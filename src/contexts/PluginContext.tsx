@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, apiRequest } from '@/api'
+import { wrapPluginComponent } from '@/components/PluginErrorBoundary'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { navigateInApp } from '@/lib/routerRef'
@@ -547,15 +548,74 @@ const PluginProviderInner = ({
         settingsFields,
       ]) => {
         if (cancelled) return
-        setPluginPages(pages)
+        setPluginPages(
+          pages.map((page) => ({
+            ...page,
+            component: wrapPluginComponent(page.component, {
+              contributionId: page.id,
+              source: 'page',
+              compact: false,
+            }),
+          }))
+        )
         setNavigationItems(navigation)
-        setTaskMapEditors(editors)
-        setTaskActionExtensions(actions)
-        setTaskActionPanels(panels)
+        setTaskMapEditors(
+          editors.map((editor) => ({
+            ...editor,
+            component: wrapPluginComponent(editor.component, {
+              contributionId: editor.id,
+              source: 'map-editor',
+            }),
+          }))
+        )
+        setTaskActionExtensions(
+          actions.map((extension) => ({
+            ...extension,
+            component: extension.component
+              ? wrapPluginComponent(extension.component, {
+                  contributionId: extension.id,
+                  source: 'task-action',
+                })
+              : undefined,
+          }))
+        )
+        setTaskActionPanels(
+          panels.map((panel) => ({
+            ...panel,
+            component: wrapPluginComponent(panel.component, {
+              contributionId: panel.id,
+              source: 'panel',
+            }),
+          }))
+        )
         setTaskEditPolicies(editPolicies)
-        setChallengeFooterExtensions(footers)
-        setTaskHistoryItemRenderers(historyRenderers)
-        setUserSettingsFields(settingsFields)
+        setChallengeFooterExtensions(
+          footers.map((footer) => ({
+            ...footer,
+            component: wrapPluginComponent(footer.component, {
+              contributionId: footer.id,
+              source: 'challenge-footer',
+            }),
+          }))
+        )
+        setTaskHistoryItemRenderers(
+          historyRenderers.map((renderer) => ({
+            ...renderer,
+            component: wrapPluginComponent(renderer.component, {
+              contributionId: renderer.id,
+              source: 'history',
+            }),
+          }))
+        )
+        setUserSettingsFields(
+          settingsFields.map((field) => ({
+            ...field,
+            component: wrapPluginComponent(field.component, {
+              contributionId: field.id,
+              source: 'settings-field',
+            }),
+          }))
+        )
         setContributionsKey(enabledPlugins.join(','))
       }
     )
