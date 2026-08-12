@@ -40,6 +40,12 @@ interface TaskActionModalProps {
   onOpenChange: (open: boolean) => void
   task: Task
   initialStatus: number
+  /**
+   * Notified whenever a submission starts/finishes so the parent can keep the completion
+   * buttons visible-but-disabled until we navigate to the next task, instead of letting the
+   * now-completed status swap in a different button set.
+   */
+  onSubmittingChange?: (submitting: boolean) => void
 }
 
 export const TaskActionModal = ({
@@ -47,6 +53,7 @@ export const TaskActionModal = ({
   onOpenChange,
   task,
   initialStatus,
+  onSubmittingChange,
 }: TaskActionModalProps) => {
   const { t } = useIntl()
   const queryClient = useQueryClient()
@@ -92,6 +99,12 @@ export const TaskActionModal = ({
   useEffect(() => {
     setNewStatus(initialStatus)
   }, [initialStatus])
+
+  // Keep the parent in sync so it can hold the completion buttons (disabled) in place
+  // through the submit-and-navigate transition.
+  useEffect(() => {
+    onSubmittingChange?.(isSubmitting)
+  }, [isSubmitting, onSubmittingChange])
 
   const handleSubmit = async () => {
     try {

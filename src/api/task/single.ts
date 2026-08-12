@@ -10,6 +10,18 @@ const getCurrentUserId = (queryClient: ReturnType<typeof useQueryClient>): numbe
   return (me as { id?: number } | undefined)?.id ?? null
 }
 
+/**
+ * Refresh the current user's "locked tasks" list (e.g. the dashboard block). Called whenever
+ * their lock state changes - lock, unlock, or a status change that releases the lock - so the
+ * list reflects reality without waiting for the 60s stale window.
+ */
+export const invalidateLockedTasks = (queryClient: ReturnType<typeof useQueryClient>): void => {
+  const userId = getCurrentUserId(queryClient)
+  if (userId != null) {
+    queryClient.invalidateQueries({ queryKey: ['user', userId, 'lockedTasks'] })
+  }
+}
+
 export interface TaskSearchResult {
   id: number
   name: string
@@ -61,6 +73,7 @@ export const taskSingle = {
       onSuccess: (lockedTask, taskId) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], lockedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        invalidateLockedTasks(queryClient)
         if (lockedTask?.parent) {
           patchChallengeTaskMarker(queryClient, lockedTask.parent, taskId, {
             lockedBy: getCurrentUserId(queryClient),
@@ -84,6 +97,7 @@ export const taskSingle = {
       onSuccess: (unlockedTask, taskId) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], unlockedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        invalidateLockedTasks(queryClient)
         if (unlockedTask?.parent) {
           patchChallengeTaskMarker(queryClient, unlockedTask.parent, taskId, {
             lockedBy: null,
@@ -110,6 +124,7 @@ export const taskSingle = {
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
+        invalidateLockedTasks(queryClient)
       },
     })
   },
@@ -129,6 +144,7 @@ export const taskSingle = {
           queryClient.setQueryData<TaskGetResponse>(['task', taskId], { ...cached, status: 3 })
         }
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        invalidateLockedTasks(queryClient)
         if (parent) {
           patchChallengeTaskMarker(queryClient, parent, taskId, { status: 3 })
           if (oldStatus !== 3) {
@@ -231,6 +247,7 @@ export const taskSingle = {
         const oldCached = queryClient.getQueryData<TaskGetResponse>(['task', variables.taskId])
         queryClient.setQueryData<TaskGetResponse>(['task', variables.taskId], updatedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', variables.taskId] })
+        invalidateLockedTasks(queryClient)
         if (variables.options?.comment) {
           queryClient.invalidateQueries({ queryKey: ['task', 'comments', variables.taskId] })
         }

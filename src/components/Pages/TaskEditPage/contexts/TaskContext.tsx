@@ -130,15 +130,13 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     attemptLock(task.id)
   }, [shouldClaimTask, task, isAuthenticated, challenge?.paused, attemptLock])
 
-  useEffect(() => {
-    return () => {
-      const id = lockedTaskIdRef.current
-      if (id != null) {
-        unlockTaskMutation.mutate(id)
-        lockedTaskIdRef.current = null
-      }
-    }
-  }, [task?.id, unlockTaskMutation.mutate])
+  // We deliberately do NOT release the lock on unmount (navigating away, closing the tab,
+  // or reloading). A lock is given up only two ways: deliberately (the unlock button, or
+  // completing/skipping the task) or by expiring on the backend once the keep-alive below
+  // stops refreshing it. This lets a mapper leave and come back - or reload - without losing
+  // their claim, and keeps the task visible in their dashboard "locked tasks" list meanwhile.
+  // (With one-lock-per-user semantics, claiming a different task still releases this one
+  // server-side, so leaving to work elsewhere does not strand the lock.)
 
   useEffect(() => {
     if (!isLocked) return

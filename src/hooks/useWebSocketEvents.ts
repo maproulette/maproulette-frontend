@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
+import { invalidateLockedTasks } from '@/api/task/single'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useCongratulate } from '@/contexts/CongratulateContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
@@ -131,6 +132,12 @@ export const useWebSocketEvents = () => {
           invalidateChallengeAggregates(queryClient, challengeId)
         }
 
+        // The current user's own lock state changed (they claimed, released, or completed a
+        // task), so refresh their locked-tasks list (e.g. the dashboard block).
+        if (user && lastMessage.data.byUser?.userId === user.id) {
+          invalidateLockedTasks(queryClient)
+        }
+
         if (
           messageType === 'task-completed' &&
           user &&
@@ -194,6 +201,12 @@ export const useWebSocketEvents = () => {
               query.queryKey[1] === 'history' &&
               historyTaskIds.has(query.queryKey[2] as number),
           })
+        }
+
+        // The current user's own lock state changed for this bundle, so refresh their
+        // locked-tasks list (e.g. the dashboard block).
+        if (user && lastMessage.data.byUser?.userId === user.id) {
+          invalidateLockedTasks(queryClient)
         }
 
         if (
