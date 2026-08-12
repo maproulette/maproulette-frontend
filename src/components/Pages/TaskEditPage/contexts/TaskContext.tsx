@@ -102,6 +102,25 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     setLockConflict(null)
   }, [task?.id])
 
+  // Reflect a lock we already hold. Locks are one-per-user, so the same account opening
+  // this task in a second tab (or reloading without ?claimTask) already owns the lock the
+  // backend now reports via task.lockedBy - render it as locked-by-me instead of free.
+  //
+  // We deliberately do NOT set lockedTaskIdRef here: that ref drives release-on-unmount and
+  // the keep-alive refresh, and it belongs to whichever tab actually acquired the lock. A
+  // passive second view claiming it would release the shared lock out from under the owning
+  // tab when this one unmounts (and, synchronously set, immediately in dev StrictMode).
+  // Explicit unlock from this tab still works - unlockTask() releases by task.id, not the ref.
+  // A lock held by a *different* user is left alone (surfaced through the normal conflict flow).
+  useEffect(() => {
+    if (!task || !isAuthenticated || !user || hasAttemptedLock.current) return
+    if (task.lockedBy == null || task.lockedBy !== user.id) return
+
+    hasAttemptedLock.current = true
+    setIsLocked(true)
+    setLockedTasks((task.lockBundledTasks ?? []).filter((id) => id !== task.id))
+  }, [task, isAuthenticated, user])
+
   useEffect(() => {
     if (!shouldClaimTask || !task || !isAuthenticated || hasAttemptedLock.current) return
     if (!EDITABLE_STATUSES.includes(task.status ?? 0)) return

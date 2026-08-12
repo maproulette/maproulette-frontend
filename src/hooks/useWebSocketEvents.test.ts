@@ -170,7 +170,7 @@ describe('useWebSocketEvents', () => {
       },
     })
 
-    it('patches the cached task status and locks it on task-claimed', () => {
+    it('locks the marker on task-claimed without touching status (lock events carry a stale status snapshot)', () => {
       mockAuth(undefined)
       mockCongratulate()
       const msg = taskEvent()
@@ -184,15 +184,42 @@ describe('useWebSocketEvents', () => {
 
       mount(queryClient)
 
+      // Status is left untouched - only task-update / task-completed drive status.
       expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])).toEqual({
         id: 1,
         parent: 10,
-        status: 2,
+        status: 0,
       })
       expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 1, {
-        status: 2,
         lockedBy: 5,
       })
+    })
+
+    it('does not let a stale task-released status snapshot clobber a newer cached status', () => {
+      mockAuth(undefined)
+      mockCongratulate()
+      // Backend snapshots the task before the status change, so the release carries the old
+      // status (0). The cache already holds the fresh status (1) from the mutation response.
+      mockWebSocket({
+        ...taskEvent({ task: { id: 1, parent: 10, status: 0 } }),
+        messageType: 'task-released',
+      })
+      const queryClient = createTestQueryClient()
+      queryClient.setQueryData<TaskGetResponse>(['task', 1], {
+        id: 1,
+        parent: 10,
+        status: 1,
+      } as TaskGetResponse)
+
+      mount(queryClient)
+
+      expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])?.status).toBe(1)
+      expect(patchChallengeTaskMarker).toHaveBeenCalledWith(
+        queryClient,
+        10,
+        1,
+        expect.not.objectContaining({ status: expect.anything() })
+      )
     })
 
     it('locks with null when task-claimed has no byUser', () => {
@@ -291,7 +318,10 @@ describe('useWebSocketEvents', () => {
     it('invalidates challenge aggregates when the status changed', () => {
       mockAuth(undefined)
       mockCongratulate()
-      mockWebSocket(taskEvent({ task: { id: 1, parent: 10, status: 2 } }))
+      mockWebSocket({
+        ...taskEvent({ task: { id: 1, parent: 10, status: 2 } }),
+        messageType: 'task-update',
+      })
       const queryClient = createTestQueryClient()
       queryClient.setQueryData<TaskGetResponse>(['task', 1], {
         id: 1,
@@ -359,17 +389,18 @@ describe('useWebSocketEvents', () => {
       },
     })
 
-    it('patches each cached bundled task, locks its marker, invalidates history for all of them, and dedupes aggregate invalidation within the same challenge', () => {
+    it('patches each cached bundled task status, patches its marker, invalidates history for all of them, and dedupes aggregate invalidation within the same challenge', () => {
       mockAuth(undefined)
       mockCongratulate()
-      mockWebSocket(
-        tasksEvent({
+      mockWebSocket({
+        ...tasksEvent({
           tasks: [
             { id: 1, parent: 10, status: 2, bundleId: 99, isBundlePrimary: true },
             { id: 2, parent: 10, status: 2 },
           ],
-        })
-      )
+        }),
+        messageType: 'tasks-update',
+      })
       const queryClient = createTestQueryClient()
       queryClient.setQueryData<TaskGetResponse>(['task', 1], {
         id: 1,
@@ -404,11 +435,9 @@ describe('useWebSocketEvents', () => {
 
       expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 1, {
         status: 2,
-        lockedBy: 5,
       })
       expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 2, {
         status: 2,
-        lockedBy: 5,
       })
 
       const historyCall = invalidateSpy.mock.calls.find(
@@ -463,7 +492,6 @@ describe('useWebSocketEvents', () => {
 
       expect(queryClient.getQueryData(['task', 42])).toBeUndefined()
       expect(patchChallengeTaskMarker).toHaveBeenCalledWith(queryClient, 10, 42, {
-        status: 2,
         lockedBy: 5,
       })
     })
@@ -550,12 +578,13 @@ describe('useWebSocketEvents', () => {
     it('derives the challenge id from data.challenge, taking priority over each task.parent', () => {
       mockAuth(undefined)
       mockCongratulate()
-      mockWebSocket(
-        tasksEvent({
+      mockWebSocket({
+        ...tasksEvent({
           challenge: { id: 77, parentId: 1, name: 'c', enabled: true },
           tasks: [{ id: 1, parent: 10, status: 2 }],
-        })
-      )
+        }),
+        messageType: 'tasks-update',
+      })
       const queryClient = createTestQueryClient()
 
       mount(queryClient)

@@ -88,7 +88,14 @@ export const useWebSocketEvents = () => {
         const messageType = lastMessage.messageType
         const taskId = lastMessage.data.task.id
         const challengeId = lastMessage.data.challenge?.id ?? lastMessage.data.task.parent
-        const newStatus = lastMessage.data.task.status ?? undefined
+        // Lock events (claimed/released) carry a task snapshot taken at lock time, not a
+        // status change. When a status change also releases the lock, the backend emits the
+        // release from a pre-update snapshot (stale status) alongside the authoritative
+        // task-update / task-completed event, and the two race. Applying status from the lock
+        // event would flip the cache back to the old status - the "fixed -> created -> fixed"
+        // flicker. So only status-bearing events drive status here.
+        const isLockEvent = messageType === 'task-claimed' || messageType === 'task-released'
+        const newStatus = isLockEvent ? undefined : (lastMessage.data.task.status ?? undefined)
 
         const cachedTask = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
         const oldStatus = cachedTask?.status ?? undefined
@@ -139,9 +146,14 @@ export const useWebSocketEvents = () => {
         const invalidatedChallenges = new Set<number>()
         const historyTaskIds = new Set<number>()
 
+        // Lock events (claimed/released) carry a pre-update task snapshot, so their status is
+        // stale when a status change also releases the lock. Only status-bearing events drive
+        // status; see the isTaskEvent branch above for the full rationale.
+        const isLockEvent = messageType === 'tasks-claimed' || messageType === 'tasks-released'
+
         lastMessage.data.tasks.forEach((bundledTask) => {
           const challengeId = lastMessage.data.challenge?.id ?? bundledTask.parent
-          const newStatus = bundledTask.status ?? undefined
+          const newStatus = isLockEvent ? undefined : (bundledTask.status ?? undefined)
 
           const cachedTask = queryClient.getQueryData<TaskGetResponse>(['task', bundledTask.id])
           const oldStatus = cachedTask?.status ?? undefined

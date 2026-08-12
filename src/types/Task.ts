@@ -5,7 +5,15 @@ export type TaskStartResponse = Task & {
   lockPrimaryTaskId: number
   lockBundledTasks: number[]
 }
-export type TaskGetResponse = Task
+// The plain task read (GET /task/:id) is augmented by the backend's inject() with the
+// current lock holder (null when unlocked) and, when locked, the covering bundle's
+// membership - so a task the caller already holds (e.g. open in another tab) can render
+// as locked-by-me without this tab issuing its own /start.
+export type TaskGetResponse = Task & {
+  lockedBy?: number | null
+  lockPrimaryTaskId?: number
+  lockBundledTasks?: number[]
+}
 export type TaskMarkersResponse =
   paths['/taskMarkers']['get']['responses']['200']['content']['application/json']
 export type TasksInBoundsResponse =
