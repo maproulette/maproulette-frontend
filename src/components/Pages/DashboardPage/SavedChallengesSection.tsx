@@ -3,6 +3,7 @@ import { api } from '@/api'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
+import { SavedChallengeActions } from './SavedChallengeActions'
 
 interface SavedChallengesSectionProps {
   userId: number
@@ -59,7 +60,11 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
         {!isLoading && !error && challenges && challenges.length > 0 && (
           <div className="space-y-3 rounded-xl bg-zinc-100 p-3 dark:bg-slate-950">
             {challenges.map((challenge) => (
-              <ChallengeCard key={challenge.id} challenge={challenge} />
+              <ChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+                actions={<SavedChallengeActions challenge={challenge} userId={userId} />}
+              />
             ))}
           </div>
         )}

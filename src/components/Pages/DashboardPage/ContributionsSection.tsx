@@ -6,12 +6,19 @@ import { useIntl } from '@/i18n'
 import { getStatusLabel, STATUS_TEXT_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import { aggregateContributions } from './contributionsAggregation'
+import { LockedTasksBlock } from './LockedTasksBlock'
 
 const DISPLAYED_STATUS_IDS = new Set([1, 2, 3, 5, 6])
 
-export const ContributionsSection = () => {
+interface ContributionsSectionProps {
+  userId: number
+}
+
+export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
   const { t } = useIntl()
   const { data: activityData, isLoading, error } = api.user.activity()
+  const { data: lockedTasks } = api.user.lockedTasks(userId)
+  const hasLockedTasks = (lockedTasks?.length ?? 0) > 0
 
   // Reason: groups and sorts activity data by date/challenge/status - expensive aggregation should not run on every render
   const { groupedActivities, totalTasks } = useMemo(
@@ -35,6 +42,8 @@ export const ContributionsSection = () => {
         )}
       </div>
       <div className="flex-1 overflow-y-auto px-4 pb-4">
+        {!error && <LockedTasksBlock userId={userId} />}
+
         {isLoading && (
           <div className="flex justify-center py-4">
             <Loader />
@@ -47,7 +56,7 @@ export const ContributionsSection = () => {
           </div>
         )}
 
-        {!isLoading && !error && !hasContributions && (
+        {!isLoading && !error && !hasContributions && !hasLockedTasks && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-slate-700/50">
               <Activity className="h-5 w-5 text-zinc-400 dark:text-slate-500" />

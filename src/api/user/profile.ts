@@ -165,6 +165,17 @@ export const userProfile = {
     })
   },
 
+  useUnsaveChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, challengeId }: { userId: number; challengeId: number }) =>
+        apiRequest.delete(`api/v2/user/${userId}/unsave/${challengeId}`).text(),
+      onSuccess: (_data, { userId }) => {
+        queryClient.invalidateQueries({ queryKey: ['user', userId, 'savedChallenges'] })
+      },
+    })
+  },
+
   useRegenerateApiKey: () => {
     const queryClient = useQueryClient()
     return useMutation({
