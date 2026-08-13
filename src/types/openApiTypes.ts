@@ -5240,6 +5240,7 @@ export interface components {
       /** Format: int32 */
       status?: number | null
       isArchived: boolean
+      paused: boolean
     }
     'org.maproulette.framework.model.MapillaryImage': {
       key: string

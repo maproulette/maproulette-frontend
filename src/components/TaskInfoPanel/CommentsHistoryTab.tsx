@@ -28,6 +28,7 @@ import { useAvatarContext } from '@/contexts/AvatarContext'
 import { useIntl } from '@/i18n'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
+import { markdownRemarkPlugins } from '@/lib/markdown'
 import {
   getStatusLabel,
   STATUS_BAR_COLORS,
@@ -196,6 +197,7 @@ export const CommentsHistoryTab = () => {
 
             <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
               <ReactMarkdown
+                remarkPlugins={markdownRemarkPlugins}
                 components={{
                   a: ({ ...props }) => (
                     <a

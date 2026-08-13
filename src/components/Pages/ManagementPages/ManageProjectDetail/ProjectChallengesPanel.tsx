@@ -30,6 +30,7 @@ export const ProjectChallengesPanel = () => {
     pinnedChallengeIds,
     toggleChallengePin: onTogglePin,
     toggleChallengeEnabled: onToggleEnabled,
+    togglePaused: onTogglePaused,
     setCloneModalChallenge: onClone,
     archiveChallenge: onArchive,
     rebuildChallenge: onRebuild,
@@ -86,6 +87,7 @@ export const ProjectChallengesPanel = () => {
               pinnedChallengeIds={pinnedChallengeIds}
               onTogglePin={onTogglePin}
               onToggleEnabled={onToggleEnabled}
+              onTogglePaused={onTogglePaused}
               onClone={onClone}
               onArchive={onArchive}
               onRebuild={onRebuild}
@@ -138,6 +140,7 @@ export const ProjectChallengesPanel = () => {
                         isPinned={isPinned}
                         onTogglePin={onTogglePin}
                         onToggleEnabled={onToggleEnabled}
+                        onTogglePaused={onTogglePaused}
                         onClone={onClone}
                         onArchive={onArchive}
                         onRebuild={onRebuild}

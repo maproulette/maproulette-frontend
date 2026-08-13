@@ -59,7 +59,6 @@ export const TaskTab = ({ task }: TaskTabProps) => {
         taskInstruction={
           challenge?.instruction ? substituteTaskProperties(challenge.instruction, task) : undefined
         }
-        challengeDescription={challenge?.description ?? undefined}
       />
     </div>
   )

@@ -33,6 +33,7 @@ export interface ManageChallengesContextType {
   // Actions
   toggleChallengePin: (challengeId: number) => void
   toggleChallengeEnabled: (challenge: Challenge) => void
+  togglePaused: (challenge: Challenge) => void
   archiveChallenge: (challenge: Challenge) => void
   rebuildChallenge: (challengeId: number) => void
 }
@@ -67,6 +68,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const updateSettingsMutation = api.user.useUpdateUserSettings()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
+  const pauseChallengeMutation = api.challenge.usePauseChallenge()
   const rebuildChallengeMutation = api.challenge.useRebuildChallenge()
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
 
@@ -119,6 +121,17 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
     [archiveChallengeMutation]
   )
 
+  const togglePaused = useCallback(
+    (challenge: Challenge) => {
+      if (challenge.id == null) return
+      pauseChallengeMutation.mutate({
+        challengeId: challenge.id,
+        paused: !(challenge.paused ?? false),
+      })
+    },
+    [pauseChallengeMutation]
+  )
+
   const rebuildChallenge = useCallback(
     (challengeId: number) => {
       rebuildChallengeMutation.mutate({ challengeId })
@@ -161,6 +174,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       confirmDeleteChallenge,
       toggleChallengePin,
       toggleChallengeEnabled,
+      togglePaused,
       archiveChallenge,
       rebuildChallenge,
     }),
@@ -177,6 +191,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       confirmDeleteChallenge,
       toggleChallengePin,
       toggleChallengeEnabled,
+      togglePaused,
       archiveChallenge,
       rebuildChallenge,
     ]

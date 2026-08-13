@@ -490,6 +490,25 @@ export const challengeSingle = {
     })
   },
 
+  usePauseChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, paused }: { challengeId: number; paused: boolean }) =>
+        apiRequest
+          .put(`api/v2/challenge/${challengeId}`, {
+            json: { id: challengeId, paused },
+          })
+          .json<Challenge>(),
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
+      },
+    })
+  },
+
   useRebuildChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({

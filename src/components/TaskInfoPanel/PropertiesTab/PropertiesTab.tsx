@@ -93,7 +93,7 @@ export const PropertiesTab = () => {
             </span>
             <span
               className={cn(
-                'block break-words font-mono text-zinc-900 [overflow-wrap:anywhere] dark:text-white',
+                'block whitespace-pre-wrap break-words font-mono text-zinc-900 [overflow-wrap:anywhere] dark:text-white',
                 isLong ? 'w-full text-left' : 'min-w-0 text-right'
               )}
             >
