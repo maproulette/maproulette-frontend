@@ -30,6 +30,7 @@ export const TaskActions = () => {
   const { isAuthenticated, login } = useAuthContext()
   const isPaused = challenge.paused
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [modalConfig, setModalConfig] = useState<{
     status: number
     label: string
@@ -156,22 +157,27 @@ export const TaskActions = () => {
     )
   }
 
-  // Show navigation buttons for non-editable statuses (Fixed, False Positive, Deleted, Already Fixed)
-  if (!EDITABLE_STATUSES.includes(task.status ?? 0)) {
-    return <NavigationActions challengeId={task.parent} taskId={task.id} />
+  // While a completion is being submitted, we hold the completion buttons in place (disabled)
+  // until we navigate to the next task - so the now-completed status doesn't briefly swap in a
+  // different button set (navigation / start-mapping). Skip the status/lock-driven branches.
+  if (!isSubmitting) {
+    // Show navigation buttons for non-editable statuses (Fixed, False Positive, Deleted, Already Fixed)
+    if (!EDITABLE_STATUSES.includes(task.status ?? 0)) {
+      return <NavigationActions challengeId={task.parent} taskId={task.id} />
+    }
+
+    // Replace all task actions with a notice while the challenge is paused
+    if (isPaused) {
+      return <ChallengePausedNotice message={pausedMessage} />
+    }
+
+    // Show start mapping button if not locked
+    if (!isLocked) {
+      return <StartMappingActions challengeId={task.parent} />
+    }
   }
 
-  // Replace all task actions with a notice while the challenge is paused
-  if (isPaused) {
-    return <ChallengePausedNotice message={pausedMessage} />
-  }
-
-  // Show start mapping button if not locked
-  if (!isLocked) {
-    return <StartMappingActions challengeId={task.parent} />
-  }
-
-  // Show completion buttons when locked
+  // Show completion buttons when locked (disabled while a submission is in flight)
   return (
     <>
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
@@ -191,6 +197,7 @@ export const TaskActions = () => {
               onClick={action.onClick}
               title={action.title}
               className="w-full"
+              disabled={isSubmitting}
             >
               {action.icon}
               {action.label}
@@ -205,6 +212,7 @@ export const TaskActions = () => {
           onOpenChange={setIsModalOpen}
           task={task}
           initialStatus={modalConfig.status}
+          onSubmittingChange={setIsSubmitting}
         />
       )}
     </>

@@ -220,6 +220,7 @@ export const ChallengesList = () => {
               renderItem={(challenge) => (
                 <ChallengeCard
                   challenge={challenge}
+                  parentName={project.displayName || project.name}
                   linkTo="/challenge/$challengeId"
                   linkParams={{ challengeId: String(challenge.id) }}
                   actions={buildChallengeActions(challenge)}

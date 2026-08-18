@@ -45,9 +45,14 @@ export const CloneChallengeModal = ({
   const nameId = useId()
   const projectId = useId()
   const [newName, setNewName] = useState(`${challengeName} (Copy)`)
-  const [selectedProjectId, setSelectedProjectId] = useState<string>('')
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(
+    currentProjectId != null ? String(currentProjectId) : ''
+  )
 
-  const { data: managedProjects = [], isLoading: isLoadingProjects } =
+  // Every project the user manages is a valid destination, including the challenge's
+  // own: challenge names only need to be unique within a project, so a renamed clone
+  // can stay where it is.
+  const { data: availableProjects = [], isLoading: isLoadingProjects } =
     api.project.getManagedProjects({
       limit: 100,
       page: 0,
@@ -55,8 +60,6 @@ export const CloneChallengeModal = ({
       onlyOwned: false,
       searchString: '',
     })
-
-  const availableProjects = managedProjects.filter((p) => p.id !== currentProjectId)
 
   const cloneMutation = api.challenge.useCloneChallenge()
 
@@ -76,7 +79,7 @@ export const CloneChallengeModal = ({
       return
     }
     cloneMutation.mutate(
-      { challengeId, newName: newName.trim() },
+      { challengeId, newName: newName.trim(), projectId: Number(selectedProjectId) },
       {
         onSuccess: async (clonedChallenge) => {
           toast.success(
@@ -113,7 +116,7 @@ export const CloneChallengeModal = ({
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
       setNewName(`${challengeName} (Copy)`)
-      setSelectedProjectId('')
+      setSelectedProjectId(currentProjectId != null ? String(currentProjectId) : '')
     }
     onOpenChange(isOpen)
   }
@@ -130,7 +133,7 @@ export const CloneChallengeModal = ({
             {t(
               'browsedChallengePage.challengeModals.cloneModal.description',
               undefined,
-              'Create a copy of this challenge in a different project. The cloned challenge will include all settings but will start with no tasks.'
+              'Create a copy of this challenge in any project you manage, including this one. The cloned challenge will include all settings but will start with no tasks.'
             )}
           </DialogDescription>
         </DialogHeader>

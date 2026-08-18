@@ -2496,7 +2496,10 @@ export interface paths {
     }
     /**
      * Start working on a Task (locks it for the user)
-     * @description Locks a Task based on the supplied ID in the URL.
+     * @description Locks a Task based on the supplied ID in the URL. A user may only hold one active
+     *     edit lock at a time - if the user already holds a lock on a different task, this
+     *     returns 409 Conflict describing that lock. The client should release that lock
+     *     (GET /task/:id/release) before retrying to lock this one.
      */
     get: operations['task_start_working_on_a_task_locks_it_for_the_user']
     put?: never
@@ -3113,26 +3116,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/task/bundle/lock': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Locks a bundle of tasks
-     * @description Attempts to lock a set of tasks. If successful, returns the tasks that were locked. If not successful, returns the tasks that were not locked.
-     */
-    post: operations['task_locks_a_bundle_of_tasks']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/task/bundle/unlock': {
     parameters: {
       query?: never
@@ -3144,7 +3127,10 @@ export interface paths {
     put?: never
     /**
      * Unlocks a bundle of tasks
-     * @description Unlocks the specified tasks in the bundle.
+     * @description Releases the calling user's lock covering any of the given task ids (bundles are
+     *     now locked as a single row on the bundle's primary task, so this releases that
+     *     covering lock if the user holds it - ids not currently locked by the user are
+     *     ignored rather than erroring).
      */
     post: operations['task_unlocks_a_bundle_of_tasks']
     delete?: never
@@ -3932,7 +3918,11 @@ export interface paths {
     put?: never
     /**
      * Create a task bundle
-     * @description Create a new task bundle with the task ids in the supplied JSON body.
+     * @description Create a new task bundle with the task ids in the supplied JSON body. The bundle's
+     *     primary task is locked for the calling user, with the other member task ids recorded
+     *     in that lock's bundledTasks. A user may only hold one active edit lock at a time - if
+     *     the user already holds a lock on a different task, this returns 409 Conflict describing
+     *     that lock. The client should release that lock before retrying.
      */
     post: operations['bundle_create_a_task_bundle']
     delete?: never
@@ -3976,7 +3966,9 @@ export interface paths {
     put?: never
     /**
      * Updates a Task Bundle
-     * @description Sets the bundle to the tasks provided, and unlock all tasks removed from current bundle
+     * @description Sets the bundle to the tasks provided, and unlock all tasks removed from current bundle.
+     *     Re-locks the bundle's primary task with the updated bundledTasks membership. Returns
+     *     409 Conflict if the user holds a lock on a different task.
      */
     post: operations['bundle_updates_a_task_bundle']
     delete?: never
@@ -4766,6 +4758,7 @@ export interface components {
       parentName: string
       /** Format: epoch */
       startedAt: number
+      bundledTasks: number[]
     }
     'org.maproulette.framework.model.CustomBasemap': {
       /** Format: int64 */
@@ -5247,6 +5240,7 @@ export interface components {
       /** Format: int32 */
       status?: number | null
       isArchived: boolean
+      paused: boolean
     }
     'org.maproulette.framework.model.MapillaryImage': {
       key: string
@@ -10808,6 +10802,13 @@ export interface operations {
         }
         content?: never
       }
+      /** @description The user already holds a lock on a different task */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
     }
   }
   task_retrieve_any_change_xml_that_is_part_of_this_tasks: {
@@ -11983,38 +11984,6 @@ export interface operations {
       }
       /** @description The task or user was not found */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  task_locks_a_bundle_of_tasks: {
-    parameters: {
-      query: {
-        taskIds: number[]
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description A JSON array of task IDs to lock. */
-    requestBody: {
-      content: {
-        'application/json': number[]
-      }
-    }
-    responses: {
-      /** @description List of tasks that were locked or list of tasks that were not locked. Boolean indicates if the tasks were locked. */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description The user is not authorized to make this request */
-      401: {
         headers: {
           [name: string]: unknown
         }
@@ -13602,14 +13571,18 @@ export interface operations {
         }
         content?: never
       }
+      /** @description The user already holds a lock on a different task */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
     }
   }
   bundle_gets_a_task_bundle: {
     parameters: {
-      query?: {
-        /** @description The tasks in the bundle will be locked by the user. */
-        lockTasks?: boolean
-      }
+      query?: never
       header?: never
       path: {
         /** @description The id of the Task Bundle */
@@ -13696,6 +13669,13 @@ export interface operations {
       }
       /** @description The user is not authorized to make this request */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user already holds a lock on a different task */
+      409: {
         headers: {
           [name: string]: unknown
         }

@@ -55,13 +55,19 @@ export const TaskMap = () => {
   const exploreSourceId = useId()
   const exploreCirclesLayerId = useId()
   const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
-  const { task } = useTaskContext()
+  const { task, isLocked } = useTaskContext()
   const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
     useEditorContext()
   const prevActiveView = useRef(activeView)
   const isEditableStatus = EDITABLE_STATUSES.includes(task.status ?? 0)
-  const { selectedMarker, markersHidden, activeTaskId, drawingMode, selectedTaskIds } =
-    useTaskMapContext()
+  const {
+    selectedMarker,
+    markersHidden,
+    activeTaskId,
+    drawingMode,
+    selectedTaskIds,
+    hoveredBundleTaskId,
+  } = useTaskMapContext()
 
   const {
     mapRef,
@@ -186,6 +192,7 @@ export const TaskMap = () => {
               selectedTaskId={selectedMarker?.id ?? null}
               activeTaskId={activeTaskId}
               lassoSelectedTaskIds={selectedTaskIds}
+              hoveredTaskId={hoveredBundleTaskId}
             />
           )}
 
@@ -204,26 +211,28 @@ export const TaskMap = () => {
       {/* Top-left inline controls: cluster toggle + multi-task panel + iD Editor */}
       <div className="absolute top-2 left-2 z-10 flex items-start gap-2">
         <ClusterToggle clusteringEnabled={isClustered} onToggle={setIsClustered} inline />
-        {!bundleEditsDisabled && isEditableStatus && <MultiTaskPanel />}
-        <button
-          type="button"
-          onClick={openIdEditor}
-          className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
-          title={t('taskEditPage.taskMap.editInId', undefined, 'Edit in iD (inline)')}
-        >
-          <OsmIcon className="h-4 w-4" />
-          {t('taskEditPage.taskMap.editInIdShort', undefined, 'Edit in iD')}
-          {idEditorMounted && (
-            <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-green-400" />
-              {idUnsavedCount > 0 && (
-                <span className="rounded-full bg-yellow-500 px-1.5 py-0.5 font-bold text-[10px] text-white leading-none">
-                  {idUnsavedCount}
-                </span>
-              )}
-            </span>
-          )}
-        </button>
+        {isLocked && !bundleEditsDisabled && isEditableStatus && <MultiTaskPanel />}
+        {isLocked && (
+          <button
+            type="button"
+            onClick={openIdEditor}
+            className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
+            title={t('taskEditPage.taskMap.editInId', undefined, 'Edit in iD (inline)')}
+          >
+            <OsmIcon className="h-4 w-4" />
+            {t('taskEditPage.taskMap.editInIdShort', undefined, 'Edit in iD')}
+            {idEditorMounted && (
+              <span className="flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-green-400" />
+                {idUnsavedCount > 0 && (
+                  <span className="rounded-full bg-yellow-500 px-1.5 py-0.5 font-bold text-[10px] text-white leading-none">
+                    {idUnsavedCount}
+                  </span>
+                )}
+              </span>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Drawing mode indicator */}

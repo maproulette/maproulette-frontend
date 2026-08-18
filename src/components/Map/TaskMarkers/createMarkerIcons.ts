@@ -188,7 +188,7 @@ export const createMarkerIcons = (
 
         createMarkerIcon(status, color, priority, '#f59e0b')
 
-        createMarkerIcon(status, color, priority, '#22c55e', 'hovered')
+        createMarkerIcon(status, color, priority, '#3b82f6', 'hovered')
 
         createMarkerIcon(status, color, priority, '#eab308')
 
@@ -312,7 +312,7 @@ export const createMarkerIcons = (
 
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-primary`, '#f59e0b', 3)
 
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#22c55e', 3)
+      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#3b82f6', 3)
 
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-lasso`, '#eab308', 3)
 
@@ -342,7 +342,7 @@ export const createMarkerIcons = (
     createOverlapIcon('20+', 'marker-overlap-many-selected', '#8b5cf6', 3)
     createOverlapIcon('20+', 'marker-overlap-many-bundled', '#22c55e', 3)
     createOverlapIcon('20+', 'marker-overlap-many-primary', '#f59e0b', 3)
-    createOverlapIcon('20+', 'marker-overlap-many-hovered', '#22c55e', 3)
+    createOverlapIcon('20+', 'marker-overlap-many-hovered', '#3b82f6', 3)
     createOverlapIcon('20+', 'marker-overlap-many-lasso', '#eab308', 3)
     createDualBorderOverlapIcon('20+', 'marker-overlap-many-bundled-selected', '#8b5cf6', '#22c55e')
     createDualBorderOverlapIcon('20+', 'marker-overlap-many-primary-selected', '#8b5cf6', '#f59e0b')

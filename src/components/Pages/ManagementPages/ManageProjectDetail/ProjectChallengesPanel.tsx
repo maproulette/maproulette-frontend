@@ -16,6 +16,7 @@ export const ProjectChallengesPanel = () => {
   const { t } = useIntl()
   const {
     projectId,
+    project,
     searchQuery,
     setSearchQuery,
     onlyDiscoverable,
@@ -30,6 +31,7 @@ export const ProjectChallengesPanel = () => {
     pinnedChallengeIds,
     toggleChallengePin: onTogglePin,
     toggleChallengeEnabled: onToggleEnabled,
+    togglePaused: onTogglePaused,
     setCloneModalChallenge: onClone,
     archiveChallenge: onArchive,
     rebuildChallenge: onRebuild,
@@ -86,6 +88,7 @@ export const ProjectChallengesPanel = () => {
               pinnedChallengeIds={pinnedChallengeIds}
               onTogglePin={onTogglePin}
               onToggleEnabled={onToggleEnabled}
+              onTogglePaused={onTogglePaused}
               onClone={onClone}
               onArchive={onArchive}
               onRebuild={onRebuild}
@@ -130,6 +133,7 @@ export const ProjectChallengesPanel = () => {
                 return (
                   <ChallengeCard
                     challenge={challenge}
+                    parentName={project?.displayName || project?.name}
                     linkTo="/manage/challenge/$challengeId"
                     linkParams={{ challengeId: String(challenge.id) }}
                     actions={
@@ -138,6 +142,7 @@ export const ProjectChallengesPanel = () => {
                         isPinned={isPinned}
                         onTogglePin={onTogglePin}
                         onToggleEnabled={onToggleEnabled}
+                        onTogglePaused={onTogglePaused}
                         onClone={onClone}
                         onArchive={onArchive}
                         onRebuild={onRebuild}

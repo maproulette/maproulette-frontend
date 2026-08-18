@@ -13,7 +13,7 @@ import {
 
 export const useLassoBundleSync = () => {
   const { selectedTaskIds, clearSelection } = useTaskMapContext()
-  const { activeBundle, setActiveBundle } = useTaskBundleContext()
+  const { activeBundle, setActiveBundle, persistBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const primaryTaskId = task.id
   const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
@@ -22,29 +22,33 @@ export const useLassoBundleSync = () => {
     if (selectedTaskIds.size === 0) return
 
     const selectedArray = Array.from(selectedTaskIds)
+    let newBundle: TaskBundle | null = null
 
     if (!activeBundle) {
       // Create new bundle with primary task and selected tasks
       const newTaskIds = [primaryTaskId, ...selectedArray].slice(0, MAX_SELECTED_TASKS)
-      const newBundle: TaskBundle = {
+      newBundle = {
         bundleId: PENDING_BUNDLE_ID,
         taskIds: newTaskIds,
         tasks: primaryTaskData ? [primaryTaskData] : [],
         name: 'Bundle (pending)',
       }
-      setActiveBundle(newBundle)
     } else {
       // Add to existing bundle
       const newTaskIds = selectedArray.filter((id) => !activeBundle.taskIds.includes(id))
-
       if (newTaskIds.length > 0) {
         const updatedTaskIds = [...activeBundle.taskIds, ...newTaskIds].slice(0, MAX_SELECTED_TASKS)
-        setActiveBundle({
+        newBundle = {
           ...activeBundle,
           taskIds: updatedTaskIds,
           tasks: activeBundle.tasks,
-        })
+        }
       }
+    }
+
+    if (newBundle) {
+      setActiveBundle(newBundle)
+      persistBundle(newBundle)
     }
 
     // Clear selection after adding to bundle
@@ -53,6 +57,7 @@ export const useLassoBundleSync = () => {
     selectedTaskIds,
     activeBundle,
     setActiveBundle,
+    persistBundle,
     clearSelection,
     primaryTaskId,
     primaryTaskData,

@@ -12,7 +12,7 @@ export const DashboardContent = () => {
   return (
     <div className="h-full w-full overflow-hidden px-4 pb-2">
       <div className="grid h-full grid-cols-1 gap-4 overflow-hidden lg:grid-cols-3">
-        {/* Left Column: Saved Challenges + Locked Tasks */}
+        {/* Left Column: Saved Challenges */}
         <div className="flex min-h-0 flex-col overflow-hidden">
           <SavedChallengesSection userId={user.id} />
         </div>
@@ -24,7 +24,7 @@ export const DashboardContent = () => {
 
         {/* Right Column: Contributions + Teams */}
         <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
-          <ContributionsSection />
+          <ContributionsSection userId={user.id} />
           <TeamsSection userId={user.id} />
         </div>
       </div>

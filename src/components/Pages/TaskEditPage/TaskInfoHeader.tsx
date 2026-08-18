@@ -3,7 +3,10 @@ import bbox from '@turf/bbox'
 import { ExternalLink, Eye, EyeOff, Share2, Star, X, ZoomIn } from 'lucide-react'
 import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
-import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import {
+  EDITABLE_STATUSES,
+  useTaskContext,
+} from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
 import {
@@ -51,6 +54,7 @@ export const TaskInfoHeader = ({
   const { isAuthenticated } = useAuthContext()
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
   const { data: project } = api.project.getProject(challenge?.parent)
+  const { task: contextTask } = useTaskContext()
 
   const status = task.status ?? 0
   const statusLabel = getStatusLabel(t, status) || t('common.unknown', undefined, 'Unknown')
@@ -175,7 +179,9 @@ export const TaskInfoHeader = ({
                 </a>
               </Button>
             )}
-            {EDITABLE_STATUSES.includes(status) && <LockButton compact />}
+            {task.id === contextTask.id && EDITABLE_STATUSES.includes(status) && (
+              <LockButton compact />
+            )}
             {onClose && (
               <Button
                 variant="ghost"

@@ -6,12 +6,14 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { Button } from '@/components/ui/Button'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 
 export const StartMappingActions = ({ challengeId }: { challengeId: number }) => {
   const { t } = useIntl()
   const { isLocking, lockTask } = useTaskContext()
   const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
   const queryClient = useQueryClient()
   const [isLoadingNext, setIsLoadingNext] = useState(false)
 
@@ -20,7 +22,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
     try {
       const randomTasks = await api.challenge.getRandomTask(challengeId, queryClient)
       if (randomTasks && randomTasks.length > 0) {
-        await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
+        await navigateToTask(randomTasks[0].id)
       } else {
         toast.info(
           t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')

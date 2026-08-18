@@ -26,7 +26,12 @@ services:
       retries: 30
 
   backend:
-    image: ghcr.io/maproulette/maproulette-backend:4.9.0
+    # Pinned to `main` rather than a version tag: the dashboard team-list name
+    # display (teams.spec.ts) depends on the `teamName` field added to the
+    # memberships API in backend commit 8b445ce0 (2026-08-05), which hasn't
+    # made it into a versioned release yet (latest is 4.9.5, from 2026-07-16).
+    # Switch back to a version tag once one is cut past that commit.
+    image: ghcr.io/maproulette/maproulette-backend:main
     platform: linux/amd64 # TODO: remove once the image above supports multi-arch
     init: true
     depends_on:

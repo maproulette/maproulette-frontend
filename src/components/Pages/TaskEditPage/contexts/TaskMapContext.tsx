@@ -15,6 +15,8 @@ export interface TaskMapContextType {
   setSelectedMarker: (marker: TaskMarker | null) => void
   markersHidden: boolean
   setMarkersHidden: (hidden: boolean) => void
+  hoveredBundleTaskId: number | null
+  setHoveredBundleTaskId: (taskId: number | null) => void
   activeTaskId: number | null
   setActiveTaskId: (taskId: number | null) => void
   emptyClickCount: number
@@ -44,6 +46,7 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<TaskMarker | null>(null)
   const [markersHidden, setMarkersHidden] = useState(false)
+  const [hoveredBundleTaskId, setHoveredBundleTaskId] = useState<number | null>(null)
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null)
   const [emptyClickCount, setEmptyClickCount] = useState(0)
 
@@ -94,6 +97,8 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
       setSelectedMarker,
       markersHidden,
       setMarkersHidden,
+      hoveredBundleTaskId,
+      setHoveredBundleTaskId,
       activeTaskId,
       setActiveTaskId,
       emptyClickCount,
@@ -115,6 +120,7 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
       mapLoaded,
       selectedMarker,
       markersHidden,
+      hoveredBundleTaskId,
       activeTaskId,
       emptyClickCount,
       drawingMode,

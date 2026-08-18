@@ -15,8 +15,10 @@ test('a user can open a task, view its details, and mark it as fixed', async ({
   await expect(page.getByText(`Task #${task.id}`).first()).toBeVisible({ timeout: 15_000 })
   await expect(page.getByText('Fix the identified issue.')).toBeVisible({ timeout: 15_000 })
 
-  // The task auto-locks for mapping shortly after the page loads, at which point
-  // the completion action buttons replace the "Map this task" prompt.
+  // Opening a task URL directly no longer auto-claims it (only in-app
+  // navigation with claimTask=true does); clicking "Map this task" locks it,
+  // at which point the completion action buttons replace that prompt.
+  await page.getByRole('button', { name: 'Map this task' }).click()
   const fixedButton = page.getByRole('button', { name: 'Fixed', exact: true })
   await expect(fixedButton).toBeVisible({ timeout: 20_000 })
   await fixedButton.click()

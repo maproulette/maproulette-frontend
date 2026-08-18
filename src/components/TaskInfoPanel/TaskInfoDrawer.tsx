@@ -15,7 +15,9 @@ import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useDrawerTransition } from '@/hooks/useDrawerTransition'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
+import { markdownRemarkPlugins } from '@/lib/markdown'
 import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
@@ -32,6 +34,7 @@ interface TaskInfoDrawerProps {
 export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawerProps) => {
   const { t } = useIntl()
   const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
 
   const { data: fullTask } = api.task.getTask(selectedTask?.id ?? 0)
   const task = fullTask as Task | undefined
@@ -47,10 +50,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
   const handleStartTask = () => {
     if (task) {
-      navigate({
-        to: '/tasks/$taskId',
-        params: { taskId: task.id.toString() },
-      })
+      navigateToTask(task.id)
     }
   }
 
@@ -84,7 +84,14 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const taskContextValue = useMemo(
     () =>
       task
-        ? { task, isLocked: false, isLocking: false, lockTask: noop, unlockTask: noop }
+        ? {
+            task,
+            isLocked: false,
+            isLocking: false,
+            lockedTasks: [],
+            lockTask: noop,
+            unlockTask: noop,
+          }
         : undefined,
     [task]
   )
@@ -266,8 +273,9 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                     <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
                       {t('common.instructions', undefined, 'Instructions')}
                     </h3>
-                    <div className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300 [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-slate-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-slate-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
+                    <div className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300 [&_:is(h1,h2,h3,h4,h5,h6)]:mt-4 [&_:is(h1,h2,h3,h4,h5,h6)]:mb-2 [&_:is(h1,h2,h3,h4,h5,h6)]:font-bold [&_:is(h1,h2,h3,h4,h5,h6)]:text-base [&_:is(h1,h2,h3,h4,h5,h6)]:text-zinc-900 [&_:is(h1,h2,h3,h4,h5,h6)]:leading-snug [&_:is(h1,h2,h3,h4,h5,h6)]:first:mt-0 [&_:is(h1,h2,h3,h4,h5,h6)]:dark:text-white [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-slate-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-slate-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
                       <ReactMarkdown
+                        remarkPlugins={markdownRemarkPlugins}
                         components={{
                           a: (props) => (
                             <a

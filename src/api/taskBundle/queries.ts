@@ -1,6 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@/types/Task'
 import { apiRequest } from '../client'
+import { invalidateLockedTasks } from '../task/single'
 
 export interface TaskBundleResponse {
   bundleId: number
@@ -57,6 +58,7 @@ export const taskBundleQueries = {
         }
 
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
+        invalidateLockedTasks(queryClient)
       },
     })
   },
@@ -82,6 +84,7 @@ export const taskBundleQueries = {
         }
 
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
+        invalidateLockedTasks(queryClient)
       },
     })
   },
@@ -122,6 +125,7 @@ export const taskBundleQueries = {
         queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })
         queryClient.invalidateQueries({ queryKey: ['task'] })
         queryClient.invalidateQueries({ queryKey: ['challenge'] })
+        invalidateLockedTasks(queryClient)
       },
     })
   },

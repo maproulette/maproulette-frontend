@@ -153,14 +153,28 @@ export const userProfile = {
         settings: UserSettings
         properties?: UserProperties
       }) => {
+        // `properties` must be sent as a JSON object, not a stringified string: the
+        // backend reads it with `(value \ "properties").asOpt[JsObject]` and silently
+        // falls back to the stored properties when it isn't an object.
         const payload = {
           ...settings,
-          ...(properties && { properties: JSON.stringify(properties) }),
+          ...(properties && { properties }),
         }
         return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
       },
       onSuccess: (updatedUser) => {
         queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
+      },
+    })
+  },
+
+  useUnsaveChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, challengeId }: { userId: number; challengeId: number }) =>
+        apiRequest.delete(`api/v2/user/${userId}/unsave/${challengeId}`).text(),
+      onSuccess: (_data, { userId }) => {
+        queryClient.invalidateQueries({ queryKey: ['user', userId, 'savedChallenges'] })
       },
     })
   },

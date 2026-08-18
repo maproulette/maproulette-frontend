@@ -471,6 +471,38 @@ describe('challengeSingle.useCloneChallenge', () => {
     expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'managed'] })
     expect(spy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
   })
+
+  it('omits the projectId query param when no target project is given', async () => {
+    const cloned = { id: 21, name: 'Cloned' } as unknown as ChallengeGetResponse
+    const fetchMock = stubFetch(new Response(JSON.stringify(cloned), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.useCloneChallenge(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({ challengeId: 20, newName: 'Cloned' })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(new URL(request.url).searchParams.has('projectId')).toBe(false)
+  })
+
+  it('sends the target projectId when cloning into a chosen project', async () => {
+    const cloned = { id: 21, name: 'Cloned' } as unknown as ChallengeGetResponse
+    const fetchMock = stubFetch(new Response(JSON.stringify(cloned), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.useCloneChallenge(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({ challengeId: 20, newName: 'Cloned', projectId: 7 })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(new URL(request.url).searchParams.get('projectId')).toBe('7')
+  })
 })
 
 type ChallengeDraft = Omit<Partial<Challenge>, 'dataOriginDate'> & {
@@ -579,6 +611,9 @@ describe('challengeSingle.useUpdateChallenge', () => {
 
     expect(queryClient.getQueryData(['challenge', 40])).toEqual(updated)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
+    // The manage-challenges pages read from ['challenge', 'listing'], so it must be
+    // invalidated or their cards keep rendering stale enabled/name values.
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'explore'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'exploreInfinite'] })
   })
@@ -607,6 +642,7 @@ describe('challengeSingle.useSaveOrUpdateChallenge', () => {
 
     expect(queryClient.getQueryData(['challenge', 50])).toEqual(saved)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'explore'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'exploreInfinite'] })
   })

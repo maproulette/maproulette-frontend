@@ -256,6 +256,56 @@ describe('taskSingle.useUnlockTask', () => {
   })
 })
 
+describe('taskSingle.useLockTaskBundle', () => {
+  it('PUTs the bundled task ids as repeated taskIds params and invalidates inBounds tasks', async () => {
+    const fetchMock = stubFetch(
+      new Response(JSON.stringify({ lockPrimaryTaskId: 1, lockBundledTasks: [2, 3] }), {
+        status: 200,
+      })
+    )
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => taskSingle.useLockTaskBundle(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ taskId: 1, taskIds: [2, 3] })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual({ lockPrimaryTaskId: 1, lockBundledTasks: [2, 3] })
+    const [request] = fetchMock.mock.calls[0] as [Request]
+    expect(request.method).toBe('PUT')
+    const url = new URL(request.url)
+    expect(url.pathname).toBe('/api/v2/task/1/lockBundle')
+    expect(url.searchParams.getAll('taskIds')).toEqual(['2', '3'])
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
+  })
+
+  it('logs and swallows a failed bundle lock update', async () => {
+    const { logger } = await import('@/lib/logger')
+    const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => {})
+    stubFetch(new Response('conflict', { status: 409 }))
+    const queryClient = createTestQueryClient()
+
+    const { result } = renderHook(() => taskSingle.useLockTaskBundle(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ taskId: 1, taskIds: [2] })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+
+    expect(loggerErrorSpy).toHaveBeenCalledWith(
+      'Failed to update bundle lock',
+      expect.objectContaining({ variables: { taskId: 1, taskIds: [2] } })
+    )
+
+    loggerErrorSpy.mockRestore()
+  })
+})
+
 describe('taskSingle.useSkipTask', () => {
   it('marks a cached task skipped, invalidates aggregates when the status actually changed, and patches the marker', async () => {
     stubFetch(new Response('', { status: 200 }))

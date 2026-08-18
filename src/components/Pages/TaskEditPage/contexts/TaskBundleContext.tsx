@@ -13,6 +13,13 @@ import type { Task, TaskMarker } from '@/types/Task'
 /** Sentinel for a locally-built bundle that hasn't been persisted yet. */
 export const PENDING_BUNDLE_ID = 0
 
+/** Canonicalizes a set of task IDs for order-independent comparison. */
+const sortedIdKey = (ids: number[]) =>
+  ids
+    .slice()
+    .sort((a, b) => a - b)
+    .join(',')
+
 export interface TaskBundle {
   bundleId: number
   taskIds: number[]
@@ -24,7 +31,6 @@ export interface TaskBundleContextType {
   activeBundle: TaskBundle | null
   setActiveBundle: Dispatch<SetStateAction<TaskBundle | null>>
   initialBundle: TaskBundle | null
-  setInitialBundle: Dispatch<SetStateAction<TaskBundle | null>>
   showBundleOnly: boolean
   setShowBundleOnly: Dispatch<SetStateAction<boolean>>
   bundleEditsDisabled: boolean
@@ -56,25 +62,57 @@ export interface TaskBundleContextType {
   canAddSelectedMarkerToBundle: boolean
   handleAddToBundle: () => void
   handleRemoveFromBundle: () => void
+  /** Updates the live lock to cover the given bundle's member tasks (or none, if null) -
+   * for edits made outside these handlers, e.g. the lasso-select workflow in
+   * useLassoBundleSync. Never touches the persisted task_bundles record; that only
+   * happens when the task is actually submitted (see TaskActionModal). */
+  persistBundle: (nextBundle: TaskBundle | null) => void
 }
 
 const TaskBundleContext = createContext<TaskBundleContextType | undefined>(undefined)
 
 export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useIntl()
-  const { task } = useTaskContext()
+  const { task, isLocked, lockedTasks } = useTaskContext()
   const { user } = useAuthContext()
   const { selectedMarker, setSelectedMarker, setActiveTaskId, emptyClickCount } =
     useTaskMapContext()
 
   const [activeBundle, setActiveBundle] = useState<TaskBundle | null>(null)
-  const [initialBundle, setInitialBundle] = useState<TaskBundle | null>(null)
   const [showBundleOnly, setShowBundleOnly] = useState(false)
   const [bundleEditsDisabled, setBundleEditsDisabled] = useState(false)
   const [bundlingDisabledReason, setBundlingDisabledReason] = useState<string | null>(null)
   const [visibleTaskIds, setVisibleTaskIds] = useState<number[] | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [drawerTaskId, setDrawerTaskId] = useState<number | null>(null)
+
+  const lockBundleMutation = api.task.useLockTaskBundle()
+
+  const persistBundle = useCallback(
+    (nextBundle: TaskBundle | null) => {
+      const memberTaskIds = nextBundle?.taskIds.filter((id) => id !== task.id) ?? []
+      lockBundleMutation.mutate({ taskId: task.id, taskIds: memberTaskIds })
+    },
+    [task.id, lockBundleMutation.mutate]
+  )
+
+  const { data: dbBundle } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
+  const dbBundleTaskIds = useMemo(
+    () => dbBundle?.taskIds.filter((id) => id !== task.id) ?? [],
+    [dbBundle, task.id]
+  )
+
+  const initialBundle: TaskBundle | null = useMemo(
+    () =>
+      dbBundleTaskIds.length === 0
+        ? null
+        : {
+            bundleId: dbBundle?.bundleId ?? PENDING_BUNDLE_ID,
+            taskIds: [task.id, ...dbBundleTaskIds],
+            name: 'Bundle',
+          },
+    [dbBundleTaskIds, task.id, dbBundle?.bundleId]
+  )
 
   // Reason: stable references returned from context — consumers use these as event handler dependencies
   const clearBundle = useCallback(() => {
@@ -92,12 +130,15 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
 
   const handleClearBundle = useCallback(() => {
     if (!activeBundle) return
+    // Release the lock's bundled tasks too - otherwise other tabs would still see them as
+    // locked/bundled even though this tab has moved on to just the primary.
+    persistBundle(null)
     clearBundle()
     toast.success(
       t('taskEditPage.taskBundle.clearedSuccess', undefined, 'Now working on only the primary task')
     )
     setShowDeleteDialog(false)
-  }, [activeBundle, clearBundle])
+  }, [activeBundle, clearBundle, persistBundle])
 
   const bundleTaskIds = activeBundle?.taskIds ?? [task.id]
   const isNonBundleSelection = selectedMarker !== null && !bundleTaskIds.includes(selectedMarker.id)
@@ -115,10 +156,16 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const { data: fetchedTask } = api.task.getTask(viewedTaskId !== task.id ? viewedTaskId : 0)
   const viewedTask: Task = viewedTaskId === task.id ? task : (fetchedTask ?? task)
 
-  // Fetch bundle data for the viewed task (if it has a bundleId)
-  const { data: viewedTaskBundle } = api.taskBundle.getTaskBundle(viewedTask.bundleId ?? 0)
-  const viewedTaskBundleTaskIds =
-    viewedTaskBundle?.taskIds.filter((id) => id !== viewedTaskId) ?? []
+  const confirmedBundleTaskIds = useMemo(
+    () => (isLocked ? lockedTasks : dbBundleTaskIds),
+    [isLocked, lockedTasks, dbBundleTaskIds]
+  )
+
+  const viewedTaskBundleTaskIds = useMemo(() => {
+    const isViewedTaskConfirmed =
+      viewedTaskId === task.id || confirmedBundleTaskIds.includes(viewedTaskId)
+    return isViewedTaskConfirmed ? confirmedBundleTaskIds.filter((id) => id !== viewedTaskId) : []
+  }, [viewedTaskId, task.id, confirmedBundleTaskIds])
 
   const isViewedTaskInBundle = activeBundle?.taskIds.includes(viewedTaskId) ?? false
 
@@ -170,33 +217,57 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [emptyClickCount, setSelectedMarker])
 
+  useEffect(() => {
+    setActiveBundle(null)
+  }, [task.id])
+
+  useEffect(() => {
+    const confirmedKey = sortedIdKey(confirmedBundleTaskIds)
+    const activeKey = sortedIdKey(activeBundle?.taskIds.filter((id) => id !== task.id) ?? [])
+    if (confirmedKey === activeKey) return
+
+    if (confirmedBundleTaskIds.length === 0) {
+      setActiveBundle(null)
+      return
+    }
+
+    setActiveBundle({
+      bundleId: task.bundleId ?? PENDING_BUNDLE_ID,
+      taskIds: [task.id, ...confirmedBundleTaskIds],
+      name: 'Bundle',
+    })
+  }, [confirmedBundleTaskIds, task.id, task.bundleId])
+
   // Reason: stable references returned from context — consumers use these as event handler dependencies
   const handleAddToBundle = useCallback(() => {
     if (bundleEditsDisabled || !selectedMarker) return
 
+    let newBundle: TaskBundle
     if (!activeBundle) {
-      const newBundle = {
+      newBundle = {
         bundleId: PENDING_BUNDLE_ID,
         taskIds: [task.id, selectedMarker.id],
         tasks: [task],
         name: `Bundle (pending)`,
       }
       setActiveBundle(newBundle)
-      setInitialBundle(null)
     } else {
       if (activeBundle.taskIds.includes(selectedMarker.id)) return
-      setActiveBundle({
+      newBundle = {
         ...activeBundle,
         taskIds: [...activeBundle.taskIds, selectedMarker.id],
         tasks: activeBundle.tasks,
-      })
+      }
+      setActiveBundle(newBundle)
     }
+
+    persistBundle(newBundle)
 
     // Move the newly added task into the drawer as a bundle task
     const addedId = selectedMarker.id
     setSelectedMarker(null)
     setDrawerTaskId(addedId)
-  }, [bundleEditsDisabled, selectedMarker, activeBundle, task, setSelectedMarker])
+  }, [bundleEditsDisabled, selectedMarker, activeBundle, task, setSelectedMarker, persistBundle])
 
   const handleRemoveFromBundle = useCallback(() => {
     if (bundleEditsDisabled || !activeBundle) return
@@ -208,14 +279,16 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     const updatedTaskIds = activeBundle.taskIds.filter((id) => id !== removedTaskId)
 
     if (updatedTaskIds.length <= 1) {
+      persistBundle(null)
       setActiveBundle(null)
-      setInitialBundle(null)
     } else {
-      setActiveBundle({
+      const newBundle: TaskBundle = {
         ...activeBundle,
         taskIds: updatedTaskIds,
         tasks: activeBundle.tasks,
-      })
+      }
+      setActiveBundle(newBundle)
+      persistBundle(newBundle)
     }
 
     // Show removed task as non-bundle selection in drawer.
@@ -229,7 +302,15 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     }
     setSelectedMarker(removedTaskMarker)
     setDrawerTaskId(null)
-  }, [bundleEditsDisabled, activeBundle, viewedTaskId, task.id, viewedTask, setSelectedMarker])
+  }, [
+    bundleEditsDisabled,
+    activeBundle,
+    viewedTaskId,
+    task.id,
+    viewedTask,
+    setSelectedMarker,
+    persistBundle,
+  ])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: TaskBundleContextType = useMemo(
@@ -237,7 +318,6 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       activeBundle,
       setActiveBundle,
       initialBundle,
-      setInitialBundle,
       showBundleOnly,
       setShowBundleOnly,
       bundleEditsDisabled,
@@ -261,6 +341,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       canAddSelectedMarkerToBundle,
       handleAddToBundle,
       handleRemoveFromBundle,
+      persistBundle,
     }),
     [
       activeBundle,
@@ -282,6 +363,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       canAddSelectedMarkerToBundle,
       handleAddToBundle,
       handleRemoveFromBundle,
+      persistBundle,
     ]
   )
 

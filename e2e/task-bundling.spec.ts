@@ -10,6 +10,11 @@ test('a user can lasso-bundle a second task and clear the bundle', async ({
   await page.goto(`/tasks/${task.id}`)
 
   await expect(page.getByText(`Task #${task.id}`).first()).toBeVisible({ timeout: 15_000 })
+
+  // Opening a task URL directly no longer auto-claims it (only in-app
+  // navigation with claimTask=true does); clicking "Map this task" locks it,
+  // at which point the completion action buttons replace that prompt.
+  await page.getByRole('button', { name: 'Map this task' }).click()
   await expect(page.getByRole('button', { name: 'Fixed', exact: true })).toBeVisible({
     timeout: 20_000,
   })

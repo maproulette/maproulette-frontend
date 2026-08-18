@@ -223,9 +223,21 @@ export const challengeSingle = {
   useCloneChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: ({ challengeId, newName }: { challengeId: number; newName: string }) =>
+      // `projectId` is optional; the backend clones into the original challenge's
+      // project when it is omitted.
+      mutationFn: ({
+        challengeId,
+        newName,
+        projectId,
+      }: {
+        challengeId: number
+        newName: string
+        projectId?: number
+      }) =>
         apiRequest
-          .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`)
+          .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`, {
+            ...(projectId != null && { searchParams: { projectId } }),
+          })
           .json<ChallengeGetResponse>(),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['challenge'] })
@@ -296,6 +308,7 @@ export const challengeSingle = {
           updatedChallenge
         )
         void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
@@ -310,6 +323,7 @@ export const challengeSingle = {
       onSuccess: (saved) => {
         queryClient.setQueryData<ChallengeGetResponse>(['challenge', saved.id], saved)
         void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
@@ -486,6 +500,25 @@ export const challengeSingle = {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+      },
+    })
+  },
+
+  usePauseChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, paused }: { challengeId: number; paused: boolean }) =>
+        apiRequest
+          .put(`api/v2/challenge/${challengeId}`, {
+            json: { id: challengeId, paused },
+          })
+          .json<Challenge>(),
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
     })
   },

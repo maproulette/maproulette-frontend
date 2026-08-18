@@ -18,6 +18,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { getParentInfo } from '@/lib/challengeParent'
 import { logger } from '@/lib/logger'
+import { markdownRemarkPlugins } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModalsContext'
 import { getGitHubErrorMessage } from './ReportModalHelpers'
@@ -271,6 +272,7 @@ export const ReportModal = () => {
               {reportText.trim() ? (
                 <div className="prose prose-sm dark:prose-invert max-w-none break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
                   <ReactMarkdown
+                    remarkPlugins={markdownRemarkPlugins}
                     components={{
                       a: ({ ...props }) => (
                         <a
