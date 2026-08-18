@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@/types/Task'
-import { invalidateLockedTasks } from '../task/single'
 import { apiRequest } from '../client'
+import { invalidateLockedTasks } from '../task/single'
 
 export interface TaskBundleResponse {
   bundleId: number

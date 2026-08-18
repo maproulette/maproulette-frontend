@@ -16,6 +16,7 @@ export const ProjectChallengesPanel = () => {
   const { t } = useIntl()
   const {
     projectId,
+    project,
     searchQuery,
     setSearchQuery,
     onlyDiscoverable,
@@ -132,6 +133,7 @@ export const ProjectChallengesPanel = () => {
                 return (
                   <ChallengeCard
                     challenge={challenge}
+                    parentName={project?.displayName || project?.name}
                     linkTo="/manage/challenge/$challengeId"
                     linkParams={{ challengeId: String(challenge.id) }}
                     actions={

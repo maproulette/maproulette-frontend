@@ -372,7 +372,7 @@ describe('userProfile.useUpdateUserSettings', () => {
     expect(JSON.parse(bodies[0])).toEqual({ defaultBasemap: 1 })
   })
 
-  it('JSON-stringifies properties when provided', async () => {
+  it('sends properties as a JSON object when provided', async () => {
     const updatedUser = { id: 9 }
     const { bodies } = stubFetchCapturingBody(
       new Response(JSON.stringify(updatedUser), { status: 200 })
@@ -392,7 +392,7 @@ describe('userProfile.useUpdateUserSettings', () => {
 
     expect(JSON.parse(bodies[0])).toEqual({
       defaultBasemap: 1,
-      properties: JSON.stringify({ theme: 'dark' }),
+      properties: { theme: 'dark' },
     })
   })
 })

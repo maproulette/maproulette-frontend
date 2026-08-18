@@ -59,9 +59,7 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
                 </span>
               )}
               {lockedTask.startedAt ? (
-                <span className="ml-auto">
-                  {formatTimeAgo(new Date(lockedTask.startedAt))}
-                </span>
+                <span className="ml-auto">{formatTimeAgo(new Date(lockedTask.startedAt))}</span>
               ) : null}
             </div>
           </Link>

@@ -75,7 +75,7 @@
   "browsedChallengePage.challengeModals.cloneModal.cloneError": "Failed to clone challenge",
   "browsedChallengePage.challengeModals.cloneModal.cloneSuccess": "Challenge cloned successfully",
   "browsedChallengePage.challengeModals.cloneModal.cloning": "Cloning...",
-  "browsedChallengePage.challengeModals.cloneModal.description": "Create a copy of this challenge in a different project. The cloned challenge will include all settings but will start with no tasks.",
+  "browsedChallengePage.challengeModals.cloneModal.description": "Create a copy of this challenge in any project you manage, including this one. The cloned challenge will include all settings but will start with no tasks.",
   "browsedChallengePage.challengeModals.cloneModal.nameLabel": "New Challenge Name",
   "browsedChallengePage.challengeModals.cloneModal.namePlaceholder": "Enter name for cloned challenge",
   "browsedChallengePage.challengeModals.cloneModal.nameRequiredError": "Please enter a name for the cloned challenge",

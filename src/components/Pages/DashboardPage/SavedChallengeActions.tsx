@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { BookmarkX, MoreHorizontal, Play, Settings } from 'lucide-react'
 import { api } from '@/api'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -10,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import type { Challenge } from '@/types/Challenge'
