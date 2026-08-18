@@ -1,3 +1,7 @@
+import type { TranslateFn } from '@/i18n'
+
+/** English fallback text per status, used as the ICU defaultMessage when a catalog entry is
+ *  missing and by non-visible consumers (e.g. STATUS_CONFIG) that don't have access to t(). */
 export const STATUS_LABELS: Record<number, string> = {
   0: 'Created',
   1: 'Fixed',
@@ -9,6 +13,26 @@ export const STATUS_LABELS: Record<number, string> = {
   7: 'Answered',
   8: 'Validated',
   9: 'Disabled',
+}
+
+/** Catalog key per status, paired with STATUS_LABELS for translation. */
+export const STATUS_LABEL_KEYS: Record<number, string> = {
+  0: 'common.created',
+  1: 'common.fixed',
+  2: 'common.notAnIssue',
+  3: 'common.skipped',
+  4: 'common.deleted',
+  5: 'common.alreadyFixed',
+  6: 'common.cantComplete',
+  7: 'common.answered',
+  8: 'common.validated',
+  9: 'common.disabled',
+}
+
+/** Translated status label, or undefined for an unrecognized status id. */
+export const getStatusLabel = (t: TranslateFn, status: number): string | undefined => {
+  const key = STATUS_LABEL_KEYS[status]
+  return key ? t(key, undefined, STATUS_LABELS[status]) : undefined
 }
 
 /** Maps string-keyed status names (used by MR3 action counts) to canonical numeric IDs. */

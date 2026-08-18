@@ -7,6 +7,7 @@ import {
   type FieldPath,
   type FieldValues,
   FormProvider,
+  type FormState,
   useFormContext,
   useFormState,
 } from 'react-hook-form'
@@ -30,8 +31,10 @@ export const FormField = <
 >({
   ...props
 }: ControllerProps<TFieldValues, TName>) => {
+  const value = React.useMemo(() => ({ name: props.name }), [props.name])
+
   return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
+    <FormFieldContext.Provider value={value}>
       <Controller {...props} />
     </FormFieldContext.Provider>
   )
@@ -68,9 +71,10 @@ const FormItemContext = React.createContext<FormItemContextValue>({} as FormItem
 
 export const FormItem = ({ className, ...props }: React.ComponentProps<'div'>) => {
   const id = React.useId()
+  const value = React.useMemo(() => ({ id }), [id])
 
   return (
-    <FormItemContext.Provider value={{ id }}>
+    <FormItemContext.Provider value={value}>
       <div data-slot="form-item" className={cn('grid gap-2', className)} {...props} />
     </FormItemContext.Provider>
   )
@@ -142,3 +146,8 @@ export const FormMessage = ({ className, ...props }: React.ComponentProps<'p'>) 
     </p>
   )
 }
+
+/** Whether a form's submit button should be disabled: mid-submit or no changes to save. */
+export const formSubmitDisabled = (
+  formState: Pick<FormState<FieldValues>, 'isSubmitting' | 'isDirty'>
+) => formState.isSubmitting || !formState.isDirty

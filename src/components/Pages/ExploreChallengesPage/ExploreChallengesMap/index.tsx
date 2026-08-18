@@ -20,7 +20,6 @@ import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import type { Bbox2D } from '@/types/Map'
 import { useExploreChallengesMap } from './hooks'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
-import { SearchThisAreaButton } from './SearchThisAreaButton'
 
 export const ExploreChallengesMap = () => {
   const mapId = useId()
@@ -156,15 +155,13 @@ export const ExploreChallengesMap = () => {
           )}
         </MapGL>
 
-        <MapLoadingIndicator isLoading={isLoadingMarkers} />
+        <MapLoadingIndicator isLoading={isLoadingMarkers} centered />
 
         <div className="absolute bottom-2 left-2 z-10 flex items-end gap-2">
           <StatusLegend />
           <ScaleBar mapRef={mapRef} mapLoaded={mapLoaded} />
         </div>
       </div>
-
-      <SearchThisAreaButton mapRef={mapRef} mapLoaded={mapLoaded} />
 
       {portalTarget &&
         createPortal(

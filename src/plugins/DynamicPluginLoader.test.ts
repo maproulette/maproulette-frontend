@@ -6,6 +6,7 @@ import {
   loadPluginFromUrl,
   loadPluginsFromManifests,
   loadPluginViaScript,
+  PLUGIN_SCRIPT_LOAD_TIMEOUT_MS,
   type RemotePluginManifest,
   validatePluginManifest,
 } from './DynamicPluginLoader'
@@ -48,7 +49,7 @@ describe('loadPluginViaScript', () => {
     'resolves with the plugin when window[globalName] exposes it %s',
     async (_label, kind, id, name, globalName) => {
       const plugin: Plugin = { metadata: { id, name, description: '', version: '1.0' } }
-      const promise = loadPluginViaScript(`https://example.com/${id}.js`, globalName)
+      const promise = loadPluginViaScript(`https://cdn.maproulette.org/${id}.js`, globalName)
       globalWindow[globalName] =
         kind === 'default' ? { default: plugin } : kind === 'plugin' ? { plugin } : plugin
       lastScript().onload?.(new Event('load'))
@@ -64,7 +65,7 @@ describe('loadPluginViaScript', () => {
     const otherPlugin: Plugin = {
       metadata: { id: 'other', name: 'Other', description: '', version: '1.0' },
     }
-    const promise = loadPluginViaScript('https://example.com/p4.js', 'BothWrapped')
+    const promise = loadPluginViaScript('https://cdn.maproulette.org/p4.js', 'BothWrapped')
     globalWindow.BothWrapped = { default: defaultPlugin, plugin: otherPlugin }
     lastScript().onload?.(new Event('load'))
 
@@ -72,7 +73,7 @@ describe('loadPluginViaScript', () => {
   })
 
   it('fails when nothing is exposed at window[globalName]', async () => {
-    const promise = loadPluginViaScript('https://example.com/missing.js', 'MissingGlobal')
+    const promise = loadPluginViaScript('https://cdn.maproulette.org/missing.js', 'MissingGlobal')
     lastScript().onload?.(new Event('load'))
 
     await expect(promise).resolves.toEqual({
@@ -86,7 +87,7 @@ describe('loadPluginViaScript', () => {
     ['is neither an object nor wrapped in default/plugin', 'PrimitiveGlobal', 'not-a-plugin'],
     ['has both default and plugin wrappers absent', 'EmptyObjectGlobal', {}],
   ] as const)('fails when the exposed value %s', async (_label, globalName, value) => {
-    const promise = loadPluginViaScript(`https://example.com/${globalName}.js`, globalName)
+    const promise = loadPluginViaScript(`https://cdn.maproulette.org/${globalName}.js`, globalName)
     globalWindow[globalName] = value
     lastScript().onload?.(new Event('load'))
 
@@ -101,7 +102,7 @@ describe('loadPluginViaScript', () => {
     ['metadata is missing an id', 'NoIdGlobal', { metadata: { name: 'Has Name' } }],
     ['metadata is missing a name', 'NoNameGlobal', { metadata: { id: 'has-id' } }],
   ] as const)('fails when the plugin %s', async (_label, globalName, value) => {
-    const promise = loadPluginViaScript(`https://example.com/${globalName}.js`, globalName)
+    const promise = loadPluginViaScript(`https://cdn.maproulette.org/${globalName}.js`, globalName)
     globalWindow[globalName] = value
     lastScript().onload?.(new Event('load'))
 
@@ -112,7 +113,7 @@ describe('loadPluginViaScript', () => {
   })
 
   it('resolves with an error and removes the script when reading window[globalName] throws an Error', async () => {
-    const promise = loadPluginViaScript('https://example.com/throws.js', 'ThrowingGlobal')
+    const promise = loadPluginViaScript('https://cdn.maproulette.org/throws.js', 'ThrowingGlobal')
     Object.defineProperty(window, 'ThrowingGlobal', {
       configurable: true,
       get() {
@@ -129,7 +130,7 @@ describe('loadPluginViaScript', () => {
 
   it('resolves with a generic message when a non-Error value is thrown', async () => {
     const promise = loadPluginViaScript(
-      'https://example.com/throwsstring.js',
+      'https://cdn.maproulette.org/throwsstring.js',
       'ThrowingStringGlobal'
     )
     Object.defineProperty(window, 'ThrowingStringGlobal', {
@@ -147,7 +148,7 @@ describe('loadPluginViaScript', () => {
   })
 
   it('resolves with an error and removes the script when the script fails to load', async () => {
-    const promise = loadPluginViaScript('https://example.com/error.js', 'ErrorGlobal')
+    const promise = loadPluginViaScript('https://cdn.maproulette.org/error.js', 'ErrorGlobal')
     lastScript().onerror?.(new Event('error'))
 
     await expect(promise).resolves.toEqual({
@@ -158,20 +159,115 @@ describe('loadPluginViaScript', () => {
   })
 
   it('configures the script element with the given URL, async and crossOrigin attributes', () => {
-    loadPluginViaScript('https://example.com/config.js', 'ConfigGlobal')
+    loadPluginViaScript('https://cdn.maproulette.org/config.js', 'ConfigGlobal')
     const script = lastScript()
 
-    expect(script.src).toBe('https://example.com/config.js')
+    expect(script.src).toBe('https://cdn.maproulette.org/config.js')
     expect(script.async).toBe(true)
     expect(script.crossOrigin).toBe('anonymous')
+  })
+
+  it('rejects a disallowed host without touching the DOM when called directly', async () => {
+    const result = await loadPluginViaScript('https://evil.com/plugin.js', 'EvilGlobal')
+
+    expect(result).toEqual({
+      success: false,
+      error:
+        'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.',
+    })
+    expect(appendedScripts).toHaveLength(0)
+  })
+
+  describe('load timeout', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('resolves with a timeout error when neither load nor error fires in time', async () => {
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/slow.js', 'SlowGlobal')
+      const removeSpy = vi.spyOn(lastScript(), 'remove')
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+      expect(removeSpy).toHaveBeenCalledOnce()
+    })
+
+    it('ignores a late onload firing after the script has already timed out', async () => {
+      const plugin: Plugin = {
+        metadata: { id: 'late', name: 'Late', description: '', version: '1.0' },
+      }
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/slow2.js', 'SlowGlobal2')
+      const script = lastScript()
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+
+      globalWindow.SlowGlobal2 = plugin
+      expect(() => script.onload?.(new Event('load'))).not.toThrow()
+      // The promise already settled from the timeout; a late onload must not
+      // change or re-resolve it.
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+    })
+
+    it('ignores a late onerror firing after the script has already timed out', async () => {
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/slow3.js', 'SlowGlobal3')
+      const script = lastScript()
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+
+      expect(() => script.onerror?.(new Event('error'))).not.toThrow()
+      await expect(promise).resolves.toEqual({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+    })
+
+    it('does not time out if the script loads before the deadline', async () => {
+      const plugin: Plugin = {
+        metadata: { id: 'fast', name: 'Fast', description: '', version: '1.0' },
+      }
+      const promise = loadPluginViaScript('https://cdn.maproulette.org/fast.js', 'FastGlobal')
+      globalWindow.FastGlobal = plugin
+
+      await vi.advanceTimersByTimeAsync(PLUGIN_SCRIPT_LOAD_TIMEOUT_MS - 1)
+      lastScript().onload?.(new Event('load'))
+
+      await expect(promise).resolves.toEqual({ success: true, plugin })
+
+      // The (now-cleared) timeout must not fire and change the result.
+      await vi.advanceTimersByTimeAsync(1)
+      await expect(promise).resolves.toEqual({ success: true, plugin })
+    })
   })
 })
 
 describe('loadPluginFromUrl', () => {
-  it('rejects non-http(s) protocols without touching the DOM', async () => {
-    const result = await loadPluginFromUrl('ftp://example.com/plugin.js')
+  it('rejects non-http(s) protocols via the security allowlist check', async () => {
+    const result = await loadPluginFromUrl('ftp://cdn.maproulette.org/plugin.js')
 
-    expect(result).toEqual({ success: false, error: 'Only HTTP(S) URLs are supported' })
+    expect(result).toEqual({
+      success: false,
+      error:
+        'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.',
+    })
     expect(appendedScripts).toHaveLength(0)
   })
 
@@ -182,25 +278,11 @@ describe('loadPluginFromUrl', () => {
     expect(typeof result.error).toBe('string')
   })
 
-  it('returns a generic message when a non-Error value is thrown while parsing the URL', async () => {
-    // Must be a constructible function (the source calls `new URL(...)`), so this can't be an arrow function.
-    function ThrowingUrl() {
-      // eslint-disable-next-line @typescript-eslint/no-throw-literal
-      throw 'not-an-error'
-    }
-    vi.stubGlobal('URL', ThrowingUrl)
-
-    const result = await loadPluginFromUrl('https://example.com/a.js')
-
-    expect(result).toEqual({ success: false, error: 'Failed to load plugin module' })
-    vi.unstubAllGlobals()
-  })
-
   it('derives the global name from the URL filename and delegates to script loading', async () => {
     const plugin: Plugin = {
       metadata: { id: 'derived', name: 'Derived', description: '', version: '1.0' },
     }
-    const promise = loadPluginFromUrl('https://example.com/path/derivedGlobal.js')
+    const promise = loadPluginFromUrl('https://cdn.maproulette.org/path/derivedGlobal.js')
     globalWindow.derivedGlobal = plugin
     lastScript().onload?.(new Event('load'))
 
@@ -208,7 +290,7 @@ describe('loadPluginFromUrl', () => {
   })
 
   it('falls back to an empty global name when the URL has no filename segment', async () => {
-    const result = loadPluginFromUrl('https://example.com/')
+    const result = loadPluginFromUrl('https://cdn.maproulette.org/')
     lastScript().onload?.(new Event('load'))
 
     await expect(result).resolves.toEqual({
@@ -225,16 +307,18 @@ describe('loadPluginsFromManifests', () => {
   })
 
   it('loads each manifest and keys the results by manifest id', async () => {
+    const notAllowedError =
+      'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.'
     const manifests: RemotePluginManifest[] = [
-      { id: 'one', name: 'One', moduleUrl: 'ftp://example.com/one.js', version: '1.0' },
-      { id: 'two', name: 'Two', moduleUrl: 'ftp://example.com/two.js', version: '1.0' },
+      { id: 'one', name: 'One', moduleUrl: 'ftp://cdn.maproulette.org/one.js', version: '1.0' },
+      { id: 'two', name: 'Two', moduleUrl: 'ftp://cdn.maproulette.org/two.js', version: '1.0' },
     ]
 
     const result = await loadPluginsFromManifests(manifests)
 
     expect(result.size).toBe(2)
-    expect(result.get('one')).toEqual({ success: false, error: 'Only HTTP(S) URLs are supported' })
-    expect(result.get('two')).toEqual({ success: false, error: 'Only HTTP(S) URLs are supported' })
+    expect(result.get('one')).toEqual({ success: false, error: notAllowedError })
+    expect(result.get('two')).toEqual({ success: false, error: notAllowedError })
   })
 })
 
@@ -244,7 +328,7 @@ describe('validatePluginManifest', () => {
       validatePluginManifest({
         id: 'a',
         name: 'A',
-        moduleUrl: 'https://x.com/a.js',
+        moduleUrl: 'https://cdn.maproulette.org/a.js',
         version: '1.0',
       })
     ).toBe(true)
@@ -260,10 +344,10 @@ describe('validatePluginManifest', () => {
   })
 
   it.each([
-    ['id', { name: 'A', moduleUrl: 'https://x.com/a.js', version: '1.0' }],
-    ['name', { id: 'a', moduleUrl: 'https://x.com/a.js', version: '1.0' }],
+    ['id', { name: 'A', moduleUrl: 'https://cdn.maproulette.org/a.js', version: '1.0' }],
+    ['name', { id: 'a', moduleUrl: 'https://cdn.maproulette.org/a.js', version: '1.0' }],
     ['moduleUrl', { id: 'a', name: 'A', version: '1.0' }],
-    ['version', { id: 'a', name: 'A', moduleUrl: 'https://x.com/a.js' }],
+    ['version', { id: 'a', name: 'A', moduleUrl: 'https://cdn.maproulette.org/a.js' }],
   ] as const)('rejects a manifest missing %s', (_field, manifest) => {
     expect(validatePluginManifest(manifest)).toBe(false)
   })
@@ -274,14 +358,28 @@ describe('fetchPluginManifest', () => {
     vi.unstubAllGlobals()
   })
 
+  it('returns null for a disallowed host without fetching', async () => {
+    vi.stubGlobal('fetch', vi.fn())
+
+    await expect(fetchPluginManifest('https://evil.com/manifest.json')).resolves.toBeNull()
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
   it('returns the parsed manifest when the response is a valid manifest', async () => {
-    const manifest = { id: 'a', name: 'A', moduleUrl: 'https://x.com/a.js', version: '1.0' }
+    const manifest = {
+      id: 'a',
+      name: 'A',
+      moduleUrl: 'https://cdn.maproulette.org/a.js',
+      version: '1.0',
+    }
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => new Response(JSON.stringify(manifest), { status: 200 }))
     )
 
-    await expect(fetchPluginManifest('https://x.com/manifest.json')).resolves.toEqual(manifest)
+    await expect(fetchPluginManifest('https://cdn.maproulette.org/manifest.json')).resolves.toEqual(
+      manifest
+    )
   })
 
   it('returns null when the response body is not a valid manifest', async () => {
@@ -290,7 +388,9 @@ describe('fetchPluginManifest', () => {
       vi.fn(async () => new Response(JSON.stringify({ foo: 'bar' }), { status: 200 }))
     )
 
-    await expect(fetchPluginManifest('https://x.com/manifest.json')).resolves.toBeNull()
+    await expect(
+      fetchPluginManifest('https://cdn.maproulette.org/manifest.json')
+    ).resolves.toBeNull()
   })
 
   it('returns null when the response is not ok', async () => {
@@ -299,7 +399,9 @@ describe('fetchPluginManifest', () => {
       vi.fn(async () => new Response('', { status: 500 }))
     )
 
-    await expect(fetchPluginManifest('https://x.com/manifest.json')).resolves.toBeNull()
+    await expect(
+      fetchPluginManifest('https://cdn.maproulette.org/manifest.json')
+    ).resolves.toBeNull()
   })
 
   it('returns null when fetch throws', async () => {
@@ -310,6 +412,8 @@ describe('fetchPluginManifest', () => {
       })
     )
 
-    await expect(fetchPluginManifest('https://x.com/manifest.json')).resolves.toBeNull()
+    await expect(
+      fetchPluginManifest('https://cdn.maproulette.org/manifest.json')
+    ).resolves.toBeNull()
   })
 })

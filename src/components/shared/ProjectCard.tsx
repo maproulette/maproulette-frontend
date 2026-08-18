@@ -29,7 +29,7 @@ export const ProjectCard = ({
   linkParams,
 }: ProjectCardProps) => {
   const { t } = useIntl()
-  const meta = challengeMeta ?? { totalChallenges: 10, pinned: 3, completed: 4 }
+  const meta = challengeMeta ?? { totalChallenges: 0, pinned: 0, completed: 0 }
   const completionPercentage =
     meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
   const lastUpdated = project.modified

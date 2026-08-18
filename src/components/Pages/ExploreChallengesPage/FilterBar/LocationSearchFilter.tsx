@@ -243,8 +243,13 @@ export const LocationSearchFilter = () => {
   const getLocationDetails = useCallback(
     async (suggestion: PlaceSuggestion): Promise<PlaceDetail | null> => {
       try {
+        const prefix = suggestion.osm_type ? osmTypeToPrefix(suggestion.osm_type) : undefined
+        if (!prefix || suggestion.osm_id === undefined) {
+          return null
+        }
+
         const data = await fetchNominatim(
-          `${NOMINATIM_BASE_URL}/search?q=${encodeURIComponent(suggestion.display_name)}&polygon_geojson=1&format=jsonv2&limit=1`
+          `${NOMINATIM_BASE_URL}/lookup?osm_ids=${prefix}${suggestion.osm_id}&polygon_geojson=1&format=jsonv2`
         )
         return data[0] || null
       } catch (err) {

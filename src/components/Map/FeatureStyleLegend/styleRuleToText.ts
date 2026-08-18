@@ -21,6 +21,8 @@ const operatorSymbol: Record<string, string> = {
   missing: 'missing',
   greaterThan: '>',
   lessThan: '<',
+  greaterThanOrEqual: '>=',
+  lessThanOrEqual: '<=',
 }
 
 export const styleRuleToText = (node: TaskPropertySearch | undefined): string => {

@@ -17,29 +17,8 @@ import {
 } from '@/components/ui/Table'
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
-import { isSuperUser } from '@/lib/SuperAdminGuard'
+import { getRoleBadgeColor, getUserRole } from '@/lib/SuperAdminGuard'
 import { cn, initials } from '@/lib/utils'
-import type { User } from '@/types/User'
-
-const getUserRole = (user: User): string => {
-  if (isSuperUser(user)) return 'super_admin'
-
-  const hasAdminGrant = user.grants?.some((grant) => grant.role === 1) ?? false
-  if (hasAdminGrant) return 'admin'
-
-  return 'user'
-}
-
-const getRoleBadgeColor = (role: string) => {
-  switch (role) {
-    case 'super_admin':
-      return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-    case 'admin':
-      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-    default:
-      return 'bg-zinc-100 text-zinc-800 dark:bg-slate-800 dark:text-zinc-200'
-  }
-}
 
 export const SuperAdminUsers = () => {
   const { t } = useIntl()
@@ -94,7 +73,7 @@ export const SuperAdminUsers = () => {
           placeholder={t(
             'superAdminUsers.searchPlaceholder',
             undefined,
-            'Search users by name or email...'
+            'Search this page by name or email...'
           )}
         />
       </div>
@@ -283,13 +262,17 @@ export const SuperAdminUsers = () => {
                       <Search />
                     </EmptyMedia>
                     <EmptyTitle>
-                      {t('superAdminUsers.empty.title', undefined, 'No users found')}
+                      {t(
+                        'superAdminUsers.empty.title',
+                        undefined,
+                        'No matching users on this page'
+                      )}
                     </EmptyTitle>
                     <EmptyDescription>
                       {t(
-                        'common.tryAdjustingYourSearchQuery',
+                        'superAdminUsers.empty.description',
                         undefined,
-                        'Try adjusting your search query.'
+                        'This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term.'
                       )}
                     </EmptyDescription>
                   </EmptyHeader>

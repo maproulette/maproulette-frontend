@@ -18,6 +18,46 @@ const STATUS_SYMBOL_SVG: Record<number, string> = {
   6: `<g transform="translate(7.5 7.5) scale(0.5)" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><path d="M12 9v4"/><circle cx="12" cy="17" r="0.6" fill="#0f172a" stroke="none"/></g>`,
 }
 
+/**
+ * Shared boilerplate for registering a single SVG icon with the map:
+ * guards against re-registering an already-loaded icon, builds an Image
+ * from base64-encoded SVG, and calls `map.addImage` once it loads.
+ *
+ * `onRegistered` fires only when `addImage` actually runs (i.e. the icon
+ * wasn't already registered by the time the image finished loading).
+ */
+const registerIcon = (
+  map: React.RefObject<maplibregl.Map | null>,
+  iconName: string,
+  svg: string,
+  size: { width: number; height: number },
+  onRegistered?: () => void
+) => {
+  const currentMap = map.current
+  if (!currentMap) return
+
+  try {
+    if (currentMap.hasImage(iconName)) {
+      return
+    }
+  } catch {
+    return
+  }
+
+  const icon = new Image(size.width * PIXEL_RATIO, size.height * PIXEL_RATIO)
+  icon.src = `data:image/svg+xml;base64,${btoa(svg)}`
+  icon.onload = () => {
+    const mapInstance = map.current
+    if (!mapInstance) return
+    try {
+      if (!mapInstance.hasImage(iconName)) {
+        mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
+        onRegistered?.()
+      }
+    } catch {}
+  }
+}
+
 const getStatusSymbol = (status: number): string =>
   STATUS_SYMBOL_SVG[status] ?? STATUS_SYMBOL_SVG[0]
 
@@ -103,32 +143,15 @@ export const createMarkerIcons = (
         ? `marker-pin-${status}-${priority}-${suffixOverride ?? getBorderSuffix(borderColor)}`
         : `marker-pin-${status}-${priority}`
 
-      try {
-        if (currentMap.hasImage(iconName)) {
-          return
-        }
-      } catch {
-        return
-      }
-
-      const icon = new Image(27 * PIXEL_RATIO, 36 * PIXEL_RATIO)
       const pinSvg = buildMarkerSvg(color, borderColor ?? '#000000', Number(status), priority)
 
-      icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
-      icon.onload = () => {
-        const mapInstance = map.current
-        if (!mapInstance) return
-        try {
-          if (!mapInstance.hasImage(iconName)) {
-            mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
-            iconsLoaded++
-            if (onComplete && iconsLoaded >= 20 && !callbackFired) {
-              callbackFired = true
-              onComplete()
-            }
-          }
-        } catch {}
-      }
+      registerIcon(map, iconName, pinSvg, { width: 27, height: 36 }, () => {
+        iconsLoaded++
+        if (onComplete && iconsLoaded >= 20 && !callbackFired) {
+          callbackFired = true
+          onComplete()
+        }
+      })
     }
 
     const createDualBorderMarkerIcon = (
@@ -141,15 +164,6 @@ export const createMarkerIcons = (
     ) => {
       const iconName = `marker-pin-${status}-${priority}-${suffix}`
 
-      try {
-        if (currentMap.hasImage(iconName)) {
-          return
-        }
-      } catch {
-        return
-      }
-
-      const icon = new Image(27 * PIXEL_RATIO, 36 * PIXEL_RATIO)
       const pinSvg = buildDualBorderMarkerSvg(
         color,
         outerColor,
@@ -158,17 +172,9 @@ export const createMarkerIcons = (
         priority
       )
 
-      icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
-      icon.onload = () => {
-        const mapInstance = map.current
-        if (!mapInstance) return
-        try {
-          if (!mapInstance.hasImage(iconName)) {
-            mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
-            iconsLoaded++
-          }
-        } catch {}
-      }
+      registerIcon(map, iconName, pinSvg, { width: 27, height: 36 }, () => {
+        iconsLoaded++
+      })
     }
 
     const PRIORITY_LEVELS = [0, 1, 2]
@@ -182,7 +188,7 @@ export const createMarkerIcons = (
 
         createMarkerIcon(status, color, priority, '#f59e0b')
 
-        createMarkerIcon(status, color, priority, '#22c55e', 'hovered')
+        createMarkerIcon(status, color, priority, '#3b82f6', 'hovered')
 
         createMarkerIcon(status, color, priority, '#eab308')
 
@@ -228,23 +234,8 @@ export const createMarkerIcons = (
       const iconName = suffix
         ? `marker-type-${typeKey}-${priority}-${suffix}`
         : `marker-type-${typeKey}-${priority}`
-      try {
-        if (currentMap.hasImage(iconName)) return
-      } catch {
-        return
-      }
-      const icon = new Image(27 * PIXEL_RATIO, 36 * PIXEL_RATIO)
       const pinSvg = buildTypeMarkerSvg(typeKey, priority, borderColor)
-      icon.src = `data:image/svg+xml;base64,${btoa(pinSvg)}`
-      icon.onload = () => {
-        const mapInstance = map.current
-        if (!mapInstance) return
-        try {
-          if (!mapInstance.hasImage(iconName)) {
-            mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
-          }
-        } catch {}
-      }
+      registerIcon(map, iconName, pinSvg, { width: 27, height: 36 })
     }
 
     TASK_TYPE_KEYS.forEach((typeKey) => {
@@ -263,15 +254,6 @@ export const createMarkerIcons = (
       borderColor?: string,
       borderWidth = 4
     ) => {
-      try {
-        if (currentMap.hasImage(iconName)) {
-          return
-        }
-      } catch {
-        return
-      }
-
-      const icon = new Image(32 * PIXEL_RATIO, 44 * PIXEL_RATIO)
       const displayText = typeof taskCount === 'number' ? String(taskCount) : taskCount
       const fontSize = typeof taskCount === 'number' && taskCount >= 10 ? '9' : '10'
       const textY = typeof taskCount === 'number' && taskCount >= 10 ? '15' : '16'
@@ -294,16 +276,7 @@ export const createMarkerIcons = (
           <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
         </svg>`
 
-      icon.src = `data:image/svg+xml;base64,${btoa(overlapPinSvg)}`
-      icon.onload = () => {
-        const mapInstance = map.current
-        if (!mapInstance) return
-        try {
-          if (!mapInstance.hasImage(iconName)) {
-            mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
-          }
-        } catch {}
-      }
+      registerIcon(map, iconName, overlapPinSvg, { width: 32, height: 44 })
     }
 
     const createDualBorderOverlapIcon = (
@@ -312,15 +285,6 @@ export const createMarkerIcons = (
       outerColor: string,
       innerColor: string
     ) => {
-      try {
-        if (currentMap.hasImage(iconName)) {
-          return
-        }
-      } catch {
-        return
-      }
-
-      const icon = new Image(32 * PIXEL_RATIO, 44 * PIXEL_RATIO)
       const displayText = typeof taskCount === 'number' ? String(taskCount) : taskCount
       const fontSize = typeof taskCount === 'number' && taskCount >= 10 ? '9' : '10'
       const textY = typeof taskCount === 'number' && taskCount >= 10 ? '15' : '16'
@@ -336,16 +300,7 @@ export const createMarkerIcons = (
           <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
         </svg>`
 
-      icon.src = `data:image/svg+xml;base64,${btoa(overlapPinSvg)}`
-      icon.onload = () => {
-        const mapInstance = map.current
-        if (!mapInstance) return
-        try {
-          if (!mapInstance.hasImage(iconName)) {
-            mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
-          }
-        } catch {}
-      }
+      registerIcon(map, iconName, overlapPinSvg, { width: 32, height: 44 })
     }
 
     for (let taskCount = 2; taskCount <= 20; taskCount++) {
@@ -357,7 +312,7 @@ export const createMarkerIcons = (
 
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-primary`, '#f59e0b', 3)
 
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#22c55e', 3)
+      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#3b82f6', 3)
 
       createOverlapIcon(taskCount, `marker-overlap-${taskCount}-lasso`, '#eab308', 3)
 
@@ -387,7 +342,7 @@ export const createMarkerIcons = (
     createOverlapIcon('20+', 'marker-overlap-many-selected', '#8b5cf6', 3)
     createOverlapIcon('20+', 'marker-overlap-many-bundled', '#22c55e', 3)
     createOverlapIcon('20+', 'marker-overlap-many-primary', '#f59e0b', 3)
-    createOverlapIcon('20+', 'marker-overlap-many-hovered', '#22c55e', 3)
+    createOverlapIcon('20+', 'marker-overlap-many-hovered', '#3b82f6', 3)
     createOverlapIcon('20+', 'marker-overlap-many-lasso', '#eab308', 3)
     createDualBorderOverlapIcon('20+', 'marker-overlap-many-bundled-selected', '#8b5cf6', '#22c55e')
     createDualBorderOverlapIcon('20+', 'marker-overlap-many-primary-selected', '#8b5cf6', '#f59e0b')

@@ -99,7 +99,7 @@ export const KeyboardShortcutsModal = () => {
                       {shortcut.description}
                     </span>
                     <kbd className="ml-4 shrink-0 rounded border border-zinc-300 bg-white px-2 py-1 font-mono text-xs text-zinc-600 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-zinc-400">
-                      {shortcut.key}
+                      {shortcut.ctrlOrCmd ? `Ctrl/Cmd + ${shortcut.key}` : shortcut.key}
                     </kbd>
                   </div>
                 ))}

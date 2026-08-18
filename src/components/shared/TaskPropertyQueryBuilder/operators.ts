@@ -8,7 +8,14 @@ export const stringOperators: PropertyOperator[] = [
   'missing',
 ]
 
-export const numberOperators: PropertyOperator[] = ['equals', 'notEqual', 'greaterThan', 'lessThan']
+export const numberOperators: PropertyOperator[] = [
+  'equals',
+  'notEqual',
+  'greaterThan',
+  'lessThan',
+  'greaterThanOrEqual',
+  'lessThanOrEqual',
+]
 
 export const operatorLabels: Record<PropertyOperator, string> = {
   equals: 'equals',
@@ -18,6 +25,8 @@ export const operatorLabels: Record<PropertyOperator, string> = {
   missing: 'is missing',
   greaterThan: 'greater than',
   lessThan: 'less than',
+  greaterThanOrEqual: 'greater than or equal to',
+  lessThanOrEqual: 'less than or equal to',
 }
 
 export const operatorTakesValue = (op: PropertyOperator): boolean =>

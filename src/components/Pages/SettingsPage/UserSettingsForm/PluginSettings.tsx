@@ -1,4 +1,5 @@
 import { Plus, Puzzle, Trash2 } from 'lucide-react'
+import { Fragment } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -123,8 +124,8 @@ export const PluginSettings = () => {
                 const isRemote = remotePluginUrls.has(plugin.metadata.id)
 
                 return (
-                  <>
-                    <Item key={plugin.metadata.id} variant="outline">
+                  <Fragment key={plugin.metadata.id}>
+                    <Item variant="outline">
                       <ItemMedia
                         variant="icon"
                         className="bg-lime-100 text-lime-600 dark:bg-lime-900/20"
@@ -155,6 +156,7 @@ export const PluginSettings = () => {
                         />
                         {isRemote && (
                           <Button
+                            type="button"
                             variant="ghost"
                             size="sm"
                             onClick={() =>
@@ -168,7 +170,7 @@ export const PluginSettings = () => {
                       </ItemActions>
                     </Item>
                     {index !== myPlugins.length - 1 && <ItemSeparator />}
-                  </>
+                  </Fragment>
                 )
               })}
             </ItemGroup>
@@ -204,8 +206,8 @@ export const PluginSettings = () => {
             ) : (
               <ItemGroup>
                 {workshopPlugins.map((plugin, index) => (
-                  <>
-                    <Item key={plugin.id} variant="outline">
+                  <Fragment key={plugin.id}>
+                    <Item variant="outline">
                       <ItemMedia
                         variant="icon"
                         className="bg-lime-100 text-lime-600 dark:bg-lime-900/20"
@@ -224,6 +226,7 @@ export const PluginSettings = () => {
                       </ItemContent>
                       <ItemActions>
                         <Button
+                          type="button"
                           variant="outline"
                           size="sm"
                           onClick={() => handleAddFromWorkshop(plugin)}
@@ -234,7 +237,7 @@ export const PluginSettings = () => {
                       </ItemActions>
                     </Item>
                     {index !== workshopPlugins.length - 1 && <ItemSeparator />}
-                  </>
+                  </Fragment>
                 ))}
               </ItemGroup>
             )}

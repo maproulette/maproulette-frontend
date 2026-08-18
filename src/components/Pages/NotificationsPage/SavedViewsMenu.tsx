@@ -12,48 +12,9 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { Input } from '@/components/ui/Input'
 import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
-import type { NotificationFilterState } from '@/hooks/useNotificationFilters'
 import { useIntl } from '@/i18n'
-import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
-
-const SAVED_VIEWS_KEY = 'mr4:notifications:savedViews'
-
-export type SavedView = {
-  id: string
-  name: string
-  state: NotificationFilterState
-}
-
-const loadSavedViews = (): SavedView[] => {
-  try {
-    const raw = localStorage.getItem(SAVED_VIEWS_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return []
-    return parsed.filter(
-      (v): v is SavedView =>
-        typeof v === 'object' &&
-        v !== null &&
-        typeof v.id === 'string' &&
-        typeof v.name === 'string' &&
-        typeof v.state === 'object' &&
-        v.state !== null
-    )
-  } catch (error) {
-    logger.warn('Failed to load saved notification views', { error: String(error) })
-    return []
-  }
-}
-
-const persistSavedViews = (views: SavedView[]) => {
-  try {
-    localStorage.setItem(SAVED_VIEWS_KEY, JSON.stringify(views))
-  } catch (error) {
-    logger.warn('Failed to persist saved notification views', { error: String(error) })
-    throw error
-  }
-}
+import { loadSavedViews, persistSavedViews, SAVED_VIEWS_KEY, type SavedView } from './savedViews'
 
 export const SavedViewsMenu = () => {
   const { t } = useIntl()

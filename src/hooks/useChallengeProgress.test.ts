@@ -9,6 +9,10 @@ vi.mock('@/api', () => ({
   api: { challenge: { getChallengeStats: vi.fn() } },
 }))
 
+vi.mock('@/contexts/AuthContext', () => ({
+  useAuthContext: () => ({ isAuthenticated: true }),
+}))
+
 type ChallengeStatsData = ReturnType<typeof api.challenge.getChallengeStats>['data']
 
 const mockStats = (data: ChallengeStatsData) => {

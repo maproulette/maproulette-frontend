@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
 import { LegendRow } from './LegendRow'
-import { priorityEntries, statusLegendEntries } from './taskStatusCatalog'
+import { getStatusLegendEntries, priorityEntries } from './taskStatusCatalog'
 
 interface Props {
   defaultOpen?: boolean
@@ -12,6 +12,7 @@ interface Props {
 export const StatusLegend = ({ defaultOpen = false }: Props) => {
   const [open, setOpen] = useState(defaultOpen)
   const { t } = useIntl()
+  const statusLegendEntries = getStatusLegendEntries(t)
 
   return (
     <div className="rounded-md bg-white/95 shadow-md backdrop-blur dark:bg-slate-900/95">

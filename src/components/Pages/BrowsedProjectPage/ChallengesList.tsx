@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Copy, Eye, ListChecks, MoreHorizontal, Pin, Play } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { ChallengesTableView } from '@/components/Pages/BrowsedProjectPage/ChallengesTableView'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import {
   buildPropertiesWithPinnedChallenges,
@@ -200,42 +201,50 @@ export const ChallengesList = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div
-          className={cn(
-            'grid gap-4',
-            viewMode === 'grid' && filteredChallenges.length > 0
-              ? 'grid-cols-1 sm:grid-cols-2'
-              : 'grid-cols-1'
-          )}
-        >
-          <EntityGrid
-            items={filteredChallenges}
-            renderItem={(challenge) => (
-              <ChallengeCard
-                challenge={challenge}
-                linkTo="/challenge/$challengeId"
-                linkParams={{ challengeId: String(challenge.id) }}
-                actions={buildChallengeActions(challenge)}
-              />
-            )}
-            getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
-            emptyState={{
-              icon: ListChecks,
-              title: t('common.noChallengesFound', undefined, 'No challenges found'),
-              description: hasActiveFilters
-                ? t(
-                    'browsedProjectPage.challengesList.emptyDescriptionFiltered',
-                    undefined,
-                    'Try clearing the filters to see more results.'
-                  )
-                : t(
-                    'browsedProjectPage.challengesList.emptyDescription',
-                    undefined,
-                    'This project has no challenges yet.'
-                  ),
-            }}
+        {viewMode === 'list' && filteredChallenges.length > 0 ? (
+          <ChallengesTableView
+            challenges={filteredChallenges}
+            renderActions={buildChallengeActions}
           />
-        </div>
+        ) : (
+          <div
+            className={cn(
+              'grid gap-4',
+              viewMode === 'grid' && filteredChallenges.length > 0
+                ? 'grid-cols-1 sm:grid-cols-2'
+                : 'grid-cols-1'
+            )}
+          >
+            <EntityGrid
+              items={filteredChallenges}
+              renderItem={(challenge) => (
+                <ChallengeCard
+                  challenge={challenge}
+                  parentName={project.displayName || project.name}
+                  linkTo="/challenge/$challengeId"
+                  linkParams={{ challengeId: String(challenge.id) }}
+                  actions={buildChallengeActions(challenge)}
+                />
+              )}
+              getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
+              emptyState={{
+                icon: ListChecks,
+                title: t('common.noChallengesFound', undefined, 'No challenges found'),
+                description: hasActiveFilters
+                  ? t(
+                      'browsedProjectPage.challengesList.emptyDescriptionFiltered',
+                      undefined,
+                      'Try clearing the filters to see more results.'
+                    )
+                  : t(
+                      'browsedProjectPage.challengesList.emptyDescription',
+                      undefined,
+                      'This project has no challenges yet.'
+                    ),
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

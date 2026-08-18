@@ -51,6 +51,33 @@ describe('userProfile.getUser', () => {
   })
 })
 
+describe('userProfile.getPublicUser', () => {
+  it('fetches a public user by id', async () => {
+    const user = { id: 5, osmProfile: { displayName: 'dave' } }
+    const fetchMock = stubFetch(new Response(JSON.stringify(user), { status: 200 }))
+
+    const { result } = renderHook(() => userProfile.getPublicUser(5), {
+      wrapper: queryClientWrapper(),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual(user)
+    const [request] = fetchMock.mock.calls[0]
+    expect(new URL(request.url).pathname).toBe('/api/v2/user/5/public')
+  })
+
+  it('is disabled when userId is 0 (falsy)', () => {
+    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
+
+    const { result } = renderHook(() => userProfile.getPublicUser(0), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
 describe('userProfile.activity', () => {
   it('fetches the current user activity log', async () => {
     const activity = [
@@ -345,7 +372,7 @@ describe('userProfile.useUpdateUserSettings', () => {
     expect(JSON.parse(bodies[0])).toEqual({ defaultBasemap: 1 })
   })
 
-  it('JSON-stringifies properties when provided', async () => {
+  it('sends properties as a JSON object when provided', async () => {
     const updatedUser = { id: 9 }
     const { bodies } = stubFetchCapturingBody(
       new Response(JSON.stringify(updatedUser), { status: 200 })
@@ -365,7 +392,7 @@ describe('userProfile.useUpdateUserSettings', () => {
 
     expect(JSON.parse(bodies[0])).toEqual({
       defaultBasemap: 1,
-      properties: JSON.stringify({ theme: 'dark' }),
+      properties: { theme: 'dark' },
     })
   })
 })

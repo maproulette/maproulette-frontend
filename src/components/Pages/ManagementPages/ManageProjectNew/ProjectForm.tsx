@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import {
   Form,
@@ -12,6 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  formSubmitDisabled,
 } from '@/components/ui/Form'
 import { FormSection, FormSectionGroup } from '@/components/ui/FormSection'
 import { Input } from '@/components/ui/Input'
@@ -22,42 +22,9 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { Project } from '@/types/Project'
+import { makeProjectFormSchema, type ProjectFormValues } from './projectFormSchema'
 
-type T = ReturnType<typeof useIntl>['t']
-
-// Building the schema requires translated validation messages, so it's built
-// from a function (called from within the component, where `t` is available)
-// rather than as a static module-level constant.
-const makeProjectFormSchema = (t: T) =>
-  z.object({
-    name: z
-      .string()
-      .min(
-        1,
-        t(
-          'manageProjectNew.projectForm.validation.nameRequired',
-          undefined,
-          'Project name is required'
-        )
-      )
-      .max(255),
-    displayName: z
-      .string()
-      .min(
-        1,
-        t(
-          'manageProjectNew.projectForm.validation.displayNameRequired',
-          undefined,
-          'Display name is required'
-        )
-      )
-      .max(255),
-    description: z.string().optional().or(z.literal('')),
-    enabled: z.boolean(),
-    featured: z.boolean(),
-  })
-
-export type ProjectFormValues = z.infer<ReturnType<typeof makeProjectFormSchema>>
+export type { ProjectFormValues } from './projectFormSchema'
 
 interface ProjectFormProps {
   project?: Project
@@ -289,7 +256,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
           <Button type="button" variant="outline" onClick={onCancel}>
             {t('common.cancel', undefined, 'Cancel')}
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {form.formState.isSubmitting
               ? t('common.saving2', undefined, 'Saving...')
               : project

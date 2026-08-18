@@ -1,26 +1,26 @@
 import { MousePointerClick, Package, Star } from 'lucide-react'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
+import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useIntl } from '@/i18n'
 
 interface BundleTaskListProps {
   taskIds: number[]
   primaryTaskId: number
   onOpenBundleTask?: (taskId: number) => void
-  /** Task ID whose drawer is currently open — keeps highlight active */
-  activeDrawerTaskId?: number | null
 }
 
 export const BundleTaskList = ({
   taskIds,
   primaryTaskId,
   onOpenBundleTask,
-  activeDrawerTaskId,
 }: BundleTaskListProps) => {
   const { t } = useIntl()
   const { highlightIdEntityRef, taskToOsmIdRef, selectIdEntitiesRef, activeView } =
     useEditorContext()
+  const { setHoveredBundleTaskId } = useTaskMapContext()
 
   const highlightTask = (taskId: number | null) => {
+    setHoveredBundleTaskId(taskId)
     if (activeView !== 'id') return
     const osmId = taskId != null ? (taskToOsmIdRef.current?.[taskId] ?? null) : null
     highlightIdEntityRef.current?.(osmId)
@@ -46,15 +46,9 @@ export const BundleTaskList = ({
 
   const highlightHandlers = (taskId: number) => ({
     onMouseEnter: () => highlightTask(taskId),
-    onMouseLeave: () => {
-      if (activeDrawerTaskId === taskId) return
-      highlightTask(null)
-    },
+    onMouseLeave: () => highlightTask(null),
     onFocus: () => highlightTask(taskId),
-    onBlur: () => {
-      if (activeDrawerTaskId === taskId) return
-      highlightTask(null)
-    },
+    onBlur: () => highlightTask(null),
   })
 
   if (taskIds.length === 0) return null
@@ -93,7 +87,7 @@ export const BundleTaskList = ({
               <button
                 type="button"
                 onClick={() => {
-                  highlightTask(taskId)
+                  if (isPrimary) return
                   onOpenBundleTask?.(taskId)
                 }}
                 {...highlightHandlers(taskId)}

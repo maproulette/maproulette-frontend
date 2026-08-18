@@ -1,10 +1,14 @@
 import type { VariantProps } from 'class-variance-authority'
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
-import { type ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
+import {
+  type KeyboardShortcut,
+  useRegisterShortcuts,
+} from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button, type buttonVariants } from '@/components/ui/Button'
-import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { TaskActionModal } from '../TaskActionModal'
@@ -23,6 +27,7 @@ export const TaskActions = () => {
   const { isAuthenticated, login } = useAuthContext()
   const isPaused = challenge.paused
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [modalConfig, setModalConfig] = useState<{
     status: number
     label: string
@@ -102,33 +107,40 @@ export const TaskActions = () => {
     },
   ]
 
-  // Keyboard shortcuts - only when locked
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isLocked) return
+  // Keyboard shortcuts - only when locked, and not while a modal is open or the challenge is paused
+  const shortcutsEnabled = isLocked && !isModalOpen && !isPaused
 
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        (e.target instanceof HTMLElement && e.target.isContentEditable)
-      ) {
-        return
-      }
-
-      if (isModalOpen || isPaused) return
-
-      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault()
-        handleMarkAsFixed()
-      } else if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-        e.preventDefault()
-        handleMarkAsFalsePositive()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isModalOpen, isLocked, isPaused])
+  // Reason: stable shortcut definitions for keyboard handler registration
+  const taskActionsShortcuts: KeyboardShortcut[] = useMemo(
+    () => [
+      {
+        key: 'f',
+        ctrlOrCmd: true,
+        description: t(
+          'taskEditPage.taskActions.main.markFixedTitle',
+          undefined,
+          'Mark as Fixed (Ctrl/Cmd + F)'
+        ),
+        category: t('taskEditPage.taskActions.main.shortcutsCategory', undefined, 'Task Actions'),
+        handler: handleMarkAsFixed,
+        enabled: shortcutsEnabled,
+      },
+      {
+        key: 'p',
+        ctrlOrCmd: true,
+        description: t(
+          'taskEditPage.taskActions.main.markFalsePositiveTitle',
+          undefined,
+          'Mark as False Positive (Ctrl/Cmd + P)'
+        ),
+        category: t('taskEditPage.taskActions.main.shortcutsCategory', undefined, 'Task Actions'),
+        handler: handleMarkAsFalsePositive,
+        enabled: shortcutsEnabled,
+      },
+    ],
+    [shortcutsEnabled, t]
+  )
+  useRegisterShortcuts('task-actions', taskActionsShortcuts)
 
   // Show sign in button if not authenticated
   if (!isAuthenticated) {
@@ -142,17 +154,27 @@ export const TaskActions = () => {
     )
   }
 
-  // Show navigation buttons for non-editable statuses (unless a plugin unlocks editing)
-  if (!isEditable) {
-    return <NavigationActions challengeId={task.parent} taskId={task.id} />
+  // While a completion is being submitted, we hold the completion buttons in place (disabled)
+  // until we navigate to the next task - so the now-completed status doesn't briefly swap in a
+  // different button set (navigation / start-mapping). Skip the status/lock-driven branches.
+  if (!isSubmitting) {
+    // Show navigation buttons for non-editable statuses (unless a plugin unlocks editing)
+    if (!isEditable) {
+      return <NavigationActions challengeId={task.parent} taskId={task.id} />
+    }
+
+    // Replace all task actions with a notice while the challenge is paused
+    if (isPaused) {
+      return <ChallengePausedNotice message={pausedMessage} />
+    }
+
+    // Show start mapping button if not locked
+    if (!isLocked) {
+      return <StartMappingActions challengeId={task.parent} />
+    }
   }
 
-  // Show start mapping button if not locked
-  if (!isLocked) {
-    return <StartMappingActions challengeId={task.parent} />
-  }
-
-  // Show completion buttons when locked
+  // Show completion buttons when locked (disabled while a submission is in flight)
   return (
     <>
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
@@ -165,19 +187,18 @@ export const TaskActions = () => {
         </div>
         <div className="grid grid-cols-2 gap-1.5">
           {completionActions.map((action) => (
-            <DisabledTooltip key={action.label} show={isPaused} message={pausedMessage}>
-              <Button
-                variant={action.variant}
-                size="sm"
-                onClick={action.onClick}
-                title={action.title}
-                disabled={isPaused}
-                className="w-full"
-              >
-                {action.icon}
-                {action.label}
-              </Button>
-            </DisabledTooltip>
+            <Button
+              key={action.label}
+              variant={action.variant}
+              size="sm"
+              onClick={action.onClick}
+              title={action.title}
+              className="w-full"
+              disabled={isSubmitting}
+            >
+              {action.icon}
+              {action.label}
+            </Button>
           ))}
         </div>
       </div>
@@ -188,6 +209,7 @@ export const TaskActions = () => {
           onOpenChange={setIsModalOpen}
           task={task}
           initialStatus={modalConfig.status}
+          onSubmittingChange={setIsSubmitting}
         />
       )}
     </>

@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
@@ -23,7 +23,7 @@ import {
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
-import type { TeamRole } from '@/types/Team'
+import { TEAM_ROLE_ADMIN, TEAM_ROLE_MEMBER, type TeamRole } from '@/types/Team'
 
 interface Props {
   teamId: number
@@ -35,9 +35,16 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
   const { t } = useIntl()
   const [query, setQuery] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
-  const [role, setRole] = useState<TeamRole>(1)
+  const [role, setRole] = useState<TeamRole>(TEAM_ROLE_MEMBER)
   const invite = api.team.useInviteMember()
   const { data: users = [] } = api.user.findUsers(query, 8, query.length > 0)
+
+  useEffect(() => {
+    if (!open) {
+      setQuery('')
+      setSelectedUserId(null)
+    }
+  }, [open])
 
   const handleInvite = async () => {
     if (!selectedUserId) return
@@ -45,8 +52,6 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
       await invite.mutateAsync({ teamId, userId: selectedUserId, role })
       toast.success(t('teams.inviteMember.sentSuccess', undefined, 'Invitation sent'))
       onOpenChange(false)
-      setQuery('')
-      setSelectedUserId(null)
     } catch (error) {
       logger.error('Invite failed', { error })
       toast.error(t('teams.inviteMember.sendError', undefined, 'Could not send invitation'))
@@ -92,10 +97,10 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
                     }`}
                   >
                     <Avatar className="size-6">
-                      <AvatarImage src={u.osmProfile.avatarURL} alt={u.osmProfile.displayName} />
-                      <AvatarFallback>{initials(u.osmProfile.displayName)}</AvatarFallback>
+                      <AvatarImage src={u.avatarURL} alt={u.displayName} />
+                      <AvatarFallback>{initials(u.displayName)}</AvatarFallback>
                     </Avatar>
-                    {u.osmProfile.displayName}
+                    {u.displayName}
                   </button>
                 </li>
               ))}
@@ -106,8 +111,12 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">{t('common.member', undefined, 'Member')}</SelectItem>
-              <SelectItem value="2">{t('common.admin', undefined, 'Admin')}</SelectItem>
+              <SelectItem value={String(TEAM_ROLE_MEMBER)}>
+                {t('common.member', undefined, 'Member')}
+              </SelectItem>
+              <SelectItem value={String(TEAM_ROLE_ADMIN)}>
+                {t('common.admin', undefined, 'Admin')}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

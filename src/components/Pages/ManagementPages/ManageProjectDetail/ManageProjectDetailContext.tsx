@@ -52,6 +52,7 @@ export interface ManageProjectDetailContextType {
   confirmDeleteChallenge: () => void
   toggleChallengePin: (challengeId: number) => void
   toggleChallengeEnabled: (challenge: Challenge) => void
+  togglePaused: (challengeId: number, paused: boolean) => void
   archiveChallenge: (challengeId: number, isArchived: boolean) => void
   rebuildChallenge: (challengeId: number) => void
 }
@@ -103,6 +104,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const deleteProjectMutation = api.project.useDeleteProject()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
+  const pauseChallengeMutation = api.challenge.usePauseChallenge()
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
 
   // Derived values
@@ -210,6 +212,13 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
     [archiveChallengeMutation]
   )
 
+  const togglePaused = useCallback(
+    (challengeId: number, paused: boolean) => {
+      pauseChallengeMutation.mutate({ challengeId, paused: !paused })
+    },
+    [pauseChallengeMutation]
+  )
+
   const rebuildChallenge = useCallback(
     (challengeId: number) => {
       const challenge = challenges?.find((c) => c.id === challengeId)
@@ -254,6 +263,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       confirmDeleteChallenge,
       toggleChallengePin,
       toggleChallengeEnabled,
+      togglePaused,
       archiveChallenge,
       rebuildChallenge,
     }),
@@ -282,6 +292,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       confirmDeleteChallenge,
       toggleChallengePin,
       toggleChallengeEnabled,
+      togglePaused,
       archiveChallenge,
       rebuildChallenge,
     ]

@@ -21,7 +21,12 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
 import type { TeamRole, TeamUser } from '@/types/Team'
-import { TeamRoleLabel } from '@/types/Team'
+import {
+  TEAM_ROLE_ADMIN,
+  TEAM_ROLE_MEMBER,
+  TeamDisplayRoleLabel,
+  teamDisplayRole,
+} from '@/types/Team'
 import { InviteMemberDialog } from './InviteMemberDialog'
 
 interface Props {
@@ -63,7 +68,7 @@ const MemberRow = ({
     }
   }
 
-  const role = member.status as TeamRole
+  const role = teamDisplayRole(member)
 
   return (
     <li className="flex items-center gap-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
@@ -73,28 +78,28 @@ const MemberRow = ({
       <div className="min-w-0 flex-1">
         <div className="truncate font-medium">{member.name}</div>
         <div className="text-xs text-zinc-500 dark:text-slate-400">
-          {TeamRoleLabel[role] ?? t('common.unknown', undefined, 'Unknown')}
+          {TeamDisplayRoleLabel[role]}
         </div>
       </div>
       {isAdmin && member.userId !== currentUserId && (
         <div className="flex gap-1">
-          {role === 1 && (
+          {role === 'member' && (
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => handleRole(2)}
+              onClick={() => handleRole(TEAM_ROLE_ADMIN)}
               disabled={changeRole.isPending}
             >
               {t('teams.detail.promoteButton', undefined, 'Promote')}
             </Button>
           )}
-          {role === 2 && (
+          {role === 'admin' && (
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => handleRole(1)}
+              onClick={() => handleRole(TEAM_ROLE_MEMBER)}
               disabled={changeRole.isPending}
             >
               {t('teams.detail.demoteButton', undefined, 'Demote')}
@@ -137,17 +142,17 @@ export const TeamDetailPage = ({ teamId }: Props) => {
   }
 
   const me = members.find((m) => m.userId === user?.id)
-  const iAmAdmin = me?.status === 2
+  const iAmAdmin = me !== undefined && teamDisplayRole(me) === 'admin'
 
-  const admins = members.filter((m) => m.status === 2)
-  const regularMembers = members.filter((m) => m.status === 1)
-  const invited = members.filter((m) => m.status === 0)
+  const admins = members.filter((m) => teamDisplayRole(m) === 'admin')
+  const regularMembers = members.filter((m) => teamDisplayRole(m) === 'member')
+  const invited = members.filter((m) => teamDisplayRole(m) === 'invited')
 
   const handleDelete = async () => {
     try {
       await deleteTeam.mutateAsync(teamId)
       toast.success(t('teams.detail.deleteSuccess', undefined, 'Team deleted'))
-      navigate({ to: '/teams' })
+      navigate({ to: '/dashboard' })
     } catch (error) {
       logger.error('Team delete failed', { error })
       toast.error(t('teams.detail.deleteError', undefined, 'Could not delete team'))

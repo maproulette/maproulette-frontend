@@ -27,7 +27,11 @@ export const MobileNav = () => {
       <DropdownMenuContent align="center">
         {allNavigationItems.map((item) => (
           <DropdownMenuItem key={item.to} asChild>
-            <Link to={item.to} className="flex w-full items-center gap-1.5">
+            <Link
+              to={item.to}
+              target={item.openInNewTab ? '_blank' : ''}
+              className="flex w-full items-center gap-1.5"
+            >
               {item.icon && <span className="inline-flex">{item.icon}</span>}
               {item.label}
               {item.openInNewTab && (

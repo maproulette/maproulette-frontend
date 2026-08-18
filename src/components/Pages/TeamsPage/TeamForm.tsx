@@ -7,11 +7,14 @@ import { Button } from '@/components/ui/Button'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  formSubmitDisabled,
 } from '@/components/ui/Form'
+import { FormSection } from '@/components/ui/FormSection'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useIntl } from '@/i18n'
@@ -62,58 +65,89 @@ export const TeamForm = ({ team }: Props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
-              <FormControl>
-                <Input autoFocus maxLength={100} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
-              <FormControl>
-                <Textarea rows={4} maxLength={1000} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="avatarURL"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                {t('teams.form.avatarUrlLabel', undefined, 'Avatar URL (optional)')}
-              </FormLabel>
-              <FormControl>
-                <Input type="url" placeholder="https://…" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end gap-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="absolute inset-0 flex min-h-0 flex-col"
+      >
+        <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+          <FormSection
+            title={t('teams.form.detailsSectionTitle', undefined, 'Team details')}
+            description={t(
+              'teams.form.detailsSectionDescription',
+              undefined,
+              'Basic identifying information for this team.'
+            )}
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
+                  <FormControl>
+                    <Input autoFocus maxLength={100} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    {t('teams.form.nameDescription', undefined, 'The unique name of the team')}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
+                  <FormControl>
+                    <Textarea rows={4} maxLength={1000} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    {t(
+                      'teams.form.descriptionDescription',
+                      undefined,
+                      'A brief description of the team'
+                    )}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="avatarURL"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('teams.form.avatarUrlLabel', undefined, 'Avatar URL (optional)')}
+                  </FormLabel>
+                  <FormControl>
+                    <Input type="url" placeholder="https://…" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    {t(
+                      'teams.form.avatarUrlDescription',
+                      undefined,
+                      'An image URL to represent the team'
+                    )}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FormSection>
+        </div>
+        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate({ to: '/teams' })}
+            onClick={() => navigate({ to: '/dashboard' })}
             disabled={form.formState.isSubmitting}
           >
             {t('common.cancel', undefined, 'Cancel')}
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {team
               ? t('common.save', undefined, 'Save')
               : t('common.createTeam', undefined, 'Create team')}

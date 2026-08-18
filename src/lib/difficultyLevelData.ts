@@ -1,13 +1,15 @@
-export const getDifficultyLabel = (difficulty: number) => {
+import type { TranslateFn } from '@/i18n'
+
+export const getDifficultyLabel = (t: TranslateFn, difficulty: number) => {
   switch (difficulty) {
     case 1:
-      return 'Easy'
+      return t('common.easy', undefined, 'Easy')
     case 2:
-      return 'Normal'
+      return t('common.normal', undefined, 'Normal')
     case 3:
-      return 'Expert'
+      return t('common.expert', undefined, 'Expert')
     default:
-      return 'Normal'
+      return t('common.normal', undefined, 'Normal')
   }
 }
 

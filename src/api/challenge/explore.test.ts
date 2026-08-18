@@ -66,6 +66,28 @@ describe('challengeExplore.exploreChallenges', () => {
     expect(request.url).toContain('limit=10')
   })
 
+  it('collapses an embedded parent project to its id when seeding the per-challenge cache', async () => {
+    // exploreChallenges runs the backend's insertProjectJSON, which replaces the
+    // scalar `parent` with the full project object. The single-challenge cache
+    // must keep the id, or consumers request `api/v2/project/[object Object]`.
+    const embedded = { id: 3, name: 'Challenge C', parent: { id: 42, name: 'My Project' } }
+    stubFetch(new Response(JSON.stringify([embedded]), { status: 200 }))
+    const client = createTestQueryClient()
+
+    const { result } = renderHook(() => challengeExplore.exploreChallenges({ limit: 10 }), {
+      wrapper: queryClientWrapper(client),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(client.getQueryData(['challenge', 3])).toEqual({
+      id: 3,
+      name: 'Challenge C',
+      parent: 42,
+    })
+    // The list itself keeps the embedded project, which list views read for the name.
+    expect(result.current.data).toEqual([embedded])
+  })
+
   it('fetches with no search params when params is undefined', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
 
@@ -159,13 +181,14 @@ describe('challengeExplore.getChallengesListingOptions', () => {
       'challenge',
       'listing',
       [1, 2],
-      { limit: -1, onlyEnabled: false },
+      { limit: -1, page: 0, onlyEnabled: false },
     ])
   })
 
-  it('builds the expected query key with explicit limit and onlyEnabled', () => {
+  it('builds the expected query key with explicit limit, page, and onlyEnabled', () => {
     const options = challengeExplore.getChallengesListingOptions([3], {
       limit: 20,
+      page: 1,
       onlyEnabled: true,
     })
 
@@ -173,7 +196,7 @@ describe('challengeExplore.getChallengesListingOptions', () => {
       'challenge',
       'listing',
       [3],
-      { limit: 20, onlyEnabled: true },
+      { limit: 20, page: 1, onlyEnabled: true },
     ])
   })
 

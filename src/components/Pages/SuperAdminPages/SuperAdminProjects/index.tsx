@@ -1,220 +1,50 @@
-import { FolderKanban, Plus, Search } from 'lucide-react'
-import { useState } from 'react'
-import { SearchBar } from '@/components/shared/SearchBar'
-import { StatusBadge } from '@/components/shared/StatusBadge'
-import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { FolderKanban } from 'lucide-react'
+import { Badge } from '@/components/ui/Badge'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
 import { useIntl } from '@/i18n'
 
-// Mock data - replace with actual API calls
-const mockProjects = [
-  {
-    id: 1,
-    name: 'Highway Mapping',
-    displayName: 'Highway Mapping Project',
-    description: 'Map and validate highway data across the country',
-    owner: 'John Doe',
-    enabled: true,
-    challengeCount: 45,
-    completionRate: 67,
-  },
-  {
-    id: 2,
-    name: 'Building Footprints',
-    displayName: 'Building Footprint Validation',
-    description: 'Validate building footprints in urban areas',
-    owner: 'Jane Smith',
-    enabled: true,
-    challengeCount: 32,
-    completionRate: 82,
-  },
-  {
-    id: 3,
-    name: 'Parks and Recreation',
-    displayName: 'Parks Mapping',
-    description: 'Map parks, playgrounds, and recreational facilities',
-    owner: 'Bob Johnson',
-    enabled: false,
-    challengeCount: 18,
-    completionRate: 45,
-  },
-]
-
-const ProjectCard = ({ project }: { project: (typeof mockProjects)[0] }) => {
-  const { t } = useIntl()
-  return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-md">
-      <CardHeader className="pb-4">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-zinc-100 dark:bg-slate-800">
-              <FolderKanban className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
-            </div>
-            <div>
-              <CardTitle className="text-base">{project.displayName || project.name}</CardTitle>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">ID: {project.id}</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Owner: {project.owner}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <StatusBadge enabled={project.enabled} />
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <CardDescription className="mb-4 line-clamp-2">
-          {project.description ||
-            t('common.noDescriptionAvailable', undefined, 'No description available')}
-        </CardDescription>
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-zinc-600 dark:text-zinc-400">
-            <span className="font-semibold">{project.challengeCount}</span>{' '}
-            {t('common.challenges2', undefined, 'challenges')}
-          </div>
-          <div className="text-sm text-zinc-600 dark:text-zinc-400">
-            <span className="font-semibold">{project.completionRate}%</span>{' '}
-            {t('common.complete', undefined, 'complete')}
-          </div>
-        </div>
-        <div className="mt-4 flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1">
-            {t('common.view', undefined, 'View')}
-          </Button>
-          <Button variant="outline" size="sm" className="flex-1">
-            {t('common.edit', undefined, 'Edit')}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
 export const SuperAdminProjects = () => {
   const { t } = useIntl()
-  const [searchQuery, setSearchQuery] = useState('')
-
-  const filteredProjects = mockProjects.filter(
-    (project) =>
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.description?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
 
   return (
     <div className="mx-auto px-4">
       {/* Header */}
       <div className="mb-6">
-        <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="mb-2 flex items-center gap-2">
-              <FolderKanban className="h-8 w-8 text-green-600 dark:text-green-400" />
-              <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-                {t('superAdminProjects.title', undefined, 'All Projects')}
-              </h1>
-            </div>
-            <p className="text-zinc-600 dark:text-zinc-400">
-              {t(
-                'common.viewManageProjectsSubtitle',
-                undefined,
-                'View and manage all projects across the platform'
-              )}
-            </p>
-          </div>
-          <Button size="lg">
-            <Plus className="mr-2 h-5 w-5" />
-            {t('common.createNewProject', undefined, 'Create New Project')}
-          </Button>
+        <div className="mb-2 flex items-center gap-2">
+          <FolderKanban className="h-8 w-8 text-green-600 dark:text-green-400" />
+          <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+            {t('superAdminProjects.title', undefined, 'All Projects')}
+          </h1>
+          <Badge variant="secondary">
+            {t('superAdminProjects.comingSoonBadge', undefined, 'Coming Soon')}
+          </Badge>
         </div>
-
-        <SearchBar
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder={t('common.searchProjects', undefined, 'Search projects...')}
-        />
+        <p className="text-zinc-600 dark:text-zinc-400">
+          {t(
+            'common.viewManageProjectsSubtitle',
+            undefined,
+            'View and manage all projects across the platform'
+          )}
+        </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>
-              {t('superAdminProjects.stats.total', undefined, 'Total Projects')}
-            </CardDescription>
-            <CardTitle className="font-semibold text-base">256</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminProjects.stats.totalChange', undefined, '+8% from last month')}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>
-              {t('common.activeProjects', undefined, 'Active Projects')}
-            </CardDescription>
-            <CardTitle className="font-semibold text-base">187</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminProjects.stats.activeShare', undefined, '73% of total')}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>
-              {t('common.totalChallenges', undefined, 'Total Challenges')}
-            </CardDescription>
-            <CardTitle className="font-semibold text-base">1,892</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminProjects.stats.totalChallengesNote', undefined, 'Across all projects')}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>
-              {t('common.avgCompletion', undefined, 'Avg. Completion')}
-            </CardDescription>
-            <CardTitle className="font-semibold text-base">64%</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('common.platformAverage', undefined, 'Platform average')}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Projects Grid */}
-      <div
-        className="grid gap-6"
-        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
-      >
-        {filteredProjects.length > 0 ? (
-          filteredProjects.map((project) => <ProjectCard key={project.id} project={project} />)
-        ) : (
-          <Empty className="col-span-full">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <Search />
-              </EmptyMedia>
-              <EmptyTitle>{t('common.noProjectsFound', undefined, 'No projects found')}</EmptyTitle>
-              <EmptyDescription>
-                {t(
-                  'common.tryAdjustingYourSearchQuery',
-                  undefined,
-                  'Try adjusting your search query.'
-                )}
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        )}
-      </div>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <FolderKanban />
+          </EmptyMedia>
+          <EmptyTitle>
+            {t('superAdminProjects.comingSoon.title', undefined, 'Project management coming soon')}
+          </EmptyTitle>
+          <EmptyDescription>
+            {t(
+              'superAdminProjects.comingSoon.description',
+              undefined,
+              "We're building out project management tools for super admins. Check back soon."
+            )}
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     </div>
   )
 }

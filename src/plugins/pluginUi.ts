@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import { TaskSelectionMap as HostTaskSelectionMap } from '@/components/Pages/TaskEditPage/TaskNearbyMap'
-import { CommentsHistoryTab } from '@/components/TaskInfoPanel/CommentsHistoryTab'
 import { ProgressBar } from '@/components/shared/ProgressBar'
+import { CommentsHistoryTab } from '@/components/TaskInfoPanel/CommentsHistoryTab'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/Card'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import {
   Dialog,
   DialogContent,
@@ -28,7 +29,6 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { Label } from '@/components/ui/Label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup'
 import {

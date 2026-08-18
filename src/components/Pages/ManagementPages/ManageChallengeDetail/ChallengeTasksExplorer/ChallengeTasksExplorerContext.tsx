@@ -16,6 +16,36 @@ const markerInBounds = (m: TaskMarker, bbox: Bbox2D): boolean => {
   return coordInBbox([m.location.lng, m.location.lat], bbox)
 }
 
+/** Sorts task markers by the given field, ascending or descending, without mutating the input. */
+export const sortTaskMarkers = (
+  markers: TaskMarker[],
+  sortField: SortField,
+  sortDesc: boolean
+): TaskMarker[] => {
+  return [...markers].sort((a, b) => {
+    let cmp = 0
+    if (sortField === 'id') cmp = a.id - b.id
+    else if (sortField === 'status') cmp = a.status - b.status
+    else if (sortField === 'priority') cmp = a.priority - b.priority
+    return sortDesc ? -cmp : cmp
+  })
+}
+
+/**
+ * Toggles whether `key` is enabled within a filter's enabled-state record, refusing to
+ * disable the last remaining enabled value out of `allValues` (at least one must stay on).
+ */
+export const toggleFilterWithMinimumOne = <T extends readonly number[]>(
+  prev: Record<number, boolean>,
+  allValues: T,
+  key: number,
+  checked: boolean
+): Record<number, boolean> => {
+  const countOn = allValues.filter((x) => prev[x]).length
+  if (!checked && countOn <= 1) return prev
+  return { ...prev, [key]: checked }
+}
+
 type ExplorerContextValue = {
   enabled: boolean
   challengeId: number
@@ -86,32 +116,19 @@ export const ChallengeTasksExplorerProvider = ({
 
   const filteredMarkers = useMemo(() => {
     const filtered = mapMarkers.filter((m) => !viewportBounds || markerInBounds(m, viewportBounds))
-
-    filtered.sort((a, b) => {
-      let cmp = 0
-      if (sortField === 'id') cmp = a.id - b.id
-      else if (sortField === 'status') cmp = a.status - b.status
-      else if (sortField === 'priority') cmp = a.priority - b.priority
-      return sortDesc ? -cmp : cmp
-    })
-
-    return filtered
+    return sortTaskMarkers(filtered, sortField, sortDesc)
   }, [mapMarkers, sortField, sortDesc, viewportBounds])
 
   const setStatusChecked = useCallback((s: number, checked: boolean) => {
-    setStatusEnabled((prev) => {
-      const countOn = DEFAULT_TASK_STATUS_FILTER.filter((x) => prev[x]).length
-      if (!checked && countOn <= 1) return prev
-      return { ...prev, [s]: checked }
-    })
+    setStatusEnabled((prev) =>
+      toggleFilterWithMinimumOne(prev, DEFAULT_TASK_STATUS_FILTER, s, checked)
+    )
   }, [])
 
   const setPriorityChecked = useCallback((p: number, checked: boolean) => {
-    setPriorityEnabled((prev) => {
-      const countOn = DEFAULT_PRIORITY_FILTER.filter((x) => prev[x]).length
-      if (!checked && countOn <= 1) return prev
-      return { ...prev, [p]: checked }
-    })
+    setPriorityEnabled((prev) =>
+      toggleFilterWithMinimumOne(prev, DEFAULT_PRIORITY_FILTER, p, checked)
+    )
   }, [])
 
   const clearFilters = useCallback(() => {

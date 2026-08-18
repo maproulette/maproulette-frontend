@@ -72,10 +72,10 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
                     }`}
                   >
                     <Avatar className="size-6">
-                      <AvatarImage src={u.osmProfile.avatarURL} alt={u.osmProfile.displayName} />
-                      <AvatarFallback>{initials(u.osmProfile.displayName)}</AvatarFallback>
+                      <AvatarImage src={u.avatarURL} alt={u.displayName} />
+                      <AvatarFallback>{initials(u.displayName)}</AvatarFallback>
                     </Avatar>
-                    {u.osmProfile.displayName}
+                    {u.displayName}
                   </button>
                 </li>
               ))}

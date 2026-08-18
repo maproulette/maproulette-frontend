@@ -24,6 +24,7 @@ export const challengeFavorites = {
           ['challenge', challengeId, 'isFavorited'],
           { isFavorited: true }
         )
+        queryClient.invalidateQueries({ queryKey: ['user'] })
       },
     })
   },
@@ -38,6 +39,7 @@ export const challengeFavorites = {
           ['challenge', challengeId, 'isFavorited'],
           { isFavorited: false }
         )
+        queryClient.invalidateQueries({ queryKey: ['user'] })
       },
     })
   },

@@ -1,7 +1,9 @@
 import { Bell, Database, Globe, Mail, Palette, Save, Settings, Shield } from 'lucide-react'
 import { useId } from 'react'
+import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
@@ -10,6 +12,11 @@ import { useIntl } from '@/i18n'
 
 export const SuperAdminSettings = () => {
   const { t } = useIntl()
+  const comingSoonMsg = t(
+    'superAdminSettings.comingSoon',
+    undefined,
+    'Platform settings management is not available yet'
+  )
   const siteNameId = useId()
   const siteDescriptionId = useId()
   const siteUrlId = useId()
@@ -41,6 +48,9 @@ export const SuperAdminSettings = () => {
           <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
             {t('superAdminSettings.title', undefined, 'Platform Settings')}
           </h1>
+          <Badge variant="secondary">
+            {t('superAdminSettings.comingSoonBadge', undefined, 'Coming Soon')}
+          </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
           {t(
@@ -74,13 +84,14 @@ export const SuperAdminSettings = () => {
               <Label htmlFor={siteNameId}>
                 {t('superAdminSettings.general.siteName', undefined, 'Site Name')}
               </Label>
-              <Input id={siteNameId} defaultValue="MapRoulette" />
+              <Input disabled id={siteNameId} defaultValue="MapRoulette" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={siteDescriptionId}>
                 {t('superAdminSettings.general.siteDescription', undefined, 'Site Description')}
               </Label>
               <Textarea
+                disabled
                 id={siteDescriptionId}
                 defaultValue="A platform for collaborative mapping and data validation"
                 rows={3}
@@ -90,7 +101,7 @@ export const SuperAdminSettings = () => {
               <Label htmlFor={siteUrlId}>
                 {t('superAdminSettings.general.siteUrl', undefined, 'Site URL')}
               </Label>
-              <Input id={siteUrlId} defaultValue="https://maproulette.org" />
+              <Input disabled id={siteUrlId} defaultValue="https://maproulette.org" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -105,7 +116,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={maintenanceId} />
+              <Switch disabled id={maintenanceId} />
             </div>
           </CardContent>
         </Card>
@@ -132,19 +143,24 @@ export const SuperAdminSettings = () => {
               <Label htmlFor={smtpHostId}>
                 {t('superAdminSettings.email.smtpHost', undefined, 'SMTP Host')}
               </Label>
-              <Input id={smtpHostId} defaultValue="smtp.example.com" />
+              <Input disabled id={smtpHostId} defaultValue="smtp.example.com" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={smtpPortId}>
                 {t('superAdminSettings.email.smtpPort', undefined, 'SMTP Port')}
               </Label>
-              <Input id={smtpPortId} type="number" defaultValue="587" />
+              <Input disabled id={smtpPortId} type="number" defaultValue="587" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={fromEmailId}>
                 {t('superAdminSettings.email.fromEmail', undefined, 'From Email Address')}
               </Label>
-              <Input id={fromEmailId} type="email" defaultValue="noreply@maproulette.org" />
+              <Input
+                disabled
+                id={fromEmailId}
+                type="email"
+                defaultValue="noreply@maproulette.org"
+              />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -163,7 +179,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={emailEnabledId} defaultChecked />
+              <Switch disabled id={emailEnabledId} defaultChecked />
             </div>
           </CardContent>
         </Card>
@@ -203,7 +219,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={requireVerificationId} defaultChecked />
+              <Switch disabled id={requireVerificationId} defaultChecked />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -222,7 +238,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={twoFactorId} defaultChecked />
+              <Switch disabled id={twoFactorId} defaultChecked />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={sessionTimeoutId}>
@@ -232,7 +248,7 @@ export const SuperAdminSettings = () => {
                   'Session Timeout (minutes)'
                 )}
               </Label>
-              <Input id={sessionTimeoutId} type="number" defaultValue="60" />
+              <Input disabled id={sessionTimeoutId} type="number" defaultValue="60" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -251,7 +267,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={passwordPolicyId} defaultChecked />
+              <Switch disabled id={passwordPolicyId} defaultChecked />
             </div>
           </CardContent>
         </Card>
@@ -278,13 +294,13 @@ export const SuperAdminSettings = () => {
               <Label htmlFor={dbHostId}>
                 {t('superAdminSettings.database.host', undefined, 'Database Host')}
               </Label>
-              <Input id={dbHostId} defaultValue="localhost" />
+              <Input disabled id={dbHostId} defaultValue="localhost" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={dbPortId}>
                 {t('superAdminSettings.database.port', undefined, 'Database Port')}
               </Label>
-              <Input id={dbPortId} type="number" defaultValue="5432" />
+              <Input disabled id={dbPortId} type="number" defaultValue="5432" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -299,7 +315,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={autoBackupId} defaultChecked />
+              <Switch disabled id={autoBackupId} defaultChecked />
             </div>
             <div className="flex gap-2">
               <Button variant="outline">
@@ -347,7 +363,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={notifyNewUserId} defaultChecked />
+              <Switch disabled id={notifyNewUserId} defaultChecked />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -366,7 +382,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={notifyNewProjectId} />
+              <Switch disabled id={notifyNewProjectId} />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -381,7 +397,7 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={notifyErrorsId} defaultChecked />
+              <Switch disabled id={notifyErrorsId} defaultChecked />
             </div>
           </CardContent>
         </Card>
@@ -417,32 +433,40 @@ export const SuperAdminSettings = () => {
                   )}
                 </p>
               </div>
-              <Switch id={darkModeId} />
+              <Switch disabled id={darkModeId} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={primaryColorId}>
                 {t('superAdminSettings.appearance.primaryColor', undefined, 'Primary Brand Color')}
               </Label>
               <div className="flex gap-2">
-                <Input id={primaryColorId} type="color" defaultValue="#3b82f6" className="w-20" />
-                <Input defaultValue="#3b82f6" className="flex-1" />
+                <Input
+                  disabled
+                  id={primaryColorId}
+                  type="color"
+                  defaultValue="#3b82f6"
+                  className="w-20"
+                />
+                <Input disabled defaultValue="#3b82f6" className="flex-1" />
               </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor={logoUrlId}>
                 {t('superAdminSettings.appearance.logoUrl', undefined, 'Logo URL')}
               </Label>
-              <Input id={logoUrlId} defaultValue="/logo.svg" />
+              <Input disabled id={logoUrlId} defaultValue="/logo.svg" />
             </div>
           </CardContent>
         </Card>
 
         {/* Save Button */}
         <div className="flex justify-end">
-          <Button size="lg">
-            <Save className="mr-2 h-5 w-5" />
-            {t('superAdminSettings.saveButton', undefined, 'Save All Settings')}
-          </Button>
+          <DisabledTooltip show message={comingSoonMsg}>
+            <Button size="lg" disabled>
+              <Save className="mr-2 h-5 w-5" />
+              {t('superAdminSettings.saveButton', undefined, 'Save All Settings')}
+            </Button>
+          </DisabledTooltip>
         </div>
       </div>
     </div>

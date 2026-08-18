@@ -46,7 +46,10 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     }
   )
 
-  const parsedMessage = lastMessage?.data ? JSON.parse(lastMessage.data) : null
+  const parsedMessage = useMemo(
+    () => (lastMessage?.data ? JSON.parse(lastMessage.data) : null),
+    [lastMessage?.data]
+  )
 
   // Reason: stored in context value and used as dependency in useEffect below
   const subscribe = useCallback(

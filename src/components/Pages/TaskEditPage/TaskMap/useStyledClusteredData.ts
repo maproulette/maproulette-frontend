@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
 
 export const useStyledClusteredData = (clusteredGeoJSONData: GeoJSON.FeatureCollection) => {
-  const { selectedTaskIds, activeTaskId } = useTaskMapContext()
+  const { selectedTaskIds, activeTaskId, hoveredBundleTaskId } = useTaskMapContext()
 
   // Reason: applies styling to clustered GeoJSON data
   return useMemo((): GeoJSON.FeatureCollection => {
-    if (selectedTaskIds.size === 0 && activeTaskId == null) {
+    if (selectedTaskIds.size === 0 && activeTaskId == null && hoveredBundleTaskId == null) {
       return clusteredGeoJSONData
     }
 
@@ -23,7 +23,8 @@ export const useStyledClusteredData = (clusteredGeoJSONData: GeoJSON.FeatureColl
         }
         const isLassoSelected = selectedTaskIds.has(taskId)
         const isActive = taskId === activeTaskId
-        if (!isLassoSelected && !isActive) {
+        const isHovered = taskId === hoveredBundleTaskId
+        if (!isLassoSelected && !isActive && !isHovered) {
           return feature
         }
         return {
@@ -32,9 +33,10 @@ export const useStyledClusteredData = (clusteredGeoJSONData: GeoJSON.FeatureColl
             ...feature.properties,
             ...(isLassoSelected && { isLassoSelected: true }),
             ...(isActive && { isActive: true }),
+            ...(isHovered && { isHovered: true }),
           },
         }
       }),
     }
-  }, [clusteredGeoJSONData, selectedTaskIds, activeTaskId])
+  }, [clusteredGeoJSONData, selectedTaskIds, activeTaskId, hoveredBundleTaskId])
 }

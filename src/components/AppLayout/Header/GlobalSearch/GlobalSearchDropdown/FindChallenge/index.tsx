@@ -1,8 +1,12 @@
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useSearch } from '@tanstack/react-router'
 import { ChevronRight, Search } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
+import type {
+  DifficultyLevel,
+  WorkOnCategory,
+} from '@/components/Pages/ExploreChallengesPage/FilterBar/filterTypes'
 import {
   difficultyMap,
   workOnCategoryMap,
@@ -31,6 +35,19 @@ const buildKeywords = (categories: string[], workOn: string): string | undefined
   return allKeywords.length > 0 ? allKeywords.join(',') : undefined
 }
 
+// Reason: FindChallenge renders inside the header on every page (not just the
+// Explore Challenges page), so it can't assume the leaf route is '/_app/' — it
+// reads from the shared '/_app' layout route instead, same as AuthContext does.
+// These params are only actually validated/typed on the '/_app/' route, so the
+// result is cast rather than inferred.
+type ChallengeExploreSearchParams = {
+  difficulty?: DifficultyLevel
+  workOn?: WorkOnCategory
+  categories?: string
+  sortBy?: ExtendedFindParamsSortBy
+  global?: boolean
+}
+
 export const FindChallenge = () => {
   const { t } = useIntl()
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
@@ -38,42 +55,32 @@ export const FindChallenge = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
-  const location = useLocation()
-  const searchParamsString =
-    typeof location.search === 'string'
-      ? location.search
-      : location.search
-        ? new URLSearchParams(location.search as Record<string, string>).toString()
-        : ''
-  const searchParams = new URLSearchParams(searchParamsString)
+  const {
+    difficulty: urlDifficulty,
+    workOn: urlWorkOn,
+    categories: urlCategories,
+    sortBy: urlSortBy,
+    global: urlGlobal,
+  } = useSearch({ from: '/_app' }) as ChallengeExploreSearchParams
 
   // Reason: stable reference prevents unnecessary API refetch when unrelated state changes
   const filters = useMemo<ExploreChallengesParams>(() => {
-    const urlDifficulty = searchParams.get('difficulty')
-    const urlWorkOn = searchParams.get('workOn')
-    const urlCategories = searchParams.get('categories')
-    const urlSortBy = searchParams.get('sortBy')
-    const urlGlobal = searchParams.get('global')
-    const urlBounds = searchParams.get('bounds')
-
     const selectedCategories = urlCategories ? urlCategories.split(',').filter(Boolean) : []
     const workOn = urlWorkOn || 'Anything'
-    const difficulty = urlDifficulty
-      ? difficultyMap[urlDifficulty as keyof typeof difficultyMap]
-      : undefined
+    const difficulty = urlDifficulty ? difficultyMap[urlDifficulty] : undefined
 
     const result: NonNullable<ExploreChallengesParams> = {
-      global: urlGlobal === 'true',
-      bounds: urlBounds || DEFAULT_WORLD_BOUNDS,
+      global: urlGlobal ?? false,
+      bounds: DEFAULT_WORLD_BOUNDS,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty,
       limit: limit,
     }
     if (urlSortBy) {
-      result.sortBy = urlSortBy as ExtendedFindParamsSortBy
+      result.sortBy = urlSortBy
     }
     return result
-  }, [location.search, limit])
+  }, [urlDifficulty, urlWorkOn, urlCategories, urlSortBy, urlGlobal, limit])
 
   const trimmedSearchQuery = searchQuery.trim()
   const hasSearchQuery = trimmedSearchQuery.length > 0
@@ -96,12 +103,13 @@ export const FindChallenge = () => {
   const results = data ?? []
   const hasMore = data && data.length >= limit
 
-  const handleLoadMore = () => {
+  // Reason: Stable callback reference prevents unnecessary observer re-subscription
+  const handleLoadMore = useCallback(() => {
     if (!isFetching && data && data.length >= limit) {
       setIsLoadingMore(true)
       setLimit((prev) => prev + 5)
     }
-  }
+  }, [isFetching, data, limit])
 
   useEffect(() => {
     if (!loadMoreRef.current || !hasMore || isFetching) return
@@ -117,8 +125,7 @@ export const FindChallenge = () => {
 
     observer.observe(loadMoreRef.current)
     return () => observer.disconnect()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMore, isFetching])
+  }, [handleLoadMore, hasMore, isFetching])
 
   return (
     <div className="space-y-4">

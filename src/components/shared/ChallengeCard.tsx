@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 import { useIntl } from '@/i18n'
+import { getParentInfo } from '@/lib/challengeParent'
 import { formatDate } from '@/lib/date'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
@@ -10,6 +11,12 @@ import { SidebarIndicator } from './SidebarIndicator'
 
 interface ChallengeCardProps {
   challenge: Challenge
+  /**
+   * Project name to display. Endpoints differ on whether they embed the parent
+   * project or return only its id, so callers that already know the project
+   * (e.g. a project's own challenge list) should pass the name explicitly.
+   */
+  parentName?: string
   className?: string
   actions?: React.ReactNode
   linkTo?: string
@@ -20,6 +27,7 @@ interface ChallengeCardProps {
 
 export const ChallengeCard = ({
   challenge,
+  parentName,
   actions,
   className,
   linkTo,
@@ -47,6 +55,8 @@ export const ChallengeCard = ({
           ? 0
           : tasksRemaining
   const lastUpdated = challenge.modified || challenge.lastTaskRefresh
+  const { name: embeddedParentName } = getParentInfo(challenge.parent)
+  const displayParentName = parentName ?? embeddedParentName
 
   return (
     <Link
@@ -70,7 +80,7 @@ export const ChallengeCard = ({
             challenge.avatar && 'mr-16'
           )}
         >
-          {t('shared.challengeCard.project', { id: challenge.parent }, 'Project {id}')}
+          {t('shared.challengeCard.project', { name: displayParentName }, '{name}')}
         </div>
 
         <h3
@@ -99,7 +109,7 @@ export const ChallengeCard = ({
 
           <div className="flex items-center justify-between">
             <span className="text-xs text-zinc-500 dark:text-slate-300">
-              {getDifficultyLabel(challenge.difficulty)}
+              {getDifficultyLabel(t, challenge.difficulty)}
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">

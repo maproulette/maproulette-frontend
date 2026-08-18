@@ -16,3 +16,6 @@ dist/plugins/
 /playwright-report/
 
 /coverage/
+
+# TanStack Router auto-generated route tree
+src/routeTree.gen.ts

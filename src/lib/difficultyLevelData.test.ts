@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { getDifficultyColor, getDifficultyLabel } from './difficultyLevelData.ts'
 
+const t = (_id: string, _values: unknown, defaultMessage?: string) => defaultMessage ?? _id
+
 describe('getDifficultyLabel', () => {
   it.each([
     [1, 'Easy'],
@@ -9,7 +11,7 @@ describe('getDifficultyLabel', () => {
     [0, 'Normal'],
     [99, 'Normal'],
   ] as const)('difficulty %s returns %s', (difficulty, expected) => {
-    expect(getDifficultyLabel(difficulty)).toBe(expected)
+    expect(getDifficultyLabel(t, difficulty)).toBe(expected)
   })
 })
 

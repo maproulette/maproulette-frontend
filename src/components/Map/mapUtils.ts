@@ -21,8 +21,6 @@ export const DEFAULT_WORLD_BOUNDS = `${MIN_LON},${MIN_LAT},${MAX_LON},${MAX_LAT}
  */
 export const isWorldBounds = (boundsString: string | undefined): boolean => {
   if (!boundsString) return true
-  if (boundsString === DEFAULT_WORLD_BOUNDS) return true
-  if (boundsString === '-180,-90,180,90') return true
 
   const parts = boundsString.split(',').map(Number)
   if (parts.length !== 4 || parts.some(Number.isNaN)) return false

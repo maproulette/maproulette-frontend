@@ -73,7 +73,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const bundledTaskIds = useMemo(
     () => activeBundle?.taskIds.filter((id) => id !== task.id) ?? [],
 
-    [activeBundle?.taskIds.length, task.id]
+    [activeBundle?.taskIds.join(','), task.id]
   )
   const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
 

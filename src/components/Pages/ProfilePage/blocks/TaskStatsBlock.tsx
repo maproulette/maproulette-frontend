@@ -4,7 +4,7 @@ import { DigitDisplay } from '@/components/shared/DigitDisplay'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useIntl } from '@/i18n'
-import { STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel } from '@/lib/taskConstants'
 import { useProfilePageContext } from '../contexts/ProfilePageContext'
 
 export const TaskStatsBlock = () => {
@@ -40,7 +40,7 @@ export const TaskStatsBlock = () => {
                 {Object.entries(data.tasks).map(([status, count]) => (
                   <div key={status} className="flex justify-between">
                     <dt className="text-zinc-600 dark:text-slate-400">
-                      {STATUS_LABELS[Number(status)] ??
+                      {getStatusLabel(t, Number(status)) ??
                         t('common.statusWithStatus', { status }, 'Status {status}')}
                     </dt>
                     <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>

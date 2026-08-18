@@ -18,14 +18,18 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
   const [historyError, setHistoryError] = useState<string | null>(null)
 
   useEffect(() => {
+    let ignore = false
+
     const fetchHistory = async () => {
       setHistoryLoading(true)
       setHistoryError(null)
       try {
         const idString = `${osmFeature.type}/${osmFeature.id}`
         const history = await api.osm.fetchOSMElementHistory(idString, true)
+        if (ignore) return
         setElementHistory(history)
       } catch (error) {
+        if (ignore) return
         const message =
           error instanceof Error
             ? error.message
@@ -36,11 +40,15 @@ export const ElementHistoryCard = ({ osmFeature, osmServer }: ElementHistoryCard
               )
         setHistoryError(message)
       } finally {
-        setHistoryLoading(false)
+        if (!ignore) setHistoryLoading(false)
       }
     }
 
     fetchHistory()
+
+    return () => {
+      ignore = true
+    }
   }, [osmFeature.type, osmFeature.id])
 
   return (

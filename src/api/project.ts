@@ -1,6 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
 import type { Project, ProjectGetResponse } from '@/types/Project'
+import { seedChallengeCache } from './challenge/single'
 import { apiRequest } from './client'
 
 export const project = {
@@ -107,21 +108,10 @@ export const project = {
     const queryClient = useQueryClient()
     return useQuery({
       ...project.getProjectChallengesOptions(projectId ?? 0, limit, page),
-      queryFn: async () => {
-        const challenges = await apiRequest
-          .get(`api/v2/project/${projectId}/challenges`, {
-            searchParams: {
-              limit,
-              page,
-            },
-          })
-          .json<Challenge[]>()
-        for (const challenge of challenges) {
-          queryClient.setQueryData(['challenge', challenge.id], challenge)
-        }
+      select: (challenges) => {
+        seedChallengeCache(queryClient, challenges)
         return challenges
       },
-      enabled: !!projectId,
     })
   },
 

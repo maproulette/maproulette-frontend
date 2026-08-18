@@ -1,5 +1,11 @@
 import { logger } from '@/lib/logger'
 import type { Plugin } from '@/types/Plugin'
+import { parsePluginUrl, validatePluginUrl } from './pluginSecurity'
+
+const PLUGIN_URL_NOT_ALLOWED_ERROR =
+  'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.'
+
+export const PLUGIN_SCRIPT_LOAD_TIMEOUT_MS = 15000
 
 /**
  * Dynamic Plugin Loader
@@ -32,26 +38,29 @@ export interface RemotePluginManifest {
  * Plugins should be built as UMD modules with React as a global
  */
 export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadResult> => {
-  try {
-    const url = new URL(moduleUrl)
-    if (!url.protocol.startsWith('http')) {
-      return {
-        success: false,
-        error: 'Only HTTP(S) URLs are supported',
-      }
-    }
-
-    const fileName = url.pathname.split('/').pop() || ''
-    const globalName = fileName.replace(/\.js$/, '')
-
-    return await loadPluginViaScript(moduleUrl, globalName)
-  } catch (error) {
-    logger.error('Failed to load plugin from URL', { moduleUrl, error })
+  if (!validatePluginUrl(moduleUrl)) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to load plugin module',
+      error: PLUGIN_URL_NOT_ALLOWED_ERROR,
     }
   }
+
+  // Parsed the same way validation parses it: a bare `new URL(moduleUrl)` throws on
+  // the root-relative `/plugins/...` form validatePluginUrl accepts. The URL just
+  // passed validation, so the null branch below is unreachable.
+  const url = parsePluginUrl(moduleUrl)
+  /* v8 ignore next 6 -- @preserve */
+  if (!url) {
+    return {
+      success: false,
+      error: PLUGIN_URL_NOT_ALLOWED_ERROR,
+    }
+  }
+
+  const fileName = url.pathname.split('/').pop() || ''
+  const globalName = fileName.replace(/\.js$/, '')
+
+  return await loadPluginViaScript(moduleUrl, globalName)
 }
 
 /**
@@ -96,13 +105,38 @@ export const loadPluginViaScript = (
   moduleUrl: string,
   globalName: string
 ): Promise<PluginLoadResult> => {
+  if (!validatePluginUrl(moduleUrl)) {
+    return Promise.resolve({
+      success: false,
+      error: PLUGIN_URL_NOT_ALLOWED_ERROR,
+    })
+  }
+
   return new Promise((resolve) => {
     const script = document.createElement('script')
     script.src = moduleUrl
     script.async = true
     script.crossOrigin = 'anonymous'
 
+    let settled = false
+
+    const timeoutId = setTimeout(() => {
+      // onload/onerror always clearTimeout(timeoutId) before this could fire
+      // once settled; this guard only exists for defensive symmetry with them.
+      /* v8 ignore next -- @preserve */
+      if (settled) return
+      settled = true
+      resolve({
+        success: false,
+        error: 'Timed out loading plugin script',
+      })
+      script.remove()
+    }, PLUGIN_SCRIPT_LOAD_TIMEOUT_MS)
+
     script.onload = () => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeoutId)
       try {
         const windowWithPlugin = window as unknown as Window & Record<string, unknown>
         const pluginModule = windowWithPlugin[globalName] as
@@ -152,6 +186,9 @@ export const loadPluginViaScript = (
     }
 
     script.onerror = () => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeoutId)
       resolve({
         success: false,
         error: 'Failed to load plugin script',
@@ -170,6 +207,11 @@ export const loadPluginViaScript = (
 export const fetchPluginManifest = async (
   manifestUrl: string
 ): Promise<RemotePluginManifest | null> => {
+  if (!validatePluginUrl(manifestUrl)) {
+    logger.error('Plugin manifest URL not allowed', { manifestUrl })
+    return null
+  }
+
   try {
     const response = await fetch(manifestUrl)
     if (!response.ok) {

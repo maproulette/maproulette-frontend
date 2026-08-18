@@ -1,13 +1,11 @@
-import { useLoaderData } from '@tanstack/react-router'
+import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
 import { ChallengesList } from './ChallengesList'
 import { ProjectDetail } from './ProjectDetail'
 
 export const BrowsedProjectPageContent = () => {
-  const { project } = useLoaderData({ from: '/_app/project/$projectId/' }) as {
-    project: { displayName?: string; name?: string }
-  }
+  const { project } = useBrowsedProjectContext()
   const projectName = project?.displayName || project?.name || null
   useSetPageTitleContext(projectName ?? null)
 

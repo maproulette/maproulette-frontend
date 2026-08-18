@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
-import { Form, FormField } from '@/components/ui/Form'
+import { Form, FormField, formSubmitDisabled } from '@/components/ui/Form'
 import { FormSectionGroup } from '@/components/ui/FormSection'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
@@ -125,7 +125,7 @@ export const ChallengeForm = () => {
           <Button type="button" variant="outline" onClick={onCancel}>
             {t('common.cancel', undefined, 'Cancel')}
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {form.formState.isSubmitting
               ? t('common.saving2', undefined, 'Saving...')
               : challenge

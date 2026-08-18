@@ -1,12 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
 import { Flag, Map as MapIcon, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button } from '@/components/ui/Button'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { useMapToggle } from '../MapToggleContext'
@@ -14,7 +15,7 @@ import { ChallengeProgress } from './ChallengeProgress'
 
 export const ChallengeFooter = () => {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
   const { challenge, existingIssue, user } = useBrowsedChallengeContext()
   const { challengeFooterExtensions } = usePluginContext()
   const { showMap, setShowMap } = useMapToggle()
@@ -30,8 +31,7 @@ export const ChallengeFooter = () => {
       const task = await api.challenge.getRandomTask(challenge.id, queryClient)
 
       if (task && task.length > 0) {
-        const taskId = task[0].id
-        await navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
+        await navigateToTask(task[0].id)
       } else {
         toast.error(
           t(
@@ -81,17 +81,27 @@ export const ChallengeFooter = () => {
       )}
 
       <div className="mt-4 flex flex-col gap-4">
-        <Button
-          size="lg"
-          className="w-full gap-2 rounded-full bg-teal-600 text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-md"
-          onClick={handleStartTask}
-          disabled={isLoadingTask}
-        >
-          <Play className="size-5" />
-          {isLoadingTask
-            ? t('common.loading2', undefined, 'Loading...')
-            : t('browsedChallengePage.footer.startChallenge', undefined, 'Start Challenge')}
-        </Button>
+        {challenge.paused ? (
+          <ChallengePausedNotice
+            message={t(
+              'browsedChallengePage.footer.challengePausedMessage',
+              undefined,
+              'This challenge is currently paused. New tasks cannot be started until it is resumed.'
+            )}
+          />
+        ) : (
+          <Button
+            size="lg"
+            className="w-full gap-2 rounded-full bg-teal-600 text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-md"
+            onClick={handleStartTask}
+            disabled={isLoadingTask}
+          >
+            <Play className="size-5" />
+            {isLoadingTask
+              ? t('common.loading2', undefined, 'Loading...')
+              : t('browsedChallengePage.footer.startChallenge', undefined, 'Start Challenge')}
+          </Button>
+        )}
       </div>
     </>
   )

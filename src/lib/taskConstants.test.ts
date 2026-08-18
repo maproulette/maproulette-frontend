@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  getStatusLabel,
   resolveHex,
   STATUS_BAR_COLORS,
   STATUS_COLORS,
@@ -14,11 +15,24 @@ import {
   tabTriggerClass,
 } from './taskConstants.ts'
 
+const t = (_id: string, _values: unknown, defaultMessage?: string) => defaultMessage ?? _id
+
 describe('STATUS_LABELS', () => {
   it('has a label for every canonical status id', () => {
     expect(STATUS_LABELS[0]).toBe('Created')
     expect(STATUS_LABELS[9]).toBe('Disabled')
     expect(Object.keys(STATUS_LABELS)).toHaveLength(10)
+  })
+})
+
+describe('getStatusLabel', () => {
+  it('returns the translated label for a recognized status', () => {
+    expect(getStatusLabel(t, 0)).toBe('Created')
+    expect(getStatusLabel(t, 8)).toBe('Validated')
+  })
+
+  it('returns undefined for an unrecognized status', () => {
+    expect(getStatusLabel(t, 99)).toBeUndefined()
   })
 })
 

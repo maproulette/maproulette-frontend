@@ -4,35 +4,24 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
 import { useIntl } from '@/i18n'
-import type { Project } from '@/types/Project'
-
-interface ProjectDetailSidebarProps {
-  projectId: string
-  project: Project | undefined
-  projectData: Project | undefined
-  isLoadingProject: boolean
-  isLoadingChallenges: boolean
-  filteredChallengesCount: number
-  challengeSummary: { total: number; enabled: number; tasksRemaining: number }
-  onArchiveProject: () => void
-  onToggleEnabled: () => void
-  onDeleteProject: () => void
-}
+import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 
 /** Left-hand panel of the project detail page: project info, quick actions, stats and playbook tips. */
-export const ProjectDetailSidebar = ({
-  projectId,
-  project,
-  projectData,
-  isLoadingProject,
-  isLoadingChallenges,
-  filteredChallengesCount,
-  challengeSummary,
-  onArchiveProject,
-  onToggleEnabled,
-  onDeleteProject,
-}: ProjectDetailSidebarProps) => {
+export const ProjectDetailSidebar = () => {
   const { t } = useIntl()
+  const {
+    projectId,
+    project,
+    projectData,
+    isLoadingProject,
+    isLoadingChallenges,
+    filteredChallenges,
+    challengeSummary,
+    handleArchiveProject,
+    handleToggleEnabled,
+    setDeleteProjectConfirm,
+  } = useManageProjectDetailContext()
+  const filteredChallengesCount = filteredChallenges.length
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
@@ -113,7 +102,7 @@ export const ProjectDetailSidebar = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={onArchiveProject}
+                onClick={handleArchiveProject}
                 className="w-full justify-start gap-2 rounded-full"
               >
                 <Archive className="h-4 w-4" />
@@ -124,7 +113,7 @@ export const ProjectDetailSidebar = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={onToggleEnabled}
+                onClick={handleToggleEnabled}
                 className="w-full justify-start gap-2 rounded-full"
               >
                 {project?.enabled ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -135,7 +124,7 @@ export const ProjectDetailSidebar = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={onDeleteProject}
+                onClick={() => setDeleteProjectConfirm(true)}
                 className="w-full justify-start gap-2 rounded-full text-red-600 hover:text-red-600 dark:text-red-400 dark:hover:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />

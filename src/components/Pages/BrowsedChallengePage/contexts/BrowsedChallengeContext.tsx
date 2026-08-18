@@ -54,7 +54,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const { data: projectData } = api.project.getProject(challenge.parent)
 
-  const { data: ownerData } = api.user.getUser(challenge.owner)
+  const { data: ownerData } = api.user.getPublicUser(challenge.owner)
 
   const projectName = projectData?.displayName || projectData?.name
 
@@ -132,7 +132,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       canManage,
       projectId: challenge.parent,
       projectName,
-      ownerName: ownerData?.osmProfile.displayName,
+      ownerName: ownerData?.osmProfile?.displayName,
       formattedDate,
       hasOverpass,
       existingIssue,
@@ -148,7 +148,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       managedProjects,
       canManage,
       projectName,
-      ownerData?.osmProfile.displayName,
+      ownerData?.osmProfile?.displayName,
       formattedDate,
       hasOverpass,
       existingIssue,

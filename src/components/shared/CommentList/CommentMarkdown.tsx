@@ -1,4 +1,5 @@
 import ReactMarkdown, { type Components } from 'react-markdown'
+import { markdownRemarkPlugins } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -44,7 +45,9 @@ export const CommentMarkdown = ({ children, className }: Props) => {
   const linkified = linkifyMentions(children ?? '')
   return (
     <div className={cn('prose prose-sm dark:prose-invert max-w-none', className)}>
-      <ReactMarkdown components={components}>{linkified}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={markdownRemarkPlugins} components={components}>
+        {linkified}
+      </ReactMarkdown>
     </div>
   )
 }

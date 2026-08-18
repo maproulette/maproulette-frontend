@@ -1,10 +1,10 @@
 import type { Task } from '@/types/Task'
 
 /**
- * Extract feature properties from task geometries, merging across features
+ * Extract feature properties from task geometries, merging across ALL features
  * (later keys win).
  */
-export const getTaskFeatureProperties = (task: Task): Record<string, unknown> | null => {
+export const getMergedFeatureProperties = (task: Task): Record<string, unknown> | null => {
   const properties: Record<string, unknown> = {}
   for (const feature of task.geometries.features) {
     if (feature.properties) {
@@ -39,6 +39,6 @@ export const replacePropertyTags = (
  * properties. Returns the original text if the task has no properties.
  */
 export const substituteTaskProperties = (text: string, task: Task): string => {
-  const properties = getTaskFeatureProperties(task)
+  const properties = getMergedFeatureProperties(task)
   return properties ? replacePropertyTags(text, properties) : text
 }

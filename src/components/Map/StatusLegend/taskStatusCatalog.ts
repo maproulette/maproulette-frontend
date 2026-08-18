@@ -1,5 +1,6 @@
 import { AlertTriangle, Check, CircleHelp, Link2, type LucideIcon, Plus } from 'lucide-react'
-import { resolveHex, STATUS_HEX_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
+import type { TranslateFn } from '@/i18n'
+import { getStatusLabel, resolveHex, STATUS_HEX_COLORS } from '@/lib/taskConstants'
 import { PRIORITY_COLOR } from '@/types/Priority'
 
 export interface StatusLegendEntry {
@@ -17,14 +18,13 @@ const STATUS_ICONS: Record<number, LucideIcon> = {
   6: AlertTriangle,
 }
 
-export const statusLegendEntries: StatusLegendEntry[] = Object.entries(STATUS_LABELS)
-  .map(([status, label]) => ({
+export const getStatusLegendEntries = (t: TranslateFn): StatusLegendEntry[] =>
+  Object.keys(STATUS_ICONS).map((status) => ({
     status: Number(status),
-    label,
+    label: getStatusLabel(t, Number(status)) ?? t('common.unknown', undefined, 'Unknown'),
     color: resolveHex(STATUS_HEX_COLORS[Number(status)] ?? 'zinc-400'),
     icon: STATUS_ICONS[Number(status)] ?? Plus,
   }))
-  .filter((entry) => entry.status in STATUS_ICONS)
 
 export interface PriorityLegendEntry {
   priority: 0 | 1 | 2

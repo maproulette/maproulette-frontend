@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import type { RefObject } from 'react'
+import { type RefObject, useMemo } from 'react'
 import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@/components/ui/Checkbox'
 import {
   Table,
   TableBody,
@@ -10,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table'
+import type { UseRowSelectionReturn } from '@/hooks/useRowSelection'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { TaskMarker } from '@/types/Task'
@@ -21,13 +23,24 @@ export const ChallengeTasksExplorerTaskTable = ({
   visibleMarkers,
   hasMore,
   sentinelRef,
+  rowSelection,
 }: {
   visibleMarkers: TaskMarker[]
   hasMore: boolean
   sentinelRef: RefObject<HTMLDivElement | null>
+  rowSelection: UseRowSelectionReturn<number>
 }) => {
   const { t } = useIntl()
   const { selectedTask, setSelectedTask } = useExplorerContext()
+
+  const visibleIds = useMemo(() => visibleMarkers.map((m) => m.id), [visibleMarkers])
+  const { allVisibleSelected, someVisibleSelected } = useMemo(() => {
+    const selectedCount = visibleIds.filter((id) => rowSelection.has(id)).length
+    return {
+      allVisibleSelected: visibleIds.length > 0 && selectedCount === visibleIds.length,
+      someVisibleSelected: selectedCount > 0,
+    }
+  }, [visibleIds, rowSelection])
 
   const statusLabel = (s: number) =>
     TASK_STATUS_LABELS[s] ?? t('common.statusWithStatus', { status: s }, 'Status {status}')
@@ -41,6 +54,29 @@ export const ChallengeTasksExplorerTaskTable = ({
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[36px] px-2">
+              <Checkbox
+                checked={allVisibleSelected}
+                indeterminate={someVisibleSelected && !allVisibleSelected}
+                disabled={visibleIds.length === 0}
+                onCheckedChange={(checked) => {
+                  const next = new Set(rowSelection.ids)
+                  for (const id of visibleIds) {
+                    if (checked === true) {
+                      next.add(id)
+                    } else {
+                      next.delete(id)
+                    }
+                  }
+                  rowSelection.selectAll(Array.from(next))
+                }}
+                aria-label={t(
+                  'manageChallengeDetail.tasksExplorer.selectAllVisibleLabel',
+                  undefined,
+                  'Select all visible tasks'
+                )}
+              />
+            </TableHead>
             <TableHead className="w-[44px]" />
             <TableHead className="w-[88px]">{t('common.id', undefined, 'ID')}</TableHead>
             <TableHead className="w-[120px]">{t('common.status', undefined, 'Status')}</TableHead>
@@ -58,7 +94,7 @@ export const ChallengeTasksExplorerTaskTable = ({
         <TableBody>
           {visibleMarkers.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
+              <TableCell colSpan={7} className="h-24 text-center text-zinc-500">
                 {t(
                   'manageChallengeDetail.tasksExplorer.noTasksMatch',
                   undefined,
@@ -69,11 +105,31 @@ export const ChallengeTasksExplorerTaskTable = ({
           ) : (
             visibleMarkers.map((marker) => {
               const isSelected = selectedTask?.id === marker.id
+              const isRowSelected = rowSelection.has(marker.id)
               return (
                 <TableRow
                   key={marker.id}
                   className={isSelected ? 'bg-purple-50 dark:bg-purple-950/30' : undefined}
                 >
+                  <TableCell className="px-2">
+                    <Checkbox
+                      checked={isRowSelected}
+                      onCheckedChange={(checked) => rowSelection.set(marker.id, checked === true)}
+                      aria-label={
+                        isRowSelected
+                          ? t(
+                              'manageChallengeDetail.tasksExplorer.deselectRowLabel',
+                              undefined,
+                              'Deselect row for bulk actions'
+                            )
+                          : t(
+                              'manageChallengeDetail.tasksExplorer.selectRowLabel',
+                              undefined,
+                              'Select row for bulk actions'
+                            )
+                      }
+                    />
+                  </TableCell>
                   <TableCell className="px-2">
                     <button
                       type="button"

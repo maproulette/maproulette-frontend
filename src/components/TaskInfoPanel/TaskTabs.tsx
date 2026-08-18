@@ -15,8 +15,6 @@ interface TaskTabsProps {
   task: Task
   /** Content rendered inside the "task" (Instructions) tab */
   taskTabContent?: ReactNode
-  /** Whether to show the Location tab. Default: false */
-  showLocationTab?: boolean
   /** Extra className applied to the content wrapper inside ScrollArea */
   contentClassName?: string
 }

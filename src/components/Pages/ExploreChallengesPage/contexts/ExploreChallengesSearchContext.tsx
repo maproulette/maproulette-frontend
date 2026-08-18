@@ -105,7 +105,6 @@ export interface ExploreChallengesSearchContextType {
   setSortBy: Dispatch<SetStateAction<ExtendedFindParamsSortBy | undefined>>
 
   keywords: string | undefined
-  setKeywords: Dispatch<SetStateAction<string | undefined>>
 
   cluster: boolean
   setCluster: Dispatch<SetStateAction<boolean>>
@@ -201,7 +200,8 @@ export const ExploreChallengesSearchContextProvider = ({
     initialGlobal ?? persistedFilters?.global
   )
 
-  const isInitialMount = useRef(true)
+  const isInitialUrlSync = useRef(true)
+  const isInitialCookiePersist = useRef(true)
 
   useEffect(() => {
     if (!persistedFilters) return
@@ -239,8 +239,8 @@ export const ExploreChallengesSearchContextProvider = ({
   }, [])
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false
+    if (isInitialUrlSync.current) {
+      isInitialUrlSync.current = false
       return
     }
 
@@ -276,8 +276,9 @@ export const ExploreChallengesSearchContextProvider = ({
     initialOsmId,
     initialViewMode,
   ])
-  const [keywords, setKeywords] = useState<string | undefined>(
-    buildKeywords(selectedCategories, workOn)
+  const keywords = useMemo(
+    () => buildKeywords(selectedCategories, workOn),
+    [selectedCategories, workOn]
   )
   const [isLocationLoading, setIsLocationLoading] = useState(false)
 
@@ -327,8 +328,8 @@ export const ExploreChallengesSearchContextProvider = ({
   )
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false
+    if (isInitialCookiePersist.current) {
+      isInitialCookiePersist.current = false
       return
     }
 
@@ -372,7 +373,6 @@ export const ExploreChallengesSearchContextProvider = ({
     setSelectedCategories([])
     setLocationGeojson(null)
     setPendingFitBounds(null)
-    setKeywords(undefined)
 
     removeCookie(COOKIE_NAME)
   }, [])
@@ -409,7 +409,6 @@ export const ExploreChallengesSearchContextProvider = ({
       isLocationLoading,
       setIsLocationLoading,
       keywords,
-      setKeywords,
       viewMode,
       setViewMode,
       handleClearFilters,

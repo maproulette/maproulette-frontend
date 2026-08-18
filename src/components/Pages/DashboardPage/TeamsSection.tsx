@@ -1,41 +1,21 @@
-import { Users } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { ExternalLink, Plus, Users } from 'lucide-react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
-import { cn, initials as getInitials } from '@/lib/utils'
+import { isPendingInvite } from '@/types/Team'
+import { PendingInvitesSection } from '../TeamsPage/PendingInvitesSection'
+import { TeamCard } from '../TeamsPage/TeamCard'
 
 interface TeamsSectionProps {
   userId: number
 }
 
-type TFunction = ReturnType<typeof useIntl>['t']
-
-const getTeamStatusStyle = (status: number, t: TFunction): { label: string; color: string } => {
-  const styles: Record<number, { label: string; color: string }> = {
-    0: {
-      label: t('common.invited', undefined, 'Invited'),
-      color: 'bg-yellow-500/20 text-yellow-400',
-    },
-    1: {
-      label: t('common.member', undefined, 'Member'),
-      color: 'bg-emerald-500/20 text-emerald-400',
-    },
-    2: {
-      label: t('common.admin', undefined, 'Admin'),
-      color: 'bg-purple-500/20 text-purple-400',
-    },
-  }
-  return (
-    styles[status] || {
-      label: t('common.unknown', undefined, 'Unknown'),
-      color: 'bg-zinc-500/20 text-zinc-400',
-    }
-  )
-}
-
 export const TeamsSection = ({ userId }: TeamsSectionProps) => {
   const { t } = useIntl()
   const { data: teamMemberships, isLoading, error } = api.user.teamMemberships(userId)
+  const pending = teamMemberships?.filter(isPendingInvite) ?? []
+  const active = teamMemberships?.filter((m) => !isPendingInvite(m)) ?? []
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
@@ -44,11 +24,29 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
           {t('common.teams', undefined, 'Teams')}
         </h3>
-        {teamMemberships && teamMemberships.length > 0 && (
-          <span className="ml-auto rounded-full bg-purple-500/20 px-2 py-0.5 font-medium text-purple-400 text-xs">
-            {teamMemberships.length}
-          </span>
-        )}
+        <a
+          href="https://learn.maproulette.org/en-US/documentation/teams/"
+          target="_blank"
+          rel="noreferrer"
+          className="rounded p-1 text-zinc-400 transition-colors hover:text-zinc-600 dark:text-slate-500 dark:hover:text-slate-300"
+          title={t('dashboard.teams.learnMore', undefined, 'Learn more about teams')}
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+        <div className="ml-auto flex items-center gap-2">
+          {teamMemberships && teamMemberships.length > 0 && (
+            <span className="rounded-full bg-purple-500/20 px-2 py-0.5 font-medium text-purple-400 text-xs">
+              {teamMemberships.length}
+            </span>
+          )}
+          <Link
+            to="/teams/new"
+            className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-purple-200 hover:text-zinc-700 dark:text-slate-400 dark:hover:bg-purple-500/30 dark:hover:text-slate-100"
+            title={t('common.createTeam', undefined, 'Create team')}
+          >
+            <Plus className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
       <div className="flex-1 overflow-y-auto px-4 pb-4">
         {isLoading && (
@@ -63,7 +61,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
           </div>
         )}
 
-        {!isLoading && !error && teamMemberships?.length === 0 && (
+        {!isLoading && !error && pending.length === 0 && active.length === 0 && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-slate-700/50">
               <Users className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
@@ -77,30 +75,16 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
           </div>
         )}
 
-        {!isLoading && !error && teamMemberships && teamMemberships.length > 0 && (
-          <div className="space-y-2">
-            {teamMemberships.map((membership) => {
-              const statusStyle = getTeamStatusStyle(membership.status, t)
-              return (
-                <div
-                  key={membership.id}
-                  className="flex items-center justify-between rounded-lg bg-zinc-100 p-3 dark:bg-slate-700/30"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-500/20 font-medium text-purple-400 text-xs">
-                      {getInitials(membership.name || `T${membership.teamId}`)}
-                    </div>
-                    <div className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-                      {membership.name ||
-                        t('common.team', { teamId: membership.teamId }, 'Team #{teamId}')}
-                    </div>
-                  </div>
-                  <span className={cn('rounded-full px-2 py-0.5 text-xs', statusStyle.color)}>
-                    {statusStyle.label}
-                  </span>
-                </div>
-              )
-            })}
+        {!isLoading && !error && (pending.length > 0 || active.length > 0) && (
+          <div className="space-y-3">
+            {pending.length > 0 && <PendingInvitesSection invites={pending} />}
+            {active.length > 0 && (
+              <div className="space-y-2">
+                {active.map((membership) => (
+                  <TeamCard key={membership.id} membership={membership} />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

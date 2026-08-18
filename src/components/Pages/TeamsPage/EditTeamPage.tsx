@@ -1,4 +1,5 @@
 import { api } from '@/api'
+import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
 import { TeamForm } from './TeamForm'
@@ -20,11 +21,17 @@ export const EditTeamPage = ({ teamId }: Props) => {
     )
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-6">
-      <h1 className="mb-4 font-bold text-xl">
-        {t('teams.editTeam.title', undefined, 'Edit team')}
-      </h1>
-      <TeamForm team={team} />
-    </div>
+    <ManageFormLayout>
+      <FormCard
+        title={t('teams.editTeam.title', undefined, 'Edit team')}
+        description={t(
+          'teams.editTeam.description',
+          undefined,
+          'Update the information for this team'
+        )}
+      >
+        <TeamForm team={team} />
+      </FormCard>
+    </ManageFormLayout>
   )
 }

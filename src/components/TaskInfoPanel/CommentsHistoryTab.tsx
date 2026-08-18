@@ -15,7 +15,7 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react'
-import { useContext, useMemo, useRef, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -29,9 +29,10 @@ import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
+import { markdownRemarkPlugins } from '@/lib/markdown'
 import {
+  getStatusLabel,
   STATUS_BAR_COLORS,
-  STATUS_LABELS,
   STATUS_PILL_COLORS,
   STATUS_TINT_COLORS,
 } from '@/lib/taskConstants'
@@ -84,7 +85,8 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
   const { t } = useIntl()
   const Icon = STATUS_ICONS[status] ?? HelpCircle
   const pill = STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS
-  const label = STATUS_LABELS[status] ?? t('common.statusWithStatus', { status }, 'Status {status}')
+  const label =
+    getStatusLabel(t, status) ?? t('common.statusWithStatus', { status }, 'Status {status}')
   return (
     <span
       className={cn(
@@ -112,8 +114,6 @@ export const CommentsHistoryTab = ({
   const resolvedTaskId = taskId ?? 0
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
-  const commentsEndRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { handleImageError, getImageSrc } = useAvatarContext()
   const { taskHistoryItemRenderers } = usePluginContext()
 
@@ -211,6 +211,7 @@ export const CommentsHistoryTab = ({
 
             <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
               <ReactMarkdown
+                remarkPlugins={markdownRemarkPlugins}
                 components={{
                   a: ({ ...props }) => (
                     <a
@@ -323,7 +324,6 @@ export const CommentsHistoryTab = ({
               .map((item, index) => renderHistoryItem(item, index))
               .filter((item) => item !== null)
           )}
-          <div ref={commentsEndRef} />
         </div>
       </ScrollArea>
 
@@ -335,7 +335,6 @@ export const CommentsHistoryTab = ({
           >
             <div className="flex gap-2">
               <Textarea
-                ref={textareaRef}
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder={t('common.addAComment', undefined, 'Add a comment...')}

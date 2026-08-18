@@ -104,7 +104,7 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
               <DialogDescription>
                 {isThread
                   ? t(
-                      'common.taskWithTaskId',
+                      'notificationsPage.thread.description.groupedForTask',
                       {
                         ref: taskId
                           ? t('common.taskWithTaskId', { taskId }, 'Task #{taskId}')

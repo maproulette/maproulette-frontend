@@ -9,34 +9,32 @@ import { InstructionPanel } from './InstructionPanel'
 
 interface TaskTabProps {
   task: Task
-  /** Whether this task can be added to the active bundle */
-  canAddToBundle?: boolean
-  onAddToBundle?: () => void
-  onRemoveFromBundle?: () => void
-  /** Override for bundle task IDs to display (e.g. from a fetched bundle). Falls back to active bundle context. */
-  nonPrimaryBundleTaskIds?: number[]
-  onOpenBundleTask?: (taskId: number) => void
-  activeDrawerTaskId?: number | null
 }
 
-export const TaskTab = ({
-  task,
-  canAddToBundle,
-  onAddToBundle,
-  onRemoveFromBundle,
-  nonPrimaryBundleTaskIds: nonPrimaryBundleTaskIdsProp,
-  onOpenBundleTask,
-  activeDrawerTaskId,
-}: TaskTabProps) => {
+export const TaskTab = ({ task }: TaskTabProps) => {
   const { challenge } = useChallengeContext()
   const { task: primaryTask } = useTaskContext()
-  const { activeBundle, bundleEditsDisabled } = useTaskBundleContext()
+  const {
+    activeBundle,
+    bundleEditsDisabled,
+    viewedTaskId,
+    viewedTaskBundleTaskIds,
+    canAddSelectedMarkerToBundle,
+    handleAddToBundle,
+    handleRemoveFromBundle,
+    setDrawerTaskId,
+  } = useTaskBundleContext()
 
   const isPrimaryTask = task.id === primaryTask.id
+  // Whether this TaskTab instance is showing the task currently displayed in
+  // the drawer (as opposed to the always-rendered primary task tab).
+  const isViewedTask = task.id === viewedTaskId
   const isInBundle = activeBundle?.taskIds.includes(task.id) ?? false
   const canRemoveFromBundle = isInBundle && !isPrimaryTask && !bundleEditsDisabled
-  const nonPrimaryBundleTaskIds =
-    nonPrimaryBundleTaskIdsProp ?? activeBundle?.taskIds.filter((id) => id !== primaryTask.id) ?? []
+  const canAddToBundle = isViewedTask && canAddSelectedMarkerToBundle
+  const nonPrimaryBundleTaskIds = isViewedTask
+    ? viewedTaskBundleTaskIds
+    : (activeBundle?.taskIds.filter((id) => id !== primaryTask.id) ?? [])
   const allBundleTaskIds =
     nonPrimaryBundleTaskIds.length > 0 ? [primaryTask.id, ...nonPrimaryBundleTaskIds] : []
 
@@ -45,24 +43,22 @@ export const TaskTab = ({
       <BundleTaskList
         taskIds={allBundleTaskIds}
         primaryTaskId={primaryTask.id}
-        onOpenBundleTask={onOpenBundleTask}
-        activeDrawerTaskId={activeDrawerTaskId}
+        onOpenBundleTask={isPrimaryTask ? setDrawerTaskId : undefined}
       />
 
       <BundleStateIndicator
-        canAddToBundle={!!canAddToBundle}
+        canAddToBundle={canAddToBundle}
         canRemoveFromBundle={canRemoveFromBundle}
         isInBundle={isInBundle}
         isPrimaryTask={isPrimaryTask}
-        onAddToBundle={onAddToBundle}
-        onRemoveFromBundle={onRemoveFromBundle}
+        onAddToBundle={handleAddToBundle}
+        onRemoveFromBundle={handleRemoveFromBundle}
       />
 
       <InstructionPanel
         taskInstruction={
           challenge?.instruction ? substituteTaskProperties(challenge.instruction, task) : undefined
         }
-        challengeDescription={challenge?.description ?? undefined}
       />
     </div>
   )

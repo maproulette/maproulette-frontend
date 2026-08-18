@@ -7,6 +7,7 @@ import {
   EyeOff,
   Hammer,
   MoreHorizontal,
+  Pause,
   Pencil,
   Pin,
   Play,
@@ -40,6 +41,7 @@ interface ChallengesTableViewProps {
   pinnedChallengeIds: number[]
   onTogglePin: (challengeId: number) => void
   onToggleEnabled: (challenge: Challenge) => void
+  onTogglePaused: (challengeId: number, paused: boolean) => void
   onClone: (challenge: { id: number; name: string }) => void
   onArchive: (challengeId: number, isArchived: boolean) => void
   onRebuild: (challengeId: number) => void
@@ -51,6 +53,7 @@ export const ChallengesTableView = ({
   pinnedChallengeIds,
   onTogglePin,
   onToggleEnabled,
+  onTogglePaused,
   onClone,
   onArchive,
   onRebuild,
@@ -139,7 +142,7 @@ export const ChallengesTableView = ({
                   {challenge.id}
                 </TableCell>
                 <TableCell className="hidden text-center text-zinc-500 md:table-cell dark:text-zinc-400">
-                  {getDifficultyLabel(challenge.difficulty)}
+                  {getDifficultyLabel(t, challenge.difficulty)}
                 </TableCell>
                 <TableCell className="hidden text-center md:table-cell">
                   <span className="font-medium tabular-nums">
@@ -151,6 +154,60 @@ export const ChallengesTableView = ({
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">
+                    {challenge.id != null && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => onTogglePaused(challenge.id, challenge.paused ?? false)}
+                        title={
+                          challenge.paused
+                            ? t('common.resumeChallenge', undefined, 'Resume challenge')
+                            : t('common.pauseChallenge', undefined, 'Pause challenge')
+                        }
+                        aria-label={
+                          challenge.paused
+                            ? t('common.resumeChallenge', undefined, 'Resume challenge')
+                            : t('common.pauseChallenge', undefined, 'Pause challenge')
+                        }
+                      >
+                        <Pause
+                          className={cn(
+                            'h-4 w-4',
+                            challenge.paused
+                              ? 'text-amber-500 dark:text-amber-400'
+                              : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+                          )}
+                        />
+                      </Button>
+                    )}
+                    {challenge.id != null && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => onArchive(challenge.id, challenge.isArchived ?? false)}
+                        title={
+                          challenge.isArchived
+                            ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                            : t('common.archiveChallenge', undefined, 'Archive challenge')
+                        }
+                        aria-label={
+                          challenge.isArchived
+                            ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                            : t('common.archiveChallenge', undefined, 'Archive challenge')
+                        }
+                      >
+                        <Archive
+                          className={cn(
+                            'h-4 w-4',
+                            challenge.isArchived
+                              ? 'text-amber-600 dark:text-amber-400'
+                              : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+                          )}
+                        />
+                      </Button>
+                    )}
                     {challenge.id != null && (
                       <Button
                         variant="ghost"

@@ -114,13 +114,18 @@ export const TaskPreviewProvider = ({
     }
   }, [markers, debouncedDraft, previewQuery.data, previewQuery.isFetching])
 
-  const value: TaskPreviewContextValue = {
-    markers,
-    // Treat both marker load and the initial preview fetch as loading so the
-    // match-count badges don't show stale zeros before the first response.
-    isLoading: isLoading || (previewQuery.isLoading && !previewQuery.data),
-    preview,
-  }
+  // Treat both marker load and the initial preview fetch as loading so the
+  // match-count badges don't show stale zeros before the first response.
+  const isLoadingCombined = isLoading || (previewQuery.isLoading && !previewQuery.data)
+
+  const value = useMemo<TaskPreviewContextValue>(
+    () => ({
+      markers,
+      isLoading: isLoadingCombined,
+      preview,
+    }),
+    [markers, isLoadingCombined, preview]
+  )
 
   return <TaskPreviewContext.Provider value={value}>{children}</TaskPreviewContext.Provider>
 }

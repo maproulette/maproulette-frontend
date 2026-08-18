@@ -51,6 +51,17 @@ describe('getPinnedProjectIds', () => {
     const properties = { mr4: { settings: { pinned: { challenges: [9, 10] } } } }
     expect(getPinnedProjectIds(userWithProperties(properties))).toEqual([])
   })
+
+  it('returns an empty array when reading user.properties throws', () => {
+    const throwingUser = {} as User
+    Object.defineProperty(throwingUser, 'properties', {
+      configurable: true,
+      get() {
+        throw new Error('boom')
+      },
+    })
+    expect(getPinnedProjectIds(throwingUser)).toEqual([])
+  })
 })
 
 describe('getPinnedChallengeIds', () => {

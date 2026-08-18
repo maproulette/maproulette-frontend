@@ -80,7 +80,10 @@ export const SidePanelHeader = ({ className, ...props }: React.ComponentProps<'d
 )
 
 export const SidePanelTitle = ({ className, ...props }: React.ComponentProps<'h2'>) => (
-  <h2 className={cn('m-0 font-semibold text-base text-zinc-900 dark:text-slate-100', className)} {...props} />
+  <h2
+    className={cn('m-0 font-semibold text-base text-zinc-900 dark:text-slate-100', className)}
+    {...props}
+  />
 )
 
 export const SidePanelBody = ({ className, ...props }: React.ComponentProps<'div'>) => (

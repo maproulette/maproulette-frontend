@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger'
 
 const taskSearchSchema = z.object({
   tab: z.enum(['task', 'properties', 'comments', 'osm']).optional(),
+  claimTask: z.coerce.boolean().optional(),
 })
 
 export const Route = createFileRoute('/_app/tasks/$taskId/')({

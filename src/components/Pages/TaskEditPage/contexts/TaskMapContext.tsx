@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
-import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
+import type { MapRef } from 'react-map-gl/maplibre'
 import type { TaskMarker } from '@/types/Task'
 
 export const MAX_SELECTED_TASKS = 50
@@ -15,6 +15,8 @@ export interface TaskMapContextType {
   setSelectedMarker: (marker: TaskMarker | null) => void
   markersHidden: boolean
   setMarkersHidden: (hidden: boolean) => void
+  hoveredBundleTaskId: number | null
+  setHoveredBundleTaskId: (taskId: number | null) => void
   activeTaskId: number | null
   setActiveTaskId: (taskId: number | null) => void
   emptyClickCount: number
@@ -35,8 +37,6 @@ export interface TaskMapContextType {
   startDrawing: (mode: 'select') => void
   cancelDrawing: () => void
   clearSelection: () => void
-  onMapClick: (e: MapMouseEvent) => void
-  onMouseMove: (e: MapMouseEvent) => void
 }
 
 const TaskMapContext = createContext<TaskMapContextType | undefined>(undefined)
@@ -46,6 +46,7 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<TaskMarker | null>(null)
   const [markersHidden, setMarkersHidden] = useState(false)
+  const [hoveredBundleTaskId, setHoveredBundleTaskId] = useState<number | null>(null)
   const [activeTaskId, setActiveTaskId] = useState<number | null>(null)
   const [emptyClickCount, setEmptyClickCount] = useState(0)
 
@@ -86,18 +87,6 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
 
   const isAtSelectionLimit = selectedTaskIds.size >= MAX_SELECTED_TASKS
 
-  const onMapClick = (_e: MapMouseEvent) => {
-    if (!drawingMode) {
-      // No-op when not in drawing mode — clicks are handled by map marker components
-    }
-  }
-
-  const onMouseMove = (_e: MapMouseEvent) => {
-    if (!drawingMode) {
-      // No-op when not in drawing mode — mouse move handled by map marker components
-    }
-  }
-
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: TaskMapContextType = useMemo(
     () => ({
@@ -108,6 +97,8 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
       setSelectedMarker,
       markersHidden,
       setMarkersHidden,
+      hoveredBundleTaskId,
+      setHoveredBundleTaskId,
       activeTaskId,
       setActiveTaskId,
       emptyClickCount,
@@ -124,13 +115,12 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
       startDrawing,
       cancelDrawing,
       clearSelection,
-      onMapClick,
-      onMouseMove,
     }),
     [
       mapLoaded,
       selectedMarker,
       markersHidden,
+      hoveredBundleTaskId,
       activeTaskId,
       emptyClickCount,
       drawingMode,
@@ -141,8 +131,6 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
       startDrawing,
       cancelDrawing,
       clearSelection,
-      onMapClick,
-      onMouseMove,
     ]
   )
 

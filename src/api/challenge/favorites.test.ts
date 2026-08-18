@@ -54,6 +54,23 @@ describe('challengeFavorites.useFavoriteChallenge', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(client.getQueryData(['challenge', 3, 'isFavorited'])).toEqual({ isFavorited: true })
   })
+
+  it("invalidates the user's saved challenges so the dashboard picks up the change", async () => {
+    stubFetch(new Response(null, { status: 200 }))
+    const client = createTestQueryClient()
+    client.setQueryData(['user', 9, 'savedChallenges', { limit: 10, page: 0 }], [])
+
+    const { result } = renderHook(() => challengeFavorites.useFavoriteChallenge(), {
+      wrapper: queryClientWrapper(client),
+    })
+
+    result.current.mutate(3)
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(
+      client.getQueryState(['user', 9, 'savedChallenges', { limit: 10, page: 0 }])?.isInvalidated
+    ).toBe(true)
+  })
 })
 
 describe('challengeFavorites.useUnfavoriteChallenge', () => {
@@ -69,5 +86,22 @@ describe('challengeFavorites.useUnfavoriteChallenge', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(client.getQueryData(['challenge', 3, 'isFavorited'])).toEqual({ isFavorited: false })
+  })
+
+  it("invalidates the user's saved challenges so the dashboard picks up the change", async () => {
+    stubFetch(new Response(null, { status: 200 }))
+    const client = createTestQueryClient()
+    client.setQueryData(['user', 9, 'savedChallenges', { limit: 10, page: 0 }], [])
+
+    const { result } = renderHook(() => challengeFavorites.useUnfavoriteChallenge(), {
+      wrapper: queryClientWrapper(client),
+    })
+
+    result.current.mutate(3)
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(
+      client.getQueryState(['user', 9, 'savedChallenges', { limit: 10, page: 0 }])?.isInvalidated
+    ).toBe(true)
   })
 })

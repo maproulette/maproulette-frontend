@@ -1,14 +1,21 @@
+import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { useIntl } from '@/i18n'
 import { TeamForm } from './TeamForm'
 
 export const NewTeamPage = () => {
   const { t } = useIntl()
   return (
-    <div className="mx-auto max-w-xl px-4 py-6">
-      <h1 className="mb-4 font-bold text-xl">
-        {t('teams.newTeam.title', undefined, 'Create a team')}
-      </h1>
-      <TeamForm />
-    </div>
+    <ManageFormLayout>
+      <FormCard
+        title={t('teams.newTeam.title', undefined, 'Create a team')}
+        description={t(
+          'teams.newTeam.description',
+          undefined,
+          'Fill in the information below to create your new team'
+        )}
+      >
+        <TeamForm />
+      </FormCard>
+    </ManageFormLayout>
   )
 }

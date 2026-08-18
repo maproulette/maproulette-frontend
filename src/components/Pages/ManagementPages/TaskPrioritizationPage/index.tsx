@@ -6,12 +6,8 @@ import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 import { TaskPriority, type TaskPriorityValue } from '@/types/Priority'
 import { PrioritizationContent } from './PrioritizationContent'
-import {
-  type PrioritizationDraft,
-  PrioritizationProvider,
-  parseBoundsString,
-  parseRulesString,
-} from './PrioritizationContext'
+import { type PrioritizationDraft, PrioritizationProvider } from './PrioritizationContext'
+import { parseBoundsString, parseRulesString } from './prioritizationParsing'
 import { TaskPreviewProvider } from './TaskPreviewContext'
 
 interface Props {

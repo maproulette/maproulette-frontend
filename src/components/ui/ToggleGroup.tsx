@@ -26,24 +26,26 @@ export const ToggleGroup = ({
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
   VariantProps<typeof toggleVariants> & {
     spacing?: number
-  }) => (
-  <ToggleGroupPrimitive.Root
-    data-slot="toggle-group"
-    data-variant={variant}
-    data-size={size}
-    data-spacing={spacing}
-    style={{ '--gap': spacing } as React.CSSProperties}
-    className={cn(
-      'group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-lg data-[spacing=default]:data-[variant=outline]:shadow-xs',
-      className
-    )}
-    {...props}
-  >
-    <ToggleGroupContext.Provider value={{ variant, size, spacing }}>
-      {children}
-    </ToggleGroupContext.Provider>
-  </ToggleGroupPrimitive.Root>
-)
+  }) => {
+  const value = React.useMemo(() => ({ variant, size, spacing }), [variant, size, spacing])
+
+  return (
+    <ToggleGroupPrimitive.Root
+      data-slot="toggle-group"
+      data-variant={variant}
+      data-size={size}
+      data-spacing={spacing}
+      style={{ '--gap': spacing } as React.CSSProperties}
+      className={cn(
+        'group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-lg data-[spacing=default]:data-[variant=outline]:shadow-xs',
+        className
+      )}
+      {...props}
+    >
+      <ToggleGroupContext.Provider value={value}>{children}</ToggleGroupContext.Provider>
+    </ToggleGroupPrimitive.Root>
+  )
+}
 
 export const ToggleGroupItem = ({
   className,

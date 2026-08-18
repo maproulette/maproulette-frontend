@@ -100,6 +100,10 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
   const MODE_HELP = buildModeHelp(t)
   const drawRef = useRef<TerraDraw | null>(null)
   const suppressChangeRef = useRef(false)
+  // Tracks the `value` currently reflected on the terra-draw canvas, so the
+  // resync effect below can tell "the canvas produced this value" (skip)
+  // apart from "the value changed out from under us" (e.g. Discard — resync).
+  const seededValueRef = useRef<GeoJSON.FeatureCollection | null>(null)
   const [activeMode, setActiveMode] = useState<DrawMode>('idle')
   const [selectedId, setSelectedId] = useState<string | number | null>(null)
   const priority: TaskPriorityValue = TIER_TO_PRIORITY[tier]
@@ -175,12 +179,15 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
         suppressChangeRef.current = false
       }
     }
+    seededValueRef.current = value
 
     const handleChange = () => {
       if (!drawRef.current || suppressChangeRef.current) return
       const snap = drawRef.current.getSnapshot()
       const features = snap.filter(isPolygonish) as GeoJSON.Feature[]
-      onChange(featureToFC(features))
+      const next = featureToFC(features)
+      seededValueRef.current = next
+      onChange(next)
     }
     const handleSelect = (id: string | number) => setSelectedId(id)
     const handleDeselect = () => setSelectedId(null)
@@ -202,6 +209,32 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapLoaded, map, tier, color])
 
+  // Resync the canvas whenever `value` changes for a reason other than the
+  // canvas itself producing it (e.g. Discard resetting the priority draft) —
+  // otherwise stale shapes stick around since the effect above only reacts
+  // to map-lifecycle changes.
+  useEffect(() => {
+    const draw = drawRef.current
+    if (!draw) return
+    if (value === seededValueRef.current) return
+    try {
+      suppressChangeRef.current = true
+      const snap = draw.getSnapshot()
+      const idsToRemove = snap.map((f) => f.id).filter((id) => id !== undefined)
+      if (idsToRemove.length) draw.removeFeatures(idsToRemove)
+      if (value?.features?.length) {
+        const seeded = value.features.filter(isPolygonish).map(normalizeSeedFeature)
+        draw.addFeatures(seeded)
+      }
+    } catch (error) {
+      logger.warn('Could not resync bounds features', { error, tier })
+    } finally {
+      suppressChangeRef.current = false
+    }
+    seededValueRef.current = value
+    setSelectedId(null)
+  }, [value, tier])
+
   const setMode = (mode: DrawMode) => {
     setActiveMode(mode)
     // Leaving select mode also drops any current selection so the delete
@@ -222,6 +255,7 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
       suppressChangeRef.current = false
     }
     setSelectedId(null)
+    seededValueRef.current = null
     onChange(null)
   }
 
