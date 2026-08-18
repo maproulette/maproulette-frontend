@@ -1,6 +1,7 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
 import type { Project, ProjectGetResponse } from '@/types/Project'
+import { seedChallengeCache } from './challenge/single'
 import { apiRequest } from './client'
 
 export const project = {
@@ -108,9 +109,7 @@ export const project = {
     return useQuery({
       ...project.getProjectChallengesOptions(projectId ?? 0, limit, page),
       select: (challenges) => {
-        for (const challenge of challenges) {
-          queryClient.setQueryData(['challenge', challenge.id], challenge)
-        }
+        seedChallengeCache(queryClient, challenges)
         return challenges
       },
     })

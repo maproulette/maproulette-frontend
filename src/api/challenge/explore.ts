@@ -16,6 +16,7 @@ import type {
   PreferredChallengesResponse,
 } from '@/types/Challenge'
 import { apiRequest, convertParamsToSearchParams } from '../client'
+import { seedChallengeCache } from './single'
 
 export const challengeExplore = {
   preferredChallenges: (params: PreferredChallengesParams) =>
@@ -42,9 +43,7 @@ export const challengeExplore = {
               searchParams: params,
             })
             .json<FeaturedChallengesResponse[]>()
-          for (const challenge of challenges) {
-            queryClient.setQueryData(['challenge', challenge.id], challenge)
-          }
+          seedChallengeCache(queryClient, challenges)
           return challenges
         },
       })
@@ -62,9 +61,7 @@ export const challengeExplore = {
               searchParams: params ? convertParamsToSearchParams(params) : undefined,
             })
             .json<ChallengeGetResponse[]>()
-          for (const challenge of challenges) {
-            queryClient.setQueryData(['challenge', challenge.id], challenge)
-          }
+          seedChallengeCache(queryClient, challenges)
           return challenges
         },
         placeholderData: (previousData) => previousData,
@@ -85,9 +82,7 @@ export const challengeExplore = {
                 : undefined,
             })
             .json<ChallengeGetResponse[]>()
-          for (const challenge of challenges) {
-            queryClient.setQueryData(['challenge', challenge.id], challenge)
-          }
+          seedChallengeCache(queryClient, challenges)
           return challenges
         },
         initialPageParam: 0,
@@ -140,9 +135,7 @@ export const challengeExplore = {
     return useQuery({
       ...challengeExplore.getChallengesListingOptions(projectIds, { limit, page, onlyEnabled }),
       select: (challenges) => {
-        for (const challenge of challenges) {
-          queryClient.setQueryData(['challenge', challenge.id], challenge)
-        }
+        seedChallengeCache(queryClient, challenges)
         return challenges as unknown as ChallengeGetResponse[]
       },
     })
@@ -161,9 +154,7 @@ export const challengeExplore = {
               },
             })
             .json<ChallengeGetResponse[]>()
-          for (const challenge of challenges) {
-            queryClient.setQueryData(['challenge', challenge.id], challenge)
-          }
+          seedChallengeCache(queryClient, challenges)
           return challenges
         },
         enabled: search.length > 0,

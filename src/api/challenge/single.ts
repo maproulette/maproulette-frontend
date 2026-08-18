@@ -5,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+import { withScalarParent } from '@/lib/challengeParent'
 import type {
   Challenge,
   ChallengeActivityEntry,
@@ -59,6 +60,27 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   void queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] })
+}
+
+/**
+ * Seed the single-challenge cache (`['challenge', id]`) from a listing payload.
+ *
+ * Listing endpoints that run the backend's `ParentMixin.insertProjectJSON`
+ * (`exploreChallenges`, `extendedFind`, ...) replace a challenge's scalar
+ * `parent` with the full project object. `GET /challenge/{id}` returns the id,
+ * and so does everything reading this cache key — including the challenge route
+ * loader, which serves it to callers that fetch the parent project. Collapse
+ * `parent` back to the id before seeding; otherwise those callers request
+ * `api/v2/project/[object Object]`.
+ */
+export const seedChallengeCache = <T extends { id?: number; parent?: unknown }>(
+  queryClient: QueryClient,
+  challenges: T[]
+) => {
+  for (const challenge of challenges) {
+    if (!challenge?.id) continue
+    queryClient.setQueryData(['challenge', challenge.id], withScalarParent(challenge))
+  }
 }
 
 export const challengeSingle = {

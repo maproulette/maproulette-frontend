@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getParentInfo } from './challengeParent'
+import { getParentId, getParentInfo, withScalarParent } from './challengeParent'
 
 describe('getParentInfo', () => {
   it('extracts id and name from a parent object', () => {
@@ -45,5 +45,55 @@ describe('getParentInfo', () => {
   it('returns null id and unknown name for other malformed input (e.g. a boolean)', () => {
     const result = getParentInfo(true)
     expect(result).toEqual({ id: null, name: 'Unknown Project' })
+  })
+})
+
+describe('getParentId', () => {
+  it('reads the id off an embedded parent project object', () => {
+    expect(getParentId({ id: 42, name: 'My Project' })).toBe(42)
+  })
+
+  it('passes a numeric parent through', () => {
+    expect(getParentId(10)).toBe(10)
+  })
+
+  it('coerces a numeric string parent', () => {
+    expect(getParentId('10')).toBe(10)
+  })
+
+  it('returns undefined for a non-numeric string', () => {
+    expect(getParentId('project-10')).toBeUndefined()
+  })
+
+  it('returns undefined for a parent object with no id', () => {
+    expect(getParentId({ name: 'Orphan Project' })).toBeUndefined()
+  })
+
+  it('returns undefined for null, undefined, and other malformed input', () => {
+    expect(getParentId(null)).toBeUndefined()
+    expect(getParentId(undefined)).toBeUndefined()
+    expect(getParentId(true)).toBeUndefined()
+  })
+})
+
+describe('withScalarParent', () => {
+  it('collapses an embedded parent project object to its id', () => {
+    const challenge = { id: 1, name: 'C', parent: { id: 42, name: 'My Project' } }
+    expect(withScalarParent(challenge)).toEqual({ id: 1, name: 'C', parent: 42 })
+  })
+
+  it('returns the same object when parent is already scalar', () => {
+    const challenge = { id: 1, name: 'C', parent: 42 }
+    expect(withScalarParent(challenge)).toBe(challenge)
+  })
+
+  it('returns the same object when parent is missing', () => {
+    const challenge = { id: 1, name: 'C' }
+    expect(withScalarParent(challenge)).toBe(challenge)
+  })
+
+  it('leaves an id-less parent object alone rather than dropping it', () => {
+    const challenge = { id: 1, parent: { name: 'Orphan Project' } }
+    expect(withScalarParent(challenge)).toBe(challenge)
   })
 })
