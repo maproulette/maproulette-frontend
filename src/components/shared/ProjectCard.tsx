@@ -44,7 +44,19 @@ export const ProjectCard = ({
       )}
     >
       {actions && (
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
+        <div
+          className="absolute top-3 right-3 z-10 flex items-center gap-1"
+          // The card is a Link, and Radix menus portal but still bubble React events
+          // through it, so keep any action click from navigating to the project.
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+          role="toolbar"
+        >
+          {actions}
+        </div>
       )}
       <div className="p-4">
         <div className="mb-2 text-xs text-zinc-500 dark:text-slate-300">

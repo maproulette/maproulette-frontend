@@ -70,7 +70,19 @@ export const ChallengeCard = ({
       )}
     >
       {actions && (
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
+        <div
+          className="absolute top-3 right-3 z-10 flex items-center gap-1"
+          // The card is a Link, and Radix menus portal but still bubble React events
+          // through it, so keep any action click from navigating to the challenge.
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+          role="toolbar"
+        >
+          {actions}
+        </div>
       )}
       <SidebarIndicator avatar={challenge.avatar} />
       <div className="p-4">
