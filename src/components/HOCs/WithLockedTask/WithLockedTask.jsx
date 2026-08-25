@@ -62,7 +62,7 @@ const WithLockedTask = function (WrappedComponent) {
         return Promise.reject("Invalid task");
       }
 
-      if (!isLockableTask(task)) {
+      if (!isLockableTask(task, this.props.challenge)) {
         // Read-only, but not a failure: there's no lock to offer to retry or
         // request, so flag it separately from a genuine lock failure
         this.setState({
@@ -170,7 +170,7 @@ const WithLockedTask = function (WrappedComponent) {
         return Promise.reject("Invalid task");
       }
 
-      if (!isLockableTask(task)) {
+      if (!isLockableTask(task, this.props.challenge)) {
         return Promise.resolve(false);
       }
 
@@ -203,7 +203,7 @@ const WithLockedTask = function (WrappedComponent) {
     syncLocks = () => {
       const { task } = this.props;
 
-      if (task && isLockableTask(task)) {
+      if (task && isLockableTask(task, this.props.challenge)) {
         if (!lockStorage.isLocked(task.id)) {
           this.refreshTaskLock(task);
         }
