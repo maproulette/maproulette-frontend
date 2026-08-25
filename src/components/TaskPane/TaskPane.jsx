@@ -90,7 +90,7 @@ const TaskLockButton = ({ lockedAt, title, onClick }) => {
       aria-label={ariaLabel}
     >
       {lockedAt && (
-        <span className="mr-text-xs mr-mr-2">
+        <span className="mr-text-xs mr-tabular-nums mr-mr-2">
           {isExpired ? (
             <FormattedMessage {...messages.taskLockExpiredLabel} />
           ) : (

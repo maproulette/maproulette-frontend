@@ -1,7 +1,7 @@
 [main]
 host = https://app.transifex.com
 
-[o:osmlab:p:maproulette3:r:en-us-json]
+[o:osmlab:p:maproulette3:r:792c5f7e58a9db617bc43de138319c64]
 file_filter  = lang/<lang>.json
 source_file  = lang/en-US.json
 source_lang  = en

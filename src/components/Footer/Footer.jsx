@@ -49,12 +49,7 @@ class Footer extends Component {
               <h3 className="mr-text-green-lighter mr-text-sm mr-font-medium mr-mb-2">
                 <FormattedMessage {...messages.supportedByHeading} />
               </h3>
-              <a
-                href="https://www.openstreetmap.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={<FormattedMessage {...messages.osmLink} />}
-              >
+              <a href="https://openstreetmap.us" target="_blank" rel="noopener noreferrer">
                 <img
                   src={img}
                   alt={this.props.intl.formatMessage(messages.osmAltText)}
