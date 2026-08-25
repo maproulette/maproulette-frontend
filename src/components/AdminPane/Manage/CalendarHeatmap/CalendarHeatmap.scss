@@ -1,13 +1,14 @@
-@import '../../../../variables.scss';
+@use "sass:list";
+@use '../../../../variables.scss';
 
 .calendar-heatmap {
   $calendar-bucket-colors: (
-    $chart-blue-light, $chart-green, $chart-brown,
-    $chart-yellow, $chart-orange, $chart-red
+    variables.$chart-blue-light, variables.$chart-green, variables.$chart-brown,
+    variables.$chart-yellow, variables.$chart-orange, variables.$chart-red
   );
 
-  @for $i from 1 through length($calendar-bucket-colors) {
-    .color-bucket-#{$i - 1} { fill: nth($calendar-bucket-colors, $i); }
+  @for $i from 1 through list.length($calendar-bucket-colors) {
+    .color-bucket-#{$i - 1} { fill: list.nth($calendar-bucket-colors, $i); }
   }
 
   .color-empty {

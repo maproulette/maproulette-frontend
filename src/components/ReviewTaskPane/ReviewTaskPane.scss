@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .task-pane {
   position: relative;
@@ -10,8 +10,8 @@
 
         &__title .subtitle {
           text-transform: uppercase;
-          font-size: $size-6;
-          font-weight: $weight-semibold;
+          font-size: variables.$size-6;
+          font-weight: variables.$weight-semibold;
         }
       }
     }

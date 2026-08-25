@@ -1,4 +1,4 @@
-@import './variables.scss';
+@use 'variables.scss';
 
 @tailwind base;
 @tailwind components;
@@ -13,15 +13,15 @@ body {
   display: flex;
   align-items: center;
   height: 100vh;
-  background-color: $green;
-  color: $white;
+  background-color: variables.$green;
+  color: variables.$white;
 
   svg {
-    fill: $white;
+    fill: variables.$white;
   }
 
   h1.title {
-    color: $white;
+    color: variables.$white;
   }
 
   &__content {

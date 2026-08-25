@@ -1,17 +1,17 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .navbar.top-nav {
-  height: $navbar-height;
+  height: variables.$navbar-height;
   position: relative;
-  z-index: $layer-topnav;
+  z-index: variables.$layer-topnav;
 
-  @media(max-width: $app-mobile-break) {
-    height: $mobile-navbar-height;
-    min-height: $mobile-navbar-height;
+  @media(max-width: variables.$app-mobile-break) {
+    height: variables.$mobile-navbar-height;
+    min-height: variables.$mobile-navbar-height;
 
     .navbar-brand {
-      height: $mobile-navbar-height;
-      min-height: $mobile-navbar-height;
+      height: variables.$mobile-navbar-height;
+      min-height: variables.$mobile-navbar-height;
     }
   }
   
@@ -27,14 +27,14 @@
         height: 2.25rem;
         width: auto;
         margin-right: 10px;
-        fill: $navbar-item-color;
+        fill: variables.$navbar-item-color;
       }
     }
   }
 
   .navbar-menu {
     .navbar-item {
-      font-weight: $weight-normal;
+      font-weight: variables.$weight-normal;
 
       .item-text {
         padding: 7px 5px 5px 5px;
@@ -42,14 +42,14 @@
         transition: border-color .25s ease-in-out;
 
         &:hover {
-          border-color: rgba($navbar-item-color, 0.5);
+          border-color: rgba(variables.$navbar-item-color, 0.5);
         }
 
         &.is-active {
-          border-color: $navbar-item-color;
+          border-color: variables.$navbar-item-color;
 
           &:hover {
-            border-color: $navbar-item-color;
+            border-color: variables.$navbar-item-color;
           }
         }
       }
@@ -61,13 +61,13 @@
 
     &.is-active {
       position: relative;
-      z-index: $layer-dropdown;
+      z-index: variables.$layer-dropdown;
 
       .navbar-item .item-text {
-        color: $primary;
+        color: variables.$primary;
 
         &:hover {
-          border-color: $primary;
+          border-color: variables.$primary;
         }
       }
     }
@@ -86,10 +86,10 @@
     top: 23px;
 
     svg {
-      fill: $navbar-item-color;
+      fill: variables.$navbar-item-color;
     }
 
-    @media(max-width: $app-mobile-break) {
+    @media(max-width: variables.$app-mobile-break) {
       top: 19px;
     }
   }
@@ -100,13 +100,13 @@
     width: 24px;
 
     svg {
-      fill: $grey-dark;
+      fill: variables.$grey-dark;
     }
   }
 
   /* General sidebar styles */
   .bm-menu {
-    background-color: $grey-lightest-more;
+    background-color: variables.$grey-lightest-more;
     padding: 2.5em 1.5em 0;
     font-size: 1.15em;
   }
@@ -123,7 +123,7 @@
     padding-top: 0;
 
     .navbar-item {
-      color: $green;
+      color: variables.$green;
     }
 
     .navbar__account-nav-item__avatar {
@@ -139,7 +139,7 @@
 
   /* Styling of overlay */
   .bm-overlay {
-    background: $modal-background-background-color;
+    background: variables.$modal-background-background-color;
     left: 0;
   }
 }

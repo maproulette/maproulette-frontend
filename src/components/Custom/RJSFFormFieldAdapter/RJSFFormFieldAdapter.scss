@@ -1,4 +1,6 @@
-@import '../../../theme.scss';
+@use '../../../theme.scss';
+@use "../../../mixins";
+@use "../../../variables";
 
 .form {
   .array-item-remove::after {
@@ -64,7 +66,7 @@ form.rjsf {
     border: none;
 
     fieldset {
-      border: 1px solid $grey-lightest;
+      border: 1px solid variables.$grey-lightest;
       padding: 25px;
 
       legend {
@@ -84,13 +86,13 @@ form.rjsf {
     // Negative top margin to reduce the top fieldset padding, which we want in
     // the event there isn't a root description.
     margin: 40px 0 45px 36px; // left-align with fieldset legend
-    color: $grey;
-    background-color: $grey-lightest-more;
+    color: variables.$grey;
+    background-color: variables.$grey-lightest-more;
     padding: 15px;
-    border-radius: $radius-medium;
+    border-radius: variables.$radius-medium;
 
     h1, h2, h3, h4, h5 {
-      font-weight: $weight-bold;
+      font-weight: variables.$weight-bold;
       margin-bottom: 1em;
     }
 
@@ -178,17 +180,17 @@ form.rjsf {
       }
 
       .markdown-preview {
-        border: 2px solid $grey-lightest-more;
-        border-radius: $radius-medium;
+        border: 2px solid variables.$grey-lightest-more;
+        border-radius: variables.$radius-medium;
         padding: 10px;
         min-width: 350px;
         width: 350px;
         height: 200px;
-        color: $grey;
-        font-size: $size-7;
+        color: variables.$grey;
+        font-size: variables.$size-7;
         line-height: 24px;
-        @include constrained-text-content();
-        @include markdown-content();
+        @include mixins.constrained-text-content();
+        @include mixins.markdown-content();
         overflow-y: auto;
       }
     }
@@ -200,7 +202,7 @@ form.rjsf {
   }
 
   label .required {
-    color: $danger;
+    color: variables.$danger;
     margin-left: 0.25em;
   }
 
@@ -217,7 +219,7 @@ form.rjsf {
   }
 
   input.form-control {
-    @include basic-form-element-styling();
+    @include mixins.basic-form-element-styling();
   }
 
   .select, .select:not(.is-multiple) {
@@ -229,7 +231,7 @@ form.rjsf {
   }
 
   .select:not(.is-multiple)::after {
-    border-color: $grey-light-less;
+    border-color: variables.$grey-light-less;
     border-width: 1.5px;
     width: 0.4em;
     height: 0.4em;
@@ -237,7 +239,7 @@ form.rjsf {
   }
 
   textarea.form-control {
-    @include basic-form-element-styling();
+    @include mixins.basic-form-element-styling();
   }
 
   .control .checkbox {
@@ -270,9 +272,9 @@ form.rjsf {
   }
 
   .dropzone {
-    background-color: $grey-lightest;
-    border: 1px solid $grey-light;
-    border-radius: $radius-medium;
+    background-color: variables.$grey-lightest;
+    border: 1px solid variables.$grey-light;
+    border-radius: variables.$radius-medium;
     padding: 15px;
     text-align: center;
     max-width: 400px;
@@ -283,27 +285,27 @@ form.rjsf {
     }
 
     &.active {
-      border-color: $green;
+      border-color: variables.$green;
     }
   }
 
   .react-tagsinput {
-    @include basic-form-element-styling();
+    @include mixins.basic-form-element-styling();
 
     .react-tagsinput-tag {
       font-family: inherit;
-      font-size: $size-7;
-      background-color: $grey-lightest;
-      color: $grey;
+      font-size: variables.$size-7;
+      background-color: variables.$grey-lightest;
+      color: variables.$grey;
       border: none;
-      border-radius: $radius-medium;
+      border-radius: variables.$radius-medium;
       margin: 5px;
       padding: 2px 5px 2px 10px;
     }
 
     .react-tagsinput-remove {
       font-family: inherit;
-      color: $grey-darkest;
+      color: variables.$grey-darkest;
       &:before {
         margin-left: 5px;
       }
@@ -317,14 +319,14 @@ form.rjsf {
   }
 
   .help {
-    font-size: $size-7;
+    font-size: variables.$size-7;
     flex-basis: 50%;
     margin-left: 1em;
   }
 
   .errors {
-    font-size: $size-8;
-    color: $danger;
+    font-size: variables.$size-8;
+    color: variables.$danger;
   }
 }
 

@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 dl.tag-list {
   display: grid;
@@ -8,10 +8,10 @@ dl.tag-list {
 
   dt {
     font-family: monospace;
-    font-weight: $weight-bold;
+    font-weight: variables.$weight-bold;
   }
 
   dd {
-    font-size: $size-7;
+    font-size: variables.$size-7;
   }
 }

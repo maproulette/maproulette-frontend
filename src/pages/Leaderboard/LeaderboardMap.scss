@@ -1,11 +1,11 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .leaderboard-map {
   .leaflet-container {
     height: 350px;
 
     .leaflet-pane {
-      z-index: $intralayer-bump;
+      z-index: variables.$intralayer-bump;
     }
   }
 }

@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@use '../../../../variables.scss';
 
 .admin__manage.projects-dashboard {
   &__dashboard-controls {
@@ -9,10 +9,10 @@
   .projects-dashboard__no-projects {
     margin: 40px 15px 15px 15px;
     padding: 15px;
-    color: $primary;
-    background-color: $white;
-    font-size: $size-5;
-    border-radius: $radius-medium;
+    color: variables.$primary;
+    background-color: variables.$white;
+    font-size: variables.$size-5;
+    border-radius: variables.$radius-medium;
     text-align: center;
   }
 

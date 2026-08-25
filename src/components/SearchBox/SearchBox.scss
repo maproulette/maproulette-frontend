@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .search-box, .navbar-item.search-box {
   width: 100%;
@@ -21,7 +21,7 @@
 
       svg {
         flex: 0 0 20px;
-        fill: $grey-light;
+        fill: variables.$grey-light;
         height: 20px;
         width: auto;
         margin-left: 20px;
@@ -34,11 +34,11 @@
           background-color: transparent;
           border: none;
           box-shadow: none;
-          color: $grey-light;
-          font-weight: $weight-light;
+          color: variables.$grey-light;
+          font-weight: variables.$weight-light;
 
           &::placeholder {
-            color: $grey-light;
+            color: variables.$grey-light;
           }
         }
       }
@@ -50,14 +50,14 @@
 
     button.search-box--done-button {
       svg {
-        fill: rgba($primary, 0.8);
+        fill: rgba(variables.$primary, 0.8);
         height: 20px;
 
       }
 
       &:enabled:hover, &:enabled:focus {
         svg {
-          fill: $primary;
+          fill: variables.$primary;
         }
       }
     }

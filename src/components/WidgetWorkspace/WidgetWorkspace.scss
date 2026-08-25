@@ -1,11 +1,11 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .widget-workspace {
   position: relative;
-  background-color: $white;
+  background-color: variables.$white;
 
   &__tab-row {
-    background-color: $white;
+    background-color: variables.$white;
     display: flex;
     justify-content: space-between;
 

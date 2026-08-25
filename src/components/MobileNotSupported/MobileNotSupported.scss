@@ -1,10 +1,10 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .mobile-not-supported {
   padding: 30px 20px;
   max-width: 100%;
-  background-color: $app-background;
-  min-height: $mobile-full-screen-pane;
+  background-color: variables.$app-background;
+  min-height: variables.$mobile-full-screen-pane;
 
   &__header {
     display: flex;
@@ -14,7 +14,7 @@
     svg {
       width: 80px;
       height: 80px;
-      fill: $grey-dark;
+      fill: variables.$grey-dark;
       margin-right: 20px;
     }
 
@@ -23,7 +23,7 @@
     }
   }
 
-  @media(max-width: $app-mobile-break) {
+  @media(max-width: variables.$app-mobile-break) {
     .mobile-not-supported__header {
       margin: 0;
       padding: 5px;
@@ -34,12 +34,12 @@
       }
 
       h1.title {
-        font-size: $size-7;
-        font-weight: $weight-semibold;
+        font-size: variables.$size-7;
+        font-weight: variables.$weight-semibold;
       }
 
       .mobile-not-supported__message {
-        font-size: $size-8;
+        font-size: variables.$size-8;
       }
     }
   }

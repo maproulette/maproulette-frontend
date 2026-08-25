@@ -1,4 +1,5 @@
-@import '../../theme.scss';
+@use '../../theme.scss';
+@use "../../variables";
 
 .busy-spinner {
   &.inline {
@@ -28,13 +29,13 @@
       border-width: 6px;
     }
     &.color-light {
-      border-top-color:  $green-neon;
+      border-top-color:  variables.$green-neon;
     }
     &.color-dark {
-      border-top-color:  $green;
+      border-top-color:  variables.$green;
     }
     &.color-grey {
-      border-top-color: $grey;
+      border-top-color: variables.$grey;
     }
   }
 }

@@ -1,4 +1,4 @@
-@import "../../variables.scss";
+@use "../../variables.scss";
 
 /**
  * Mixin to set the colors for map clusters. Three colors are required: the
@@ -58,7 +58,7 @@
 }
 
 .greyscale-cluster {
-  @include colored-cluster($grey-dark-less, $grey-light-less, $grey-darkest);
+  @include colored-cluster(variables.$grey-dark-less, variables.$grey-light-less, variables.$grey-darkest);
 }
 
 .multicolor-cluster {

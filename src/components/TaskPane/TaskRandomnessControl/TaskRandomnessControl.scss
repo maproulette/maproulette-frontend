@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@use '../../../variables.scss';
 
 .task-randomness-control {
   margin: 15px 0px;
@@ -15,7 +15,7 @@
 
   &__prompt {
     margin-right: 0.5em;
-    font-size: $size-5;
+    font-size: variables.$size-5;
   }
 
   &__options {

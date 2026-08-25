@@ -1,15 +1,17 @@
-@import '../../../theme.scss';
+@use '../../../theme.scss';
+@use "../../../mixins";
+@use "../../../variables";
 
 .challenge-filter-subnav.navbar.sub-nav {
-  $mobile-break: $app-mobile-break;
-  z-index: $layer-subnav;
-  height: $subnav-height;
-  background-color: $white;
-  border-bottom: 2px solid $grey-lighter;
+  $mobile-break: variables.$app-mobile-break;
+  z-index: variables.$layer-subnav;
+  height: variables.$subnav-height;
+  background-color: variables.$white;
+  border-bottom: 2px solid variables.$grey-lighter;
 
   @media(max-width: $mobile-break) {
-    height: $mobile-subnav-height;
-    min-height: $mobile-subnav-height;
+    height: variables.$mobile-subnav-height;
+    min-height: variables.$mobile-subnav-height;
   }
 
   .navbar-brand {
@@ -17,16 +19,16 @@
   }
 
   .navbar-link {
-    color: $blue;
+    color: variables.$blue;
   }
 
   .nav-dropdown {
-    z-index: $layer-subnav;
+    z-index: variables.$layer-subnav;
 
     .navbar-dropdown {
       padding-top: 0;
       padding-bottom: 0;
-      border-radius: 0 0 $radius-medium $radius-medium;
+      border-radius: 0 0 variables.$radius-medium variables.$radius-medium;
 
       .navbar-item {
         padding-left: 20px;
@@ -38,32 +40,32 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      border-right: 2px solid $grey-lightest;
+      border-right: 2px solid variables.$grey-lightest;
 
       &:after {
-        @include dropdown-arrow();
+        @include mixins.dropdown-arrow();
         margin-top: 6px;
         margin-right: 10px;
       }
 
       label {
         text-transform: uppercase;
-        font-size: $size-8;
-        font-weight: $weight-medium;
-        letter-spacing: $letter-spacing-medium;
+        font-size: variables.$size-8;
+        font-weight: variables.$weight-medium;
+        letter-spacing: variables.$letter-spacing-medium;
         margin: 7px 0px 5px 0px;
       }
 
       .default-value, .placeholder, .current-value {
-        color: $grey-light;
+        color: variables.$grey-light;
         min-width: 135px;
         margin-right: 20px;
       }
     }
 
     .navbar-item {
-      color: $grey;
-      border-top: 1px solid $grey-light;
+      color: variables.$grey;
+      border-top: 1px solid variables.$grey-light;
       padding-top: 15px;
       padding-bottom: 15px;
 
@@ -97,8 +99,8 @@
     .search-box {
       .search-box__search-field {
         .control-wrapper .control input.input {
-          font-size: $size-6;
-          border-bottom: 1px solid $grey-lighter;
+          font-size: variables.$size-6;
+          border-bottom: 1px solid variables.$grey-lighter;
           border-radius: 0;
           padding: 0;
           height: 1.5em;
@@ -114,7 +116,7 @@
       max-width: 80vw;
       padding: 0px 10px;
       .search-box__search-field {
-        font-size: $size-6;
+        font-size: variables.$size-6;
 
         svg {
           height: 18px;
@@ -131,7 +133,7 @@
             flex: 1 1 240px;
 
             input {
-              font-size: $size-6;
+              font-size: variables.$size-6;
             }
           }
         }

@@ -1,14 +1,15 @@
-@import '../../mixins.scss';
+@use '../../mixins.scss';
+@use "../../variables";
 
 .keyword-autosuggest-input {
-  @include basic-form-element-styling();
+  @include mixins.basic-form-element-styling();
 
   > span { // wrapper around react-tagsinput
     display: flex;
   }
 
   .react-tagsinput-tag {
-    @include tag();
+    @include mixins.tag();
     display: inline-flex;
   }
 
@@ -25,7 +26,7 @@
     .dropdown-content {
       .new-keyword {
         padding-bottom: 11px;
-        border-bottom: 2px solid $grey-lightest;
+        border-bottom: 2px solid variables.$grey-lightest;
         margin-bottom: 5px;
         font-style: italic;
       }

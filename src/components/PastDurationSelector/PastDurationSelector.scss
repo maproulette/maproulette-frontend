@@ -1,12 +1,14 @@
-@import '../../theme.scss';
+@use '../../theme.scss';
+@use "../../mixins";
+@use "../../variables";
 
 .past-duration-selector {
   .dropdown-trigger {
     line-height: 24px;
 
     .button.is-outlined {
-      @include invert-on-hover($grey-light, $white);
-      font-weight: $weight-normal;
+      @include mixins.invert-on-hover(variables.$grey-light, variables.$white);
+      font-weight: variables.$weight-normal;
 
       .dropdown-indicator {
         height: 10px;
@@ -19,6 +21,6 @@
   }
 
   .dropdown-item {
-    font-weight: $weight-normal;
+    font-weight: variables.$weight-normal;
   }
 }

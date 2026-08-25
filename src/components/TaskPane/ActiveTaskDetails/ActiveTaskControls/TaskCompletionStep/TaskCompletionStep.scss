@@ -1,4 +1,4 @@
-@import '../../../../../variables.scss';
+@use '../../../../../variables.scss';
 
 .task-edit-controls {
   &__control-block {
@@ -25,8 +25,8 @@
       width: 100%;
       font-size: 16px;
       padding: 5px;
-      border: 2px solid $grey;
-      border-radius: $radius-medium;
+      border: 2px solid variables.$grey;
+      border-radius: variables.$radius-medium;
     }
   }
 
@@ -48,7 +48,7 @@
       width: auto;
       margin-left: 0px;
       margin-right: 0px;
-      fill: $default-icon-color;
+      fill: variables.$default-icon-color;
     }
 
     .task-edit-controls__task-comment {

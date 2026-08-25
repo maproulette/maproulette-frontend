@@ -1,10 +1,10 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .congratulate-modal {
   .modal-content {
     padding: 15px;
     min-height: 200px;
-    border-radius: $radius-medium;
+    border-radius: variables.$radius-medium;
     overflow: visible;
     display: flex;
     flex-direction: column;
@@ -17,12 +17,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: $size-5;
-    color: $green;
+    font-size: variables.$size-5;
+    color: variables.$green;
 
     h2 {
-      font-size: $size-3;
-      font-weight: $weight-bold;
+      font-size: variables.$size-3;
+      font-weight: variables.$weight-bold;
       margin-top: 8px;
     }
   }
@@ -34,7 +34,7 @@
     align-items: center;
 
     &__trophy {
-      fill: $yellow;
+      fill: variables.$yellow;
       width: 48px;
       height: auto;
     }
@@ -42,8 +42,8 @@
 
   &__dismiss-control.button.is-outlined {
     margin-top: 40px;
-    font-size: $size-6;
-    font-weight: $weight-normal;
+    font-size: variables.$size-6;
+    font-weight: variables.$weight-normal;
     padding: 0px 30px;
     height: 40px;
     width: 200px;
@@ -59,7 +59,7 @@
     right: 15px;
 
     svg {
-      fill: $grey-light;
+      fill: variables.$grey-light;
       height: 20px;
       width: 20px;
     }

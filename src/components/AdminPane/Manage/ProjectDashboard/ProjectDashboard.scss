@@ -1,4 +1,5 @@
-@import '../../../../mixins.scss';
+@use '../../../../mixins.scss';
+@use "../../../../variables";
 
 .admin__manage.project-dashboard {
   .admin__manage__primary-content {
@@ -27,14 +28,14 @@
       }
 
       .status-label {
-        font-weight: $weight-light;
-        color: $grey;
-        font-size: $size-6-plus;
+        font-weight: variables.$weight-light;
+        color: variables.$grey;
+        font-size: variables.$size-6-plus;
       }
 
       .status-value {
-        color: $grey;
-        font-size: $size-6-plus;
+        color: variables.$grey;
+        font-size: variables.$size-6-plus;
       }
 
       .challenge-keywords {
@@ -79,51 +80,51 @@
   .filter-option.status-filter .field {
     &.created {
       label::before, label::after {
-        background-color: $status-created-color !important;
+        background-color: variables.$status-created-color !important;
       }
     }
 
     &.fixed {
       label::before, label::after {
-        background-color: $status-fixed-color !important;
+        background-color: variables.$status-fixed-color !important;
       }
     }
 
     &.falsePositive {
       label::before, label::after {
-        background-color: $status-falsePositive-color !important;
+        background-color: variables.$status-falsePositive-color !important;
       }
     }
 
     &.skipped {
       label::before, label::after {
-        background-color: $status-skipped-color !important;
+        background-color: variables.$status-skipped-color !important;
       }
 
       label::after {
-        border-color: $grey-darkest !important;
+        border-color: variables.$grey-darkest !important;
       }
     }
 
     &.deleted {
       label::before, label::after {
-        background-color: $status-deleted-color !important;
+        background-color: variables.$status-deleted-color !important;
       }
 
       label::after {
-        border-color: $grey-darkest !important;
+        border-color: variables.$grey-darkest !important;
       }
     }
 
     &.alreadyFixed {
       label::before, label::after {
-        background-color: $status-alreadyFixed-color !important;
+        background-color: variables.$status-alreadyFixed-color !important;
       }
     }
 
     &.tooHard {
       label::before, label::after {
-        background-color: $status-tooHard-color !important;
+        background-color: variables.$status-tooHard-color !important;
       }
     }
   }
@@ -131,13 +132,13 @@
   .filter-option.priority-filter .field {
     &.low, &.medium, &.high {
       label::before, label::after {
-        background-color: $grey-lightest !important;
+        background-color: variables.$grey-lightest !important;
       }
 
       label::after {
         border: none;
         transform: none;
-        color: $green;
+        color: variables.$green;
         font-size: 10px;
         left: 7px;
         top: 4px;
@@ -174,8 +175,8 @@
       padding: 0px 20px 5px 10px;
       margin-bottom: 10px;
       margin-right: 10px;
-      background-color: $grey-lightest;
-      border-radius: $radius-medium;
+      background-color: variables.$grey-lightest;
+      border-radius: variables.$radius-medium;
 
       .dropdown {
         height: 1.25em;

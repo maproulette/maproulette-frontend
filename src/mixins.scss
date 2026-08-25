@@ -1,4 +1,4 @@
-@import './variables.scss';
+@use 'variables.scss';
 
 // Buttons
 @mixin button-color($foreground-color, $background-color) {
@@ -115,39 +115,39 @@
 }
 
 @mixin basic-form-element-styling() {
-  border-color: $form-element-border-color;
+  border-color: variables.$form-element-border-color;
   border-width: 2px;
   border-style: solid;
   box-shadow: none;
-  border-radius: $radius-medium;
-  color: $grey;
+  border-radius: variables.$radius-medium;
+  color: variables.$grey;
 
   &:hover, &:focus {
     outline: none;
-    border-color: $grey-light;
+    border-color: variables.$grey-light;
     box-shadow: none;
   }
 
   &[readonly], &[readonly]:hover, &[readonly]:focus {
     outline: none;
-    border-color: $form-element-border-color;
+    border-color: variables.$form-element-border-color;
     box-shadow: none;
   }
 }
 
 @mixin tag() {
   font-family: inherit;
-  font-size: $size-7;
-  background-color: $grey-lightest;
-  color: $grey;
+  font-size: variables.$size-7;
+  background-color: variables.$grey-lightest;
+  color: variables.$grey;
   border: none;
-  border-radius: $radius-medium;
+  border-radius: variables.$radius-medium;
   margin: 5px;
   padding: 2px 5px 2px 10px;
 
   .react-tagsinput-remove {
     font-family: inherit;
-    color: $grey-darkest;
+    color: variables.$grey-darkest;
 
     &:before {
       margin-left: 5px;
