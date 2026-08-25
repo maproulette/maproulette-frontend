@@ -145,7 +145,7 @@ const apiRoutes = (factory) => {
       testCooperativeWork: factory.post("/change/test"),
       applyTagFix: factory.post("/task/:id/fix/apply"),
       updateCompletionResponses: factory.put("/task/:id/responses"),
-      lockMultipleTasks: factory.post("/task/bundle/lock"),
+      lockTaskBundle: factory.put("/task/:taskId/lockBundle"),
       releaseMultipleTasks: factory.post("/task/bundle/unlock"),
       requestUnlock: factory.put("/task/:id/unlock/request"),
     },

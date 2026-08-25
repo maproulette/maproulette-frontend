@@ -122,6 +122,43 @@ export default defineMessages({
     defaultMessage: "Request Unlock",
   },
 
+  lockConflictTitle: {
+    id: "Task.pane.lockConflictDialog.title",
+    defaultMessage: "You're Already Working on a Task",
+  },
+
+  lockConflictDescription: {
+    id: "Task.pane.lockConflictDialog.description",
+    defaultMessage:
+      "You can only have one task locked at a time, and you still hold the lock on task #{taskId}.",
+  },
+
+  lockConflictChallenge: {
+    id: "Task.pane.lockConflictDialog.challenge",
+    defaultMessage: "Challenge: {parentName}",
+  },
+
+  lockConflictStarted: {
+    id: "Task.pane.lockConflictDialog.started",
+    defaultMessage: "Started {startedAgo}",
+  },
+
+  lockConflictBundle: {
+    id: "Task.pane.lockConflictDialog.bundle",
+    defaultMessage:
+      "Bundled with {count, plural, one {# other task} other {# other tasks}}, which will be released too.",
+  },
+
+  goToLockedTaskLabel: {
+    id: "Task.pane.lockConflictDialog.goToLockedTaskLabel",
+    defaultMessage: "Go to Locked Task",
+  },
+
+  releaseLockAndContinueLabel: {
+    id: "Task.pane.lockConflictDialog.releaseLockAndContinueLabel",
+    defaultMessage: "Release Lock & Continue",
+  },
+
   saveChangesLabel: {
     id: "Task.pane.controls.saveChanges.label",
     defaultMessage: "Save Changes",

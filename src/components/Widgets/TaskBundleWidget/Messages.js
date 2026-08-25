@@ -232,4 +232,26 @@ export default defineMessages({
     id: "TaskBundleWidget.cannotEditLockedTask",
     defaultMessage: "Task is locked by another user",
   },
+  lockConflictTitle: {
+    id: "Widgets.TaskBundleWidget.lockConflict.title",
+    defaultMessage: "You already have a task locked",
+  },
+  lockConflictDescription: {
+    id: "Widgets.TaskBundleWidget.lockConflict.description",
+    defaultMessage:
+      "You still hold the lock on task #{taskId}. Release it to continue building this bundle.",
+  },
+  lockConflictDescriptionWithParent: {
+    id: "Widgets.TaskBundleWidget.lockConflict.descriptionWithParent",
+    defaultMessage:
+      'You still hold the lock on task #{taskId} in "{parentName}". Release it to continue building this bundle.',
+  },
+  cancelLabel: {
+    id: "Widgets.TaskBundleWidget.lockConflict.cancel.label",
+    defaultMessage: "Cancel",
+  },
+  releaseLockAndContinueLabel: {
+    id: "Widgets.TaskBundleWidget.lockConflict.releaseLockAndContinue.label",
+    defaultMessage: "Release Lock & Continue",
+  },
 });

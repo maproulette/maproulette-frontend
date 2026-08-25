@@ -433,73 +433,24 @@ export const releaseMultipleTasks = function (taskIds) {
 };
 
 /**
- * Lock multiple tasks at once
+ * Locks a task bundle's primary task, recording the given member task ids as
+ * the lock's bundled tasks (replacing whatever membership it covered before).
+ * Rejects (with `error.details` populated on a 409) rather than swallowing
+ * errors, since callers need to detect a one-lock-per-user conflict.
  */
-export const lockMultipleTasks = function (taskIds) {
+export const lockTaskBundle = function (primaryTaskId, memberTaskIds) {
   return function (dispatch) {
-    // Don't make API call if no tasks to lock
-    if (!taskIds || taskIds.length === 0) {
-      return Promise.resolve([]);
-    }
-
-    return new Endpoint(api.task.lockMultipleTasks, {
-      schema: [taskSchema()],
-      params: { taskIds: taskIds },
+    return new Endpoint(api.task.lockTaskBundle, {
+      variables: { taskId: primaryTaskId },
+      params: { taskIds: memberTaskIds || [] },
     })
       .execute()
-      .then((normalizedResults) => {
-        const tasks = Object.values(normalizedResults.entities?.tasks);
-
-        dispatch(receiveTasks(tasks));
-
-        return tasks;
-      })
       .catch((error) => {
         if (isSecurityError(error)) {
           dispatch(ensureUserLoggedIn()).catch(() => null);
         }
 
-        // Handle error but don't throw - try to continue UI experience
-        if (error.response) {
-          try {
-            const errorMessage = error.response.text
-              ? error.response.text()
-              : Promise.resolve(error.message || "Lock failed");
-
-            errorMessage
-              .then((text) => {
-                let errorMessage = text;
-                try {
-                  // Try to parse the response as JSON
-                  const jsonResponse = JSON.parse(text);
-                  // Extract just the message part if it exists
-                  if (jsonResponse && jsonResponse.message) {
-                    errorMessage = jsonResponse.message;
-                  }
-                } catch (e) {
-                  // If parsing fails, use the original text
-                  console.log("Error parsing error response:", e);
-                }
-
-                dispatch(
-                  addErrorWithDetails(
-                    AppErrors.task.lockFailure,
-                    errorMessage || error.defaultMessage,
-                  ),
-                );
-              })
-              .catch(() => {
-                dispatch(addError(AppErrors.task.lockFailure));
-              });
-          } catch (e) {
-            dispatch(addError(AppErrors.task.lockFailure));
-          }
-        } else {
-          dispatch(addError(AppErrors.task.lockFailure));
-        }
-
-        // Return empty array instead of throwing to avoid breaking UI
-        return [];
+        throw error;
       });
   };
 };

@@ -164,7 +164,19 @@ export const sendContent = function (
           })
           .catch((error) => reject(error));
       })
-      .catch((error) => reject(error));
+      .catch((error) => {
+        if (error.response) {
+          // Attach any details in the response body to the error, same as fetchContent
+          parseJSON(error.response)
+            .then((jsonData) => {
+              error.details = jsonData;
+              reject(error);
+            })
+            .catch(() => reject(error));
+        } else {
+          reject(error);
+        }
+      });
   });
 };
 

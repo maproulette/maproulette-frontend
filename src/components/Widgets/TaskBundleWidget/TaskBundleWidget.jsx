@@ -5,7 +5,7 @@ import _map from "lodash/map";
 import _pick from "lodash/pick";
 import _sum from "lodash/sum";
 import _values from "lodash/values";
-import { Component } from "react";
+import { Component, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { Popup } from "react-leaflet";
 import AsCooperativeWork from "../../../interactions/Task/AsCooperativeWork";
@@ -14,6 +14,7 @@ import { toLatLngBounds } from "../../../services/MapBounds/MapBounds";
 import { buildSearchURL } from "../../../services/SearchCriteria/SearchCriteria";
 import { TaskAction } from "../../../services/Task/TaskAction/TaskAction";
 import { WidgetDataTarget, registerWidgetType } from "../../../services/Widget/Widget";
+import BasicDialog from "../../BasicDialog/BasicDialog";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
 import MapPane from "../../EnhancedMap/MapPane/MapPane";
@@ -553,6 +554,13 @@ const BundleInterface = (props) => {
   const challenge = props.browsedChallenge;
   return (
     <div className="mr-pb-2 mr-h-full mr-rounded">
+      {props.lockConflict && (
+        <LockConflictDialog
+          lockConflict={props.lockConflict}
+          onRelease={props.releaseConflictingLockAndRetry}
+          onCancel={props.clearLockConflict}
+        />
+      )}
       {bundleEditsDisabled && (
         <BundlingDisabledMessage
           task={task}
@@ -819,6 +827,45 @@ const SaveFiltersControl = ({ saveFilters, closeDropdown }) => {
     >
       <FormattedMessage {...messages.saveCurrentFiltersLabel} />
     </button>
+  );
+};
+
+const LockConflictDialog = ({ lockConflict, onRelease, onCancel }) => {
+  const [releasing, setReleasing] = useState(false);
+
+  const handleRelease = () => {
+    setReleasing(true);
+    onRelease().finally(() => setReleasing(false));
+  };
+
+  return (
+    <BasicDialog
+      title={<FormattedMessage {...messages.lockConflictTitle} />}
+      prompt={
+        <FormattedMessage
+          {...(lockConflict.parentName
+            ? messages.lockConflictDescriptionWithParent
+            : messages.lockConflictDescription)}
+          values={{ taskId: lockConflict.lockedTaskId, parentName: lockConflict.parentName }}
+        />
+      }
+      icon="unlocked-icon"
+      onClose={onCancel}
+      controls={
+        <div className="mr-flex mr-justify-center mr-space-x-3">
+          <button className="mr-button mr-button--white" onClick={onCancel}>
+            <FormattedMessage {...messages.cancelLabel} />
+          </button>
+          <button className="mr-button" disabled={releasing} onClick={handleRelease}>
+            {releasing ? (
+              <BusySpinner inline small />
+            ) : (
+              <FormattedMessage {...messages.releaseLockAndContinueLabel} />
+            )}
+          </button>
+        </div>
+      }
+    />
   );
 };
 

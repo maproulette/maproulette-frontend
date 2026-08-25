@@ -36,6 +36,7 @@ import {
   updateTaskTags,
 } from "../../../services/Task/Task";
 import { TaskLoadMethod } from "../../../services/Task/TaskLoadMethod/TaskLoadMethod";
+import { isLockableTask } from "../../../services/Task/TaskLock";
 import { fetchTaskForReview } from "../../../services/Task/TaskReview/TaskReview";
 import { fetchUser } from "../../../services/User/User";
 import { renewVirtualChallenge } from "../../../services/VirtualChallenge/VirtualChallenge";
@@ -398,9 +399,20 @@ export const nextRandomTask = async (dispatch, props, currentTaskId, taskLoadBy)
  * Load and lock a requested next task
  */
 export const nextRequestedTask = function (dispatch, props, requestedTaskId) {
-  return dispatch(fetchTask(requestedTaskId))
-    .then(() => dispatch(startTask(requestedTaskId)))
-    .then((normalizedResults) => normalizedResults?.entities?.tasks?.[normalizedResults.result]);
+  const taskFrom = (normalizedResults) =>
+    normalizedResults?.entities?.tasks?.[normalizedResults.result];
+
+  return dispatch(fetchTask(requestedTaskId)).then((fetched) => {
+    // Skip the lock for tasks that can't be worked on - the user gets only one
+    // at a time, and WithLockedTask won't take one for these either
+    if (!isLockableTask(taskFrom(fetched))) {
+      return taskFrom(fetched);
+    }
+
+    return dispatch(startTask(requestedTaskId)).then(
+      (started) => taskFrom(started) ?? taskFrom(fetched),
+    );
+  });
 };
 
 /**
