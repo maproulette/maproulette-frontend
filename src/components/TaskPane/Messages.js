@@ -124,19 +124,34 @@ export default defineMessages({
 
   lockConflictTitle: {
     id: "Task.pane.lockConflictDialog.title",
-    defaultMessage: "You already have a task locked",
+    defaultMessage: "You're Already Working on a Task",
   },
 
   lockConflictDescription: {
     id: "Task.pane.lockConflictDialog.description",
     defaultMessage:
-      "You still hold the lock on task #{taskId}. Release it to lock this task instead.",
+      "You can only have one task locked at a time, and you still hold the lock on task #{taskId}.",
   },
 
-  lockConflictDescriptionWithParent: {
-    id: "Task.pane.lockConflictDialog.descriptionWithParent",
+  lockConflictChallenge: {
+    id: "Task.pane.lockConflictDialog.challenge",
+    defaultMessage: "Challenge: {parentName}",
+  },
+
+  lockConflictStarted: {
+    id: "Task.pane.lockConflictDialog.started",
+    defaultMessage: "Started {startedAgo}",
+  },
+
+  lockConflictBundle: {
+    id: "Task.pane.lockConflictDialog.bundle",
     defaultMessage:
-      'You still hold the lock on task #{taskId} in "{parentName}". Release it to lock this task instead.',
+      "Bundled with {count, plural, one {# other task} other {# other tasks}}, which will be released too.",
+  },
+
+  goToLockedTaskLabel: {
+    id: "Task.pane.lockConflictDialog.goToLockedTaskLabel",
+    defaultMessage: "Go to Locked Task",
   },
 
   releaseLockAndContinueLabel: {

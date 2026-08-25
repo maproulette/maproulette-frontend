@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { formatDistanceToNow, parseISO } from "date-fns";
 import _findIndex from "lodash/findIndex";
 import PropTypes from "prop-types";
 import { Component, Fragment, useEffect, useState } from "react";
@@ -190,6 +191,7 @@ export class TaskPane extends Component {
     unlockRequested: false,
     showLockOptionsDialog: false,
     extendingLock: false,
+    releasingLock: false,
   };
 
   tryLockingTask = () => {
@@ -215,6 +217,27 @@ export class TaskPane extends Component {
     this.props.refreshTaskLock(this.props.task).then(() => {
       this.setState({ extendingLock: false, showLockOptionsDialog: false });
     });
+  };
+
+  /**
+   * Explicitly release the lock on the current task and head back to the
+   * challenge (or virtual challenge) browse view. Navigating away on its own no
+   * longer releases anything, so the release has to happen here.
+   */
+  releaseTaskLock = async () => {
+    this.setState({ releasingLock: true });
+
+    try {
+      await this.props.unlockTask(this.props.task);
+    } finally {
+      this.setState({ releasingLock: false, showLockOptionsDialog: false });
+    }
+
+    this.props.history.push(
+      Number.isFinite(this.props.virtualChallengeId)
+        ? `/browse/virtual/${this.props.virtualChallengeId}`
+        : `/browse/challenges/${this.props.task?.parent?.id ?? this.props.task.parent}`,
+    );
   };
 
   /**
@@ -315,6 +338,10 @@ export class TaskPane extends Component {
 
     if (this.props.taskReadOnly && !prevProps.taskReadOnly) {
       this.setState({ showLockFailureDialog: true });
+    } else if (!this.props.taskReadOnly && prevProps.taskReadOnly) {
+      // The lock came through after all (a retry, a refresh, or a release of
+      // the conflicting lock succeeded), so the failure dialog is stale
+      this.setState({ showLockFailureDialog: false, unlockRequested: false });
     }
   }
 
@@ -524,112 +551,150 @@ export class TaskPane extends Component {
           </MapPane>
           <MobileTabBar {...this.props} />
         </MediaQuery>
-        {this.state.showLockFailureDialog && this.props.lockConflict && (
-          <BasicDialog
-            title={<FormattedMessage {...messages.lockConflictTitle} />}
-            prompt={
-              <FormattedMessage
-                {...(this.props.lockConflict.parentName
-                  ? messages.lockConflictDescriptionWithParent
-                  : messages.lockConflictDescription)}
-                values={{
-                  taskId: this.props.lockConflict.lockedTaskId,
-                  parentName: this.props.lockConflict.parentName,
-                }}
-              />
-            }
-            icon="unlocked-icon"
-            onClose={() => this.clearLockFailure()}
-            controls={
-              <Fragment>
-                <button
-                  className="mr-button mr-button--white mr-mr-4"
-                  onClick={() => this.clearLockFailure()}
-                >
-                  <FormattedMessage {...messages.previewTaskLabel} />
-                </button>
-                {this.props.releasingConflict || this.props.tryingLock ? (
-                  <BusySpinner inline />
-                ) : (
+        {this.state.showLockFailureDialog &&
+          this.props.taskReadOnly &&
+          this.props.taskLockConflict && (
+            <BasicDialog
+              title={<FormattedMessage {...messages.lockConflictTitle} />}
+              prompt={
+                <Fragment>
+                  <FormattedMessage
+                    {...messages.lockConflictDescription}
+                    values={{ taskId: this.props.taskLockConflict.lockedTaskId }}
+                  />
+                  {this.props.taskLockConflict.parentName && (
+                    <div className="mr-mt-2 mr-text-sm mr-text-grey-light">
+                      <FormattedMessage
+                        {...messages.lockConflictChallenge}
+                        values={{ parentName: this.props.taskLockConflict.parentName }}
+                      />
+                    </div>
+                  )}
+                  {this.props.taskLockConflict.startedAt && (
+                    <div className="mr-text-sm mr-text-grey-light">
+                      <FormattedMessage
+                        {...messages.lockConflictStarted}
+                        values={{
+                          startedAgo: formatDistanceToNow(
+                            parseISO(this.props.taskLockConflict.startedAt),
+                            { addSuffix: true },
+                          ),
+                        }}
+                      />
+                    </div>
+                  )}
+                  {this.props.taskLockConflict.bundledTasks?.length > 0 && (
+                    <div className="mr-text-sm mr-text-grey-light">
+                      <FormattedMessage
+                        {...messages.lockConflictBundle}
+                        values={{ count: this.props.taskLockConflict.bundledTasks.length }}
+                      />
+                    </div>
+                  )}
+                </Fragment>
+              }
+              icon="unlocked-icon"
+              onClose={() => this.clearLockFailure()}
+              controls={
+                <Fragment>
                   <button
-                    className="mr-button mr-button--green-light"
+                    className="mr-button mr-button--white mr-mr-4"
                     onClick={() =>
-                      this.props
-                        .releaseConflictingLockAndRetry(this.props.task)
-                        .then((success) => this.setState({ showLockFailureDialog: !success }))
+                      this.props.history.push(`/task/${this.props.taskLockConflict.lockedTaskId}`)
                     }
                   >
-                    <FormattedMessage {...messages.releaseLockAndContinueLabel} />
+                    <FormattedMessage {...messages.goToLockedTaskLabel} />
                   </button>
-                )}
-              </Fragment>
-            }
-          />
-        )}
-        {this.state.showLockFailureDialog && !this.props.lockConflict && (
-          <BasicDialog
-            title={<FormattedMessage {...messages.lockFailedTitle} />}
-            prompt={
-              <Fragment>
-                <span>
-                  {this.props.lockFailureDetails?.message ??
-                    this.props.intl.formatMessage(messages.genericLockFailure)}
-                </span>
-                <FormattedMessage {...messages.previewAvailable} />
-              </Fragment>
-            }
-            icon="unlocked-icon"
-            onClose={() => this.clearLockFailure()}
-            controls={
-              <Fragment>
-                <button
-                  className="mr-button mr-button--green-light mr-mr-4"
-                  onClick={() => this.clearLockFailure()}
-                >
-                  <FormattedMessage {...messages.previewTaskLabel} />
-                </button>
-                {this.props.tryingLock ? (
-                  <div className="mr-mr-4">
+                  <button
+                    className="mr-button mr-button--white mr-mr-4"
+                    onClick={() => this.clearLockFailure()}
+                  >
+                    <FormattedMessage {...messages.previewTaskLabel} />
+                  </button>
+                  {this.props.releasingTaskLockConflict || this.props.tryingLock ? (
                     <BusySpinner inline />
-                  </div>
-                ) : (
+                  ) : (
+                    <button
+                      className="mr-button mr-button--green-light"
+                      onClick={() =>
+                        this.props
+                          .releaseConflictingTaskLockAndRetry(this.props.task)
+                          .then((success) => this.setState({ showLockFailureDialog: !success }))
+                      }
+                    >
+                      <FormattedMessage {...messages.releaseLockAndContinueLabel} />
+                    </button>
+                  )}
+                </Fragment>
+              }
+            />
+          )}
+        {this.state.showLockFailureDialog &&
+          this.props.taskReadOnly &&
+          !this.props.taskLockConflict && (
+            <BasicDialog
+              title={<FormattedMessage {...messages.lockFailedTitle} />}
+              prompt={
+                <Fragment>
+                  <span>
+                    {this.props.lockFailureDetails?.message ??
+                      this.props.intl.formatMessage(messages.genericLockFailure)}
+                  </span>
+                  <FormattedMessage {...messages.previewAvailable} />
+                </Fragment>
+              }
+              icon="unlocked-icon"
+              onClose={() => this.clearLockFailure()}
+              controls={
+                <Fragment>
                   <button
                     className="mr-button mr-button--green-light mr-mr-4"
-                    onClick={() => this.tryLockingTask()}
+                    onClick={() => this.clearLockFailure()}
                   >
-                    <FormattedMessage {...messages.retryLockLabel} />
+                    <FormattedMessage {...messages.previewTaskLabel} />
                   </button>
-                )}
-                <button
-                  className="mr-button mr-button--white"
-                  onClick={() => {
-                    this.props.history.push(
-                      `/browse/challenges/${this.props.task?.parent?.id ?? this.props.task.parent}`,
-                    );
-                  }}
-                >
-                  <FormattedMessage {...messages.browseChallengeLabel} />
-                </button>
-                {!this.state.unlockRequested ? (
+                  {this.props.tryingLock ? (
+                    <div className="mr-mr-4">
+                      <BusySpinner inline />
+                    </div>
+                  ) : (
+                    <button
+                      className="mr-button mr-button--green-light mr-mr-4"
+                      onClick={() => this.tryLockingTask()}
+                    >
+                      <FormattedMessage {...messages.retryLockLabel} />
+                    </button>
+                  )}
                   <button
-                    className={"mr-button mr-button--green-light mr-ml-4"}
-                    disabled={this.state.unlockRequested}
+                    className="mr-button mr-button--white"
                     onClick={() => {
-                      this.setState({ unlockRequested: true });
-                      this.props.requestUnlock(this.props.task.id);
+                      this.props.history.push(
+                        `/browse/challenges/${this.props.task?.parent?.id ?? this.props.task.parent}`,
+                      );
                     }}
                   >
-                    <FormattedMessage {...messages.requestUnlock} />
+                    <FormattedMessage {...messages.browseChallengeLabel} />
                   </button>
-                ) : (
-                  <div className="mr-ml-4">Request Sent!</div>
-                )}
+                  {!this.state.unlockRequested ? (
+                    <button
+                      className={"mr-button mr-button--green-light mr-ml-4"}
+                      disabled={this.state.unlockRequested}
+                      onClick={() => {
+                        this.setState({ unlockRequested: true });
+                        this.props.requestUnlock(this.props.task.id);
+                      }}
+                    >
+                      <FormattedMessage {...messages.requestUnlock} />
+                    </button>
+                  ) : (
+                    <div className="mr-ml-4">Request Sent!</div>
+                  )}
 
-                <div />
-              </Fragment>
-            }
-          />
-        )}
+                  <div />
+                </Fragment>
+              }
+            />
+          )}
         {this.state.showLockOptionsDialog && (
           <BasicDialog
             title={<FormattedMessage {...messages.lockOptionsTitle} />}
@@ -656,20 +721,18 @@ export class TaskPane extends Component {
                     <FormattedMessage {...messages.extendLockLabel} />
                   </button>
                 )}
-                <button
-                  className="mr-button mr-button--green-light mr-ml-4"
-                  onClick={() => {
-                    this.props.history.push(
-                      Number.isFinite(this.props.virtualChallengeId)
-                        ? `/browse/virtual/${this.props.virtualChallengeId}`
-                        : `/browse/challenges/${
-                            this.props.task?.parent?.id ?? this.props.task.parent
-                          }`,
-                    );
-                  }}
-                >
-                  <FormattedMessage {...messages.taskUnlockLabel} />
-                </button>
+                {this.state.releasingLock ? (
+                  <div className="mr-ml-4">
+                    <BusySpinner inline />
+                  </div>
+                ) : (
+                  <button
+                    className="mr-button mr-button--green-light mr-ml-4"
+                    onClick={() => this.releaseTaskLock()}
+                  >
+                    <FormattedMessage {...messages.taskUnlockLabel} />
+                  </button>
+                )}
               </Fragment>
             }
           />

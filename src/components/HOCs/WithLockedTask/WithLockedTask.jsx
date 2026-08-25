@@ -37,6 +37,11 @@ const lockStorage = {
  * about to work on. If a lock cannot be acquired, the WrappedCompont will be
  * passed a `taskReadOnly` flag set to true
  *
+ * Locks are only ever released intentionally: via the lock dialog, the locked
+ * tasks widget, a lock-conflict release, or a server-side release on task
+ * completion/skip. Merely navigating away from (or closing) a task keeps the
+ * lock, leaving the user's work claimed until they release it or it expires.
+ *
  * @author [Kelli Rotstan](https://github.com/krotstan)
  */
 const WithLockedTask = function (WrappedComponent) {
@@ -83,6 +88,11 @@ const WithLockedTask = function (WrappedComponent) {
     /**
      * Releases the task the user already holds a lock on elsewhere (per a
      * one-lock-per-user 409 conflict), then retries locking the given task.
+     *
+     * Exposed as `releaseConflictingTaskLockAndRetry` (and the conflict itself
+     * as `taskLockConflict`) rather than the plainer names: WithTaskBundle
+     * tracks its own, separate bundle-lock conflict under `lockConflict` and
+     * sits inside this HOC, so unnamespaced props would be clobbered by it.
      */
     releaseConflictingLockAndRetry = async (task) => {
       const conflictTaskId = this.state.lockConflict?.lockedTaskId;
@@ -102,21 +112,28 @@ const WithLockedTask = function (WrappedComponent) {
       return this.lockTask(task);
     };
 
+    /**
+     * Explicitly release the lock on the given task. Only ever called in
+     * response to a deliberate user action - see the class doc above.
+     */
     unlockTask = (task) => {
       if (!task) {
         return Promise.reject("Invalid task");
       }
 
-      this.props
+      const release = this.props
         .releaseTask(task.id)
         .then(() => {
           //wait for lock to be cleared in db and provide some leeway
           //time with setTimeout before triggering storage event
           setTimeout(() => lockStorage.removeLock(task.id), 1500);
+          return true;
         })
-        .catch(() => null);
+        .catch(() => false);
 
       this.setState({ lockedAt: null });
+
+      return release;
     };
 
     requestUnlock = (taskId) => {
@@ -135,7 +152,7 @@ const WithLockedTask = function (WrappedComponent) {
         .refreshTaskLock(task.id)
         .then(() => {
           if (this.state.readOnly) {
-            this.setState({ readOnly: false, failureDetails: null });
+            this.setState({ readOnly: false, failureDetails: null, lockConflict: null });
           }
 
           this.setState({ lockedAt: Date.now() });
@@ -145,7 +162,14 @@ const WithLockedTask = function (WrappedComponent) {
           return true;
         })
         .catch((err) => {
-          this.setState({ readOnly: true, failureDetails: err.details });
+          // A refresh can hit the same one-lock-per-user conflict an initial
+          // lock can (e.g. the user grabbed a lock elsewhere in the meantime),
+          // so surface it the same way and let the conflict dialog handle it
+          this.setState({
+            readOnly: true,
+            failureDetails: err.details,
+            lockConflict: getLockConflict(err),
+          });
           return false;
         });
     };
@@ -172,10 +196,10 @@ const WithLockedTask = function (WrappedComponent) {
 
     componentDidUpdate(prevProps) {
       if (prevProps?.task?.id !== this.props.task?.id) {
-        if (prevProps.task) {
-          this.unlockTask(prevProps.task);
-        }
-
+        // The lock on the previous task is deliberately left in place - releasing
+        // a lock is always an explicit user action. If the previous lock is still
+        // held, locking this task reports a lock conflict and the wrapped
+        // component can offer to release it (releaseConflictingLockAndRetry).
         if (this.props.task) {
           this.lockTask(this.props.task);
         }
@@ -186,10 +210,9 @@ const WithLockedTask = function (WrappedComponent) {
       const { task } = this.props;
       window.removeEventListener("storage", this.syncLocks);
 
+      // Only the local tab bookkeeping is cleared here; the lock itself stays
+      // until the user releases it (or it expires server-side).
       if (task) {
-        if (localStorage.getItem("isLoggedIn")) {
-          this.unlockTask(task);
-        }
         lockStorage.removeLock(task.id);
       }
     }
@@ -206,9 +229,9 @@ const WithLockedTask = function (WrappedComponent) {
           unlockTask={this.unlockTask}
           refreshTaskLock={this.refreshTaskLock}
           requestUnlock={this.requestUnlock}
-          lockConflict={this.state.lockConflict}
-          releasingConflict={this.state.releasingConflict}
-          releaseConflictingLockAndRetry={this.releaseConflictingLockAndRetry}
+          taskLockConflict={this.state.lockConflict}
+          releasingTaskLockConflict={this.state.releasingConflict}
+          releaseConflictingTaskLockAndRetry={this.releaseConflictingLockAndRetry}
         />
       );
     }

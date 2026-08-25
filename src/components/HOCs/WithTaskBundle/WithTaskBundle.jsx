@@ -10,7 +10,6 @@ import {
   deleteTaskBundle,
   fetchTaskBundle,
   lockTaskBundle,
-  releaseMultipleTasks,
   releaseTask,
   updateTaskBundle,
 } from "../../../services/Task/Task";
@@ -32,7 +31,6 @@ export function WithTaskBundle(WrappedComponent) {
       resetSelectedTasks: null,
       loading: false,
       updateTaskBundleError: false,
-      isDeletingBundle: false,
       lockConflict: null,
       pendingMemberIds: null,
     };
@@ -44,17 +42,14 @@ export function WithTaskBundle(WrappedComponent) {
       }
 
       this.updateBundlingConditions();
-      window.addEventListener("beforeunload", this.handleBeforeUnload);
     }
 
     async componentDidUpdate(prevProps) {
       const { task } = this.props;
 
       if (task && task?.id !== prevProps?.task?.id) {
-        if (this.state.taskBundle) {
-          this.unlockTasks(this.state.taskBundle.taskIds);
-        }
-
+        // The previous bundle's covering lock is deliberately left in place -
+        // releasing it is always an explicit user action (see WithLockedTask).
         this.setState({
           selectedTasks: [],
           taskBundle: null,
@@ -68,21 +63,12 @@ export function WithTaskBundle(WrappedComponent) {
           await this.fetchBundle(task.bundleId);
         }
         this.updateBundlingConditions();
+      } else if (this.props.taskReadOnly !== prevProps.taskReadOnly) {
+        // Read-only status is one of the bundling conditions, so it has to be
+        // reevaluated whenever the lock is acquired or lost
+        this.updateBundlingConditions();
       }
     }
-
-    componentWillUnmount() {
-      if (!this.state.isDeletingBundle) {
-        this.unlockBundleTasks();
-      }
-      window.removeEventListener("beforeunload", this.handleBeforeUnload);
-    }
-
-    handleBeforeUnload = () => {
-      if (!this.state.isDeletingBundle) {
-        this.unlockBundleTasks();
-      }
-    };
 
     /**
      * Looks up full task data for the given ids from the redux tasks entity
@@ -263,19 +249,6 @@ export function WithTaskBundle(WrappedComponent) {
       }
     };
 
-    unlockTasks = async (taskIds) => {
-      if (!taskIds || taskIds.length === 0) {
-        return;
-      }
-
-      try {
-        await this.props.releaseMultipleTasks(taskIds);
-      } catch (error) {
-        console.warn("Error unlocking tasks:", error);
-        this.setState({ error: "unlockError" });
-      }
-    };
-
     createTaskBundle = async (taskIds) => {
       if (taskIds.length > 50) {
         this.setState({ bundleLimitError: true });
@@ -401,7 +374,6 @@ export function WithTaskBundle(WrappedComponent) {
           this.setState({ updateTaskBundleError: false });
 
           if (!taskBundle && initialBundle) {
-            this.setState({ isDeletingBundle: true });
             await this.props.deleteTaskBundle(initialBundle?.bundleId);
             return null;
           }
@@ -417,20 +389,6 @@ export function WithTaskBundle(WrappedComponent) {
         }
       }
       return null;
-    };
-
-    unlockBundleTasks = () => {
-      if (this.state.taskBundle) {
-        // Only unlock tasks that aren't the primary task
-        // since the primary task is managed by WithLockedTask
-        const tasksToUnlock = this.state.taskBundle.taskIds.filter(
-          (taskId) => taskId !== this.props.task?.id,
-        );
-
-        if (tasksToUnlock.length > 0) {
-          this.unlockTasks(tasksToUnlock);
-        }
-      }
     };
 
     releaseConflictingLockAndRetry = async () => {
@@ -501,7 +459,6 @@ export const mapDispatchToProps = (dispatch) =>
       deleteTaskBundle,
       updateTaskBundle,
       lockTaskBundle,
-      releaseMultipleTasks,
       releaseTask,
       addError,
     },
