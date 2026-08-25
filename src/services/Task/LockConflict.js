@@ -15,6 +15,7 @@ export const getLockConflict = (error) => {
 
   return {
     lockedTaskId: details.lockedTaskId,
+    parentId: typeof details.parentId === "number" ? details.parentId : null,
     parentName: details.parentName ?? null,
     bundledTasks: details.bundledTasks ?? [],
     startedAt: details.startedAt ?? null,

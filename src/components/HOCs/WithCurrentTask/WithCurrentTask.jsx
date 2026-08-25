@@ -231,15 +231,20 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
           // Wait for all parallel tasks to complete
           await Promise.all(parallelTasks);
 
-          // Handle next task loading - this needs to be sequential
+          // Handle next task loading - this needs to be sequential.
+          // challengeIdFromRoute falls back to props.challengeId, and ownProps
+          // carries one only when the route does (/challenge/:challengeId/task/
+          // :taskId). On the bare /task/:taskId route it doesn't, so seed it
+          // with the id the caller already handed us.
+          const nextTaskProps = { ...ownProps, challengeId };
           if (taskLoadBy) {
             // Start loading the next task from the challenge.
             const loadNextTask = Number.isFinite(requestedNextTask)
-              ? await nextRequestedTask(dispatch, ownProps, requestedNextTask)
-              : await nextRandomTask(dispatch, ownProps, taskId, taskLoadBy);
+              ? await nextRequestedTask(dispatch, nextTaskProps, requestedNextTask)
+              : await nextRandomTask(dispatch, nextTaskProps, taskId, taskLoadBy);
 
             try {
-              await visitNewTask(dispatch, ownProps, taskId, loadNextTask);
+              await visitNewTask(dispatch, nextTaskProps, taskId, loadNextTask);
             } catch (error) {
               ownProps.history.push(`/browse/challenges/${challengeId}`);
             }
@@ -287,13 +292,15 @@ export const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(addTaskComment(taskId, comment));
       }
 
+      // See completeTask above for why challengeId has to be seeded here
+      const nextTaskProps = { ...ownProps, challengeId };
       if (taskLoadBy === TaskLoadMethod.proximity && requestedNextTask) {
-        nextRequestedTask(dispatch, ownProps, requestedNextTask).then((newTask) =>
-          visitNewTask(dispatch, ownProps, taskId, newTask),
+        nextRequestedTask(dispatch, nextTaskProps, requestedNextTask).then((newTask) =>
+          visitNewTask(dispatch, nextTaskProps, taskId, newTask),
         );
       } else {
-        nextRandomTask(dispatch, ownProps, taskId, taskLoadBy).then((newTask) =>
-          visitNewTask(dispatch, ownProps, taskId, newTask),
+        nextRandomTask(dispatch, nextTaskProps, taskId, taskLoadBy).then((newTask) =>
+          visitNewTask(dispatch, nextTaskProps, taskId, newTask),
         );
       }
     },

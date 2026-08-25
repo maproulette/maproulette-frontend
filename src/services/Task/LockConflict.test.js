@@ -22,6 +22,7 @@ describe("getLockConflict", () => {
       details: {
         message: "User 1 already holds a lock on item 123",
         lockedTaskId: 123,
+        parentId: 42,
         parentName: "Some Challenge",
         bundledTasks: [124, 125],
         startedAt: "2026-01-01T00:00:00Z",
@@ -30,6 +31,7 @@ describe("getLockConflict", () => {
 
     expect(getLockConflict(error)).toEqual({
       lockedTaskId: 123,
+      parentId: 42,
       parentName: "Some Challenge",
       bundledTasks: [124, 125],
       startedAt: "2026-01-01T00:00:00Z",
@@ -37,7 +39,7 @@ describe("getLockConflict", () => {
     });
   });
 
-  it("defaults parentName/bundledTasks/startedAt when absent", () => {
+  it("defaults parentId/parentName/bundledTasks/startedAt when absent", () => {
     const error = {
       response: { status: 409 },
       details: { message: "conflict", lockedTaskId: 123 },
@@ -45,6 +47,7 @@ describe("getLockConflict", () => {
 
     expect(getLockConflict(error)).toEqual({
       lockedTaskId: 123,
+      parentId: null,
       parentName: null,
       bundledTasks: [],
       startedAt: null,

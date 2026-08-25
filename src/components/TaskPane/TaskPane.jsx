@@ -605,9 +605,17 @@ export class TaskPane extends Component {
                 <Fragment>
                   <button
                     className="mr-button mr-button--white mr-mr-4"
-                    onClick={() =>
-                      this.props.history.push(`/task/${this.props.taskLockConflict.lockedTaskId}`)
-                    }
+                    onClick={() => {
+                      // Route through the challenge whenever we know it: on the
+                      // bare /task/:id route nothing supplies a challenge id,
+                      // and loading the next task after completion needs one
+                      const { lockedTaskId, parentId } = this.props.taskLockConflict;
+                      this.props.history.push(
+                        Number.isFinite(parentId)
+                          ? `/challenge/${parentId}/task/${lockedTaskId}`
+                          : `/task/${lockedTaskId}`,
+                      );
+                    }}
                   >
                     <FormattedMessage {...messages.goToLockedTaskLabel} />
                   </button>
