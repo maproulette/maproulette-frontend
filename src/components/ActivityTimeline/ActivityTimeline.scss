@@ -1,7 +1,7 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 $markerColor: #F7BB59;
-$markerTextColor: $white;
+$markerTextColor: variables.$white;
 $headingColor: $markerColor;
 $badgeColor: #F2EFE9;
 $badgeTextColor: #737373;
@@ -49,7 +49,7 @@ $badgeTextColor: #737373;
         margin-top: 20px;
 
         .challenge-name {
-          font-weight: $weight-light;
+          font-weight: variables.$weight-light;
           margin-bottom: 5px;
         }
       }

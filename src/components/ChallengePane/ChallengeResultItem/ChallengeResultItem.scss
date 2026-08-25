@@ -1,17 +1,19 @@
-@import '../../../theme.scss';
+@use '../../../theme.scss';
+@use "../../../mixins";
+@use "../../../variables";
 
 .challenge-list__item.card {
   width: 100%;
   border: none;
   box-shadow: none;
   margin-top: 20px;
-  border-radius: $radius-medium;
+  border-radius: variables.$radius-medium;
 
   .challenge-list__item--featured-indicator {
-    background-color: $grey-light;
-    border-radius: $radius-medium 0 $radius-medium 0;
-    color: $white;
-    font-size: $size-9;
+    background-color: variables.$grey-light;
+    border-radius: variables.$radius-medium 0 variables.$radius-medium 0;
+    color: variables.$white;
+    font-size: variables.$size-9;
     display: inline-block;
     padding: 1px 5px;
     position: absolute;
@@ -32,13 +34,13 @@
 
     &.saved {
       svg {
-        fill: $coral;
+        fill: variables.$coral;
       }
     }
 
     &.virtual {
       svg {
-        fill: $coral;
+        fill: variables.$coral;
       }
     }
   }
@@ -50,20 +52,20 @@
   }
 
   .challenge-list__item__name {
-    font-size: $size-5;
+    font-size: variables.$size-5;
   }
 
   .challenge-list__item__project-name {
     margin-left: 23px;
-    font-size: $size-8;
+    font-size: variables.$size-8;
     min-height: 1em;
-    color: $grey-light;
+    color: variables.$grey-light;
   }
 
   .challenge-list__item__field-label {
     text-transform: uppercase;
-    font-weight: $weight-medium;
-    letter-spacing: $letter-spacing-little;
+    font-weight: variables.$weight-medium;
+    letter-spacing: variables.$letter-spacing-little;
     margin-right: 0.5em;
 
     &:after {
@@ -73,8 +75,8 @@
 
   .challenge-list__item__blurb {
     margin: 15px 0 20px 0px;
-    @include constrained-text-content();
-    @include markdown-content();
+    @include mixins.constrained-text-content();
+    @include mixins.markdown-content();
     max-height: 200px;
     overflow-y: auto;
     padding-right: 10px;
@@ -82,7 +84,7 @@
 
   .challenge-list__item__task-progress {
     margin-bottom: 20px;
-    font-size: $size-8;
+    font-size: variables.$size-8;
   }
 
   .challenge-list__item__controls {
@@ -95,19 +97,19 @@
   }
 
   button.start-challenge {
-    @include invert-on-hover($green, $white);
+    @include mixins.invert-on-hover(variables.$green, variables.$white);
   }
 
   button.save-challenge-toggle {
-    @include invert-on-hover($grey, $white);
+    @include mixins.invert-on-hover(variables.$grey, variables.$white);
   }
 
   .card-header {
-    background-color: $white;
-    color: $blue;
-    font-weight: $weight-normal;
+    background-color: variables.$white;
+    color: variables.$blue;
+    font-weight: variables.$weight-normal;
     padding: 1rem;
-    border-radius: $radius-medium;
+    border-radius: variables.$radius-medium;
     justify-content: space-between;
     align-items: flex-start;
 
@@ -115,7 +117,7 @@
       align-items: flex-end;
 
       .icon {
-        @include dropdown-arrow();
+        @include mixins.dropdown-arrow();
       }
     }
 
@@ -125,8 +127,8 @@
   }
 
   .card-content {
-    color: $grey;
-    font-size: $size-7;
+    color: variables.$grey;
+    font-size: variables.$size-7;
     max-height: 0;
     transition: max-height 0.25s, padding 0.25s;
     padding: 0 2.5rem;
@@ -144,9 +146,9 @@
     }
 
     .card-header {
-      border-radius: $radius-medium $radius-medium 0 0;
+      border-radius: variables.$radius-medium variables.$radius-medium 0 0;
       box-shadow: none;
-      border-bottom: 2px solid $grey-lightest-more;
+      border-bottom: 2px solid variables.$grey-lightest-more;
 
       .icon {
         margin-top: 5px;

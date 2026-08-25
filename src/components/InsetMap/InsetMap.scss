@@ -1,18 +1,18 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .inset-map {
   height: 100%;
 
   .leaflet-container {
     height: 100%;
-    border-radius: $radius-medium;
+    border-radius: variables.$radius-medium;
     border: none;
     -webkit-transform: translate3d(0, 0, 0);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
     -webkit-backface-visibility: hidden;
     
     .leaflet-pane {
-      z-index: $intralayer-bump;
+      z-index: variables.$intralayer-bump;
     }
   }
 }

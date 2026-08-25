@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@use '../../../variables.scss';
 
 .comment-count-badge {
   display: inline-block;
@@ -10,20 +10,20 @@
     svg {
       height: 19px;
       width: auto;
-      fill: $grey;
+      fill: variables.$grey;
     }
   }
 
   .badge.is-badge-outlined[data-badge]::after {
-    font-size: $size-9;
+    font-size: variables.$size-9;
     padding: 0.25rem;
-    color: $white;
-    background-color: $coral;
+    color: variables.$white;
+    background-color: variables.$coral;
     border: none;
     left: calc(100% - ( 1.2rem / 2 ) - 1px) // move slightly to the left
   }
 
   .badge.is-badge-outlined.is-empty[data-badge]::after {
-    background-color: $grey-light;
+    background-color: variables.$grey-light;
   }
 }

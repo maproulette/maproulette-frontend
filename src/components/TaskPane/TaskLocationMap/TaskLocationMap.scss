@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@use '../../../variables.scss';
 
 .task-location-map {
   position: relative;
@@ -18,7 +18,7 @@
     right: -15px;
     height:90px;
     width: 90px;
-    z-index: $intralayer-bump;
+    z-index: variables.$intralayer-bump;
 
     .leaflet-container {
       height: 100%;

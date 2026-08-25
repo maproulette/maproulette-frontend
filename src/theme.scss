@@ -1,5 +1,5 @@
-@import './variables.scss';
-@import './mixins.scss';
+@use 'variables.scss';
+@use 'mixins.scss';
 
 $desktop: 50px;
 $tablet: 40px;
@@ -15,7 +15,7 @@ $tablet: 40px;
   align-items: center;
 
   svg {
-    fill: $subtitle-color;
+    fill: variables.$subtitle-color;
     height: 1em;
     width: auto;
     margin-left: 1em;
@@ -31,19 +31,19 @@ $tablet: 40px;
 }
 
 .modal.is-active {
-  z-index: $layer-modal;
+  z-index: variables.$layer-modal;
 }
 
 .full-screen-height {
-  height: calc(100vh - #{$navbar-height} - #{$subnav-height});
+  height: calc(100vh - #{variables.$navbar-height} - #{variables.$subnav-height});
 
   &.no-subnav {
-    height: calc(100vh - #{$navbar-height});
+    height: calc(100vh - #{variables.$navbar-height});
   }
 
-  @media (max-width: $app-mobile-break) {
+  @media (max-width: variables.$app-mobile-break) {
     height: calc(
-      100vh - #{$mobile-navbar-height} - #{$mobile-subnav-height} - #{$mobile-address-bar-height}
+      100vh - #{variables.$mobile-navbar-height} - #{variables.$mobile-subnav-height} - #{variables.$mobile-address-bar-height}
     );
   }
 }
@@ -51,11 +51,11 @@ $tablet: 40px;
 .task .full-screen-height {
   // no subnav in task mode or about pane
   .leaflet-container {
-    height: calc(100vh - #{$navbar-height});
+    height: calc(100vh - #{variables.$navbar-height});
 
-    @media (max-width: $app-mobile-break) {
+    @media (max-width: variables.$app-mobile-break) {
       height: calc(
-        100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+        100vh - #{variables.$mobile-navbar-height} - #{variables.$mobile-address-bar-height}
       );
     }
   }
@@ -65,11 +65,11 @@ $tablet: 40px;
 // presence or absence of navbar and subnav.
 .full-screen-map {
   .leaflet-container {
-    height: calc(100vh - #{$navbar-height});
+    height: calc(100vh - #{variables.$navbar-height});
 
-    @media (max-width: $app-mobile-break) {
+    @media (max-width: variables.$app-mobile-break) {
       height: calc(
-        100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+        100vh - #{variables.$mobile-navbar-height} - #{variables.$mobile-address-bar-height}
       );
     }
   }
@@ -78,11 +78,11 @@ $tablet: 40px;
   &.about {
     // no subnav in task mode or about pane
     .leaflet-container {
-      height: calc(100vh - #{$navbar-height});
+      height: calc(100vh - #{variables.$navbar-height});
 
-      @media (max-width: $app-mobile-break) {
+      @media (max-width: variables.$app-mobile-break) {
         height: calc(
-          100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+          100vh - #{variables.$mobile-navbar-height} - #{variables.$mobile-address-bar-height}
         );
       }
     }
@@ -94,11 +94,11 @@ $tablet: 40px;
   .menu-wrapper {
     position: fixed;
     left: 65px;
-    z-index: $layer-popout;
+    z-index: variables.$layer-popout;
 
     .dropdown-menu {
       padding-top: 0;
-      box-shadow: 0px 2px 6px 0px $box-shadow-color;
+      box-shadow: 0px 2px 6px 0px variables.$box-shadow-color;
     }
   }
 }
@@ -124,20 +124,20 @@ $tablet: 40px;
 .button.is-outlined {
   border-radius: 20px;
   border: 2px solid;
-  font-size: $size-6;
-  font-weight: $weight-medium;
+  font-size: variables.$size-6;
+  font-weight: variables.$weight-medium;
   padding: 0px 30px;
   height: 30px;
 
   &.is-small {
     border-radius: 20px;
-    font-size: $size-8;
+    font-size: variables.$size-8;
     padding: 0px 30px;
   }
 
   &.is-big {
-    font-size: $size-5;
-    font-weight: $weight-normal;
+    font-size: variables.$size-5;
+    font-weight: variables.$weight-normal;
     border-radius: 30px;
     padding: 0px 40px;
   }
@@ -155,19 +155,19 @@ $tablet: 40px;
 
     &.is-danger {
       svg {
-        fill: $danger;
+        fill: variables.$danger;
       }
     }
   }
 
   svg.icon.is-danger {
-    fill: $danger;
+    fill: variables.$danger;
   }
 }
 
 .button.large-and-wide {
   svg {
-    fill: $green;
+    fill: variables.$green;
   }
 
   height: auto;
@@ -175,10 +175,10 @@ $tablet: 40px;
   line-height: 1;
   //width: 140px;
   //height: 75px;
-  background-color: $grey-lightest-more;
-  font-size: $size-6;
-  font-weight: $weight-medium;
-  color: $green;
+  background-color: variables.$grey-lightest-more;
+  font-size: variables.$size-6;
+  font-weight: variables.$weight-medium;
+  color: variables.$green;
   border: none;
   display: flex;
   justify-content: center;
@@ -186,8 +186,8 @@ $tablet: 40px;
 
   &:hover,
   &:enabled:focus {
-    box-shadow: 0px 2px 4px 0px $box-shadow-color;
-    color: $green;
+    box-shadow: 0px 2px 4px 0px variables.$box-shadow-color;
+    color: variables.$green;
   }
 
   .control-icon svg {
@@ -210,22 +210,22 @@ $tablet: 40px;
   padding: 0px 6px;
 
   .control-icon svg {
-    fill: $green;
+    fill: variables.$green;
     height: 20px;
     width: auto;
     transition: fill 0.3s;
 
     &.is-primary {
-      fill: $primary;
+      fill: variables.$primary;
     }
 
     &.is-danger {
-      fill: $danger;
+      fill: variables.$danger;
     }
   }
 
   &.is-active .control-icon svg {
-    fill: $black;
+    fill: variables.$black;
   }
 
   &.is-small .control-icon svg {
@@ -238,7 +238,7 @@ $tablet: 40px;
 
   &:hover {
     .control-icon svg {
-      fill: $black;
+      fill: variables.$black;
     }
   }
 }
@@ -252,13 +252,13 @@ $tablet: 40px;
 
   &.is-primary {
     svg {
-      fill: $primary;
+      fill: variables.$primary;
     }
 
     &:enabled:hover,
     &:enabled:focus {
       svg {
-        fill: $primary-invert;
+        fill: variables.$primary-invert;
       }
     }
   }
@@ -271,24 +271,24 @@ $tablet: 40px;
 }
 
 .button.is-primary {
-  @include invert-on-hover($primary, $white);
+  @include mixins.invert-on-hover(variables.$primary, variables.$white);
 }
 
 .button.is-secondary {
-  @include invert-on-hover($grey, $white);
+  @include mixins.invert-on-hover(variables.$grey, variables.$white);
 }
 
 .button.is-green {
-  @include invert-on-hover($green, $white);
+  @include mixins.invert-on-hover(variables.$green, variables.$white);
 }
 
 .button.is-danger {
-  @include invert-on-hover($danger, $white);
+  @include mixins.invert-on-hover(variables.$danger, variables.$white);
 }
 
 .button.is-primary.is-loading {
   &:enabled:focus:after {
-    border-color: transparent transparent $primary-invert $primary-invert !important;
+    border-color: transparent transparent variables.$primary-invert variables.$primary-invert !important;
   }
 }
 
@@ -303,7 +303,7 @@ $tablet: 40px;
 }
 
 a.is-danger {
-  color: $danger;
+  color: variables.$danger;
 }
 
 .full-width {
@@ -343,7 +343,7 @@ img.is-circular {
   height: 1em;
 
   .icon {
-    @include dropdown-arrow();
+    @include mixins.dropdown-arrow();
     position: static;
   }
 }
@@ -365,36 +365,36 @@ img.is-circular {
 }
 
 code {
-  color: $coral;
+  color: variables.$coral;
   background-color: transparent;
   padding: 0;
-  font-family: $family-sans-serif;
+  font-family: variables.$family-sans-serif;
   font-size: inherit;
 }
 
 .button.is-primary.is-outlined {
-  background-color: $white;
+  background-color: variables.$white;
 }
 
 .pane-loading {
   display: flex;
   align-items: center;
-  font-size: $size-1;
-  height: calc(100vh - #{$navbar-height});
+  font-size: variables.$size-1;
+  height: calc(100vh - #{variables.$navbar-height});
 
-  @media (max-width: $app-mobile-break) {
+  @media (max-width: variables.$app-mobile-break) {
     height: calc(
-      100vh - #{$mobile-navbar-height} - #{$mobile-address-bar-height}
+      100vh - #{variables.$mobile-navbar-height} - #{variables.$mobile-address-bar-height}
     );
   }
 }
 
 html {
-  background-color: $app-background;
+  background-color: variables.$app-background;
 
   // In case page doesn't fill screen on some devices
-  @media (max-width: $app-mobile-break) {
-    background-color: $grey-darkest;
+  @media (max-width: variables.$app-mobile-break) {
+    background-color: variables.$grey-darkest;
   }
 }
 
@@ -461,11 +461,11 @@ a {
   }
 
   input:checked + .slider {
-    background-color: $green-neon;
+    background-color: variables.$green-neon;
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 1px $green-neon;
+    box-shadow: 0 0 1px variables.$green-neon;
   }
 
   input:checked + .slider:before {
@@ -495,7 +495,7 @@ a {
     width: 14px;
     left: 4px;
     bottom: 3px;
-    background-color: $white;
+    background-color: variables.$white;
     -webkit-transition: .4s;
     transition: .4s;
   }

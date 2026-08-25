@@ -1,16 +1,16 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .confirm-action {
   display: inline-flex;
   justify-content: flex-start;
 
   .message .message-body {
-    background-color: $white;
+    background-color: variables.$white;
   }
 
   &__prompt {
-    color: $grey-dark;
-    font-size: $size-5;
+    color: variables.$grey-dark;
+    font-size: variables.$size-5;
   }
 
   &__controls {

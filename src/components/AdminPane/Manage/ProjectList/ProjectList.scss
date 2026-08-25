@@ -1,7 +1,7 @@
-@import '../../../../variables.scss';
+@use '../../../../variables.scss';
 
 .admin__manage__managed-item-list.project-list {
-  font-size: $size-5;
+  font-size: variables.$size-5;
   margin: 0px 20px 0 0;
   display: flex;
   flex-wrap: wrap;
@@ -17,14 +17,14 @@
   }
 
   .project-list__heading {
-    color: $green;
+    color: variables.$green;
     margin-top: 40px;
     padding-bottom: 20px;
     margin-bottom: 20px;
-    border-bottom: 2px solid $grey-lightest-less;
+    border-bottom: 2px solid variables.$grey-lightest-less;
 
     h2 {
-      font-weight: $weight-semibold;
+      font-weight: variables.$weight-semibold;
     }
   }
 
@@ -39,8 +39,8 @@
   }
 
   .column.edit-control {
-    font-size: $size-7;
-    font-weight: $weight-normal;
+    font-size: variables.$size-7;
+    font-weight: variables.$weight-normal;
   }
 
   .project-list-item {
@@ -51,7 +51,7 @@
     }
 
     &__project-name {
-      color: $primary
+      color: variables.$primary
     }
   }
 

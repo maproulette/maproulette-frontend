@@ -1,11 +1,12 @@
-@import '../../mixins.scss';
+@use '../../mixins.scss';
+@use "../../variables";
 
 .share-link.dropdown {
   position: static; // allow content to float above sidebar
 
   .dropdown-trigger {
     svg {
-      fill: $grey-lighter;
+      fill: variables.$grey-lighter;
       height: 15px;
       width: auto;
     }
@@ -23,8 +24,8 @@
       left: 25px;
 
       .dropdown-content {
-        font-size: $size-7;
-        color: $grey;
+        font-size: variables.$size-7;
+        color: variables.$grey;
         padding: 5px 10px 5px 15px;
         display: flex;
         justify-content: flex-start;
@@ -35,9 +36,9 @@
         }
 
         .share-link__copy-button {
-          @include invert-on-hover($green, $white);
+          @include mixins.invert-on-hover(variables.$green, variables.$white);
           margin-left: 10px;
-          font-size: $size-7;
+          font-size: variables.$size-7;
           padding: 0px 10px 0px 5px;
 
           svg {

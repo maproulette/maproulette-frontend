@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .widget-grid {
   &__controls {
@@ -27,7 +27,7 @@
     flex-direction: column;
 
     &--bordered-top {
-      border-top: 1px solid $grey-lighter-more;
+      border-top: 1px solid variables.$grey-lighter-more;
       padding-top: 30px;
     }
 
@@ -38,7 +38,7 @@
       max-width: 18px;
       height: auto;
       margin-right: 12px;
-      fill: $grey-darkest;
+      fill: variables.$grey-darkest;
     }
 
     &__remove-control {
@@ -47,7 +47,7 @@
       max-width: 18px;
       height: auto;
       margin-right: 12px;
-      fill: $danger;
+      fill: variables.$danger;
     }
 
     &__header {
@@ -66,7 +66,7 @@
           flex-shrink: 0;
 
           .subtitle {
-            font-weight: $weight-normal;
+            font-weight: variables.$weight-normal;
             margin: 0;
           }
         }
@@ -92,10 +92,10 @@
               margin-left: 20px;
               width: 20px;
               height: 20px;
-              fill: $grey-lightest;
+              fill: variables.$grey-lightest;
 
               &:hover {
-                fill: $grey-dark;
+                fill: variables.$grey-dark;
               }
             }
 

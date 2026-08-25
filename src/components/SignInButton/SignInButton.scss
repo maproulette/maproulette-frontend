@@ -1,10 +1,10 @@
-@import '../../variables.scss';
-@import '../../mixins.scss';
+@use '../../variables.scss';
+@use '../../mixins.scss';
 
 .button.signin-button {
-  @include invert-on-hover($primary, $white);
+  @include mixins.invert-on-hover(variables.$primary, variables.$white);
 
   &.white-on-green {
-    @include invert-on-hover($white, $green);
+    @include mixins.invert-on-hover(variables.$white, variables.$green);
   }
 }

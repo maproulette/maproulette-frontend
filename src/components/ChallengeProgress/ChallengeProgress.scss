@@ -1,8 +1,8 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .challenge-task-progress {
   // margin-bottom: 30px;
-  font-size: $size-9;
+  font-size: variables.$size-9;
   height: 55px;
   position: relative;
 

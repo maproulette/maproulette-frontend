@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .admin {
   display: flex;
@@ -14,26 +14,26 @@
   }
 
   h1 {
-    font-size: $size-2;
-    font-weight: $title-weight;
-    color: $title-color;
+    font-size: variables.$size-2;
+    font-weight: variables.$title-weight;
+    color: variables.$title-color;
   }
 
   h3.subtitle {
-    color: $primary;
-    font-weight: $weight-normal;
+    color: variables.$primary;
+    font-weight: variables.$weight-normal;
   }
 
   .search-box {
-    border: 2px solid $grey-lighter-more;
-    border-radius: $radius-medium;
+    border: 2px solid variables.$grey-lighter-more;
+    border-radius: variables.$radius-medium;
     max-width: 320px;
 
     .control-wrapper svg {
-      fill: $grey-light;
+      fill: variables.$grey-light;
 
       input::placeholder {
-        color: $grey-light;
+        color: variables.$grey-light;
       }
     }
   }
@@ -48,21 +48,21 @@
     svg.icon {
       height: 18px;
       width: auto;
-      fill: $grey-lightest;
+      fill: variables.$grey-lightest;
       vertical-align: middle;
     }
   }
 
   .tabs {
     ul {
-      border-bottom: 2px solid $grey-lightest-less;
+      border-bottom: 2px solid variables.$grey-lightest-less;
 
       li {
         a {
-          font-size: $size-5;
-          color: $green;
-          font-weight: $weight-light;
-          letter-spacing: $letter-spacing-medium;
+          font-size: variables.$size-5;
+          color: variables.$green;
+          font-weight: variables.$weight-light;
+          letter-spacing: variables.$letter-spacing-medium;
           padding: 10px 0px 12px 0px;
           margin: 0px 13px;
           border-bottom: none;
@@ -72,9 +72,9 @@
           margin-bottom: -2px;
 
           a {
-            font-weight: $weight-semibold;
-            color: $green;
-            border-bottom: 3px solid $green;
+            font-weight: variables.$weight-semibold;
+            color: variables.$green;
+            border-bottom: 3px solid variables.$green;
             padding-bottom: 11px;
           }
         }
@@ -108,8 +108,8 @@
       flex-wrap: wrap;
 
       h3 {
-        font-size: $size-3;
-        color: $subtitle-color;
+        font-size: variables.$size-3;
+        color: variables.$subtitle-color;
 
         display: flex;
         justify-content: flex-start;
@@ -123,9 +123,9 @@
 
     nav.breadcrumb {
       overflow: visible;
-      font-size: $size-5;
+      font-size: variables.$size-5;
       margin-bottom: 0;
-      color: $white;
+      color: variables.$white;
       margin-bottom: 0.5em;
 
       ul {
@@ -139,7 +139,7 @@
 
       li a {
         display: inline;
-        color: $white;
+        color: variables.$white;
         line-height: 16px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -151,7 +151,7 @@
       }
 
       li.is-active:not(.nav-title) a {
-        color: $yellow;
+        color: variables.$yellow;
 
         .busy-spinner {
           margin-left: 10px;
@@ -159,11 +159,11 @@
       }
 
       li + li:before {
-        color: $white;
+        color: variables.$white;
       }
 
       @media(max-width: 1000px) {
-        font-size: $size-6;
+        font-size: variables.$size-6;
         padding-top: 0.5em;
       }
 
@@ -186,14 +186,14 @@
       }
 
       .status-label {
-        font-weight: $weight-light;
-        color: $grey;
-        font-size: $size-6-plus;
+        font-weight: variables.$weight-light;
+        color: variables.$grey;
+        font-size: variables.$size-6-plus;
       }
 
       .status-value {
-        color: $grey;
-        font-size: $size-6-plus;
+        color: variables.$grey;
+        font-size: variables.$size-6-plus;
       }
 
       .start-challenge-control {
@@ -202,7 +202,7 @@
     }
 
     &__controls.columns {
-      font-size: $size-5;
+      font-size: variables.$size-5;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -220,21 +220,21 @@
           }
 
           &:hover {
-            color: $white;
+            color: variables.$white;
 
             .basic-dropdown-indicator {
-              border-color: $white;
+              border-color: variables.$white;
             }
           }
         }
 
         svg {
           fill: #91F3A2;
-          height: $size-5;
+          height: variables.$size-5;
           width: auto;
 
           &:hover {
-            fill: $white;
+            fill: variables.$white;
           }
         }
 
@@ -262,7 +262,7 @@
     }
 
     &__managed-item-list {
-      font-size: $size-5;
+      font-size: variables.$size-5;
 
       svg.icon {
         height: 18px;
@@ -294,11 +294,11 @@
           svg.icon {
             height: 24px;
             width: auto;
-            fill: $green-light;
+            fill: variables.$green-light;
             vertical-align: middle;
 
             &.enabled {
-              fill: $green;
+              fill: variables.$green;
             }
           }
         }
@@ -309,12 +309,12 @@
           svg.icon {
             height: 18px;
             width: auto;
-            fill: $grey-lightest;
+            fill: variables.$grey-lightest;
             vertical-align: middle;
             transform: rotate(10deg);
 
             &.enabled {
-              fill: $blue;
+              fill: variables.$blue;
             }
           }
         }
@@ -325,11 +325,11 @@
           svg.icon {
             height: 18px;
             width: auto;
-            fill: $grey-lightest;
+            fill: variables.$grey-lightest;
             vertical-align: middle;
 
             &.enabled {
-              fill: $blue;
+              fill: variables.$blue;
             }
           }
         }
@@ -343,22 +343,22 @@
         }
 
         .column.controls {
-          color: $grey-light;
+          color: variables.$grey-light;
 
           svg {
-            fill: $grey-light;
+            fill: variables.$grey-light;
 
             &:hover {
-              fill: $grey-darkest;
+              fill: variables.$grey-darkest;
             }
           }
 
           a, a:link, a:visited, a:active {
-            color: $grey-light;
+            color: variables.$grey-light;
           }
 
           a:hover {
-            color: $grey-darkest;
+            color: variables.$grey-darkest;
           }
         }
       }

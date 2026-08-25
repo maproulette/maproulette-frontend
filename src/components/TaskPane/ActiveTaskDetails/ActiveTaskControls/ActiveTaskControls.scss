@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@use '../../../../variables.scss';
 
 .active-task-controls {
   &__control-block {
@@ -17,8 +17,8 @@
   }
 
   button.button.large-and-wide {
-    color: $primary;
-    font-weight: $weight-normal;
+    color: variables.$primary;
+    font-weight: variables.$weight-normal;
 
     &.false-positive-control, &.skip-control {
       flex: 1;
@@ -28,7 +28,7 @@
       height: 20px;
       width: auto;
       margin-right: 10px;
-      fill: $primary;
+      fill: variables.$primary;
     }
   }
 
@@ -46,15 +46,15 @@
   }
 
   &__additional-controls {
-    border: 2px solid $grey-lightest-more;
+    border: 2px solid variables.$grey-lightest-more;
     border-radius: 4px;
     padding: 10px 0px;
 
     .collapsible-section__heading {
       justify-content: center;
-      color: $grey-light-less;
-      font-size: $size-6;
-      font-weight: $weight-medium;
+      color: variables.$grey-light-less;
+      font-size: variables.$size-6;
+      font-weight: variables.$weight-medium;
       transition: color 0.25s;
 
       .has-svg-icon {
@@ -63,29 +63,29 @@
 
         svg {
           height: 20px;
-          fill: $grey-light-less;
+          fill: variables.$grey-light-less;
           transition: fill 0.25s;
         }
       }
 
       &:hover {
-        color: $primary;
+        color: variables.$primary;
 
         svg {
-          fill: $primary;
+          fill: variables.$primary;
         }
       }
     }
 
     &.is-expanded {
       .collapsible-section__heading {
-        border-bottom: 2px solid $grey-lightest-more;
+        border-bottom: 2px solid variables.$grey-lightest-more;
         margin-bottom: 20px;
         padding-bottom: 10px;
-        color: $primary;
+        color: variables.$primary;
 
         svg {
-          fill: $primary;
+          fill: variables.$primary;
         }
       }
 
@@ -113,7 +113,7 @@
       width: auto;
       margin-left: 0px;
       margin-right: 0px;
-      fill: $default-icon-color;
+      fill: variables.$default-icon-color;
     }
 
     .active-task-controls__task-comment {
@@ -133,12 +133,12 @@
         height: 1.5em;
 
         svg {
-          fill: $grey-light-less;
+          fill: variables.$grey-light-less;
         }
 
         &:hover, &:enabled:focus {
           svg {
-            fill: $nearly-black;
+            fill: variables.$nearly-black;
           }
         }
       }

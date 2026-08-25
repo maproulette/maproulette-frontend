@@ -1,18 +1,19 @@
-@import '../../../mixins.scss';
+@use '../../../mixins.scss';
+@use "../../../variables";
 
 .mobile-task-details {
-  $inactive-icon-color: $grey-darkest;
-  $active-icon-color: $primary;
+  $inactive-icon-color: variables.$grey-darkest;
+  $active-icon-color: variables.$primary;
   position: absolute;
   bottom: 0;
   left: 0;
-  z-index: $layer-top;
+  z-index: variables.$layer-top;
   width: 100vw;
-  background-color: rgba($grey-lightest-more, 0.95);
+  background-color: rgba(variables.$grey-lightest-more, 0.95);
 
   &__active-pane {
     padding: 15px;
-    height: calc(100vh - #{5 * $mobile-navbar-height});
+    height: calc(100vh - #{5 * variables.$mobile-navbar-height});
     overflow-y: auto;
     transition: height 0.3s cubic-bezier(0.19, 1, 0.22, 1); // easings.net/#easeOutExpo
 
@@ -33,7 +34,7 @@
     display: flex;
     justify-content: space-between;
     padding: 7px 10px;
-    height: $mobile-navbar-height;
+    height: variables.$mobile-navbar-height;
 
     &__control {
       padding: 13px 10px 5px 10px;
@@ -66,19 +67,19 @@
     }
 
     .place-description {
-      font-size: $size-8;
+      font-size: variables.$size-8;
       margin-top: 1em;
     }
 
     .task-lat-lon {
-      font-size: $size-8;
+      font-size: variables.$size-8;
       margin-top: 0.5em;
     }
 
     &__description {
       margin-top: 20px;
-      @include constrained-text-content();
-      @include markdown-content();
+      @include mixins.constrained-text-content();
+      @include mixins.markdown-content();
     }
   }
 
@@ -92,11 +93,11 @@
   &__comments {
     .comment-list {
       &__comment--content {
-        background-color: $white;
+        background-color: variables.$white;
       }
 
       .with-triangle-border::before {
-        border-bottom-color: $white;
+        border-bottom-color: variables.$white;
       }
     }
   }

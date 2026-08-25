@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables.scss';
 
 .active-task-details .task-status {
   margin: 25px 0;
@@ -6,9 +6,9 @@
   box-sizing: border-box;
 
   .active-task-details--sub-heading {
-    background-color: $blue;
-    color: $white;
-    border-radius: $radius-medium $radius-medium 0 0;
+    background-color: variables.$blue;
+    color: variables.$white;
+    border-radius: variables.$radius-medium variables.$radius-medium 0 0;
     padding: 10px 15px;
     margin-bottom: 0;
   }
@@ -16,35 +16,35 @@
   svg {
     height: 18px;
     width: auto;
-    fill: $grey-dark;
+    fill: variables.$grey-dark;
     margin-right: 7px;
     vertical-align: text-top;
   }
 
   .task-status__prompt {
-    font-weight: $weight-medium;
+    font-weight: variables.$weight-medium;
   }
 
   .task-status__label {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    border: 2px solid rgba($blue, 0.33);
-    border-radius: 0 0 $radius-medium $radius-medium;
+    border: 2px solid rgba(variables.$blue, 0.33);
+    border-radius: 0 0 variables.$radius-medium variables.$radius-medium;
     border-top: none;
     padding: 10px 15px;
-    font-weight: $weight-semibold;
-    color: $grey;
+    font-weight: variables.$weight-semibold;
+    color: variables.$grey;
   }
 
   .task-status__view-changeset-link {
-    font-weight: $weight-normal;
-    font-size: $size-7;
+    font-weight: variables.$weight-normal;
+    font-size: variables.$size-7;
   }
 
   &.icon-only {
     .control-icon svg {
-      fill: $yellow;
+      fill: variables.$yellow;
     }
   }
 }
@@ -56,5 +56,5 @@
 }
 
 .popout-content__body .task-status__label {
-  color: $grey;
+  color: variables.$grey;
 }

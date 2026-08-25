@@ -1,4 +1,5 @@
-@import '../../../mixins.scss';
+@use '../../../mixins.scss';
+@use "../../../variables";
 
 .map-pane {
   position: relative;
@@ -17,7 +18,7 @@
     -webkit-backface-visibility: hidden;
     
     .leaflet-pane {
-      z-index: $layer-map;
+      z-index: variables.$layer-map;
 
       &.leaflet-marker-pane.animated {
         @keyframes marker-bounce {
@@ -43,12 +44,12 @@
       .leaflet-top.leaflet-right, .leaflet-top.leaflet-left,
       .leaflet-bottom.leaflet-right, .leaflet-bottom.leaflet-left {
         -webkit-transform: translate3d(0,0,0); // hack to get Safari to honor z-index
-        z-index: $layer-map-control;
+        z-index: variables.$layer-map-control;
 
         .leaflet-control, .leaflet-bar  {
-          z-index: $layer-map-control;
+          z-index: variables.$layer-map-control;
           top: 40px; // swap zoom with layer toggle for mobile
-          border-radius: $radius-medium-less;
+          border-radius: variables.$radius-medium-less;
           box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
           margin-right: .5rem;
 
@@ -79,7 +80,7 @@
             }
 
             &:not(.leaflet-disabled) {
-              color: $white;
+              color: variables.$white;
             }
 
             &:first-child {
@@ -96,14 +97,14 @@
 
         .leaflet-control-attribution.leaflet-control {
           top: 0;
-          z-index: $layer-map-control;
-          font-size: $size-8;
-          color: $grey;
+          z-index: variables.$layer-map-control;
+          font-size: variables.$size-8;
+          color: variables.$grey;
           background-color: transparent;
 
           a {
-            font-size: $size-8;
-            color: $grey;
+            font-size: variables.$size-8;
+            color: variables.$grey;
           }
         }
 
@@ -120,7 +121,7 @@
       }
 
       .leaflet-popup-content-wrapper {
-        border-radius: $radius-medium;
+        border-radius: variables.$radius-medium;
 
         .leaflet-popup-content {
           width: 350px;
@@ -130,22 +131,22 @@
           h3 {
             text-align: center;
             color: #23395B; // tailwind blue
-            font-size: $size-6;
-            font-weight: $weight-medium;
+            font-size: variables.$size-6;
+            font-weight: variables.$weight-medium;
             padding: 12px 19px 12px 19px;
             margin-bottom: 12px;
-            border-bottom: 2px solid $grey-lightest-more;
+            border-bottom: 2px solid variables.$grey-lightest-more;
           }
 
           .marker-popup-content__links {
             text-align: center;
-            font-size: $size-7;
+            font-size: variables.$size-7;
             margin: 12px;
           }
 
           .feature-properties {
-            color: $grey;
-            font-size: $size-7;
+            color: variables.$grey;
+            font-size: variables.$size-7;
             margin: 19px 0px;
             max-height: 70vh;
             overflow-y: auto;
@@ -156,26 +157,26 @@
             }
 
             .name {
-              font-weight: $weight-medium;
+              font-weight: variables.$weight-medium;
               padding: 5px 0.5em 5px 0px;
               border: none;
               position: relative;
 
               .not-linked {
-                color: $grey;
+                color: variables.$grey;
                 padding-left: 19px;
               }
 
               a, a:link, a:active, a:visited {
-                color: $grey;
+                color: variables.$grey;
                 padding-left: 19px;
 
                 &:hover {
                   &:before {
                     content: '?';
                     font-size: 10px;
-                    color: $white;
-                    background-color: $grey-light;
+                    color: variables.$white;
+                    background-color: variables.$grey-light;
                     border-radius: 50%;
                     padding: 0px 4px;
                     position: absolute;
@@ -187,7 +188,7 @@
             }
 
             .value {
-              @include constrained-text-content;
+              @include mixins.constrained-text-content;
               hyphens: initial;
               padding: 5px 19px 5px 0px;
               border: none;
@@ -199,12 +200,12 @@
   }
 
   .busy-spinner:not(.mr-static) {
-    @include busy-spinner-color($grey);
-    @include busy-spinner-size(30px);
+    @include mixins.busy-spinner-color(variables.$grey);
+    @include mixins.busy-spinner-size(30px);
 
     position: absolute;
     top: calc(50% - 15px);
     left: calc(50% - 15px);
-    z-index: $layer-map + $intralayer-bump;
+    z-index: variables.$layer-map + variables.$intralayer-bump;
   }
 }
