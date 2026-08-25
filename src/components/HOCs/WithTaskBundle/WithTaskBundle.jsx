@@ -13,6 +13,7 @@ import {
   releaseTask,
   updateTaskBundle,
 } from "../../../services/Task/Task";
+import { isFinalStatus } from "../../../services/Task/TaskStatus/TaskStatus";
 
 /**
  * WithTaskBundle passes down methods for creating new task bundles and
@@ -135,7 +136,7 @@ export function WithTaskBundle(WrappedComponent) {
             bundleEditsDisabled = true;
             break;
 
-          case taskReadOnly === true:
+          case taskReadOnly === true && !isFinalStatus(task?.status):
             reason = "readOnly";
             bundleEditsDisabled = true;
             break;

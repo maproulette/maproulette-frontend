@@ -9,6 +9,7 @@ import {
   requestUnlock,
   startTask,
 } from "../../../services/Task/Task";
+import { isLockableTask } from "../../../services/Task/TaskLock";
 
 // Used for lock storage events. Users will be locked from other task tabs
 // if logging out, signing back in, or have multiple tabs on one task
@@ -53,6 +54,7 @@ const WithLockedTask = function (WrappedComponent) {
       lockedAt: null,
       lockConflict: null,
       releasingConflict: false,
+      lockNotApplicable: false,
     };
 
     lockTask = (task) => {
@@ -60,7 +62,27 @@ const WithLockedTask = function (WrappedComponent) {
         return Promise.reject("Invalid task");
       }
 
-      this.setState({ tryingLock: true, failureDetails: null, lockConflict: null });
+      if (!isLockableTask(task)) {
+        // Read-only, but not a failure: there's no lock to offer to retry or
+        // request, so flag it separately from a genuine lock failure
+        this.setState({
+          readOnly: true,
+          tryingLock: false,
+          failureDetails: null,
+          lockConflict: null,
+          lockedAt: null,
+          lockNotApplicable: true,
+        });
+        lockStorage.removeLock(task.id);
+        return Promise.resolve(false);
+      }
+
+      this.setState({
+        tryingLock: true,
+        failureDetails: null,
+        lockConflict: null,
+        lockNotApplicable: false,
+      });
       return this.props
         .startTask(task.id)
         .then(() => {
@@ -148,6 +170,10 @@ const WithLockedTask = function (WrappedComponent) {
         return Promise.reject("Invalid task");
       }
 
+      if (!isLockableTask(task)) {
+        return Promise.resolve(false);
+      }
+
       return this.props
         .refreshTaskLock(task.id)
         .then(() => {
@@ -177,7 +203,7 @@ const WithLockedTask = function (WrappedComponent) {
     syncLocks = () => {
       const { task } = this.props;
 
-      if (task) {
+      if (task && isLockableTask(task)) {
         if (!lockStorage.isLocked(task.id)) {
           this.refreshTaskLock(task);
         }
@@ -229,6 +255,7 @@ const WithLockedTask = function (WrappedComponent) {
           unlockTask={this.unlockTask}
           refreshTaskLock={this.refreshTaskLock}
           requestUnlock={this.requestUnlock}
+          taskLockNotApplicable={this.state.lockNotApplicable}
           taskLockConflict={this.state.lockConflict}
           releasingTaskLockConflict={this.state.releasingConflict}
           releaseConflictingTaskLockAndRetry={this.releaseConflictingLockAndRetry}

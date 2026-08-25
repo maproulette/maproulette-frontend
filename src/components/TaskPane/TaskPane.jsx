@@ -312,6 +312,10 @@ export class TaskPane extends Component {
     // doesn't expire while the mapper is actively working on the task
     this.clearLockRefreshInterval();
     this.lockRefreshInterval = setInterval(() => {
+      if (this.props.taskLockNotApplicable) {
+        return;
+      }
+
       this.props.refreshTaskLock(this.props.task).then((success) => {
         if (!success) {
           this.setState({ showLockFailureDialog: true });
@@ -337,7 +341,9 @@ export class TaskPane extends Component {
     }
 
     if (this.props.taskReadOnly && !prevProps.taskReadOnly) {
-      this.setState({ showLockFailureDialog: true });
+      // Read-only because the task is already complete isn't a lock failure -
+      // there's nothing to retry or request an unlock for
+      this.setState({ showLockFailureDialog: !this.props.taskLockNotApplicable });
     } else if (!this.props.taskReadOnly && prevProps.taskReadOnly) {
       // The lock came through after all (a retry, a refresh, or a release of
       // the conflicting lock succeeded), so the failure dialog is stale
@@ -417,7 +423,7 @@ export class TaskPane extends Component {
                   <ChallengeNameLink {...this.props} includeProject suppressShareLink />
                 </h2>
 
-                {this.props.tryingLock ? (
+                {this.props.taskLockNotApplicable ? null : this.props.tryingLock ? (
                   <BusySpinner inline className="mr-mr-4" />
                 ) : this.props.taskReadOnly ? (
                   <Dropdown
