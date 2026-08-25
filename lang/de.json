@@ -1107,7 +1107,7 @@
   "PastDurationSelector.currentMonth.selectOption": "Diesen Monat",
   "PastDurationSelector.customRange.endDate": "Ende",
   "PastDurationSelector.customRange.startDate": "Beginn",
-  "PastDurationSelector.pastMonths.selectOption": "Letzte{months, plural, one {r Monat} other { # Monate}}",
+  "PastDurationSelector.pastMonths.selectOption": "{months, plural, one {Letzter Monat} other {Letzten # Monate}}",
   "PastDurationSelector.pastYear.selectOption": "Letztes Jahr",
   "PointsTicker.label": "Meine Punkte",
   "PopularChallenges.header": "Beliebte Kampagnen",
