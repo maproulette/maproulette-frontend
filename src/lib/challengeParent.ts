@@ -37,8 +37,9 @@ export const getParentId = (parent: unknown): number | undefined => {
  * that feed `parent` into a project request or query key need the scalar —
  * an object stringifies into URLs as `[object Object]`.
  */
-export const withScalarParent = <T extends { parent?: unknown }>(challenge: T): T => {
-  if (typeof challenge.parent !== 'object' || challenge.parent === null) return challenge
-  const parentId = getParentId(challenge.parent)
+export const withScalarParent = <T extends object>(challenge: T): T => {
+  const { parent } = challenge as { parent?: unknown }
+  if (typeof parent !== 'object' || parent === null) return challenge
+  const parentId = getParentId(parent)
   return parentId === undefined ? challenge : ({ ...challenge, parent: parentId } as T)
 }
