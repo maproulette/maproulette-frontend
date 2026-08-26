@@ -211,6 +211,18 @@ export const challengeSingle = {
     return tasks
   },
 
+  // Any task in the challenge, regardless of status - used to drop into read-only
+  // browsing when the challenge has no startable tasks left.
+  getFirstTask: async (challengeId: number, queryClient: QueryClient) => {
+    const tasks = await apiRequest
+      .get(`api/v2/challenge/${challengeId}/tasks`, { searchParams: { limit: 1, page: 0 } })
+      .json<Task[]>()
+    for (const task of tasks) {
+      queryClient.setQueryData(['task', task.id], task)
+    }
+    return tasks
+  },
+
   fetchTasksNearby: async (challengeId: number, taskId: number, limit = 5) => {
     const tasks = await apiRequest
       .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {

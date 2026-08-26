@@ -1,11 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { Flag, Map as MapIcon, Play } from 'lucide-react'
+import { Eye, Flag, Map as MapIcon, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button } from '@/components/ui/Button'
+import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
@@ -19,7 +20,17 @@ export const ChallengeFooter = () => {
   const { showMap, setShowMap } = useMapToggle()
   const { t } = useIntl()
 
+  const { hasActions, tasksRemaining } = useChallengeProgress(
+    challenge.id ?? 0,
+    challenge.completionMetrics
+  )
+
   const [isLoadingTask, setIsLoadingTask] = useState(false)
+
+  // Nothing left to work on (every task is completed, or the challenge has no
+  // tasks at all), so offer read-only browsing instead of a start that can only
+  // fail with "no tasks available".
+  const isBrowseOnly = hasActions && tasksRemaining === 0
 
   const handleStartTask = async () => {
     if (!challenge.id) return
@@ -41,6 +52,31 @@ export const ChallengeFooter = () => {
       }
     } catch (error) {
       logger.error('Error starting task', { error })
+      toast.error(
+        t('browsedChallengePage.footer.failedToLoadTask', undefined, 'Failed to load task')
+      )
+    } finally {
+      setIsLoadingTask(false)
+    }
+  }
+
+  // Opens a task without claiming it, so completed challenges can still be read through.
+  const handleBrowseTask = async () => {
+    if (!challenge.id) return
+
+    try {
+      setIsLoadingTask(true)
+      const tasks = await api.challenge.getFirstTask(challenge.id, queryClient)
+
+      if (tasks && tasks.length > 0) {
+        await navigateToTask(tasks[0].id, { claim: false })
+      } else {
+        toast.error(
+          t('browsedChallengePage.footer.noTasksToBrowse', undefined, 'This challenge has no tasks')
+        )
+      }
+    } catch (error) {
+      logger.error('Error browsing challenge', { error })
       toast.error(
         t('browsedChallengePage.footer.failedToLoadTask', undefined, 'Failed to load task')
       )
@@ -79,7 +115,7 @@ export const ChallengeFooter = () => {
       )}
 
       <div className="mt-4 flex flex-col gap-4">
-        {challenge.paused ? (
+        {challenge.paused && !isBrowseOnly ? (
           <ChallengePausedNotice
             message={t(
               'browsedChallengePage.footer.challengePausedMessage',
@@ -91,13 +127,15 @@ export const ChallengeFooter = () => {
           <Button
             size="lg"
             className="w-full gap-2 rounded-full bg-teal-600 text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-md"
-            onClick={handleStartTask}
+            onClick={isBrowseOnly ? handleBrowseTask : handleStartTask}
             disabled={isLoadingTask}
           >
-            <Play className="size-5" />
+            {isBrowseOnly ? <Eye className="size-5" /> : <Play className="size-5" />}
             {isLoadingTask
               ? t('common.loading2', undefined, 'Loading...')
-              : t('browsedChallengePage.footer.startChallenge', undefined, 'Start Challenge')}
+              : isBrowseOnly
+                ? t('browsedChallengePage.footer.browseChallenge', undefined, 'Browse Challenge')
+                : t('browsedChallengePage.footer.startChallenge', undefined, 'Start Challenge')}
           </Button>
         )}
       </div>

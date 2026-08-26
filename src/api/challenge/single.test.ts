@@ -381,6 +381,25 @@ describe('challengeSingle.getRandomTask', () => {
   })
 })
 
+describe('challengeSingle.getFirstTask', () => {
+  it('fetches the first task in the challenge and caches it', async () => {
+    const tasks = [{ id: 33 }] as unknown as Task[]
+    const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
+    const queryClient = createTestQueryClient()
+
+    const result = await challengeSingle.getFirstTask(9, queryClient)
+
+    expect(result).toEqual(tasks)
+    expect(queryClient.getQueryData(['task', 33])).toEqual(tasks[0])
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.url).toContain('api/v2/challenge/9/tasks')
+    const params = new URL(request.url).searchParams
+    expect(params.get('limit')).toBe('1')
+    expect(params.get('page')).toBe('0')
+  })
+})
+
 describe('challengeSingle.fetchTasksNearby', () => {
   it('fetches nearby tasks using the default limit', async () => {
     const tasks = [{ id: 5 }] as unknown as Task[]
