@@ -72,7 +72,12 @@ export const ChallengesList = () => {
       result = result.filter((c) => c.name.toLowerCase().includes(query))
     }
 
-    return result
+    const pinned = new Set(pinnedChallengeIds)
+    return [...result].sort((a, b) => {
+      const aPinned = a.id != null && pinned.has(a.id) ? 1 : 0
+      const bPinned = b.id != null && pinned.has(b.id) ? 1 : 0
+      return bPinned - aPinned
+    })
   }, [challenges, showCompleted, onlyPinned, searchQuery, pinnedChallengeIds])
 
   const buildChallengeActions = (challenge: Challenge) => {

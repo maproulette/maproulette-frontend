@@ -17,6 +17,11 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
   }
   let localGeoJSONUpload: LocalGeoJSONUpload | undefined
 
+  // Always sent, including as an explicit null: the backend treats a missing
+  // key as "leave the image alone", so omitting it would make clearing an
+  // image impossible.
+  challengeData.teamImageId = values.teamImageId ?? null
+
   // The data source is only set at creation. Editing a challenge changes
   // metadata only — regenerating tasks from a new/updated source is done via
   // Rebuild Tasks — so the source fields are deliberately omitted on update to

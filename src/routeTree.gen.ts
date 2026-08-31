@@ -23,6 +23,7 @@ import { Route as AppManageIndexRouteImport } from './routes/_app/manage/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
 import { Route as AppTeamsNewRouteImport } from './routes/_app/teams/new'
 import { Route as AppSuperAdminUsersRouteImport } from './routes/_app/super-admin/users'
+import { Route as AppSuperAdminTeamImagesRouteImport } from './routes/_app/super-admin/team-images'
 import { Route as AppSuperAdminSettingsRouteImport } from './routes/_app/super-admin/settings'
 import { Route as AppSuperAdminProjectsRouteImport } from './routes/_app/super-admin/projects'
 import { Route as AppSuperAdminPluginsRouteImport } from './routes/_app/super-admin/plugins'
@@ -118,6 +119,11 @@ const AppTeamsNewRoute = AppTeamsNewRouteImport.update({
 const AppSuperAdminUsersRoute = AppSuperAdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AppSuperAdminRouteRoute,
+} as any)
+const AppSuperAdminTeamImagesRoute = AppSuperAdminTeamImagesRouteImport.update({
+  id: '/team-images',
+  path: '/team-images',
   getParentRoute: () => AppSuperAdminRouteRoute,
 } as any)
 const AppSuperAdminSettingsRoute = AppSuperAdminSettingsRouteImport.update({
@@ -283,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
   '/super-admin/projects': typeof AppSuperAdminProjectsRoute
   '/super-admin/settings': typeof AppSuperAdminSettingsRoute
+  '/super-admin/team-images': typeof AppSuperAdminTeamImagesRoute
   '/super-admin/users': typeof AppSuperAdminUsersRoute
   '/teams/new': typeof AppTeamsNewRoute
   '/dashboard': typeof AppDashboardIndexRoute
@@ -323,6 +330,7 @@ export interface FileRoutesByTo {
   '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
   '/super-admin/projects': typeof AppSuperAdminProjectsRoute
   '/super-admin/settings': typeof AppSuperAdminSettingsRoute
+  '/super-admin/team-images': typeof AppSuperAdminTeamImagesRoute
   '/super-admin/users': typeof AppSuperAdminUsersRoute
   '/teams/new': typeof AppTeamsNewRoute
   '/dashboard': typeof AppDashboardIndexRoute
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/_app/super-admin/plugins': typeof AppSuperAdminPluginsRoute
   '/_app/super-admin/projects': typeof AppSuperAdminProjectsRoute
   '/_app/super-admin/settings': typeof AppSuperAdminSettingsRoute
+  '/_app/super-admin/team-images': typeof AppSuperAdminTeamImagesRoute
   '/_app/super-admin/users': typeof AppSuperAdminUsersRoute
   '/_app/teams/new': typeof AppTeamsNewRoute
   '/_app/dashboard/': typeof AppDashboardIndexRoute
@@ -408,6 +417,7 @@ export interface FileRouteTypes {
     | '/super-admin/plugins'
     | '/super-admin/projects'
     | '/super-admin/settings'
+    | '/super-admin/team-images'
     | '/super-admin/users'
     | '/teams/new'
     | '/dashboard'
@@ -448,6 +458,7 @@ export interface FileRouteTypes {
     | '/super-admin/plugins'
     | '/super-admin/projects'
     | '/super-admin/settings'
+    | '/super-admin/team-images'
     | '/super-admin/users'
     | '/teams/new'
     | '/dashboard'
@@ -488,6 +499,7 @@ export interface FileRouteTypes {
     | '/_app/super-admin/plugins'
     | '/_app/super-admin/projects'
     | '/_app/super-admin/settings'
+    | '/_app/super-admin/team-images'
     | '/_app/super-admin/users'
     | '/_app/teams/new'
     | '/_app/dashboard/'
@@ -617,6 +629,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/super-admin/users'
       preLoaderRoute: typeof AppSuperAdminUsersRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/super-admin/team-images': {
+      id: '/_app/super-admin/team-images'
+      path: '/team-images'
+      fullPath: '/super-admin/team-images'
+      preLoaderRoute: typeof AppSuperAdminTeamImagesRouteImport
       parentRoute: typeof AppSuperAdminRouteRoute
     }
     '/_app/super-admin/settings': {
@@ -902,6 +921,7 @@ interface AppSuperAdminRouteRouteChildren {
   AppSuperAdminPluginsRoute: typeof AppSuperAdminPluginsRoute
   AppSuperAdminProjectsRoute: typeof AppSuperAdminProjectsRoute
   AppSuperAdminSettingsRoute: typeof AppSuperAdminSettingsRoute
+  AppSuperAdminTeamImagesRoute: typeof AppSuperAdminTeamImagesRoute
   AppSuperAdminUsersRoute: typeof AppSuperAdminUsersRoute
   AppSuperAdminIndexRoute: typeof AppSuperAdminIndexRoute
 }
@@ -912,6 +932,7 @@ const AppSuperAdminRouteRouteChildren: AppSuperAdminRouteRouteChildren = {
   AppSuperAdminPluginsRoute: AppSuperAdminPluginsRoute,
   AppSuperAdminProjectsRoute: AppSuperAdminProjectsRoute,
   AppSuperAdminSettingsRoute: AppSuperAdminSettingsRoute,
+  AppSuperAdminTeamImagesRoute: AppSuperAdminTeamImagesRoute,
   AppSuperAdminUsersRoute: AppSuperAdminUsersRoute,
   AppSuperAdminIndexRoute: AppSuperAdminIndexRoute,
 }

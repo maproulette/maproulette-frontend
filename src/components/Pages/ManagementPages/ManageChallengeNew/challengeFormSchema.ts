@@ -49,6 +49,10 @@ const makeBaseChallengeFormSchema = (t: T) =>
     localGeoJSON: z.instanceof(File).nullable().optional(),
     remoteGeoJSON: z.string().optional().or(z.literal('')),
     dataOriginDate: z.string().optional().or(z.literal('')),
+    // The team image shown on this challenge's card, or null for no image.
+    // Whether the id is one the user may actually use is enforced server-side,
+    // since the picker only ever offers their own teams' approved images.
+    teamImageId: z.number().nullable(),
     automatedEditsCodeAgreement: z.boolean(),
   })
 
@@ -142,6 +146,7 @@ export const buildFormValues = (
   localGeoJSON: null,
   remoteGeoJSON: challenge?.remoteGeoJson ?? '',
   dataOriginDate: '',
+  teamImageId: challenge?.teamImageId ?? null,
   // Editing an existing challenge isn't an automated edit, so the agreement is
   // pre-satisfied; new challenges must explicitly accept it (see schema).
   automatedEditsCodeAgreement: challenge !== undefined,

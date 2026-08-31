@@ -1,5 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
-import { daysSince, formatDate, formatDateTime, formatLongDate, formatTimeAgo } from './date.ts'
+import {
+  daysSince,
+  formatDate,
+  formatDateTime,
+  formatDurationSeconds,
+  formatLongDate,
+  formatTimeAgo,
+} from './date.ts'
 
 const LOCALE = 'en-US'
 
@@ -107,5 +114,28 @@ describe('daysSince', () => {
     withFrozenNow(() => {
       expect(daysSince(new Date('2026-06-05T12:00:00Z'))).toBe(-3)
     })
+  })
+})
+
+describe('formatDurationSeconds', () => {
+  it('formats sub-minute spans in seconds', () => {
+    expect(formatDurationSeconds(45, LOCALE)).toBe('45 sec')
+  })
+
+  it('formats sub-hour spans as minutes and seconds', () => {
+    expect(formatDurationSeconds(750, LOCALE)).toBe('12 min 30 sec')
+  })
+
+  it('formats hour-plus spans as hours and minutes', () => {
+    expect(formatDurationSeconds(7000, LOCALE)).toBe('1 hr 56 min')
+  })
+
+  it('drops a zero-valued trailing unit', () => {
+    expect(formatDurationSeconds(600, LOCALE)).toBe('10 min')
+    expect(formatDurationSeconds(7200, LOCALE)).toBe('2 hr')
+  })
+
+  it('clamps negative input to zero', () => {
+    expect(formatDurationSeconds(-5, LOCALE)).toBe('0 sec')
   })
 })

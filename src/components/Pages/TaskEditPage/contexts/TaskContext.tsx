@@ -9,7 +9,7 @@ import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import { useIntl } from '@/i18n'
 import { getLockConflictInfo, type LockConflictInfo } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
-import type { Task } from '@/types/Task'
+import type { TaskGetResponse } from '@/types/Task'
 import type { TaskEventMessage, TasksEventMessage } from '@/types/WebSocket'
 import { LockConflictDialog } from './LockConflictDialog'
 
@@ -24,7 +24,7 @@ export const isBaseEditableStatus = (status: number | null | undefined): boolean
 const LOCK_REFRESH_INTERVAL_MS = 15 * 60 * 1000
 
 export interface TaskContextType {
-  task: Task
+  task: TaskGetResponse
   isEditable: boolean
   isLocked: boolean
   isLocking: boolean

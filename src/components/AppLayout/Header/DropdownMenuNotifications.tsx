@@ -164,10 +164,13 @@ const NotificationList = ({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-slate-700">
-      <ul className="divide-y divide-zinc-200 dark:divide-slate-700">
+    <div className="rounded-xl bg-zinc-100 p-3 dark:bg-slate-950">
+      <ul className="space-y-2">
         {notifications.map((notification) => (
-          <li key={notification.id}>
+          <li
+            key={notification.id}
+            className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110"
+          >
             <NotificationItem
               notification={notification}
               alwaysShowActions={false}

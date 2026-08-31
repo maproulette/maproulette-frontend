@@ -48,7 +48,7 @@ export const PendingInvitesSection = ({ invites }: Props) => {
       <ul className="space-y-2">
         {invites.map((invite) => (
           <li key={invite.id}>
-            <Card className="flex items-center justify-between gap-3 p-3">
+            <Card className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 p-4 transition-all hover:shadow-md dark:border-slate-700 dark:hover:brightness-110">
               <div className="font-medium">
                 {invite.teamName || t('common.team', { teamId: invite.teamId }, 'Team #{teamId}')}
               </div>

@@ -3,6 +3,7 @@ import {
   BarChart3,
   Database,
   FolderKanban,
+  ImageIcon,
   ListChecks,
   Puzzle,
   Settings,
@@ -101,6 +102,32 @@ export const SuperAdminHome = () => {
             <CardContent>
               <Button variant="outline" className="w-full">
                 {t('common.viewChallenges', undefined, 'View Challenges')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Link>
+
+        {/* Team challenge images */}
+        <Link to="/super-admin/team-images">
+          <Card className="cursor-pointer transition-shadow hover:shadow-md">
+            <CardHeader>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-pink-100 dark:bg-pink-900">
+                <ImageIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />
+              </div>
+              <CardTitle>
+                {t('superAdminHome.cards.teamImages.title', undefined, 'Team Images')}
+              </CardTitle>
+              <CardDescription>
+                {t(
+                  'superAdminHome.cards.teamImages.description',
+                  undefined,
+                  'Review challenge images teams have requested'
+                )}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="outline" className="w-full">
+                {t('superAdminHome.cards.teamImages.button', undefined, 'Review Images')}
               </Button>
             </CardContent>
           </Card>

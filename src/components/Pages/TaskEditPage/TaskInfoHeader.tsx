@@ -1,6 +1,16 @@
 import { Link } from '@tanstack/react-router'
 import bbox from '@turf/bbox'
-import { ExternalLink, Eye, EyeOff, Share2, Star, X, ZoomIn } from 'lucide-react'
+import {
+  BookOpen,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  FolderOpen,
+  Share2,
+  Star,
+  X,
+  ZoomIn,
+} from 'lucide-react'
 import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import {
@@ -22,9 +32,16 @@ import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
+import {
+  challengeDescriptionText,
+  projectDescriptionText,
+} from './contexts/descriptionRecommendation'
+import { usePanelViewContext } from './contexts/PanelViewContext'
+import { DescriptionBreadcrumbButton } from './DescriptionBreadcrumbButton'
 import { EditorButton } from './TaskActions/EditorButton'
 import { LockButton } from './TaskActions/LockButton'
 import { SkipButton } from './TaskActions/SkipButton'
+import { useDescriptionRecommendation } from './useDescriptionRecommendation'
 
 export type TaskRelation = 'primary' | 'bundle' | 'selection'
 
@@ -57,6 +74,11 @@ export const TaskInfoHeader = ({
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
   const { data: project } = api.project.getProject(challenge?.parent)
   const { task: contextTask } = useTaskContext()
+  const { showView } = usePanelViewContext()
+  const { recommended, markDescriptionRead } = useDescriptionRecommendation()
+
+  const challengeDescription = challengeDescriptionText(challenge)
+  const projectDescription = projectDescriptionText(project)
 
   const status = task.status ?? 0
   const statusLabel = getStatusLabel(t, status) || t('common.unknown', undefined, 'Unknown')
@@ -93,7 +115,7 @@ export const TaskInfoHeader = ({
   return (
     <div
       className={cn(
-        'shrink-0 rounded-t-xl border-slate-200 border-b bg-white px-4 py-3 dark:border-slate-700/50 dark:bg-slate-800',
+        'shrink-0 rounded-t-lg border-slate-200 border-b bg-white px-4 py-3 dark:border-slate-700/50 dark:bg-slate-800',
         HEADER_GRADIENTS[relation]
       )}
     >
@@ -204,29 +226,70 @@ export const TaskInfoHeader = ({
           {t('common.taskWithId', { id: task.id }, 'Task #{id}')}
         </div>
 
-        {/* Challenge › Project breadcrumb */}
+        {/* Challenge › Project breadcrumb, each with a button opening its description */}
         {(challenge || project) && (
-          <div className="text-xs text-zinc-500 leading-tight dark:text-zinc-400">
+          <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-500 leading-tight dark:text-zinc-400">
             {challenge && (
-              <Link
-                to="/challenge/$challengeId"
-                params={{ challengeId: String(challenge.id) }}
-                className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
-              >
-                {challenge.name}
-              </Link>
+              <>
+                <DescriptionBreadcrumbButton
+                  icon={BookOpen}
+                  label={t(
+                    'taskEditPage.taskInfoHeader.viewChallengeDescription',
+                    undefined,
+                    'View challenge description'
+                  )}
+                  recommendationLabel={t(
+                    'taskEditPage.taskInfoHeader.readChallengeDescription',
+                    undefined,
+                    'Make sure that you have read the challenge description as it could have important information not mentioned in the task instructions'
+                  )}
+                  recommended={relation === 'primary' && recommended}
+                  disabled={!challengeDescription}
+                  disabledReason={t(
+                    'taskEditPage.taskInfoHeader.noChallengeDescription',
+                    undefined,
+                    'This challenge has no description'
+                  )}
+                  onClick={() => {
+                    markDescriptionRead()
+                    showView('challengeDescription')
+                  }}
+                />
+                <Link
+                  to="/challenge/$challengeId"
+                  params={{ challengeId: String(challenge.id) }}
+                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                >
+                  {challenge.name}
+                </Link>
+              </>
             )}
-            {challenge && project && (
-              <span className="mx-1.5 text-zinc-400 dark:text-zinc-500">›</span>
-            )}
+            {challenge && project && <span className="text-zinc-400 dark:text-zinc-500">›</span>}
             {project && (
-              <Link
-                to="/project/$projectId"
-                params={{ projectId: String(project.id) }}
-                className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
-              >
-                {project.displayName ?? project.name}
-              </Link>
+              <>
+                <DescriptionBreadcrumbButton
+                  icon={FolderOpen}
+                  label={t(
+                    'taskEditPage.taskInfoHeader.viewProjectDescription',
+                    undefined,
+                    'View project description'
+                  )}
+                  disabled={!projectDescription}
+                  disabledReason={t(
+                    'taskEditPage.taskInfoHeader.noProjectDescription',
+                    undefined,
+                    'This project has no description'
+                  )}
+                  onClick={() => showView('projectDescription')}
+                />
+                <Link
+                  to="/project/$projectId"
+                  params={{ projectId: String(project.id) }}
+                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                >
+                  {project.displayName ?? project.name}
+                </Link>
+              </>
             )}
           </div>
         )}
@@ -234,7 +297,7 @@ export const TaskInfoHeader = ({
 
       {/* Action zone: Skip + Editor (only when user can edit) */}
       {showActionRow && (
-        <div className="mt-3 flex items-center justify-between gap-2 border-slate-200/60 border-t pt-3 dark:border-slate-700/40">
+        <div className="flex items-center justify-between gap-2 pt-3">
           {canSkip ? <SkipButton task={task} /> : <div />}
           <EditorButton task={task} />
         </div>

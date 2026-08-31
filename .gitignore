@@ -19,3 +19,5 @@ dist/plugins/
 
 # TanStack Router auto-generated route tree
 src/routeTree.gen.ts
+# Local MCP server config
+.mcp.json

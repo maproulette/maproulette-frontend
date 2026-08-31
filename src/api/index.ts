@@ -6,6 +6,7 @@ import { service } from './service'
 import { task } from './task'
 import { taskBundle } from './taskBundle'
 import { team } from './team'
+import { teamImage } from './teamImage'
 import { user } from './user'
 
 export const api = {
@@ -18,6 +19,7 @@ export const api = {
   search,
   service,
   team,
+  teamImage,
 }
 
 // Re-exported for backward compatibility. Feature modules under src/api/**

@@ -45,3 +45,29 @@ export function formatTimeAgo(date: Date, locale?: string): string {
 export function daysSince(date: Date): number {
   return Math.floor((Date.now() - date.getTime()) / (24 * 60 * 60 * 1000))
 }
+
+/**
+ * Format a span of seconds as a compact, locale-aware duration
+ * (e.g. `7000` -> "1 hr 56 min"). Only the two most significant units are
+ * shown, and a zero-valued trailing unit is dropped, so the result stays
+ * short enough to sit inline in a stat row.
+ */
+export function formatDurationSeconds(totalSeconds: number, locale?: string): string {
+  const seconds = Math.max(0, Math.round(totalSeconds))
+  const unit = (value: number, unit: 'hour' | 'minute' | 'second') =>
+    new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay: 'short' }).format(value)
+
+  if (seconds < 60) return unit(seconds, 'second')
+
+  if (seconds < 3600) {
+    const minutes = Math.floor(seconds / 60)
+    const rest = seconds % 60
+    return rest === 0
+      ? unit(minutes, 'minute')
+      : `${unit(minutes, 'minute')} ${unit(rest, 'second')}`
+  }
+
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  return minutes === 0 ? unit(hours, 'hour') : `${unit(hours, 'hour')} ${unit(minutes, 'minute')}`
+}

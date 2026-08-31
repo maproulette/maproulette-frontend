@@ -53,7 +53,22 @@ export type Challenge = Omit<
   components['schemas']['org.maproulette.framework.model.BaseChallenge'],
   'tasksRemaining'
 > & {
-  avatar?: string
+  /**
+   * The team image chosen as this challenge's card image, or null for none.
+   * Only images approved for a team the challenge owner belongs to are
+   * accepted; the backend rejects anything else.
+   */
+  teamImageId?: number | null
+  /**
+   * Root-relative path serving `teamImageId`'s bytes, derived by the backend so
+   * clients never assemble it themselves. Resolve with `resolveTeamImageUrl`
+   * before using it as an `<img>` src.
+   *
+   * Both fields are declared here rather than coming from the generated schema
+   * so they stay available until `openApiTypes.ts` is regenerated against a
+   * backend carrying them.
+   */
+  avatarUrl?: string | null
   completionMetrics?: CompletionMetrics
 }
 

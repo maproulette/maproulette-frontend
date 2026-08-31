@@ -48,7 +48,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
           </Link>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-4 pb-4">
+      <div className="flex-1 overflow-y-auto px-1 pb-4">
         {isLoading && (
           <div className="flex justify-center py-4">
             <Loader />
@@ -76,7 +76,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
         )}
 
         {!isLoading && !error && (pending.length > 0 || active.length > 0) && (
-          <div className="space-y-3">
+          <div className="space-y-3 rounded-xl bg-zinc-100 p-3 dark:bg-slate-950">
             {pending.length > 0 && <PendingInvitesSection invites={pending} />}
             {active.length > 0 && (
               <div className="space-y-2">

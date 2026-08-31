@@ -11,6 +11,7 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { AgreementSection } from './AgreementSection'
 import { BasicInfoFields } from './BasicInfoFields'
+import { ChallengeImageSection } from './ChallengeImageSection'
 import {
   buildFormValues,
   type ChallengeFormValues,
@@ -111,6 +112,8 @@ export const ChallengeForm = () => {
               "{user}'s Challenge"
             )}
           />
+
+          <ChallengeImageSection form={form} />
 
           <TaskDataSection
             form={form}

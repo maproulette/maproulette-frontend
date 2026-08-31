@@ -10,7 +10,7 @@ interface Props {
 
 export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
   const { t } = useIntl()
-  const { total, segments } = useActionSummary(actions)
+  const { total, completed, segments } = useActionSummary(actions)
 
   if (total === 0 || segments.length === 0) {
     return (
@@ -22,13 +22,6 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
       />
     )
   }
-
-  const completed = segments
-    .filter(
-      (segment) =>
-        segment.key === 'fixed' || segment.key === 'alreadyFixed' || segment.key === 'falsePositive'
-    )
-    .reduce((acc, segment) => acc + segment.count, 0)
 
   return (
     <div

@@ -28,6 +28,7 @@ import {
   teamDisplayRole,
 } from '@/types/Team'
 import { InviteMemberDialog } from './InviteMemberDialog'
+import { TeamImagesSection } from './TeamImagesSection'
 
 interface Props {
   teamId: number
@@ -202,6 +203,8 @@ export const TeamDetailPage = ({ teamId }: Props) => {
           </div>
         )}
       </div>
+
+      <TeamImagesSection teamId={teamId} isAdmin={iAmAdmin} currentUserId={user?.id} />
 
       {admins.length > 0 && (
         <section className="space-y-2">

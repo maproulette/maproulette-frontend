@@ -7,6 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import type {
+  Challenge,
   ChallengeGetResponse,
   ChallengeListingResponse,
   ExploreChallengesParams,
@@ -19,6 +20,23 @@ import { apiRequest, convertParamsToSearchParams } from '../client'
 import { seedChallengeCache } from './single'
 
 export const challengeExplore = {
+  /**
+   * Challenges at one difficulty (1 easy / 2 normal / 3 expert), most popular first.
+   * Imperative rather than a hook: the caller picks one at random on demand, it isn't
+   * rendering the list.
+   */
+  fetchChallengesByDifficulty: (difficulty: number, limit = 50) =>
+    apiRequest
+      .get('api/v2/challenges/exploreChallenges', {
+        searchParams: convertParamsToSearchParams({
+          global: true,
+          sortBy: 'popularity',
+          limit,
+          difficulty,
+        }),
+      })
+      .json<Challenge[]>(),
+
   preferredChallenges: (params: PreferredChallengesParams) =>
     useQuery(
       queryOptions({

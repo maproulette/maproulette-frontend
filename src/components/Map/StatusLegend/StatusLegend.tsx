@@ -15,7 +15,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
   const statusLegendEntries = getStatusLegendEntries(t)
 
   return (
-    <div className="rounded-md bg-white/95 shadow-md backdrop-blur dark:bg-slate-900/95">
+    <div className="flex flex-col-reverse rounded-md bg-white/95 shadow-md backdrop-blur dark:bg-slate-900/95">
       <Button
         type="button"
         variant="ghost"
@@ -34,8 +34,13 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
           <ChevronUp className="size-3.5" aria-hidden="true" />
         )}
       </Button>
-      {open && (
-        <div className="space-y-2 border-zinc-200 border-t p-2 dark:border-slate-700">
+      <div
+        className={
+          open ? 'border-zinc-200 border-b dark:border-slate-700' : 'invisible h-0 overflow-hidden'
+        }
+        aria-hidden={!open}
+      >
+        <div className="space-y-2 p-2">
           <div>
             <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
               {t('common.status', undefined, 'Status')}
@@ -68,7 +73,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
             </ul>
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

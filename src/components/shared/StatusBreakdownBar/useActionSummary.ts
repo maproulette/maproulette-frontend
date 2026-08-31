@@ -54,8 +54,17 @@ export interface ActionSummarySegment {
   percent: number
 }
 
+/** Statuses that count as "done" for completion percentages. */
+export const COMPLETED_STATUS_KEYS: readonly StatusKey[] = [
+  'fixed',
+  'alreadyFixed',
+  'falsePositive',
+]
+
 export interface ActionSummary {
   total: number
+  /** Tasks in a completed status (see `COMPLETED_STATUS_KEYS`). */
+  completed: number
   /** Non-zero segments, ordered by STATUS_ORDER. */
   segments: ActionSummarySegment[]
   /** Counts keyed by canonical status, zero-count entries omitted. Suitable
@@ -83,7 +92,7 @@ export const useActionSummary = (actions: ActionCounts | undefined): ActionSumma
   const { t } = useIntl()
 
   if (!actions) {
-    return { total: 0, segments: [], counts: {} }
+    return { total: 0, completed: 0, segments: [], counts: {} }
   }
 
   const rawByKey: Record<StatusKey, number> = {
@@ -116,5 +125,7 @@ export const useActionSummary = (actions: ActionCounts | undefined): ActionSumma
     })
   }
 
-  return { total, segments, counts }
+  const completed = COMPLETED_STATUS_KEYS.reduce((acc, key) => acc + rawByKey[key], 0)
+
+  return { total, completed, segments, counts }
 }

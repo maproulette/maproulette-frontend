@@ -49,7 +49,7 @@ export const Drawer = ({
       {/* Drawer sliding up from bottom */}
       <div
         className={cn(
-          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-t-xl border-zinc-200 border-t bg-white shadow-2xl transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950`,
+          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-t-lg border-zinc-200 border-t bg-white shadow-2xl transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950`,
           open ? 'translate-y-0' : 'translate-y-full',
           className
         )}

@@ -1,4 +1,4 @@
-import { CalendarDays, Navigation, Shield, Sparkles } from 'lucide-react'
+import { Shield, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import {
   calculateLevel,
@@ -9,10 +9,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { useIntl } from '@/i18n'
-import { daysSince, formatDate } from '@/lib/date'
 import { initials as getInitials } from '@/lib/utils'
 import type { User } from '@/types/User'
 import { LevelModal } from './LevelModal'
+import { TaskRoulette } from './TaskRoulette'
+
+/**
+ * The random-task roulette is finished but not ready to ship - flip this to true
+ * to put it back on the profile card.
+ */
+const SHOW_TASK_ROULETTE = false
 
 interface UserProfileSectionProps {
   user: User
@@ -29,7 +35,6 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
   const pointsIntoLevel = (user.score || 0) - currentLevelScore
   const pointsNeededForLevel = nextLevelScore - currentLevelScore
   const { title: levelTitle, emoji: levelEmoji } = getLevelInfo(userLevel)
-  const createdAt = user.created ? new Date(user.created) : null
 
   return (
     <>
@@ -91,9 +96,12 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
             </span>
             <span className="font-semibold text-zinc-900 dark:text-white">
               {t(
-                'dashboard.profile.points',
-                { points: (user.score || 0).toLocaleString() },
-                '{points} pts'
+                'dashboard.profile.progressToNext',
+                {
+                  current: pointsIntoLevel.toLocaleString(),
+                  total: pointsNeededForLevel.toLocaleString(),
+                },
+                '{current} / {total} to next level'
               )}
             </span>
           </div>
@@ -103,45 +111,10 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
               style={{ width: `${levelProgress}%` }}
             />
           </div>
-          <div className="mt-2 text-right text-xs text-zinc-400 dark:text-slate-500">
-            {t(
-              'dashboard.profile.progressToNext',
-              {
-                current: pointsIntoLevel.toLocaleString(),
-                total: pointsNeededForLevel.toLocaleString(),
-              },
-              '{current} / {total} to next level'
-            )}
-          </div>
         </button>
 
-        {/* Stats */}
-        <div className="flex flex-col gap-3 p-6">
-          <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-slate-700/50">
-            <CalendarDays className="h-4 w-4 shrink-0 text-blue-500 dark:text-blue-400" />
-            <div className="min-w-0">
-              <p className="text-xs text-zinc-500 dark:text-slate-400">
-                {t('common.joined', undefined, 'Joined')}
-              </p>
-              <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
-                {createdAt ? formatDate(createdAt) : '—'}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2.5 dark:bg-slate-700/50">
-            <Navigation className="h-4 w-4 shrink-0 text-emerald-500 dark:text-emerald-400" />
-            <div className="min-w-0">
-              <p className="text-xs text-zinc-500 dark:text-slate-400">
-                {t('dashboard.profile.accountAge', undefined, 'Account age')}
-              </p>
-              <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">
-                {createdAt
-                  ? t('dashboard.profile.daysCount', { days: daysSince(createdAt) }, '{days} days')
-                  : '—'}
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Random-task roulette - hidden until we're ready to launch it */}
+        {SHOW_TASK_ROULETTE && <TaskRoulette />}
       </div>
 
       <LevelModal

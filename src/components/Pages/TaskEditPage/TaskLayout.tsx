@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { MapProvider } from 'react-map-gl/maplibre'
 import { ChallengeProvider } from './contexts/ChallengeContext'
 import { OSMDataProvider } from './contexts/OSMDataContext'
+import { PanelViewProvider } from './contexts/PanelViewContext'
 import { ProjectProvider } from './contexts/ProjectContext'
 import { TaskBundleProvider } from './contexts/TaskBundleContext'
 import { TaskProvider } from './contexts/TaskContext'
@@ -32,7 +33,7 @@ export const TaskProviders = ({ children }: { children: ReactNode }) => {
                 <OSMDataProvider>
                   <TaskEditMapProvider>
                     <LassoEventsInitializer />
-                    {children}
+                    <PanelViewProvider>{children}</PanelViewProvider>
                   </TaskEditMapProvider>
                 </OSMDataProvider>
               </TaskBundleProvider>

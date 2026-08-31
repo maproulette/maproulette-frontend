@@ -5,6 +5,7 @@ export {
   type ActionCounts,
   type ActionSummary,
   type ActionSummarySegment,
+  COMPLETED_STATUS_KEYS,
   STATUS_ORDER,
   type StatusKey,
   useActionSummary,

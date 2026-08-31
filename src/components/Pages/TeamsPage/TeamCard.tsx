@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import { Users } from 'lucide-react'
 import { api } from '@/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
-import { Card } from '@/components/ui/Card'
 import { useIntl } from '@/i18n'
 import { cn, initials } from '@/lib/utils'
 import type { TeamDisplayRole, TeamUser } from '@/types/Team'
@@ -25,8 +24,12 @@ export const TeamCard = ({ membership }: Props) => {
     membership.teamName || t('common.team', { teamId: membership.teamId }, 'Team #{teamId}')
   const role = teamDisplayRole(membership)
   return (
-    <Link to="/teams/$teamId" params={{ teamId: String(membership.teamId) }} className="block">
-      <Card className="mb-2 flex items-center gap-3 transition-shadow hover:shadow-md">
+    <Link
+      to="/teams/$teamId"
+      params={{ teamId: String(membership.teamId) }}
+      className="group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110"
+    >
+      <div className="flex items-center gap-3 p-4">
         <Avatar className="size-10">
           <AvatarImage src={team?.avatarURL ?? ''} alt={name} />
           <AvatarFallback>
@@ -34,17 +37,19 @@ export const TeamCard = ({ membership }: Props) => {
           </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <div className="truncate font-medium">{name}</div>
+          <div className="truncate font-semibold text-base text-zinc-900 leading-tight dark:text-white">
+            {name}
+          </div>
           <span
             className={cn(
-              'inline-block rounded-full px-2 py-0.5 font-medium text-xs',
+              'mt-1 inline-block rounded-full px-2 py-0.5 font-medium text-xs',
               roleBadge[role]
             )}
           >
             {TeamDisplayRoleLabel[role]}
           </span>
         </div>
-      </Card>
+      </div>
     </Link>
   )
 }

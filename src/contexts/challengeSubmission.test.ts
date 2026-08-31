@@ -24,6 +24,7 @@ const baseValues: ChallengeFormValues = {
   localGeoJSON: null,
   remoteGeoJSON: '',
   dataOriginDate: '',
+  teamImageId: null,
   automatedEditsCodeAgreement: true,
 }
 
@@ -41,6 +42,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          teamImageId: null,
           overpassQL: 'way[highway=primary];',
         },
         localGeoJSONUpload: undefined,
@@ -73,6 +75,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          teamImageId: null,
           overpassQL: '',
           remoteGeoJson: 'https://example.com/data.geojson',
         },
@@ -103,6 +106,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          teamImageId: null,
           overpassQL: '',
           localGeoJSON: geoJSON,
           dataOriginDate: '2024-01-15',
@@ -215,6 +219,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          teamImageId: null,
         },
         localGeoJSONUpload: undefined,
       })
@@ -244,5 +249,25 @@ describe('buildChallengeSubmission', () => {
       expect(result.challengeData.description).toBeUndefined()
       expect(result.challengeData.instruction).toBeUndefined()
     })
+  })
+})
+
+describe('buildChallengeSubmission team image handling', () => {
+  it('sends the chosen team image id', async () => {
+    const result = await buildChallengeSubmission({ ...baseValues, teamImageId: 7 }, false)
+    expect(result.challengeData.teamImageId).toBe(7)
+  })
+
+  it('sends an explicit null to clear the image', async () => {
+    const result = await buildChallengeSubmission({ ...baseValues, teamImageId: null }, false)
+    // Omitting the key would mean "leave it alone" server-side, so clearing
+    // has to be an explicit null rather than an absent field.
+    expect('teamImageId' in result.challengeData).toBe(true)
+    expect(result.challengeData.teamImageId).toBeNull()
+  })
+
+  it('sends the image id when creating too', async () => {
+    const result = await buildChallengeSubmission({ ...baseValues, teamImageId: 3 }, true)
+    expect(result.challengeData.teamImageId).toBe(3)
   })
 })

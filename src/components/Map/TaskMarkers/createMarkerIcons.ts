@@ -88,6 +88,18 @@ const buildMarkerSvg = (color: string, borderColor: string, status: number, prio
     ${getStatusSymbol(status)}
   </svg>`
 
+/** Pixel dimensions of the pin artwork above, and so of every registered marker icon. */
+export const TASK_MARKER_SIZE = { width: 27, height: 36 }
+
+/**
+ * Data URI for the plain (unselected) task pin — the very artwork `createMarkerIcons`
+ * registers with the map, so a one-off DOM marker matches the pins on the big maps.
+ */
+export const taskMarkerDataUri = (status: number, priority: number): string => {
+  const { color } = STATUS_CONFIG[status] ?? STATUS_CONFIG[0]
+  return `data:image/svg+xml;base64,${btoa(buildMarkerSvg(color, '#000000', status, priority))}`
+}
+
 const buildDualBorderMarkerSvg = (
   color: string,
   outerColor: string,
@@ -145,7 +157,7 @@ export const createMarkerIcons = (
 
       const pinSvg = buildMarkerSvg(color, borderColor ?? '#000000', Number(status), priority)
 
-      registerIcon(map, iconName, pinSvg, { width: 27, height: 36 }, () => {
+      registerIcon(map, iconName, pinSvg, TASK_MARKER_SIZE, () => {
         iconsLoaded++
         if (onComplete && iconsLoaded >= 20 && !callbackFired) {
           callbackFired = true
@@ -172,7 +184,7 @@ export const createMarkerIcons = (
         priority
       )
 
-      registerIcon(map, iconName, pinSvg, { width: 27, height: 36 }, () => {
+      registerIcon(map, iconName, pinSvg, TASK_MARKER_SIZE, () => {
         iconsLoaded++
       })
     }
@@ -235,7 +247,7 @@ export const createMarkerIcons = (
         ? `marker-type-${typeKey}-${priority}-${suffix}`
         : `marker-type-${typeKey}-${priority}`
       const pinSvg = buildTypeMarkerSvg(typeKey, priority, borderColor)
-      registerIcon(map, iconName, pinSvg, { width: 27, height: 36 })
+      registerIcon(map, iconName, pinSvg, TASK_MARKER_SIZE)
     }
 
     TASK_TYPE_KEYS.forEach((typeKey) => {

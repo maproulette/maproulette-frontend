@@ -84,12 +84,12 @@ export const ChallengeCard = ({
           {actions}
         </div>
       )}
-      <SidebarIndicator avatar={challenge.avatar} />
+      <SidebarIndicator avatarUrl={challenge.avatarUrl} />
       <div className="p-4">
         <div
           className={cn(
             'mb-2 text-xs text-zinc-500 dark:text-slate-300',
-            challenge.avatar && 'mr-16'
+            challenge.avatarUrl && 'mr-16'
           )}
         >
           {t('shared.challengeCard.project', { name: displayParentName }, '{name}')}
@@ -98,7 +98,7 @@ export const ChallengeCard = ({
         <h3
           className={cn(
             'mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
-            challenge.avatar && 'mr-16'
+            challenge.avatarUrl && 'mr-16'
           )}
         >
           <span className="line-clamp-2">{challenge.name}</span>

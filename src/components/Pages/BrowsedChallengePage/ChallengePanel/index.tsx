@@ -108,7 +108,7 @@ export const ChallengePanel = () => {
             <div
               ref={headerRef}
               className={cn(
-                'sticky top-0 z-10 w-full shrink-0 rounded-t-xl border-b backdrop-blur-md transition-all duration-500 ease-in-out',
+                'sticky top-0 z-10 w-full shrink-0 rounded-t-lg border-b backdrop-blur-md transition-all duration-500 ease-in-out',
                 isScrolled
                   ? 'border-zinc-200/60 bg-white/95 shadow-md dark:border-slate-700/60 dark:bg-slate-800/95'
                   : 'border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800'

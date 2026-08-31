@@ -25,17 +25,15 @@ export const ChallengeProgress = () => {
           <span className="font-semibold text-zinc-900 dark:text-white">
             {t('browsedChallengePage.progress.progress', undefined, 'Progress')}
           </span>
-          {onViewDetails && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 gap-1.5 px-2 text-xs"
-              onClick={onViewDetails}
-            >
-              <BarChart3 className="size-3.5" />
-              {t('browsedChallengePage.progress.details', undefined, 'Details')}
-            </Button>
-          )}
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 gap-1.5 rounded-full px-2.5 text-xs hover:bg-zinc-100 dark:hover:bg-slate-700"
+            onClick={onViewDetails}
+          >
+            <BarChart3 className="size-3.5" />
+            {t('browsedChallengePage.progress.details', undefined, 'Details')}
+          </Button>
         </div>
         <div className="flex items-center gap-3">
           <span className="font-bold text-base text-zinc-900 dark:text-white">
