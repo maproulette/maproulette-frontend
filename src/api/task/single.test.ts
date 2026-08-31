@@ -468,13 +468,13 @@ describe('taskSingle.useUpdateTask', () => {
 })
 
 describe('taskSingle.useUpdateTaskStatus', () => {
-  it('builds a query string with tags and requestReview, posts a comment, and falls back to a GET when the PUT has no JSON body', async () => {
+  it('builds a query string with tags and opaque plugin queryParams, posts a comment, and falls back to a GET when the PUT has no JSON body', async () => {
     const finalTask = makeTask({ id: 1, parent: 10, status: 2 })
     const fetchMock = stubRoutedFetch((request) => {
       const url = new URL(request.url)
       if (request.method === 'PUT' && url.pathname === '/api/v2/task/1/2') {
         expect(url.searchParams.get('tags')).toBe('a,b')
-        expect(url.searchParams.get('requestReview')).toBe('true')
+        expect(url.searchParams.get('pluginFlag')).toBe('true')
         return new Response(null, { status: 204 })
       }
       if (request.method === 'POST' && url.pathname === '/api/v2/task/1/comment') {
@@ -502,7 +502,7 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     result.current.mutate({
       taskId: 1,
       status: 2,
-      options: { tags: ['a', 'b'], requestReview: true, comment: 'looks good' },
+      options: { tags: ['a', 'b'], queryParams: { pluginFlag: true }, comment: 'looks good' },
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
@@ -583,11 +583,11 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 5] })
   })
 
-  it('sets requestReview=false explicitly, and skips the marker/aggregate patch when the updated task has no parent', async () => {
+  it('forwards opaque plugin queryParams, and skips the marker/aggregate patch when the updated task has no parent', async () => {
     const finalTask = makeTask({ id: 3, parent: 0, status: 3 })
     const fetchMock = stubRoutedFetch((request) => {
       const url = new URL(request.url)
-      expect(url.searchParams.get('requestReview')).toBe('false')
+      expect(url.searchParams.get('pluginFlag')).toBe('false')
       expect(url.searchParams.has('tags')).toBe(false)
       return new Response(JSON.stringify(finalTask), {
         status: 200,
@@ -602,7 +602,11 @@ describe('taskSingle.useUpdateTaskStatus', () => {
       wrapper: queryClientWrapper(queryClient),
     })
 
-    result.current.mutate({ taskId: 3, status: 3, options: { requestReview: false } })
+    result.current.mutate({
+      taskId: 3,
+      status: 3,
+      options: { queryParams: { pluginFlag: false } },
+    })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 

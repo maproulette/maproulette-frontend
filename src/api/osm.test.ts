@@ -15,8 +15,8 @@ afterEach(() => {
   vi.stubGlobal('DOMParser', new Window().DOMParser)
 })
 
-const OSM_SERVER = 'https://www.openstreetmap.org'
-const OSM_API_SERVER = 'https://api.openstreetmap.org'
+const OSM_SERVER = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+const OSM_API_SERVER = window.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
 
 function stubFetch(implementation: (uri: string) => Promise<Response> | Response) {
   const fetchMock = vi.fn(async (uri: string) => implementation(uri))

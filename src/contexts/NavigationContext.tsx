@@ -1,30 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { navigation } from '@/data/site.json'
-import { logger } from '@/lib/logger'
 import type { PluginNavigationItem } from '@/types/Plugin'
-
-const usePluginNavigation = () => {
-  const { getNavigationItems, enabledPlugins, loading: pluginsLoading } = usePluginContext()
-  const [navigationItems, setNavigationItems] = useState<PluginNavigationItem[]>([])
-
-  useEffect(() => {
-    const loadNavigationItems = async () => {
-      if (pluginsLoading) return
-
-      try {
-        const items = await getNavigationItems()
-        setNavigationItems(items)
-      } catch (err) {
-        logger.error('Failed to load plugin navigation items', { error: err })
-      }
-    }
-
-    loadNavigationItems()
-  }, [enabledPlugins, pluginsLoading, getNavigationItems])
-
-  return { navigationItems }
-}
 
 interface NavigationContextType {
   allNavigationItems: PluginNavigationItem[]
@@ -36,7 +13,7 @@ const NavigationContext = createContext<NavigationContextType>({
 
 export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
   const { main: mainNavigation } = navigation
-  const { navigationItems: pluginNavigationItems } = usePluginNavigation()
+  const { navigationItems: pluginNavigationItems } = usePluginContext()
 
   // Reason: combines static + plugin navigation, used as context value dependency
   const allNavigationItems: PluginNavigationItem[] = useMemo(

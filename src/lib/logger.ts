@@ -15,6 +15,28 @@ interface Logger {
 const isDev = import.meta.env.DEV
 const isTest = import.meta.env.MODE === 'test'
 
+/** JSON.stringify drops Error fields; keep message/stack for production diagnosis. */
+const serializeLogValue = (value: unknown): unknown => {
+  if (value instanceof Error) {
+    return {
+      name: value.name,
+      message: value.message,
+      stack: value.stack,
+    }
+  }
+  if (Array.isArray(value)) {
+    return value.map(serializeLogValue)
+  }
+  if (value && typeof value === 'object') {
+    const out: Record<string, unknown> = {}
+    for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
+      out[key] = serializeLogValue(nested)
+    }
+    return out
+  }
+  return value
+}
+
 const log = (level: LogLevel, message: string, metadata?: LogMetadata) => {
   if (isTest && !import.meta.env.VITE_ENABLE_TEST_LOGS) {
     return
@@ -28,7 +50,7 @@ const log = (level: LogLevel, message: string, metadata?: LogMetadata) => {
   const prefix = `[${timestamp}] [${level.toUpperCase()}]`
 
   const formattedMessage = metadata
-    ? `${prefix} ${message} ${JSON.stringify(metadata, null, 2)}`
+    ? `${prefix} ${message} ${JSON.stringify(serializeLogValue(metadata), null, 2)}`
     : `${prefix} ${message}`
 
   switch (level) {
@@ -41,9 +63,17 @@ const log = (level: LogLevel, message: string, metadata?: LogMetadata) => {
     case 'warn':
       console.warn(formattedMessage)
       break
-    case 'error':
-      console.error(formattedMessage)
+    case 'error': {
+      // Pass the raw Error as a second arg so DevTools keeps an expandable stack
+      // even when the plugin / host bundle is minified.
+      const rawError = metadata?.error
+      if (rawError instanceof Error) {
+        console.error(formattedMessage, rawError)
+      } else {
+        console.error(formattedMessage)
+      }
       break
+    }
   }
 }
 

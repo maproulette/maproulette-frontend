@@ -63,16 +63,18 @@ export type TasksBoundingBoxQuery = {
 }
 
 /* Custom Types */
+export type TaskHistoryUserRef = {
+  id: number
+  username: string
+}
+
 export type TaskHistoryAction = {
   taskId: number
   timestamp: string
   actionType: number
   // Backend's TaskHistoryController injects { id, username } here (the original
   // TaskLogEntry only carries the user id as an Int).
-  user: {
-    id: number
-    username: string
-  } | null
+  user: TaskHistoryUserRef | null
   oldStatus?: number
   status?: number
   startedAt?: string
@@ -90,6 +92,11 @@ export type TaskHistoryAction = {
         comment: string
         actionId?: number
       }
+  /**
+   * Additional fields returned by the history API.
+   * Core only interprets known keys above; plugins read domain-specific extras.
+   */
+  [key: string]: unknown
 }
 
 /* Task Tiles Types — query params from OpenAPI, plus z/bounds used by the MVT source builder */

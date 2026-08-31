@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import { useIntl } from '@/i18n'
 import { getLockConflictInfo, type LockConflictInfo } from '@/lib/apiError'
@@ -15,12 +16,16 @@ import { LockConflictDialog } from './LockConflictDialog'
 // Statuses that allow editing: Created (0), Skipped (3), Too Hard/Can't Complete (6)
 export const EDITABLE_STATUSES = [0, 3, 6]
 
+export const isBaseEditableStatus = (status: number | null | undefined): boolean =>
+  EDITABLE_STATUSES.includes(status ?? 0)
+
 // Well under the backend's 1-hour lock expiry (see Config.DEFAULT_TASK_LOCK_EXPIRY),
 // so an actively-open task never gets silently expired out from under the user.
 const LOCK_REFRESH_INTERVAL_MS = 15 * 60 * 1000
 
 export interface TaskContextType {
   task: Task
+  isEditable: boolean
   isLocked: boolean
   isLocking: boolean
   lockedTasks: number[]
@@ -37,6 +42,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { data: liveTask } = api.task.getTask(loaderTask.id)
   const task = liveTask ?? loaderTask
   const { user, isAuthenticated } = useAuthContext()
+  const { isTaskEditableByPlugins } = usePluginContext()
   const { lastMessage } = useWebSocketContext()
   const { t } = useIntl()
   const lockTaskMutation = api.task.useLockTask()
@@ -48,6 +54,8 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [lockConflict, setLockConflict] = useState<LockConflictInfo | null>(null)
 
   const lockedTaskIdRef = useRef<number | null>(null)
+
+  const isEditable = isBaseEditableStatus(task.status) || isTaskEditableByPlugins(task)
 
   // Clears local lock state after `id`'s lock is confirmed gone (release, expiry, or a
   // conflicting claim elsewhere) - only nulls the ref if it still points at that same task,
@@ -123,12 +131,12 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!shouldClaimTask || !task || !isAuthenticated || hasAttemptedLock.current) return
-    if (!EDITABLE_STATUSES.includes(task.status ?? 0)) return
+    if (!isEditable) return
     if (challenge?.paused) return
 
     hasAttemptedLock.current = true
     attemptLock(task.id)
-  }, [shouldClaimTask, task, isAuthenticated, challenge?.paused, attemptLock])
+  }, [shouldClaimTask, task, isAuthenticated, isEditable, challenge?.paused, attemptLock])
 
   // We deliberately do NOT release the lock on unmount (navigating away, closing the tab,
   // or reloading). A lock is given up only two ways: deliberately (the unlock button, or
@@ -225,13 +233,14 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const value: TaskContextType = useMemo(
     () => ({
       task,
+      isEditable,
       isLocked,
       isLocking: lockTaskMutation.isPending,
       lockedTasks,
       lockTask,
       unlockTask,
     }),
-    [task, isLocked, lockTaskMutation.isPending, lockedTasks, lockTask, unlockTask]
+    [task, isEditable, isLocked, lockTaskMutation.isPending, lockedTasks, lockTask, unlockTask]
   )
 
   return (

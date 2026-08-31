@@ -195,8 +195,9 @@ export const taskSingle = {
         status: number
         options?: {
           tags?: string[]
-          requestReview?: boolean
           comment?: string
+          /** Opaque query params contributed by plugins */
+          queryParams?: Record<string, string | boolean | number | undefined | null>
         }
       }) => {
         // Build query string manually
@@ -204,8 +205,12 @@ export const taskSingle = {
         if (options?.tags && options.tags.length > 0) {
           params.set('tags', options.tags.join(','))
         }
-        if (options?.requestReview !== undefined) {
-          params.set('requestReview', options.requestReview.toString())
+        if (options?.queryParams) {
+          for (const [key, value] of Object.entries(options.queryParams)) {
+            if (value !== undefined && value !== null) {
+              params.set(key, String(value))
+            }
+          }
         }
 
         const queryString = params.toString()

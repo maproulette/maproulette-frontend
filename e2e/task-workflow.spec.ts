@@ -49,7 +49,22 @@ test('a user can open a task, view its details, and mark it as fixed', async ({
   // The map view appends a `#zoom/lat/lng` hash once it settles, so match the
   // path rather than requiring an exact end-of-string.
   await expect(page).toHaveURL(new RegExp(`/challenge/${challenge.id}(#|$)`), { timeout: 20_000 })
-  await expect(page.getByRole('heading', { name: challenge.name })).toBeVisible({
-    timeout: 15_000,
-  })
+
+  // Finishing the last (or first) task can award several achievements at once
+  // (e.g. First Fix + Challenge Champion + Closer). Each opens CongratulateModal
+  // for ~8s, and Radix Dialog aria-hides the rest of the page — including the
+  // challenge heading — until the queue is cleared. Dismiss one-at-a-time;
+  // the next achievement may open immediately so we don't wait for "hidden".
+  const challengeHeading = page.getByRole('heading', { name: challenge.name })
+  await expect(async () => {
+    if (
+      await page
+        .getByRole('dialog')
+        .isVisible()
+        .catch(() => false)
+    ) {
+      await page.keyboard.press('Escape')
+    }
+    await expect(challengeHeading).toBeVisible({ timeout: 500 })
+  }).toPass({ timeout: 25_000 })
 })

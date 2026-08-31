@@ -109,15 +109,25 @@ export const taskBundleQueries = {
         primaryId,
         status,
         tags,
+        queryParams,
       }: {
         bundleId: number
         primaryId: number
         status: number
         tags?: string[]
+        /** Opaque query params contributed by plugins */
+        queryParams?: Record<string, string | boolean | number | undefined | null>
       }) => {
         const searchParams: Record<string, string> = { primaryId: String(primaryId) }
         if (tags && tags.length > 0) {
           searchParams.tags = tags.join(',')
+        }
+        if (queryParams) {
+          for (const [key, value] of Object.entries(queryParams)) {
+            if (value !== undefined && value !== null) {
+              searchParams[key] = String(value)
+            }
+          }
         }
         await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, { searchParams })
       },

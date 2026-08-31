@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/Button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -52,6 +53,7 @@ export const TaskInfoHeader = ({
   const { t } = useIntl()
   const { challenge } = useChallengeContext()
   const { isAuthenticated } = useAuthContext()
+  const { isTaskEditableByPlugins } = usePluginContext()
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
   const { data: project } = api.project.getProject(challenge?.parent)
   const { task: contextTask } = useTaskContext()
@@ -60,8 +62,11 @@ export const TaskInfoHeader = ({
   const statusLabel = getStatusLabel(t, status) || t('common.unknown', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
+  const isEditable = EDITABLE_STATUSES.includes(status) || isTaskEditableByPlugins(task)
   // Only show edit actions if user is authenticated, has locked the task, and status is editable
-  const canEdit = isAuthenticated && isLocked && EDITABLE_STATUSES.includes(status)
+  // (including plugin-unlocked revision flows)
+  const canEdit = isAuthenticated && isLocked && isEditable
+  const canSkip = EDITABLE_STATUSES.includes(status)
 
   const osmFeature = parseOsmFeatureFromTask(task)
   const osmServer = getOsmServerUrl()
@@ -179,9 +184,7 @@ export const TaskInfoHeader = ({
                 </a>
               </Button>
             )}
-            {task.id === contextTask.id && EDITABLE_STATUSES.includes(status) && (
-              <LockButton compact />
-            )}
+            {task.id === contextTask.id && isEditable && <LockButton compact />}
             {onClose && (
               <Button
                 variant="ghost"
@@ -232,7 +235,7 @@ export const TaskInfoHeader = ({
       {/* Action zone: Skip + Editor (only when user can edit) */}
       {showActionRow && (
         <div className="mt-3 flex items-center justify-between gap-2 border-slate-200/60 border-t pt-3 dark:border-slate-700/40">
-          <SkipButton task={task} />
+          {canSkip ? <SkipButton task={task} /> : <div />}
           <EditorButton task={task} />
         </div>
       )}

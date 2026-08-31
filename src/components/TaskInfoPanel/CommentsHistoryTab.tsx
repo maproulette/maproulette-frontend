@@ -15,16 +15,17 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { TaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarContext } from '@/contexts/AvatarContext'
+import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
@@ -42,9 +43,7 @@ import type { TaskHistoryAction } from '@/types/Task'
 const ACTION_TYPE = {
   COMMENT: 0,
   STATUS_CHANGE: 1,
-  REVIEW: 2,
   UPDATE: 3,
-  META_REVIEW: 4,
 } as const
 
 const STATUS_ICONS: Record<number, LucideIcon> = {
@@ -102,18 +101,35 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
   )
 }
 
-export const CommentsHistoryTab = () => {
+export const CommentsHistoryTab = ({
+  taskId: taskIdProp,
+  readOnly = false,
+}: {
+  taskId?: number
+  readOnly?: boolean
+} = {}) => {
   const { t } = useIntl()
-  const { task } = useTaskContext()
+  const taskContext = useContext(TaskContext)
+  const taskId = taskIdProp ?? taskContext?.task.id
+  const resolvedTaskId = taskId ?? 0
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
   const { handleImageError, getImageSrc } = useAvatarContext()
+  const { taskHistoryItemRenderers } = usePluginContext()
 
-  const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(task.id)
+  const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(resolvedTaskId)
   const addCommentMutation = api.task.useAddTaskComment()
+  const userOsmId = user?.osmProfile?.id
+
+  const sortedHistory = useMemo(() => {
+    return [...taskHistory].sort(
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    )
+  }, [taskHistory])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (readOnly || !resolvedTaskId) return
     if (!commentText.trim()) {
       toast.error(t('common.pleaseEnterAComment', undefined, 'Please enter a comment'))
       return
@@ -125,7 +141,7 @@ export const CommentsHistoryTab = () => {
       return
     }
     addCommentMutation.mutate(
-      { taskId: task.id, commentText: commentText.trim() },
+      { taskId: resolvedTaskId, commentText: commentText.trim() },
       {
         onSuccess: () => {
           setCommentText('')
@@ -139,13 +155,9 @@ export const CommentsHistoryTab = () => {
     )
   }
 
-  const userOsmId = user?.osmProfile?.id
-
-  const sortedHistory = useMemo(() => {
-    return [...taskHistory].sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-    )
-  }, [taskHistory])
+  if (!resolvedTaskId) {
+    return null
+  }
 
   const renderHistoryItem = (item: TaskHistoryAction, index: number) => {
     const timestamp = new Date(item.timestamp)
@@ -180,8 +192,10 @@ export const CommentsHistoryTab = () => {
 
           <div
             className={cn(
-              'flex min-w-0 flex-1 flex-col gap-1 rounded-lg p-2.5',
-              isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-slate-800'
+              'flex min-w-0 flex-1 flex-col gap-1 rounded-2xl px-3 py-2.5 shadow-xs ring-1',
+              isUser
+                ? 'bg-blue-100 ring-blue-200/70 dark:bg-blue-950 dark:ring-blue-800/70'
+                : 'bg-white ring-zinc-200/80 dark:bg-slate-950 dark:ring-slate-600/80'
             )}
           >
             <div className="flex items-center gap-2">
@@ -272,8 +286,15 @@ export const CommentsHistoryTab = () => {
       )
     }
 
-    // Review and meta-review entries are surfaced in the dedicated review UI,
-    // not in the task history/comments tab.
+    const pluginItem = item as import('@/types/Plugin').PluginTaskHistoryItem
+    for (const renderer of taskHistoryItemRenderers) {
+      if (!renderer.canRender(pluginItem)) continue
+      const Renderer = renderer.component
+      return (
+        <Renderer key={`plugin-history-${renderer.id}-${index}`} item={pluginItem} index={index} />
+      )
+    }
+
     return null
   }
 
@@ -289,11 +310,13 @@ export const CommentsHistoryTab = () => {
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
               <p className="text-sm text-zinc-500 dark:text-slate-400">
-                {t(
-                  'taskInfoPanel.comments.emptyState',
-                  undefined,
-                  'No activity yet. Be the first to comment!'
-                )}
+                {readOnly
+                  ? t('taskInfoPanel.comments.emptyStateReadOnly', undefined, 'No activity yet.')
+                  : t(
+                      'taskInfoPanel.comments.emptyState',
+                      undefined,
+                      'No activity yet. Be the first to comment!'
+                    )}
               </p>
             </div>
           ) : (
@@ -304,35 +327,36 @@ export const CommentsHistoryTab = () => {
         </div>
       </ScrollArea>
 
-      {user ? (
-        <form
-          onSubmit={handleSubmit}
-          className="mt-3 border-zinc-200 border-t pt-3 dark:border-slate-700"
-        >
-          <div className="flex gap-2">
-            <Textarea
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              placeholder={t('common.addAComment', undefined, 'Add a comment...')}
-              rows={2}
-              className="flex-1 resize-none text-sm"
-              maxLength={5000}
-            />
-            <Button
-              type="submit"
-              size="sm"
-              disabled={!commentText.trim() || addCommentMutation.isPending}
-              className="self-end"
-            >
-              <Send className="size-3.5" />
-            </Button>
+      {!readOnly &&
+        (user ? (
+          <form
+            onSubmit={handleSubmit}
+            className="mt-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-xs dark:border-slate-600 dark:bg-slate-950"
+          >
+            <div className="flex gap-2">
+              <Textarea
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder={t('common.addAComment', undefined, 'Add a comment...')}
+                rows={2}
+                className="flex-1 resize-none bg-zinc-50 text-sm dark:border-slate-600 dark:bg-slate-900"
+                maxLength={5000}
+              />
+              <Button
+                type="submit"
+                size="sm"
+                disabled={!commentText.trim() || addCommentMutation.isPending}
+                className="self-end"
+              >
+                <Send className="size-3.5" />
+              </Button>
+            </div>
+          </form>
+        ) : (
+          <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-center text-xs text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+            {t('taskInfoPanel.comments.signInPrompt', undefined, 'Sign in to add comments')}
           </div>
-        </form>
-      ) : (
-        <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-center text-xs text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-          {t('taskInfoPanel.comments.signInPrompt', undefined, 'Sign in to add comments')}
-        </div>
-      )}
+        ))}
     </div>
   )
 }

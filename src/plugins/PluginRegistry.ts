@@ -11,6 +11,7 @@ class PluginRegistry {
   private plugins: Map<string, Plugin> = new Map()
   private initializedPlugins: Set<string> = new Set()
   private remotePluginUrls: Map<string, string> = new Map() // pluginId -> moduleUrl
+  private loadedModuleUrls: Map<string, string> = new Map() // moduleUrl -> pluginId
   private apiContext: PluginApiContext | null = null
 
   /**
@@ -135,11 +136,20 @@ class PluginRegistry {
       }
     }
 
+    const existingPluginId = this.loadedModuleUrls.get(moduleUrl)
+    if (existingPluginId) {
+      const plugin = this.plugins.get(existingPluginId)
+      if (plugin) {
+        return { success: true, plugin }
+      }
+    }
+
     const result = await loadPluginFromUrl(moduleUrl)
 
     if (result.success && result.plugin) {
       this.register(result.plugin)
       this.remotePluginUrls.set(result.plugin.metadata.id, moduleUrl)
+      this.loadedModuleUrls.set(moduleUrl, result.plugin.metadata.id)
     }
 
     return result

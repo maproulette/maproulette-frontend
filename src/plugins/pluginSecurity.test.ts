@@ -1,11 +1,17 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { getAllowedPluginHosts, validatePluginUrl, validatePluginUrls } from './pluginSecurity'
+import {
+  getAllowedPluginHosts,
+  parsePluginUrl,
+  validatePluginUrl,
+  validatePluginUrls,
+} from './pluginSecurity'
 
 // import.meta.env.DEV defaults to true under vitest, so the module-level
 // ALLOWED_PLUGIN_HOSTS list (built at import time) includes localhost/127.0.0.1
 // unless a test explicitly stubs DEV to false and re-imports the module fresh.
 afterEach(() => {
   vi.unstubAllEnvs()
+  vi.unstubAllGlobals()
   vi.resetModules()
 })
 
@@ -95,5 +101,51 @@ describe('getAllowedPluginHosts', () => {
     const hosts = getAllowedPluginHosts()
     expect(hosts).toContain('maproulette.org')
     expect(hosts).toContain('localhost')
+  })
+})
+
+// The node test environment shims `window` as a bare global with no location, so
+// same-origin handling is only reachable with an origin stubbed in.
+describe('validatePluginUrl (same-origin bundles)', () => {
+  it('allows a root-relative bundle path once the app origin is known', () => {
+    vi.stubGlobal('location', { origin: 'https://mr.example.org' })
+
+    expect(validatePluginUrl('/plugins/review.js')).toBe(true)
+  })
+
+  it("allows an absolute URL on the app's own origin even though it is not allowlisted", () => {
+    vi.stubGlobal('location', { origin: 'https://mr.example.org' })
+
+    expect(validatePluginUrl('https://mr.example.org/plugins/review.js')).toBe(true)
+  })
+
+  it('rejects a root-relative path when there is no app origin to resolve it against', () => {
+    expect(validatePluginUrl('/plugins/review.js')).toBe(false)
+  })
+})
+
+describe('parsePluginUrl', () => {
+  it('parses an absolute URL as-is', () => {
+    expect(parsePluginUrl('https://cdn.maproulette.org/plugin.js')?.href).toBe(
+      'https://cdn.maproulette.org/plugin.js'
+    )
+  })
+
+  it('resolves a root-relative path against the app origin', () => {
+    vi.stubGlobal('location', { origin: 'https://mr.example.org' })
+
+    expect(parsePluginUrl('/plugins/review.js')?.href).toBe(
+      'https://mr.example.org/plugins/review.js'
+    )
+  })
+
+  it('returns null for a root-relative path with no app origin', () => {
+    expect(parsePluginUrl('/plugins/review.js')).toBeNull()
+  })
+
+  it('returns null for junk rather than absorbing it as a relative path', () => {
+    vi.stubGlobal('location', { origin: 'https://mr.example.org' })
+
+    expect(parsePluginUrl('not a valid url')).toBeNull()
   })
 })

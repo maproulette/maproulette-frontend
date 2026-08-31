@@ -13,9 +13,24 @@ import { formSchema } from './formSchema'
 import { GeneralSettings } from './GeneralSettings'
 import { NotificationsSettings } from './NotificationsSettings'
 import { PluginSettings } from './PluginSettings'
+import { PluginUserSettingsFields } from './PluginUserSettingsFields'
+
+const CORE_SETTINGS_KEYS = new Set([
+  'defaultEditor',
+  'defaultBasemap',
+  'defaultBasemapId',
+  'locale',
+  'email',
+  'emailOptIn',
+  'leaderboardOptOut',
+  'theme',
+  'disableTaskConfirm',
+])
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
+  const updateSettingsMutation = api.user.useUpdateUserSettings()
   const { locale } = useIntl()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -27,17 +42,34 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
     },
   })
 
-  const { mutateAsync: updateUserSettings } = api.user.useUpdateUserSettings()
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await updateUserSettings({
-      userId: user.id,
-      // UserSettings is generated from an OpenAPI spec that only types defaultBasemap
-      // as number | null, but the backend also accepts string basemap ids (see
-      // formSchema.ts / GeneralSettings.tsx) — the generated type is stale, not `values`.
-      settings: values as unknown as UserSettings,
-    })
-    toast('User settings updated')
+    try {
+      const pluginSettings: Record<string, unknown> = {}
+      for (const [key, value] of Object.entries(values)) {
+        if (!CORE_SETTINGS_KEYS.has(key)) {
+          pluginSettings[key] = value
+        }
+      }
+
+      await updateSettingsMutation.mutateAsync({
+        userId: user.id,
+        // UserSettings is generated from an OpenAPI spec that only types defaultBasemap
+        // as number | null, but the backend also accepts string basemap ids (see
+        // formSchema.ts / GeneralSettings.tsx) — the generated type is stale, not `values`.
+        settings: {
+          ...user.settings,
+          defaultEditor: values.defaultEditor,
+          defaultBasemap: values.defaultBasemap,
+          defaultBasemapId: values.defaultBasemapId,
+          locale: values.locale,
+          email: values.email,
+          ...pluginSettings,
+        } as unknown as UserSettings,
+      })
+      toast.success('User settings updated')
+    } catch {
+      toast.error('Failed to update user settings')
+    }
   }
 
   return (
@@ -54,7 +86,9 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
           <div className="rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
             <FieldGroup>
               <TabsContent value="general">
-                <GeneralSettings form={form} />
+                <GeneralSettings form={form}>
+                  <PluginUserSettingsFields form={form} settings={user.settings} />
+                </GeneralSettings>
               </TabsContent>
               <TabsContent value="notifications">
                 <NotificationsSettings form={form} />

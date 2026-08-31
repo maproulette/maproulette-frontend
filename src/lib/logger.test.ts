@@ -69,6 +69,21 @@ describe('logger (test logs enabled)', () => {
     expect(errorSpy).toHaveBeenCalledWith('[2026-01-01T00:00:00.000Z] [ERROR] hello error')
   })
 
+  it('serializes Error metadata instead of empty {} and passes the raw Error', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const { logger } = await loadLogger({ VITE_ENABLE_TEST_LOGS: 'true' })
+    const boom = new Error('plugin boom')
+    boom.stack = 'Error: plugin boom\n    at Plugin.tsx:1:1'
+    logger.error('failed', { error: boom, pluginId: 'review' })
+
+    expect(errorSpy).toHaveBeenCalledTimes(1)
+    const [message, rawError] = errorSpy.mock.calls[0] ?? []
+    expect(String(message)).toContain('"message": "plugin boom"')
+    expect(String(message)).toContain('"stack": "Error: plugin boom')
+    expect(String(message)).toContain('"pluginId": "review"')
+    expect(rawError).toBe(boom)
+  })
+
   it('scope() prefixes messages with the scope name for every level', async () => {
     const debugSpy = vi.spyOn(console, 'debug').mockImplementation(() => {})
     const infoSpy = vi.spyOn(console, 'info').mockImplementation(() => {})

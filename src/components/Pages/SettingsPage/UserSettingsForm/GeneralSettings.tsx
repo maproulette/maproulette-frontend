@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
@@ -21,7 +22,13 @@ import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.jso
 import { FieldSubmit } from './FieldSubmit'
 import type { formSchema } from './formSchema'
 
-export const GeneralSettings = ({ form }: { form: UseFormReturn<z.infer<typeof formSchema>> }) => {
+export const GeneralSettings = ({
+  form,
+  children,
+}: {
+  form: UseFormReturn<z.infer<typeof formSchema>>
+  children?: ReactNode
+}) => {
   return (
     <FieldSet>
       <FieldLegend>General</FieldLegend>
@@ -127,6 +134,7 @@ export const GeneralSettings = ({ form }: { form: UseFormReturn<z.infer<typeof f
             </FormItem>
           )}
         />
+        {children}
       </FieldGroup>
       <FieldSubmit isSubmitting={form.formState.isSubmitting} isDirty={form.formState.isDirty} />
     </FieldSet>

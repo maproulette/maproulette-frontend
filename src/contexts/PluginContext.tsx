@@ -1,20 +1,50 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, apiRequest } from '@/api'
+import { wrapPluginComponent } from '@/components/PluginErrorBoundary'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { matchPath } from '@/lib/matchPath'
+import { navigateInApp } from '@/lib/routerRef'
 import type { PluginLoadResult } from '@/plugins/DynamicPluginLoader'
 import { pluginRegistry } from '@/plugins/PluginRegistry'
+import { pluginUi } from '@/plugins/pluginUi'
 import type {
+  ChallengeFooterExtension,
   Plugin,
   PluginApiContext,
   PluginConfiguration,
   PluginNavigationItem,
   PluginPage,
   RouteParams,
+  TaskActionExtension,
+  TaskActionPanelExtension,
+  TaskEditPolicy,
+  TaskHistoryItemRenderer,
   TaskMapEditor,
+  UserSettingsFieldExtension,
 } from '@/types/Plugin'
 import { useAuthContext } from './AuthContext'
+import { useThemeContext } from './ThemeContext'
+
+const resolvePluginUrl = (url: string): string => {
+  if (url.startsWith('/')) {
+    return `${window.location.origin}${url}`
+  }
+  return url
+}
+
+const getDeploymentPluginUrls = (): string[] => {
+  const rawUrls = window.env.VITE_DEPLOYMENT_PLUGIN_URLS
+  if (!rawUrls || typeof rawUrls !== 'string') {
+    return []
+  }
+
+  return rawUrls
+    .split(',')
+    .map((url) => url.trim())
+    .filter((url) => url.length > 0)
+    .map(resolvePluginUrl)
+}
 
 export interface PluginPageMatch {
   page: PluginPage
@@ -25,10 +55,16 @@ interface PluginContextType {
   enabledPlugins: string[]
   togglePlugin: (pluginId: string, enabled: boolean) => void
   getAvailablePlugins: () => Plugin[]
-  getNavigationItems: () => Promise<PluginNavigationItem[]>
-  getPluginPage: (pluginId: string, pageId: string) => Promise<PluginPage | null>
-  getPluginPageByPath: (path: string) => Promise<PluginPageMatch | null>
-  getTaskMapEditors: () => Promise<TaskMapEditor[]>
+  navigationItems: PluginNavigationItem[]
+  getPluginPageByPath: (path: string) => PluginPageMatch | null
+  taskMapEditors: TaskMapEditor[]
+  taskActionExtensions: TaskActionExtension[]
+  taskActionPanels: TaskActionPanelExtension[]
+  taskEditPolicies: TaskEditPolicy[]
+  challengeFooterExtensions: ChallengeFooterExtension[]
+  taskHistoryItemRenderers: TaskHistoryItemRenderer[]
+  userSettingsFields: UserSettingsFieldExtension[]
+  isTaskEditableByPlugins: (task: unknown) => boolean
   isPluginEnabled: (pluginId: string) => boolean
   registerPluginFromUrl: (moduleUrl: string) => Promise<PluginLoadResult>
   removeRemotePlugin: (pluginId: string) => Promise<void>
@@ -48,10 +84,16 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       enabledPlugins: [],
       togglePlugin: () => {},
       getAvailablePlugins: () => [],
-      getNavigationItems: async () => [],
-      getPluginPage: async () => null,
-      getPluginPageByPath: async () => null,
-      getTaskMapEditors: async () => [],
+      navigationItems: [],
+      getPluginPageByPath: () => null,
+      taskMapEditors: [],
+      taskActionExtensions: [],
+      taskActionPanels: [],
+      taskEditPolicies: [],
+      challengeFooterExtensions: [],
+      taskHistoryItemRenderers: [],
+      userSettingsFields: [],
+      isTaskEditableByPlugins: () => false,
       isPluginEnabled: () => false,
       registerPluginFromUrl: async () => ({
         success: false,
@@ -79,14 +121,35 @@ const PluginProviderInner = ({
   children: React.ReactNode
   user: NonNullable<ReturnType<typeof useAuthContext>['user']>
 }) => {
+  const { theme } = useThemeContext()
   const { t } = useIntl()
   const [enabledPlugins, setEnabledPlugins] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [remotePluginUrls, setRemotePluginUrls] = useState<string[]>([])
+  const [pluginPages, setPluginPages] = useState<PluginPage[]>([])
+  const [contributionsKey, setContributionsKey] = useState('')
+  const [navigationItems, setNavigationItems] = useState<PluginNavigationItem[]>([])
+  const [taskMapEditors, setTaskMapEditors] = useState<TaskMapEditor[]>([])
+  const [taskActionExtensions, setTaskActionExtensions] = useState<TaskActionExtension[]>([])
+  const [taskActionPanels, setTaskActionPanels] = useState<TaskActionPanelExtension[]>([])
+  const [taskEditPolicies, setTaskEditPolicies] = useState<TaskEditPolicy[]>([])
+  const [challengeFooterExtensions, setChallengeFooterExtensions] = useState<
+    ChallengeFooterExtension[]
+  >([])
+  const [taskHistoryItemRenderers, setTaskHistoryItemRenderers] = useState<
+    TaskHistoryItemRenderer[]
+  >([])
+  const [userSettingsFields, setUserSettingsFields] = useState<UserSettingsFieldExtension[]>([])
 
   useEffect(() => {
+    const getThemeTokens = (): Record<string, string> => ({})
+
     const apiContext: PluginApiContext = {
+      theme: {
+        isDarkMode: () => document.documentElement.classList.contains('dark'),
+        getThemeTokens,
+      },
       api: {
         task: {
           useTask: api.task.getTask,
@@ -105,10 +168,22 @@ const PluginProviderInner = ({
         },
       },
       apiRequest,
+      user: user
+        ? {
+            id: user.id,
+            settings: (user.settings ?? undefined) as Record<string, unknown> | undefined,
+          }
+        : null,
+      navigate: navigateInApp,
+      ui: pluginUi,
     }
 
     pluginRegistry.setApiContext(apiContext)
-  }, [])
+    if (typeof window !== 'undefined') {
+      ;(window as unknown as { __maproulettePluginApi?: PluginApiContext }).__maproulettePluginApi =
+        apiContext
+    }
+  }, [theme, user])
 
   useEffect(() => {
     const loadPluginPreferences = async () => {
@@ -117,49 +192,64 @@ const PluginProviderInner = ({
 
         const storageKey = `plugin_preferences_${user.id}`
         const stored = localStorage.getItem(storageKey)
+        const preferences = stored ? (JSON.parse(stored) as PluginConfiguration[]) : []
+        const storedPreferenceByPluginId = new Map(
+          preferences.map((config) => [config.pluginId, config])
+        )
 
-        if (stored) {
-          const preferences = JSON.parse(stored) as PluginConfiguration[]
+        const deploymentUrls = getDeploymentPluginUrls()
+        const storedRemoteUrls = preferences
+          .filter((config) => config.source === 'remote' && config.moduleUrl)
+          .map((config) => config.moduleUrl as string)
+        const urlsToLoad = Array.from(new Set([...deploymentUrls, ...storedRemoteUrls]))
 
-          const remotePlugins = preferences.filter((p) => p.source === 'remote' && p.moduleUrl)
-          const remoteUrls: string[] = []
+        const remoteUrls: string[] = []
+        const deploymentLoadedPluginIds: string[] = []
 
-          for (const config of remotePlugins) {
-            if (config.moduleUrl) {
-              try {
-                const result = await pluginRegistry.registerFromUrl(config.moduleUrl)
-                if (result.success) {
-                  remoteUrls.push(config.moduleUrl)
-                } else {
-                  logger.error(`Failed to load remote plugin from ${config.moduleUrl}`, {
-                    error: result.error,
-                  })
-                  setError(
-                    t(
-                      'plugins.errors.loadPluginFailed',
-                      { error: String(result.error) },
-                      'Failed to load plugin: {error}'
-                    )
-                  )
-                }
-              } catch (err) {
-                logger.error(`Error loading remote plugin from ${config.moduleUrl}`, { error: err })
+        for (const moduleUrl of urlsToLoad) {
+          try {
+            const result = await pluginRegistry.registerFromUrl(moduleUrl)
+            if (result.success && result.plugin) {
+              remoteUrls.push(moduleUrl)
+              if (deploymentUrls.includes(moduleUrl)) {
+                deploymentLoadedPluginIds.push(result.plugin.metadata.id)
               }
+            } else {
+              logger.error(`Failed to load remote plugin from ${moduleUrl}`, {
+                error: result.error,
+              })
+              setError(
+                t(
+                  'plugins.errors.loadPluginFailed',
+                  { error: String(result.error) },
+                  'Failed to load plugin: {error}'
+                )
+              )
             }
-          }
-
-          setRemotePluginUrls(remoteUrls)
-
-          const enabled = preferences
-            .filter((config) => config.enabled)
-            .map((config) => config.pluginId)
-
-          setEnabledPlugins(enabled)
-
-          for (const pluginId of enabled) {
-            await pluginRegistry.initialize(pluginId)
+          } catch (err) {
+            logger.error(`Error loading remote plugin from ${moduleUrl}`, { error: err })
           }
         }
+
+        setRemotePluginUrls(remoteUrls)
+
+        const enabled = new Set(
+          preferences.filter((config) => config.enabled).map((config) => config.pluginId)
+        )
+
+        for (const pluginId of deploymentLoadedPluginIds) {
+          const storedPreference = storedPreferenceByPluginId.get(pluginId)
+          if (storedPreference?.enabled === false) {
+            continue
+          }
+          enabled.add(pluginId)
+        }
+
+        const enabledPluginIds = Array.from(enabled)
+        for (const pluginId of enabledPluginIds) {
+          await pluginRegistry.initialize(pluginId)
+        }
+        setEnabledPlugins(enabledPluginIds)
       } catch (error) {
         logger.error('Failed to load plugin preferences', { error })
         setError(
@@ -190,23 +280,19 @@ const PluginProviderInner = ({
     return pluginRegistry.getRemotePluginUrls()
   }, [])
 
-  const getPluginPage = useCallback(
-    async (pluginId: string, pageId: string): Promise<PluginPage | null> => {
+  const getPluginPages = useCallback(async (): Promise<PluginPage[]> => {
+    const pages: PluginPage[] = []
+    for (const pluginId of enabledPlugins) {
       const plugin = pluginRegistry.get(pluginId)
-      if (!plugin?.getPages) {
-        return null
-      }
-
+      if (!plugin?.getPages) continue
       try {
-        const pages = await plugin.getPages()
-        return pages.find((page) => page.id === pageId) || null
+        pages.push(...(await plugin.getPages()))
       } catch (error) {
-        logger.error(`Failed to get page ${pageId} from plugin ${pluginId}`, { error })
-        return null
+        logger.error(`Failed to get pages from plugin ${pluginId}`, { error })
       }
-    },
-    []
-  )
+    }
+    return pages
+  }, [enabledPlugins])
 
   const getNavigationItems = useCallback(async (): Promise<PluginNavigationItem[]> => {
     const items: PluginNavigationItem[] = []
@@ -232,36 +318,6 @@ const PluginProviderInner = ({
     return items
   }, [enabledPlugins])
 
-  const getPluginPageByPath = useCallback(
-    async (path: string): Promise<PluginPageMatch | null> => {
-      for (const pluginId of enabledPlugins) {
-        const plugin = pluginRegistry.get(pluginId)
-
-        if (plugin?.getPages) {
-          try {
-            const pages = await plugin.getPages()
-
-            for (const page of pages) {
-              const matchResult = matchPath(page.path, path)
-
-              if (matchResult.matched) {
-                return {
-                  page,
-                  params: matchResult.params,
-                }
-              }
-            }
-          } catch (error) {
-            logger.error(`Failed to get pages from plugin ${pluginId}`, { error })
-          }
-        }
-      }
-
-      return null
-    },
-    [enabledPlugins]
-  )
-
   const getTaskMapEditors = useCallback(async (): Promise<TaskMapEditor[]> => {
     const editors: TaskMapEditor[] = []
 
@@ -286,6 +342,279 @@ const PluginProviderInner = ({
     return editors
   }, [enabledPlugins])
 
+  const getTaskActionExtensions = useCallback(async (): Promise<TaskActionExtension[]> => {
+    const extensions: TaskActionExtension[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getTaskActionExtensions) {
+        try {
+          const pluginExtensions = await plugin.getTaskActionExtensions()
+          extensions.push(...pluginExtensions)
+        } catch (error) {
+          logger.error(`Failed to get task action extensions from plugin ${pluginId}`, { error })
+        }
+      }
+    }
+
+    extensions.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return extensions
+  }, [enabledPlugins])
+
+  const getTaskActionPanels = useCallback(async (): Promise<TaskActionPanelExtension[]> => {
+    const panels: TaskActionPanelExtension[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getTaskActionPanels) {
+        try {
+          const pluginPanels = await plugin.getTaskActionPanels()
+          panels.push(...pluginPanels)
+        } catch (error) {
+          logger.error(`Failed to get task action panels from plugin ${pluginId}`, { error })
+        }
+      }
+    }
+
+    panels.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return panels
+  }, [enabledPlugins])
+
+  const getTaskEditPolicies = useCallback(async (): Promise<TaskEditPolicy[]> => {
+    const policies: TaskEditPolicy[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getTaskEditPolicies) {
+        try {
+          const pluginPolicies = await plugin.getTaskEditPolicies()
+          policies.push(...pluginPolicies)
+        } catch (error) {
+          logger.error(`Failed to get task edit policies from plugin ${pluginId}`, { error })
+        }
+      }
+    }
+
+    policies.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return policies
+  }, [enabledPlugins])
+
+  const getChallengeFooterExtensions = useCallback(async (): Promise<
+    ChallengeFooterExtension[]
+  > => {
+    const extensions: ChallengeFooterExtension[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getChallengeFooterExtensions) {
+        try {
+          const pluginExtensions = await plugin.getChallengeFooterExtensions()
+          extensions.push(...pluginExtensions)
+        } catch (error) {
+          logger.error(`Failed to get challenge footer extensions from plugin ${pluginId}`, {
+            error,
+          })
+        }
+      }
+    }
+
+    extensions.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return extensions
+  }, [enabledPlugins])
+
+  const getTaskHistoryItemRenderers = useCallback(async (): Promise<TaskHistoryItemRenderer[]> => {
+    const renderers: TaskHistoryItemRenderer[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getTaskHistoryItemRenderers) {
+        try {
+          const pluginRenderers = await plugin.getTaskHistoryItemRenderers()
+          renderers.push(...pluginRenderers)
+        } catch (error) {
+          logger.error(`Failed to get task history item renderers from plugin ${pluginId}`, {
+            error,
+          })
+        }
+      }
+    }
+
+    renderers.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return renderers
+  }, [enabledPlugins])
+
+  const getUserSettingsFields = useCallback(async (): Promise<UserSettingsFieldExtension[]> => {
+    const fields: UserSettingsFieldExtension[] = []
+
+    for (const pluginId of enabledPlugins) {
+      const plugin = pluginRegistry.get(pluginId)
+      if (plugin?.getUserSettingsFields) {
+        try {
+          const pluginFields = await plugin.getUserSettingsFields()
+          fields.push(...pluginFields)
+        } catch (error) {
+          logger.error(`Failed to get user settings fields from plugin ${pluginId}`, { error })
+        }
+      }
+    }
+
+    fields.sort((a, b) => {
+      const orderA = a.order ?? 999
+      const orderB = b.order ?? 999
+      return orderA - orderB
+    })
+
+    return fields
+  }, [enabledPlugins])
+
+  useEffect(() => {
+    let cancelled = false
+    void Promise.all([
+      getPluginPages(),
+      getNavigationItems(),
+      getTaskMapEditors(),
+      getTaskActionExtensions(),
+      getTaskActionPanels(),
+      getTaskEditPolicies(),
+      getChallengeFooterExtensions(),
+      getTaskHistoryItemRenderers(),
+      getUserSettingsFields(),
+    ]).then(
+      ([
+        pages,
+        navigation,
+        editors,
+        actions,
+        panels,
+        editPolicies,
+        footers,
+        historyRenderers,
+        settingsFields,
+      ]) => {
+        if (cancelled) return
+        setPluginPages(
+          pages.map((page) => ({
+            ...page,
+            component: wrapPluginComponent(page.component, {
+              contributionId: page.id,
+              source: 'page',
+              compact: false,
+            }),
+          }))
+        )
+        setNavigationItems(navigation)
+        setTaskMapEditors(
+          editors.map((editor) => ({
+            ...editor,
+            component: wrapPluginComponent(editor.component, {
+              contributionId: editor.id,
+              source: 'map-editor',
+            }),
+          }))
+        )
+        setTaskActionExtensions(
+          actions.map((extension) => ({
+            ...extension,
+            component: extension.component
+              ? wrapPluginComponent(extension.component, {
+                  contributionId: extension.id,
+                  source: 'task-action',
+                })
+              : undefined,
+          }))
+        )
+        setTaskActionPanels(
+          panels.map((panel) => ({
+            ...panel,
+            component: wrapPluginComponent(panel.component, {
+              contributionId: panel.id,
+              source: 'panel',
+            }),
+          }))
+        )
+        setTaskEditPolicies(editPolicies)
+        setChallengeFooterExtensions(
+          footers.map((footer) => ({
+            ...footer,
+            component: wrapPluginComponent(footer.component, {
+              contributionId: footer.id,
+              source: 'challenge-footer',
+            }),
+          }))
+        )
+        setTaskHistoryItemRenderers(
+          historyRenderers.map((renderer) => ({
+            ...renderer,
+            component: wrapPluginComponent(renderer.component, {
+              contributionId: renderer.id,
+              source: 'history',
+            }),
+          }))
+        )
+        setUserSettingsFields(
+          settingsFields.map((field) => ({
+            ...field,
+            component: wrapPluginComponent(field.component, {
+              contributionId: field.id,
+              source: 'settings-field',
+            }),
+          }))
+        )
+        setContributionsKey(enabledPlugins.join(','))
+      }
+    )
+    return () => {
+      cancelled = true
+    }
+  }, [
+    getPluginPages,
+    getNavigationItems,
+    getTaskMapEditors,
+    getTaskActionExtensions,
+    getTaskActionPanels,
+    getTaskEditPolicies,
+    getChallengeFooterExtensions,
+    getTaskHistoryItemRenderers,
+    getUserSettingsFields,
+    enabledPlugins,
+  ])
+
+  const getPluginPageByPath = useCallback(
+    (path: string): PluginPageMatch | null => {
+      for (const page of pluginPages) {
+        const matchResult = matchPath(page.path, path)
+        if (matchResult.matched) return { page, params: matchResult.params }
+      }
+      return null
+    },
+    [pluginPages]
+  )
+
   const togglePlugin = useCallback(
     async (pluginId: string, enabled: boolean) => {
       try {
@@ -293,13 +622,12 @@ const PluginProviderInner = ({
           ? [...enabledPlugins, pluginId]
           : enabledPlugins.filter((id) => id !== pluginId)
 
-        setEnabledPlugins(newEnabledPlugins)
-
         if (enabled) {
           await pluginRegistry.initialize(pluginId)
         } else {
           await pluginRegistry.cleanup(pluginId)
         }
+        setEnabledPlugins(newEnabledPlugins)
 
         const storageKey = `plugin_preferences_${user.id}`
         const allPlugins = pluginRegistry.getAllMetadata()
@@ -396,36 +724,57 @@ const PluginProviderInner = ({
     [enabledPlugins, togglePlugin, remotePluginUrls, user.id, t]
   )
 
+  const isTaskEditableByPlugins = useCallback(
+    (task: unknown) => {
+      const userId = user.id ?? null
+      return taskEditPolicies.some((policy) => policy.isEditable(task, { userId }))
+    },
+    [taskEditPolicies, user.id]
+  )
+
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: PluginContextType = useMemo(
     () => ({
       enabledPlugins,
       togglePlugin,
       getAvailablePlugins,
-      getNavigationItems,
-      getPluginPage,
+      navigationItems,
       getPluginPageByPath,
-      getTaskMapEditors,
+      taskMapEditors,
+      taskActionExtensions,
+      taskActionPanels,
+      taskEditPolicies,
+      challengeFooterExtensions,
+      taskHistoryItemRenderers,
+      userSettingsFields,
+      isTaskEditableByPlugins,
       isPluginEnabled,
       registerPluginFromUrl,
       removeRemotePlugin,
       getRemotePluginUrls,
-      loading,
+      loading: loading || contributionsKey !== enabledPlugins.join(','),
       error,
     }),
     [
       enabledPlugins,
       togglePlugin,
       getAvailablePlugins,
-      getNavigationItems,
-      getPluginPage,
+      navigationItems,
       getPluginPageByPath,
-      getTaskMapEditors,
+      taskMapEditors,
+      taskActionExtensions,
+      taskActionPanels,
+      taskEditPolicies,
+      challengeFooterExtensions,
+      taskHistoryItemRenderers,
+      userSettingsFields,
+      isTaskEditableByPlugins,
       isPluginEnabled,
       registerPluginFromUrl,
       removeRemotePlugin,
       getRemotePluginUrls,
       loading,
+      contributionsKey,
       error,
     ]
   )

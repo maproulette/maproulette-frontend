@@ -86,6 +86,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
       task
         ? {
             task,
+            isEditable: false,
             isLocked: false,
             isLocking: false,
             lockedTasks: [],

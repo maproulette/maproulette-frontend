@@ -9,17 +9,24 @@ import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
 
-interface TaskNearbyMapProps {
+interface TaskSelectionMapProps {
   currentTask: Task
+  tasks: Task[]
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
+  excludeCurrentBundle?: boolean
+  /** Show the "Task #N selected" overlay. Default true. */
+  showSelectedBadge?: boolean
 }
 
-export const TaskNearbyMap = ({
+export const TaskSelectionMap = ({
   currentTask,
+  tasks: nearbyTasks,
   selectedTaskId,
   onTaskSelect,
-}: TaskNearbyMapProps) => {
+  excludeCurrentBundle = false,
+  showSelectedBadge = true,
+}: TaskSelectionMapProps) => {
   const { t } = useIntl()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -29,24 +36,24 @@ export const TaskNearbyMap = ({
 
   // Track if we've already zoomed to fit initial tasks
   const hasZoomedRef = useRef(false)
+  const centeredTaskIdRef = useRef<number | null>(null)
 
   const [currentLng, currentLat] = currentTask.location.coordinates
-
-  // Fetch nearby tasks using the dedicated API endpoint
-  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
-    currentTask.parent,
-    currentTask.id
-  )
 
   // Reason: GeoJSON processing — parses nearby task locations and drops bundle members
   const nearbyTaskLocations = useMemo(() => {
     return nearbyTasks
-      .filter((task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId)
+      .filter(
+        (task) =>
+          !excludeCurrentBundle ||
+          currentTask.bundleId == null ||
+          task.bundleId !== currentTask.bundleId
+      )
       .map((task) => {
         const [lng, lat] = task.location.coordinates
         return { id: task.id, lng, lat }
       })
-  }, [nearbyTasks, currentTask.bundleId])
+  }, [nearbyTasks, currentTask.bundleId, excludeCurrentBundle])
 
   // Reason: GeoJSON processing — builds FeatureCollection from parsed locations
   const nearbyTasksGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
@@ -66,10 +73,8 @@ export const TaskNearbyMap = ({
     }
   }, [nearbyTaskLocations, selectedTaskId])
 
-  // Zoom to fit all tasks (current + nearby) when data loads
-  useEffect(() => {
+  const centerOnTasks = useCallback(() => {
     if (!mapRef.current || !mapLoaded) return
-    if (hasZoomedRef.current) return
 
     const points: [number, number][] = [[currentLng, currentLat]]
     for (const loc of nearbyTaskLocations) {
@@ -92,9 +97,24 @@ export const TaskNearbyMap = ({
         duration: 0,
       })
     }
-
-    hasZoomedRef.current = true
   }, [mapLoaded, nearbyTaskLocations, currentLng, currentLat])
+
+  // Zoom to fit all tasks (current + nearby) on first load
+  useEffect(() => {
+    if (!mapLoaded) return
+    if (hasZoomedRef.current) return
+    centerOnTasks()
+    hasZoomedRef.current = true
+    centeredTaskIdRef.current = currentTask.id
+  }, [mapLoaded, centerOnTasks, currentTask.id])
+
+  // Re-center when the current task changes (e.g. preview Prev/Next)
+  useEffect(() => {
+    if (!mapLoaded) return
+    if (centeredTaskIdRef.current === currentTask.id) return
+    centerOnTasks()
+    centeredTaskIdRef.current = currentTask.id
+  }, [mapLoaded, currentTask.id, currentLng, currentLat, centerOnTasks])
 
   const initialViewState = {
     longitude: currentLng,
@@ -171,7 +191,7 @@ export const TaskNearbyMap = ({
       </div>
 
       {/* Selected task info */}
-      {selectedTaskId && (
+      {showSelectedBadge && selectedTaskId && (
         <div className="absolute top-2 left-2 rounded bg-green-500 px-2 py-1 font-medium text-white text-xs shadow">
           {t(
             'taskEditPage.taskNearbyMap.selectedTask',
@@ -182,4 +202,15 @@ export const TaskNearbyMap = ({
       )}
     </div>
   )
+}
+
+type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
+
+export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
+  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
+    props.currentTask.parent,
+    props.currentTask.id
+  )
+
+  return <TaskSelectionMap {...props} tasks={nearbyTasks} excludeCurrentBundle />
 }

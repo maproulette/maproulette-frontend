@@ -13,8 +13,15 @@ export const badgeVariants = cva(
           'border-transparent bg-zinc-900 text-zinc-50 [a&]:hover:bg-zinc-900/90 dark:bg-slate-50 dark:text-zinc-900 dark:[a&]:hover:bg-slate-50/90',
         secondary:
           'border-transparent bg-zinc-100 text-zinc-900 [a&]:hover:bg-zinc-100/90 dark:bg-slate-800 dark:text-zinc-50 dark:[a&]:hover:bg-slate-800/90',
+        success:
+          'border-transparent bg-green-700 text-white [a&]:hover:bg-green-800 dark:bg-green-700 dark:[a&]:hover:bg-green-600',
+        warning:
+          'border-transparent bg-yellow-500 text-zinc-950 [a&]:hover:bg-yellow-600 dark:bg-yellow-500 dark:text-zinc-950 dark:[a&]:hover:bg-yellow-400',
+        caution:
+          'border-transparent bg-orange-600 text-zinc-950 [a&]:hover:bg-orange-700 dark:bg-orange-500 dark:text-zinc-950 dark:[a&]:hover:bg-orange-400',
+        info: 'border-transparent bg-blue-600 text-white [a&]:hover:bg-blue-700 dark:bg-blue-600 dark:[a&]:hover:bg-blue-500',
         destructive:
-          'border-transparent bg-red-500 text-white [a&]:hover:bg-red-500/90 focus-visible:ring-red-500/20 dark:focus-visible:ring-red-500/40 dark:bg-red-500/60 dark:bg-red-900 dark:[a&]:hover:bg-red-900/90 dark:focus-visible:ring-red-900/20 dark:dark:focus-visible:ring-red-900/40 dark:dark:bg-red-900/60',
+          'border-transparent bg-red-700 text-white [a&]:hover:bg-red-800 focus-visible:ring-red-500/20 dark:bg-red-700 dark:[a&]:hover:bg-red-600 dark:focus-visible:ring-red-500/40',
         outline:
           'text-zinc-950 [a&]:hover:bg-zinc-100 [a&]:hover:text-zinc-900 dark:text-zinc-50 dark:[a&]:hover:bg-slate-800 dark:[a&]:hover:text-zinc-50',
       },

@@ -13,18 +13,15 @@
 <body>
     <div id="app" tabindex="-1"></div>
     <script type="module">
-        // Load runtime config into window.env, then start the app
+        // Load runtime config, expose host React for plugins, then boot the app
         window.env = await fetch('/env.json').then((res) => res.json());
-        await import('/src/main.tsx');
-    </script>
-    <script type="module">
-        // Expose React globallt for plugins after the main app loads
         import React from 'react';
         import ReactDOM from 'react-dom';
         import * as jsxRuntime from 'react/jsx-runtime';
         window.React = React;
         window.ReactDOM = ReactDOM;
         window.jsxRuntime = jsxRuntime;
+        await import('/src/main.tsx');
     </script>
 </body>
 

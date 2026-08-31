@@ -6,10 +6,7 @@ import {
   type KeyboardShortcut,
   useRegisterShortcuts,
 } from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
-import {
-  EDITABLE_STATUSES,
-  useTaskContext,
-} from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button, type buttonVariants } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
@@ -25,7 +22,7 @@ export const TaskActions = () => {
     undefined,
     'This challenge is currently paused. Tasks cannot be completed until it is resumed.'
   )
-  const { task, isLocked } = useTaskContext()
+  const { task, isLocked, isEditable } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { isAuthenticated, login } = useAuthContext()
   const isPaused = challenge.paused
@@ -161,8 +158,8 @@ export const TaskActions = () => {
   // until we navigate to the next task - so the now-completed status doesn't briefly swap in a
   // different button set (navigation / start-mapping). Skip the status/lock-driven branches.
   if (!isSubmitting) {
-    // Show navigation buttons for non-editable statuses (Fixed, False Positive, Deleted, Already Fixed)
-    if (!EDITABLE_STATUSES.includes(task.status ?? 0)) {
+    // Show navigation buttons for non-editable statuses (unless a plugin unlocks editing)
+    if (!isEditable) {
       return <NavigationActions challengeId={task.parent} taskId={task.id} />
     }
 

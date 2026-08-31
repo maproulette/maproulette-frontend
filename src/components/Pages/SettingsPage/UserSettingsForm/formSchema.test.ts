@@ -9,8 +9,6 @@ const validInput = {
   email: 'user@example.com',
   emailOptIn: true,
   leaderboardOptOut: false,
-  needsReview: 2,
-  isReviewer: true,
   theme: 1,
   disableTaskConfirm: false,
 }
@@ -95,14 +93,22 @@ describe('formSchema', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejects a negative needsReview value', () => {
-    const result = formSchema.safeParse({ ...validInput, needsReview: -1 })
-    expect(result.success).toBe(false)
+  it('accepts opaque plugin settings fields via loose schema', () => {
+    const result = formSchema.safeParse({
+      ...validInput,
+      pluginNumber: -1,
+      pluginEnabled: true,
+      pluginNote: 'anything',
+    })
+    expect(result.success).toBe(true)
   })
 
-  it('accepts a needsReview value of zero', () => {
-    const result = formSchema.safeParse({ ...validInput, needsReview: 0 })
+  it('preserves opaque plugin settings fields in the parse output', () => {
+    const result = formSchema.safeParse({ ...validInput, pluginNumber: 0 })
     expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.pluginNumber).toBe(0)
+    }
   })
 
   it('rejects a theme value below the minimum', () => {
