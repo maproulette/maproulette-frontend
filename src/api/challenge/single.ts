@@ -5,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+import { withScalarParent } from '@/lib/challengeParent'
 import type {
   Challenge,
   ChallengeActivityEntry,
@@ -61,6 +62,27 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] })
 }
 
+/**
+ * Seed the single-challenge cache (`['challenge', id]`) from a listing payload.
+ *
+ * Listing endpoints that run the backend's `ParentMixin.insertProjectJSON`
+ * (`exploreChallenges`, `extendedFind`, ...) replace a challenge's scalar
+ * `parent` with the full project object. `GET /challenge/{id}` returns the id,
+ * and so does everything reading this cache key — including the challenge route
+ * loader, which serves it to callers that fetch the parent project. Collapse
+ * `parent` back to the id before seeding; otherwise those callers request
+ * `api/v2/project/[object Object]`.
+ */
+export const seedChallengeCache = <T extends { id?: number; parent?: unknown }>(
+  queryClient: QueryClient,
+  challenges: T[]
+) => {
+  for (const challenge of challenges) {
+    if (!challenge?.id) continue
+    queryClient.setQueryData(['challenge', challenge.id], withScalarParent(challenge))
+  }
+}
+
 export const challengeSingle = {
   getChallenge: (challengeId: number) =>
     useQuery(
@@ -91,13 +113,64 @@ export const challengeSingle = {
       })
     ),
 
-  getChallengeStats: (challengeId: number) =>
+  /**
+   * Fetches tags for many challenges in a single request instead of one request
+   * per challenge id. Reuses/backfills the per-challenge `getChallengeTags` cache
+   * entries so single-challenge lookups can hit cache too.
+   */
+  getChallengeTagsBatch: (challengeIds: number[]) => {
+    const queryClient = useQueryClient()
+    return useQuery(
+      queryOptions({
+        queryKey: ['challenge', 'tags', 'batch', [...challengeIds].sort((a, b) => a - b)],
+        queryFn: async () => {
+          const result = new Map<number, Array<{ id: number; name: string }>>()
+          const missingIds: number[] = []
+
+          for (const id of challengeIds) {
+            const cached = queryClient.getQueryData<Array<{ id: number; name: string }>>([
+              'challenge',
+              'tags',
+              id,
+            ])
+            if (cached) {
+              result.set(id, cached)
+            } else {
+              missingIds.push(id)
+            }
+          }
+
+          if (missingIds.length === 0) {
+            return result
+          }
+
+          const fetched = await apiRequest
+            .get('api/v2/challenges/tags/batch', {
+              searchParams: { challengeIds: missingIds.join(',') },
+            })
+            .json<Record<string, Array<{ id: number; name: string }>>>()
+
+          for (const id of missingIds) {
+            const tags = fetched[String(id)] ?? []
+            queryClient.setQueryData(['challenge', 'tags', id], tags)
+            result.set(id, tags)
+          }
+
+          return result
+        },
+        staleTime: 5 * 60 * 1000,
+        enabled: challengeIds.length > 0,
+      })
+    )
+  },
+
+  getChallengeStats: (challengeId: number, enabled = true) =>
     useQuery(
       queryOptions({
         queryKey: ['challenge', 'stats', challengeId],
         queryFn: async () =>
           apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeStatsResponse>(),
-        enabled: !!challengeId,
+        enabled: !!challengeId && enabled,
       })
     ),
 
@@ -131,6 +204,18 @@ export const challengeSingle = {
   getRandomTask: async (challengeId: number, queryClient: QueryClient) => {
     const tasks = await apiRequest
       .get(`api/v2/challenge/${challengeId}/tasks/random`, { searchParams: { limit: 1 } })
+      .json<Task[]>()
+    for (const task of tasks) {
+      queryClient.setQueryData(['task', task.id], task)
+    }
+    return tasks
+  },
+
+  // Any task in the challenge, regardless of status - used to drop into read-only
+  // browsing when the challenge has no startable tasks left.
+  getFirstTask: async (challengeId: number, queryClient: QueryClient) => {
+    const tasks = await apiRequest
+      .get(`api/v2/challenge/${challengeId}/tasks`, { searchParams: { limit: 1, page: 0 } })
       .json<Task[]>()
     for (const task of tasks) {
       queryClient.setQueryData(['task', task.id], task)
@@ -172,9 +257,21 @@ export const challengeSingle = {
   useCloneChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: ({ challengeId, newName }: { challengeId: number; newName: string }) =>
+      // `projectId` is optional; the backend clones into the original challenge's
+      // project when it is omitted.
+      mutationFn: ({
+        challengeId,
+        newName,
+        projectId,
+      }: {
+        challengeId: number
+        newName: string
+        projectId?: number
+      }) =>
         apiRequest
-          .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`)
+          .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`, {
+            ...(projectId != null && { searchParams: { projectId } }),
+          })
           .json<ChallengeGetResponse>(),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['challenge'] })
@@ -245,6 +342,7 @@ export const challengeSingle = {
           updatedChallenge
         )
         void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
@@ -259,6 +357,7 @@ export const challengeSingle = {
       onSuccess: (saved) => {
         queryClient.setQueryData<ChallengeGetResponse>(['challenge', saved.id], saved)
         void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
         void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
@@ -435,6 +534,25 @@ export const challengeSingle = {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+      },
+    })
+  },
+
+  usePauseChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, paused }: { challengeId: number; paused: boolean }) =>
+        apiRequest
+          .put(`api/v2/challenge/${challengeId}`, {
+            json: { id: challengeId, paused },
+          })
+          .json<Challenge>(),
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
     })
   },

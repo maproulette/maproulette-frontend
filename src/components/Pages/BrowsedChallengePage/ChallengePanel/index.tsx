@@ -7,11 +7,7 @@ import { cn } from '@/lib/utils'
 import { ChallengeDescription } from './ChallengeDescription'
 import { ChallengeFooter } from './ChallengeFooter'
 import { ChallengeHeader } from './ChallengeHeader'
-import { ChallengeModals } from './ChallengeModals'
-import {
-  ChallengeModalsProvider,
-  useChallengeModals,
-} from './ChallengeModals/ChallengeModalsContext'
+import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 import { ScrollIndicator } from './ScrollIndicator'
 import { useScrollIndicator } from './useScrollIndicator'
 
@@ -104,9 +100,9 @@ export const ChallengePanel = () => {
   }
 
   return (
-    <ChallengeModalsProvider>
+    <>
       <CommentsAutoOpener shouldOpen={shouldAutoOpenComments} />
-      <div className="flex w-full flex-col overflow-hidden md:h-full">
+      <div className="flex h-full w-full flex-col overflow-hidden">
         <div className="flex h-full flex-col overflow-hidden">
           <div className="relative flex min-h-0 flex-1 flex-col">
             <div
@@ -150,8 +146,6 @@ export const ChallengePanel = () => {
           <ChallengeFooter />
         </div>
       </div>
-
-      <ChallengeModals />
-    </ChallengeModalsProvider>
+    </>
   )
 }

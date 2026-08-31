@@ -1,5 +1,6 @@
 import { api } from '@/api'
 import type { ProgressSegment } from '@/components/shared/ProgressBar'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import type { CompletionMetrics } from '@/types/Challenge'
 
@@ -62,7 +63,10 @@ const ALL_STATUS_FIELDS = [
 ] as const
 
 export const useChallengeProgress = (challengeId: number, fallback?: CompletionMetrics) => {
-  const { data: challengeStatsData } = api.challenge.getChallengeStats(challengeId)
+  const { isAuthenticated } = useAuthContext()
+  // /api/v2/data/challenge/:id requires auth; skip it for logged-out users and
+  // fall back to the listing-provided metrics instead of a doomed 401 request.
+  const { data: challengeStatsData } = api.challenge.getChallengeStats(challengeId, isAuthenticated)
   // Prefer per-challenge stats when loaded; otherwise use the listing-provided
   // metrics so list views show segmented bars without waiting on per-card
   // requests. Both shapes share the same per-status field names.

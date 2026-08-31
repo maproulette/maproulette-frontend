@@ -6,6 +6,8 @@ export type PropertyOperator =
   | 'missing'
   | 'greaterThan'
   | 'lessThan'
+  | 'greaterThanOrEqual'
+  | 'lessThanOrEqual'
 
 export interface PropertyRuleLeaf {
   type: 'leaf'

@@ -136,7 +136,7 @@ export const GeneralSettings = ({
         />
         {children}
       </FieldGroup>
-      <FieldSubmit isSubmitting={form.formState.isSubmitting} />
+      <FieldSubmit isSubmitting={form.formState.isSubmitting} isDirty={form.formState.isDirty} />
     </FieldSet>
   )
 }

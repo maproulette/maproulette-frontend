@@ -28,11 +28,15 @@ class PluginRegistry {
   /**
    * Unregister a plugin from the registry
    */
-  unregister(pluginId: string): void {
+  async unregister(pluginId: string): Promise<void> {
     const plugin = this.plugins.get(pluginId)
     if (plugin) {
       if (this.initializedPlugins.has(pluginId)) {
-        plugin.cleanup?.()
+        try {
+          await plugin.cleanup?.()
+        } catch (error) {
+          logger.error(`Failed to cleanup plugin ${pluginId}`, { error })
+        }
         this.initializedPlugins.delete(pluginId)
       }
       this.plugins.delete(pluginId)

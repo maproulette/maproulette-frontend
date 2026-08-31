@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react'
 import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
-import { reverseDifficultyMap } from './filterUtils'
 import { GlobalToggle } from './GlobalMapToggles'
 import { LocationSearchFilter } from './LocationSearchFilter'
 import { SortByFilter } from './SortByFilter'
@@ -45,10 +44,7 @@ export const FilterBar = () => {
           osm_type: (locationOsmType as 'N' | 'W' | 'R' | undefined) ?? undefined,
           osm_id: locationOsmId ?? undefined,
           keywords: keywords && keywords !== '' ? keywords : undefined,
-          difficulty:
-            difficulty !== undefined
-              ? reverseDifficultyMap[difficulty as unknown as number]
-              : undefined,
+          difficulty: difficulty !== 'Any' ? difficulty : undefined,
           viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
         }),
         hash: true,

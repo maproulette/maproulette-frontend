@@ -8,6 +8,11 @@ export interface KeyboardShortcut {
   handler?: () => void
   /** Whether the shortcut is currently enabled (default: true) */
   enabled?: boolean
+  /**
+   * Whether this shortcut requires the Ctrl (Windows/Linux) or Cmd (Mac) modifier
+   * to be held down (default: false, meaning no modifier should be held).
+   */
+  ctrlOrCmd?: boolean
 }
 
 interface KeyboardShortcutsContextValue {
@@ -89,7 +94,8 @@ export const KeyboardShortcutsProvider = ({ children }: KeyboardShortcutsProvide
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement ||
-        e.target instanceof HTMLSelectElement
+        e.target instanceof HTMLSelectElement ||
+        (e.target instanceof HTMLElement && e.target.isContentEditable)
       ) {
         return
       }
@@ -103,6 +109,7 @@ export const KeyboardShortcutsProvider = ({ children }: KeyboardShortcutsProvide
 
       // Normalize key for comparison
       const pressedKey = e.key.toLowerCase()
+      const hasCtrlOrCmd = e.ctrlKey || e.metaKey
 
       // Find matching shortcut from all registered shortcuts
       const allShortcuts: KeyboardShortcut[] = []
@@ -116,6 +123,14 @@ export const KeyboardShortcutsProvider = ({ children }: KeyboardShortcutsProvide
 
         if (!isEnabled || !shortcut.handler) continue
 
+        // Match the modifier state: shortcuts requiring Ctrl/Cmd only fire while it's
+        // held, and plain shortcuts must not fire while it's held (e.g. browser shortcuts
+        // like Ctrl/Cmd + Backspace, and to avoid colliding with modifier-based shortcuts
+        // that reuse the same letter)
+        const modifierMatches = shortcut.ctrlOrCmd ? hasCtrlOrCmd : !hasCtrlOrCmd
+
+        if (!modifierMatches) continue
+
         // Match the key
         const keyMatches =
           shortcutKey === pressedKey ||
@@ -123,11 +138,6 @@ export const KeyboardShortcutsProvider = ({ children }: KeyboardShortcutsProvide
           (shortcutKey === 'esc' && pressedKey === 'escape')
 
         if (keyMatches) {
-          // For delete/backspace, don't trigger if meta/ctrl is held (browser back)
-          if ((pressedKey === 'delete' || pressedKey === 'backspace') && (e.metaKey || e.ctrlKey)) {
-            continue
-          }
-
           e.preventDefault()
           shortcut.handler()
           return

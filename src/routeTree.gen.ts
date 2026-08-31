@@ -17,7 +17,6 @@ import { Route as AppSplatRouteImport } from './routes/_app/$'
 import { Route as AppTasksRouteRouteImport } from './routes/_app/tasks/route'
 import { Route as AppSuperAdminRouteRouteImport } from './routes/_app/super-admin/route'
 import { Route as AppManageRouteRouteImport } from './routes/_app/manage/route'
-import { Route as AppTeamsIndexRouteImport } from './routes/_app/teams/index'
 import { Route as AppSuperAdminIndexRouteImport } from './routes/_app/super-admin/index'
 import { Route as AppProfileIndexRouteImport } from './routes/_app/profile/index'
 import { Route as AppManageIndexRouteImport } from './routes/_app/manage/index'
@@ -89,11 +88,6 @@ const AppSuperAdminRouteRoute = AppSuperAdminRouteRouteImport.update({
 const AppManageRouteRoute = AppManageRouteRouteImport.update({
   id: '/manage',
   path: '/manage',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppTeamsIndexRoute = AppTeamsIndexRouteImport.update({
-  id: '/teams/',
-  path: '/teams/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppSuperAdminIndexRoute = AppSuperAdminIndexRouteImport.update({
@@ -295,7 +289,6 @@ export interface FileRoutesByFullPath {
   '/manage/': typeof AppManageIndexRoute
   '/profile': typeof AppProfileIndexRoute
   '/super-admin/': typeof AppSuperAdminIndexRoute
-  '/teams': typeof AppTeamsIndexRoute
   '/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdRouteRouteWithChildren
   '/manage/project/$projectId': typeof AppManageProjectProjectIdRouteRouteWithChildren
   '/manage/task/$taskId': typeof AppManageTaskTaskIdRouteRouteWithChildren
@@ -336,7 +329,6 @@ export interface FileRoutesByTo {
   '/manage': typeof AppManageIndexRoute
   '/profile': typeof AppProfileIndexRoute
   '/super-admin': typeof AppSuperAdminIndexRoute
-  '/teams': typeof AppTeamsIndexRoute
   '/manage/challenge/new': typeof AppManageChallengeNewRoute
   '/manage/project/new': typeof AppManageProjectNewRoute
   '/manage/task/new': typeof AppManageTaskNewRoute
@@ -378,7 +370,6 @@ export interface FileRoutesById {
   '/_app/manage/': typeof AppManageIndexRoute
   '/_app/profile/': typeof AppProfileIndexRoute
   '/_app/super-admin/': typeof AppSuperAdminIndexRoute
-  '/_app/teams/': typeof AppTeamsIndexRoute
   '/_app/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdRouteRouteWithChildren
   '/_app/manage/project/$projectId': typeof AppManageProjectProjectIdRouteRouteWithChildren
   '/_app/manage/task/$taskId': typeof AppManageTaskTaskIdRouteRouteWithChildren
@@ -423,7 +414,6 @@ export interface FileRouteTypes {
     | '/manage/'
     | '/profile'
     | '/super-admin/'
-    | '/teams'
     | '/manage/challenge/$challengeId'
     | '/manage/project/$projectId'
     | '/manage/task/$taskId'
@@ -464,7 +454,6 @@ export interface FileRouteTypes {
     | '/manage'
     | '/profile'
     | '/super-admin'
-    | '/teams'
     | '/manage/challenge/new'
     | '/manage/project/new'
     | '/manage/task/new'
@@ -505,7 +494,6 @@ export interface FileRouteTypes {
     | '/_app/manage/'
     | '/_app/profile/'
     | '/_app/super-admin/'
-    | '/_app/teams/'
     | '/_app/manage/challenge/$challengeId'
     | '/_app/manage/project/$projectId'
     | '/_app/manage/task/$taskId'
@@ -587,13 +575,6 @@ declare module '@tanstack/react-router' {
       path: '/manage'
       fullPath: '/manage'
       preLoaderRoute: typeof AppManageRouteRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/_app/teams/': {
-      id: '/_app/teams/'
-      path: '/teams'
-      fullPath: '/teams'
-      preLoaderRoute: typeof AppTeamsIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/super-admin/': {
@@ -961,7 +942,6 @@ interface AppRouteRouteChildren {
   AppTeamsNewRoute: typeof AppTeamsNewRoute
   AppDashboardIndexRoute: typeof AppDashboardIndexRoute
   AppProfileIndexRoute: typeof AppProfileIndexRoute
-  AppTeamsIndexRoute: typeof AppTeamsIndexRoute
   AppTeamsTeamIdEditRoute: typeof AppTeamsTeamIdEditRoute
   AppChallengeChallengeIdIndexRoute: typeof AppChallengeChallengeIdIndexRoute
   AppProfileUserIdIndexRoute: typeof AppProfileUserIdIndexRoute
@@ -980,7 +960,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppTeamsNewRoute: AppTeamsNewRoute,
   AppDashboardIndexRoute: AppDashboardIndexRoute,
   AppProfileIndexRoute: AppProfileIndexRoute,
-  AppTeamsIndexRoute: AppTeamsIndexRoute,
   AppTeamsTeamIdEditRoute: AppTeamsTeamIdEditRoute,
   AppChallengeChallengeIdIndexRoute: AppChallengeChallengeIdIndexRoute,
   AppProfileUserIdIndexRoute: AppProfileUserIdIndexRoute,

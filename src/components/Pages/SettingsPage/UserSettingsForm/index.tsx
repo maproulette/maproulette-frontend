@@ -6,6 +6,7 @@ import { api } from '@/api'
 import { FieldGroup } from '@/components/ui/Field'
 import { Form } from '@/components/ui/Form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { useIntl } from '@/i18n'
 import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
 import { formSchema } from './formSchema'
@@ -29,6 +30,7 @@ const CORE_SETTINGS_KEYS = new Set([
 ])
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
+  const { locale } = useIntl()
   const updateSettingsMutation = api.user.useUpdateUserSettings()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,7 +40,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
       defaultBasemap: user.settings.defaultBasemap ?? -1,
       defaultBasemapId: user.settings.defaultBasemapId ?? '',
       email: user.settings.email ?? '',
-      locale: user.settings.locale ?? 'en-US',
+      locale: user.settings.locale ?? locale,
     },
   })
 
@@ -51,18 +53,15 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
         }
       }
 
-      // `defaultBasemap`'s zod schema is a bare `.refine()` with no base type, so
-      // it infers as `unknown` even though the form only ever produces a number
-      // (see formSchema.ts) — narrow it back to the shape the API expects.
+      // UserSettings is generated from an OpenAPI spec that only types defaultBasemap
+      // as number | null, but the backend also accepts string basemap ids (see
+      // formSchema.ts / GeneralSettings.tsx) — the generated type is stale, not `values`.
       await updateSettingsMutation.mutateAsync({
         userId: user.id,
         settings: {
           ...user.settings,
           defaultEditor: values.defaultEditor,
-          defaultBasemap:
-            typeof values.defaultBasemap === 'number'
-              ? values.defaultBasemap
-              : user.settings.defaultBasemap,
+          defaultBasemap: values.defaultBasemap as UserSettings['defaultBasemap'],
           defaultBasemapId: values.defaultBasemapId,
           locale: values.locale,
           email: values.email,

@@ -14,38 +14,25 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/AlertDialog'
 import { useIntl } from '@/i18n'
-import type { Challenge } from '@/types/Challenge'
 import { MoveChallengeModal } from '../MoveChallengeModal'
-
-interface ProjectDetailDialogsProps {
-  projectId: string
-  cloneModalChallenge: { id: number; name: string } | null
-  setCloneModalChallenge: (challenge: { id: number; name: string } | null) => void
-  rebuildModalChallenge: Challenge | null
-  setRebuildModalChallenge: (challenge: Challenge | null) => void
-  deleteChallengeId: number | null
-  setDeleteChallengeId: (id: number | null) => void
-  confirmDeleteChallenge: () => void
-  deleteProjectConfirm: boolean
-  setDeleteProjectConfirm: (open: boolean) => void
-  confirmDeleteProject: () => void
-}
+import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 
 /** Modals and confirmation dialogs used by the project detail page (move/clone/rebuild/delete). */
-export const ProjectDetailDialogs = ({
-  projectId,
-  cloneModalChallenge,
-  setCloneModalChallenge,
-  rebuildModalChallenge,
-  setRebuildModalChallenge,
-  deleteChallengeId,
-  setDeleteChallengeId,
-  confirmDeleteChallenge,
-  deleteProjectConfirm,
-  setDeleteProjectConfirm,
-  confirmDeleteProject,
-}: ProjectDetailDialogsProps) => {
+export const ProjectDetailDialogs = () => {
   const { t } = useIntl()
+  const {
+    projectId,
+    cloneModalChallenge,
+    setCloneModalChallenge,
+    rebuildModalChallenge,
+    setRebuildModalChallenge,
+    deleteChallengeId,
+    setDeleteChallengeId,
+    confirmDeleteChallenge,
+    deleteProjectConfirm,
+    setDeleteProjectConfirm,
+    confirmDeleteProject,
+  } = useManageProjectDetailContext()
 
   return (
     <>

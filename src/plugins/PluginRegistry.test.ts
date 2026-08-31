@@ -69,7 +69,7 @@ describe('unregister', () => {
     const plugin = makePlugin('a')
     pluginRegistry.register(plugin)
 
-    pluginRegistry.unregister('a')
+    await pluginRegistry.unregister('a')
 
     expect(pluginRegistry.get('a')).toBeUndefined()
   })
@@ -81,7 +81,7 @@ describe('unregister', () => {
     pluginRegistry.register(plugin)
     await pluginRegistry.initialize('a')
 
-    pluginRegistry.unregister('a')
+    await pluginRegistry.unregister('a')
 
     expect(cleanup).toHaveBeenCalledTimes(1)
     expect(pluginRegistry.get('a')).toBeUndefined()
@@ -94,14 +94,35 @@ describe('unregister', () => {
     pluginRegistry.register(plugin)
     await pluginRegistry.initialize('a')
 
-    expect(() => pluginRegistry.unregister('a')).not.toThrow()
+    await expect(pluginRegistry.unregister('a')).resolves.not.toThrow()
     expect(pluginRegistry.get('a')).toBeUndefined()
   })
 
   it('is a no-op for an id that is not registered', async () => {
     const { pluginRegistry } = await freshRegistry()
 
-    expect(() => pluginRegistry.unregister('missing')).not.toThrow()
+    await expect(pluginRegistry.unregister('missing')).resolves.not.toThrow()
+  })
+
+  it('logs and still fully removes the plugin when cleanup rejects', async () => {
+    const { pluginRegistry } = await freshRegistry()
+    const { logger } = await import('@/lib/logger')
+    const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => {})
+    const cleanup = vi.fn().mockRejectedValue(new Error('cleanup failed'))
+    const plugin = makePlugin('a', { cleanup })
+    pluginRegistry.register(plugin)
+    await pluginRegistry.initialize('a')
+
+    await expect(pluginRegistry.unregister('a')).resolves.not.toThrow()
+
+    expect(loggerErrorSpy).toHaveBeenCalledWith(
+      'Failed to cleanup plugin a',
+      expect.objectContaining({ error: expect.any(Error) })
+    )
+    expect(pluginRegistry.get('a')).toBeUndefined()
+    expect(pluginRegistry.isInitialized('a')).toBe(false)
+
+    loggerErrorSpy.mockRestore()
   })
 })
 

@@ -39,24 +39,18 @@ export const PendingInvitesSection = ({ invites }: Props) => {
   return (
     <section className="space-y-3">
       <h2 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-        {invites.length === 1
-          ? t(
-              'teams.pendingInvites.countSingular',
-              { count: invites.length },
-              'You have {count} pending invitation'
-            )
-          : t(
-              'teams.pendingInvites.countPlural',
-              { count: invites.length },
-              'You have {count} pending invitations'
-            )}
+        {t(
+          'teams.pendingInvites.count',
+          { count: invites.length },
+          'You have {count, plural, one {# pending invitation} other {# pending invitations}}'
+        )}
       </h2>
       <ul className="space-y-2">
         {invites.map((invite) => (
           <li key={invite.id}>
             <Card className="flex items-center justify-between gap-3 p-3">
               <div className="font-medium">
-                {invite.name || t('common.team', { teamId: invite.teamId }, 'Team #{teamId}')}
+                {invite.teamName || t('common.team', { teamId: invite.teamId }, 'Team #{teamId}')}
               </div>
               <div className="flex gap-2">
                 <Button

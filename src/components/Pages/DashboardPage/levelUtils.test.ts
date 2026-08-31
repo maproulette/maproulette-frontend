@@ -72,13 +72,13 @@ describe('calculateNextLevelProgress', () => {
     }
   })
 
-  it('returns a negative percentage for scores below 10, since calculateLevel clamps to a minimum level of 1 while getScoreForLevel(1) is 10', () => {
-    // This documents existing behavior rather than asserting it is desirable:
+  it('clamps to 0% for scores below 10, since calculateLevel clamps to a minimum level of 1 while getScoreForLevel(1) is 10', () => {
     // calculateLevel(0..9) is clamped to 1 via Math.max(1, ...), but level 1's
     // own threshold (getScoreForLevel(1) = 10) is higher than these scores, so
-    // the progress-to-next-level calculation goes negative instead of clamping at 0.
-    expect(calculateNextLevelProgress(0)).toBeCloseTo(-33.33, 1)
-    expect(calculateNextLevelProgress(9)).toBeCloseTo(-3.33, 1)
+    // the raw progress-to-next-level calculation would go negative; it is clamped
+    // to 0 so brand-new users (score 0) don't see negative progress.
+    expect(calculateNextLevelProgress(0)).toBe(0)
+    expect(calculateNextLevelProgress(9)).toBe(0)
   })
 
   it('handles a score of 0 without producing NaN', () => {

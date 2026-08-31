@@ -18,6 +18,14 @@ const CHALLENGE_STATUS_DELETING_TASKS = 6
 
 const TASKS_UPDATING_MESSAGE = 'Updating Task Statuses'
 
+// Statuses that are not yet final; the challenge may still transition out of
+// these and the UI should keep polling for updates until it does.
+const NON_TERMINAL_STATUSES = [
+  CHALLENGE_STATUS_BUILDING,
+  CHALLENGE_STATUS_PARTIALLY_LOADED,
+  CHALLENGE_STATUS_DELETING_TASKS,
+]
+
 interface ChallengeStatusIndicatorProps {
   challenge: Challenge
   challengeId: number
@@ -29,7 +37,7 @@ export const ChallengeStatusIndicator = ({
 }: ChallengeStatusIndicatorProps) => {
   const { t } = useIntl()
   const queryClient = useQueryClient()
-  const [startTime] = useState(Date.now())
+  const [startTime, setStartTime] = useState(Date.now())
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [currentTime, setCurrentTime] = useState(Date.now())
   const hasInitialRefresh = useRef(false)
@@ -39,19 +47,20 @@ export const ChallengeStatusIndicator = ({
 
   useEffect(() => {
     hasInitialRefresh.current = false
+    setStartTime(Date.now())
   }, [challengeId])
 
   useEffect(() => {
-    if (!hasInitialRefresh.current && status === CHALLENGE_STATUS_BUILDING) {
+    if (!hasInitialRefresh.current && NON_TERMINAL_STATUSES.includes(status)) {
       api.challenge.refreshChallenge(challengeId, queryClient)
       setLastRefresh(Date.now())
       hasInitialRefresh.current = true
     }
   }, [status, challengeId])
 
-  // Auto-refresh every 10 seconds when building
+  // Auto-refresh every 10 seconds while the challenge is in any non-terminal status
   useEffect(() => {
-    if (status !== CHALLENGE_STATUS_BUILDING) return
+    if (!NON_TERMINAL_STATUSES.includes(status)) return
     const refreshInterval = setInterval(() => {
       api.challenge.refreshChallenge(challengeId, queryClient)
       setLastRefresh(Date.now())

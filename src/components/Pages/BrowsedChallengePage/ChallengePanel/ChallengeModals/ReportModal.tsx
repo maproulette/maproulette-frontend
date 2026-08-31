@@ -16,23 +16,15 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
+import { getParentInfo } from '@/lib/challengeParent'
 import { logger } from '@/lib/logger'
+import { markdownRemarkPlugins } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModalsContext'
+import { getGitHubErrorMessage } from './ReportModalHelpers'
 
 const MIN_CHARACTERS = 100
 const MAX_CHARACTERS = 1000
-
-const getParentInfo = (parent: unknown) => {
-  if (typeof parent === 'object' && parent !== null) {
-    const parentObj = parent as { id?: number; name?: string }
-    return { id: parentObj.id ?? null, name: parentObj.name || 'Unknown Project' }
-  }
-  if (typeof parent === 'number' || typeof parent === 'string') {
-    return { id: parent, name: 'Unknown Project' }
-  }
-  return { id: null, name: 'Unknown Project' }
-}
 
 const getCharacterCountColor = (count: number) => {
   if (count >= MAX_CHARACTERS || count < MIN_CHARACTERS) {
@@ -42,35 +34,6 @@ const getCharacterCountColor = (count: number) => {
     return 'text-yellow-600 dark:text-yellow-400'
   }
   return 'text-zinc-500 dark:text-slate-400'
-}
-
-const getGitHubErrorMessage = (
-  t: ReturnType<typeof useIntl>['t'],
-  status: number,
-  message: string
-) => {
-  if (message.includes('Bad credentials') || status === 401) {
-    return t(
-      'browsedChallengePage.challengeModals.reportModal.githubAuthError',
-      undefined,
-      'GitHub authentication failed. Please check that your GitHub token is valid and has the necessary permissions.'
-    )
-  }
-  if (status === 403) {
-    return t(
-      'browsedChallengePage.challengeModals.reportModal.githubForbiddenError',
-      undefined,
-      'GitHub API access forbidden. The token may not have the required permissions or the repository may be private.'
-    )
-  }
-  if (status === 404) {
-    return t(
-      'browsedChallengePage.challengeModals.reportModal.githubNotFoundError',
-      undefined,
-      'GitHub repository not found. Please check that the repository exists and is accessible.'
-    )
-  }
-  return message
 }
 
 export const ReportModal = () => {
@@ -309,6 +272,7 @@ export const ReportModal = () => {
               {reportText.trim() ? (
                 <div className="prose prose-sm dark:prose-invert max-w-none break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
                   <ReactMarkdown
+                    remarkPlugins={markdownRemarkPlugins}
                     components={{
                       a: ({ ...props }) => (
                         <a

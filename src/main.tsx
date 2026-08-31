@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, ErrorComponent, RouterProvider } from '@tanstack/react-router'
+import { HTTPError } from 'ky'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { ThemeProvider } from '@/contexts/ThemeContext'
@@ -18,13 +19,9 @@ const queryClient = new QueryClient({
       staleTime: 60 * 1000,
       refetchOnWindowFocus: false,
       retry: (failureCount, error: unknown) => {
-        if (
-          error &&
-          typeof error === 'object' &&
-          'status' in error &&
-          typeof error.status === 'number'
-        ) {
-          if (error.status >= 400 && error.status < 500) {
+        if (error instanceof HTTPError) {
+          const status = error.response.status
+          if (status >= 400 && status < 500) {
             return false
           }
         }

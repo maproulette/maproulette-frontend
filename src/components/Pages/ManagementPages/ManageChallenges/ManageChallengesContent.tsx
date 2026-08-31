@@ -11,6 +11,7 @@ import {
   MoreHorizontal,
   PanelLeftClose,
   PanelLeftOpen,
+  Pause,
   Pencil,
   Pin,
   Play,
@@ -66,6 +67,7 @@ export const ManageChallengesContent = () => {
     confirmDeleteChallenge,
     toggleChallengePin,
     toggleChallengeEnabled,
+    togglePaused,
     archiveChallenge,
     rebuildChallenge,
   } = useManageChallengesContext()
@@ -85,6 +87,66 @@ export const ManageChallengesContent = () => {
     const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
     return (
       <div className="flex items-center gap-1">
+        {challenge.id != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              togglePaused(challenge)
+            }}
+            title={
+              challenge.paused
+                ? t('common.resumeChallenge', undefined, 'Resume challenge')
+                : t('common.pauseChallenge', undefined, 'Pause challenge')
+            }
+            aria-label={
+              challenge.paused
+                ? t('common.resumeChallenge', undefined, 'Resume challenge')
+                : t('common.pauseChallenge', undefined, 'Pause challenge')
+            }
+          >
+            <Pause
+              className={cn(
+                'h-4 w-4',
+                challenge.paused
+                  ? 'text-amber-500 dark:text-amber-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+              )}
+            />
+          </Button>
+        )}
+        {challenge.id != null && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={(e) => {
+              e.preventDefault()
+              archiveChallenge(challenge)
+            }}
+            title={
+              challenge.isArchived
+                ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                : t('common.archiveChallenge', undefined, 'Archive challenge')
+            }
+            aria-label={
+              challenge.isArchived
+                ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
+                : t('common.archiveChallenge', undefined, 'Archive challenge')
+            }
+          >
+            <Archive
+              className={cn(
+                'h-4 w-4',
+                challenge.isArchived
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
+              )}
+            />
+          </Button>
+        )}
         {challenge.id != null && (
           <Button
             variant="ghost"

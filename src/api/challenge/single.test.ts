@@ -177,6 +177,81 @@ describe('challengeSingle.getChallengeTags', () => {
   })
 })
 
+describe('challengeSingle.getChallengeTagsBatch', () => {
+  it('returns all tags from cache without fetching when every id is already cached', async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 'tags', 1], [{ id: 1, name: 'tag-a' }])
+    queryClient.setQueryData(['challenge', 'tags', 2], [{ id: 2, name: 'tag-b' }])
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([1, 2]), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(
+      new Map([
+        [1, [{ id: 1, name: 'tag-a' }]],
+        [2, [{ id: 2, name: 'tag-b' }]],
+      ])
+    )
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('fetches only the missing ids in a single request, merges with cache, and backfills the per-challenge cache', async () => {
+    const fetchMock = stubFetch(
+      new Response(JSON.stringify({ '2': [{ id: 9, name: 'tag-b' }] }), { status: 200 })
+    )
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 'tags', 1], [{ id: 1, name: 'tag-a' }])
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([1, 2]), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(
+      new Map([
+        [1, [{ id: 1, name: 'tag-a' }]],
+        [2, [{ id: 9, name: 'tag-b' }]],
+      ])
+    )
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    const [request] = fetchMock.mock.calls[0]
+    const url = new URL((request as Request).url)
+    expect(url.pathname).toBe('/api/v2/challenges/tags/batch')
+    expect(url.searchParams.get('challengeIds')).toBe('2')
+    expect(queryClient.getQueryData(['challenge', 'tags', 2])).toEqual([{ id: 9, name: 'tag-b' }])
+  })
+
+  it('defaults to an empty tag list and caches it when the response omits a requested id', async () => {
+    stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+    const queryClient = createTestQueryClient()
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([3]), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(new Map([[3, []]]))
+    expect(queryClient.getQueryData(['challenge', 'tags', 3])).toEqual([])
+  })
+
+  it('is disabled when given an empty array of challenge ids', () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([]), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
 describe('challengeSingle.getChallengeStats', () => {
   it('fetches stats for a challenge', async () => {
     const stats = { actions: [] } as unknown as ChallengeStatsResponse
@@ -194,6 +269,17 @@ describe('challengeSingle.getChallengeStats', () => {
     const fetchMock = stubFetch(new Response('{}', { status: 200 }))
 
     const { result } = renderHook(() => challengeSingle.getChallengeStats(0), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('is disabled when the enabled param is false, even with a valid challengeId', () => {
+    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.getChallengeStats(4, false), {
       wrapper: queryClientWrapper(),
     })
 
@@ -295,6 +381,25 @@ describe('challengeSingle.getRandomTask', () => {
   })
 })
 
+describe('challengeSingle.getFirstTask', () => {
+  it('fetches the first task in the challenge and caches it', async () => {
+    const tasks = [{ id: 33 }] as unknown as Task[]
+    const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
+    const queryClient = createTestQueryClient()
+
+    const result = await challengeSingle.getFirstTask(9, queryClient)
+
+    expect(result).toEqual(tasks)
+    expect(queryClient.getQueryData(['task', 33])).toEqual(tasks[0])
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.url).toContain('api/v2/challenge/9/tasks')
+    const params = new URL(request.url).searchParams
+    expect(params.get('limit')).toBe('1')
+    expect(params.get('page')).toBe('0')
+  })
+})
+
 describe('challengeSingle.fetchTasksNearby', () => {
   it('fetches nearby tasks using the default limit', async () => {
     const tasks = [{ id: 5 }] as unknown as Task[]
@@ -384,6 +489,38 @@ describe('challengeSingle.useCloneChallenge', () => {
     expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
     expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'managed'] })
     expect(spy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
+  })
+
+  it('omits the projectId query param when no target project is given', async () => {
+    const cloned = { id: 21, name: 'Cloned' } as unknown as ChallengeGetResponse
+    const fetchMock = stubFetch(new Response(JSON.stringify(cloned), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.useCloneChallenge(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({ challengeId: 20, newName: 'Cloned' })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(new URL(request.url).searchParams.has('projectId')).toBe(false)
+  })
+
+  it('sends the target projectId when cloning into a chosen project', async () => {
+    const cloned = { id: 21, name: 'Cloned' } as unknown as ChallengeGetResponse
+    const fetchMock = stubFetch(new Response(JSON.stringify(cloned), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.useCloneChallenge(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({ challengeId: 20, newName: 'Cloned', projectId: 7 })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(new URL(request.url).searchParams.get('projectId')).toBe('7')
   })
 })
 
@@ -493,6 +630,9 @@ describe('challengeSingle.useUpdateChallenge', () => {
 
     expect(queryClient.getQueryData(['challenge', 40])).toEqual(updated)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
+    // The manage-challenges pages read from ['challenge', 'listing'], so it must be
+    // invalidated or their cards keep rendering stale enabled/name values.
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'explore'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'exploreInfinite'] })
   })
@@ -521,6 +661,7 @@ describe('challengeSingle.useSaveOrUpdateChallenge', () => {
 
     expect(queryClient.getQueryData(['challenge', 50])).toEqual(saved)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'explore'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'exploreInfinite'] })
   })

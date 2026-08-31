@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/Table'
 import { useIntl } from '@/i18n'
+import { getParentInfo } from '@/lib/challengeParent'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
@@ -66,76 +67,79 @@ export const ChallengesTableView = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {challenges.map((challenge) => (
-            <TableRow key={challenge.id}>
-              <TableCell>
-                <Link
-                  to="/challenge/$challengeId"
-                  params={{ challengeId: challenge.id.toString() }}
-                  className="font-medium text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  {challenge.name}
-                </Link>
-              </TableCell>
-              <TableCell className="text-zinc-600 dark:text-slate-400">
-                {challenge.owner
-                  ? t(
-                      'exploreChallenges.challengeList.table.userLabel',
-                      { owner: challenge.owner },
-                      'User {owner}'
-                    )
-                  : '--'}
-              </TableCell>
-              <TableCell className="text-zinc-600 dark:text-slate-400">
-                {challenge.parent
-                  ? t(
-                      'exploreChallenges.challengeList.table.projectLabel',
-                      { parent: challenge.parent },
-                      'Project {parent}'
-                    )
-                  : '--'}
-              </TableCell>
-              <TableCell className="text-center text-zinc-600 dark:text-slate-400">
-                {challenge.completionPercentage ?? 0}%
-              </TableCell>
-              <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
-              <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
-              <TableCell className="text-center">
-                {challenge.featured ? (
-                  <Badge
-                    variant="secondary"
-                    className="bg-orange-100 text-orange-800 text-xs dark:bg-orange-900 dark:text-orange-200"
+          {challenges.map((challenge) => {
+            const { name: parentName } = getParentInfo(challenge.parent)
+            return (
+              <TableRow key={challenge.id}>
+                <TableCell>
+                  <Link
+                    to="/challenge/$challengeId"
+                    params={{ challengeId: challenge.id.toString() }}
+                    className="font-medium text-blue-600 hover:underline dark:text-blue-400"
                   >
-                    {t('exploreChallenges.challengeList.table.urgent', undefined, 'URGENT')}
+                    {challenge.name}
+                  </Link>
+                </TableCell>
+                <TableCell className="text-zinc-600 dark:text-slate-400">
+                  {challenge.owner
+                    ? t(
+                        'exploreChallenges.challengeList.table.userLabel',
+                        { owner: challenge.owner },
+                        'User {owner}'
+                      )
+                    : '--'}
+                </TableCell>
+                <TableCell className="text-zinc-600 dark:text-slate-400">
+                  {challenge.parent
+                    ? t(
+                        'exploreChallenges.challengeList.table.projectLabel',
+                        { name: parentName },
+                        'Project {name}'
+                      )
+                    : '--'}
+                </TableCell>
+                <TableCell className="text-center text-zinc-600 dark:text-slate-400">
+                  {challenge.completionPercentage ?? 0}%
+                </TableCell>
+                <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
+                <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
+                <TableCell className="text-center">
+                  {challenge.featured ? (
+                    <Badge
+                      variant="secondary"
+                      className="bg-orange-100 text-orange-800 text-xs dark:bg-orange-900 dark:text-orange-200"
+                    >
+                      {t('exploreChallenges.challengeList.table.urgent', undefined, 'URGENT')}
+                    </Badge>
+                  ) : (
+                    <span className="text-zinc-600 dark:text-slate-400">--</span>
+                  )}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Badge
+                    variant="outline"
+                    className={cn(getDifficultyColor(challenge.difficulty), 'text-xs')}
+                  >
+                    {getDifficultyLabel(t, challenge.difficulty)}
                   </Badge>
-                ) : (
-                  <span className="text-zinc-600 dark:text-slate-400">--</span>
-                )}
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge
-                  variant="outline"
-                  className={cn(getDifficultyColor(challenge.difficulty), 'text-xs')}
-                >
-                  {getDifficultyLabel(challenge.difficulty)}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge variant="outline" className="text-xs">
-                  {challenge.enabled
-                    ? t('exploreChallenges.challengeList.table.published', undefined, 'Published')
-                    : t('exploreChallenges.challengeList.table.disabled', undefined, 'Disabled')}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-zinc-600 dark:text-slate-400">
-                {typeof challenge.location === 'string' ? challenge.location : '--'}
-              </TableCell>
-              <TableCell className="text-zinc-600 dark:text-slate-400">
-                {challenge.modified ? formatDate(new Date(challenge.modified)) : '--'}
-              </TableCell>
-              <TableCell className="text-zinc-600 dark:text-slate-400">--</TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Badge variant="outline" className="text-xs">
+                    {challenge.enabled
+                      ? t('exploreChallenges.challengeList.table.published', undefined, 'Published')
+                      : t('exploreChallenges.challengeList.table.disabled', undefined, 'Disabled')}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-zinc-600 dark:text-slate-400">
+                  {typeof challenge.location === 'string' ? challenge.location : '--'}
+                </TableCell>
+                <TableCell className="text-zinc-600 dark:text-slate-400">
+                  {challenge.modified ? formatDate(new Date(challenge.modified)) : '--'}
+                </TableCell>
+                <TableCell className="text-zinc-600 dark:text-slate-400">--</TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </ScrollArea>

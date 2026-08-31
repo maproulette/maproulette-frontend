@@ -25,6 +25,7 @@ interface SpiderMarkersProps {
   selectedTaskId?: number | null
   activeTaskId?: number | null
   lassoSelectedTaskIds?: Set<number>
+  hoveredTaskId?: number | null
 }
 
 /**
@@ -38,6 +39,7 @@ export const SpiderMarkers = ({
   selectedTaskId,
   activeTaskId,
   lassoSelectedTaskIds = new Set(),
+  hoveredTaskId,
 }: SpiderMarkersProps) => {
   const SPIDER_SOURCE_ID = 'spider-lines'
   const SPIDER_LINES_OUTLINE_ID = 'spider-lines-outline'
@@ -56,6 +58,7 @@ export const SpiderMarkers = ({
         const isSelected = marker.id === selectedTaskId
         const isActive = marker.id === activeTaskId
         const isLassoSelected = lassoSelectedTaskIds.has(marker.id)
+        const isHovered = marker.id === hoveredTaskId
         const typeKey = (marker as TaskMarker & { typeKey?: TaskTypeKey | null }).typeKey ?? null
 
         return {
@@ -69,6 +72,7 @@ export const SpiderMarkers = ({
             isSelected,
             isActive,
             isLassoSelected,
+            isHovered,
             isSpidered: true,
             ...(typeKey ? { typeKey } : {}),
           },
@@ -92,6 +96,7 @@ export const SpiderMarkers = ({
     selectedTaskId,
     activeTaskId,
     lassoSelectedTaskIds,
+    hoveredTaskId,
   ])
 
   const spiderLinesGeoJSON = useMemo(() => {
@@ -215,6 +220,16 @@ export const SpiderMarkers = ({
           layout={{
             'icon-image': [
               'case',
+
+              ['get', 'isHovered'],
+              [
+                'concat',
+                'marker-pin-',
+                ['to-string', ['get', 'status']],
+                '-',
+                ['to-string', ['coalesce', ['get', 'priority'], 1]],
+                '-hovered',
+              ],
 
               ['get', 'isPrimary'],
               [
@@ -340,7 +355,13 @@ export const SpiderMarkers = ({
             'icon-size': [
               'case',
 
-              ['any', ['get', 'isHighlighted'], ['get', 'isActive'], ['get', 'isSelected']],
+              [
+                'any',
+                ['get', 'isHighlighted'],
+                ['get', 'isActive'],
+                ['get', 'isSelected'],
+                ['get', 'isHovered'],
+              ],
               1.4,
 
               1.0,
@@ -350,6 +371,8 @@ export const SpiderMarkers = ({
             'icon-ignore-placement': true,
             'symbol-sort-key': [
               'case',
+              ['get', 'isHovered'],
+              1300,
               ['get', 'isPrimary'],
               1200,
               ['all', ['get', 'isHighlighted'], ['get', 'isActive']],

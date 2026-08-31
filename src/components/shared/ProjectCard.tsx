@@ -29,7 +29,7 @@ export const ProjectCard = ({
   linkParams,
 }: ProjectCardProps) => {
   const { t } = useIntl()
-  const meta = challengeMeta ?? { totalChallenges: 10, pinned: 3, completed: 4 }
+  const meta = challengeMeta ?? { totalChallenges: 0, pinned: 0, completed: 0 }
   const completionPercentage =
     meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
   const lastUpdated = project.modified
@@ -44,7 +44,19 @@ export const ProjectCard = ({
       )}
     >
       {actions && (
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
+        <div
+          className="absolute top-3 right-3 z-10 flex items-center gap-1"
+          // The card is a Link, and Radix menus portal but still bubble React events
+          // through it, so keep any action click from navigating to the project.
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+          role="toolbar"
+        >
+          {actions}
+        </div>
       )}
       <div className="p-4">
         <div className="mb-2 text-xs text-zinc-500 dark:text-slate-300">

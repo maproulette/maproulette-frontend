@@ -63,6 +63,27 @@ export interface TaskEventMessage extends WebSocketMessage {
   data: TaskAction
 }
 
+export interface BundleTaskInfo {
+  id: number
+  parent: number
+  status?: number | null
+  name?: string
+  bundleId?: number | null
+  isBundlePrimary?: boolean | null
+}
+
+export interface TasksAction {
+  tasks: BundleTaskInfo[]
+  challenge: ChallengeSummary | null
+  project: ProjectSummary | null
+  byUser: UserSummary | null
+}
+
+export interface TasksEventMessage extends WebSocketMessage {
+  messageType: 'tasks-claimed' | 'tasks-released' | 'tasks-update' | 'tasks-completed'
+  data: TasksAction
+}
+
 export interface ReviewData {
   taskWithReview: {
     task: { id: number; parent: number; status?: number | null }
@@ -95,6 +116,7 @@ export type WebSocketMessageTypes =
   | NotificationNewMessage
   | AchievementAwardedMessage
   | TaskEventMessage
+  | TasksEventMessage
   | ReviewEventMessage
   | TeamUpdateMessage
   | FollowUpdateMessage

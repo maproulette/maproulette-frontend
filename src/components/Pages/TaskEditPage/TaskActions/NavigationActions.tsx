@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 
 export const NavigationActions = ({
@@ -16,6 +17,7 @@ export const NavigationActions = ({
 }) => {
   const { t } = useIntl()
   const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
   const queryClient = useQueryClient()
   const [isLoadingNearby, setIsLoadingNearby] = useState(false)
   const [isLoadingRandom, setIsLoadingRandom] = useState(false)
@@ -28,7 +30,7 @@ export const NavigationActions = ({
         queryFn: () => api.challenge.fetchTasksNearby(challengeId, taskId, 1),
       })
       if (nearbyTasks && nearbyTasks.length > 0) {
-        await navigate({ to: '/tasks/$taskId', params: { taskId: String(nearbyTasks[0].id) } })
+        await navigateToTask(nearbyTasks[0].id)
       } else {
         toast.info(
           t(
@@ -56,7 +58,7 @@ export const NavigationActions = ({
     try {
       const randomTasks = await api.challenge.getRandomTask(challengeId, queryClient)
       if (randomTasks && randomTasks.length > 0) {
-        await navigate({ to: '/tasks/$taskId', params: { taskId: String(randomTasks[0].id) } })
+        await navigateToTask(randomTasks[0].id)
       } else {
         toast.info(
           t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')

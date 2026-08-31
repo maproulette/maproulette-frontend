@@ -3,7 +3,10 @@ import bbox from '@turf/bbox'
 import { ExternalLink, Eye, EyeOff, Share2, Star, X, ZoomIn } from 'lucide-react'
 import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
-import { EDITABLE_STATUSES } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import {
+  EDITABLE_STATUSES,
+  useTaskContext,
+} from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
 import {
@@ -15,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover
 import { useAuthContext } from '@/contexts/AuthContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
-import { STATUS_COLORS, STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
@@ -53,9 +56,10 @@ export const TaskInfoHeader = ({
   const { isTaskEditableByPlugins } = usePluginContext()
   const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
   const { data: project } = api.project.getProject(challenge?.parent)
+  const { task: contextTask } = useTaskContext()
 
   const status = task.status ?? 0
-  const statusLabel = STATUS_LABELS[status] || t('common.unknown', undefined, 'Unknown')
+  const statusLabel = getStatusLabel(t, status) || t('common.unknown', undefined, 'Unknown')
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const isEditable = EDITABLE_STATUSES.includes(status) || isTaskEditableByPlugins(task)
@@ -180,7 +184,7 @@ export const TaskInfoHeader = ({
                 </a>
               </Button>
             )}
-            {isEditable && <LockButton compact />}
+            {task.id === contextTask.id && isEditable && <LockButton compact />}
             {onClose && (
               <Button
                 variant="ghost"

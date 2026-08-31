@@ -76,7 +76,7 @@ export const ClusterToggle = ({
       className={cn(
         inline
           ? 'max-w-none'
-          : 'absolute top-3 left-3 z-[100] max-w-[calc(100%-6rem)] md:top-4 md:left-4 md:max-w-none',
+          : 'absolute top-3 left-3 z-20 max-w-[calc(100%-6rem)] md:top-4 md:left-4 md:max-w-none',
         className
       )}
     >

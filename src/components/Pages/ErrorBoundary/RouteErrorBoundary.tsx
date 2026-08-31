@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { AlertCircle, ArrowLeft, Home, RefreshCw } from 'lucide-react'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
@@ -243,11 +244,13 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
  * - Generic errors
  */
 export const RouteErrorBoundary = ({ error, reset }: RouteErrorBoundaryProps) => {
-  // Log the error for debugging
-  logger.error('Route error caught', {
-    error: error.message,
-    stack: error.stack,
-  })
+  // Log the error for debugging, once per occurrence rather than on every re-render
+  useEffect(() => {
+    logger.error('Route error caught', {
+      error: error.message,
+      stack: error.stack,
+    })
+  }, [error])
 
   // Handle HTTP errors from API
   if (error instanceof HTTPError) {

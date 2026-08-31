@@ -21,14 +21,7 @@ export const ProjectDetail = () => {
     (sum, c) => sum + (c.completionMetrics?.tasksRemaining ?? 0),
     0
   )
-  const totalTasks = challenges.reduce((sum, c) => {
-    const remaining = c.completionMetrics?.tasksRemaining ?? 0
-    const completion = c.completionPercentage || 0
-    if (completion > 0 && remaining > 0) {
-      return sum + Math.round(remaining / (1 - completion / 100))
-    }
-    return sum + remaining
-  }, 0)
+  const totalTasks = challenges.reduce((sum, c) => sum + (c.completionMetrics?.total ?? 0), 0)
   const completedTasks = totalTasks - remainingTasks
   const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0
 

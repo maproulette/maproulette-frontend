@@ -43,6 +43,21 @@ describe('team.useCreateTeam', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(created)
   })
+
+  // The backend's shared Group JSON reader requires `id` and `groupType` to
+  // be present in the request body (even though it discards both), so
+  // omitting them makes this endpoint 400. See the comment on useCreateTeam.
+  it('sends placeholder id and groupType fields required by the backend', async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({ id: 5, name: 'New Team' })))
+
+    const { result } = renderHook(() => team.useCreateTeam(), { wrapper: queryClientWrapper() })
+    result.current.mutate({ name: 'New Team' })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    const [request] = fetchMock.mock.calls[0]
+    const body = JSON.parse(await request.clone().text())
+    expect(body).toEqual({ id: 0, groupType: 0, name: 'New Team' })
+  })
 })
 
 describe('team.members', () => {
@@ -122,6 +137,18 @@ describe('team.useUpdateTeam', () => {
     const [request] = fetchMock.mock.calls[0]
     expect(request.method).toBe('PUT')
     expect(request.url).toContain('api/v2/team/3')
+  })
+
+  it('sends placeholder id and groupType fields required by the backend', async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify({ id: 3, name: 'Updated Team' })))
+
+    const { result } = renderHook(() => team.useUpdateTeam(), { wrapper: queryClientWrapper() })
+    result.current.mutate({ teamId: 3, payload: { name: 'Updated Team' } })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    const [request] = fetchMock.mock.calls[0]
+    const body = JSON.parse(await request.clone().text())
+    expect(body).toEqual({ id: 3, groupType: 0, name: 'Updated Team' })
   })
 })
 

@@ -11,7 +11,13 @@ const GEOJSON = {
   ],
 }
 
-test('a user can create a challenge from a local GeoJSON file', async ({ page, project }) => {
+// Only verifies the create-challenge form submits successfully with a GeoJSON
+// upload. It does not verify that the uploaded tasks are actually imported —
+// see the note in fixtures.ts about the backend's async import bug.
+test('a user can submit the create-challenge form with a local GeoJSON file', async ({
+  page,
+  project,
+}) => {
   await page.goto(`/manage/challenge/new?projectId=${project.id}`)
 
   const heading = page.getByRole('heading', { name: 'Create New Challenge' })

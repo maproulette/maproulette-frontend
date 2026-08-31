@@ -269,6 +269,19 @@ describe('makeChallengeFormSchema', () => {
     )
 
     it.each([true, false])(
+      'treats a whitespace-only remoteGeoJSON as blank (isEdit=%s)',
+      (isEdit) => {
+        const result = makeChallengeFormSchema(isEdit, t).safeParse({
+          ...validValues,
+          dataSource: 'remoteGeoJSON',
+          overpassQL: '',
+          remoteGeoJSON: '   ',
+        })
+        expect(result.success).toBe(false)
+      }
+    )
+
+    it.each([true, false])(
       'accepts dataSource remoteGeoJSON once a URL is provided (isEdit=%s)',
       (isEdit) => {
         const result = makeChallengeFormSchema(isEdit, t).safeParse({

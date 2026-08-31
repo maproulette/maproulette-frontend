@@ -96,6 +96,26 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-image': [
       'case',
 
+      ['==', ['get', 'isHovered'], true],
+      [
+        'case',
+        ['==', ['get', 'isOverlapping'], true],
+        [
+          'case',
+          ['>', ['get', 'overlapTaskCount'], 20],
+          'marker-overlap-many-hovered',
+          ['concat', 'marker-overlap-', ['to-string', ['get', 'overlapTaskCount']], '-hovered'],
+        ],
+        [
+          'concat',
+          'marker-pin-',
+          ['to-string', ['get', 'status']],
+          '-',
+          ['to-string', ['coalesce', ['get', 'priority'], 1]],
+          '-hovered',
+        ],
+      ],
+
       ['==', ['get', 'isOverlapping'], true],
       [
         'case',
@@ -267,6 +287,7 @@ export const unclusteredPointLayer: LayerProps = {
         ['==', ['get', 'isHighlighted'], true],
         ['==', ['get', 'isActive'], true],
         ['==', ['get', 'isSelected'], true],
+        ['==', ['get', 'isHovered'], true],
       ],
       1.4,
 
@@ -281,6 +302,8 @@ export const unclusteredPointLayer: LayerProps = {
     'icon-opacity': [
       'case',
 
+      ['==', ['get', 'isHovered'], true],
+      1,
       ['==', ['get', 'isPrimary'], true],
       1,
       ['==', ['get', 'isHighlighted'], true],

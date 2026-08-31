@@ -45,7 +45,7 @@ export const CommentMentionInput = ({
 
   useEffect(() => {
     setSelectedIndex(0)
-  }, [])
+  }, [match, users])
 
   const pickUser = (displayName: string) => {
     if (!match) return
@@ -82,7 +82,7 @@ export const CommentMentionInput = ({
       if (e.key === 'Enter' || e.key === 'Tab') {
         e.preventDefault()
         const picked = users[selectedIndex]
-        if (picked) pickUser(picked.osmProfile.displayName)
+        if (picked) pickUser(picked.displayName)
         return
       }
       if (e.key === 'Escape') {
@@ -133,14 +133,14 @@ export const CommentMentionInput = ({
               )}
               onMouseDown={(e) => {
                 e.preventDefault()
-                pickUser(u.osmProfile.displayName)
+                pickUser(u.displayName)
               }}
             >
               <Avatar className="size-6">
-                <AvatarImage src={u.osmProfile.avatarURL} alt={u.osmProfile.displayName} />
-                <AvatarFallback>{initials(u.osmProfile.displayName)}</AvatarFallback>
+                <AvatarImage src={u.avatarURL} alt={u.displayName} />
+                <AvatarFallback>{initials(u.displayName)}</AvatarFallback>
               </Avatar>
-              <span>{u.osmProfile.displayName}</span>
+              <span>{u.displayName}</span>
             </button>
           ))}
         </div>

@@ -1,7 +1,4 @@
-import { expect, test } from './fixtures'
-
-const BACKEND_URL = 'http://localhost:9000'
-const SUPER_KEY = 'super-secret-key'
+import { BACKEND_URL, expect, SUPER_KEY, test } from './fixtures'
 
 interface WhoamiUser {
   id: number
@@ -21,6 +18,14 @@ interface WhoamiUser {
 // environment, independent of anything in this repo — there's currently no
 // way to represent a real super-admin-granted user without OSM OAuth or
 // direct database access, neither of which the E2E harness uses.
+//
+// Substitute coverage: src/lib/SuperAdminGuard.test.ts unit-tests
+// `isSuperUser` directly (the guard's actual access-control predicate) across
+// null/undefined users and grants with/without role === -1, which is the one
+// piece of /super-admin/* logic this repo can exercise without a real
+// super-admin-granted identity. It does not cover the routed page/table
+// behavior below (that remains genuinely untested pending either OSM OAuth
+// support or DB-level seeding in the E2E harness).
 test.skip('the super-admin users page lists the real authenticated user from the backend', async ({
   page,
   request,

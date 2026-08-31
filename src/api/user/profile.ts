@@ -2,7 +2,13 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/r
 import type { Challenge } from '@/types/Challenge'
 import type { components } from '@/types/openApiTypes'
 import type { Task } from '@/types/Task'
-import type { User, UserMetricsResponse, UserProperties, UserSettings } from '@/types/User'
+import type {
+  PublicUser,
+  User,
+  UserMetricsResponse,
+  UserProperties,
+  UserSettings,
+} from '@/types/User'
 import { apiRequest } from '../client'
 
 export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
@@ -29,6 +35,15 @@ export const userProfile = {
       queryOptions({
         queryKey: ['user', userId],
         queryFn: () => apiRequest.get(`api/v2/user/${userId}`).json<User>(),
+        enabled: !!userId,
+      })
+    ),
+
+  getPublicUser: (userId: number) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'public'],
+        queryFn: () => apiRequest.get(`api/v2/user/${userId}/public`).json<PublicUser>(),
         enabled: !!userId,
       })
     ),
@@ -138,14 +153,28 @@ export const userProfile = {
         settings: UserSettings
         properties?: UserProperties
       }) => {
+        // `properties` must be sent as a JSON object, not a stringified string: the
+        // backend reads it with `(value \ "properties").asOpt[JsObject]` and silently
+        // falls back to the stored properties when it isn't an object.
         const payload = {
           ...settings,
-          ...(properties && { properties: JSON.stringify(properties) }),
+          ...(properties && { properties }),
         }
         return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
       },
       onSuccess: (updatedUser) => {
         queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
+      },
+    })
+  },
+
+  useUnsaveChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, challengeId }: { userId: number; challengeId: number }) =>
+        apiRequest.delete(`api/v2/user/${userId}/unsave/${challengeId}`).text(),
+      onSuccess: (_data, { userId }) => {
+        queryClient.invalidateQueries({ queryKey: ['user', userId, 'savedChallenges'] })
       },
     })
   },

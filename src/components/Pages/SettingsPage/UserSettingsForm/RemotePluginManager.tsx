@@ -1,5 +1,5 @@
 import { AlertCircle, Download, ExternalLink, Plus, Trash2 } from 'lucide-react'
-import { useId, useState } from 'react'
+import { Fragment, useId, useState } from 'react'
 import { toast } from 'sonner'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
@@ -149,7 +149,11 @@ export const RemotePluginManager = () => {
             className="flex-1"
             disabled={isLoading}
           />
-          <Button onClick={handleSearchPlugin} disabled={isLoading || !moduleUrl.trim()}>
+          <Button
+            type="button"
+            onClick={handleSearchPlugin}
+            disabled={isLoading || !moduleUrl.trim()}
+          >
             {isLoading ? (
               <>
                 <Download className="mr-2 size-4 animate-pulse" />
@@ -207,8 +211,8 @@ export const RemotePluginManager = () => {
             {remotePlugins.map((plugin, index) => {
               const moduleUrl = remotePluginUrls.get(plugin.metadata.id)
               return (
-                <>
-                  <Item key={plugin.metadata.id} variant="outline" size="sm">
+                <Fragment key={plugin.metadata.id}>
+                  <Item variant="outline" size="sm">
                     <ItemContent>
                       <ItemTitle>
                         {plugin.metadata.name}
@@ -230,6 +234,7 @@ export const RemotePluginManager = () => {
                     </ItemContent>
                     <ItemActions>
                       <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemovePlugin(plugin.metadata.id, plugin.metadata.name)}
@@ -240,7 +245,7 @@ export const RemotePluginManager = () => {
                     </ItemActions>
                   </Item>
                   {index !== remotePlugins.length - 1 && <ItemSeparator />}
-                </>
+                </Fragment>
               )
             })}
           </ItemGroup>

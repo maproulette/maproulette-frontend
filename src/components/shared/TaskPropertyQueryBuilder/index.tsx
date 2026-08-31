@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { logger } from '@/lib/logger'
 import {
   binaryToFlat,
   createEmptyLeaf,
@@ -35,7 +36,8 @@ export const TaskPropertyQueryBuilder = ({ value, onChange }: Props) => {
     if (validatePropertyRules(next).length === 0 && next.rules.length > 0) {
       try {
         onChange?.(flatToBinary(next))
-      } catch {
+      } catch (error) {
+        logger.warn('Rule to binary conversion failed', { error })
         onChange?.(null)
       }
     } else {

@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
+import { BACKEND_URL } from './e2e/fixtures'
 
 const FRONTEND_URL = 'http://localhost:3005'
-const BACKEND_URL = 'http://localhost:9000'
 
 export default defineConfig({
   testDir: './e2e',

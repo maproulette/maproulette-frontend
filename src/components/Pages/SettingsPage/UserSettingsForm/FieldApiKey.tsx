@@ -13,7 +13,7 @@ import {
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import { RegenerateApiKeyDialog } from './RegenerateApiKeyDialog'
 
-const maskKey = (key: string): string => {
+export const maskKey = (key: string): string => {
   if (!key) return ''
   if (key.length <= 8) return '••••••••'
   return `${key.slice(0, 4)}${'•'.repeat(Math.max(4, key.length - 8))}${key.slice(-4)}`

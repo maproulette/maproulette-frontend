@@ -6,6 +6,7 @@ import { DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { useIntl } from '@/i18n'
+import { getStatusLabel } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
 const cardClassName = cn(
@@ -16,15 +17,6 @@ const cardClassName = cn(
 
 export const FindFeatureByName = () => {
   const { t } = useIntl()
-  const statusLabels: Record<number, string> = {
-    0: t('common.created', undefined, 'Created'),
-    1: t('common.fixed', undefined, 'Fixed'),
-    2: t('common.falsePositive', undefined, 'False Positive'),
-    3: t('common.skipped', undefined, 'Skipped'),
-    4: t('common.deleted', undefined, 'Deleted'),
-    5: t('common.alreadyFixed', undefined, 'Already Fixed'),
-    6: t('common.cantComplete', undefined, "Can't Complete"),
-  }
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const trimmed = searchQuery.trim()
@@ -218,7 +210,8 @@ export const FindFeatureByName = () => {
               <div className="space-y-2">
                 {tasks.map((task) => {
                   const statusLabel =
-                    statusLabels[task.status ?? -1] || t('common.unknown', undefined, 'Unknown')
+                    getStatusLabel(t, task.status ?? -1) ||
+                    t('common.unknown', undefined, 'Unknown')
                   return (
                     <Link
                       key={`t-${task.id}`}

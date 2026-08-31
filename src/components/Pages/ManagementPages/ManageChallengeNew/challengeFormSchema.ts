@@ -59,6 +59,9 @@ export type ChallengeFormValues = z.infer<ReturnType<typeof makeBaseChallengeFor
 // creating. Overpass and remote sources still need their value either way.
 export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
   makeBaseChallengeFormSchema(t).superRefine((data, ctx) => {
+    // dataSource is a zod enum of exactly these three values, and each check
+    // below only fires an issue for its own source, so these are independent
+    // checks rather than an if/else-if chain.
     if (data.dataSource === 'overpass') {
       if (!data.overpassQL || data.overpassQL.trim().length === 0) {
         ctx.addIssue({
@@ -71,7 +74,8 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
           ),
         })
       }
-    } else if (data.dataSource === 'localGeoJSON') {
+    }
+    if (data.dataSource === 'localGeoJSON') {
       if (!isEdit && !data.localGeoJSON) {
         ctx.addIssue({
           code: 'custom',
@@ -83,7 +87,8 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
           ),
         })
       }
-    } else if (data.dataSource === 'remoteGeoJSON') {
+    }
+    if (data.dataSource === 'remoteGeoJSON') {
       if (!data.remoteGeoJSON || data.remoteGeoJSON.trim().length === 0) {
         ctx.addIssue({
           code: 'custom',

@@ -1,8 +1,8 @@
-import { createFileRoute, useParams } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { TaskPrioritizationPage } from '@/components/Pages/ManagementPages/TaskPrioritizationPage'
 
 const PrioritizationRouteComponent = () => {
-  const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/prioritization' })
+  const { challengeId } = Route.useParams()
   return <TaskPrioritizationPage challengeId={Number(challengeId)} />
 }
 

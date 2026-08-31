@@ -10,7 +10,7 @@ import type { ChallengeActivityEntry } from '@/types/Challenge'
 const MAX_RAW_ENTRIES = 90
 const MAX_DAY_GROUPS = 14
 
-const dateSortKey = (raw: string | number): string => {
+export const dateSortKey = (raw: string | number): string => {
   if (typeof raw === 'number') return new Date(raw).toISOString().slice(0, 10)
   const s = String(raw)
   if (/^\d+$/.test(s)) return new Date(Number(s)).toISOString().slice(0, 10)
@@ -30,7 +30,7 @@ const statusLabel = (status: number, statusName: string, t: ReturnType<typeof us
   )
 }
 
-const buildDayGroups = (entries: ChallengeActivityEntry[]) => {
+export const buildDayGroups = (entries: ChallengeActivityEntry[]) => {
   const trimmed = entries.slice(-MAX_RAW_ENTRIES)
   const byDay = new Map<string, ChallengeActivityEntry[]>()
   for (const row of trimmed) {

@@ -8,7 +8,7 @@ import { useProfilePageContext } from '../contexts/ProfilePageContext'
 export const ReviewerStatsBlock = () => {
   const { t } = useIntl()
   const { userId, timeRange } = useProfilePageContext()
-  const { data, isLoading } = api.user.metrics(userId, timeRange.monthDuration)
+  const { data, isLoading, isError } = api.user.metrics(userId, timeRange.monthDuration)
 
   const reviewStatusLabels: Record<string, string> = {
     '0': t('common.needed', undefined, 'Needed'),
@@ -21,7 +21,7 @@ export const ReviewerStatsBlock = () => {
 
   const reviewerTotal = Object.values(data?.reviewTasks ?? {}).reduce((a, b) => a + b, 0)
 
-  if (!isLoading && reviewerTotal === 0) {
+  if (!isLoading && !isError && reviewerTotal === 0) {
     return null
   }
 
@@ -36,6 +36,10 @@ export const ReviewerStatsBlock = () => {
       <CardContent>
         {isLoading ? (
           <Skeleton className="h-24 w-full" />
+        ) : isError || !data ? (
+          <p className="text-sm text-zinc-500 dark:text-slate-400">
+            {t('profilePage.reviewerStats.loadError', undefined, "Couldn't load reviewer stats.")}
+          </p>
         ) : (
           <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
             {Object.entries(data?.reviewTasks ?? {}).map(([status, count]) => (

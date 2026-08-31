@@ -1,9 +1,5 @@
 import { useLoaderData } from '@tanstack/react-router'
-import { useEffect } from 'react'
-import { api } from '@/api'
 import { KeyboardShortcutsProvider } from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
-import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { TaskMap } from '@/components/Pages/TaskEditPage/TaskMap'
 import {
   DrawerPortalProvider,
@@ -21,36 +17,7 @@ const viewPanelClass = (isActive: boolean) =>
   isActive ? 'absolute inset-0 z-[1]' : 'invisible absolute inset-0 z-0 pointer-events-none'
 
 const TaskContent = () => {
-  const { task } = useTaskContext()
-  const { setActiveBundle, setInitialBundle } = useTaskBundleContext()
   const { activeView, idEditorMounted, showMap } = useEditorContext()
-
-  // Fetch bundle if task belongs to one
-  const { data: bundleData } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
-
-  // Clear stale bundle immediately when navigating to a different task,
-  // before the new bundle data has loaded
-  useEffect(() => {
-    setActiveBundle(null)
-    setInitialBundle(null)
-  }, [task.id, setActiveBundle, setInitialBundle])
-
-  // Set active bundle and initial bundle when bundle data is loaded,
-  // or clear when navigating to a task without a bundle
-  useEffect(() => {
-    if (bundleData && task.bundleId) {
-      const bundle = {
-        bundleId: bundleData.bundleId,
-        taskIds: bundleData.taskIds,
-        name: `Bundle #${bundleData.bundleId}`,
-      }
-      setActiveBundle(bundle)
-      setInitialBundle(bundle)
-    } else if (!task.bundleId) {
-      setActiveBundle(null)
-      setInitialBundle(null)
-    }
-  }, [bundleData, task.bundleId, setActiveBundle, setInitialBundle])
 
   return (
     <DrawerPortalProvider>

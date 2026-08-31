@@ -35,8 +35,12 @@ export const team = {
   useCreateTeam: () => {
     const queryClient = useQueryClient()
     return useMutation({
+      // `id` and `groupType` are required by the backend's shared Group JSON
+      // reader but are discarded server-side (a real id is DB-assigned on
+      // insert, and groupType is always forced to GROUP_TYPE_TEAM) — send
+      // placeholders purely to satisfy that parsing requirement.
       mutationFn: (payload: { name: string; description?: string; avatarURL?: string }) =>
-        apiRequest.post('api/v2/team', { json: payload }).json<Team>(),
+        apiRequest.post('api/v2/team', { json: { id: 0, groupType: 0, ...payload } }).json<Team>(),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['user'] })
       },
@@ -46,13 +50,19 @@ export const team = {
   useUpdateTeam: () => {
     const queryClient = useQueryClient()
     return useMutation({
+      // See the comment in useCreateTeam above: `id`/`groupType` are required
+      // by the backend's shared Group JSON reader but ignored by this
+      // endpoint, which only reads name/description/avatarURL from the body.
       mutationFn: ({
         teamId,
         payload,
       }: {
         teamId: number
         payload: { name: string; description?: string; avatarURL?: string }
-      }) => apiRequest.put(`api/v2/team/${teamId}`, { json: payload }).json<Team>(),
+      }) =>
+        apiRequest
+          .put(`api/v2/team/${teamId}`, { json: { id: teamId, groupType: 0, ...payload } })
+          .json<Team>(),
       onSuccess: (_team, { teamId }) => {
         queryClient.invalidateQueries({ queryKey: ['team', teamId] })
       },

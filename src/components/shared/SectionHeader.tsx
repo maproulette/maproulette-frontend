@@ -36,7 +36,7 @@ const ENTITY_LIST_ROUTES: Record<string, { id: string; defaultMessage: string; p
   },
 }
 
-const buildBreadcrumbSegments = (
+export const buildBreadcrumbSegments = (
   pathname: string,
   basePath: string,
   breadcrumbRoot: string,
@@ -69,7 +69,7 @@ const buildBreadcrumbSegments = (
   return segments
 }
 
-const buildTitle = (
+export const buildTitle = (
   pathname: string,
   basePath: string,
   staticTitle: string | undefined,

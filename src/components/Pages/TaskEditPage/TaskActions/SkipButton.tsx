@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
@@ -12,6 +13,7 @@ import type { Task } from '@/types/Task'
 export const SkipButton = ({ task }: { task: Task }) => {
   const { t } = useIntl()
   const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
   const queryClient = useQueryClient()
   const skip = api.task.useSkipTask()
   const [busy, setBusy] = useState(false)
@@ -26,10 +28,7 @@ export const SkipButton = ({ task }: { task: Task }) => {
 
       const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)
       if (randomTasks && randomTasks.length > 0) {
-        await navigate({
-          to: '/tasks/$taskId',
-          params: { taskId: String(randomTasks[0].id) },
-        })
+        await navigateToTask(randomTasks[0].id)
       } else {
         toast.info(
           t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')

@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { TASK_STATUS_OPTIONS } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import {
@@ -12,6 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  formSubmitDisabled,
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import {
@@ -25,16 +25,9 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
+import { type TaskFormValues, taskFormSchema } from './taskFormSchema'
 
-const taskFormSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
-  instruction: z.string().optional().or(z.literal('')),
-  geometries: z.string().min(1, 'GeoJSON is required'),
-  status: z.number().int().min(0),
-  errorTags: z.string().optional().or(z.literal('')),
-})
-
-export type TaskFormValues = z.infer<typeof taskFormSchema>
+export type { TaskFormValues } from './taskFormSchema'
 
 interface TaskFormProps {
   task: TaskGetResponse
@@ -226,7 +219,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
           <Button type="button" variant="outline" onClick={onCancel}>
             {t('common.cancel', undefined, 'Cancel')}
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {form.formState.isSubmitting
               ? t('common.saving2', undefined, 'Saving...')
               : t('common.save', undefined, 'Save')}

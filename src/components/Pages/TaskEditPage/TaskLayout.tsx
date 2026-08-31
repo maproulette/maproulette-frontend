@@ -24,18 +24,20 @@ export const TaskProviders = ({ children }: { children: ReactNode }) => {
     <TaskProvider>
       <ChallengeProvider>
         <ProjectProvider>
-          <TaskBundleProvider>
-            <MapProvider>
-              <TaskMapProvider>
+          <MapProvider>
+            <TaskMapProvider>
+              {/* TaskBundleProvider derives drawer/selection state from TaskMapContext
+                  (e.g. selectedMarker), so it must be nested inside TaskMapProvider. */}
+              <TaskBundleProvider>
                 <OSMDataProvider>
                   <TaskEditMapProvider>
                     <LassoEventsInitializer />
                     {children}
                   </TaskEditMapProvider>
                 </OSMDataProvider>
-              </TaskMapProvider>
-            </MapProvider>
-          </TaskBundleProvider>
+              </TaskBundleProvider>
+            </TaskMapProvider>
+          </MapProvider>
         </ProjectProvider>
       </ChallengeProvider>
     </TaskProvider>

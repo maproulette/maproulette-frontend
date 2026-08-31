@@ -3,17 +3,17 @@ import { PointsTicker } from '@/components/shared/PointsTicker'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { useIntl } from '@/i18n'
 import { initials } from '@/lib/utils'
-import type { User } from '@/types/User'
+import type { PublicUser, User } from '@/types/User'
 
 interface Props {
-  user: User
+  user: User | PublicUser
   showLivePoints: boolean
 }
 
 export const ProfileHeader = ({ user, showLivePoints }: Props) => {
   const { t } = useIntl()
-  const displayName = user.osmProfile.displayName
-  const avatarURL = user.osmProfile.avatarURL
+  const displayName = user.osmProfile?.displayName ?? ''
+  const avatarURL = user.osmProfile?.avatarURL
   const createdDate = user.created
     ? new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'long' }).format(
         new Date(user.created)

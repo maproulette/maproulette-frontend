@@ -5,19 +5,11 @@ import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { useIntl } from '@/i18n'
+import { getStatusLabel } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
 export const FindTask = () => {
   const { t } = useIntl()
-  const statusLabels: Record<number, string> = {
-    0: t('common.created', undefined, 'Created'),
-    1: t('common.fixed', undefined, 'Fixed'),
-    2: t('common.falsePositive', undefined, 'False Positive'),
-    3: t('common.skipped', undefined, 'Skipped'),
-    4: t('common.deleted', undefined, 'Deleted'),
-    5: t('common.alreadyFixed', undefined, 'Already Fixed'),
-    6: t('common.cantComplete', undefined, "Can't Complete"),
-  }
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
   const [debouncedId, setDebouncedId] = useState(0)
   const trimmed = searchQuery.trim()
@@ -98,7 +90,8 @@ export const FindTask = () => {
   }
 
   const task = taskQuery.data
-  const statusLabel = statusLabels[task.status ?? -1] || t('common.unknown', undefined, 'Unknown')
+  const statusLabel =
+    getStatusLabel(t, task.status ?? -1) || t('common.unknown', undefined, 'Unknown')
 
   return (
     <div className="space-y-4">

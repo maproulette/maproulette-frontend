@@ -26,7 +26,7 @@ export const calculateNextLevelProgress = (score: number): number => {
   const nextLevelThreshold = (currentLevel + 1) ** 2 * 10
   const progress =
     ((score - currentLevelThreshold) / (nextLevelThreshold - currentLevelThreshold)) * 100
-  return Math.min(progress, 100)
+  return Math.min(Math.max(progress, 0), 100)
 }
 
 /**

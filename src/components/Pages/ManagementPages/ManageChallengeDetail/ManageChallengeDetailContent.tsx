@@ -280,7 +280,7 @@ export const ManageChallengeDetailContent = () => {
                       getDifficultyColor(challengeData?.difficulty as number)
                     )}
                   >
-                    {getDifficultyLabel(challengeData?.difficulty as number)}
+                    {getDifficultyLabel(t, challengeData?.difficulty as number)}
                   </span>
                 </div>
               )}

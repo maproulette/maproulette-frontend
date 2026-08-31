@@ -1,5 +1,5 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import type { User } from '@/types/User'
+import type { UserSearchResult } from '@/types/User'
 import { apiRequest } from '../client'
 
 export const userSearch = {
@@ -12,7 +12,7 @@ export const userSearch = {
             .get(`api/v2/users/find/${encodeURIComponent(prefix)}`, {
               searchParams: { limit },
             })
-            .json<User[]>(),
+            .json<UserSearchResult[]>(),
         enabled: enabled && prefix.length > 0,
         staleTime: 30_000,
       })

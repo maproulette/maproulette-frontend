@@ -12,7 +12,9 @@ afterEach(() => {
 
 describe('userSearch.findUsers', () => {
   it('fetches matching users with the default limit', async () => {
-    const users = [{ id: 1, osmProfile: { displayName: 'alice' } }]
+    const users = [
+      { id: 1, osmId: 111, displayName: 'alice', avatarURL: 'https://example.com/a.png' },
+    ]
     const fetchMock = stubFetch(new Response(JSON.stringify(users), { status: 200 }))
 
     const { result } = renderHook(() => userSearch.findUsers('ali'), {

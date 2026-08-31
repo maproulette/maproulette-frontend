@@ -44,6 +44,7 @@ export const taskBulk = {
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['task'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge'] })
       },
     })
   },
@@ -81,6 +82,7 @@ export const taskBulk = {
           .json<BulkReassignResult>(),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['task'] })
+        queryClient.invalidateQueries({ queryKey: ['challenge'] })
       },
     })
   },

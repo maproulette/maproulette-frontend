@@ -1,5 +1,7 @@
 import { ArrowUp } from 'lucide-react'
+import { BulkActionsToolbar } from '@/components/Pages/ManagementPages/shared/BulkActionsToolbar'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
+import { useRowSelection } from '@/hooks/useRowSelection'
 import { useIntl } from '@/i18n'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
 import { ChallengeTasksExplorerControls } from './ChallengeTasksExplorerControls'
@@ -15,6 +17,7 @@ export const ChallengeTasksExplorerMain = () => {
 
   const { visibleMarkers, hasMore, sentinelRef } = useVisibleTaskMarkers(filteredMarkers)
   const { topRef, showScrollTop, scrollToTop } = useScrollToTopVisibility()
+  const rowSelection = useRowSelection<number>()
 
   if (!enabled) {
     return null
@@ -54,7 +57,17 @@ export const ChallengeTasksExplorerMain = () => {
               visibleMarkers={visibleMarkers}
               hasMore={hasMore}
               sentinelRef={sentinelRef}
+              rowSelection={rowSelection}
             />
+
+            {rowSelection.count > 0 && (
+              <div className="shrink-0 pt-2">
+                <BulkActionsToolbar
+                  selectedIds={rowSelection.idList}
+                  onClearSelection={rowSelection.clear}
+                />
+              </div>
+            )}
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>

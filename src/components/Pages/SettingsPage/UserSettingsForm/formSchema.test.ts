@@ -11,7 +11,6 @@ const validInput = {
   leaderboardOptOut: false,
   allowFollowing: true,
   theme: 1,
-  seeTagFixSuggestions: true,
   disableTaskConfirm: false,
 }
 

@@ -49,7 +49,7 @@ export const NotificationsSettings = ({
           <FieldGroup>{/* Placeholder for future notification subscription options */}</FieldGroup>
         </FieldSet>
       </FieldGroup>
-      <FieldSubmit isSubmitting={form.formState.isSubmitting} />
+      <FieldSubmit isSubmitting={form.formState.isSubmitting} isDirty={form.formState.isDirty} />
     </FieldSet>
   )
 }

@@ -3,94 +3,28 @@ import { useMemo } from 'react'
 import { api } from '@/api'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
-import { STATUS_TEXT_COLORS, STATUS_LABELS as TASK_STATUS_LABELS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_TEXT_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
+import { aggregateContributions } from './contributionsAggregation'
+import { LockedTasksBlock } from './LockedTasksBlock'
 
 const DISPLAYED_STATUS_IDS = new Set([1, 2, 3, 5, 6])
 
-interface GroupedActivity {
-  date: string
-  challenges: {
-    name: string
-    parentId: number
-    actions: { status: number; count: number }[]
-  }[]
+interface ContributionsSectionProps {
+  userId: number
 }
 
-export const ContributionsSection = () => {
+export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
   const { t } = useIntl()
   const { data: activityData, isLoading, error } = api.user.activity()
+  const { data: lockedTasks } = api.user.lockedTasks(userId)
+  const hasLockedTasks = (lockedTasks?.length ?? 0) > 0
 
   // Reason: groups and sorts activity data by date/challenge/status - expensive aggregation should not run on every render
-  const { groupedActivities, totalTasks } = useMemo(() => {
-    if (!activityData || activityData.length === 0) {
-      return { groupedActivities: [] as GroupedActivity[], totalTasks: 0 }
-    }
-
-    // Group by date string (e.g., "JANUARY 26")
-    const dateMap = new Map<string, Map<number, Map<number, number>>>()
-
-    // Track challenge names by parentId
-    const challengeNames = new Map<number, string>()
-
-    let total = 0
-
-    for (const entry of activityData) {
-      const date = new Date(entry.created)
-      const dateKey = date
-        .toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
-        .toUpperCase()
-
-      challengeNames.set(entry.parentId, entry.parentName)
-
-      if (!dateMap.has(dateKey)) {
-        dateMap.set(dateKey, new Map())
-      }
-      const challengeMap = dateMap.get(dateKey) as Map<number, Map<number, number>>
-
-      if (!challengeMap.has(entry.parentId)) {
-        challengeMap.set(entry.parentId, new Map())
-      }
-      const statusMap = challengeMap.get(entry.parentId) as Map<number, number>
-
-      statusMap.set(entry.status, (statusMap.get(entry.status) || 0) + 1)
-      total++
-    }
-
-    // Convert to array format, sorted by date (most recent first)
-    const grouped: GroupedActivity[] = []
-    const sortedDates = Array.from(dateMap.entries()).sort((a, b) => {
-      // Parse dates back to compare
-      const dateA = new Date(a[0])
-      const dateB = new Date(b[0])
-      return dateB.getTime() - dateA.getTime()
-    })
-
-    for (const [dateKey, challengeMap] of sortedDates) {
-      const challenges: GroupedActivity['challenges'] = []
-
-      for (const [parentId, statusMap] of challengeMap) {
-        const actions: { status: number; count: number }[] = []
-        for (const [status, count] of statusMap) {
-          actions.push({ status, count })
-        }
-        // Sort actions by status
-        actions.sort((a, b) => a.status - b.status)
-
-        challenges.push({
-          name:
-            challengeNames.get(parentId) ||
-            t('dashboard.contributions.unknownChallenge', { parentId }, 'Challenge {parentId}'),
-          parentId,
-          actions,
-        })
-      }
-
-      grouped.push({ date: dateKey, challenges })
-    }
-
-    return { groupedActivities: grouped, totalTasks: total }
-  }, [activityData, t])
+  const { groupedActivities, totalTasks } = useMemo(
+    () => aggregateContributions(activityData, t),
+    [activityData, t]
+  )
 
   const hasContributions = totalTasks > 0
 
@@ -108,6 +42,8 @@ export const ContributionsSection = () => {
         )}
       </div>
       <div className="flex-1 overflow-y-auto px-4 pb-4">
+        {!error && <LockedTasksBlock userId={userId} />}
+
         {isLoading && (
           <div className="flex justify-center py-4">
             <Loader />
@@ -120,7 +56,7 @@ export const ContributionsSection = () => {
           </div>
         )}
 
-        {!isLoading && !error && !hasContributions && (
+        {!isLoading && !error && !hasContributions && !hasLockedTasks && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <div className="mb-2 rounded-lg bg-zinc-100 p-2 dark:bg-slate-700/50">
               <Activity className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
@@ -176,7 +112,10 @@ export const ContributionsSection = () => {
                               {DISPLAYED_STATUS_IDS.has(action.status)
                                 ? t(
                                     'dashboard.contributions.statusSetLabel',
-                                    { statusLabel: TASK_STATUS_LABELS[action.status] },
+                                    {
+                                      statusLabel:
+                                        getStatusLabel(t, action.status) ?? String(action.status),
+                                    },
                                     'Set Status on Task as {statusLabel}'
                                   )
                                 : t(

@@ -385,14 +385,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                       {projectName}
                     </Link>
                     {(ownerName || formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-white0">•</span>
+                      <span className="text-zinc-400 dark:text-white">•</span>
                     )}
                   </>
                 ) : projectName ? (
                   <>
                     <span className="break-all font-medium">{projectName}</span>
                     {(ownerName || formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-white0">•</span>
+                      <span className="text-zinc-400 dark:text-white">•</span>
                     )}
                   </>
                 ) : null}
@@ -411,14 +411,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                       </a>
                     </span>
                     {(formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-white0">•</span>
+                      <span className="text-zinc-400 dark:text-white">•</span>
                     )}
                   </>
                 )}
                 {formattedDate && (
                   <>
                     <span className="whitespace-nowrap">{formattedDate}</span>
-                    {likeCount > 0 && <span className="text-zinc-400 dark:text-white0">•</span>}
+                    {likeCount > 0 && <span className="text-zinc-400 dark:text-white">•</span>}
                   </>
                 )}
                 {likeCount > 0 && (

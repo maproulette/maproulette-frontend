@@ -8,7 +8,9 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
+import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import type { DifficultyLevel } from './filterTypes'
+import { difficultyMap } from './filterUtils'
 
 export const DifficultyFilter = () => {
   const { t } = useIntl()
@@ -26,9 +28,15 @@ export const DifficultyFilter = () => {
           <SelectItem value="Any">
             {t('exploreChallenges.filterBar.difficulty.any', undefined, 'Any')}
           </SelectItem>
-          <SelectItem value="Easy">{t('common.easy', undefined, 'Easy')}</SelectItem>
-          <SelectItem value="Normal">{t('common.normal', undefined, 'Normal')}</SelectItem>
-          <SelectItem value="Expert">{t('common.expert', undefined, 'Expert')}</SelectItem>
+          <SelectItem value="Easy">
+            {getDifficultyLabel(t, difficultyMap.Easy as number)}
+          </SelectItem>
+          <SelectItem value="Normal">
+            {getDifficultyLabel(t, difficultyMap.Normal as number)}
+          </SelectItem>
+          <SelectItem value="Expert">
+            {getDifficultyLabel(t, difficultyMap.Expert as number)}
+          </SelectItem>
         </SelectContent>
       </Select>
     </div>
