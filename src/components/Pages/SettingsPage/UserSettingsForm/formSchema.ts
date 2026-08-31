@@ -24,9 +24,7 @@ export const formSchema = z
     email: z.email().optional().or(z.literal('')),
     emailOptIn: z.boolean().optional(),
     leaderboardOptOut: z.boolean().optional(),
-    allowFollowing: z.boolean().optional(),
     theme: z.number().min(0).max(2).optional(),
-    seeTagFixSuggestions: z.boolean().optional(),
     disableTaskConfirm: z.boolean().optional(),
   })
   // Allow plugin-contributed settings fields (e.g. from getUserSettingsFields)

@@ -9,7 +9,6 @@ const validInput = {
   email: 'user@example.com',
   emailOptIn: true,
   leaderboardOptOut: false,
-  allowFollowing: true,
   theme: 1,
   disableTaskConfirm: false,
 }

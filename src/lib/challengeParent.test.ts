@@ -88,7 +88,9 @@ describe('withScalarParent', () => {
   })
 
   it('returns the same object when parent is missing', () => {
-    const challenge = { id: 1, name: 'C' }
+    // Annotated so the object literal isn't a weak-type mismatch against the
+    // `{ parent?: unknown }` constraint - the value under test is parent-less.
+    const challenge: { id: number; name: string; parent?: unknown } = { id: 1, name: 'C' }
     expect(withScalarParent(challenge)).toBe(challenge)
   })
 

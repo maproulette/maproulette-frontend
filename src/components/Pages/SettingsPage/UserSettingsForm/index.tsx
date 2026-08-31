@@ -23,15 +23,13 @@ const CORE_SETTINGS_KEYS = new Set([
   'email',
   'emailOptIn',
   'leaderboardOptOut',
-  'allowFollowing',
   'theme',
-  'seeTagFixSuggestions',
   'disableTaskConfirm',
 ])
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
-  const { locale } = useIntl()
   const updateSettingsMutation = api.user.useUpdateUserSettings()
+  const { locale } = useIntl()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,20 +51,20 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
         }
       }
 
-      // UserSettings is generated from an OpenAPI spec that only types defaultBasemap
-      // as number | null, but the backend also accepts string basemap ids (see
-      // formSchema.ts / GeneralSettings.tsx) — the generated type is stale, not `values`.
       await updateSettingsMutation.mutateAsync({
         userId: user.id,
+        // UserSettings is generated from an OpenAPI spec that only types defaultBasemap
+        // as number | null, but the backend also accepts string basemap ids (see
+        // formSchema.ts / GeneralSettings.tsx) — the generated type is stale, not `values`.
         settings: {
           ...user.settings,
           defaultEditor: values.defaultEditor,
-          defaultBasemap: values.defaultBasemap as UserSettings['defaultBasemap'],
+          defaultBasemap: values.defaultBasemap,
           defaultBasemapId: values.defaultBasemapId,
           locale: values.locale,
           email: values.email,
-          ...(pluginSettings as UserSettings),
-        },
+          ...pluginSettings,
+        } as unknown as UserSettings,
       })
       toast.success('User settings updated')
     } catch {

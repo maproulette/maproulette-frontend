@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger'
 import type { Plugin } from '@/types/Plugin'
-import { validatePluginUrl } from './pluginSecurity'
+import { parsePluginUrl, validatePluginUrl } from './pluginSecurity'
 
 const PLUGIN_URL_NOT_ALLOWED_ERROR =
   'Plugin URL not allowed. URL must be from an approved host. See plugin security documentation.'
@@ -45,9 +45,18 @@ export const loadPluginFromUrl = async (moduleUrl: string): Promise<PluginLoadRe
     }
   }
 
-  // validatePluginUrl above already confirms moduleUrl parses and uses an
-  // http(s) protocol, so re-parsing here can't fail or hit a non-http(s) URL.
-  const url = new URL(moduleUrl)
+  // Parsed the same way validation parses it: a bare `new URL(moduleUrl)` throws on
+  // the root-relative `/plugins/...` form validatePluginUrl accepts. The URL just
+  // passed validation, so the null branch below is unreachable.
+  const url = parsePluginUrl(moduleUrl)
+  /* v8 ignore next 6 -- @preserve */
+  if (!url) {
+    return {
+      success: false,
+      error: PLUGIN_URL_NOT_ALLOWED_ERROR,
+    }
+  }
+
   const fileName = url.pathname.split('/').pop() || ''
   const globalName = fileName.replace(/\.js$/, '')
 
