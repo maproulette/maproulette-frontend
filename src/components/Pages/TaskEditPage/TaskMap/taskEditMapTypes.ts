@@ -1,4 +1,5 @@
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
+import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
 
 export interface ClusterProperties {
@@ -43,6 +44,9 @@ export type SpideredMarkers = Map<
 export interface TaskEditMapContextType {
   mapRef: React.RefObject<MapRef | null>
   mapLoaded: boolean
+  /** Current viewport, for the `#`-prefixed workspace mustache properties. */
+  mapBounds: Bbox2D
+  mapZoom: number
   setMapLoaded: (loaded: boolean) => void
   taskCount: number
   shouldCluster: boolean

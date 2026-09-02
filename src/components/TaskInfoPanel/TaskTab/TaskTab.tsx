@@ -1,6 +1,7 @@
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useOptionalTaskEditMapContext } from '@/components/Pages/TaskEditPage/TaskMap/TaskEditMapContext'
 import { substituteTaskProperties } from '@/components/TaskInfoPanel/taskUtils/propertyUtils'
 import type { Task } from '@/types/Task'
 import { BundleStateIndicator } from './BundleStateIndicator'
@@ -13,6 +14,7 @@ interface TaskTabProps {
 
 export const TaskTab = ({ task }: TaskTabProps) => {
   const { challenge } = useChallengeContext()
+  const taskMap = useOptionalTaskEditMapContext()
   const { task: primaryTask } = useTaskContext()
   const {
     activeBundle,
@@ -57,7 +59,12 @@ export const TaskTab = ({ task }: TaskTabProps) => {
 
       <InstructionPanel
         taskInstruction={
-          challenge?.instruction ? substituteTaskProperties(challenge.instruction, task) : undefined
+          challenge?.instruction
+            ? substituteTaskProperties(challenge.instruction, task, {
+                bounds: taskMap?.mapBounds,
+                zoom: taskMap?.mapZoom,
+              })
+            : undefined
         }
       />
     </div>

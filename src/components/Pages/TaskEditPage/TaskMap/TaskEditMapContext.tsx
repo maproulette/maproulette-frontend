@@ -94,6 +94,8 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       setSpideredMarkers,
       isClusteringForced,
       initialBoundsApplied,
+      mapBounds,
+      mapZoom,
       showExploreLayer,
       setShowExploreLayer,
     }),
@@ -115,11 +117,21 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
       isClusteringForced,
       initialBoundsApplied,
       showExploreLayer,
+      mapBounds,
+      mapZoom,
     ]
   )
 
   return <TaskEditMapContext.Provider value={value}>{children}</TaskEditMapContext.Provider>
 }
+
+/**
+ * The task map's state where there is one, or null. The task info panel is also
+ * rendered in places with no task map (challenge browsing, the prioritization
+ * preview), so it reads the viewport through this rather than the throwing
+ * accessor below.
+ */
+export const useOptionalTaskEditMapContext = () => useContext(TaskEditMapContext)
 
 export const useTaskEditMapContext = () => {
   const context = useContext(TaskEditMapContext)

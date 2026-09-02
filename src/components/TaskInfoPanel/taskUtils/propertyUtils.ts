@@ -1,4 +1,5 @@
 import type { Task } from '@/types/Task'
+import { type WorkspaceViewport, workspaceProperties } from './workspaceProperties'
 
 /**
  * Extract feature properties from task geometries, merging across ALL features
@@ -26,7 +27,9 @@ export const replacePropertyTags = (
   let result = text
 
   Object.keys(properties).forEach((key) => {
-    const pattern = new RegExp(`{{${key}}}`, 'g')
+    // Property names come from the challenge's data, so they may contain
+    // regex metacharacters.
+    const pattern = new RegExp(`{{${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}}}`, 'g')
     const value = encode ? encodeURIComponent(String(properties[key])) : String(properties[key])
     result = result.replace(pattern, value)
   })
@@ -38,7 +41,16 @@ export const replacePropertyTags = (
  * Substitute `{{property}}` tags in the given text using the task's feature
  * properties. Returns the original text if the task has no properties.
  */
-export const substituteTaskProperties = (text: string, task: Task): string => {
-  const properties = getMergedFeatureProperties(task)
-  return properties ? replacePropertyTags(text, properties) : text
+export const substituteTaskProperties = (
+  text: string,
+  task: Task,
+  viewport?: WorkspaceViewport | null
+): string => {
+  // Workspace properties are applied after the task's own, so a challenge
+  // whose data happens to carry a `#`-prefixed property can't shadow them.
+  const properties = {
+    ...(getMergedFeatureProperties(task) ?? {}),
+    ...workspaceProperties(task, viewport),
+  }
+  return replacePropertyTags(text, properties)
 }

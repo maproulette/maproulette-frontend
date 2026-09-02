@@ -112,3 +112,39 @@ describe('substituteTaskProperties', () => {
     )
   })
 })
+
+describe('substituteTaskProperties with workspace properties', () => {
+  const task = {
+    id: 7,
+    geometries: {
+      type: 'FeatureCollection',
+      features: [{ type: 'Feature', properties: { '@id': 'way/42', name: 'Main St' } }],
+    },
+  } as unknown as Task
+
+  it('substitutes task feature properties and workspace properties together', () => {
+    const text = 'Survey {{name}} (task {{#mrTaskId}}, {{#osmType}} {{#osmId}})'
+    expect(substituteTaskProperties(text, task)).toBe('Survey Main St (task 7, way 42)')
+  })
+
+  it('substitutes map properties when a viewport is supplied', () => {
+    const text = 'zoom {{#mapZoom}} bbox {{#mapBBox}}'
+    const result = substituteTaskProperties(text, task, { bounds: [-1, 50, 1, 52], zoom: 12 })
+    expect(result).toBe('zoom 12 bbox -1,50,1,52')
+  })
+
+  it('leaves a workspace tag alone when it cannot be resolved', () => {
+    expect(substituteTaskProperties('zoom {{#mapZoom}}', task)).toBe('zoom {{#mapZoom}}')
+  })
+
+  it('treats a property name containing regex characters literally', () => {
+    const weird = {
+      id: 1,
+      geometries: {
+        type: 'FeatureCollection',
+        features: [{ type: 'Feature', properties: { 'a.b': 'matched' } }],
+      },
+    } as unknown as Task
+    expect(substituteTaskProperties('{{a.b}} {{axb}}', weird)).toBe('matched {{axb}}')
+  })
+})
