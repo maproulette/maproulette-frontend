@@ -1,7 +1,10 @@
 import { AlertCircle, CheckCircle2, Loader2, MapPin, X } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/Map/mapUtils'
-import type { LocationGeojson } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
+import type {
+  LocationGeojson,
+  PlaceFilter,
+} from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -48,6 +51,10 @@ export interface PlaceDetail {
 }
 
 const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org'
+// Boundaries are sent to the server as a request body, which is capped there.
+// Anything larger (a whole country, say) filters by its bounding box instead,
+// where the difference between the box and the boundary hardly matters.
+const MAX_PLACE_GEOMETRY_BYTES = 1_000_000
 const USER_AGENT = 'MapRoulette/4.0'
 const DEBOUNCE_MS = 1000
 const MIN_QUERY_LENGTH = 3
@@ -68,17 +75,37 @@ const boundsToString = (bbox: string[]): string => {
 
 const applyLocation = (
   place: PlaceDetail,
+  placeKey: string,
   setBounds: (bounds: string) => void,
   requestFitBounds: (bounds: string) => void,
-  setLocationGeojson: (geojson: LocationGeojson) => void
+  setLocationGeojson: (geojson: LocationGeojson) => void,
+  setLocationBounds: (bounds: string | undefined) => void,
+  setResolvedPlaceFilter: (filter: PlaceFilter | null) => void,
+  // The camera is left alone when it was already positioned from the URL hash,
+  // but the place still has to filter the results either way.
+  moveMap = true
 ) => {
   if (place.boundingbox) {
     const boundsString = boundsToString(place.boundingbox)
-    setBounds(boundsString)
-    requestFitBounds(boundsString)
-    if (place.geojson) {
-      setLocationGeojson(place.geojson as LocationGeojson)
+    setLocationBounds(boundsString)
+    if (moveMap) {
+      setBounds(boundsString)
+      requestFitBounds(boundsString)
     }
+  }
+
+  if (place.geojson) {
+    setLocationGeojson(place.geojson as LocationGeojson)
+    const geometryJson = JSON.stringify(place.geojson)
+    setResolvedPlaceFilter(
+      geometryJson.length <= MAX_PLACE_GEOMETRY_BYTES
+        ? { key: `${placeKey}:boundary`, geometryJson }
+        : null
+    )
+  } else {
+    // Nominatim has no boundary for some places (a node, a POI); the bounding
+    // box set above is then all there is to filter by.
+    setResolvedPlaceFilter(null)
   }
 }
 
@@ -92,6 +119,8 @@ export const LocationSearchFilter = () => {
     setLocationOsm,
     setIsLocationLoading,
     setLocationGeojson,
+    setLocationBounds,
+    setResolvedPlaceFilter,
     requestFitBounds,
     bounds,
   } = useExploreChallengesSearchContext()
@@ -105,7 +134,10 @@ export const LocationSearchFilter = () => {
 
   const inputRef = useRef<HTMLInputElement>(null)
   const abortControllerRef = useRef<AbortController | null>(null)
-  const initialLocationLoadedRef = useRef(false)
+  // Which place (osm type + id) the bbox and input text were resolved for, so
+  // a place arriving from elsewhere -- the cookie, the URL, browser
+  // back/forward -- gets re-resolved instead of leaving a stale filter behind.
+  const resolvedPlaceRef = useRef<string | null>(null)
   const selectedLocationRef = useRef('')
 
   useEffect(() => {
@@ -175,10 +207,12 @@ export const LocationSearchFilter = () => {
   }, [suggestions])
 
   useEffect(() => {
-    if (!locationOsmType || !locationOsmId || initialLocationLoadedRef.current) return
+    if (!locationOsmType || !locationOsmId) return
+    const placeKey = `${locationOsmType}${locationOsmId}`
+    if (resolvedPlaceRef.current === placeKey) return
 
     const loadLocation = async () => {
-      initialLocationLoadedRef.current = true
+      resolvedPlaceRef.current = placeKey
       setIsLocationLoading(true)
 
       try {
@@ -193,13 +227,16 @@ export const LocationSearchFilter = () => {
 
           const hasInitialBoundsFromUrl = bounds && !isWorldBounds(bounds)
 
-          if (hasInitialBoundsFromUrl) {
-            if (place.geojson) {
-              setLocationGeojson(place.geojson as LocationGeojson)
-            }
-          } else {
-            applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
-          }
+          applyLocation(
+            place,
+            placeKey,
+            setBounds,
+            requestFitBounds,
+            setLocationGeojson,
+            setLocationBounds,
+            setResolvedPlaceFilter,
+            !hasInitialBoundsFromUrl
+          )
         } else {
           setError(
             t('exploreChallenges.filterBar.location.notFound', undefined, 'Location not found')
@@ -223,6 +260,8 @@ export const LocationSearchFilter = () => {
     setBounds,
     requestFitBounds,
     setLocationGeojson,
+    setLocationBounds,
+    setResolvedPlaceFilter,
     bounds,
     t,
   ])
@@ -235,6 +274,7 @@ export const LocationSearchFilter = () => {
     ) {
       setLocationInput('')
       selectedLocationRef.current = ''
+      resolvedPlaceRef.current = null
       setSuggestions([])
     }
   }, [locationOsmType, locationOsmId])
@@ -278,7 +318,17 @@ export const LocationSearchFilter = () => {
 
       const prefix = suggestion.osm_type ? osmTypeToPrefix(suggestion.osm_type) : undefined
       if (prefix && suggestion.osm_id !== undefined) {
+        // Claim the place before the state change so the effect above doesn't
+        // look it up a second time; the details are fetched right below.
+        resolvedPlaceRef.current = `${prefix}${suggestion.osm_id}`
         setLocationOsm(prefix, suggestion.osm_id)
+        // Filter by the new place immediately -- the suggestion already
+        // carries its bounding box -- rather than leaving the previous
+        // place's boundary in force until the details arrive.
+        setResolvedPlaceFilter(null)
+        if (suggestion.boundingbox) {
+          setLocationBounds(boundsToString(suggestion.boundingbox))
+        }
       } else {
         setError(
           t(
@@ -296,10 +346,27 @@ export const LocationSearchFilter = () => {
 
       const place = await getLocationDetails(suggestion)
       if (place) {
-        applyLocation(place, setBounds, requestFitBounds, setLocationGeojson)
+        applyLocation(
+          place,
+          `${prefix}${suggestion.osm_id}`,
+          setBounds,
+          requestFitBounds,
+          setLocationGeojson,
+          setLocationBounds,
+          setResolvedPlaceFilter
+        )
       }
     },
-    [getLocationDetails, setLocationOsm, setBounds, requestFitBounds, setLocationGeojson, t]
+    [
+      getLocationDetails,
+      setLocationOsm,
+      setBounds,
+      requestFitBounds,
+      setLocationGeojson,
+      setLocationBounds,
+      setResolvedPlaceFilter,
+      t,
+    ]
   )
 
   // Reason: stable reference for clear button click handler

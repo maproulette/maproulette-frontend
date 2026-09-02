@@ -1,7 +1,12 @@
 import { useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { clampBoundsString, DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
+import {
+  boundsStringToPolygon,
+  clampBoundsString,
+  DEFAULT_WORLD_BOUNDS,
+  intersectBoundsStrings,
+} from '@/components/Map/mapUtils'
 import type {
   DifficultyLevel,
   ViewMode,
@@ -12,7 +17,7 @@ import {
   workOnCategoryMap,
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
 import { logger } from '@/lib/logger'
-import type { ExploreChallengesParams, ExtendedFindParamsSortBy } from '@/types/Challenge'
+import type { ExploreChallengesRequest, ExtendedFindParamsSortBy } from '@/types/Challenge'
 import type { TaskTilesParams } from '@/types/Task'
 
 const COOKIE_PREFIX = 'mr4_'
@@ -74,8 +79,18 @@ export type LocationGeojson =
     }
   | null
 
+/**
+ * The boundary of the selected place, ready to send. Held pre-serialized
+ * because these geometries are large: `key` stands in for the geometry in
+ * React Query keys so the polygon itself is never hashed on a render.
+ */
+export interface PlaceFilter {
+  key: string
+  geometryJson: string
+}
+
 export interface ExploreChallengesSearchContextType {
-  extendedFindParams: NonNullable<ExploreChallengesParams>
+  extendedFindParams: ExploreChallengesRequest
   taskTilesParams: TaskTilesParams
 
   bounds: string
@@ -85,6 +100,11 @@ export interface ExploreChallengesSearchContextType {
   locationOsmType: string | undefined
   locationOsmId: number | undefined
   setLocationOsm: (osmType: string | undefined, osmId: number | undefined) => void
+  locationBounds: string | undefined
+  setLocationBounds: Dispatch<SetStateAction<string | undefined>>
+  setResolvedPlaceFilter: Dispatch<SetStateAction<PlaceFilter | null>>
+  /** The viewport and the selected place don't overlap, so nothing can match */
+  hasEmptyPlaceIntersection: boolean
   global: boolean | undefined
   setGlobal: Dispatch<SetStateAction<boolean | undefined>>
 
@@ -143,6 +163,7 @@ interface PersistedFilters {
   global?: boolean
   locationOsmType?: string
   locationOsmId?: number
+  locationBounds?: string
   viewMode?: ViewMode
   cluster?: boolean
 }
@@ -192,9 +213,28 @@ export const ExploreChallengesSearchContextProvider = ({
   const [locationOsmId, setLocationOsmId] = useState<number | undefined>(
     initialOsmId ?? persistedFilters?.locationOsmId
   )
+  // Bounding box of the place picked in the location filter. Kept separate
+  // from `bounds` (the map viewport) because the viewport is overwritten on
+  // every map move, which would otherwise widen the results back out.
+  const [locationBounds, setLocationBounds] = useState<string | undefined>(() => {
+    // A place supplied in the URL wins over the cookie, and its bbox isn't
+    // known until Nominatim resolves it, so don't seed a mismatched one.
+    const urlPlaceDiffers =
+      (initialOsmType !== undefined || initialOsmId !== undefined) &&
+      (initialOsmType !== persistedFilters?.locationOsmType ||
+        initialOsmId !== persistedFilters?.locationOsmId)
+    return urlPlaceDiffers ? undefined : persistedFilters?.locationBounds
+  })
+  // The place's real boundary, once Nominatim has returned one. Until then --
+  // and for places it has no polygon for -- the bbox above stands in.
+  const [resolvedPlaceFilter, setResolvedPlaceFilter] = useState<PlaceFilter | null>(null)
   const setLocationOsm = useCallback((osmType: string | undefined, osmId: number | undefined) => {
     setLocationOsmType(osmType)
     setLocationOsmId(osmId)
+    if (osmType === undefined || osmId === undefined) {
+      setLocationBounds(undefined)
+      setResolvedPlaceFilter(null)
+    }
   }, [])
   const [global, setGlobal] = useState<boolean | undefined>(
     initialGlobal ?? persistedFilters?.global
@@ -295,19 +335,41 @@ export const ExploreChallengesSearchContextProvider = ({
     setPendingFitBounds(boundsToFit)
   }, [])
 
-  const effectiveBounds = viewMode === 'grid-map' ? clampBoundsString(bounds) : DEFAULT_WORLD_BOUNDS
+  // A challenge has to have a task that is both in view and inside the place.
+  // The box sent is the viewport narrowed to the place's own box, and the
+  // place's exact boundary rides along as geometry below -- so results stay
+  // bounded by the place even against a server too old to accept the boundary.
+  const viewportBounds = viewMode === 'grid-map' ? clampBoundsString(bounds) : DEFAULT_WORLD_BOUNDS
+  const placeIntersection = locationBounds
+    ? intersectBoundsStrings(viewportBounds, locationBounds)
+    : viewportBounds
+  // Nothing overlaps: no box expresses that, so the query is skipped instead.
+  const hasEmptyPlaceIntersection = placeIntersection === null
+  const effectiveBounds = placeIntersection ?? viewportBounds
 
-  const searchParams = useMemo<ExploreChallengesParams>(
+  const bboxPlaceFilter = useMemo<PlaceFilter | null>(() => {
+    if (!locationBounds) return null
+    const polygon = boundsStringToPolygon(locationBounds)
+    return polygon ? { key: `bbox:${locationBounds}`, geometryJson: JSON.stringify(polygon) } : null
+  }, [locationBounds])
+
+  const placeFilter = resolvedPlaceFilter ?? bboxPlaceFilter
+
+  const searchParams = useMemo<ExploreChallengesRequest>(
     () => ({
       bounds: effectiveBounds,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty: difficultyMap[difficulty],
-      global,
+      // Sent explicitly: the toggle renders unset as off, so leaving the
+      // param out and inheriting a server-side default would contradict it.
+      global: global ?? false,
+      placeGeometryJson: placeFilter?.geometryJson,
+      placeKey: placeFilter?.key,
     }),
-    [effectiveBounds, selectedCategories, workOn, difficulty, global]
+    [effectiveBounds, selectedCategories, workOn, difficulty, global, placeFilter]
   )
 
-  const extendedFindParams = useMemo<NonNullable<ExploreChallengesParams>>(
+  const extendedFindParams = useMemo<ExploreChallengesRequest>(
     () => ({
       ...searchParams,
       sortBy: sortBy as ExtendedFindParamsSortBy,
@@ -322,7 +384,7 @@ export const ExploreChallengesSearchContextProvider = ({
       bounds: effectiveBounds,
       keywords: buildKeywords(selectedCategories, workOn),
       difficulty: difficultyMap[difficulty],
-      global,
+      global: global ?? false,
     }),
     [zoom, effectiveBounds, selectedCategories, workOn, difficulty, global]
   )
@@ -341,6 +403,7 @@ export const ExploreChallengesSearchContextProvider = ({
       global: global !== undefined ? global : undefined,
       locationOsmType: locationOsmType !== undefined ? locationOsmType : undefined,
       locationOsmId: locationOsmId !== undefined ? locationOsmId : undefined,
+      locationBounds,
       viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
       cluster: cluster !== true ? cluster : undefined,
     }
@@ -359,6 +422,7 @@ export const ExploreChallengesSearchContextProvider = ({
     global,
     locationOsmType,
     locationOsmId,
+    locationBounds,
     viewMode,
     cluster,
   ])
@@ -367,6 +431,8 @@ export const ExploreChallengesSearchContextProvider = ({
     setBounds(DEFAULT_WORLD_BOUNDS)
     setLocationOsmType(undefined)
     setLocationOsmId(undefined)
+    setLocationBounds(undefined)
+    setResolvedPlaceFilter(null)
     setGlobal(undefined)
     setDifficulty('Any')
     setWorkOn('Anything')
@@ -389,6 +455,10 @@ export const ExploreChallengesSearchContextProvider = ({
       locationOsmType,
       locationOsmId,
       setLocationOsm,
+      locationBounds,
+      setLocationBounds,
+      setResolvedPlaceFilter,
+      hasEmptyPlaceIntersection,
       global,
       setGlobal,
       locationGeojson,
@@ -421,6 +491,8 @@ export const ExploreChallengesSearchContextProvider = ({
       locationOsmType,
       locationOsmId,
       setLocationOsm,
+      locationBounds,
+      hasEmptyPlaceIntersection,
       global,
       locationGeojson,
       pendingFitBounds,

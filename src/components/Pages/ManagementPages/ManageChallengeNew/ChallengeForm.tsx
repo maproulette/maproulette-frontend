@@ -88,7 +88,10 @@ export const ChallengeForm = () => {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="absolute inset-0 flex min-h-0 flex-col"
       >
-        <FormSectionGroup className="min-h-0 flex-1 overflow-y-auto pr-1">
+        {/* The scrollable body clips anything painted outside its padding box, so
+            the horizontal padding leaves room for the selection rings drawn
+            around the cards and image tiles below. */}
+        <FormSectionGroup className="min-h-0 flex-1 overflow-y-auto px-1 py-1">
           {!isEdit && (
             <FormField
               control={form.control}

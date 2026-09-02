@@ -23,12 +23,22 @@ interface ChallengeResultsProviderProps {
 }
 
 export const ChallengeResultsContextProvider = ({ children }: ChallengeResultsProviderProps) => {
-  const { extendedFindParams, isLocationLoading } = useExploreChallengesSearchContext()
+  const { extendedFindParams, isLocationLoading, hasEmptyPlaceIntersection } =
+    useExploreChallengesSearchContext()
+  // The map has been moved clear of the selected place: nothing can match, so
+  // there is nothing to ask the server for.
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    api.challenge.exploreChallengesInfinite(extendedFindParams)
+    api.challenge.exploreChallengesInfinite(extendedFindParams, {
+      enabled: !hasEmptyPlaceIntersection,
+    })
 
-  // Stable reference for flattened pages — used as dependency for derived state below
-  const challenges = useMemo(() => data?.pages.flat() ?? [], [data])
+  // Stable reference for flattened pages — used as dependency for derived state below.
+  // A skipped query still carries the previous page data as placeholder, which
+  // would show challenges from before the map left the place.
+  const challenges = useMemo(
+    () => (hasEmptyPlaceIntersection ? [] : (data?.pages.flat() ?? [])),
+    [data, hasEmptyPlaceIntersection]
+  )
 
   // Only show full loading overlay on initial load (no data yet), not on background refetches
   const isLoadingState = (isLoading && challenges.length === 0) || isLocationLoading

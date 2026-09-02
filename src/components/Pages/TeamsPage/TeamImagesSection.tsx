@@ -13,7 +13,7 @@ import {
   resolveTeamImageUrl,
   TEAM_IMAGE_ACCEPT,
   TEAM_IMAGE_MAX_BYTES,
-  TEAM_IMAGE_MIME_TYPES,
+  teamImageFileProblem,
 } from '@/lib/teamImage'
 import type { TeamImage } from '@/types/TeamImage'
 import { isPendingImage } from '@/types/TeamImage'
@@ -24,30 +24,6 @@ interface TeamImagesSectionProps {
   isAdmin: boolean
   /** The viewer's user id, used to decide who may withdraw a pending request. */
   currentUserId: number | undefined
-}
-
-/**
- * Validates a chosen file against the same limits the backend enforces, so an
- * obviously-bad file is rejected before it is uploaded.
- *
- * @returns An error message, or undefined when the file is acceptable
- */
-const fileProblem = (file: File, t: ReturnType<typeof useIntl>['t']): string | undefined => {
-  if (!(TEAM_IMAGE_MIME_TYPES as readonly string[]).includes(file.type)) {
-    return t(
-      'teamImages.validation.fileType',
-      undefined,
-      'Image must be a PNG, JPEG, WebP or GIF file'
-    )
-  }
-  if (file.size > TEAM_IMAGE_MAX_BYTES) {
-    return t(
-      'teamImages.validation.fileSize',
-      { max: TEAM_IMAGE_MAX_BYTES / (1024 * 1024) },
-      'Image must be smaller than {max}MB'
-    )
-  }
-  return undefined
 }
 
 const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }) => {
@@ -67,13 +43,10 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
   return (
     <li className="flex items-center gap-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
       <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-zinc-100 dark:bg-slate-800">
-        {/* Only approved images are served, so a pending one intentionally has
-            no preview here rather than a broken image. */}
-        {image.status === 1 ? (
-          <img src={resolveTeamImageUrl(image.url)} alt="" className="h-full w-full object-cover" />
-        ) : (
-          <ImagePlus className="h-5 w-5 text-zinc-400 dark:text-slate-500" aria-hidden="true" />
-        )}
+        {/* The team's own images are served to them whatever their review
+            state, so a request still awaiting review still shows what was
+            asked for. */}
+        <img src={resolveTeamImageUrl(image.url)} alt="" className="h-full w-full object-cover" />
       </span>
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-sm">{image.name}</p>
@@ -132,7 +105,7 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
   const { data: images, isLoading, isError } = api.teamImage.forTeam(teamId)
   const requestImage = api.teamImage.useRequestImage()
 
-  const problem = file ? fileProblem(file, t) : undefined
+  const problem = file ? teamImageFileProblem(file, t) : undefined
 
   const handleSubmit = async () => {
     if (!file || problem) return

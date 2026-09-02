@@ -365,6 +365,57 @@ describe('project.useUpdateProject', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(client.getQueryData(['project', 'managed', 'seed'])).toBeUndefined()
   })
+
+  it('patches the cached project and managed lists before the request resolves', async () => {
+    let releaseResponse: () => void = () => {}
+    const pending = new Promise<void>((resolve) => {
+      releaseResponse = resolve
+    })
+    const fetchMock = vi.fn(async (_request: Request) => {
+      await pending
+      return new Response(JSON.stringify({ id: 1, name: 'Project A', enabled: false }), {
+        status: 200,
+      })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    const client = createTestQueryClient()
+    client.setQueryData(['project', 1], projectA)
+    client.setQueryData(['project', 'managed', 'seed'], [projectA, projectB])
+
+    const { result } = renderHook(() => project.useUpdateProject(), {
+      wrapper: queryClientWrapper(client),
+    })
+    result.current.mutate({ projectId: 1, updates: { enabled: false } })
+
+    await waitFor(() =>
+      expect(client.getQueryData(['project', 1])).toEqual({ ...projectA, enabled: false })
+    )
+    expect(client.getQueryData(['project', 'managed', 'seed'])).toEqual([
+      { ...projectA, enabled: false },
+      projectB,
+    ])
+    expect(result.current.isPending).toBe(true)
+
+    releaseResponse()
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+  })
+
+  it('restores the cached project and managed lists when the request fails', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const client = createTestQueryClient()
+    client.setQueryData(['project', 1], projectA)
+    client.setQueryData(['project', 'managed', 'seed'], [projectA, projectB])
+
+    const { result } = renderHook(() => project.useUpdateProject(), {
+      wrapper: queryClientWrapper(client),
+    })
+    result.current.mutate({ projectId: 1, updates: { enabled: false } })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+
+    expect(client.getQueryData(['project', 1])).toEqual(projectA)
+    expect(client.getQueryData(['project', 'managed', 'seed'])).toEqual([projectA, projectB])
+  })
 })
 
 describe('project.useDeleteProject', () => {

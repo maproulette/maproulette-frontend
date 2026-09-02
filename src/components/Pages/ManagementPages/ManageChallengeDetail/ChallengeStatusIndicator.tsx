@@ -5,16 +5,16 @@ import { api } from '@/api'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Panel } from '@/components/ui/Panel'
 import { useIntl } from '@/i18n'
+import {
+  CHALLENGE_STATUS_BUILDING,
+  CHALLENGE_STATUS_DELETING_TASKS,
+  CHALLENGE_STATUS_FAILED,
+  CHALLENGE_STATUS_FINISHED,
+  CHALLENGE_STATUS_NONE,
+  CHALLENGE_STATUS_PARTIALLY_LOADED,
+  CHALLENGE_STATUS_READY,
+} from '@/lib/challengeStatus'
 import type { Challenge } from '@/types/Challenge'
-
-// Challenge status constants (matching backend)
-const CHALLENGE_STATUS_NONE = 0
-const CHALLENGE_STATUS_BUILDING = 1
-const CHALLENGE_STATUS_FAILED = 2
-const CHALLENGE_STATUS_READY = 3
-const CHALLENGE_STATUS_PARTIALLY_LOADED = 4
-const CHALLENGE_STATUS_FINISHED = 5
-const CHALLENGE_STATUS_DELETING_TASKS = 6
 
 const TASKS_UPDATING_MESSAGE = 'Updating Task Statuses'
 

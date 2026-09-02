@@ -69,6 +69,35 @@ export const team = {
     })
   },
 
+  useUploadAvatar: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ teamId, imageFile }: { teamId: number; imageFile: File }) => {
+        const formData = new FormData()
+        formData.append('image', imageFile)
+
+        return apiRequest.post(`api/v2/team/${teamId}/avatar`, { body: formData }).json<Team>()
+      },
+      onSuccess: (_team, { teamId }) => {
+        queryClient.invalidateQueries({ queryKey: ['team', teamId] })
+        // The avatar shows up on team listings hanging off the user too
+        queryClient.invalidateQueries({ queryKey: ['user'] })
+      },
+    })
+  },
+
+  useDeleteAvatar: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: (teamId: number) =>
+        apiRequest.delete(`api/v2/team/${teamId}/avatar`).json<Team>(),
+      onSuccess: (_team, teamId) => {
+        queryClient.invalidateQueries({ queryKey: ['team', teamId] })
+        queryClient.invalidateQueries({ queryKey: ['user'] })
+      },
+    })
+  },
+
   useDeleteTeam: () => {
     const queryClient = useQueryClient()
     return useMutation({

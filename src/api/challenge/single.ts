@@ -1,5 +1,6 @@
 import {
   type QueryClient,
+  type QueryKey,
   queryOptions,
   useMutation,
   useQuery,
@@ -47,6 +48,97 @@ export const patchChallengeTaskMarker = (
       return changed ? { ...old, markers } : old
     }
   )
+}
+
+/**
+ * Query keys whose cached payload holds whole challenge records — a single
+ * challenge, an array of them, or an infinite-query page set. Aggregate caches
+ * (`stats`, `activity`, `tags`, `isFavorited`, ...) are deliberately excluded:
+ * they carry `id` fields of their own and must not absorb challenge patches.
+ */
+const CHALLENGE_LIST_KEYS = new Set([
+  'listing',
+  'explore',
+  'exploreInfinite',
+  'featured',
+  'preferred',
+  'search',
+])
+
+const holdsChallengeRecords = (queryKey: readonly unknown[]) => {
+  if (queryKey[0] === 'project' && queryKey[1] === 'challenges') return true
+  if (queryKey[0] !== 'challenge') return false
+  if (queryKey.length === 2 && typeof queryKey[1] === 'number') return true
+  return typeof queryKey[1] === 'string' && CHALLENGE_LIST_KEYS.has(queryKey[1])
+}
+
+/**
+ * Merge `patch` into the matching challenge wherever it sits in a cached
+ * payload. Returns the original reference untouched when nothing matched, so
+ * callers can skip writing (and snapshotting) unaffected queries.
+ */
+const patchCachedChallenges = (
+  data: unknown,
+  challengeId: number,
+  patch: Record<string, unknown>
+): unknown => {
+  if (Array.isArray(data)) {
+    let changed = false
+    const next = data.map((entry) => {
+      if (!entry || typeof entry !== 'object') return entry
+      if ((entry as { id?: number }).id !== challengeId) return entry
+      changed = true
+      return { ...entry, ...patch }
+    })
+    return changed ? next : data
+  }
+
+  if (data && typeof data === 'object') {
+    const record = data as { id?: number; pages?: unknown[] }
+    if (Array.isArray(record.pages)) {
+      let changed = false
+      const pages = record.pages.map((page) => {
+        const nextPage = patchCachedChallenges(page, challengeId, patch)
+        if (nextPage !== page) changed = true
+        return nextPage
+      })
+      return changed ? { ...record, pages } : data
+    }
+    if (record.id === challengeId) return { ...record, ...patch }
+  }
+
+  return data
+}
+
+/**
+ * Optimistically apply a challenge change to every cache that already holds
+ * that challenge, so card toggles (pause, archive, discoverable) repaint on
+ * click instead of after the round trip plus the listing refetch that follows
+ * it. Returns a rollback that restores the pre-patch snapshots — call it from
+ * the mutation's `onError` so a failed write doesn't leave a lie on screen.
+ */
+export const patchChallengeInCaches = (
+  queryClient: QueryClient,
+  challengeId: number,
+  patch: Partial<Challenge> | Record<string, unknown>
+) => {
+  if (!challengeId) return () => {}
+
+  const snapshots: Array<[QueryKey, unknown]> = []
+  for (const query of queryClient.getQueryCache().findAll()) {
+    if (!holdsChallengeRecords(query.queryKey)) continue
+    const current = query.state.data
+    const next = patchCachedChallenges(current, challengeId, patch as Record<string, unknown>)
+    if (next === current) continue
+    snapshots.push([query.queryKey, current])
+    queryClient.setQueryData(query.queryKey, next)
+  }
+
+  return () => {
+    for (const [queryKey, data] of snapshots) {
+      queryClient.setQueryData(queryKey, data)
+    }
+  }
 }
 
 /**
@@ -336,6 +428,12 @@ export const challengeSingle = {
             },
           })
           .json<Challenge>(),
+      // Repaint the edited fields everywhere the challenge is cached before the
+      // request goes out; the invalidations below reconcile with the server.
+      onMutate: ({ challengeId, updates }) => ({
+        rollback: patchChallengeInCaches(queryClient, challengeId, updates),
+      }),
+      onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (updatedChallenge) => {
         queryClient.setQueryData<ChallengeGetResponse>(
           ['challenge', updatedChallenge.id],
@@ -530,6 +628,10 @@ export const challengeSingle = {
             json: { isArchived },
           })
           .json<void>(),
+      onMutate: ({ challengeId, isArchived }) => ({
+        rollback: patchChallengeInCaches(queryClient, challengeId, { isArchived }),
+      }),
+      onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
@@ -547,6 +649,10 @@ export const challengeSingle = {
             json: { id: challengeId, paused },
           })
           .json<Challenge>(),
+      onMutate: ({ challengeId, paused }) => ({
+        rollback: patchChallengeInCaches(queryClient, challengeId, { paused }),
+      }),
+      onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })

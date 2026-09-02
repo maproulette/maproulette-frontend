@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/Table'
 import { useIntl } from '@/i18n'
 import { getParentInfo } from '@/lib/challengeParent'
+import { isChallengeComplete } from '@/lib/challengeStatus'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
@@ -124,10 +125,19 @@ export const ChallengesTableView = () => {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-center">
-                  <Badge variant="outline" className="text-xs">
-                    {challenge.enabled
-                      ? t('exploreChallenges.challengeList.table.published', undefined, 'Published')
-                      : t('exploreChallenges.challengeList.table.disabled', undefined, 'Disabled')}
+                  <Badge
+                    variant={isChallengeComplete(challenge) ? 'success' : 'outline'}
+                    className="text-xs"
+                  >
+                    {!challenge.enabled
+                      ? t('exploreChallenges.challengeList.table.disabled', undefined, 'Disabled')
+                      : isChallengeComplete(challenge)
+                        ? t('common.completed', undefined, 'Completed')
+                        : t(
+                            'exploreChallenges.challengeList.table.published',
+                            undefined,
+                            'Published'
+                          )}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">

@@ -3,10 +3,12 @@ import { describe, expect, it, vi } from 'vitest'
 import type { Bbox2D } from '@/types/Map'
 import {
   boundsAreEqual,
+  boundsStringToPolygon,
   clampBoundsString,
   coordInBbox,
   DEFAULT_WORLD_BOUNDS,
   getMapBoundsString,
+  intersectBoundsStrings,
   isWorldBounds,
   parseBoundsString,
   resetMapView,
@@ -98,6 +100,53 @@ describe('clampBoundsString', () => {
 
   it('returns the default world bounds for a malformed string (non-numeric parts)', () => {
     expect(clampBoundsString('a,b,c,d')).toBe(DEFAULT_WORLD_BOUNDS)
+  })
+})
+
+describe('boundsStringToPolygon', () => {
+  it('builds a closed ring in west,south -> east,north order', () => {
+    expect(boundsStringToPolygon('-100,30,-90,40')).toEqual({
+      type: 'Polygon',
+      coordinates: [
+        [
+          [-100, 30],
+          [-90, 30],
+          [-90, 40],
+          [-100, 40],
+          [-100, 30],
+        ],
+      ],
+    })
+  })
+
+  it('clamps out-of-range bounds before building the ring', () => {
+    expect(boundsStringToPolygon('-200,-100,200,100')?.coordinates[0][0]).toEqual([-180, -85])
+  })
+
+  it('returns null for a malformed bounds string', () => {
+    expect(boundsStringToPolygon('a,b,c,d')).toBeNull()
+  })
+})
+
+describe('intersectBoundsStrings', () => {
+  it('returns the overlapping box of two boxes', () => {
+    expect(intersectBoundsStrings('-100,30,-90,40', '-95,35,-85,45')).toBe('-95,35,-90,40')
+  })
+
+  it('returns the inner box when one contains the other', () => {
+    expect(intersectBoundsStrings('-100,30,-90,40', '-97,32,-95,34')).toBe('-97,32,-95,34')
+  })
+
+  it('returns null when the boxes do not overlap', () => {
+    expect(intersectBoundsStrings('-100,30,-90,40', '-80,30,-70,40')).toBeNull()
+  })
+
+  it('returns null when the boxes only touch along an edge', () => {
+    expect(intersectBoundsStrings('-100,30,-90,40', '-90,30,-80,40')).toBeNull()
+  })
+
+  it('returns null when either box is malformed', () => {
+    expect(intersectBoundsStrings('-100,30,-90,40', 'nope')).toBeNull()
   })
 })
 

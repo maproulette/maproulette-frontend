@@ -1,7 +1,9 @@
 import { Link } from '@tanstack/react-router'
+import { Badge } from '@/components/ui/Badge'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 import { useIntl } from '@/i18n'
 import { getParentInfo } from '@/lib/challengeParent'
+import { isChallengeComplete } from '@/lib/challengeStatus'
 import { formatDate } from '@/lib/date'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
@@ -54,6 +56,7 @@ export const ChallengeCard = ({
         : pct >= 100
           ? 0
           : tasksRemaining
+  const isComplete = isChallengeComplete(challenge, pct)
   const lastUpdated = challenge.modified || challenge.lastTaskRefresh
   const { name: embeddedParentName } = getParentInfo(challenge.parent)
   const displayParentName = parentName ?? embeddedParentName
@@ -119,9 +122,14 @@ export const ChallengeCard = ({
             className="mb-3"
           />
 
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-zinc-500 dark:text-slate-300">
+          <div className="flex items-center justify-between gap-2">
+            <span className="flex items-center gap-2 text-xs text-zinc-500 dark:text-slate-300">
               {getDifficultyLabel(t, challenge.difficulty)}
+              {isComplete && (
+                <Badge variant="success" className="text-xs">
+                  {t('common.completed', undefined, 'Completed')}
+                </Badge>
+              )}
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">

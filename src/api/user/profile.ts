@@ -162,6 +162,24 @@ export const userProfile = {
         }
         return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
       },
+      // Settings drive UI that should react on click — pinned challenge/project
+      // stars in particular — so patch the cached user before the round trip and
+      // let `onSuccess` replace it with the server's copy.
+      onMutate: ({ settings, properties }) => {
+        const previous = queryClient.getQueryData<User>(['user', 'whoami'])
+        if (!previous) return { previous }
+        queryClient.setQueryData<User>(['user', 'whoami'], {
+          ...previous,
+          settings: { ...previous.settings, ...settings },
+          ...(properties && { properties }),
+        })
+        return { previous }
+      },
+      onError: (_error, _variables, context) => {
+        if (context?.previous) {
+          queryClient.setQueryData<User>(['user', 'whoami'], context.previous)
+        }
+      },
       onSuccess: (updatedUser) => {
         queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
       },

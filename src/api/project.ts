@@ -180,6 +180,36 @@ export const project = {
             },
           })
           .json<Project>(),
+      // Archive / discoverable toggles read straight off these caches, so patch
+      // them on click rather than after the round trip; `onSuccess` then swaps in
+      // the server's copy.
+      onMutate: ({ projectId, updates }) => {
+        const previousProject = queryClient.getQueryData<ProjectGetResponse>(['project', projectId])
+        const previousManaged = queryClient.getQueriesData<Project[]>({
+          queryKey: ['project', 'managed'],
+        })
+        if (previousProject) {
+          queryClient.setQueryData<ProjectGetResponse>(['project', projectId], {
+            ...previousProject,
+            ...updates,
+          })
+        }
+        queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>
+          oldProjects?.map((p) => (p.id === projectId ? { ...p, ...updates } : p))
+        )
+        return { previousProject, previousManaged }
+      },
+      onError: (_error, variables, context) => {
+        if (context?.previousProject) {
+          queryClient.setQueryData<ProjectGetResponse>(
+            ['project', variables.projectId],
+            context.previousProject
+          )
+        }
+        for (const [queryKey, data] of context?.previousManaged ?? []) {
+          queryClient.setQueryData(queryKey, data)
+        }
+      },
       onSuccess: (updatedProject) => {
         queryClient.setQueryData<ProjectGetResponse>(['project', updatedProject.id], updatedProject)
         queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>

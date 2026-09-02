@@ -53,6 +53,52 @@ export const clampBoundsString = (boundsString: string): string => {
 }
 
 /**
+ * Turn a "west,south,east,north" bounds string into a GeoJSON Polygon ring.
+ * Used as the place-boundary filter for locations Nominatim has no polygon
+ * for, and while a real boundary is still being fetched.
+ */
+export const boundsStringToPolygon = (
+  boundsString: string
+): { type: 'Polygon'; coordinates: number[][][] } | null => {
+  // Validate before clamping: clampBoundsString turns a malformed string into
+  // world bounds, which would read as a place covering the planet.
+  const raw = boundsString.split(',').map(Number)
+  if (raw.length !== 4 || raw.some(Number.isNaN)) return null
+  const [west, south, east, north] = clampBoundsString(boundsString).split(',').map(Number)
+  return {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [west, south],
+        [east, south],
+        [east, north],
+        [west, north],
+        [west, south],
+      ],
+    ],
+  }
+}
+
+/**
+ * Intersect two "west,south,east,north" bounds strings. Returns null when they
+ * don't overlap at all -- there is no box that means "nothing", so callers have
+ * to treat that as an empty result rather than passing a box along.
+ */
+export const intersectBoundsStrings = (a: string, b: string): string | null => {
+  const first = parseBoundsString(a)
+  const second = parseBoundsString(b)
+  if (!first || !second) return null
+
+  const west = Math.max(first[0], second[0])
+  const south = Math.max(first[1], second[1])
+  const east = Math.min(first[2], second[2])
+  const north = Math.min(first[3], second[3])
+  if (west >= east || south >= north) return null
+
+  return [west, south, east, north].join(',')
+}
+
+/**
  * Convert maplibre LngLatBounds to a [west, south, east, north] tuple.
  */
 export const mapBoundsToBbox = (bounds: maplibregl.LngLatBounds): Bbox2D => {

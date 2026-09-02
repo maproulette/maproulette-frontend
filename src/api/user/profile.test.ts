@@ -395,6 +395,72 @@ describe('userProfile.useUpdateUserSettings', () => {
       properties: { theme: 'dark' },
     })
   })
+
+  it('patches the cached user before the request resolves', async () => {
+    let releaseResponse: () => void = () => {}
+    const pending = new Promise<void>((resolve) => {
+      releaseResponse = resolve
+    })
+    const fetchMock = vi.fn(async (_request: Request) => {
+      await pending
+      return new Response(JSON.stringify({ id: 9, properties: { theme: 'dark' } }), { status: 200 })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['user', 'whoami'], {
+      id: 9,
+      settings: { defaultBasemap: 1 },
+      properties: { theme: 'light' },
+    })
+
+    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({
+      userId: 9,
+      settings: { defaultBasemap: 2 },
+      properties: { theme: 'dark' },
+    })
+
+    await waitFor(() =>
+      expect(queryClient.getQueryData(['user', 'whoami'])).toEqual({
+        id: 9,
+        settings: { defaultBasemap: 2 },
+        properties: { theme: 'dark' },
+      })
+    )
+    expect(result.current.isPending).toBe(true)
+
+    releaseResponse()
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+  })
+
+  it('restores the cached user when the request fails', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const queryClient = createTestQueryClient()
+    const cachedUser = {
+      id: 9,
+      settings: { defaultBasemap: 1 },
+      properties: { theme: 'light' },
+    }
+    queryClient.setQueryData(['user', 'whoami'], cachedUser)
+
+    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({
+      userId: 9,
+      settings: { defaultBasemap: 2 },
+      properties: { theme: 'dark' },
+    })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+
+    expect(queryClient.getQueryData(['user', 'whoami'])).toEqual(cachedUser)
+  })
 })
 
 describe('userProfile.useRegenerateApiKey', () => {

@@ -192,10 +192,8 @@ export const CommentsHistoryTab = ({
 
           <div
             className={cn(
-              'flex min-w-0 flex-1 flex-col gap-1 rounded-2xl px-3 py-2.5 shadow-xs ring-1',
-              isUser
-                ? 'bg-blue-100 ring-blue-200/70 dark:bg-blue-950 dark:ring-blue-800/70'
-                : 'bg-white ring-zinc-200/80 dark:bg-slate-950 dark:ring-slate-600/80'
+              'flex min-w-0 max-w-[85%] flex-col gap-1 rounded-2xl bg-white px-3 py-2.5 shadow-sm dark:bg-slate-800',
+              isUser && 'items-end text-right'
             )}
           >
             <div className="flex items-center gap-2">
@@ -329,17 +327,14 @@ export const CommentsHistoryTab = ({
 
       {!readOnly &&
         (user ? (
-          <form
-            onSubmit={handleSubmit}
-            className="mt-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-xs dark:border-slate-600 dark:bg-slate-950"
-          >
+          <form onSubmit={handleSubmit} className="mt-3">
             <div className="flex gap-2">
               <Textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder={t('common.addAComment', undefined, 'Add a comment...')}
                 rows={2}
-                className="flex-1 resize-none bg-zinc-50 text-sm dark:border-slate-600 dark:bg-slate-900"
+                className="flex-1 resize-none border-transparent bg-white text-sm shadow-sm dark:border-transparent dark:bg-slate-800"
                 maxLength={5000}
               />
               <Button
@@ -353,7 +348,7 @@ export const CommentsHistoryTab = ({
             </div>
           </form>
         ) : (
-          <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-center text-xs text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+          <div className="mt-3 rounded-lg bg-white p-3 text-center text-xs text-zinc-600 shadow-sm dark:bg-slate-800 dark:text-slate-400">
             {t('taskInfoPanel.comments.signInPrompt', undefined, 'Sign in to add comments')}
           </div>
         ))}
