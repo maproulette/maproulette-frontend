@@ -1,4 +1,6 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { isTagFixTask } from '@/lib/cooperativeWork'
+import { useTaskContext } from './TaskContext'
 
 type ActiveView = 'map' | 'id'
 
@@ -43,6 +45,22 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const showMap = useCallback(() => {
     setActiveView('map')
   }, [])
+
+  // A tag-fix task's whole point is the tag change waiting to be applied, and
+  // that only happens inside the embedded editor — so open it as soon as the
+  // mapper holds the lock and is actually working the task, rather than making
+  // them find the button first.
+  //
+  // Once per task: a mapper who closes the editor gets to keep it closed.
+  const { task, isLocked } = useTaskContext()
+  const autoOpenedTaskRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (!isLocked || autoOpenedTaskRef.current === task.id) return
+    if (!isTagFixTask(task)) return
+    autoOpenedTaskRef.current = task.id
+    openIdEditor()
+  }, [isLocked, task, openIdEditor])
 
   const value = useMemo(
     () => ({

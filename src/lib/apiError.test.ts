@@ -1,7 +1,12 @@
 import type { NormalizedOptions } from 'ky'
 import { HTTPError } from 'ky'
 import { describe, expect, it } from 'vitest'
-import { getApiErrorMessage, getLockConflict, getLockConflictInfo } from './apiError.ts'
+import {
+  getApiErrorMessage,
+  getErrorMessage,
+  getLockConflict,
+  getLockConflictInfo,
+} from './apiError.ts'
 
 const makeHttpError = (body: unknown, status = 400) => {
   const response = new Response(JSON.stringify(body), { status })
@@ -40,6 +45,33 @@ describe('getApiErrorMessage', () => {
     const request = new Request('http://example.test/api')
     const error = new HTTPError(response, request, {} as NormalizedOptions)
     await expect(getApiErrorMessage(error)).resolves.toBeUndefined()
+  })
+})
+
+describe('getErrorMessage', () => {
+  it('prefers the backend message over the fallback', async () => {
+    const error = makeHttpError({
+      status: 'KO',
+      message: 'Challenge with name test already exists in the database',
+    })
+    await expect(getErrorMessage(error, 'Failed to save')).resolves.toBe(
+      'Challenge with name test already exists in the database'
+    )
+  })
+
+  it('falls back for an HTTP error with no usable message, hiding ky wording', async () => {
+    const error = makeHttpError({ status: 'KO' })
+    await expect(getErrorMessage(error, 'Failed to save')).resolves.toBe('Failed to save')
+  })
+
+  it('uses the message of an error raised by our own code', async () => {
+    await expect(
+      getErrorMessage(new Error('Project ID is required'), 'Failed to save')
+    ).resolves.toBe('Project ID is required')
+  })
+
+  it('falls back for a non-error value', async () => {
+    await expect(getErrorMessage('nope', 'Failed to save')).resolves.toBe('Failed to save')
   })
 })
 

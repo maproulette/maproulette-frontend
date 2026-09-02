@@ -611,6 +611,31 @@ describe('challengeSingle.useCreateChallenge', () => {
       dataOriginDate: draft.dataOriginDate,
     })
   })
+
+  // A remote URL is the challenge's only task source: dropping it here leaves
+  // the backend nothing to build tasks from, so the challenge comes up empty.
+  it('sends the remote GeoJSON URL and the team image so the backend can build from them', async () => {
+    const created = { id: 32 } as unknown as Challenge
+    const fetchMock = stubFetch(new Response(JSON.stringify(created), { status: 200 }))
+
+    const { result } = renderHook(() => challengeSingle.useCreateChallenge(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    const draft: ChallengeDraft = {
+      name: 'Remote Challenge',
+      remoteGeoJson: 'https://example.com/tasks.geojson',
+      teamImageId: 7,
+    }
+    result.current.mutate({ projectId: 3, challengeData: draft as unknown as Partial<Challenge> })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    const body = await request.clone().json()
+    expect(body.remoteGeoJson).toBe('https://example.com/tasks.geojson')
+    expect(body.teamImageId).toBe(7)
+  })
 })
 
 describe('challengeSingle.useUpdateChallenge', () => {

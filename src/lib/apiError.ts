@@ -15,6 +15,19 @@ export const getApiErrorMessage = async (error: unknown): Promise<string | undef
   }
 }
 
+/**
+ * The message to show a user for a failed request: the backend's `{status: "KO",
+ * message}` body when it sends one, the error's own message when it was raised by
+ * our own code, and `fallback` otherwise — ky's own HTTPError message is just
+ * "Request failed with status code 400 Bad Request", which tells a user nothing.
+ */
+export const getErrorMessage = async (error: unknown, fallback: string): Promise<string> => {
+  const apiMessage = await getApiErrorMessage(error)
+  if (apiMessage) return apiMessage
+  if (error instanceof Error && !(error instanceof HTTPError)) return error.message
+  return fallback
+}
+
 /** The lock a user already holds elsewhere, as returned by a 409 lock-conflict response. */
 export interface LockConflictInfo {
   lockedTaskId: number

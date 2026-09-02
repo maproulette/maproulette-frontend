@@ -95,6 +95,15 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         // First feature wins for the per-task highlight mapping
         if (!(t.id in mapping)) mapping[t.id] = entityId
       }
+
+      // A tag fix names the elements it changes, and those are the ones the
+      // mapper needs to look at. They are not always discoverable from the
+      // task's own geometry properties, so without this a tag-fix task could
+      // have a pending edit with nothing selected to inspect it on.
+      for (const fix of tagFixes(t)) {
+        if (!ids.includes(fix.entityId)) ids.push(fix.entityId)
+        if (!(t.id in mapping)) mapping[t.id] = fix.entityId
+      }
     }
     taskToOsmIdRef.current = mapping
 
@@ -263,16 +272,32 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         })
       }
 
-      setTimeout(() => {
+      // iD downloads the task's elements after the map settles, so selecting
+      // them is retried until they arrive. A single delayed attempt used to
+      // leave slow-loading elements — a tag fix's element in particular —
+      // unselected, with nothing for the mapper to inspect the change on.
+      const attemptInitialSelect = (attemptsLeft: number) => {
         const ids = osmEntityIdsRef.current
-        if (!context || ids.length === 0) return
+        if (!context || ids.length === 0 || attemptsLeft <= 0) return
         try {
           const iDGlobal = getIdGlobal(iframe.contentWindow)
-          selectValidEntities(context, iDGlobal, ids)
+          const loaded = ids.filter((id) => {
+            try {
+              return !!context.hasEntity(id)
+            } catch {
+              return false
+            }
+          })
+          if (loaded.length > 0) {
+            selectValidEntities(context, iDGlobal, loaded)
+            return
+          }
         } catch (e) {
           logger.error('[iD] initial select error', { error: e })
         }
-      }, 2000)
+        setTimeout(() => attemptInitialSelect(attemptsLeft - 1), 1000)
+      }
+      setTimeout(() => attemptInitialSelect(10), 2000)
 
       applyPendingTagFixes(context, iframe)
 

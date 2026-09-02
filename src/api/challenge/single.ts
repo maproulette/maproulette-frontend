@@ -384,7 +384,12 @@ export const challengeSingle = {
         challengeData: Partial<Challenge>
       }) => {
         const { id: _, ...challengeDataWithoutId } = challengeData
+        // Everything the form assembled is passed through as-is; only the
+        // fields the backend requires on create get a default filled in. An
+        // allowlist here would silently drop task-data fields like
+        // remoteGeoJson, leaving the challenge with no source to build from.
         const body: Record<string, unknown> = {
+          ...challengeDataWithoutId,
           parent: projectId,
           name: challengeDataWithoutId.name || '',
           description: challengeDataWithoutId.description || '',
@@ -393,23 +398,8 @@ export const challengeSingle = {
           enabled: challengeDataWithoutId.enabled ?? true,
           featured: challengeDataWithoutId.featured ?? false,
           overpassQL: challengeDataWithoutId.overpassQL || '',
-          overpassTargetType: '',
+          overpassTargetType: challengeDataWithoutId.overpassTargetType || '',
         }
-        const extra = challengeDataWithoutId as Record<string, unknown>
-        for (const key of [
-          'osmIdProperty',
-          'preferredTags',
-          'limitTags',
-          'preferredReviewTags',
-          'limitReviewTags',
-        ]) {
-          if (extra[key] !== undefined) body[key] = extra[key]
-        }
-        if (extra.defaultBasemap !== undefined) body.defaultBasemap = extra.defaultBasemap
-        if (extra.defaultBasemapId !== undefined) body.defaultBasemapId = extra.defaultBasemapId
-        if (extra.customBasemap !== undefined) body.customBasemap = extra.customBasemap
-        if (extra.localGeoJSON !== undefined) body.localGeoJSON = extra.localGeoJSON
-        if (extra.dataOriginDate !== undefined) body.dataOriginDate = extra.dataOriginDate
 
         return apiRequest.post('api/v2/challenge', { json: body }).json<Challenge>()
       },
