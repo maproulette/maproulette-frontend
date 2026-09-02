@@ -8,6 +8,7 @@ import { CongratulateModal } from '@/components/shared/CongratulateModal'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { AvatarProvider } from '@/contexts/AvatarContext'
 import { CongratulateProvider } from '@/contexts/CongratulateContext'
+import { CustomBaseLayersProvider } from '@/contexts/CustomBaseLayersContext'
 import { NavigationProvider } from '@/contexts/NavigationContext'
 import { NotificationsProvider } from '@/contexts/NotificationsContext'
 import { PageTitleProvider } from '@/contexts/PageTitleContext'
@@ -28,18 +29,20 @@ export const AppLayout = () => {
               <NavigationProvider>
                 <PageTitleProvider>
                   <VisibleLayersProvider>
-                    <CongratulateProvider>
-                      <WebSocketEventsListener />
-                      <main className="mx-auto flex h-screen w-full max-w-[2560px] flex-col overflow-hidden">
-                        <SystemNotices />
-                        <BetaBanner />
-                        <Header />
-                        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-                          <Outlet />
-                        </div>
-                      </main>
-                      <CongratulateModal />
-                    </CongratulateProvider>
+                    <CustomBaseLayersProvider>
+                      <CongratulateProvider>
+                        <WebSocketEventsListener />
+                        <main className="mx-auto flex h-screen w-full max-w-[2560px] flex-col overflow-hidden">
+                          <SystemNotices />
+                          <BetaBanner />
+                          <Header />
+                          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+                            <Outlet />
+                          </div>
+                        </main>
+                        <CongratulateModal />
+                      </CongratulateProvider>
+                    </CustomBaseLayersProvider>
                   </VisibleLayersProvider>
                 </PageTitleProvider>
               </NavigationProvider>

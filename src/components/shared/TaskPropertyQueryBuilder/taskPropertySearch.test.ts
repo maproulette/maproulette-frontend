@@ -107,3 +107,60 @@ describe('searchableOperators', () => {
     expect(searchableOperators('number')).toEqual(['equals', 'notEqual', 'greaterThan', 'lessThan'])
   })
 })
+
+describe('comma-separated values', () => {
+  it('ORs two values together', () => {
+    const node = leaf({ value: 'motorway,trunk', commaSeparate: true })
+    expect(binaryToTaskPropertySearch(node)).toEqual({
+      operationType: 'or',
+      left: { key: 'highway', value: 'motorway', valueType: 'string', searchType: 'equals' },
+      right: { key: 'highway', value: 'trunk', valueType: 'string', searchType: 'equals' },
+    })
+  })
+
+  it('nests to the right for three or more values', () => {
+    const node = leaf({ value: 'a,b,c', commaSeparate: true })
+    expect(binaryToTaskPropertySearch(node)).toEqual({
+      operationType: 'or',
+      left: { key: 'highway', value: 'a', valueType: 'string', searchType: 'equals' },
+      right: {
+        operationType: 'or',
+        left: { key: 'highway', value: 'b', valueType: 'string', searchType: 'equals' },
+        right: { key: 'highway', value: 'c', valueType: 'string', searchType: 'equals' },
+      },
+    })
+  })
+
+  it('trims whitespace around each value and drops empty ones', () => {
+    const node = leaf({ value: 'a , , b ', commaSeparate: true })
+    expect(binaryToTaskPropertySearch(node)).toEqual({
+      operationType: 'or',
+      left: { key: 'highway', value: 'a', valueType: 'string', searchType: 'equals' },
+      right: { key: 'highway', value: 'b', valueType: 'string', searchType: 'equals' },
+    })
+  })
+
+  it('is a plain leaf when the flag is set but there is only one value', () => {
+    const node = leaf({ value: 'motorway', commaSeparate: true })
+    expect(binaryToTaskPropertySearch(node)).toEqual({
+      key: 'highway',
+      value: 'motorway',
+      valueType: 'string',
+      searchType: 'equals',
+    })
+  })
+
+  it('treats commas literally when the flag is off', () => {
+    const node = leaf({ value: 'motorway,trunk' })
+    expect(binaryToTaskPropertySearch(node)).toEqual({
+      key: 'highway',
+      value: 'motorway,trunk',
+      valueType: 'string',
+      searchType: 'equals',
+    })
+  })
+
+  it('is null when every value is empty', () => {
+    expect(binaryToTaskPropertySearch(leaf({ value: ' , ', commaSeparate: true }))).toBeNull()
+  })
+})

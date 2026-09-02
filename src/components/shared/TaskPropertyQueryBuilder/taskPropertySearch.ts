@@ -60,5 +60,25 @@ export const binaryToTaskPropertySearch = (
   ]
   if (!searchType) return null
 
-  return { key, value: node.value ?? '', valueType, searchType }
+  const value = node.value ?? ''
+
+  // A comma-separated rule matches the property against any one of several
+  // values. The backend has no "in" operator, so it becomes a chain of ORs —
+  // one leaf per value — which is what MapRoulette 3 sent too.
+  if (node.commaSeparate && value.includes(',')) {
+    const values = value
+      .split(',')
+      .map((part) => part.trim())
+      .filter(Boolean)
+    if (values.length === 0) return null
+    const leaves: TaskPropertySearch[] = values.map((one) => ({
+      key,
+      value: one,
+      valueType,
+      searchType,
+    }))
+    return leaves.reduceRight((right, left) => ({ operationType: 'or', left, right }))
+  }
+
+  return { key, value, valueType, searchType }
 }

@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@/components/ui/Checkbox'
 import { Input } from '@/components/ui/Input'
 import {
   Select,
@@ -85,6 +86,19 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
           placeholder={t('taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder', undefined, 'value')}
           className="max-w-40"
         />
+      )}
+      {operatorTakesValue(rule.operator) && (
+        <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+          <Checkbox
+            checked={!!rule.commaSeparate}
+            onCheckedChange={(checked) => onChange({ ...rule, commaSeparate: checked === true })}
+          />
+          {t(
+            'taskPropertyQueryBuilder.ruleLeaf.commaSeparate',
+            undefined,
+            'Comma-separated values'
+          )}
+        </label>
       )}
       {onRemove && (
         <Button

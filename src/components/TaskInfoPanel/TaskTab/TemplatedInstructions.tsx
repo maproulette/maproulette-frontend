@@ -12,7 +12,11 @@ import {
 import { useCompletionResponses } from '@/contexts/CompletionResponsesContext'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import { useIntl } from '@/i18n'
-import { type InstructionToken, tokenizeInstructions } from '@/lib/shortCodes'
+import {
+  type InstructionToken,
+  type OsmElementsToken,
+  tokenizeInstructions,
+} from '@/lib/shortCodes'
 
 const CopyableText = ({ text }: { text: string }) => {
   const { t } = useIntl()
@@ -93,6 +97,39 @@ const SelectField = ({
   )
 }
 
+const OSM_BASE = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+
+const externalLinkClass = 'text-blue-600 hover:underline dark:text-blue-400'
+
+const OsmElements = ({ elements }: { elements: OsmElementsToken['elements'] }) => (
+  <span className="inline-flex flex-wrap items-center gap-1">
+    {elements.map((element, i) => (
+      <span key={`${element.type}-${element.id}`}>
+        {i > 0 && ', '}
+        <a
+          href={`${OSM_BASE}/${element.type}/${element.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={externalLinkClass}
+        >
+          {element.type} {element.id}
+        </a>
+      </span>
+    ))}
+  </span>
+)
+
+const ViewportLink = ({ zoom, lat, lon }: { zoom: string; lat: string; lon: string }) => (
+  <a
+    href={`${OSM_BASE}/#map=${zoom}/${lat}/${lon}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={externalLinkClass}
+  >
+    {lat}, {lon}
+  </a>
+)
+
 const renderToken = (token: InstructionToken, key: number) => {
   switch (token.kind) {
     case 'checkbox':
@@ -101,6 +138,10 @@ const renderToken = (token: InstructionToken, key: number) => {
       return <SelectField key={key} label={token.label} name={token.name} values={token.values} />
     case 'copyable':
       return <CopyableText key={key} text={token.text} />
+    case 'osmElements':
+      return <OsmElements key={key} elements={token.elements} />
+    case 'viewport':
+      return <ViewportLink key={key} zoom={token.zoom} lat={token.lat} lon={token.lon} />
     default:
       return <MarkdownContent key={key}>{token.text}</MarkdownContent>
   }

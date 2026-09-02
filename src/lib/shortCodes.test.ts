@@ -95,3 +95,65 @@ describe('hasShortCodes', () => {
     expect(hasShortCodes('[link](https://example.org)')).toBe(false)
   })
 })
+
+describe('OSM element short codes', () => {
+  it('parses the abbreviated forms', () => {
+    for (const [code, type] of [
+      ['[n123]', 'node'],
+      ['[w/456]', 'way'],
+      ['[r 789]', 'relation'],
+    ] as const) {
+      const [token] = tokenizeInstructions(code)
+      expect(token).toEqual({
+        kind: 'osmElements',
+        elements: [{ type, id: code.match(/\d+/)![0] }],
+      })
+    }
+  })
+
+  it('parses the spelled-out forms', () => {
+    const [token] = tokenizeInstructions('[relation/12]')
+    expect(token).toEqual({ kind: 'osmElements', elements: [{ type: 'relation', id: '12' }] })
+  })
+
+  it('parses several elements in one short code', () => {
+    const [token] = tokenizeInstructions('[n123456789, w987654321]')
+    expect(token).toEqual({
+      kind: 'osmElements',
+      elements: [
+        { type: 'node', id: '123456789' },
+        { type: 'way', id: '987654321' },
+      ],
+    })
+  })
+
+  it('leaves prose that merely mentions an element alone', () => {
+    const text = '[see way 12 for details]'
+    expect(tokenizeInstructions(text)).toEqual([{ kind: 'text', text }])
+  })
+})
+
+describe('viewport short codes', () => {
+  it('parses zoom/lat/lon', () => {
+    expect(tokenizeInstructions('[v17/37.11777/126.99754]')).toEqual([
+      { kind: 'viewport', zoom: '17', lat: '37.11777', lon: '126.99754' },
+    ])
+  })
+
+  it('accepts the spelled-out form and negative coordinates', () => {
+    expect(tokenizeInstructions('[viewport/14/-42.38/-12.26]')).toEqual([
+      { kind: 'viewport', zoom: '14', lat: '-42.38', lon: '-12.26' },
+    ])
+  })
+
+  it('accepts a pasted OpenStreetMap map URL', () => {
+    expect(tokenizeInstructions('[https://www.openstreetmap.org/#map=14/42.38/12.26]')).toEqual([
+      { kind: 'viewport', zoom: '14', lat: '42.38', lon: '12.26' },
+    ])
+  })
+
+  it('still leaves ordinary markdown links alone', () => {
+    const text = 'See [the map](https://www.openstreetmap.org/#map=14/42.38/12.26) here.'
+    expect(tokenizeInstructions(text)).toEqual([{ kind: 'text', text }])
+  })
+})

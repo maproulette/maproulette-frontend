@@ -10,6 +10,7 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
 import type { PublicUser } from '@/types/User'
+import { FollowedActivity } from './FollowedActivity'
 
 const UserList = ({ users, emptyLabel }: { users: PublicUser[]; emptyLabel: string }) => {
   if (users.length === 0) {
@@ -106,6 +107,19 @@ export const FollowSection = ({ userId }: { userId: number }) => {
           </Button>
         )}
       </div>
+
+      {isOwnProfile && (following?.length ?? 0) > 0 && (
+        <div className="space-y-2">
+          <h3 className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
+            {t(
+              'profilePage.follow.activityTitle',
+              undefined,
+              'Recent activity from mappers you follow'
+            )}
+          </h3>
+          <FollowedActivity following={following ?? []} />
+        </div>
+      )}
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">

@@ -12,14 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useCustomBaseLayers } from '@/contexts/CustomBaseLayersContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
-import {
-  addCustomBaseLayer,
-  type CustomLayerType,
-  getCustomBaseLayers,
-  removeCustomBaseLayer,
-} from './customBaseLayers'
+import type { CustomLayerType } from './customBaseLayers'
 import { allMapStyles, bundledMapStyles, getCurrentMapStyleIndex, saveMapStyle } from './mapStyles'
 
 interface MapStyleSwitcherProps {
@@ -30,8 +26,7 @@ interface MapStyleSwitcherProps {
 export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
   const { t } = useIntl()
   const [selectedIndex, setSelectedIndex] = useState(getCurrentMapStyleIndex)
-  // Bumped whenever the custom-layer list changes, to re-read it from storage.
-  const [revision, setRevision] = useState(0)
+  const { layers: customLayers, addLayer, removeLayer } = useCustomBaseLayers()
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
   const [type, setType] = useState<CustomLayerType>('xyz')
@@ -39,8 +34,6 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
   const [layers, setLayers] = useState('')
 
   const styles = allMapStyles()
-  const customLayers = getCustomBaseLayers()
-  void revision
 
   const handleStyleChange = (style: StyleSpecification, index: number) => {
     if (!map.current || !mapLoaded) return
@@ -53,7 +46,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
 
   const handleAdd = () => {
     if (!canSave) return
-    addCustomBaseLayer({
+    addLayer({
       name: name.trim(),
       type,
       url: url.trim(),
@@ -63,14 +56,12 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
     setUrl('')
     setLayers('')
     setAdding(false)
-    setRevision((r) => r + 1)
   }
 
   const handleRemove = (id: string) => {
-    removeCustomBaseLayer(id)
+    removeLayer(id)
     // The removed layer may have been the selected one; fall back to the first.
     setSelectedIndex(getCurrentMapStyleIndex())
-    setRevision((r) => r + 1)
   }
 
   return (

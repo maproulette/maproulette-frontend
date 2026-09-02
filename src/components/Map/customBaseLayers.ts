@@ -99,6 +99,36 @@ export const removeCustomBaseLayer = (id: string): void => {
   writeStored(readStored().filter((layer) => layer.id !== id))
 }
 
+/**
+ * Replace the mirror wholesale, used when syncing with the account's copy.
+ */
+export const replaceCustomBaseLayers = (layers: CustomBaseLayer[]): void => writeStored(layers)
+
+/**
+ * The account stores a custom basemap as a name and a single URL, with no
+ * separate WMS fields, so a WMS layer is flattened to its resolved tile
+ * template on the way out and read back as a plain XYZ layer.
+ */
+export const toUserBasemap = (layer: CustomBaseLayer) => ({
+  // The backend assigns real ids; a client-side layer has a string id, so send
+  // 0 and let it allocate one.
+  id: Number.isFinite(Number(layer.id)) ? Number(layer.id) : 0,
+  name: layer.name,
+  url: layer.type === 'wms' ? wmsTileUrl(layer.url, layer.layers ?? '') : layer.url,
+  overlay: false,
+})
+
+export const toStoredLayer = (basemap: {
+  id: number
+  name: string
+  url: string
+}): CustomBaseLayer => ({
+  id: String(basemap.id),
+  name: basemap.name,
+  type: 'xyz',
+  url: basemap.url,
+})
+
 /** Styles for every custom base layer, for appending to the bundled list. */
 export const customBaseLayerStyles = (): StyleSpecification[] =>
   getCustomBaseLayers().map(customBaseLayerStyle)

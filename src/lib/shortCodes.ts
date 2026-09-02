@@ -30,12 +30,32 @@ export interface CopyableToken {
   text: string
 }
 
+/** One or more OSM elements referenced from instructions, e.g. `[n123, w456]`. */
+export interface OsmElementsToken {
+  kind: 'osmElements'
+  elements: Array<{ type: 'node' | 'way' | 'relation'; id: string }>
+}
+
+/** A map viewport, e.g. `[v17/37.11777/126.99754]`. */
+export interface ViewportToken {
+  kind: 'viewport'
+  zoom: string
+  lat: string
+  lon: string
+}
+
 export interface TextToken {
   kind: 'text'
   text: string
 }
 
-export type InstructionToken = TextToken | CheckboxToken | SelectToken | CopyableToken
+export type InstructionToken =
+  | TextToken
+  | CheckboxToken
+  | SelectToken
+  | CopyableToken
+  | OsmElementsToken
+  | ViewportToken
 
 /** Names of the form fields a set of tokens asks the mapper to fill in. */
 export const responseFieldNames = (tokens: InstructionToken[]): string[] =>
@@ -49,6 +69,26 @@ export const responseFieldNames = (tokens: InstructionToken[]): string[] =>
 const CHECKBOX = /^checkbox[/ ]?"([^"]+)"\s+name="([^"]+)"$/
 const SELECT = /^select[/ ]?"([^"]+)"\s+name="([^"]+)"\s+values="([^"]*)"$/
 const COPYABLE = /^copyable[/ ]?"([^"]*)"$/
+
+// `[n123]`, `[w/456]`, `[relation 789]`, and comma-separated combinations.
+const OSM_ELEMENT = /(n|w|r|node|way|rel|relation)[/ ]?(\d+)/gi
+const OSM_ELEMENT_ONLY =
+  /^(?:(?:n|w|r|node|way|rel|relation)[/ ]?\d+)(?:\s*,\s*(?:(?:n|w|r|node|way|rel|relation)[/ ]?\d+))*$/i
+
+const ELEMENT_TYPES: Record<string, 'node' | 'way' | 'relation'> = {
+  n: 'node',
+  node: 'node',
+  w: 'way',
+  way: 'way',
+  r: 'relation',
+  rel: 'relation',
+  relation: 'relation',
+}
+
+// `[v17/37.11777/126.99754]` or `[viewport/…]`, plus a pasted OSM map URL.
+const VIEWPORT = /^(?:v|viewport)[/ ]?(\d+)\/(-?[\d.]+)\/(-?[\d.]+)$/i
+const OSM_MAP_URL =
+  /^https?:\/\/(?:www\.)?openstreetmap\.org\/?#map=(\d+)\/(-?[\d.]+)\/(-?[\d.]+)$/i
 
 /** Strip the surrounding brackets or triple braces from a matched short code. */
 const innerText = (token: string): string =>
@@ -75,6 +115,19 @@ const parseShortCode = (token: string): InstructionToken => {
 
   const copyable = COPYABLE.exec(inner)
   if (copyable) return { kind: 'copyable', text: copyable[1] }
+
+  const viewport = VIEWPORT.exec(inner) ?? OSM_MAP_URL.exec(inner)
+  if (viewport) {
+    return { kind: 'viewport', zoom: viewport[1], lat: viewport[2], lon: viewport[3] }
+  }
+
+  if (OSM_ELEMENT_ONLY.test(inner)) {
+    const elements = [...inner.matchAll(OSM_ELEMENT)].map((match) => ({
+      type: ELEMENT_TYPES[match[1].toLowerCase()],
+      id: match[2],
+    }))
+    if (elements.length > 0) return { kind: 'osmElements', elements }
+  }
 
   // Not a short code we know — leave it exactly as the author wrote it, so
   // bracketed prose and unfamiliar codes still read correctly.
