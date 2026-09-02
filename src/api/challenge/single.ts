@@ -396,6 +396,15 @@ export const challengeSingle = {
           overpassTargetType: '',
         }
         const extra = challengeDataWithoutId as Record<string, unknown>
+        for (const key of [
+          'osmIdProperty',
+          'preferredTags',
+          'limitTags',
+          'preferredReviewTags',
+          'limitReviewTags',
+        ]) {
+          if (extra[key] !== undefined) body[key] = extra[key]
+        }
         if (extra.defaultBasemap !== undefined) body.defaultBasemap = extra.defaultBasemap
         if (extra.defaultBasemapId !== undefined) body.defaultBasemapId = extra.defaultBasemapId
         if (extra.customBasemap !== undefined) body.customBasemap = extra.customBasemap

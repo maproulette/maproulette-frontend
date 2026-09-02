@@ -56,6 +56,14 @@ const makeBaseChallengeFormSchema = (t: T) =>
     // Basemap the challenge forces on its maps: a bundled style's name,
     // `custom` (paired with basemapUrl), or `none` to leave the mapper's own
     // preference in charge.
+    // Feature property holding each task's identifier; blank means "detect it".
+    osmIdProperty: z.string().optional().or(z.literal('')),
+    // Comma-separated MapRoulette tags suggested to mappers, and whether they
+    // are the only tags accepted.
+    preferredTags: z.string().optional().or(z.literal('')),
+    limitTags: z.boolean(),
+    preferredReviewTags: z.string().optional().or(z.literal('')),
+    limitReviewTags: z.boolean(),
     basemap: z.string(),
     basemapUrl: z.string().optional().or(z.literal('')),
     teamImageId: z.number().nullable(),
@@ -152,6 +160,11 @@ export const buildFormValues = (
   localGeoJSON: null,
   remoteGeoJSON: challenge?.remoteGeoJson ?? '',
   dataOriginDate: '',
+  osmIdProperty: challenge?.osmIdProperty ?? '',
+  preferredTags: challenge?.preferredTags ?? '',
+  limitTags: challenge?.limitTags ?? false,
+  preferredReviewTags: challenge?.preferredReviewTags ?? '',
+  limitReviewTags: challenge?.limitReviewTags ?? false,
   basemap: basemapSelection(challenge),
   basemapUrl: challenge?.customBasemap ?? '',
   teamImageId: challenge?.teamImageId ?? null,

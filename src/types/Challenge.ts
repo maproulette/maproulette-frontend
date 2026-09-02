@@ -86,6 +86,15 @@ export type Challenge = Omit<
    * backend carrying them.
    */
   avatarUrl?: string | null
+  /**
+   * Comma-separated MapRoulette tags a challenge suggests to mappers, during
+   * task completion and during review respectively. The backend accepts and
+   * returns them, but they sit on the create/update schema rather than
+   * `BaseChallenge`, so they are declared here until `openApiTypes.ts` is
+   * regenerated against a backend carrying them.
+   */
+  preferredTags?: string | null
+  preferredReviewTags?: string | null
   completionMetrics?: CompletionMetrics
 }
 

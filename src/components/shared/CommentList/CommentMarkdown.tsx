@@ -7,10 +7,20 @@ interface Props {
   className?: string
 }
 
+// A bare @mention covers the usual OSM display name. Names containing spaces
+// or punctuation can't be matched that way, so they may be wrapped in square
+// brackets — `[@example user]` — which is how MapRoulette has always written
+// them. The bracketed form is matched first so its contents aren't cut short
+// by the bare pattern.
+const bracketedMentionPattern = /\[@([^\]]+)\](?!\()/g
 const mentionPattern = /@([A-Za-z0-9_-]+)/g
 
+const mentionLink = (name: string): string => `[@${name}](/search?user=${encodeURIComponent(name)})`
+
 const linkifyMentions = (text: string): string =>
-  text.replace(mentionPattern, (_, name) => `[@${name}](/search?user=${encodeURIComponent(name)})`)
+  text
+    .replace(bracketedMentionPattern, (_, name) => mentionLink(name.trim()))
+    .replace(mentionPattern, (_, name) => mentionLink(name))
 
 const components: Components = {
   a: ({ href, children, ...props }) => {

@@ -11,6 +11,7 @@ import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
 import { formSchema } from './formSchema'
 import { GeneralSettings } from './GeneralSettings'
+import { NotificationSubscriptionsSettings } from './NotificationSubscriptionsSettings'
 import { NotificationsSettings } from './NotificationsSettings'
 import { PluginSettings } from './PluginSettings'
 import { PluginUserSettingsFields } from './PluginUserSettingsFields'
@@ -80,6 +81,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
           <TabsList>
             <TabsTrigger value="general">General</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
             <TabsTrigger value="plugins">Plugins</TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>
@@ -92,6 +94,9 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
               </TabsContent>
               <TabsContent value="notifications">
                 <NotificationsSettings form={form} />
+              </TabsContent>
+              <TabsContent value="subscriptions">
+                <NotificationSubscriptionsSettings userId={user.id} />
               </TabsContent>
               <TabsContent value="plugins">
                 <PluginSettings />

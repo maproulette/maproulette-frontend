@@ -4,6 +4,7 @@ import { userAuth } from './auth'
 import { userNotifications } from './notifications'
 import { userProfile } from './profile'
 import { userSearch } from './search'
+import { userSubscriptions } from './subscriptions'
 
 export const user = {
   ...userAuth,
@@ -12,4 +13,5 @@ export const user = {
   ...userAdmin,
   ...userSearch,
   ...userAnnouncements,
+  ...userSubscriptions,
 }

@@ -20,6 +20,7 @@ import {
 } from './challengeFormSchema'
 import { ProjectPickerField } from './ProjectPickerField'
 import { TaskDataSection } from './TaskDataSection'
+import { TaskFieldsSection } from './TaskFieldsSection'
 
 export type { ChallengeFormValues } from './challengeFormSchema'
 
@@ -120,6 +121,8 @@ export const ChallengeForm = () => {
           <ChallengeImageSection form={form} />
 
           <BasemapFields form={form} />
+
+          <TaskFieldsSection form={form} />
 
           <TaskDataSection
             form={form}

@@ -23,8 +23,13 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
   // image impossible.
   challengeData.teamImageId = values.teamImageId ?? null
 
-  // The challenge basemap is editable at any time, so it is assembled before
-  // the update short-circuit below.
+  // These are editable at any time, so they are assembled before the update
+  // short-circuit below.
+  challengeData.osmIdProperty = values.osmIdProperty || null
+  challengeData.preferredTags = values.preferredTags || null
+  challengeData.limitTags = values.limitTags
+  challengeData.preferredReviewTags = values.preferredReviewTags || null
+  challengeData.limitReviewTags = values.limitReviewTags
   Object.assign(challengeData, basemapSubmission(values.basemap, values.basemapUrl ?? ''))
 
   // The data source is only set at creation. Editing a challenge changes
