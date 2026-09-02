@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
 import { useIntl } from '@/i18n'
 import { useManageProjectDetailContext } from './ManageProjectDetailContext'
+import { ProjectManagersPanel } from './ProjectManagersPanel'
 
 /** Left-hand panel of the project detail page: project info, quick actions, stats and playbook tips. */
 export const ProjectDetailSidebar = () => {
@@ -201,6 +202,10 @@ export const ProjectDetailSidebar = () => {
             )}
           </p>
         </div>
+        <ProjectManagersPanel />
+
+        <Separator className="my-4" />
+
         <DocsLink
           page="projectsAndProjectManagers"
           icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
