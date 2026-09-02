@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import type { UseFormReturn } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { DocsLink } from '@/components/shared/DocsLink'
 import {
   FormControl,
@@ -17,7 +17,6 @@ import { cn } from '@/lib/utils'
 import type { ChallengeFormValues } from './challengeFormSchema'
 
 interface DataSourceFieldsProps {
-  form: UseFormReturn<ChallengeFormValues>
   dataSource: ChallengeFormValues['dataSource']
 }
 
@@ -25,7 +24,8 @@ interface DataSourceFieldsProps {
 // choice of data source plus whichever field that choice requires. Only
 // rendered while creating — once a challenge exists the source is read-only
 // (see TaskDataReadOnly).
-export const DataSourceFields = ({ form, dataSource }: DataSourceFieldsProps) => {
+export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
+  const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
   const overpassId = useId()
   const localGeoJSONId = useId()

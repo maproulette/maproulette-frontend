@@ -32,9 +32,10 @@ import { useExplorerContext } from './ChallengeTasksExplorerContext'
  * Downloads this challenge's tasks, in CSV or GeoJSON, with the task table's
  * current filters applied and timestamps rendered in a chosen timezone.
  */
-export const ExportTasksButton = ({ challengeName }: { challengeName?: string | null }) => {
+export const ExportTasksButton = () => {
   const { t } = useIntl()
-  const { challengeId, statusEnabled, priorityEnabled, propertyRule } = useExplorerContext()
+  const { challengeId, challengeName, statusEnabled, priorityEnabled, propertyRule } =
+    useExplorerContext()
   const exportMutation = api.challenge.useExportChallenge()
   const [open, setOpen] = useState(false)
   const [format, setFormat] = useState<ExportFormat>('csv')

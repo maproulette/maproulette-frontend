@@ -51,6 +51,7 @@ export const toggleFilterWithMinimumOne = <T extends readonly number[]>(
 type ExplorerContextValue = {
   enabled: boolean
   challengeId: number
+  challengeName?: string | null
   statusEnabled: Record<number, boolean>
   setStatusChecked: (s: number, checked: boolean) => void
   priorityEnabled: Record<number, boolean>
@@ -86,10 +87,12 @@ export const useExplorerContext = () => {
 
 export const ChallengeTasksExplorerProvider = ({
   challengeId,
+  challengeName,
   enabled,
   children,
 }: {
   challengeId: number
+  challengeName?: string | null
   enabled: boolean
   children: ReactNode
 }) => {
@@ -170,6 +173,7 @@ export const ChallengeTasksExplorerProvider = ({
     (): ExplorerContextValue => ({
       enabled,
       challengeId,
+      challengeName,
       statusEnabled,
       setStatusChecked,
       priorityEnabled,
@@ -195,6 +199,7 @@ export const ChallengeTasksExplorerProvider = ({
     [
       enabled,
       challengeId,
+      challengeName,
       statusEnabled,
       priorityEnabled,
       propertyRule,

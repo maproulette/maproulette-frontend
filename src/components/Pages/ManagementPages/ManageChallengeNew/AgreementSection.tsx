@@ -1,17 +1,14 @@
-import type { UseFormReturn } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form'
 import { FormSection } from '@/components/ui/FormSection'
 import { useIntl } from '@/i18n'
 import type { ChallengeFormValues } from './challengeFormSchema'
 
-interface AgreementSectionProps {
-  form: UseFormReturn<ChallengeFormValues>
-}
-
 // Only shown while creating a challenge — see makeChallengeFormSchema, which
 // only requires this agreement on create.
-export const AgreementSection = ({ form }: AgreementSectionProps) => {
+export const AgreementSection = () => {
+  const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
 
   return (

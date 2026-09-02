@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Check, ImageOff } from 'lucide-react'
-import type { UseFormReturn } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { api } from '@/api'
 import { FormField, FormItem, FormMessage } from '@/components/ui/Form'
 import { FormSection } from '@/components/ui/FormSection'
@@ -10,10 +10,6 @@ import { resolveTeamImageUrl } from '@/lib/teamImage'
 import { cn } from '@/lib/utils'
 import type { TeamImage } from '@/types/TeamImage'
 import type { ChallengeFormValues } from './challengeFormSchema'
-
-interface ChallengeImageSectionProps {
-  form: UseFormReturn<ChallengeFormValues>
-}
 
 interface ImageTileProps {
   label: string
@@ -71,7 +67,8 @@ const ImageTile = ({ label, selected, onSelect, children, caption }: ImageTilePr
  * user with no teams, or whose teams have no approved images yet, simply has
  * nothing to choose from.
  */
-export const ChallengeImageSection = ({ form }: ChallengeImageSectionProps) => {
+export const ChallengeImageSection = () => {
+  const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
   const { data: images, isLoading, isError } = api.teamImage.available()
 

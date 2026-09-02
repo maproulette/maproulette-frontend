@@ -8,6 +8,7 @@ import {
   validatePropertyRules,
 } from './propertyRuleConversion'
 import type { BinaryNode, PropertyOperator, PropertyRuleGroup } from './propertyRuleTypes'
+import { RuleBuilderProvider } from './RuleBuilderContext'
 import { RuleGroup } from './RuleGroup'
 
 interface Props {
@@ -59,24 +60,21 @@ export const TaskPropertyQueryBuilder = ({
   }
 
   return (
-    <div className="space-y-3">
-      <RuleGroup
-        group={flat}
-        onChange={handleChange}
-        operatorsFor={operatorsFor}
-        propertyKeys={propertyKeys}
-      />
-      {errors.length > 0 && (
-        <ul className="text-red-600 text-sm dark:text-red-400">
-          {errors.map((e) => (
-            <li key={e}>{e}</li>
-          ))}
-        </ul>
-      )}
-      <div className="rounded-md bg-zinc-50 p-2 font-mono text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
-        {summary}
+    <RuleBuilderProvider operatorsFor={operatorsFor} propertyKeys={propertyKeys}>
+      <div className="space-y-3">
+        <RuleGroup group={flat} onChange={handleChange} />
+        {errors.length > 0 && (
+          <ul className="text-red-600 text-sm dark:text-red-400">
+            {errors.map((e) => (
+              <li key={e}>{e}</li>
+            ))}
+          </ul>
+        )}
+        <div className="rounded-md bg-zinc-50 p-2 font-mono text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
+          {summary}
+        </div>
       </div>
-    </div>
+    </RuleBuilderProvider>
   )
 }
 

@@ -110,7 +110,6 @@ export const ChallengeForm = () => {
           )}
 
           <BasicInfoFields
-            form={form}
             namePlaceholder={t(
               'manageChallengeNew.challengeForm.namePlaceholder',
               { user: user?.osmProfile.displayName ?? '' },
@@ -118,20 +117,19 @@ export const ChallengeForm = () => {
             )}
           />
 
-          <ChallengeImageSection form={form} />
+          <ChallengeImageSection />
 
-          <BasemapFields form={form} />
+          <BasemapFields />
 
-          <TaskFieldsSection form={form} />
+          <TaskFieldsSection />
 
           <TaskDataSection
-            form={form}
             dataSource={dataSource}
             challenge={challenge}
             sourceReadOnly={sourceReadOnly}
           />
 
-          {!isEdit && <AgreementSection form={form} />}
+          {!isEdit && <AgreementSection />}
         </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>

@@ -1,4 +1,4 @@
-import type { UseFormReturn } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { BASEMAP_CUSTOM, BASEMAP_NONE, bundledStyleNames } from '@/components/Map/basemap'
 import { DocsLink } from '@/components/shared/DocsLink'
 import {
@@ -26,7 +26,8 @@ import type { ChallengeFormValues } from './challengeFormSchema'
  * chosen for themselves. Useful when a challenge can only be judged against
  * particular imagery.
  */
-export const BasemapFields = ({ form }: { form: UseFormReturn<ChallengeFormValues> }) => {
+export const BasemapFields = () => {
+  const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
   const basemap = form.watch('basemap')
 

@@ -1,4 +1,4 @@
-import type { UseFormReturn } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { DocsLink } from '@/components/shared/DocsLink'
 import {
   FormControl,
@@ -21,13 +21,13 @@ import { useIntl } from '@/i18n'
 import type { ChallengeFormValues } from './challengeFormSchema'
 
 interface BasicInfoFieldsProps {
-  form: UseFormReturn<ChallengeFormValues>
   namePlaceholder: string
 }
 
 // The core identifying fields shared by both create and edit — name,
 // description, instructions and difficulty.
-export const BasicInfoFields = ({ form, namePlaceholder }: BasicInfoFieldsProps) => {
+export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
+  const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
 
   return (

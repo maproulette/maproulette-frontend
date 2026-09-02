@@ -15,6 +15,7 @@ export const ManageChallengeDetail = () => {
     <div className="h-full">
       <ChallengeTasksExplorerProvider
         challengeId={Number(challengeId)}
+        challengeName={challengeData?.name}
         enabled={!isLoadingChallenge && !!challengeData?.id}
       >
         <DrawerPortalProvider>

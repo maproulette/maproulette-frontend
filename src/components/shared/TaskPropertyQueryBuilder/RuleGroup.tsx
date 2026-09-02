@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup'
 import { useIntl } from '@/i18n'
 import { createEmptyLeaf } from './propertyRuleConversion'
-import type { PropertyOperator, PropertyRule, PropertyRuleGroup } from './propertyRuleTypes'
+import type { PropertyRule, PropertyRuleGroup } from './propertyRuleTypes'
 import { RuleLeaf } from './RuleLeaf'
 
 interface Props {
@@ -11,20 +11,9 @@ interface Props {
   onChange: (next: PropertyRuleGroup) => void
   onRemove?: () => void
   depth?: number
-  /** See RuleLeaf; passed down to every leaf and nested group. */
-  operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
-  /** See RuleLeaf; passed down to every leaf and nested group. */
-  propertyKeys?: string[]
 }
 
-export const RuleGroup = ({
-  group,
-  onChange,
-  onRemove,
-  depth = 0,
-  operatorsFor,
-  propertyKeys,
-}: Props) => {
+export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
   const { t } = useIntl()
 
   const updateRule = (index: number, updated: PropertyRule) => {
@@ -92,8 +81,6 @@ export const RuleGroup = ({
               rule={rule}
               onChange={(next) => updateRule(i, next)}
               onRemove={group.rules.length > 1 ? () => removeRule(i) : undefined}
-              operatorsFor={operatorsFor}
-              propertyKeys={propertyKeys}
             />
           ) : (
             <RuleGroup
@@ -102,8 +89,6 @@ export const RuleGroup = ({
               onChange={(next) => updateRule(i, next)}
               onRemove={() => removeRule(i)}
               depth={depth + 1}
-              operatorsFor={operatorsFor}
-              propertyKeys={propertyKeys}
             />
           )
         })}

@@ -1,4 +1,4 @@
-import type { UseFormReturn } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
@@ -19,7 +19,8 @@ import type { ChallengeFormValues } from './challengeFormSchema'
  * property identifies the OSM element, and which MapRoulette tags mappers are
  * offered or restricted to.
  */
-export const TaskFieldsSection = ({ form }: { form: UseFormReturn<ChallengeFormValues> }) => {
+export const TaskFieldsSection = () => {
+  const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
 
   return (

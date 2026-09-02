@@ -1,4 +1,3 @@
-import type { UseFormReturn } from 'react-hook-form'
 import { FormSection } from '@/components/ui/FormSection'
 import { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
@@ -7,7 +6,6 @@ import { DataSourceFields } from './DataSourceFields'
 import { TaskDataReadOnly } from './TaskDataReadOnly'
 
 interface TaskDataSectionProps {
-  form: UseFormReturn<ChallengeFormValues>
   dataSource: ChallengeFormValues['dataSource']
   challenge?: Challenge
   // The data source can only be set while creating. Once a challenge exists,
@@ -18,7 +16,6 @@ interface TaskDataSectionProps {
 }
 
 export const TaskDataSection = ({
-  form,
   dataSource,
   challenge,
   sourceReadOnly,
@@ -45,7 +42,7 @@ export const TaskDataSection = ({
       {sourceReadOnly ? (
         <TaskDataReadOnly dataSource={dataSource} challenge={challenge} />
       ) : (
-        <DataSourceFields form={form} dataSource={dataSource} />
+        <DataSourceFields dataSource={dataSource} />
       )}
     </FormSection>
   )
