@@ -1,5 +1,6 @@
 import ReactMarkdown, { type Components } from 'react-markdown'
 import { markdownRemarkPlugins } from '@/lib/markdown'
+import { linkifyOsmShortCodes } from '@/lib/shortCodes'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -21,6 +22,11 @@ const linkifyMentions = (text: string): string =>
   text
     .replace(bracketedMentionPattern, (_, name) => mentionLink(name.trim()))
     .replace(mentionPattern, (_, name) => mentionLink(name))
+
+// Mentions first: a bracketed mention would otherwise be offered to the OSM
+// short-code parser, which correctly declines it, but the order makes the
+// intent explicit.
+const prepare = (text: string): string => linkifyOsmShortCodes(linkifyMentions(text))
 
 const components: Components = {
   a: ({ href, children, ...props }) => {
@@ -52,7 +58,7 @@ const components: Components = {
 }
 
 export const CommentMarkdown = ({ children, className }: Props) => {
-  const linkified = linkifyMentions(children ?? '')
+  const linkified = prepare(children ?? '')
   return (
     <div className={cn('prose prose-sm dark:prose-invert max-w-none', className)}>
       <ReactMarkdown remarkPlugins={markdownRemarkPlugins} components={components}>

@@ -11,6 +11,7 @@
  */
 
 const SHORT_CODE_PATTERN = /(\{\{\{[^}]+\}\}\}|\[[^\]]+\](?![(]))/
+const SHORT_CODE_PATTERN_GLOBAL = new RegExp(SHORT_CODE_PATTERN.source, 'g')
 
 export interface CheckboxToken {
   kind: 'checkbox'
@@ -168,3 +169,27 @@ export const tokenizeInstructions = (content: string | null | undefined): Instru
 /** Whether instructions contain any short code we would render specially. */
 export const hasShortCodes = (content: string | null | undefined): boolean =>
   tokenizeInstructions(content).some((token) => token.kind !== 'text')
+
+const OSM_BASE_URL = (): string => window.env?.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+
+/**
+ * Rewrite OSM element and viewport short codes as Markdown links, for text
+ * that goes through a Markdown renderer rather than being tokenized into
+ * components — comments, in practice. Form-field short codes are deliberately
+ * untouched here: a comment is not a place to collect responses.
+ */
+export const linkifyOsmShortCodes = (text: string): string => {
+  const base = OSM_BASE_URL()
+  return text.replace(SHORT_CODE_PATTERN_GLOBAL, (match) => {
+    const token = parseShortCode(match)
+    if (token.kind === 'osmElements') {
+      return token.elements
+        .map((element) => `[${element.type} ${element.id}](${base}/${element.type}/${element.id})`)
+        .join(', ')
+    }
+    if (token.kind === 'viewport') {
+      return `[${token.lat}, ${token.lon}](${base}/#map=${token.zoom}/${token.lat}/${token.lon})`
+    }
+    return match
+  })
+}

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { hasShortCodes, responseFieldNames, tokenizeInstructions } from './shortCodes.ts'
+import {
+  hasShortCodes,
+  linkifyOsmShortCodes,
+  responseFieldNames,
+  tokenizeInstructions,
+} from './shortCodes.ts'
 
 describe('tokenizeInstructions', () => {
   it('is empty for no instructions', () => {
@@ -155,5 +160,36 @@ describe('viewport short codes', () => {
   it('still leaves ordinary markdown links alone', () => {
     const text = 'See [the map](https://www.openstreetmap.org/#map=14/42.38/12.26) here.'
     expect(tokenizeInstructions(text)).toEqual([{ kind: 'text', text }])
+  })
+})
+
+describe('linkifyOsmShortCodes', () => {
+  it('turns an element short code into a markdown link', () => {
+    expect(linkifyOsmShortCodes('see [w/123] please')).toBe(
+      'see [way 123](https://www.openstreetmap.org/way/123) please'
+    )
+  })
+
+  it('turns several elements into a comma-separated list of links', () => {
+    expect(linkifyOsmShortCodes('[n1, w2]')).toBe(
+      '[node 1](https://www.openstreetmap.org/node/1), [way 2](https://www.openstreetmap.org/way/2)'
+    )
+  })
+
+  it('turns a viewport short code into a link to that view', () => {
+    expect(linkifyOsmShortCodes('[v17/37.11/126.99]')).toBe(
+      '[37.11, 126.99](https://www.openstreetmap.org/#map=17/37.11/126.99)'
+    )
+  })
+
+  it('leaves form-field short codes alone — a comment is not a form', () => {
+    const text = '[checkbox "Locked?" name="locked"]'
+    expect(linkifyOsmShortCodes(text)).toBe(text)
+  })
+
+  it('leaves markdown links and ordinary prose alone', () => {
+    for (const text of ['[a link](https://example.org)', 'a [bracketed aside] here']) {
+      expect(linkifyOsmShortCodes(text)).toBe(text)
+    }
   })
 })
