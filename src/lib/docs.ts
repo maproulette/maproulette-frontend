@@ -21,6 +21,7 @@ export const DOCS_PAGES = {
   usingLayouts: 'documentation/using-layouts',
   rapidEditor: 'documentation/rapid-editor',
   solvingMultipleTasksTogether: 'documentation/solving-multiple-tasks-together',
+  tagFixChallenges: 'documentation/tag-fix-challenges',
   // User settings
   defaultOsmEditor: 'documentation/setting-your-default-osm-editor',
   mapBaseLayer: 'documentation/setting-your-map-base-layer',

@@ -11,6 +11,7 @@ import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice
 import { Button, type buttonVariants } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
+import { allowedStatusProgressions, TASK_STATUS } from '@/lib/taskStatusProgressions'
 import { TaskActionModal } from '../TaskActionModal'
 import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'
@@ -60,8 +61,10 @@ export const TaskActions = () => {
     onClick: () => void
     title: string
     label: string
+    status: number
   }> = [
     {
+      status: TASK_STATUS.fixed,
       variant: 'success',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsFixed,
@@ -73,6 +76,7 @@ export const TaskActions = () => {
       label: t('common.fixed', undefined, 'Fixed'),
     },
     {
+      status: TASK_STATUS.alreadyFixed,
       variant: 'info',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsAlreadyFixed,
@@ -84,6 +88,7 @@ export const TaskActions = () => {
       label: t('common.alreadyFixed', undefined, 'Already Fixed'),
     },
     {
+      status: TASK_STATUS.falsePositive,
       variant: 'warning',
       icon: <Flag />,
       onClick: handleMarkAsFalsePositive,
@@ -95,6 +100,7 @@ export const TaskActions = () => {
       label: t('taskEditPage.taskActions.main.notAnIssue', undefined, 'Not an Issue'),
     },
     {
+      status: TASK_STATUS.tooHard,
       variant: 'caution',
       icon: <X />,
       onClick: handleMarkAsTooHard,
@@ -154,6 +160,13 @@ export const TaskActions = () => {
     )
   }
 
+  // maproulette3 only offers the statuses a task is allowed to progress to, so
+  // a task that has already been resolved isn't offered a contradictory one.
+  const allowedProgressions = allowedStatusProgressions(task.status ?? TASK_STATUS.created)
+  const availableCompletionActions = completionActions.filter((action) =>
+    allowedProgressions.has(action.status)
+  )
+
   // While a completion is being submitted, we hold the completion buttons in place (disabled)
   // until we navigate to the next task - so the now-completed status doesn't briefly swap in a
   // different button set (navigation / start-mapping). Skip the status/lock-driven branches.
@@ -186,7 +199,7 @@ export const TaskActions = () => {
           )}
         </div>
         <div className="grid grid-cols-2 gap-1.5">
-          {completionActions.map((action) => (
+          {availableCompletionActions.map((action) => (
             <Button
               key={action.label}
               variant={action.variant}

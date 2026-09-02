@@ -7,6 +7,7 @@ import type { Task } from '@/types/Task'
 import { BundleStateIndicator } from './BundleStateIndicator'
 import { BundleTaskList } from './BundleTaskList'
 import { InstructionPanel } from './InstructionPanel'
+import { TagFixPanel } from './TagFixPanel'
 
 interface TaskTabProps {
   task: Task
@@ -56,6 +57,8 @@ export const TaskTab = ({ task }: TaskTabProps) => {
         onAddToBundle={handleAddToBundle}
         onRemoveFromBundle={handleRemoveFromBundle}
       />
+
+      <TagFixPanel task={task} />
 
       <InstructionPanel
         taskInstruction={
