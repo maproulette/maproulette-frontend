@@ -20,12 +20,21 @@ export interface IdMap {
 
 export interface IdHistory {
   on: (event: string, cb: (() => void) | null) => void
-  changes: () => { modified: unknown[]; created: unknown[]; deleted: unknown[] }
+  changes: () => { modified: IdEntity[]; created: IdEntity[]; deleted: IdEntity[] }
+  /** The graph as it was before the current edits. */
+  base: () => IdGraph
 }
 
 /** The subset of an iD entity we read: its current tags. */
 export interface IdEntity {
+  id?: string
+  type?: string
   tags?: Record<string, string>
+}
+
+/** iD's edit graph, used to look an entity up as it was before editing. */
+export interface IdGraph {
+  hasEntity: (id: string) => IdEntity | undefined
 }
 
 export interface IdContext {

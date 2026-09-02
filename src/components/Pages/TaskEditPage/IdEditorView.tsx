@@ -14,6 +14,7 @@ import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/o
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { type TagFix, tagFixes } from '@/lib/cooperativeWork'
+import { type EntityEdit, pendingEdits } from '@/lib/idChanges'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
@@ -25,6 +26,7 @@ import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
 import { useTaskMapContext } from './contexts/TaskMapContext'
+import { PendingEditsModal } from './PendingEditsModal'
 
 /** Filter entity IDs to only those currently loaded in the iD context, then enter modeSelect. */
 const selectValidEntities = (
@@ -71,6 +73,8 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const tagFixesRef = useRef<TagFix[]>([])
 
   const [focusMode, setFocusMode] = useState(false)
+  const [pendingEditsOpen, setPendingEditsOpen] = useState(false)
+  const [currentEdits, setCurrentEdits] = useState<EntityEdit[]>([])
 
   const hasUnsavedChanges = idUnsavedCount > 0
 
@@ -163,6 +167,11 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     } catch {
       ctx.map().centerZoom([(west + east) / 2, (south + north) / 2], 17)
     }
+  }
+
+  const handleShowPendingEdits = () => {
+    setCurrentEdits(pendingEdits(idContextRef.current?.history?.()))
+    setPendingEditsOpen(true)
   }
 
   const handleToggleFocusMode = () => {
@@ -431,7 +440,16 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           <div className="flex items-center gap-1 bg-slate-900/95 py-1.5 pr-2 pl-1 shadow-md">
             {/* Unsaved changes */}
             {hasUnsavedChanges && (
-              <div className="flex items-center gap-1.5 rounded-md bg-yellow-500/90 px-2.5 py-1.5">
+              <button
+                type="button"
+                onClick={handleShowPendingEdits}
+                className="flex items-center gap-1.5 rounded-md bg-yellow-500/90 px-2.5 py-1.5 transition-colors hover:bg-yellow-400"
+                title={t(
+                  'taskEditPage.idEditor.reviewChanges',
+                  undefined,
+                  'Review the unsaved changes'
+                )}
+              >
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
                 <span className="whitespace-nowrap font-semibold text-[11px] text-white">
                   {t(
@@ -440,7 +458,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                     '{count, plural, one {# unsaved change} other {# unsaved changes}}'
                   )}
                 </span>
-              </div>
+              </button>
             )}
 
             {/* Action buttons */}
@@ -533,6 +551,12 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         src={initialUrl}
         onLoad={handleIframeLoad}
         title="iD Editor"
+      />
+
+      <PendingEditsModal
+        open={pendingEditsOpen}
+        onOpenChange={setPendingEditsOpen}
+        edits={currentEdits}
       />
     </div>
   )
