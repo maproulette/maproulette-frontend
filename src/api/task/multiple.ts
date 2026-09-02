@@ -17,6 +17,10 @@ import { apiRequest, convertParamsToSearchParams } from '../client'
 // first this many matches rather than refusing to filter at all.
 const PROPERTY_MATCH_LIMIT = 10000
 
+// Tasks sampled when collecting the property names to suggest. Big enough to
+// cover a challenge's schema, small enough to stay cheap.
+const PROPERTY_KEY_SAMPLE_SIZE = 100
+
 const tasksBoundingBoxSearchParams = (query: TasksBoundingBoxQuery) => {
   const mr = metaReviewStatusesForApi(query.reviewStatuses, query.metaReviewStatuses)
   return convertParamsToSearchParams({
@@ -147,6 +151,47 @@ export const taskMultiple = {
         },
         placeholderData: keepPreviousData,
         enabled: (options?.enabled ?? true) && !!taskPropertySearch,
+      })
+    ),
+
+  /**
+   * Feature-property names in use on a challenge's tasks, for suggesting them
+   * in the property filter.
+   *
+   * MapRoulette 3 read these from a dedicated backend route, which the current
+   * API does not have, so they are collected from a sample of the challenge's
+   * tasks instead. A sample is enough to offer as suggestions — the filter
+   * still accepts any name typed by hand.
+   */
+  getChallengePropertyKeys: (challengeId: number, options?: { enabled?: boolean }) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['task', 'propertyKeys', challengeId],
+        queryFn: async ({ signal }) => {
+          const response = await apiRequest
+            .put('api/v2/tasks/box/-180/-85/180/85', {
+              searchParams: convertParamsToSearchParams({
+                cid: challengeId,
+                limit: PROPERTY_KEY_SAMPLE_SIZE,
+                page: 0,
+                includeGeometries: true,
+                includeTags: false,
+              }),
+              json: {},
+              signal,
+            })
+            .json<TasksBoundingBoxResponse>()
+
+          const keys = new Set<string>()
+          for (const task of response.tasks ?? []) {
+            for (const feature of task.geometries?.features ?? []) {
+              for (const key of Object.keys(feature.properties ?? {})) keys.add(key)
+            }
+          }
+          return [...keys].sort((a, b) => a.localeCompare(b))
+        },
+        staleTime: 5 * 60 * 1000,
+        enabled: (options?.enabled ?? true) && !!challengeId,
       })
     ),
 

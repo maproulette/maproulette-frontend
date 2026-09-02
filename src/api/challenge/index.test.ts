@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { challengeComments } from './comments'
 import { challengeExplore } from './explore'
+import { challengeExports } from './exports'
 import { challengeFavorites } from './favorites'
 import { challenge } from './index'
 import { challengeLikes } from './likes'
@@ -9,6 +10,7 @@ import { challengeSingle } from './single'
 describe('challenge', () => {
   it('merges every source module without any member being overwritten', () => {
     const sources = {
+      ...challengeExports,
       ...challengeSingle,
       ...challengeExplore,
       ...challengeFavorites,
@@ -19,6 +21,12 @@ describe('challenge', () => {
     expect(Object.keys(challenge).sort()).toEqual(Object.keys(sources).sort())
     for (const key of Object.keys(sources)) {
       expect(challenge[key as keyof typeof challenge]).toBe(sources[key as keyof typeof sources])
+    }
+  })
+
+  it('re-exports every member of challengeExports by identity', () => {
+    for (const [key, value] of Object.entries(challengeExports)) {
+      expect(challenge[key as keyof typeof challenge]).toBe(value)
     }
   })
 

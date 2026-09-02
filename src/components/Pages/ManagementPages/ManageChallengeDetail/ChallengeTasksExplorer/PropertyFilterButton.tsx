@@ -1,5 +1,6 @@
 import { ChevronDown, SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
+import { api } from '@/api'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { TaskPropertyQueryBuilder } from '@/components/shared/TaskPropertyQueryBuilder'
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
@@ -16,9 +17,16 @@ import { useExplorerContext } from './ChallengeTasksExplorerContext'
  */
 export const PropertyFilterButton = () => {
   const { t } = useIntl()
-  const { propertyRule, setPropertyRule, propertyFilterActive, propertyMatchesLoading } =
-    useExplorerContext()
+  const {
+    challengeId,
+    propertyRule,
+    setPropertyRule,
+    propertyFilterActive,
+    propertyMatchesLoading,
+  } = useExplorerContext()
   const [open, setOpen] = useState(false)
+  // Only sampled once the manager actually opens the filter.
+  const { data: propertyKeys } = api.task.getChallengePropertyKeys(challengeId, { enabled: open })
   // Held while the manager edits, and only applied on Apply, so the table
   // doesn't refetch on every keystroke in the rule builder.
   const [draft, setDraft] = useState<BinaryNode | null>(propertyRule)
@@ -82,6 +90,7 @@ export const PropertyFilterButton = () => {
           value={propertyRule}
           onChange={setDraft}
           operatorsFor={searchableOperators}
+          propertyKeys={propertyKeys}
         />
 
         <div className="flex items-center justify-end gap-2">

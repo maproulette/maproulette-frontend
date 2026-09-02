@@ -1,5 +1,6 @@
 import type { StyleSpecification } from 'maplibre-gl'
-import { getCurrentMapStyle, mapStyles } from './mapStyles'
+import { customRasterStyle } from './customBaseLayers'
+import { allMapStyles, getCurrentMapStyle } from './mapStyles'
 
 /**
  * The backend's basemap constants, stored on a challenge (`defaultBasemap`) and
@@ -27,21 +28,7 @@ const STYLE_NAME_FOR_BASEMAP: Record<number, string> = {
 
 /** The bundled style with this name, if there is one. */
 export const styleByName = (name: string | null | undefined): StyleSpecification | undefined =>
-  name ? mapStyles.find((style) => style.name === name) : undefined
-
-/**
- * A minimal raster style for a caller-supplied XYZ tile template, so a
- * challenge or user can point the map at imagery we don't bundle. `{z}/{x}/{y}`
- * is MapLibre's own placeholder syntax, so the template is used as given.
- */
-export const customRasterStyle = (url: string, name = 'Custom'): StyleSpecification => ({
-  version: 8,
-  name,
-  sources: {
-    custom: { type: 'raster', tiles: [url], tileSize: 256 },
-  },
-  layers: [{ id: 'custom', type: 'raster', source: 'custom' }],
-})
+  name ? allMapStyles().find((style) => style.name === name) : undefined
 
 interface BasemapSettings {
   defaultBasemap?: number | null
@@ -95,7 +82,9 @@ export const BASEMAP_CUSTOM = 'custom'
 
 /** Names of the bundled styles, in the order the Map style control shows them. */
 export const bundledStyleNames = (): string[] =>
-  mapStyles.map((style) => style.name).filter((name): name is string => !!name)
+  allMapStyles()
+    .map((style) => style.name)
+    .filter((name): name is string => !!name)
 
 /**
  * The challenge form's basemap selection for a stored challenge: a bundled

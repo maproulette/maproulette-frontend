@@ -5,9 +5,9 @@ import {
   basemapSubmission,
   bundledStyleNames,
   CHALLENGE_BASEMAP,
-  customRasterStyle,
   resolveMapStyle,
 } from './basemap.ts'
+import { customRasterStyle } from './customBaseLayers.ts'
 import { getCurrentMapStyle } from './mapStyles.ts'
 
 describe('basemapStyle', () => {

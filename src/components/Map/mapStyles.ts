@@ -1,6 +1,6 @@
 import type { StyleSpecification } from 'maplibre-gl'
-
 import BingAerial from './bing-aerial.json'
+import { customBaseLayerStyles } from './customBaseLayers'
 import EsriWorldImagery from './esri-world-imagery.json'
 import EsriWorldImageryClarity from './esri-world-imagery-clarity.json'
 import OsmBright from './osm-bright.json'
@@ -12,7 +12,8 @@ export const OVERLAY_GLYPHS_URL = 'https://tiles.openstreetmap.us/fonts/{fontsta
 
 const asStyle = (s: unknown) => s as StyleSpecification
 
-export const mapStyles: StyleSpecification[] = [
+/** Base layers bundled with the frontend, in the order the control shows them. */
+export const bundledMapStyles: StyleSpecification[] = [
   asStyle(OsmBright),
   asStyle(OsmCarto),
   asStyle(BingAerial),
@@ -20,12 +21,25 @@ export const mapStyles: StyleSpecification[] = [
   asStyle(EsriWorldImageryClarity),
 ]
 
+/**
+ * Every base layer on offer: the bundled ones plus any the user has added
+ * themselves. Read as a function of current storage rather than a frozen
+ * array, so a layer added during the session is immediately selectable.
+ */
+export const allMapStyles = (): StyleSpecification[] => [
+  ...bundledMapStyles,
+  ...customBaseLayerStyles(),
+]
+
+/** @deprecated Prefer `allMapStyles()`, which includes the user's own layers. */
+export const mapStyles = bundledMapStyles
+
 const STORAGE_KEY = 'mapstyle'
 
 export const getCurrentMapStyleIndex = (): number => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    const i = mapStyles.findIndex((s) => s.name === saved)
+    const i = allMapStyles().findIndex((s) => s.name === saved)
     return i >= 0 ? i : 0
   } catch {
     return 0
@@ -34,7 +48,7 @@ export const getCurrentMapStyleIndex = (): number => {
 
 export const saveMapStyle = (index: number) => {
   try {
-    const name = mapStyles[index]?.name
+    const name = allMapStyles()[index]?.name
     if (name) localStorage.setItem(STORAGE_KEY, name)
   } catch {
     // localStorage may throw (e.g. in a private browser window).
@@ -43,4 +57,5 @@ export const saveMapStyle = (index: number) => {
   }
 }
 
-export const getCurrentMapStyle = () => mapStyles[getCurrentMapStyleIndex()]
+export const getCurrentMapStyle = () =>
+  allMapStyles()[getCurrentMapStyleIndex()] ?? bundledMapStyles[0]

@@ -19,6 +19,8 @@ interface Props {
    * smaller one.
    */
   operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
+  /** Property names found on the challenge's tasks, offered as suggestions. */
+  propertyKeys?: string[]
 }
 
 const emptyGroup = (): PropertyRuleGroup => ({
@@ -27,7 +29,12 @@ const emptyGroup = (): PropertyRuleGroup => ({
   rules: [createEmptyLeaf()],
 })
 
-export const TaskPropertyQueryBuilder = ({ value, onChange, operatorsFor }: Props) => {
+export const TaskPropertyQueryBuilder = ({
+  value,
+  onChange,
+  operatorsFor,
+  propertyKeys,
+}: Props) => {
   const [flat, setFlat] = useState<PropertyRuleGroup>(() => {
     if (!value) return emptyGroup()
     const parsed = binaryToFlat(value)
@@ -53,7 +60,12 @@ export const TaskPropertyQueryBuilder = ({ value, onChange, operatorsFor }: Prop
 
   return (
     <div className="space-y-3">
-      <RuleGroup group={flat} onChange={handleChange} operatorsFor={operatorsFor} />
+      <RuleGroup
+        group={flat}
+        onChange={handleChange}
+        operatorsFor={operatorsFor}
+        propertyKeys={propertyKeys}
+      />
       {errors.length > 0 && (
         <ul className="text-red-600 text-sm dark:text-red-400">
           {errors.map((e) => (

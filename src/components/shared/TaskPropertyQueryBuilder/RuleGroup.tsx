@@ -13,9 +13,18 @@ interface Props {
   depth?: number
   /** See RuleLeaf; passed down to every leaf and nested group. */
   operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
+  /** See RuleLeaf; passed down to every leaf and nested group. */
+  propertyKeys?: string[]
 }
 
-export const RuleGroup = ({ group, onChange, onRemove, depth = 0, operatorsFor }: Props) => {
+export const RuleGroup = ({
+  group,
+  onChange,
+  onRemove,
+  depth = 0,
+  operatorsFor,
+  propertyKeys,
+}: Props) => {
   const { t } = useIntl()
 
   const updateRule = (index: number, updated: PropertyRule) => {
@@ -84,6 +93,7 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0, operatorsFor }
               onChange={(next) => updateRule(i, next)}
               onRemove={group.rules.length > 1 ? () => removeRule(i) : undefined}
               operatorsFor={operatorsFor}
+              propertyKeys={propertyKeys}
             />
           ) : (
             <RuleGroup
@@ -93,6 +103,7 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0, operatorsFor }
               onRemove={() => removeRule(i)}
               depth={depth + 1}
               operatorsFor={operatorsFor}
+              propertyKeys={propertyKeys}
             />
           )
         })}

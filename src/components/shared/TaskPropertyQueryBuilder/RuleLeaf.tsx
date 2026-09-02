@@ -1,4 +1,5 @@
 import { X } from 'lucide-react'
+import { useId } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import {
@@ -22,10 +23,13 @@ interface Props {
    * decides rather than the builder offering operators that can't be honored.
    */
   operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
+  /** Property names found on the challenge's tasks, offered as suggestions. */
+  propertyKeys?: string[]
 }
 
-export const RuleLeaf = ({ rule, onChange, onRemove, operatorsFor }: Props) => {
+export const RuleLeaf = ({ rule, onChange, onRemove, operatorsFor, propertyKeys }: Props) => {
   const { t } = useIntl()
+  const listId = useId()
   const valueType = rule.valueType === 'number' ? 'number' : 'string'
   const ops = operatorsFor
     ? operatorsFor(valueType)
@@ -37,6 +41,7 @@ export const RuleLeaf = ({ rule, onChange, onRemove, operatorsFor }: Props) => {
     <div className="flex flex-wrap items-center gap-2 rounded-md border border-zinc-200 p-2 dark:border-slate-700">
       <Input
         value={rule.key}
+        list={propertyKeys?.length ? listId : undefined}
         onChange={(e) => onChange({ ...rule, key: e.target.value })}
         placeholder={t(
           'taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder',
@@ -45,6 +50,13 @@ export const RuleLeaf = ({ rule, onChange, onRemove, operatorsFor }: Props) => {
         )}
         className="max-w-40"
       />
+      {propertyKeys && propertyKeys.length > 0 && (
+        <datalist id={listId}>
+          {propertyKeys.map((key) => (
+            <option key={key} value={key} />
+          ))}
+        </datalist>
+      )}
       <Select
         value={rule.valueType ?? 'string'}
         onValueChange={(v) => onChange({ ...rule, valueType: v as 'string' | 'number' })}
