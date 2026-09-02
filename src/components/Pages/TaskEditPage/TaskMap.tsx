@@ -1,8 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
-import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -16,8 +16,10 @@ import {
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import type { TaskMarker } from '@/types/Task'
+import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { ClearBundleDialog } from './TaskMap/ClearBundleDialog'
 import { LassoLayer } from './TaskMap/LassoLayer'
@@ -56,6 +58,12 @@ export const TaskMap = () => {
   const exploreCirclesLayerId = useId()
   const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
   const { task, isLocked } = useTaskContext()
+  const { challenge } = useChallengeContext()
+  const { user } = useAuthContext()
+  // The challenge's basemap wins over the mapper's own default, which in turn
+  // wins over the style they last picked with the Map style control. Resolved
+  // once on mount so switching styles mid-task isn't undone on every re-render.
+  const [mapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
   const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
     useEditorContext()
   const prevActiveView = useRef(activeView)
@@ -138,7 +146,7 @@ export const TaskMap = () => {
           ref={mapRef}
           hash
           initialViewState={initialViewState}
-          mapStyle={getCurrentMapStyle()}
+          mapStyle={mapStyle}
           onLoad={() => setMapLoaded(true)}
           onClick={onMapClick}
           onMouseMove={onMouseMove}

@@ -3,19 +3,28 @@ import { type ReactNode, useState } from 'react'
 import { useIntl } from '@/i18n'
 
 interface Props {
-  /** localStorage key used to persist the dismissed state across reloads. */
-  storageKey: string
+  /**
+   * localStorage key used to persist the dismissed state across reloads. Omit
+   * for banners whose dismissal is recorded elsewhere (see `onDismiss`), in
+   * which case the banner only stays hidden for the rest of the session.
+   */
+  storageKey?: string
+  /** Called when the banner is dismissed, for persisting it server-side. */
+  onDismiss?: () => void
   children: ReactNode
 }
 
-export const DismissibleBanner = ({ storageKey, children }: Props) => {
+export const DismissibleBanner = ({ storageKey, onDismiss, children }: Props) => {
   const { t } = useIntl()
-  const [dismissed, setDismissed] = useState(() => localStorage.getItem(storageKey) === 'true')
+  const [dismissed, setDismissed] = useState(
+    () => !!storageKey && localStorage.getItem(storageKey) === 'true'
+  )
 
   if (dismissed) return null
 
   const handleDismiss = () => {
-    localStorage.setItem(storageKey, 'true')
+    if (storageKey) localStorage.setItem(storageKey, 'true')
+    onDismiss?.()
     setDismissed(true)
   }
 

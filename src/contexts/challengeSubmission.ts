@@ -1,3 +1,4 @@
+import { basemapSubmission } from '@/components/Map/basemap'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { detectLocalGeoJSONSubmission } from '@/lib/localGeoJSON'
 import type { Challenge } from '@/types/Challenge'
@@ -21,6 +22,10 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
   // key as "leave the image alone", so omitting it would make clearing an
   // image impossible.
   challengeData.teamImageId = values.teamImageId ?? null
+
+  // The challenge basemap is editable at any time, so it is assembled before
+  // the update short-circuit below.
+  Object.assign(challengeData, basemapSubmission(values.basemap, values.basemapUrl ?? ''))
 
   // The data source is only set at creation. Editing a challenge changes
   // metadata only — regenerating tasks from a new/updated source is done via

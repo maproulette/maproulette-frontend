@@ -32,6 +32,8 @@ const validValues: ChallengeFormValues = {
   localGeoJSON: null,
   remoteGeoJSON: '',
   dataOriginDate: '',
+  basemap: 'none',
+  basemapUrl: '',
   teamImageId: null,
   automatedEditsCodeAgreement: true,
 }
@@ -89,6 +91,8 @@ describe('buildFormValues', () => {
       localGeoJSON: null,
       remoteGeoJSON: '',
       dataOriginDate: '',
+      basemap: 'none',
+      basemapUrl: '',
       teamImageId: null,
       automatedEditsCodeAgreement: false,
     })
@@ -116,6 +120,8 @@ describe('buildFormValues', () => {
       localGeoJSON: null,
       remoteGeoJSON: '',
       dataOriginDate: '',
+      basemap: 'none',
+      basemapUrl: '',
       teamImageId: null,
       automatedEditsCodeAgreement: true,
     })

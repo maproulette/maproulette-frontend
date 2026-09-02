@@ -183,6 +183,22 @@ export const taskSingle = {
     })
   },
 
+  /**
+   * Save the mapper's answers to the form fields embedded in a challenge's task
+   * instructions. Stored on the task and included in the challenge's CSV and
+   * GeoJSON exports.
+   */
+  useUpdateCompletionResponses: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ taskId, responses }: { taskId: number; responses: Record<string, unknown> }) =>
+        apiRequest.put(`api/v2/task/${taskId}/responses`, { json: responses }).text(),
+      onSuccess: (_data, { taskId }) => {
+        queryClient.invalidateQueries({ queryKey: ['task', taskId] })
+      },
+    })
+  },
+
   useUpdateTaskStatus: () => {
     const queryClient = useQueryClient()
     return useMutation({

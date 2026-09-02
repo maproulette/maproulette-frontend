@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { useCompletionResponses } from '@/contexts/CompletionResponsesContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useLockConflict } from '@/hooks/useLockConflict'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
@@ -90,6 +91,8 @@ export const TaskActionModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const addTaskCommentMutation = api.task.useAddTaskComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
+  const updateCompletionResponsesMutation = api.task.useUpdateCompletionResponses()
+  const completionResponses = useCompletionResponses()
   const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
   const createBundleMutation = api.taskBundle.useCreateTaskBundle()
   const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
@@ -172,6 +175,20 @@ export const TaskActionModal = ({
             queryParams: pluginQueryParams,
           },
         })
+      }
+
+      // Answers to any form fields embedded in the challenge's instructions.
+      // Saved after the status change, which has already succeeded on the
+      // server — a failure here must not fail the whole submission.
+      if (completionResponses && Object.keys(completionResponses.responses).length > 0) {
+        try {
+          await updateCompletionResponsesMutation.mutateAsync({
+            taskId: task.id,
+            responses: completionResponses.responses,
+          })
+        } catch (error) {
+          logger.error('Failed to save completion responses', { taskId: task.id, error })
+        }
       }
 
       if (comment.trim()) {

@@ -5,6 +5,7 @@ import type { MapRef } from 'react-map-gl/maplibre'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { binaryToBackendJson } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import { DrawerPortalTarget, useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -107,7 +108,10 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
                   ),
               },
               '{name} — rules run top-down; the first tier to match wins.'
-            )}
+            )}{' '}
+            <DocsLink page="taskPriorityRules" icon={null}>
+              {t('taskPrioritizationPage.content.docsLink', undefined, 'How priority rules work')}
+            </DocsLink>
           </p>
           <div className="flex items-center gap-2">
             <Button

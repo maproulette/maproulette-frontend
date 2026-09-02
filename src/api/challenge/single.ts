@@ -396,6 +396,9 @@ export const challengeSingle = {
           overpassTargetType: '',
         }
         const extra = challengeDataWithoutId as Record<string, unknown>
+        if (extra.defaultBasemap !== undefined) body.defaultBasemap = extra.defaultBasemap
+        if (extra.defaultBasemapId !== undefined) body.defaultBasemapId = extra.defaultBasemapId
+        if (extra.customBasemap !== undefined) body.customBasemap = extra.customBasemap
         if (extra.localGeoJSON !== undefined) body.localGeoJSON = extra.localGeoJSON
         if (extra.dataOriginDate !== undefined) body.dataOriginDate = extra.dataOriginDate
 

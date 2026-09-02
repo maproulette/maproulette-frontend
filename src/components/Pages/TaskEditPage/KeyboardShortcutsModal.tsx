@@ -4,6 +4,7 @@ import {
   type KeyboardShortcut,
   useKeyboardShortcuts,
 } from '@/components/Pages/TaskEditPage/contexts/KeyboardShortcutsContext'
+import { DocsLink } from '@/components/shared/DocsLink'
 import {
   Dialog,
   DialogContent,
@@ -107,6 +108,14 @@ export const KeyboardShortcutsModal = () => {
             </div>
           ))}
         </div>
+
+        <DocsLink page="keyboardShortcuts" className="text-sm">
+          {t(
+            'taskEditPage.keyboardShortcuts.docsLink',
+            undefined,
+            'See the full list of keyboard shortcuts'
+          )}
+        </DocsLink>
 
         {allShortcuts.length === 1 && (
           <p className="pt-2 text-center text-xs text-zinc-400">

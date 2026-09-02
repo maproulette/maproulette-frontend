@@ -7,12 +7,18 @@ import {
   flatToBinary,
   validatePropertyRules,
 } from './propertyRuleConversion'
-import type { BinaryNode, PropertyRuleGroup } from './propertyRuleTypes'
+import type { BinaryNode, PropertyOperator, PropertyRuleGroup } from './propertyRuleTypes'
 import { RuleGroup } from './RuleGroup'
 
 interface Props {
   value?: BinaryNode | null
   onChange?: (next: BinaryNode | null) => void
+  /**
+   * Narrows the operators offered per value type. Defaults to the full set,
+   * which is what priority rules support; task-property search passes a
+   * smaller one.
+   */
+  operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
 }
 
 const emptyGroup = (): PropertyRuleGroup => ({
@@ -21,7 +27,7 @@ const emptyGroup = (): PropertyRuleGroup => ({
   rules: [createEmptyLeaf()],
 })
 
-export const TaskPropertyQueryBuilder = ({ value, onChange }: Props) => {
+export const TaskPropertyQueryBuilder = ({ value, onChange, operatorsFor }: Props) => {
   const [flat, setFlat] = useState<PropertyRuleGroup>(() => {
     if (!value) return emptyGroup()
     const parsed = binaryToFlat(value)
@@ -47,7 +53,7 @@ export const TaskPropertyQueryBuilder = ({ value, onChange }: Props) => {
 
   return (
     <div className="space-y-3">
-      <RuleGroup group={flat} onChange={handleChange} />
+      <RuleGroup group={flat} onChange={handleChange} operatorsFor={operatorsFor} />
       {errors.length > 0 && (
         <ul className="text-red-600 text-sm dark:text-red-400">
           {errors.map((e) => (

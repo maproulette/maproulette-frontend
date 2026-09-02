@@ -1,3 +1,4 @@
+import type { TaskPropertySearch } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
 import type { components, operations, paths } from './openApiTypes'
 
 /* Responses */
@@ -60,6 +61,12 @@ export type TasksBoundingBoxQuery = {
   priorities: number[]
   reviewStatuses: number[]
   metaReviewStatuses: number[]
+  /**
+   * Feature-property filter, sent in the request body rather than the query
+   * string because it is a nested rule tree. Omitted when the manager has not
+   * built a valid rule.
+   */
+  taskPropertySearch?: TaskPropertySearch | null
 }
 
 /* Custom Types */

@@ -1,5 +1,13 @@
 import type { UseFormReturn } from 'react-hook-form'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form'
+import { DocsLink } from '@/components/shared/DocsLink'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
 import {
   Select,
@@ -77,6 +85,29 @@ export const BasicInfoFields = ({ form, namePlaceholder }: BasicInfoFieldsProps)
                 {...field}
               />
             </FormControl>
+            <FormDescription>
+              {t(
+                'manageChallengeNew.challengeForm.instructionsDescriptionBefore',
+                undefined,
+                'Shown to mappers with every task. Instructions support'
+              )}{' '}
+              <DocsLink page="markdown" icon={null}>
+                {t('manageChallengeNew.challengeForm.markdownLinkText', undefined, 'Markdown')}
+              </DocsLink>{' '}
+              {t('manageChallengeNew.challengeForm.instructionsDescriptionAnd', undefined, 'and')}{' '}
+              <DocsLink page="mustacheTagReplacement" icon={null}>
+                {t(
+                  'manageChallengeNew.challengeForm.mustacheTagsLinkText',
+                  undefined,
+                  'mustache tag replacement'
+                )}
+              </DocsLink>{' '}
+              {t(
+                'manageChallengeNew.challengeForm.instructionsDescriptionAfter',
+                undefined,
+                'so each task can show details from its own feature properties.'
+              )}
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}

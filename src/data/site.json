@@ -3,7 +3,7 @@
     "main": [
       { "to": "/dashboard", "label": "Dashboard" },
       { "to": "/", "label": "Explore Challenges" },
-      { "to": "https://maproulette.org/learn", "openInNewTab": true, "label": "Learn" },
+      { "to": "docs:", "openInNewTab": true, "label": "Learn" },
       {
         "to": "https://openstreetmap.app.neoncrm.com/forms/maproulette",
         "openInNewTab": true,

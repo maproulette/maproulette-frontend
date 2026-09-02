@@ -16,11 +16,22 @@ interface Props {
   rule: PropertyRuleLeaf
   onChange: (next: PropertyRuleLeaf) => void
   onRemove?: () => void
+  /**
+   * Narrows the operators on offer for the given value type. Task-property
+   * search understands fewer of them than priority rules do, so the caller
+   * decides rather than the builder offering operators that can't be honored.
+   */
+  operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
 }
 
-export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
+export const RuleLeaf = ({ rule, onChange, onRemove, operatorsFor }: Props) => {
   const { t } = useIntl()
-  const ops = rule.valueType === 'number' ? numberOperators : stringOperators
+  const valueType = rule.valueType === 'number' ? 'number' : 'string'
+  const ops = operatorsFor
+    ? operatorsFor(valueType)
+    : valueType === 'number'
+      ? numberOperators
+      : stringOperators
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-md border border-zinc-200 p-2 dark:border-slate-700">

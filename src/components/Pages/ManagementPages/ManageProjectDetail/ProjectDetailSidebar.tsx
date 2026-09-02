@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Archive, BookOpen, Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
@@ -200,19 +201,17 @@ export const ProjectDetailSidebar = () => {
             )}
           </p>
         </div>
-        <a
-          href="https://learn.maproulette.org/documentation/project-management/"
-          target="_blank"
-          rel="noreferrer"
-          className="mt-3 inline-flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
+        <DocsLink
+          page="projectsAndProjectManagers"
+          icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
+          className="mt-3 gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
         >
-          <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
           {t(
             'manageProjectDetail.content.playbookDocsLink',
             undefined,
             'Open project management docs'
           )}
-        </a>
+        </DocsLink>
       </div>
     </div>
   )

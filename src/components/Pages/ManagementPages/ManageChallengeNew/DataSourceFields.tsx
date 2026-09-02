@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
+import { DocsLink } from '@/components/shared/DocsLink'
 import {
   FormControl,
   FormDescription,
@@ -154,14 +155,9 @@ export const DataSourceFields = ({ form, dataSource }: DataSourceFieldsProps) =>
                   undefined,
                   'Overpass query language to automatically generate tasks for this challenge. Please see the'
                 )}{' '}
-                <a
-                  href="https://learn.maproulette.org/en-US/documentation/using-overpass-to-create-challenges/#content"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                >
+                <DocsLink page="overpassChallenges" icon={null}>
                   {t('manageChallengeNew.challengeForm.docsLinkText', undefined, 'docs')}
-                </a>{' '}
+                </DocsLink>{' '}
                 {t(
                   'manageChallengeNew.challengeForm.overpassQLDescriptionAfter',
                   undefined,
@@ -211,18 +207,13 @@ export const DataSourceFields = ({ form, dataSource }: DataSourceFieldsProps) =>
                   undefined,
                   'Upload a GeoJSON file from your computer. Standard GeoJSON and'
                 )}{' '}
-                <a
-                  href="https://learn.maproulette.org/en-US/documentation/line-by-line-geojson/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
-                >
+                <DocsLink page="lineByLineGeoJSON" icon={null}>
                   {t(
                     'manageChallengeNew.challengeForm.lineByLineGeoJSONLinkText',
                     undefined,
                     'line-by-line GeoJSON format'
                   )}
-                </a>{' '}
+                </DocsLink>{' '}
                 {t(
                   'manageChallengeNew.challengeForm.geoJSONFileDescriptionAfter',
                   undefined,
@@ -251,6 +242,18 @@ export const DataSourceFields = ({ form, dataSource }: DataSourceFieldsProps) =>
                   'manageChallengeNew.challengeForm.remoteGeoJSONDescription',
                   undefined,
                   'Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file.'
+                )}{' '}
+                <DocsLink page="gistsForRemoteGeoJSON" icon={null}>
+                  {t(
+                    'manageChallengeNew.challengeForm.remoteGeoJSONDocsLinkText',
+                    undefined,
+                    'Hosting your GeoJSON in a GitHub gist'
+                  )}
+                </DocsLink>{' '}
+                {t(
+                  'manageChallengeNew.challengeForm.remoteGeoJSONDocsSuffix',
+                  undefined,
+                  'is one way to do that.'
                 )}
               </FormDescription>
               <FormMessage />

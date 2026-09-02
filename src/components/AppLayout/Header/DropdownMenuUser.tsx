@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CircleUser, LayoutDashboard, LogOut, Shield, SwatchBook } from 'lucide-react'
+import { BookOpen, CircleUser, LayoutDashboard, LogOut, Shield, SwatchBook } from 'lucide-react'
 import { api } from '@/api'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
+import { docsUrl } from '@/lib/docs'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { initials } from '@/lib/utils'
 import { frontendVersion } from '@/lib/version'
@@ -78,6 +79,12 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
             </Link>
           </DropdownMenuItem>
         )}
+        <DropdownMenuItem asChild>
+          <a href={docsUrl()} target="_blank" rel="noreferrer">
+            <BookOpen className="size-4" aria-hidden="true" />{' '}
+            {t('appLayout.header.userMenu.documentation', undefined, 'Documentation')}
+          </a>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={logout}>
           <LogOut className="size-4" aria-hidden="true" />{' '}
           {t('appLayout.header.userMenu.signOut', undefined, 'Sign out')}

@@ -2,6 +2,8 @@ import { createContext, type ReactNode, useCallback, useContext, useMemo, useSta
 import { api } from '@/api'
 import { coordInBbox, parseBoundsString } from '@/components/Map/mapUtils'
 import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
+import { binaryToTaskPropertySearch } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
 import type { Bbox2D } from '@/types/Map'
 import type { TaskMarker } from '@/types/Task'
@@ -53,6 +55,10 @@ type ExplorerContextValue = {
   setStatusChecked: (s: number, checked: boolean) => void
   priorityEnabled: Record<number, boolean>
   setPriorityChecked: (p: number, checked: boolean) => void
+  propertyRule: BinaryNode | null
+  setPropertyRule: (rule: BinaryNode | null) => void
+  propertyFilterActive: boolean
+  propertyMatchesLoading: boolean
   sortField: SortField
   setSortField: (f: SortField) => void
   sortDesc: boolean
@@ -93,6 +99,7 @@ export const ChallengeTasksExplorerProvider = ({
   const [priorityEnabled, setPriorityEnabled] = useState(() =>
     initialEnabledRecord(DEFAULT_PRIORITY_FILTER)
   )
+  const [propertyRule, setPropertyRule] = useState<BinaryNode | null>(null)
   const [sortField, setSortField] = useState<SortField>('id')
   const [sortDesc, setSortDesc] = useState(true)
   const [viewportBounds, setViewportBoundsRaw] = useState<Bbox2D | null>(null)
@@ -104,14 +111,27 @@ export const ChallengeTasksExplorerProvider = ({
 
   const { data: taskMarkersData, isLoading } = api.challenge.getChallengeTaskMarkers(challengeId)
 
+  // Feature properties live server-side, so the property rule is resolved to a
+  // set of matching task ids and intersected with the markers below.
+  const taskPropertySearch = useMemo(() => binaryToTaskPropertySearch(propertyRule), [propertyRule])
+  const { data: propertyMatches, isFetching: propertyMatchesLoading } =
+    api.task.getTaskIdsMatchingProperties(challengeId, taskPropertySearch, { enabled })
+  const propertyFilterActive = !!taskPropertySearch
+
   const markers = useMemo(() => processMarkersData(taskMarkersData).markers, [taskMarkersData])
 
   // Markers passed to the map: filtered by status/priority only (not viewport,
   // to avoid a feedback loop where panning the map hides tasks that would then
   // no longer be in bounds on the next pan).
   const mapMarkers = useMemo(
-    () => markers.filter((m) => statusEnabled[m.status]).filter((m) => priorityEnabled[m.priority]),
-    [markers, statusEnabled, priorityEnabled]
+    () =>
+      markers
+        .filter((m) => statusEnabled[m.status])
+        .filter((m) => priorityEnabled[m.priority])
+        // While the matches are still loading, show nothing rather than the
+        // unfiltered list, so the table never briefly contradicts the filter.
+        .filter((m) => !propertyFilterActive || !!propertyMatches?.has(m.id)),
+    [markers, statusEnabled, priorityEnabled, propertyFilterActive, propertyMatches]
   )
 
   const filteredMarkers = useMemo(() => {
@@ -132,6 +152,7 @@ export const ChallengeTasksExplorerProvider = ({
   }, [])
 
   const clearFilters = useCallback(() => {
+    setPropertyRule(null)
     setStatusEnabled(initialEnabledRecord(DEFAULT_TASK_STATUS_FILTER))
     setPriorityEnabled(initialEnabledRecord(DEFAULT_PRIORITY_FILTER))
     setSortField('id')
@@ -141,6 +162,7 @@ export const ChallengeTasksExplorerProvider = ({
   const filtersDirty =
     DEFAULT_TASK_STATUS_FILTER.some((s) => !statusEnabled[s]) ||
     DEFAULT_PRIORITY_FILTER.some((p) => !priorityEnabled[p]) ||
+    propertyFilterActive ||
     sortField !== 'id' ||
     sortDesc !== true
 
@@ -152,6 +174,10 @@ export const ChallengeTasksExplorerProvider = ({
       setStatusChecked,
       priorityEnabled,
       setPriorityChecked,
+      propertyRule,
+      setPropertyRule,
+      propertyFilterActive,
+      propertyMatchesLoading,
       sortField,
       setSortField,
       sortDesc,
@@ -171,6 +197,9 @@ export const ChallengeTasksExplorerProvider = ({
       challengeId,
       statusEnabled,
       priorityEnabled,
+      propertyRule,
+      propertyFilterActive,
+      propertyMatchesLoading,
       sortField,
       sortDesc,
       clearFilters,

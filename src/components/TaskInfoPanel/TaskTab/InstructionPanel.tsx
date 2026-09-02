@@ -1,4 +1,4 @@
-import { MarkdownContent } from '@/components/shared/MarkdownContent'
+import { TemplatedInstructions } from './TemplatedInstructions'
 
 interface InstructionPanelProps {
   taskInstruction?: string
@@ -9,7 +9,7 @@ export const InstructionPanel = ({ taskInstruction }: InstructionPanelProps) => 
 
   return (
     <div>
-      <MarkdownContent>{taskInstruction}</MarkdownContent>
+      <TemplatedInstructions instructions={taskInstruction} />
     </div>
   )
 }

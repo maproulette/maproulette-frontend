@@ -1,10 +1,10 @@
 import { Maximize2 } from 'lucide-react'
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Map as MapGL } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
-import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
@@ -16,12 +16,19 @@ import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLaye
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { useBrowseChallengeMap } from './BrowseChallengeMap/hooks'
+import { useBrowsedChallengeContext } from './contexts/BrowsedChallengeContext'
 
 export const BrowseChallengeMap = () => {
   const mapId = useId()
   const { t } = useIntl()
+  const { challenge } = useBrowsedChallengeContext()
+  const { user } = useAuthContext()
+  // Same precedence as the task map: challenge basemap, then the mapper's
+  // own default, then the style they last picked.
+  const [mapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
   const {
     mapRef,
     mapLoaded,
@@ -52,7 +59,7 @@ export const BrowseChallengeMap = () => {
         ref={mapRef}
         hash
         initialViewState={initialViewState}
-        mapStyle={getCurrentMapStyle()}
+        mapStyle={mapStyle}
         onLoad={() => setMapLoaded(true)}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseMove}

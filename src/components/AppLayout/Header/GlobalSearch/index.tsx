@@ -1,6 +1,7 @@
 import { Search } from 'lucide-react'
 import type { RefObject } from 'react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { DropdownMenuShortcut } from '@/components/ui/DropdownMenu'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
 import type { SearchType } from '@/types/GlobalSearch'
@@ -267,6 +268,15 @@ export const GlobalSearch = ({
                 <SearchTypeFilters searchType={activeSearchType} />
               )}
             </GlobalSearchProvider>
+            <div className="mt-2 border-zinc-200 border-t pt-2 dark:border-slate-800">
+              <DocsLink page="searchboxShortCommands" className="text-xs">
+                {t(
+                  'appLayout.header.globalSearch.docsLink',
+                  undefined,
+                  'Search shortcuts and short commands'
+                )}
+              </DocsLink>
+            </div>
           </div>
         </div>
       </search>

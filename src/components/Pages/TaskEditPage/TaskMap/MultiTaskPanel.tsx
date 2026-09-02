@@ -4,6 +4,7 @@ import {
   MAX_SELECTED_TASKS,
   useTaskMapContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
@@ -115,6 +116,14 @@ export const MultiTaskPanel = () => {
                 {t('taskMap.multiTaskPanel.resetBundle', undefined, 'Reset to initial bundle')}
               </button>
             )}
+
+          <DocsLink page="solvingMultipleTasksTogether" className="px-3 text-xs">
+            {t(
+              'taskMap.multiTaskPanel.docsLink',
+              undefined,
+              'Learn about solving multiple tasks together'
+            )}
+          </DocsLink>
         </div>
       </CollapsibleContent>
     </Collapsible>

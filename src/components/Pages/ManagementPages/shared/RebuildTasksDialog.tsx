@@ -2,6 +2,7 @@ import { CircleAlert } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
@@ -19,8 +20,6 @@ import { logger } from '@/lib/logger'
 import type { Challenge } from '@/types/Challenge'
 
 type SourceType = 'local' | 'remote' | 'overpass'
-
-const REBUILD_DOCS_URL = 'https://learn.maproulette.org/documentation/rebuilding-challenge-tasks/'
 
 // Infer a challenge's task source from which field is populated, falling back
 // to a local upload — mirrors the detection used by the challenge form.
@@ -195,14 +194,13 @@ export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType
                   'Warning: Rebuilding can lead to task duplication if your feature ids are not setup properly or if matching up old data with new data is unsuccessful. This operation cannot be undone!'
                 )}
               </p>
-              <a
-                href={REBUILD_DOCS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-green-600 underline hover:text-green-700 dark:text-green-400"
+              <DocsLink
+                page="rebuildingChallengeTasks"
+                icon={null}
+                className="text-green-600 hover:text-green-700 dark:text-green-400"
               >
                 {t('managementPages.rebuildTasksDialog.learnMore', undefined, 'Learn More')}
-              </a>
+              </DocsLink>
             </div>
           </div>
 

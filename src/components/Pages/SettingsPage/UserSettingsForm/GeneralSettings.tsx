@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
   FormControl,
@@ -85,7 +86,12 @@ export const GeneralSettings = ({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Choose your preferred editor for mapping tasks.</FormDescription>
+                <FormDescription>
+                  Choose your preferred editor for mapping tasks.{' '}
+                  <DocsLink page="defaultOsmEditor" icon={null}>
+                    Learn about the editor choices
+                  </DocsLink>
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -115,7 +121,12 @@ export const GeneralSettings = ({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Choose the default map background for your tasks.</FormDescription>
+                <FormDescription>
+                  Choose the default map background for your tasks.{' '}
+                  <DocsLink page="mapBaseLayer" icon={null}>
+                    Learn about base layers
+                  </DocsLink>
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

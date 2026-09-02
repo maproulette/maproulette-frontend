@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { basemapSelection } from '@/components/Map/basemap'
 import type { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
 
@@ -52,6 +53,11 @@ const makeBaseChallengeFormSchema = (t: T) =>
     // The team image shown on this challenge's card, or null for no image.
     // Whether the id is one the user may actually use is enforced server-side,
     // since the picker only ever offers their own teams' approved images.
+    // Basemap the challenge forces on its maps: a bundled style's name,
+    // `custom` (paired with basemapUrl), or `none` to leave the mapper's own
+    // preference in charge.
+    basemap: z.string(),
+    basemapUrl: z.string().optional().or(z.literal('')),
     teamImageId: z.number().nullable(),
     automatedEditsCodeAgreement: z.boolean(),
   })
@@ -146,6 +152,8 @@ export const buildFormValues = (
   localGeoJSON: null,
   remoteGeoJSON: challenge?.remoteGeoJson ?? '',
   dataOriginDate: '',
+  basemap: basemapSelection(challenge),
+  basemapUrl: challenge?.customBasemap ?? '',
   teamImageId: challenge?.teamImageId ?? null,
   // Editing an existing challenge isn't an automated edit, so the agreement is
   // pre-satisfied; new challenges must explicitly accept it (see schema).

@@ -10,6 +10,7 @@ import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { AgreementSection } from './AgreementSection'
+import { BasemapFields } from './BasemapFields'
 import { BasicInfoFields } from './BasicInfoFields'
 import { ChallengeImageSection } from './ChallengeImageSection'
 import {
@@ -117,6 +118,8 @@ export const ChallengeForm = () => {
           />
 
           <ChallengeImageSection form={form} />
+
+          <BasemapFields form={form} />
 
           <TaskDataSection
             form={form}

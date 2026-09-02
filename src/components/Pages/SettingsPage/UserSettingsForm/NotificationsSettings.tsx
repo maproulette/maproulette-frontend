@@ -1,5 +1,6 @@
 import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
   FormControl,
@@ -44,7 +45,10 @@ export const NotificationsSettings = ({
           <FieldDescription>
             Decide which MapRoulette notifications you would like to receive, along with whether you
             would like to be sent an email informing you of the notification (either immediately or
-            as a daily digest)
+            as a daily digest).{' '}
+            <DocsLink page="notificationsAndEmail" icon={null}>
+              Learn about notifications and email
+            </DocsLink>
           </FieldDescription>
           <FieldGroup>{/* Placeholder for future notification subscription options */}</FieldGroup>
         </FieldSet>

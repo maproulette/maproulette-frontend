@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { DocsLink } from '@/components/shared/DocsLink'
 import { TagInput } from '@/components/shared/TaskTags/TagInput'
 import { Button } from '@/components/ui/Button'
 import {
@@ -37,7 +38,14 @@ export const BulkTagDialog = ({ open, onOpenChange, onConfirm }: Props) => {
               'managementPages.bulkActionsToolbar.tagDialog.description',
               undefined,
               'Applies the entered tags to every selected task.'
-            )}
+            )}{' '}
+            <DocsLink page="maprouletteTags" icon={null}>
+              {t(
+                'managementPages.bulkActionsToolbar.tagDialog.docsLink',
+                undefined,
+                'How MapRoulette tags are used'
+              )}
+            </DocsLink>
           </DialogDescription>
         </DialogHeader>
         <TagInput value={tags} onChange={setTags} />
