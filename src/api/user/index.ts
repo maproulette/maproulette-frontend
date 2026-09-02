@@ -1,6 +1,7 @@
 import { userAdmin } from './admin'
 import { userAnnouncements } from './announcements'
 import { userAuth } from './auth'
+import { userFollow } from './follow'
 import { userNotifications } from './notifications'
 import { userProfile } from './profile'
 import { userSearch } from './search'
@@ -14,4 +15,5 @@ export const user = {
   ...userSearch,
   ...userAnnouncements,
   ...userSubscriptions,
+  ...userFollow,
 }

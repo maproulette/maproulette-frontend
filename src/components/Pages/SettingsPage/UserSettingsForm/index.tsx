@@ -26,6 +26,7 @@ const CORE_SETTINGS_KEYS = new Set([
   'leaderboardOptOut',
   'theme',
   'disableTaskConfirm',
+  'allowFollowing',
 ])
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
@@ -39,6 +40,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
       defaultBasemap: user.settings.defaultBasemap ?? -1,
       defaultBasemapId: user.settings.defaultBasemapId ?? '',
       email: user.settings.email ?? '',
+      allowFollowing: user.settings.allowFollowing ?? true,
       locale: user.settings.locale ?? locale,
     },
   })
@@ -64,6 +66,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
           defaultBasemapId: values.defaultBasemapId,
           locale: values.locale,
           email: values.email,
+          allowFollowing: values.allowFollowing,
           ...pluginSettings,
         } as unknown as UserSettings,
       })

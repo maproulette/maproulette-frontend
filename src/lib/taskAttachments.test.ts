@@ -11,8 +11,7 @@ import {
 const layer = { id: 'abc-123', kind: 'referenceLayer', type: 'geojson', name: 'Boundary Layer' }
 const blob = { id: 'def-456', kind: 'blob', type: 'json' }
 
-const makeTask = (geometries: unknown, id = 99): Task =>
-  ({ id, geometries }) as unknown as Task
+const makeTask = (geometries: unknown, id = 99): Task => ({ id, geometries }) as unknown as Task
 
 describe('taskAttachments', () => {
   it('reads attachments from the task FeatureCollection', () => {

@@ -51,6 +51,7 @@ export const DOCS_PAGES = {
   bulkEditingChallenges: 'documentation/bulk-editing-challenges',
   // Teams
   teams: 'documentation/teams',
+  following: 'documentation/following',
   // Advanced
   keyboardShortcuts: 'documentation/using-keyboard-shortcuts',
   markdown: 'documentation/markdown',

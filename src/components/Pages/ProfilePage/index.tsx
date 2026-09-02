@@ -4,6 +4,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import type { PublicUser, User } from '@/types/User'
 import { ProfilePageProvider } from './contexts/ProfilePageContext'
+import { FollowSection } from './FollowSection'
 import { ProfileHeader } from './ProfileHeader'
 import { AchievementsSection } from './sections/AchievementsSection'
 import { MetricsSection } from './sections/MetricsSection'
@@ -42,6 +43,7 @@ export const ProfilePage = ({ userId }: Props = {}) => {
       <ProfilePageProvider userId={user.id ?? userId ?? authedUser?.id ?? 0}>
         <div className="space-y-10">
           <MetricsSection />
+          <FollowSection userId={user.id ?? userId ?? authedUser?.id ?? 0} />
           <TopChallengesSection />
           <AchievementsSection
             earnedIds={!isViewingOther ? (authedUser?.achievements ?? []) : []}
