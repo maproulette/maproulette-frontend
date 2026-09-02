@@ -1,5 +1,5 @@
 import { Trash2, UserPlus, Users } from 'lucide-react'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { DocsLink } from '@/components/shared/DocsLink'
@@ -64,6 +64,7 @@ export const ProjectManagersPanel = () => {
 
   const [userQuery, setUserQuery] = useState('')
   const [newRole, setNewRole] = useState<number>(PROJECT_ROLE.write)
+  const addManagerId = useId()
   const { data: userMatches } = api.user.findUsers(userQuery, 10, userQuery.length > 2)
 
   const handleAddUser = async (userId: number, displayName: string) => {
@@ -145,12 +146,12 @@ export const ProjectManagersPanel = () => {
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="add-manager">
+        <Label htmlFor={addManagerId}>
           {t('manageProjectDetail.managers.addLabel', undefined, 'Add a manager')}
         </Label>
         <div className="flex gap-2">
           <Input
-            id="add-manager"
+            id={addManagerId}
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
             placeholder={t(

@@ -25,6 +25,7 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
   const { operatorsFor, propertyKeys } = useRuleBuilder()
   const { t } = useIntl()
   const listId = useId()
+  const commaSeparateId = useId()
   const valueType = rule.valueType === 'number' ? 'number' : 'string'
   const ops = operatorsFor(valueType)
 
@@ -88,8 +89,12 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
         />
       )}
       {operatorTakesValue(rule.operator) && (
-        <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+        <label
+          htmlFor={commaSeparateId}
+          className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400"
+        >
           <Checkbox
+            id={commaSeparateId}
             checked={!!rule.commaSeparate}
             onCheckedChange={(checked) => onChange({ ...rule, commaSeparate: checked === true })}
           />

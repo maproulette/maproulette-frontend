@@ -1,5 +1,5 @@
 import { Download } from 'lucide-react'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import type { ExportFormat } from '@/api/challenge/exports'
@@ -40,6 +40,7 @@ export const ExportTasksButton = () => {
   const [open, setOpen] = useState(false)
   const [format, setFormat] = useState<ExportFormat>('csv')
   const [timezone, setTimezone] = useState(localTimezoneOffset)
+  const fieldId = useId()
 
   const handleExport = async () => {
     try {
@@ -101,8 +102,8 @@ export const ExportTasksButton = () => {
                 className="gap-2"
               >
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem value="csv" id="export-csv" />
-                  <Label htmlFor="export-csv" className="font-normal">
+                  <RadioGroupItem value="csv" id={`${fieldId}-csv`} />
+                  <Label htmlFor={`${fieldId}-csv`} className="font-normal">
                     {t(
                       'manageChallengeDetail.export.formatCsv',
                       undefined,
@@ -111,8 +112,8 @@ export const ExportTasksButton = () => {
                   </Label>
                 </div>
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem value="geojson" id="export-geojson" />
-                  <Label htmlFor="export-geojson" className="font-normal">
+                  <RadioGroupItem value="geojson" id={`${fieldId}-geojson`} />
+                  <Label htmlFor={`${fieldId}-geojson`} className="font-normal">
                     {t(
                       'manageChallengeDetail.export.formatGeoJSON',
                       undefined,
@@ -124,11 +125,11 @@ export const ExportTasksButton = () => {
             </fieldset>
 
             <div className="space-y-2">
-              <Label htmlFor="export-timezone">
+              <Label htmlFor={`${fieldId}-timezone`}>
                 {t('manageChallengeDetail.export.timezoneLabel', undefined, 'Timestamp timezone')}
               </Label>
               <Select value={timezone} onValueChange={setTimezone}>
-                <SelectTrigger id="export-timezone" className="w-full">
+                <SelectTrigger id={`${fieldId}-timezone`} className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="max-h-72">

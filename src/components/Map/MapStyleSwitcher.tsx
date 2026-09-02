@@ -1,6 +1,6 @@
 import { Plus, Trash2 } from 'lucide-react'
 import type { StyleSpecification } from 'maplibre-gl'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -32,6 +32,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
   const [type, setType] = useState<CustomLayerType>('xyz')
   const [url, setUrl] = useState('')
   const [layers, setLayers] = useState('')
+  const fieldId = useId()
 
   const styles = allMapStyles()
 
@@ -106,22 +107,22 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
       {adding ? (
         <div className="mt-2 space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
           <div className="space-y-1">
-            <Label htmlFor="custom-layer-name">
+            <Label htmlFor={`${fieldId}-name`}>
               {t('map.styleSwitcher.nameLabel', undefined, 'Name')}
             </Label>
             <Input
-              id="custom-layer-name"
+              id={`${fieldId}-name`}
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="My imagery"
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="custom-layer-type">
+            <Label htmlFor={`${fieldId}-type`}>
               {t('map.styleSwitcher.typeLabel', undefined, 'Type')}
             </Label>
             <Select value={type} onValueChange={(v) => setType(v as CustomLayerType)}>
-              <SelectTrigger id="custom-layer-type" className="w-full">
+              <SelectTrigger id={`${fieldId}-type`} className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -131,13 +132,13 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
             </Select>
           </div>
           <div className="space-y-1">
-            <Label htmlFor="custom-layer-url">
+            <Label htmlFor={`${fieldId}-url`}>
               {type === 'xyz'
                 ? t('map.styleSwitcher.xyzUrlLabel', undefined, 'Tile URL')
                 : t('map.styleSwitcher.wmsUrlLabel', undefined, 'WMS endpoint')}
             </Label>
             <Input
-              id="custom-layer-url"
+              id={`${fieldId}-url`}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder={
@@ -149,11 +150,11 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
           </div>
           {type === 'wms' && (
             <div className="space-y-1">
-              <Label htmlFor="custom-layer-layers">
+              <Label htmlFor={`${fieldId}-layers`}>
                 {t('map.styleSwitcher.wmsLayersLabel', undefined, 'WMS layers')}
               </Label>
               <Input
-                id="custom-layer-layers"
+                id={`${fieldId}-layers`}
                 value={layers}
                 onChange={(e) => setLayers(e.target.value)}
                 placeholder="workspace:layer"

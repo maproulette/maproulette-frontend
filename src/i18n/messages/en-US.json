@@ -1206,6 +1206,7 @@
   "taskEditPage.taskActions.editorButton.changeDefault": "Change default editor",
   "taskEditPage.taskActions.editorButton.defaultUpdateFailed": "Failed to update default editor",
   "taskEditPage.taskActions.editorButton.defaultUpdated": "Default editor updated",
+  "taskEditPage.taskActions.editorButton.editInId": "Edit in iD",
   "taskEditPage.taskActions.editorButton.josmRemoteControlHint": "Make sure JOSM is running with remote control enabled",
   "taskEditPage.taskActions.editorButton.noBounds": "Task bounds not available",
   "taskEditPage.taskActions.editorButton.noOsmFeatures": "Task has no OSM feature IDs to load",

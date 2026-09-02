@@ -111,7 +111,7 @@ describe('OSM element short codes', () => {
       const [token] = tokenizeInstructions(code)
       expect(token).toEqual({
         kind: 'osmElements',
-        elements: [{ type, id: code.match(/\d+/)![0] }],
+        elements: [{ type, id: code.replace(/\D/g, '') }],
       })
     }
   })

@@ -13,11 +13,13 @@ import { api } from '@/api'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
+import { type TagFix, tagFixes } from '@/lib/cooperativeWork'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
+import { applyTagFixesInId } from './applyTagFixes'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -66,6 +68,8 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const idContextRef = useRef<IdContext | null>(null)
   const osmEntityIdsRef = useRef<string[]>([])
+  const tagFixesRef = useRef<TagFix[]>([])
+
   const [focusMode, setFocusMode] = useState(false)
 
   const hasUnsavedChanges = idUnsavedCount > 0
@@ -101,6 +105,11 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }, [task.id, bundledTasks])
 
   osmEntityIdsRef.current = osmEntityIds
+  // Tag changes proposed for this task and anything bundled with it.
+  tagFixesRef.current = useMemo(
+    () => [task, ...(bundledTasks ?? [])].flatMap((t) => tagFixes(t as Task)),
+    [task, bundledTasks]
+  )
 
   const position = useMemo(() => {
     if (map.current) {
@@ -265,12 +274,38 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         }
       }, 2000)
 
+      applyPendingTagFixes(context, iframe)
+
       setIsLoading(false)
     } catch (err) {
       logger.error('Failed to initialize iD editor', { error: err })
       setIsLoading(false)
     }
   }
+
+  /**
+   * Tag-fix challenges propose tag changes for the task's elements. They are
+   * applied as pending edits once iD has loaded the elements, so the mapper
+   * reviews and saves them like their own work rather than approving them
+   * through a separate dialog. Elements arrive asynchronously, so this retries
+   * for a few seconds before giving up.
+   */
+  const applyPendingTagFixes = useCallback((context: IdContext, iframe: HTMLIFrameElement) => {
+    const fixes = tagFixesRef.current
+    if (fixes.length === 0) return
+
+    const remaining = new Set(fixes.map((fix) => fix.entityId))
+    const attempt = (attemptsLeft: number) => {
+      if (remaining.size === 0 || attemptsLeft <= 0) return
+      const iDGlobal = getIdGlobal(iframe.contentWindow)
+      const pending = fixes.filter((fix) => remaining.has(fix.entityId))
+      for (const entityId of applyTagFixesInId(context, iDGlobal, pending)) {
+        remaining.delete(entityId)
+      }
+      if (remaining.size > 0) setTimeout(() => attempt(attemptsLeft - 1), 1000)
+    }
+    setTimeout(() => attempt(8), 1500)
+  }, [])
 
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {

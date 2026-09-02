@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import {
   formatOsmEntities,
   parseOsmFeaturesFromTask,
@@ -20,6 +21,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
+import { isTagFixTask } from '@/lib/cooperativeWork'
 import { logger } from '@/lib/logger'
 import { josmImportUrl, referenceLayers } from '@/lib/taskAttachments'
 import type { Bbox2D } from '@/types/Map'
@@ -60,11 +62,19 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   const bundledTaskIds = (activeBundle?.taskIds ?? []).filter((id) => id !== task.id)
   const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
   const [isSaving, setIsSaving] = useState(false)
+  const { openIdEditor } = useEditorContext()
+  const isTagFix = isTagFixTask(task)
 
   // Get current default editor (default to iD if not set)
   const defaultEditor = user?.settings?.defaultEditor ?? 0
   const currentEditorOption =
     editorOptions.find((opt) => opt.value === defaultEditor) || editorOptions[1] // Default to iD
+
+  // The primary button opens embedded iD for a tag fix, so it must say so
+  // rather than advertising the mapper's usual editor.
+  const primaryEditorLabel = isTagFix
+    ? t('taskEditPage.taskActions.editorButton.editInId', undefined, 'Edit in iD')
+    : currentEditorOption.label
 
   const updateEditorMutation = api.user.useUpdateUserSettings()
 
@@ -248,6 +258,14 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   }
 
   const handleOpenEditor = () => {
+    // A tag-fix challenge proposes tag changes that MapRoulette can only apply
+    // for the mapper inside the embedded iD editor, so those tasks open there
+    // whatever the mapper's usual editor is. Picking an editor explicitly from
+    // the dropdown still does what it says.
+    if (isTagFix) {
+      openIdEditor()
+      return
+    }
     openEditor(defaultEditor === -1 ? 0 : defaultEditor)
   }
 
@@ -324,13 +342,13 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
           variant="default"
           title={t(
             'taskEditPage.taskActions.editorButton.openTaskIn',
-            { editor: currentEditorOption.label },
+            { editor: primaryEditorLabel },
             'Open task in {editor}'
           )}
           disabled={isSaving || updateEditorMutation.isPending}
         >
-          <span className="hidden sm:inline">{currentEditorOption.label}</span>
-          <span className="sm:hidden">{getShortLabel(currentEditorOption.label)}</span>
+          <span className="hidden sm:inline">{primaryEditorLabel}</span>
+          <span className="sm:hidden">{getShortLabel(primaryEditorLabel)}</span>
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
