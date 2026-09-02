@@ -21,6 +21,7 @@ import { editorOptions } from '@/data/account.json'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { logger } from '@/lib/logger'
+import { josmImportUrl, referenceLayers } from '@/lib/taskAttachments'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
@@ -39,6 +40,9 @@ const JOSM_FEATURES = 4
 const RAPID = 5
 
 const JOSM_HOST = 'http://127.0.0.1:8111/'
+
+// JOSM fetches attachment data itself, so it needs an absolute backend URL.
+const apiBaseUrl = window.env.VITE_API_BASE_URL || window.location.origin
 
 /**
  * Build a [west, south, east, north] bbox covering all the given tasks' geometries.
@@ -203,6 +207,26 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
 
       if (editorUrl) {
         window.open(editorUrl, '_blank', 'noopener,noreferrer')
+
+        // Reference layers attached to the task are sent to JOSM as extra
+        // layers once the task itself has been loaded. They are supplementary,
+        // so a failure here is logged rather than surfaced — the mapper still
+        // has the task open.
+        if (editorValue === JOSM || editorValue === JOSM_LAYER) {
+          const layers = tasks.flatMap((t) =>
+            referenceLayers(t).map((attachment) => ({ taskId: t.id, attachment }))
+          )
+          for (const { taskId, attachment } of layers) {
+            const importUrl = josmImportUrl(JOSM_HOST, apiBaseUrl, taskId, attachment)
+            fetch(importUrl, { mode: 'no-cors' }).catch((error) => {
+              logger.warn('Failed to send reference layer to JOSM', {
+                taskId,
+                attachmentId: attachment.id,
+                error: String(error),
+              })
+            })
+          }
+        }
         toast.success(
           t(
             'taskEditPage.taskActions.editorButton.openingTaskIn',
