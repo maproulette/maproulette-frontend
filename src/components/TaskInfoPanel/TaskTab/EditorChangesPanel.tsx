@@ -24,10 +24,9 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
   if (!editor?.idEditorMounted) return null
 
   const { pendingEdits, divergedTagFixCount, resetTagFixesRef } = editor
-  const canReset = isTagFix && divergedTagFixCount > 0
+  const hasDiverged = divergedTagFixCount > 0
 
-  // With nothing pending and nothing to reset there is nothing worth a panel.
-  if (pendingEdits.length === 0 && !canReset) return null
+  if (pendingEdits.length === 0) return null
 
   return (
     <section className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
@@ -59,25 +58,49 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
             )}
       </p>
 
-      {canReset && (
-        <div className="flex flex-wrap items-center gap-2 rounded border border-amber-500/40 bg-amber-500/10 px-2 py-1.5">
+      {/* Always offered on a tag-fix task, not only once something has
+          diverged — a control that appears only when you have already made a
+          mess is a control nobody finds. */}
+      {isTagFix && (
+        <div
+          className={`flex flex-wrap items-center gap-2 rounded border px-2 py-1.5 ${
+            hasDiverged
+              ? 'border-amber-500/40 bg-amber-500/10'
+              : 'border-zinc-200 dark:border-slate-700'
+          }`}
+        >
           <p className="min-w-0 flex-1 text-xs text-zinc-600 dark:text-zinc-300">
-            {t(
-              'taskInfoPanel.editorChanges.diverged',
-              { count: divergedTagFixCount },
-              '{count, plural, one {# element no longer matches} other {# elements no longer match}} what the challenge suggests.'
-            )}
+            {hasDiverged
+              ? t(
+                  'taskInfoPanel.editorChanges.diverged',
+                  { count: divergedTagFixCount },
+                  '{count, plural, one {# element no longer matches} other {# elements no longer match}} what the challenge suggests.'
+                )
+              : t(
+                  'taskInfoPanel.editorChanges.matches',
+                  undefined,
+                  'These elements match what the challenge suggests.'
+                )}
           </p>
           <Button
             size="sm"
             variant="outline"
             className="gap-1.5"
+            disabled={!hasDiverged}
             onClick={() => resetTagFixesRef.current?.()}
-            title={t(
-              'taskInfoPanel.editorChanges.resetTitle',
-              undefined,
-              'Discard your changes to these elements and restore the suggested tags'
-            )}
+            title={
+              hasDiverged
+                ? t(
+                    'taskInfoPanel.editorChanges.resetTitle',
+                    undefined,
+                    'Discard your changes to these elements and restore the suggested tags'
+                  )
+                : t(
+                    'taskInfoPanel.editorChanges.resetDisabledTitle',
+                    undefined,
+                    'Nothing to reset — these elements already carry the suggested tags'
+                  )
+            }
           >
             <RotateCcw className="size-3.5" />
             {t('taskInfoPanel.editorChanges.reset', undefined, 'Reset')}
@@ -85,13 +108,7 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
         </div>
       )}
 
-      {pendingEdits.length > 0 ? (
-        <EntityEditList edits={pendingEdits} />
-      ) : (
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-          {t('taskInfoPanel.editorChanges.none', undefined, 'Nothing is pending.')}
-        </p>
-      )}
+      <EntityEditList edits={pendingEdits} />
     </section>
   )
 }
