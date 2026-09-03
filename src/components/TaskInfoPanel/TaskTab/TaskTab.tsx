@@ -6,9 +6,8 @@ import { substituteTaskProperties } from '@/components/TaskInfoPanel/taskUtils/p
 import type { Task } from '@/types/Task'
 import { BundleStateIndicator } from './BundleStateIndicator'
 import { BundleTaskList } from './BundleTaskList'
+import { EditorChangesPanel } from './EditorChangesPanel'
 import { InstructionPanel } from './InstructionPanel'
-import { TagFixPanel } from './TagFixPanel'
-import { YourEditsPanel } from './YourEditsPanel'
 
 interface TaskTabProps {
   task: Task
@@ -59,9 +58,7 @@ export const TaskTab = ({ task }: TaskTabProps) => {
         onRemoveFromBundle={handleRemoveFromBundle}
       />
 
-      <TagFixPanel task={task} />
-
-      <YourEditsPanel />
+      <EditorChangesPanel task={task} />
 
       <InstructionPanel
         taskInstruction={

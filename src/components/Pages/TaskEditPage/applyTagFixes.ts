@@ -1,6 +1,5 @@
 import { applyTagFix, type TagFix } from '@/lib/cooperativeWork'
 import { logger } from '@/lib/logger'
-import { tagChanges } from '@/lib/tagDiff'
 import type { IdContext, IdGlobal } from '@/types/iDEditor'
 
 /**
@@ -42,18 +41,71 @@ export const applyTagFixesInId = (
 }
 
 /**
- * Which of a task's tag fixes are not currently reflected in the editor.
- *
- * Elements iD has not loaded are treated as applied, so a slow download does
- * not momentarily look like the mapper undid something.
+ * The tags an element should carry for the challenge's suggestion to be
+ * satisfied: how it looked before any editing, with the fix applied.
  */
-export const unappliedTagFixes = (context: IdContext, fixes: TagFix[]): TagFix[] =>
+const targetTags = (context: IdContext, fix: TagFix): Record<string, string> => {
+  const base = context.history?.().base?.().hasEntity(fix.entityId)?.tags ?? {}
+  return applyTagFix(base, fix)
+}
+
+const sameTags = (a: Record<string, string>, b: Record<string, string>): boolean => {
+  const keys = Object.keys(a)
+  return keys.length === Object.keys(b).length && keys.every((key) => a[key] === b[key])
+}
+
+/**
+ * Tag fixes whose elements no longer look the way the challenge suggested,
+ * whether because the mapper undid the change or because they edited the
+ * element further.
+ *
+ * Elements iD has not loaded are treated as matching, so a slow download does
+ * not momentarily look like the mapper changed something.
+ */
+export const divergedTagFixes = (context: IdContext, fixes: TagFix[]): TagFix[] =>
   fixes.filter((fix) => {
     try {
       const entity = context.hasEntity(fix.entityId)
       if (!entity) return false
-      return tagChanges(entity.tags ?? {}, fix).length > 0
+      return !sameTags(entity.tags ?? {}, targetTags(context, fix))
     } catch {
       return false
     }
   })
+
+/**
+ * Put the tag-fix elements back exactly as the challenge suggested: their
+ * original tags with the fix applied, discarding anything else the mapper did
+ * to them.
+ *
+ * This is a reset rather than a re-apply — re-applying only the suggested tags
+ * would leave unrelated edits on the element in place, which is not what
+ * someone asking to go back to the suggestion means.
+ */
+export const resetTagFixesInId = (
+  context: IdContext,
+  iDGlobal: IdGlobal | undefined,
+  fixes: TagFix[]
+): string[] => {
+  if (!iDGlobal?.actionChangeTags) return []
+
+  const reset: string[] = []
+  for (const fix of fixes) {
+    try {
+      const entity = context.hasEntity(fix.entityId)
+      if (!entity) continue
+
+      const target = targetTags(context, fix)
+      if (sameTags(entity.tags ?? {}, target)) continue
+
+      context.perform(
+        iDGlobal.actionChangeTags(fix.entityId, target),
+        'Reset to MapRoulette suggested tags'
+      )
+      reset.push(fix.entityId)
+    } catch (error) {
+      logger.warn('Could not reset to suggested tags', { entityId: fix.entityId, error })
+    }
+  }
+  return reset
+}

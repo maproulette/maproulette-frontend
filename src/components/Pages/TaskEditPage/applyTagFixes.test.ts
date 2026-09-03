@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { TagFix } from '@/lib/cooperativeWork'
 import type { IdContext, IdEntity, IdGlobal } from '@/types/iDEditor'
-import { applyTagFixesInId, unappliedTagFixes } from './applyTagFixes.ts'
+import { applyTagFixesInId, divergedTagFixes, resetTagFixesInId } from './applyTagFixes.ts'
 
 const fix = (props: Partial<TagFix> = {}): TagFix => ({
   elementId: 'way/1',
@@ -11,12 +11,16 @@ const fix = (props: Partial<TagFix> = {}): TagFix => ({
   ...props,
 })
 
-const makeContext = (entities: Record<string, IdEntity | undefined>) => {
+const makeContext = (
+  entities: Record<string, IdEntity | undefined>,
+  baseEntities: Record<string, IdEntity | undefined> = {}
+) => {
   const perform = vi.fn()
   const context = {
     hasEntity: (id: string) => entities[id],
     entity: (id: string) => entities[id],
     perform,
+    history: () => ({ base: () => ({ hasEntity: (id: string) => baseEntities[id] }) }),
   } as unknown as IdContext
   return { context, perform }
 }
@@ -92,39 +96,79 @@ describe('applyTagFixesInId', () => {
   })
 })
 
-describe('unappliedTagFixes', () => {
-  it('is empty when the element already carries the proposed tags', () => {
-    const { context } = makeContext({ w1: { tags: { surface: 'asphalt' } } })
-    expect(unappliedTagFixes(context, [fix()])).toEqual([])
+describe('divergedTagFixes', () => {
+  // The element started as gravel; the challenge suggests asphalt.
+  const base = { w1: { tags: { highway: 'residential', surface: 'gravel' } } }
+  const suggested = { highway: 'residential', surface: 'asphalt' }
+
+  it('is empty when the element matches the suggestion exactly', () => {
+    const { context } = makeContext({ w1: { tags: suggested } }, base)
+    expect(divergedTagFixes(context, [fix()])).toEqual([])
   })
 
-  it('reports a fix the mapper has undone', () => {
-    const { context } = makeContext({ w1: { tags: { surface: 'gravel' } } })
-    expect(unappliedTagFixes(context, [fix()]).map((f) => f.entityId)).toEqual(['w1'])
+  it('reports a suggestion the mapper undid', () => {
+    const { context } = makeContext({ w1: { tags: base.w1.tags } }, base)
+    expect(divergedTagFixes(context, [fix()])).toHaveLength(1)
   })
 
-  it('reports a fix whose value the mapper changed to something else', () => {
-    const { context } = makeContext({ w1: { tags: { surface: 'concrete' } } })
-    expect(unappliedTagFixes(context, [fix()])).toHaveLength(1)
+  it('reports an element the mapper edited further, even if the suggestion still holds', () => {
+    const { context } = makeContext({ w1: { tags: { ...suggested, tunnel: 'yes' } } }, base)
+    expect(divergedTagFixes(context, [fix()])).toHaveLength(1)
   })
 
-  it('treats an unloaded element as applied, so a slow download is not mistaken for an undo', () => {
-    const { context } = makeContext({})
-    expect(unappliedTagFixes(context, [fix()])).toEqual([])
+  it('reports a suggested value the mapper mistyped', () => {
+    const { context } = makeContext({ w1: { tags: { ...suggested, surface: 'asphal' } } }, base)
+    expect(divergedTagFixes(context, [fix()])).toHaveLength(1)
   })
 
-  it('reports an unset tag that has come back', () => {
-    const { context } = makeContext({ w1: { tags: { fixme: 'check' } } })
-    const unset = fix({ setTags: {}, unsetTags: ['fixme'] })
-    expect(unappliedTagFixes(context, [unset])).toHaveLength(1)
+  it('treats an unloaded element as matching', () => {
+    const { context } = makeContext({}, base)
+    expect(divergedTagFixes(context, [fix()])).toEqual([])
   })
+})
 
-  it('checks each element independently', () => {
-    const { context } = makeContext({
-      w1: { tags: { surface: 'asphalt' } },
-      w2: { tags: { surface: 'gravel' } },
+describe('resetTagFixesInId', () => {
+  const base = { w1: { tags: { highway: 'residential', surface: 'gravel' } } }
+
+  it('restores the original tags with the suggestion applied', () => {
+    const { context, perform } = makeContext({ w1: { tags: { surface: 'concrete' } } }, base)
+    expect(resetTagFixesInId(context, iDGlobal, [fix()])).toEqual(['w1'])
+    expect(perform.mock.calls[0][0].tags).toEqual({
+      highway: 'residential',
+      surface: 'asphalt',
     })
-    const result = unappliedTagFixes(context, [fix(), fix({ elementId: 'way/2', entityId: 'w2' })])
-    expect(result.map((f) => f.entityId)).toEqual(['w2'])
+  })
+
+  it('discards unrelated tags the mapper added to the element', () => {
+    const { context, perform } = makeContext(
+      { w1: { tags: { highway: 'residential', surface: 'asphalt', tunnel: 'yes', layer: '-1' } } },
+      base
+    )
+    resetTagFixesInId(context, iDGlobal, [fix()])
+    expect(perform.mock.calls[0][0].tags).toEqual({
+      highway: 'residential',
+      surface: 'asphalt',
+    })
+  })
+
+  it('does nothing when the element already matches the suggestion', () => {
+    const { context, perform } = makeContext(
+      { w1: { tags: { highway: 'residential', surface: 'asphalt' } } },
+      base
+    )
+    expect(resetTagFixesInId(context, iDGlobal, [fix()])).toEqual([])
+    expect(perform).not.toHaveBeenCalled()
+  })
+
+  it('annotates the edit so the undo history explains it', () => {
+    const { context, perform } = makeContext({ w1: { tags: {} } }, base)
+    resetTagFixesInId(context, iDGlobal, [fix()])
+    expect(perform.mock.calls[0][1]).toBe('Reset to MapRoulette suggested tags')
+  })
+
+  it('does nothing when iD has not exposed the action', () => {
+    const { context, perform } = makeContext({ w1: { tags: {} } }, base)
+    expect(resetTagFixesInId(context, undefined, [fix()])).toEqual([])
+    expect(perform).not.toHaveBeenCalled()
   })
 })

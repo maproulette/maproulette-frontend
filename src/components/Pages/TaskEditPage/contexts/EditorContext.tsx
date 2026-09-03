@@ -26,16 +26,16 @@ interface EditorContextType {
   showMap: () => void
   setIdUnsavedCount: (count: number) => void
   /**
-   * Tag fixes the editor has loaded but whose tags are not currently applied —
-   * the mapper undid or changed them. Empty when there is nothing to re-apply.
+   * How many of the task's tag-fix elements no longer look the way the
+   * challenge suggested. Zero when there is nothing to reset.
    */
-  unappliedTagFixCount: number
-  setUnappliedTagFixCount: (count: number) => void
+  divergedTagFixCount: number
+  setDivergedTagFixCount: (count: number) => void
   /** Edits currently pending in the editor, refreshed on every history change. */
   pendingEdits: EntityEdit[]
   setPendingEdits: (edits: EntityEdit[]) => void
-  /** Populated by IdEditorView; re-applies the challenge's proposed tags. */
-  reapplyTagFixesRef: React.RefObject<(() => void) | null>
+  /** Populated by IdEditorView; restores the challenge's suggested tags. */
+  resetTagFixesRef: React.RefObject<(() => void) | null>
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -44,9 +44,9 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeView, setActiveView] = useState<ActiveView>('map')
   const [idEditorMounted, setIdEditorMounted] = useState(false)
   const [idUnsavedCount, setIdUnsavedCount] = useState(0)
-  const [unappliedTagFixCount, setUnappliedTagFixCount] = useState(0)
+  const [divergedTagFixCount, setDivergedTagFixCount] = useState(0)
   const [pendingEdits, setPendingEdits] = useState<EntityEdit[]>([])
-  const reapplyTagFixesRef = useRef<(() => void) | null>(null)
+  const resetTagFixesRef = useRef<(() => void) | null>(null)
   const idViewportRef = useRef<EditorViewport | null>(null)
   const highlightIdEntityRef = useRef<((osmEntityId: string | null) => void) | null>(null)
   const taskToOsmIdRef = useRef<Record<number, string> | null>({})
@@ -89,11 +89,11 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       openIdEditor,
       showMap,
       setIdUnsavedCount,
-      unappliedTagFixCount,
-      setUnappliedTagFixCount,
+      divergedTagFixCount,
+      setDivergedTagFixCount,
       pendingEdits,
       setPendingEdits,
-      reapplyTagFixesRef,
+      resetTagFixesRef,
     }),
     [
       activeView,
@@ -101,7 +101,7 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       idUnsavedCount,
       openIdEditor,
       showMap,
-      unappliedTagFixCount,
+      divergedTagFixCount,
       pendingEdits,
     ]
   )

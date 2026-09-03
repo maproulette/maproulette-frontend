@@ -23,7 +23,7 @@ import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
-import { applyTagFixesInId, unappliedTagFixes } from './applyTagFixes'
+import { applyTagFixesInId, divergedTagFixes, resetTagFixesInId } from './applyTagFixes'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -70,10 +70,10 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     highlightIdEntityRef,
     taskToOsmIdRef,
     selectIdEntitiesRef,
-    setUnappliedTagFixCount,
+    setDivergedTagFixCount,
     setPendingEdits,
     pendingEdits: currentEdits,
-    reapplyTagFixesRef,
+    resetTagFixesRef,
   } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(true)
@@ -301,7 +301,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           setPendingEdits(pendingEdits(context.history()))
           // An undo or a hand edit can put the element out of step with what
           // the challenge proposed, which is what offers the re-apply control.
-          setUnappliedTagFixCount(unappliedTagFixes(context, tagFixesRef.current).length)
+          setDivergedTagFixCount(divergedTagFixes(context, tagFixesRef.current).length)
         })
       }
 
@@ -373,19 +373,19 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     setTimeout(() => attempt(8), 1500)
   }, [])
 
-  // Lets the task panel re-apply the challenge's tags after the mapper has
-  // undone or altered them.
+  // Lets the task panel put the elements back the way the challenge suggested
+  // after the mapper has undone or altered them.
   useEffect(() => {
-    reapplyTagFixesRef.current = () => {
+    resetTagFixesRef.current = () => {
       const context = idContextRef.current
       if (!context) return
-      applyTagFixesInId(context, getIdGlobal(iframeRef.current?.contentWindow), tagFixesRef.current)
-      setUnappliedTagFixCount(unappliedTagFixes(context, tagFixesRef.current).length)
+      resetTagFixesInId(context, getIdGlobal(iframeRef.current?.contentWindow), tagFixesRef.current)
+      setDivergedTagFixCount(divergedTagFixes(context, tagFixesRef.current).length)
     }
     return () => {
-      reapplyTagFixesRef.current = null
+      resetTagFixesRef.current = null
     }
-  }, [reapplyTagFixesRef, setUnappliedTagFixCount])
+  }, [resetTagFixesRef, setDivergedTagFixCount])
 
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {
