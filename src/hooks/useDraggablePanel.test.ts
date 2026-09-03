@@ -56,7 +56,7 @@ describe('useDraggablePanel', () => {
         clientX: 0,
         clientY: 0,
         preventDefault: () => {},
-      } as unknown as React.PointerEvent)
+      } as unknown as React.PointerEvent<HTMLElement>)
     })
 
     expect(result.current.dragging).toBe(false)

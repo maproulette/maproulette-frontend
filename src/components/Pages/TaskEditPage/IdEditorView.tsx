@@ -1,5 +1,6 @@
 import bbox from '@turf/bbox'
 import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Crosshair,
@@ -31,6 +32,9 @@ import { useTaskMapContext } from './contexts/TaskMapContext'
 import { PendingEditsModal } from './PendingEditsModal'
 
 /** Filter entity IDs to only those currently loaded in the iD context, then enter modeSelect. */
+/** Height of iD's own toolbar, which the controls start just beneath. */
+const ID_TOOLBAR_HEIGHT = 150
+
 const selectValidEntities = (
   ctx: IdContext,
   iDGlobal: IdGlobal | undefined,
@@ -82,7 +86,11 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     dragging,
     handleProps,
     style: panelStyle,
-  } = useDraggablePanel('mr4:idEditor:controlsPosition')
+  } = useDraggablePanel('mr4:idEditor:controlsPosition', (size) => ({
+    x: Math.max(12, (window.innerWidth - size.x) / 2),
+    // Clear of iD's Inspect / Add Feature / Save row along the top.
+    y: ID_TOOLBAR_HEIGHT,
+  }))
 
   const hasUnsavedChanges = idUnsavedCount > 0
 
@@ -230,7 +238,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
             .mr-focus-mode .layer-osm text,
             .mr-focus-mode .layer-osm use,
             .mr-focus-mode .layer-osm image {
-              opacity: 0.08 !important;
+              display: none !important;
             }
             .mr-focus-mode .layer-osm .mr-task,
             .mr-focus-mode .layer-osm .mr-task *,
@@ -240,6 +248,11 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
             .mr-focus-mode .layer-osm .selected *,
             .mr-focus-mode .layer-osm .mr-active,
             .mr-focus-mode .layer-osm .mr-active * {
+              /* These selectors carry more classes than the hide rule above,
+                 so they win it back. Display has to be reverted explicitly now
+                 that focus mode removes the other elements rather than fading
+                 them: opacity alone would leave them hidden. */
+              display: revert !important;
               opacity: 1 !important;
             }
           `
@@ -483,6 +496,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                     '{count, plural, one {# unsaved change} other {# unsaved changes}}'
                   )}
                 </span>
+                <ChevronDown className="h-3 w-3 text-white/80" aria-hidden="true" />
               </button>
             )}
 

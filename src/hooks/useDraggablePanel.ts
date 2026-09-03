@@ -33,26 +33,32 @@ const clampToViewport = (position: PanelPosition, size: PanelPosition): PanelPos
  * Returns a ref for the panel, the handle props to spread onto whatever should
  * start a drag, and the position to apply.
  */
-export const useDraggablePanel = (storageKey: string) => {
+export const useDraggablePanel = (
+  storageKey: string,
+  /**
+   * Where the panel sits until the user moves it, given its measured size.
+   * Defaults to the bottom right.
+   */
+  defaultPosition: (size: PanelPosition) => PanelPosition = (size) => ({
+    x: Math.max(MARGIN, window.innerWidth - size.x - MARGIN),
+    y: Math.max(MARGIN, window.innerHeight - size.y - MARGIN),
+  })
+) => {
   const panelRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState<PanelPosition | null>(() => readStored(storageKey))
   const [dragging, setDragging] = useState(false)
   // Where in the panel the pointer grabbed it, so it doesn't jump on grab.
   const grabOffset = useRef<PanelPosition>({ x: 0, y: 0 })
 
-  // Place the panel at the bottom right on first render, once its size is
-  // known. Measuring beats hardcoding: the panel's width changes as its
-  // contents collapse.
+  // Place the panel on first render, once its size is known — measuring beats
+  // hardcoding, because the panel's width changes as its contents collapse.
   useEffect(() => {
     if (position !== null) return
     const element = panelRef.current
     if (!element) return
     const { width, height } = element.getBoundingClientRect()
-    setPosition({
-      x: Math.max(MARGIN, window.innerWidth - width - MARGIN),
-      y: Math.max(MARGIN, window.innerHeight - height - MARGIN),
-    })
-  }, [position])
+    setPosition(clampToViewport(defaultPosition({ x: width, y: height }), { x: width, y: height }))
+  }, [position, defaultPosition])
 
   // A panel parked near an edge would otherwise end up off screen when the
   // window shrinks — or when the panel itself grows, which it does when its
@@ -78,31 +84,6 @@ export const useDraggablePanel = (storageKey: string) => {
     }
   }, [])
 
-  useEffect(() => {
-    if (!dragging) return
-
-    const onPointerMove = (event: PointerEvent) => {
-      const element = panelRef.current
-      const size = element ? { x: element.offsetWidth, y: element.offsetHeight } : { x: 0, y: 0 }
-      setPosition(
-        clampToViewport(
-          { x: event.clientX - grabOffset.current.x, y: event.clientY - grabOffset.current.y },
-          size
-        )
-      )
-    }
-    const onPointerUp = () => setDragging(false)
-
-    window.addEventListener('pointermove', onPointerMove)
-    window.addEventListener('pointerup', onPointerUp)
-    window.addEventListener('pointercancel', onPointerUp)
-    return () => {
-      window.removeEventListener('pointermove', onPointerMove)
-      window.removeEventListener('pointerup', onPointerUp)
-      window.removeEventListener('pointercancel', onPointerUp)
-    }
-  }, [dragging])
-
   // Persist only once the drag ends, to avoid a write per pointer move.
   useEffect(() => {
     if (dragging || !position) return
@@ -113,22 +94,66 @@ export const useDraggablePanel = (storageKey: string) => {
     }
   }, [dragging, position, storageKey])
 
-  const onPointerDown = useCallback((event: React.PointerEvent) => {
+  const onPointerDown = useCallback((event: React.PointerEvent<HTMLElement>) => {
     // Let clicks on the panel's own buttons through untouched.
     if ((event.target as HTMLElement).closest('button, a, input, select')) return
     const element = panelRef.current
     if (!element) return
+
     const rect = element.getBoundingClientRect()
     grabOffset.current = { x: event.clientX - rect.left, y: event.clientY - rect.top }
+
+    // Capture the pointer on the handle. Without this the drag is dropped the
+    // moment the cursor crosses the iD editor's iframe, which swallows pointer
+    // events before they reach this document — which is exactly what happens
+    // when you move quickly.
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId)
+    } catch {
+      // Capture is best-effort; the move handlers below still work without it
+      // as long as the pointer stays over this document.
+    }
+
     setDragging(true)
     event.preventDefault()
+  }, [])
+
+  const onPointerMove = useCallback(
+    (event: React.PointerEvent<HTMLElement>) => {
+      if (!dragging) return
+      const element = panelRef.current
+      const size = element ? { x: element.offsetWidth, y: element.offsetHeight } : { x: 0, y: 0 }
+      setPosition(
+        clampToViewport(
+          { x: event.clientX - grabOffset.current.x, y: event.clientY - grabOffset.current.y },
+          size
+        )
+      )
+    },
+    [dragging]
+  )
+
+  const endDrag = useCallback((event: React.PointerEvent<HTMLElement>) => {
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    } catch {
+      // Already released, or never captured.
+    }
+    setDragging(false)
   }, [])
 
   return {
     panelRef,
     dragging,
     /** Spread onto the drag handle. */
-    handleProps: { onPointerDown },
+    handleProps: {
+      onPointerDown,
+      onPointerMove,
+      onPointerUp: endDrag,
+      onPointerCancel: endDrag,
+      // Stops the browser taking the gesture for panning/scrolling mid-drag.
+      style: { touchAction: 'none' as const },
+    },
     /** Spread onto the panel. Hidden until measured, to avoid a visible jump. */
     style: position
       ? { left: position.x, top: position.y }
