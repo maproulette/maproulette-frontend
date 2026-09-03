@@ -1152,6 +1152,7 @@
   "taskEditPage.idEditor.closeEditor": "Close editor",
   "taskEditPage.idEditor.closeEditorTitle": "Close editor and return to task map",
   "taskEditPage.idEditor.collapsePanel": "Collapse panel",
+  "taskEditPage.idEditor.dragPanel": "Drag to move these controls",
   "taskEditPage.idEditor.expandPanel": "Expand panel",
   "taskEditPage.idEditor.focus": "Focus",
   "taskEditPage.idEditor.focusTitle": "Dim other features to focus on tasks",

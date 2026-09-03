@@ -5,12 +5,14 @@ import {
   Crosshair,
   Eye,
   EyeOff,
+  GripVertical,
   Map as MapIcon,
   MousePointerClick,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
+import { useDraggablePanel } from '@/hooks/useDraggablePanel'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { type TagFix, tagFixes } from '@/lib/cooperativeWork'
@@ -75,6 +77,12 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const [focusMode, setFocusMode] = useState(false)
   const [pendingEditsOpen, setPendingEditsOpen] = useState(false)
   const [currentEdits, setCurrentEdits] = useState<EntityEdit[]>([])
+  const {
+    panelRef,
+    dragging,
+    handleProps,
+    style: panelStyle,
+  } = useDraggablePanel('mr4:idEditor:controlsPosition')
 
   const hasUnsavedChanges = idUnsavedCount > 0
 
@@ -412,13 +420,30 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
 
   return (
     <div className="relative size-full bg-white dark:bg-slate-950">
-      {/* MapRoulette toolbar — attached to bottom of iD nav */}
-      <div className="absolute top-[70px] right-0 z-10 flex items-start">
-        {/* Toggle + logo tab (always visible) */}
+      {/* MapRoulette's own controls, floating over iD. Dragging the panel by its
+          handle moves it anywhere the mapper wants; it starts bottom right so
+          it is clear of iD's own toolbars. */}
+      <div
+        ref={panelRef}
+        style={panelStyle}
+        className={`fixed z-20 flex items-stretch overflow-hidden rounded-lg shadow-lg ${
+          dragging ? 'cursor-grabbing select-none' : ''
+        }`}
+      >
+        {/* Drag handle, which doubles as the collapse toggle */}
+        <div
+          {...handleProps}
+          className={`flex items-center bg-slate-900/95 pl-1.5 ${
+            dragging ? 'cursor-grabbing' : 'cursor-grab'
+          }`}
+          title={t('taskEditPage.idEditor.dragPanel', undefined, 'Drag to move these controls')}
+        >
+          <GripVertical className="h-4 w-4 text-slate-500" aria-hidden="true" />
+        </div>
         <button
           type="button"
           onClick={() => setDrawerOpen(!drawerOpen)}
-          className="flex h-10 items-center gap-1.5 rounded-bl-lg bg-slate-900/95 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
+          className="flex h-10 items-center gap-1.5 bg-slate-900/95 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
           title={
             drawerOpen
               ? t('taskEditPage.idEditor.collapsePanel', undefined, 'Collapse panel')
