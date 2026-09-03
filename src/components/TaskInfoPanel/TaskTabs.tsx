@@ -7,8 +7,7 @@ import { ScrollArea } from '@/components/ui/ScrollArea'
 import { TabsContent } from '@/components/ui/Tabs'
 import type { Task } from '@/types/Task'
 import { CommentsHistoryTab } from './CommentsHistoryTab'
-import { OSMHistoryTab } from './OSMHistoryTab/OSMHistoryTab'
-import { PropertiesTab } from './PropertiesTab/PropertiesTab'
+import { DataTab } from './DataTab/DataTab'
 import { TaskTabsList } from './TaskTabsList'
 
 interface TaskTabsProps {
@@ -19,7 +18,7 @@ interface TaskTabsProps {
   contentClassName?: string
 }
 
-const VALID_TABS = ['task', 'properties', 'comments', 'osm'] as const
+const VALID_TABS = ['task', 'data', 'comments'] as const
 
 export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsProps) => {
   const search = useRouterState({ select: (s) => s.location.search }) as { tab?: string }
@@ -36,25 +35,21 @@ export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsPro
 
   const commentsQueryResult = api.task.getTaskComments(task.id)
   const commentsCount = commentsQueryResult.data?.length ?? 0
-  const osmHistoryCount = task.changesetId && task.changesetId > 0 ? 1 : 0
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex min-h-0 flex-1 flex-col">
-      <TaskTabsList commentsCount={commentsCount} osmHistoryCount={osmHistoryCount} />
+      <TaskTabsList commentsCount={commentsCount} />
 
       <ScrollArea className="min-h-0 flex-1">
         <div className={contentClassName ?? 'p-4'}>
           <TabsContent value="task" className="mt-0">
             {taskTabContent}
           </TabsContent>
-          <TabsContent value="properties" className="mt-0">
-            <PropertiesTab />
+          <TabsContent value="data" className="mt-0">
+            <DataTab />
           </TabsContent>
           <TabsContent value="comments" className="mt-0">
             <CommentsHistoryTab />
-          </TabsContent>
-          <TabsContent value="osm" className="mt-0">
-            <OSMHistoryTab />
           </TabsContent>
         </div>
       </ScrollArea>

@@ -6,7 +6,7 @@ import { Task } from '@/components/Pages/TaskEditPage'
 import { logger } from '@/lib/logger'
 
 const taskSearchSchema = z.object({
-  tab: z.enum(['task', 'properties', 'comments', 'osm']).optional(),
+  tab: z.enum(['task', 'data', 'comments']).optional(),
   claimTask: z.coerce.boolean().optional(),
 })
 

@@ -41,7 +41,7 @@ const VALUE_CHAR_WIDTH = 7.2
 // Row padding (px-2 each side) + gap between key and value (gap-2).
 const ROW_HORIZONTAL_OVERHEAD = 24
 
-export const PropertiesTab = () => {
+export const PropertiesSection = () => {
   const { t } = useIntl()
   const { task } = useTaskContext()
   const properties = parseFirstFeatureProperties(task)

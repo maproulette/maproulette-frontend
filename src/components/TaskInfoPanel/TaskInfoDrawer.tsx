@@ -77,8 +77,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
           ? `${osmServer}/way/${task.name}`
           : null
 
-  // Provide a TaskContext so tab descendants (PropertiesTab, CommentsHistoryTab,
-  // OSMHistoryTab, TaskTab) work outside the task-edit route. Lock-related
+  // Provide a TaskContext so tab descendants (DataTab, CommentsHistoryTab,
+  // TaskTab) work outside the task-edit route. Lock-related
   // methods are no-ops here — the drawer is read-only on browse/explore/
   // prioritization pages.
   const taskContextValue = useMemo(
