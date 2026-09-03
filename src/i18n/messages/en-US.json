@@ -1333,6 +1333,8 @@
   "taskInfoPanel.taskTab.bundleState.removeFromBundle": "Remove from Bundle",
   "taskInfoPanel.taskTab.instructions.noChallengeDescription": "No challenge description available.",
   "taskInfoPanel.taskTab.instructions.noTaskInstructions": "No task instructions available.",
+  "taskInfoPanel.yourEdits.description": "Everything currently pending in the editor. Save from the editor to send it to OpenStreetMap.",
+  "taskInfoPanel.yourEdits.title": "Your unsaved edits",
   "taskMap.clearBundleDialog.confirm": "Clear Bundle",
   "taskMap.clearBundleDialog.description": "This will unbundle all {taskCount} tasks. The tasks themselves will not be deleted, only separated. This action cannot be undone.",
   "taskMap.clearBundleDialog.title": "Clear Task Bundle?",

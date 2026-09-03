@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { isTagFixTask } from '@/lib/cooperativeWork'
+import type { EntityEdit } from '@/lib/idChanges'
 import { useTaskContext } from './TaskContext'
 
 type ActiveView = 'map' | 'id'
@@ -30,6 +31,9 @@ interface EditorContextType {
    */
   unappliedTagFixCount: number
   setUnappliedTagFixCount: (count: number) => void
+  /** Edits currently pending in the editor, refreshed on every history change. */
+  pendingEdits: EntityEdit[]
+  setPendingEdits: (edits: EntityEdit[]) => void
   /** Populated by IdEditorView; re-applies the challenge's proposed tags. */
   reapplyTagFixesRef: React.RefObject<(() => void) | null>
 }
@@ -41,6 +45,7 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const [idEditorMounted, setIdEditorMounted] = useState(false)
   const [idUnsavedCount, setIdUnsavedCount] = useState(0)
   const [unappliedTagFixCount, setUnappliedTagFixCount] = useState(0)
+  const [pendingEdits, setPendingEdits] = useState<EntityEdit[]>([])
   const reapplyTagFixesRef = useRef<(() => void) | null>(null)
   const idViewportRef = useRef<EditorViewport | null>(null)
   const highlightIdEntityRef = useRef<((osmEntityId: string | null) => void) | null>(null)
@@ -86,9 +91,19 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       setIdUnsavedCount,
       unappliedTagFixCount,
       setUnappliedTagFixCount,
+      pendingEdits,
+      setPendingEdits,
       reapplyTagFixesRef,
     }),
-    [activeView, idEditorMounted, idUnsavedCount, openIdEditor, showMap, unappliedTagFixCount]
+    [
+      activeView,
+      idEditorMounted,
+      idUnsavedCount,
+      openIdEditor,
+      showMap,
+      unappliedTagFixCount,
+      pendingEdits,
+    ]
   )
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>

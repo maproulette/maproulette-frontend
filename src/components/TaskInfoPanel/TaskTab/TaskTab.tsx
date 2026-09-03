@@ -8,6 +8,7 @@ import { BundleStateIndicator } from './BundleStateIndicator'
 import { BundleTaskList } from './BundleTaskList'
 import { InstructionPanel } from './InstructionPanel'
 import { TagFixPanel } from './TagFixPanel'
+import { YourEditsPanel } from './YourEditsPanel'
 
 interface TaskTabProps {
   task: Task
@@ -59,6 +60,8 @@ export const TaskTab = ({ task }: TaskTabProps) => {
       />
 
       <TagFixPanel task={task} />
+
+      <YourEditsPanel />
 
       <InstructionPanel
         taskInstruction={

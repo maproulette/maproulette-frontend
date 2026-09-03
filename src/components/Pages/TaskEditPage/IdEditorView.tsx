@@ -17,7 +17,7 @@ import { useDraggablePanel } from '@/hooks/useDraggablePanel'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { type TagFix, tagFixes } from '@/lib/cooperativeWork'
-import { type EntityEdit, pendingEdits } from '@/lib/idChanges'
+import { pendingEdits } from '@/lib/idChanges'
 import { logger } from '@/lib/logger'
 import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
@@ -71,6 +71,8 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     taskToOsmIdRef,
     selectIdEntitiesRef,
     setUnappliedTagFixCount,
+    setPendingEdits,
+    pendingEdits: currentEdits,
     reapplyTagFixesRef,
   } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
@@ -82,7 +84,6 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
 
   const [focusMode, setFocusMode] = useState(false)
   const [pendingEditsOpen, setPendingEditsOpen] = useState(false)
-  const [currentEdits, setCurrentEdits] = useState<EntityEdit[]>([])
   const {
     panelRef,
     dragging,
@@ -188,7 +189,9 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }
 
   const handleShowPendingEdits = () => {
-    setCurrentEdits(pendingEdits(idContextRef.current?.history?.()))
+    // Re-read on open as well as on history events, so the modal cannot show a
+    // stale list if an event was ever missed.
+    setPendingEdits(pendingEdits(idContextRef.current?.history?.()))
     setPendingEditsOpen(true)
   }
 
@@ -293,6 +296,9 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           const changes = context.history().changes()
           const count = changes.modified.length + changes.created.length + changes.deleted.length
           setIdUnsavedCount(count)
+          // Published so the task panel can show the mapper's actual edits as
+          // they work, rather than only in the modal.
+          setPendingEdits(pendingEdits(context.history()))
           // An undo or a hand edit can put the element out of step with what
           // the challenge proposed, which is what offers the re-apply control.
           setUnappliedTagFixCount(unappliedTagFixes(context, tagFixesRef.current).length)
