@@ -428,7 +428,12 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         `.mr-focus-mode .layer-osm .${id} * {`,
         '  display: revert !important; opacity: 1 !important;',
         '}',
+        // iD names a line's hit targets after its segments — `w123-0`, `w123-1`
+        // — rather than after the way, so the touch layer needs a prefix match
+        // as well as the plain id used for points and vertices. The trailing
+        // hyphen keeps `w123-` from matching way `w1234`.
         `.mr-focus-mode .layer-touch .${id},`,
+        `.mr-focus-mode .layer-touch [class*="${id}-"],`,
         `.mr-focus-mode .layer-touch .${id} * {`,
         '  pointer-events: auto !important;',
         '}',
