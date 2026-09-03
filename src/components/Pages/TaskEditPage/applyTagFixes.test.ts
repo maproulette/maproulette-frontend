@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { TagFix } from '@/lib/cooperativeWork'
 import type { IdContext, IdEntity, IdGlobal } from '@/types/iDEditor'
-import { applyTagFixesInId } from './applyTagFixes.ts'
+import { applyTagFixesInId, unappliedTagFixes } from './applyTagFixes.ts'
 
 const fix = (props: Partial<TagFix> = {}): TagFix => ({
   elementId: 'way/1',
@@ -89,5 +89,42 @@ describe('applyTagFixesInId', () => {
       fix({ elementId: 'way/2', entityId: 'w2' }),
     ])
     expect(result).toEqual(['w2'])
+  })
+})
+
+describe('unappliedTagFixes', () => {
+  it('is empty when the element already carries the proposed tags', () => {
+    const { context } = makeContext({ w1: { tags: { surface: 'asphalt' } } })
+    expect(unappliedTagFixes(context, [fix()])).toEqual([])
+  })
+
+  it('reports a fix the mapper has undone', () => {
+    const { context } = makeContext({ w1: { tags: { surface: 'gravel' } } })
+    expect(unappliedTagFixes(context, [fix()]).map((f) => f.entityId)).toEqual(['w1'])
+  })
+
+  it('reports a fix whose value the mapper changed to something else', () => {
+    const { context } = makeContext({ w1: { tags: { surface: 'concrete' } } })
+    expect(unappliedTagFixes(context, [fix()])).toHaveLength(1)
+  })
+
+  it('treats an unloaded element as applied, so a slow download is not mistaken for an undo', () => {
+    const { context } = makeContext({})
+    expect(unappliedTagFixes(context, [fix()])).toEqual([])
+  })
+
+  it('reports an unset tag that has come back', () => {
+    const { context } = makeContext({ w1: { tags: { fixme: 'check' } } })
+    const unset = fix({ setTags: {}, unsetTags: ['fixme'] })
+    expect(unappliedTagFixes(context, [unset])).toHaveLength(1)
+  })
+
+  it('checks each element independently', () => {
+    const { context } = makeContext({
+      w1: { tags: { surface: 'asphalt' } },
+      w2: { tags: { surface: 'gravel' } },
+    })
+    const result = unappliedTagFixes(context, [fix(), fix({ elementId: 'way/2', entityId: 'w2' })])
+    expect(result.map((f) => f.entityId)).toEqual(['w2'])
   })
 })

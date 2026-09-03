@@ -1,7 +1,9 @@
 import { useQueries } from '@tanstack/react-query'
-import { ArrowRight, Wand2 } from 'lucide-react'
+import { ArrowRight, RotateCcw, Wand2 } from 'lucide-react'
 import { api } from '@/api'
+import { useOptionalEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { DocsLink } from '@/components/shared/DocsLink'
+import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
 import { tagFixes } from '@/lib/cooperativeWork'
 import { type TagChange, tagChanges, tagsFromOsmElement } from '@/lib/tagDiff'
@@ -66,6 +68,13 @@ const TagChangeRow = ({ change }: { change: TagChange }) => {
 export const TagFixPanel = ({ task }: { task: Task }) => {
   const { t } = useIntl()
   const fixes = tagFixes(task)
+  const editor = useOptionalEditorContext()
+  const unappliedTagFixCount = editor?.unappliedTagFixCount ?? 0
+  // Only offered while the editor is actually open — there is nowhere to
+  // re-apply them to otherwise.
+  const needsReapply = !!editor?.idEditorMounted && unappliedTagFixCount > 0
+
+  const handleReapply = () => editor?.reapplyTagFixesRef.current?.()
 
   const elementQueries = useQueries({
     queries: fixes.map((fix) => ({
@@ -99,6 +108,22 @@ export const TagFixPanel = ({ task }: { task: Task }) => {
           'Applied for you in the editor. Review them there before saving — you can change or undo any of them.'
         )}
       </p>
+
+      {needsReapply && (
+        <div className="flex flex-wrap items-center gap-2 rounded border border-amber-500/40 bg-amber-500/10 px-2 py-1.5">
+          <p className="min-w-0 flex-1 text-xs text-zinc-600 dark:text-zinc-300">
+            {t(
+              'taskInfoPanel.tagFix.outOfStep',
+              { count: unappliedTagFixCount },
+              '{count, plural, one {# element no longer matches} other {# elements no longer match}} what the challenge suggests.'
+            )}
+          </p>
+          <Button size="sm" variant="outline" className="gap-1.5" onClick={handleReapply}>
+            <RotateCcw className="size-3.5" />
+            {t('taskInfoPanel.tagFix.reapply', undefined, 'Re-apply')}
+          </Button>
+        </div>
+      )}
 
       {fixes.map((fix, index) => {
         const query = elementQueries[index]

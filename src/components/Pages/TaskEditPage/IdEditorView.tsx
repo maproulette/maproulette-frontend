@@ -23,7 +23,7 @@ import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
-import { applyTagFixesInId } from './applyTagFixes'
+import { applyTagFixesInId, unappliedTagFixes } from './applyTagFixes'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -70,6 +70,8 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     highlightIdEntityRef,
     taskToOsmIdRef,
     selectIdEntitiesRef,
+    setUnappliedTagFixCount,
+    reapplyTagFixesRef,
   } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(true)
@@ -291,6 +293,9 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           const changes = context.history().changes()
           const count = changes.modified.length + changes.created.length + changes.deleted.length
           setIdUnsavedCount(count)
+          // An undo or a hand edit can put the element out of step with what
+          // the challenge proposed, which is what offers the re-apply control.
+          setUnappliedTagFixCount(unappliedTagFixes(context, tagFixesRef.current).length)
         })
       }
 
@@ -361,6 +366,20 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     }
     setTimeout(() => attempt(8), 1500)
   }, [])
+
+  // Lets the task panel re-apply the challenge's tags after the mapper has
+  // undone or altered them.
+  useEffect(() => {
+    reapplyTagFixesRef.current = () => {
+      const context = idContextRef.current
+      if (!context) return
+      applyTagFixesInId(context, getIdGlobal(iframeRef.current?.contentWindow), tagFixesRef.current)
+      setUnappliedTagFixCount(unappliedTagFixes(context, tagFixesRef.current).length)
+    }
+    return () => {
+      reapplyTagFixesRef.current = null
+    }
+  }, [reapplyTagFixesRef, setUnappliedTagFixCount])
 
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {

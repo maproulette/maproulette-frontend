@@ -1,5 +1,6 @@
 import { applyTagFix, type TagFix } from '@/lib/cooperativeWork'
 import { logger } from '@/lib/logger'
+import { tagChanges } from '@/lib/tagDiff'
 import type { IdContext, IdGlobal } from '@/types/iDEditor'
 
 /**
@@ -39,3 +40,20 @@ export const applyTagFixesInId = (
   }
   return applied
 }
+
+/**
+ * Which of a task's tag fixes are not currently reflected in the editor.
+ *
+ * Elements iD has not loaded are treated as applied, so a slow download does
+ * not momentarily look like the mapper undid something.
+ */
+export const unappliedTagFixes = (context: IdContext, fixes: TagFix[]): TagFix[] =>
+  fixes.filter((fix) => {
+    try {
+      const entity = context.hasEntity(fix.entityId)
+      if (!entity) return false
+      return tagChanges(entity.tags ?? {}, fix).length > 0
+    } catch {
+      return false
+    }
+  })

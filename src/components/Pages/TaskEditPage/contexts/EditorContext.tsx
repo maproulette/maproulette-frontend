@@ -24,6 +24,14 @@ interface EditorContextType {
   openIdEditor: () => void
   showMap: () => void
   setIdUnsavedCount: (count: number) => void
+  /**
+   * Tag fixes the editor has loaded but whose tags are not currently applied —
+   * the mapper undid or changed them. Empty when there is nothing to re-apply.
+   */
+  unappliedTagFixCount: number
+  setUnappliedTagFixCount: (count: number) => void
+  /** Populated by IdEditorView; re-applies the challenge's proposed tags. */
+  reapplyTagFixesRef: React.RefObject<(() => void) | null>
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -32,6 +40,8 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeView, setActiveView] = useState<ActiveView>('map')
   const [idEditorMounted, setIdEditorMounted] = useState(false)
   const [idUnsavedCount, setIdUnsavedCount] = useState(0)
+  const [unappliedTagFixCount, setUnappliedTagFixCount] = useState(0)
+  const reapplyTagFixesRef = useRef<(() => void) | null>(null)
   const idViewportRef = useRef<EditorViewport | null>(null)
   const highlightIdEntityRef = useRef<((osmEntityId: string | null) => void) | null>(null)
   const taskToOsmIdRef = useRef<Record<number, string> | null>({})
@@ -74,12 +84,21 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       openIdEditor,
       showMap,
       setIdUnsavedCount,
+      unappliedTagFixCount,
+      setUnappliedTagFixCount,
+      reapplyTagFixesRef,
     }),
-    [activeView, idEditorMounted, idUnsavedCount, openIdEditor, showMap]
+    [activeView, idEditorMounted, idUnsavedCount, openIdEditor, showMap, unappliedTagFixCount]
   )
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>
 }
+
+/**
+ * The editor's state where there is one, or null. The task info panel also
+ * renders outside the task page, where no editor exists.
+ */
+export const useOptionalEditorContext = () => useContext(EditorContext)
 
 export const useEditorContext = () => {
   const context = useContext(EditorContext)

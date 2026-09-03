@@ -1320,6 +1320,8 @@
   "taskInfoPanel.tagFix.changed": "change",
   "taskInfoPanel.tagFix.description": "Applied for you in the editor. Review them there before saving — you can change or undo any of them.",
   "taskInfoPanel.tagFix.docsLink": "About tag fix challenges",
+  "taskInfoPanel.tagFix.outOfStep": "{count, plural, one {# element no longer matches} other {# elements no longer match}} what the challenge suggests.",
+  "taskInfoPanel.tagFix.reapply": "Re-apply",
   "taskInfoPanel.tagFix.removed": "remove",
   "taskInfoPanel.tagFix.title": "Suggested tag changes",
   "taskInfoPanel.taskTab.bundleList.selectAll": "Select All",
