@@ -245,12 +245,30 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
             .mr-focus-mode .layer-osm image {
               display: none !important;
             }
+
+            /* iD hit-tests against its own touch/target layers, which are
+               separate from the drawn geometry above. Hiding the drawing alone
+               left invisible elements still clickable, so those layers are
+               taken out of hit-testing too. */
+            .mr-focus-mode .layer-touch,
+            .mr-focus-mode .layer-touch *,
+            .mr-focus-mode .layer-osm .shadow,
+            .mr-focus-mode .layer-osm .target {
+              pointer-events: none !important;
+            }
             .mr-focus-mode .layer-osm .mr-task,
             .mr-focus-mode .layer-osm .mr-task *,
             .mr-focus-mode .layer-osm .highlighted,
             .mr-focus-mode .layer-osm .highlighted *,
             .mr-focus-mode .layer-osm .selected,
             .mr-focus-mode .layer-osm .selected *,
+            /* The task's own elements stay both visible and clickable. */
+            .mr-focus-mode .layer-touch .mr-task,
+            .mr-focus-mode .layer-touch .mr-task *,
+            .mr-focus-mode .layer-touch .selected,
+            .mr-focus-mode .layer-touch .selected * {
+              pointer-events: auto !important;
+            }
             .mr-focus-mode .layer-osm .mr-active,
             .mr-focus-mode .layer-osm .mr-active * {
               /* These selectors carry more classes than the hide rule above,

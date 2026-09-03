@@ -1,11 +1,14 @@
-import { PencilLine, RotateCcw } from 'lucide-react'
+import { useQueries } from '@tanstack/react-query'
+import { PencilLine, RotateCcw, Wand2 } from 'lucide-react'
+import { api } from '@/api'
 import { useOptionalEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityEditList } from '@/components/shared/EntityEditList'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
-import { isTagFixTask } from '@/lib/cooperativeWork'
+import { tagFixes } from '@/lib/cooperativeWork'
 import type { Task } from '@/types/Task'
+import { SuggestedChangesList } from './SuggestedChangesList'
 
 /**
  * What the mapper currently has pending in the editor.
@@ -19,21 +22,41 @@ import type { Task } from '@/types/Task'
 export const EditorChangesPanel = ({ task }: { task: Task }) => {
   const { t } = useIntl()
   const editor = useOptionalEditorContext()
-  const isTagFix = isTagFixTask(task)
+  const fixes = tagFixes(task)
+  const isTagFix = fixes.length > 0
 
-  if (!editor?.idEditorMounted) return null
+  // Current tags for the elements a tag fix names, so the suggestion can be
+  // shown as a real before/after before the editor is even open.
+  const elementQueries = useQueries({
+    queries: fixes.map((fix) => ({
+      queryKey: ['osm', 'element', fix.elementId],
+      queryFn: () => api.osm.fetchOSMElement(fix.elementId),
+      staleTime: 5 * 60 * 1000,
+      retry: false,
+    })),
+  })
 
-  const { pendingEdits, divergedTagFixCount, resetTagFixesRef } = editor
-  const hasDiverged = divergedTagFixCount > 0
+  const pendingEdits = editor?.pendingEdits ?? []
+  const editorOpen = !!editor?.idEditorMounted
+  const hasDiverged = (editor?.divergedTagFixCount ?? 0) > 0
+  // Before the editor has anything pending there is nothing of the mapper's to
+  // show, so a tag-fix task falls back to what the challenge is asking for.
+  const showingSuggestion = pendingEdits.length === 0
 
-  if (pendingEdits.length === 0) return null
+  if (showingSuggestion && !isTagFix) return null
 
   return (
     <section className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
       <div className="flex items-center gap-2">
-        <PencilLine className="size-4 text-amber-500" aria-hidden="true" />
+        {showingSuggestion ? (
+          <Wand2 className="size-4 text-amber-500" aria-hidden="true" />
+        ) : (
+          <PencilLine className="size-4 text-amber-500" aria-hidden="true" />
+        )}
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('taskInfoPanel.editorChanges.title', undefined, 'Your unsaved edits')}
+          {showingSuggestion
+            ? t('taskInfoPanel.editorChanges.suggestionTitle', undefined, 'Suggested tag changes')
+            : t('taskInfoPanel.editorChanges.title', undefined, 'Your unsaved edits')}
         </h3>
         {isTagFix && (
           <DocsLink
@@ -45,23 +68,29 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
       </div>
 
       <p className="text-xs text-zinc-500 dark:text-zinc-400">
-        {isTagFix
+        {showingSuggestion
           ? t(
-              'taskInfoPanel.editorChanges.tagFixDescription',
+              'taskInfoPanel.editorChanges.suggestionDescription',
               undefined,
-              "The challenge's suggested tags were applied for you and are included below. Save from the editor to send everything to OpenStreetMap."
+              'What this challenge suggests changing. Opening the editor applies it for you to review.'
             )
-          : t(
-              'taskInfoPanel.editorChanges.description',
-              undefined,
-              'Everything currently pending in the editor. Save from the editor to send it to OpenStreetMap.'
-            )}
+          : isTagFix
+            ? t(
+                'taskInfoPanel.editorChanges.tagFixDescription',
+                undefined,
+                "The challenge's suggested tags were applied for you and are included below. Save from the editor to send everything to OpenStreetMap."
+              )
+            : t(
+                'taskInfoPanel.editorChanges.description',
+                undefined,
+                'Everything currently pending in the editor. Save from the editor to send it to OpenStreetMap.'
+              )}
       </p>
 
-      {/* Always offered on a tag-fix task, not only once something has
-          diverged — a control that appears only when you have already made a
-          mess is a control nobody finds. */}
-      {isTagFix && (
+      {/* Always offered on a tag-fix task once the editor is open, not only
+          when something has diverged — a control that appears only after you
+          have made a mess is a control nobody finds. */}
+      {isTagFix && editorOpen && !showingSuggestion && (
         <div
           className={`flex flex-wrap items-center gap-2 rounded border px-2 py-1.5 ${
             hasDiverged
@@ -73,7 +102,7 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
             {hasDiverged
               ? t(
                   'taskInfoPanel.editorChanges.diverged',
-                  { count: divergedTagFixCount },
+                  { count: editor?.divergedTagFixCount ?? 0 },
                   '{count, plural, one {# element no longer matches} other {# elements no longer match}} what the challenge suggests.'
                 )
               : t(
@@ -87,7 +116,7 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
             variant="outline"
             className="gap-1.5"
             disabled={!hasDiverged}
-            onClick={() => resetTagFixesRef.current?.()}
+            onClick={() => editor?.resetTagFixesRef.current?.()}
             title={
               hasDiverged
                 ? t(
@@ -108,7 +137,11 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
         </div>
       )}
 
-      <EntityEditList edits={pendingEdits} />
+      {showingSuggestion ? (
+        <SuggestedChangesList fixes={fixes} elementTags={elementQueries.map((q) => q.data)} />
+      ) : (
+        <EntityEditList edits={pendingEdits} />
+      )}
     </section>
   )
 }
