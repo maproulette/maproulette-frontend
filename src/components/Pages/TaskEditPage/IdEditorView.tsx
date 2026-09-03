@@ -405,6 +405,39 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     }
   }, [resetTagFixesRef, setDivergedTagFixCount])
 
+  // iD re-renders the map surface constantly, and any class we add to an
+  // element is lost when it does. It always renders an entity with its own id
+  // as a class, though, so focus mode exempts the task's elements by id rather
+  // than by a marker class that may have been thrown away — otherwise the task
+  // itself gets hidden along with everything else.
+  useEffect(() => {
+    const iframeDoc = iframeRef.current?.contentDocument
+    if (!iframeDoc) return
+
+    const STYLE_ID = 'mr-focus-exemptions'
+    let style = iframeDoc.getElementById(STYLE_ID) as HTMLStyleElement | null
+    if (!style) {
+      style = iframeDoc.createElement('style')
+      style.id = STYLE_ID
+      iframeDoc.head.appendChild(style)
+    }
+
+    style.textContent = osmEntityIds
+      .flatMap((id) => [
+        `.mr-focus-mode .layer-osm .${id},`,
+        `.mr-focus-mode .layer-osm .${id} * {`,
+        '  display: revert !important; opacity: 1 !important;',
+        '}',
+        `.mr-focus-mode .layer-touch .${id},`,
+        `.mr-focus-mode .layer-touch .${id} * {`,
+        '  pointer-events: auto !important;',
+        '}',
+      ])
+      .join('\n')
+    // `isLoading` flips false once the iframe has loaded, which is the first
+    // point its document exists to write into.
+  }, [osmEntityIds, isLoading])
+
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {
     if (task.id === initialTaskIdRef.current) return
