@@ -17,6 +17,7 @@ import {
   invalidateChallengeAggregates,
   patchChallengeInCaches,
   patchChallengeTaskMarker,
+  seedChallengeCache,
 } from './single'
 
 afterEach(() => {
@@ -945,6 +946,37 @@ describe('challengeSingle.useArchiveChallenge', () => {
   })
 })
 
+describe('seedChallengeCache', () => {
+  it('seeds one cache entry per challenge, collapsing an expanded parent to its id', () => {
+    const queryClient = createTestQueryClient()
+
+    seedChallengeCache(queryClient, [
+      { id: 7, name: 'seven', parent: { id: 1, displayName: 'Project' } },
+      { id: 8, name: 'eight', parent: 2 },
+    ])
+
+    expect(queryClient.getQueryData(['challenge', 7])).toEqual({
+      id: 7,
+      name: 'seven',
+      parent: 1,
+    })
+    expect(queryClient.getQueryData(['challenge', 8])).toEqual({
+      id: 8,
+      name: 'eight',
+      parent: 2,
+    })
+  })
+
+  it('skips entries with no id to key the cache on', () => {
+    const queryClient = createTestQueryClient()
+    const setQueryData = vi.spyOn(queryClient, 'setQueryData')
+
+    seedChallengeCache(queryClient, [{ name: 'nameless' }, { id: 0 }])
+
+    expect(setQueryData).not.toHaveBeenCalled()
+  })
+})
+
 describe('patchChallengeInCaches', () => {
   it('does nothing when challengeId is falsy', () => {
     const queryClient = createTestQueryClient()
@@ -953,6 +985,60 @@ describe('patchChallengeInCaches', () => {
     patchChallengeInCaches(queryClient, 0, { paused: true })
 
     expect(spy).not.toHaveBeenCalled()
+  })
+
+  it('returns a rollback that is safe to call when there was nothing to patch', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 7], { id: 7, paused: false })
+
+    const rollback = patchChallengeInCaches(queryClient, 0, { paused: true })
+    rollback()
+
+    expect(queryClient.getQueryData(['challenge', 7])).toEqual({ id: 7, paused: false })
+  })
+
+  it('leaves caches belonging to other parts of the app alone', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['user', 'whoami'], { id: 7, name: 'me' })
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(queryClient.getQueryData(['user', 'whoami'])).toEqual({ id: 7, name: 'me' })
+  })
+
+  it('steps over cached payloads with nothing to patch', () => {
+    const queryClient = createTestQueryClient()
+    const listing = [null, 'not a challenge', { id: 8, paused: false }]
+    const otherChallenge = { id: 8, paused: false }
+    const otherPages = { pages: [[{ id: 8, paused: false }]], pageParams: [0] }
+    queryClient.setQueryData(['challenge', 'listing', [1], { limit: 100 }], listing)
+    queryClient.setQueryData(['challenge', 'search', 'sidewalks'], otherChallenge)
+    queryClient.setQueryData(['challenge', 'exploreInfinite', {}, null], otherPages)
+    queryClient.setQueryData(['challenge', 'explore', {}], 'unexpected payload')
+    const setQueryData = vi.spyOn(queryClient, 'setQueryData')
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(setQueryData).not.toHaveBeenCalled()
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toBe(listing)
+    expect(queryClient.getQueryData(['challenge', 'search', 'sidewalks'])).toBe(otherChallenge)
+    expect(queryClient.getQueryData(['challenge', 'exploreInfinite', {}, null])).toBe(otherPages)
+  })
+
+  it('patches around unusable entries in a cached list', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [null, 'junk', { id: 7, paused: false }]
+    )
+
+    patchChallengeInCaches(queryClient, 7, { paused: true })
+
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+      null,
+      'junk',
+      { id: 7, paused: true },
+    ])
   })
 
   it('patches the challenge in single, listing, infinite and project caches', () => {
@@ -1079,6 +1165,41 @@ describe('optimistic challenge toggles', () => {
 
     expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
       { id: 121, isArchived: false },
+    ])
+  })
+
+  it('useUpdateChallenge rolls the cache back when the request fails', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 123], { id: 123, enabled: true })
+
+    const { result } = renderHook(() => challengeSingle.useUpdateChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 123, updates: { enabled: false } })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(queryClient.getQueryData(['challenge', 123])).toEqual({ id: 123, enabled: true })
+  })
+
+  it('usePauseChallenge rolls the cache back when the request fails', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['challenge', 'listing', [1], { limit: 100 }],
+      [{ id: 124, paused: false }]
+    )
+
+    const { result } = renderHook(() => challengeSingle.usePauseChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 124, paused: true })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(queryClient.getQueryData(['challenge', 'listing', [1], { limit: 100 }])).toEqual([
+      { id: 124, paused: false },
     ])
   })
 

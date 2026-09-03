@@ -502,7 +502,12 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     result.current.mutate({
       taskId: 1,
       status: 2,
-      options: { tags: ['a', 'b'], queryParams: { pluginFlag: true }, comment: 'looks good' },
+      options: {
+        tags: ['a', 'b'],
+        // A plugin passing an absent value must not turn into `?omitted=null`.
+        queryParams: { pluginFlag: true, omitted: null, alsoOmitted: undefined },
+        comment: 'looks good',
+      },
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
@@ -513,6 +518,13 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 1] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'comments', 1] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 10] })
+
+    const statusUrl = new URL(
+      (fetchMock.mock.calls.find(([request]) => request.method === 'PUT')?.[0] as Request).url
+    )
+    expect(statusUrl.searchParams.get('pluginFlag')).toBe('true')
+    expect(statusUrl.searchParams.has('omitted')).toBe(false)
+    expect(statusUrl.searchParams.has('alsoOmitted')).toBe(false)
   })
 
   it('logs and swallows a comment POST failure so the status update still succeeds and updates caches', async () => {
@@ -649,5 +661,40 @@ describe('taskSingle.useUpdateTaskStatus', () => {
       7,
     ])
     expect(markers?.markers[0].status).toBe(2)
+  })
+})
+
+describe('taskSingle.useRefreshLock', () => {
+  it('refreshes the lock on a task the mapper is still working on', async () => {
+    const refreshed = { id: 5, lockedBy: 9 }
+    const fetchMock = stubFetch(new Response(JSON.stringify(refreshed), { status: 200 }))
+
+    const { result } = renderHook(() => taskSingle.useRefreshLock(), {
+      wrapper: queryClientWrapper(),
+    })
+    await expect(result.current.mutateAsync(5)).resolves.toEqual(refreshed)
+
+    const [request] = fetchMock.mock.calls[0]
+    expect((request as Request).method).toBe('GET')
+    expect(new URL((request as Request).url).pathname).toBe('/api/v2/task/5/refreshLock')
+  })
+})
+
+describe('taskSingle.useUpdateCompletionResponses', () => {
+  it('saves the answers to the task’s form fields and refreshes the task', async () => {
+    const fetchMock = stubFetch(new Response('ok', { status: 200 }))
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => taskSingle.useUpdateCompletionResponses(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    await result.current.mutateAsync({ taskId: 5, responses: { surface: 'gravel' } })
+
+    const [request] = fetchMock.mock.calls[0]
+    expect((request as Request).method).toBe('PUT')
+    expect(new URL((request as Request).url).pathname).toBe('/api/v2/task/5/responses')
+    expect(await (request as Request).clone().json()).toEqual({ surface: 'gravel' })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 5] })
   })
 })

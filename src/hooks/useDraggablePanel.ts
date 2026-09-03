@@ -49,6 +49,11 @@ export const useDraggablePanel = (
   const [dragging, setDragging] = useState(false)
   // Where in the panel the pointer grabbed it, so it doesn't jump on grab.
   const grabOffset = useRef<PanelPosition>({ x: 0, y: 0 })
+  // Mirrors `position` so the resize handler below can clamp wherever the panel
+  // currently sits without reaching for it through a functional update — it has
+  // no position of its own to reason about, only a new size.
+  const positionRef = useRef<PanelPosition>({ x: MARGIN, y: MARGIN })
+  if (position) positionRef.current = position
 
   // Place the panel on first render, once its size is known — measuring beats
   // hardcoding, because the panel's width changes as its contents collapse.
@@ -70,9 +75,7 @@ export const useDraggablePanel = (
 
     const reclamp = () => {
       const { width, height } = element.getBoundingClientRect()
-      setPosition((current) =>
-        current ? clampToViewport(current, { x: width, y: height }) : current
-      )
+      setPosition(clampToViewport(positionRef.current, { x: width, y: height }))
     }
 
     const observer = new ResizeObserver(reclamp)

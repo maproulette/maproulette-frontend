@@ -116,4 +116,21 @@ describe('logger (test logs enabled)', () => {
     pluginLogger.info('loaded')
     expect(infoSpy).toHaveBeenCalledWith('[2026-01-01T00:00:00.000Z] [INFO] [Plugin] loaded')
   })
+
+  it('serializes errors nested inside arrays in the metadata', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { logger } = await loadLogger({ VITE_ENABLE_TEST_LOGS: 'true' })
+
+    const failure = new Error('nope')
+    failure.stack = 'Error: nope\n    at somewhere'
+    logger.warn('batch failed', { failures: [failure, 'plain'] })
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      `[2026-01-01T00:00:00.000Z] [WARN] batch failed ${JSON.stringify(
+        { failures: [{ name: 'Error', message: 'nope', stack: failure.stack }, 'plain'] },
+        null,
+        2
+      )}`
+    )
+  })
 })

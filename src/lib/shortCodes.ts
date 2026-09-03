@@ -127,7 +127,7 @@ const parseShortCode = (token: string): InstructionToken => {
       type: ELEMENT_TYPES[match[1].toLowerCase()],
       id: match[2],
     }))
-    if (elements.length > 0) return { kind: 'osmElements', elements }
+    return { kind: 'osmElements', elements }
   }
 
   // Not a short code we know — leave it exactly as the author wrote it, so
@@ -144,8 +144,8 @@ export const tokenizeInstructions = (content: string | null | undefined): Instru
   if (!content) return []
 
   const tokens: InstructionToken[] = []
+  // Only ever called with a non-empty run: empty split parts are skipped below.
   const pushText = (text: string) => {
-    if (!text) return
     const last = tokens[tokens.length - 1]
     if (last?.kind === 'text') last.text += text
     else tokens.push({ kind: 'text', text })

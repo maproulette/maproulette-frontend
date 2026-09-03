@@ -236,6 +236,48 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
     expect(fetchMock.mock.calls.map(([request]) => request.method)).toEqual(['POST'])
   })
 
+  it('surfaces a network failure on the boundary POST rather than retrying without it', async () => {
+    vi.resetModules()
+    const { challengeExplore: freshExplore } = await import('./explore')
+
+    const fetchMock = vi.fn(() => Promise.reject(new Error('offline')))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { result } = renderHook(
+      () =>
+        freshExplore.exploreChallengesInfinite({
+          limit: 10,
+          placeGeometryJson: '{"type":"Polygon","coordinates":[]}',
+          placeKey: 'R1:boundary',
+        }),
+      { wrapper: queryClientWrapper() }
+    )
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('surfaces a server error on the boundary POST rather than retrying without it', async () => {
+    vi.resetModules()
+    const { challengeExplore: freshExplore } = await import('./explore')
+
+    const fetchMock = vi.fn(async (_request: Request) => new Response('boom', { status: 500 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { result } = renderHook(
+      () =>
+        freshExplore.exploreChallengesInfinite({
+          limit: 10,
+          placeGeometryJson: '{"type":"Polygon","coordinates":[]}',
+          placeKey: 'R1:boundary',
+        }),
+      { wrapper: queryClientWrapper() }
+    )
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(fetchMock.mock.calls.map(([request]) => request.method)).toEqual(['POST'])
+  })
+
   it('fetches subsequent pages using the accumulated offset', async () => {
     const fetchMock = vi.fn(async (request: Request) => {
       if (request.url.includes('offset=0')) {
@@ -368,5 +410,28 @@ describe('challengeExplore.searchChallenges', () => {
     expect(client.getQueryData(['challenge', 1])).toEqual(challengeA)
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('search=road')
+  })
+})
+
+describe('challengeExplore.fetchChallengesByDifficulty', () => {
+  it('asks for the most popular global challenges at that difficulty', async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
+
+    await expect(challengeExplore.fetchChallengesByDifficulty(2)).resolves.toEqual([challengeA])
+
+    const url = new URL(fetchMock.mock.calls[0][0].url)
+    expect(url.pathname).toBe('/api/v2/challenges/exploreChallenges')
+    expect(url.searchParams.get('difficulty')).toBe('2')
+    expect(url.searchParams.get('sortBy')).toBe('popularity')
+    expect(url.searchParams.get('global')).toBe('true')
+    expect(url.searchParams.get('limit')).toBe('50')
+  })
+
+  it('honours a caller-supplied limit', async () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
+
+    await challengeExplore.fetchChallengesByDifficulty(1, 5)
+
+    expect(new URL(fetchMock.mock.calls[0][0].url).searchParams.get('limit')).toBe('5')
   })
 })

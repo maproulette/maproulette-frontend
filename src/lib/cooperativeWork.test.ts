@@ -32,6 +32,19 @@ describe('cooperativeWorkType', () => {
   it('treats v1 as a tag fix, since that is all it could express', () => {
     expect(cooperativeWorkType(tagFixTask([], { version: 1 }))).toBe(COOPERATIVE_TYPE.tags)
   })
+
+  it('is none when the metadata says nothing useful', () => {
+    expect(cooperativeWorkType(tagFixTask([], { version: 2 }))).toBe(COOPERATIVE_TYPE.none)
+    expect(cooperativeWorkType({ id: 1, cooperativeWork: {} } as unknown as Task)).toBe(
+      COOPERATIVE_TYPE.none
+    )
+  })
+
+  it('is none when cooperativeWork is not an object', () => {
+    expect(cooperativeWorkType({ id: 1, cooperativeWork: 'nope' } as unknown as Task)).toBe(
+      COOPERATIVE_TYPE.none
+    )
+  })
 })
 
 describe('toIdEntityId', () => {
@@ -98,6 +111,44 @@ describe('tagFixes', () => {
 
   it('skips an operation that changes no tags', () => {
     expect(tagFixes(tagFixTask([modify('way/1', [])]))).toEqual([])
+  })
+
+  it('is empty when the work carries no operations at all', () => {
+    expect(
+      tagFixes({ id: 1, cooperativeWork: { meta: { version: 1 } } } as unknown as Task)
+    ).toEqual([])
+  })
+
+  it('skips an operation whose element id is missing or unreadable', () => {
+    const task = tagFixTask([
+      { operationType: 'modifyElement', data: { operations: [] } },
+      modify('w123', [{ operation: 'setTags', data: { a: '1' } }]),
+    ])
+    expect(tagFixes(task)).toEqual([])
+  })
+
+  it('skips an operation with no inner operations block', () => {
+    expect(
+      tagFixes(tagFixTask([{ operationType: 'modifyElement', data: { id: 'way/1' } }]))
+    ).toEqual([])
+  })
+
+  it('ignores tag changes the format does not describe properly', () => {
+    const task = tagFixTask([
+      modify('way/1', [
+        { operation: 'setTags', data: 'not an object' },
+        { operation: 'unsetTags', data: 'fixme' },
+        { operation: 'somethingElse', data: { a: '1' } },
+      ]),
+    ])
+    expect(tagFixes(task)).toEqual([])
+  })
+
+  it('drops non-string keys from an unsetTags list', () => {
+    const task = tagFixTask([
+      modify('way/1', [{ operation: 'unsetTags', data: ['fixme', 7, null] }]),
+    ])
+    expect(tagFixes(task)[0].unsetTags).toEqual(['fixme'])
   })
 })
 

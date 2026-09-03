@@ -291,6 +291,34 @@ describe('registerFromUrl', () => {
     expect(pluginRegistry.isRemotePlugin('remote-a')).toBe(true)
   })
 
+  it('serves an already-loaded URL from the registry instead of fetching it again', async () => {
+    const { pluginRegistry, validatePluginUrl, loadPluginFromUrl } = await freshRegistry()
+    const plugin = makePlugin('remote-a')
+    validatePluginUrl.mockReturnValue(true)
+    loadPluginFromUrl.mockResolvedValue({ success: true, plugin })
+    await pluginRegistry.registerFromUrl('https://github.com/plugin.js')
+
+    const result = await pluginRegistry.registerFromUrl('https://github.com/plugin.js')
+
+    expect(result).toEqual({ success: true, plugin })
+    expect(loadPluginFromUrl).toHaveBeenCalledTimes(1)
+  })
+
+  it('reloads a URL whose plugin has since been unregistered', async () => {
+    const { pluginRegistry, validatePluginUrl, loadPluginFromUrl } = await freshRegistry()
+    const plugin = makePlugin('remote-a')
+    validatePluginUrl.mockReturnValue(true)
+    loadPluginFromUrl.mockResolvedValue({ success: true, plugin })
+    await pluginRegistry.registerFromUrl('https://github.com/plugin.js')
+    await pluginRegistry.unregister('remote-a')
+
+    const result = await pluginRegistry.registerFromUrl('https://github.com/plugin.js')
+
+    expect(result).toEqual({ success: true, plugin })
+    expect(loadPluginFromUrl).toHaveBeenCalledTimes(2)
+    expect(pluginRegistry.get('remote-a')).toBe(plugin)
+  })
+
   it('does not register anything when loading fails', async () => {
     const { pluginRegistry, validatePluginUrl, loadPluginFromUrl } = await freshRegistry()
     validatePluginUrl.mockReturnValue(true)

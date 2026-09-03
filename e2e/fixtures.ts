@@ -63,6 +63,11 @@ export interface TestTask {
   coordinates: [number, number]
 }
 
+export interface TestTeam {
+  id: number
+  name: string
+}
+
 async function createProject(request: APIRequestContext, name: string): Promise<TestProject> {
   const response = await request.post(`${BACKEND_URL}/api/v2/project`, {
     headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
@@ -150,11 +155,43 @@ async function createTask(
   return { id: body.id, name, challengeId, coordinates }
 }
 
+// Teams are their own top-level resource (not owned by a project), so unlike
+// challenges and tasks they don't get cleaned up by a cascading project
+// delete and need their own teardown below.
+async function createTeam(request: APIRequestContext, name: string): Promise<TestTeam> {
+  const response = await request.post(`${BACKEND_URL}/api/v2/team`, {
+    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    // `id` and `groupType` are required by the backend's Group writer even on
+    // a create, and the frontend sends the same two placeholders (see
+    // api.team.useCreateTeam).
+    data: { id: 0, groupType: 0, name, description: 'E2E test team' },
+  })
+  if (!response.ok()) {
+    throw new Error(`Failed to create team: ${response.status()} ${await response.text()}`)
+  }
+  const body = (await response.json()) as { id: number }
+  return { id: body.id, name }
+}
+
+async function deleteTeam(request: APIRequestContext, id: number): Promise<void> {
+  try {
+    const response = await request.delete(`${BACKEND_URL}/api/v2/team/${id}`, {
+      headers: { apiKey: SUPER_KEY },
+    })
+    if (!response.ok()) {
+      console.warn(`Team ${id} teardown returned ${response.status()}: ${await response.text()}`)
+    }
+  } catch (error) {
+    console.warn(`Team ${id} teardown threw:`, error)
+  }
+}
+
 export const test = base.extend<{
   project: TestProject
   challenge: TestChallenge
   task: TestTask
   secondTask: TestTask
+  team: TestTeam
   reviewerRequest: APIRequestContext
   reviewerPage: Page
 }>({
@@ -187,6 +224,12 @@ export const test = base.extend<{
       [-95.452772, 37.6886588]
     )
     await use(secondTask)
+  },
+
+  team: async ({ request }, use) => {
+    const team = await createTeam(request, uniqueName('e2e-team'))
+    await use(team)
+    await deleteTeam(request, team.id)
   },
 
   // Direct-API second identity (see REVIEWER_KEY above). Behaves like the

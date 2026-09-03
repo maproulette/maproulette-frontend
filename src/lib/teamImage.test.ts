@@ -1,5 +1,16 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { resolveTeamImageUrl, TEAM_IMAGE_ACCEPT, TEAM_IMAGE_MAX_BYTES } from './teamImage'
+import type { TranslateFn } from '@/i18n'
+import {
+  isUploadedTeamAvatarUrl,
+  resolveTeamImageUrl,
+  TEAM_IMAGE_ACCEPT,
+  TEAM_IMAGE_MAX_BYTES,
+  TEAM_IMAGE_MIME_TYPES,
+  teamImageFileProblem,
+} from './teamImage'
+
+const t: TranslateFn = (id, values, defaultMessage) =>
+  (defaultMessage ?? id).replace(/\{(\w+)\}/g, (_match, key: string) => String(values?.[key]))
 
 type MutableEnv = { VITE_API_BASE_URL?: string }
 const env = window.env as MutableEnv
@@ -60,5 +71,50 @@ describe('image constraints', () => {
   it('accepts only the bitmap formats the backend stores', () => {
     expect(TEAM_IMAGE_ACCEPT).toBe('image/png,image/jpeg,image/webp,image/gif')
     expect(TEAM_IMAGE_ACCEPT).not.toContain('svg')
+  })
+})
+
+describe('isUploadedTeamAvatarUrl', () => {
+  it('recognises an avatar we store for the team', () => {
+    expect(isUploadedTeamAvatarUrl('/api/v2/team/7/avatar/file', 7)).toBe(true)
+  })
+
+  it('does not claim the avatar of a different team', () => {
+    expect(isUploadedTeamAvatarUrl('/api/v2/team/8/avatar/file', 7)).toBe(false)
+  })
+
+  it('does not claim an external url the team pasted in', () => {
+    expect(isUploadedTeamAvatarUrl('https://example.org/logo.png', 7)).toBe(false)
+  })
+
+  it('is false when there is no avatar at all', () => {
+    expect(isUploadedTeamAvatarUrl(undefined, 7)).toBe(false)
+    expect(isUploadedTeamAvatarUrl(null, 7)).toBe(false)
+    expect(isUploadedTeamAvatarUrl('', 7)).toBe(false)
+  })
+})
+
+describe('teamImageFileProblem', () => {
+  it.each(TEAM_IMAGE_MIME_TYPES)('accepts a %s file within the size cap', (type) => {
+    expect(teamImageFileProblem(new File(['bytes'], 'logo', { type }), t)).toBeUndefined()
+  })
+
+  it('rejects a format the backend does not store', () => {
+    const svg = new File(['<svg />'], 'logo.svg', { type: 'image/svg+xml' })
+    expect(teamImageFileProblem(svg, t)).toBe('Image must be a PNG, JPEG, WebP or GIF file')
+  })
+
+  it('rejects a file over the 2MB cap, naming the limit', () => {
+    const huge = new File([new Uint8Array(TEAM_IMAGE_MAX_BYTES + 1)], 'logo.png', {
+      type: 'image/png',
+    })
+    expect(teamImageFileProblem(huge, t)).toBe('Image must be smaller than 2MB')
+  })
+
+  it('accepts a file sitting exactly on the cap', () => {
+    const exact = new File([new Uint8Array(TEAM_IMAGE_MAX_BYTES)], 'logo.png', {
+      type: 'image/png',
+    })
+    expect(teamImageFileProblem(exact, t)).toBeUndefined()
   })
 })

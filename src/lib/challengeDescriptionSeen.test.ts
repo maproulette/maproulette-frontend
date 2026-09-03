@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   hasSeenChallengeDescription,
   markChallengeDescriptionSeen,
@@ -9,6 +9,10 @@ import {
 beforeEach(() => {
   sessionStorage.clear()
   resetSeenChallengeDescriptions()
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
 })
 
 describe('challenge description record', () => {
@@ -45,6 +49,40 @@ describe('challenge description record', () => {
 
     expect(hasSeenChallengeDescription(7)).toBe(false)
     markChallengeDescriptionSeen(7)
+    expect(hasSeenChallengeDescription(7)).toBe(true)
+  })
+
+  it('ignores stored json that is not an array', () => {
+    sessionStorage.setItem('mr:challengeDescriptionsSeen', '{"7":true}')
+
+    expect(hasSeenChallengeDescription(7)).toBe(false)
+  })
+
+  it('ignores non-numeric ids inside the stored array', () => {
+    sessionStorage.setItem('mr:challengeDescriptionsSeen', '["7", null, 9]')
+
+    expect(hasSeenChallengeDescription(7)).toBe(false)
+    expect(hasSeenChallengeDescription(9)).toBe(true)
+  })
+
+  it('does not rewrite storage for a challenge already recorded there', () => {
+    markChallengeDescriptionSeen(7)
+    resetSeenChallengeDescriptions() // as if the page were reloaded
+    const setItem = vi.spyOn(sessionStorage, 'setItem')
+
+    markChallengeDescriptionSeen(7)
+
+    expect(setItem).not.toHaveBeenCalled()
+    expect(hasSeenChallengeDescription(7)).toBe(true)
+  })
+
+  it('still remembers in memory when storage refuses the write', () => {
+    vi.spyOn(sessionStorage, 'setItem').mockImplementation(() => {
+      throw new Error('quota exceeded')
+    })
+
+    markChallengeDescriptionSeen(7)
+
     expect(hasSeenChallengeDescription(7)).toBe(true)
   })
 })

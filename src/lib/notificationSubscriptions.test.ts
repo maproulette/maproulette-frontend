@@ -28,6 +28,15 @@ describe('withSubscriptionDefaults', () => {
     expect(filled.system).toBe(3)
   })
 
+  it('keeps a summary frequency the server already set', () => {
+    const filled = withSubscriptionDefaults({
+      reviewCount: SUBSCRIPTION_FREQUENCY.daily,
+      revisionCount: SUBSCRIPTION_FREQUENCY.weekly,
+    })
+    expect(filled.reviewCount).toBe(SUBSCRIPTION_FREQUENCY.daily)
+    expect(filled.revisionCount).toBe(SUBSCRIPTION_FREQUENCY.weekly)
+  })
+
   it('leaves ids alone', () => {
     const filled = withSubscriptionDefaults({ id: 7, userId: 42 })
     expect(filled.id).toBe(7)

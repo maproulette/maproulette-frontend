@@ -67,4 +67,11 @@ describe('tagsFromOsmElement', () => {
     expect(tagsFromOsmElement({})).toEqual({})
     expect(tagsFromOsmElement(null)).toEqual({})
   })
+
+  it('skips entries that are missing a key or a value', () => {
+    const element = {
+      tag: [{ k: 'highway', v: 'tertiary' }, { k: 'surface' }, { v: 'gravel' }, null],
+    }
+    expect(tagsFromOsmElement(element)).toEqual({ highway: 'tertiary' })
+  })
 })

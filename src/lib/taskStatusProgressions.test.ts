@@ -14,6 +14,18 @@ describe('allowedStatusProgressions', () => {
     }
   })
 
+  it('lets a deleted task be restored or disabled', () => {
+    expect(sorted(allowedStatusProgressions(TASK_STATUS.deleted))).toEqual(
+      sorted(new Set([TASK_STATUS.created, TASK_STATUS.disabled]))
+    )
+  })
+
+  it('lets a disabled task be restored or deleted', () => {
+    expect(sorted(allowedStatusProgressions(TASK_STATUS.disabled))).toEqual(
+      sorted(new Set([TASK_STATUS.created, TASK_STATUS.deleted]))
+    )
+  })
+
   it('treats completed work as final', () => {
     expect(allowedStatusProgressions(TASK_STATUS.fixed).size).toBe(0)
     expect(allowedStatusProgressions(TASK_STATUS.alreadyFixed).size).toBe(0)

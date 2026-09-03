@@ -9,6 +9,7 @@ import { project } from './project'
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 const projectA = { id: 1, name: 'Project A', enabled: true }
@@ -416,6 +417,37 @@ describe('project.useUpdateProject', () => {
     expect(client.getQueryData(['project', 1])).toEqual(projectA)
     expect(client.getQueryData(['project', 'managed', 'seed'])).toEqual([projectA, projectB])
   })
+
+  it('restores nothing when the optimistic snapshot could not be taken', async () => {
+    stubFetch(new Response(JSON.stringify(projectA), { status: 200 }))
+    const client = createTestQueryClient()
+    client.setQueryData(['project', 1], projectA)
+    vi.spyOn(client, 'getQueriesData').mockImplementation(() => {
+      throw new Error('cache unavailable')
+    })
+
+    const { result } = renderHook(() => project.useUpdateProject(), {
+      wrapper: queryClientWrapper(client),
+    })
+    result.current.mutate({ projectId: 1, updates: { enabled: false } })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(client.getQueryData(['project', 1])).toEqual(projectA)
+  })
+
+  it('has nothing to restore when the failed update had nothing cached', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const client = createTestQueryClient()
+
+    const { result } = renderHook(() => project.useUpdateProject(), {
+      wrapper: queryClientWrapper(client),
+    })
+    result.current.mutate({ projectId: 1, updates: { enabled: false } })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+
+    expect(client.getQueryData(['project', 1])).toBeUndefined()
+  })
 })
 
 describe('project.useDeleteProject', () => {
@@ -489,5 +521,173 @@ describe('project.getProjectStats', () => {
 
     expect(result.current.fetchStatus).toBe('idle')
     expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
+describe('project.managers', () => {
+  it('normalises the manager shapes the backend returns', async () => {
+    const fetchMock = stubFetch(
+      new Response(
+        JSON.stringify([
+          {
+            userId: 7,
+            osmProfile: { displayName: 'alice', avatarURL: 'https://osm/alice.png' },
+            roles: [1],
+          },
+          { id: 8, grants: [{ role: 2 }, { role: 3 }], displayName: 'bob' },
+          {},
+        ]),
+        { status: 200 }
+      )
+    )
+
+    const { result } = renderHook(() => project.managers(4), {
+      wrapper: queryClientWrapper(),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual([
+      {
+        userId: 7,
+        avatarURL: 'https://osm/alice.png',
+        displayName: 'alice',
+        roles: [1],
+      },
+      { userId: 8, avatarURL: undefined, displayName: 'bob', roles: [2, 3] },
+      { userId: 0, avatarURL: undefined, displayName: 'User 0', roles: [] },
+    ])
+    expect(new URL(fetchMock.mock.calls[0][0].url).pathname).toBe('/api/v2/user/project/4')
+  })
+
+  it('copes with a body that is not a list', async () => {
+    stubFetch(new Response('null', { status: 200 }))
+
+    const { result } = renderHook(() => project.managers(4), {
+      wrapper: queryClientWrapper(),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual([])
+  })
+
+  it('does not fetch without a project, or while switched off', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+
+    const { result: noProject } = renderHook(() => project.managers(0), {
+      wrapper: queryClientWrapper(),
+    })
+    const { result: switchedOff } = renderHook(() => project.managers(4, { enabled: false }), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(noProject.current.fetchStatus).toBe('idle')
+    expect(switchedOff.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
+describe('project.teamManagers', () => {
+  it('flattens each team grant down to the roles it carries', async () => {
+    const team = { id: 2, name: 'Team' }
+    const fetchMock = stubFetch(
+      new Response(JSON.stringify([{ team, grants: [{ role: 1 }, { role: 2 }] }, { team }]), {
+        status: 200,
+      })
+    )
+
+    const { result } = renderHook(() => project.teamManagers(4), {
+      wrapper: queryClientWrapper(),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual([
+      { team, roles: [1, 2] },
+      { team, roles: [] },
+    ])
+    expect(new URL(fetchMock.mock.calls[0][0].url).pathname).toBe('/api/v2/teams/projectManagers/4')
+  })
+
+  it('copes with a body that is not a list', async () => {
+    stubFetch(new Response('null', { status: 200 }))
+
+    const { result } = renderHook(() => project.teamManagers(4), {
+      wrapper: queryClientWrapper(),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(result.current.data).toEqual([])
+  })
+
+  it('does not fetch without a project, or while switched off', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+
+    const { result: noProject } = renderHook(() => project.teamManagers(0), {
+      wrapper: queryClientWrapper(),
+    })
+    const { result: switchedOff } = renderHook(() => project.teamManagers(4, { enabled: false }), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(noProject.current.fetchStatus).toBe('idle')
+    expect(switchedOff.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
+describe('project manager role mutations', () => {
+  const managerQueries = [
+    { queryKey: ['project', 4, 'managers'] },
+    { queryKey: ['project', 4, 'teamManagers'] },
+  ]
+
+  it.each([
+    ['useSetUserProjectRole', 'PUT', '/api/v2/user/7/project/4/1'],
+    ['useRemoveUserFromProject', 'DELETE', '/api/v2/user/7/project/4/1'],
+  ] as const)('%s sends %s and refreshes both manager lists', async (hook, method, pathname) => {
+    const fetchMock = stubFetch(new Response('ok', { status: 200 }))
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => project[hook](), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    await result.current.mutateAsync({ userId: 7, projectId: 4, role: 1 })
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.method).toBe(method)
+    expect(new URL(request.url).pathname).toBe(pathname)
+    for (const query of managerQueries) expect(invalidateSpy).toHaveBeenCalledWith(query)
+  })
+
+  it('useSetTeamProjectRole grants the team a role and refreshes both manager lists', async () => {
+    const fetchMock = stubFetch(new Response('ok', { status: 200 }))
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => project.useSetTeamProjectRole(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    await result.current.mutateAsync({ teamId: 2, projectId: 4, role: 1 })
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.method).toBe('POST')
+    expect(new URL(request.url).pathname).toBe('/api/v2/team/2/project/4/1')
+    for (const query of managerQueries) expect(invalidateSpy).toHaveBeenCalledWith(query)
+  })
+
+  it('useRemoveTeamFromProject drops the team and refreshes both manager lists', async () => {
+    const fetchMock = stubFetch(new Response('ok', { status: 200 }))
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => project.useRemoveTeamFromProject(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    await result.current.mutateAsync({ teamId: 2, projectId: 4 })
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.method).toBe('DELETE')
+    expect(new URL(request.url).pathname).toBe('/api/v2/team/2/project/4')
+    for (const query of managerQueries) expect(invalidateSpy).toHaveBeenCalledWith(query)
   })
 })

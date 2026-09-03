@@ -239,4 +239,27 @@ describe('taskBundleQueries.useUpdateTaskBundleStatus', () => {
     const [request] = fetchMock.mock.calls[0]
     expect(new URL((request as Request).url).searchParams.has('tags')).toBe(false)
   })
+
+  it('forwards opaque plugin query params, dropping the ones with no value', async () => {
+    const fetchMock = stubFetch(new Response('', { status: 200 }))
+
+    const { result } = renderHook(() => taskBundleQueries.useUpdateTaskBundleStatus(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({
+      bundleId: 11,
+      primaryId: 1,
+      status: 3,
+      queryParams: { pluginFlag: true, attempt: 2, omitted: null, alsoOmitted: undefined },
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const url = new URL((fetchMock.mock.calls[0][0] as Request).url)
+    expect(url.searchParams.get('pluginFlag')).toBe('true')
+    expect(url.searchParams.get('attempt')).toBe('2')
+    expect(url.searchParams.has('omitted')).toBe(false)
+    expect(url.searchParams.has('alsoOmitted')).toBe(false)
+  })
 })

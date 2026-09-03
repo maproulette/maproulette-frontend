@@ -188,6 +188,21 @@ describe('teamImage.useRejectImage', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['teamImage'] })
   })
+
+  it('sends no comment param when the moderator gave no reason', async () => {
+    const fetchMock = stubFetch(
+      new Response(JSON.stringify(anImage({ status: 2 })), { status: 200 })
+    )
+
+    const { result } = renderHook(() => teamImage.useRejectImage(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({ imageId: 5 })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(new URL(fetchMock.mock.calls[0][0].url).search).toBe('')
+  })
 })
 
 describe('teamImage.useDeleteImage', () => {

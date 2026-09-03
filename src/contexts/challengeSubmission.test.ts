@@ -299,4 +299,17 @@ describe('buildChallengeSubmission team image handling', () => {
     const result = await buildChallengeSubmission({ ...baseValues, teamImageId: 3 }, true)
     expect(result.challengeData.teamImageId).toBe(3)
   })
+
+  it('treats a missing custom basemap url as no custom basemap', async () => {
+    const { challengeData } = await buildChallengeSubmission(
+      { ...baseValues, basemap: 'custom', basemapUrl: undefined },
+      true
+    )
+
+    expect(challengeData).toMatchObject({
+      defaultBasemap: -1,
+      defaultBasemapId: null,
+      customBasemap: null,
+    })
+  })
 })

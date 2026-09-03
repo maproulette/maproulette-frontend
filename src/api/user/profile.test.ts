@@ -461,6 +461,42 @@ describe('userProfile.useUpdateUserSettings', () => {
 
     expect(queryClient.getQueryData(['user', 'whoami'])).toEqual(cachedUser)
   })
+
+  it('has nothing to restore when the request fails with no cached user', async () => {
+    stubFetch(new Response('nope', { status: 500 }))
+    const queryClient = createTestQueryClient()
+
+    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ userId: 9, settings: { defaultBasemap: 2 } })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(queryClient.getQueryData(['user', 'whoami'])).toBeUndefined()
+  })
+})
+
+describe('userProfile.useUnsaveChallenge', () => {
+  it('unsaves the challenge and refreshes the saved list', async () => {
+    const fetchMock = stubFetch(new Response('ok', { status: 200 }))
+    const queryClient = createTestQueryClient()
+    const invalidateQueries = vi
+      .spyOn(queryClient, 'invalidateQueries')
+      .mockResolvedValue(undefined)
+
+    const { result } = renderHook(() => userProfile.useUnsaveChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    await result.current.mutateAsync({ userId: 9, challengeId: 42 })
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.method).toBe('DELETE')
+    expect(new URL(request.url).pathname).toBe('/api/v2/user/9/unsave/42')
+    expect(invalidateQueries).toHaveBeenCalledWith({
+      queryKey: ['user', 9, 'savedChallenges'],
+    })
+  })
 })
 
 describe('userProfile.useRegenerateApiKey', () => {

@@ -122,6 +122,12 @@ describe('validatePluginUrl (same-origin bundles)', () => {
   it('rejects a root-relative path when there is no app origin to resolve it against', () => {
     expect(validatePluginUrl('/plugins/review.js')).toBe(false)
   })
+
+  it('rejects a root-relative path outside a browser altogether', () => {
+    vi.stubGlobal('window', undefined)
+
+    expect(validatePluginUrl('/plugins/review.js')).toBe(false)
+  })
 })
 
 describe('parsePluginUrl', () => {

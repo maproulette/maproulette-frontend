@@ -1,10 +1,12 @@
 // @vitest-environment happy-dom
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { stubFetch } from '@/test/stubFetch'
+import { logger } from './logger'
 import { reverseGeocodePlaceName } from './reverseGeocode'
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 const jsonResponse = (body: unknown) =>
@@ -49,5 +51,32 @@ describe('reverseGeocodePlaceName', () => {
     )
 
     expect(await reverseGeocodePlaceName(1, 2)).toBeNull()
+  })
+
+  it('returns null when the response has neither address fields nor a display name', async () => {
+    stubFetch(jsonResponse({}))
+
+    expect(await reverseGeocodePlaceName(1, 2)).toBeNull()
+  })
+
+  it('returns null when the display name is blank', async () => {
+    stubFetch(jsonResponse({ display_name: '' }))
+
+    expect(await reverseGeocodePlaceName(1, 2)).toBeNull()
+  })
+
+  it('stays quiet when the caller aborted the lookup', async () => {
+    const controller = new AbortController()
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => {
+        controller.abort()
+        return Promise.reject(new DOMException('aborted', 'AbortError'))
+      })
+    )
+    const warn = vi.spyOn(logger, 'warn').mockImplementation(() => {})
+
+    expect(await reverseGeocodePlaceName(1, 2, controller.signal)).toBeNull()
+    expect(warn).not.toHaveBeenCalled()
   })
 })

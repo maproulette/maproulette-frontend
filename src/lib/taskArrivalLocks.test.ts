@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   getTaskArrivalLocks,
   recordTaskArrivalLocks,
@@ -12,6 +12,10 @@ const arrivedHolding = { heldThis: true, heldInChallenge: false }
 beforeEach(() => {
   sessionStorage.clear()
   resetTaskArrivalLocks()
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
 })
 
 describe('task arrival locks record', () => {
@@ -76,5 +80,15 @@ describe('task arrival locks record', () => {
     )
 
     expect(getTaskArrivalLocks(102685)).toEqual({ heldThis: false, heldInChallenge: true })
+  })
+
+  it('still records in memory when storage refuses the write', () => {
+    vi.spyOn(sessionStorage, 'setItem').mockImplementation(() => {
+      throw new Error('quota exceeded')
+    })
+
+    recordTaskArrivalLocks(102685, { heldThis: true, heldInChallenge: true })
+
+    expect(getTaskArrivalLocks(102685)).toEqual({ heldThis: true, heldInChallenge: true })
   })
 })

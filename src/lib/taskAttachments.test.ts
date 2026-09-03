@@ -32,6 +32,14 @@ describe('taskAttachments', () => {
     expect(taskAttachments(makeTask(undefined))).toEqual([])
   })
 
+  it('skips features that carry no attachments of their own', () => {
+    const task = makeTask({
+      type: 'FeatureCollection',
+      features: [{ type: 'Feature' }, null, { type: 'Feature', attachments: [layer] }],
+    })
+    expect(taskAttachments(task)).toHaveLength(1)
+  })
+
   it('ignores entries missing an id or kind', () => {
     const task = makeTask({ attachments: [layer, { id: 'x' }, { kind: 'referenceLayer' }] })
     expect(taskAttachments(task)).toHaveLength(1)
@@ -98,6 +106,14 @@ describe('josmImportUrl', () => {
     })
     expect(relaxed).toContain('layer_locked=false')
     expect(relaxed).toContain('download_policy=&')
+  })
+
+  it('falls back to a task-derived layer name for an unnamed attachment', () => {
+    const unnamed = josmImportUrl('http://127.0.0.1:8111', 'https://api.example.org', 99, {
+      ...layer,
+      name: '',
+    })
+    expect(unnamed).toContain('layer_name=MR%20Task%2099%20Reference')
   })
 
   it('encodes the data URL so JOSM receives it whole', () => {

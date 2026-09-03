@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { IdEntity, IdHistory } from '@/types/iDEditor'
-import { pendingEdits } from './idChanges.ts'
+import { type EntityEdit, pendingEditCount, pendingEdits } from './idChanges.ts'
 
 const makeHistory = (
   changes: { created?: IdEntity[]; modified?: IdEntity[]; deleted?: IdEntity[] },
@@ -98,5 +98,36 @@ describe('pendingEdits', () => {
       },
     } as unknown as IdHistory
     expect(pendingEdits(broken)).toEqual([])
+  })
+
+  it('is empty when iD reports no change lists at all', () => {
+    const empty = { changes: () => ({}), base: () => null } as unknown as IdHistory
+    expect(pendingEdits(empty)).toEqual([])
+  })
+
+  it('copes with an iD build that exposes no base graph', () => {
+    const noBase = {
+      changes: () => ({ modified: [{ id: 'w1', tags: { a: '1' } }] }),
+    } as unknown as IdHistory
+    expect(pendingEdits(noBase)[0].tags).toEqual([
+      { key: 'a', from: null, to: '1', status: 'added' },
+    ])
+  })
+
+  it('falls back to an empty id for an entity iD has not numbered yet', () => {
+    const history = makeHistory({ created: [{ tags: {} } as IdEntity] })
+    expect(pendingEdits(history)[0].id).toBe('')
+  })
+})
+
+describe('pendingEditCount', () => {
+  it('counts the entities with pending edits', () => {
+    expect(pendingEditCount([])).toBe(0)
+    expect(
+      pendingEditCount([
+        { id: 'w1', kind: 'modified', tags: [], geometryOnly: true },
+        { id: 'n2', kind: 'deleted', tags: [], geometryOnly: false },
+      ] satisfies EntityEdit[])
+    ).toBe(2)
   })
 })
