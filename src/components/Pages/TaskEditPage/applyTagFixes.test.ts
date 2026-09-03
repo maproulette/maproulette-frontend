@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { TagFix } from '@/lib/cooperativeWork'
 import type { IdContext, IdEntity, IdGlobal } from '@/types/iDEditor'
-import { applyTagFixesInId, divergedTagFixes, resetTagFixesInId } from './applyTagFixes.ts'
+import {
+  applyTagFixesInId,
+  divergedTagFixes,
+  resetTagFixesInId,
+  revertTagFixesInId,
+} from './applyTagFixes.ts'
 
 const fix = (props: Partial<TagFix> = {}): TagFix => ({
   elementId: 'way/1',
@@ -169,6 +174,59 @@ describe('resetTagFixesInId', () => {
   it('does nothing when iD has not exposed the action', () => {
     const { context, perform } = makeContext({ w1: { tags: {} } }, base)
     expect(resetTagFixesInId(context, undefined, [fix()])).toEqual([])
+    expect(perform).not.toHaveBeenCalled()
+  })
+})
+
+describe('revertTagFixesInId', () => {
+  const base = { w1: { tags: { highway: 'residential', surface: 'gravel' } } }
+
+  it('puts a changed tag back to the value it had before', () => {
+    const { context, perform } = makeContext(
+      { w1: { tags: { highway: 'residential', surface: 'asphalt' } } },
+      base
+    )
+    expect(revertTagFixesInId(context, iDGlobal, [fix()])).toEqual(['w1'])
+    expect(perform.mock.calls[0][0].tags).toEqual({
+      highway: 'residential',
+      surface: 'gravel',
+    })
+  })
+
+  it('removes a tag the fix introduced, since it was never there', () => {
+    const { context, perform } = makeContext(
+      { w1: { tags: { highway: 'residential', lit: 'yes' } } },
+      { w1: { tags: { highway: 'residential' } } }
+    )
+    revertTagFixesInId(context, iDGlobal, [fix({ setTags: { lit: 'yes' } })])
+    expect(perform.mock.calls[0][0].tags).toEqual({ highway: 'residential' })
+  })
+
+  it('brings back a tag the fix removed', () => {
+    const { context, perform } = makeContext(
+      { w1: { tags: { highway: 'residential' } } },
+      { w1: { tags: { highway: 'residential', fixme: 'check' } } }
+    )
+    revertTagFixesInId(context, iDGlobal, [fix({ setTags: {}, unsetTags: ['fixme'] })])
+    expect(perform.mock.calls[0][0].tags).toEqual({ highway: 'residential', fixme: 'check' })
+  })
+
+  it("leaves the mapper's own edits to the same element alone", () => {
+    const { context, perform } = makeContext(
+      { w1: { tags: { highway: 'residential', surface: 'asphalt', tunnel: 'yes' } } },
+      base
+    )
+    revertTagFixesInId(context, iDGlobal, [fix()])
+    expect(perform.mock.calls[0][0].tags).toEqual({
+      highway: 'residential',
+      surface: 'gravel',
+      tunnel: 'yes',
+    })
+  })
+
+  it('does nothing when the fix was never applied', () => {
+    const { context, perform } = makeContext({ w1: { tags: base.w1.tags } }, base)
+    expect(revertTagFixesInId(context, iDGlobal, [fix()])).toEqual([])
     expect(perform).not.toHaveBeenCalled()
   })
 })

@@ -23,7 +23,12 @@ import { getOSMToken } from '@/plugins/RapidEditorPlugin/editorUtils'
 import { getIdGlobal, type IdContext, type IdGlobal, type IdIframeWindow } from '@/types/iDEditor'
 import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
-import { applyTagFixesInId, divergedTagFixes, resetTagFixesInId } from './applyTagFixes'
+import {
+  applyTagFixesInId,
+  divergedTagFixes,
+  resetTagFixesInId,
+  revertTagFixesInId,
+} from './applyTagFixes'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -137,11 +142,13 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }, [task.id, bundledTasks])
 
   osmEntityIdsRef.current = osmEntityIds
-  // Tag changes proposed for this task and anything bundled with it.
-  tagFixesRef.current = useMemo(
+  // Tag changes proposed for this task and anything bundled with it. Changes
+  // whenever a task joins or leaves the bundle.
+  const taskTagFixes = useMemo(
     () => [task, ...(bundledTasks ?? [])].flatMap((t) => tagFixes(t as Task)),
     [task, bundledTasks]
   )
+  tagFixesRef.current = taskTagFixes
 
   const position = useMemo(() => {
     if (map.current) {
@@ -358,8 +365,6 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
       }
       setTimeout(() => attemptInitialSelect(10), 2000)
 
-      applyPendingTagFixes(context, iframe)
-
       setIsLoading(false)
     } catch (err) {
       logger.error('Failed to initialize iD editor', { error: err })
@@ -374,22 +379,24 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
    * through a separate dialog. Elements arrive asynchronously, so this retries
    * for a few seconds before giving up.
    */
-  const applyPendingTagFixes = useCallback((context: IdContext, iframe: HTMLIFrameElement) => {
-    const fixes = tagFixesRef.current
-    if (fixes.length === 0) return
+  const applyPendingTagFixes = useCallback(
+    (context: IdContext, iframe: HTMLIFrameElement, fixes: TagFix[]) => {
+      if (fixes.length === 0) return
 
-    const remaining = new Set(fixes.map((fix) => fix.entityId))
-    const attempt = (attemptsLeft: number) => {
-      if (remaining.size === 0 || attemptsLeft <= 0) return
-      const iDGlobal = getIdGlobal(iframe.contentWindow)
-      const pending = fixes.filter((fix) => remaining.has(fix.entityId))
-      for (const entityId of applyTagFixesInId(context, iDGlobal, pending)) {
-        remaining.delete(entityId)
+      const remaining = new Set(fixes.map((fix) => fix.entityId))
+      const attempt = (attemptsLeft: number) => {
+        if (remaining.size === 0 || attemptsLeft <= 0) return
+        const iDGlobal = getIdGlobal(iframe.contentWindow)
+        const pending = fixes.filter((fix) => remaining.has(fix.entityId))
+        for (const entityId of applyTagFixesInId(context, iDGlobal, pending)) {
+          remaining.delete(entityId)
+        }
+        if (remaining.size > 0) setTimeout(() => attempt(attemptsLeft - 1), 1000)
       }
-      if (remaining.size > 0) setTimeout(() => attempt(attemptsLeft - 1), 1000)
-    }
-    setTimeout(() => attempt(8), 1500)
-  }, [])
+      setTimeout(() => attempt(8), 1500)
+    },
+    []
+  )
 
   // Lets the task panel put the elements back the way the challenge suggested
   // after the mapper has undone or altered them.
@@ -442,6 +449,31 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     // `isLoading` flips false once the iframe has loaded, which is the first
     // point its document exists to write into.
   }, [osmEntityIds, isLoading])
+
+  // Keep the editor in step with the bundle: a task joining brings its
+  // suggestion with it, and a task leaving takes its suggestion back out. Only
+  // the difference is acted on, so a mapper's own edits to elements that stay
+  // in the bundle are untouched.
+  const appliedFixesRef = useRef<Map<string, TagFix>>(new Map())
+
+  useEffect(() => {
+    const context = idContextRef.current
+    const iframe = iframeRef.current
+    if (isLoading || !context || !iframe) return
+
+    const iDGlobal = getIdGlobal(iframe.contentWindow)
+    const wanted = new Map(taskTagFixes.map((fix) => [fix.entityId, fix]))
+
+    const removed = [...appliedFixesRef.current.values()].filter((fix) => !wanted.has(fix.entityId))
+    if (removed.length > 0) revertTagFixesInId(context, iDGlobal, removed)
+
+    const added = taskTagFixes.filter((fix) => !appliedFixesRef.current.has(fix.entityId))
+    // Elements for a newly bundled task may not be loaded yet, so this retries.
+    if (added.length > 0) applyPendingTagFixes(context, iframe, added)
+
+    appliedFixesRef.current = wanted
+    setDivergedTagFixCount(divergedTagFixes(context, taskTagFixes).length)
+  }, [taskTagFixes, isLoading, applyPendingTagFixes, setDivergedTagFixCount])
 
   const initialTaskIdRef = useRef(task.id)
   useEffect(() => {

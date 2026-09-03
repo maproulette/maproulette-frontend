@@ -109,3 +109,47 @@ export const resetTagFixesInId = (
   }
   return reset
 }
+
+/**
+ * Undo a tag fix without disturbing anything else on the element: keys the fix
+ * set go back to their original values (or away, if the fix introduced them),
+ * and keys it removed come back.
+ *
+ * Used when a task leaves the bundle — its suggestion should stop applying,
+ * but any editing the mapper did to that element themselves is theirs to keep.
+ */
+export const revertTagFixesInId = (
+  context: IdContext,
+  iDGlobal: IdGlobal | undefined,
+  fixes: TagFix[]
+): string[] => {
+  if (!iDGlobal?.actionChangeTags) return []
+
+  const reverted: string[] = []
+  for (const fix of fixes) {
+    try {
+      const entity = context.hasEntity(fix.entityId)
+      if (!entity) continue
+
+      const base = context.history?.().base?.().hasEntity(fix.entityId)?.tags ?? {}
+      const next = { ...(entity.tags ?? {}) }
+      for (const key of Object.keys(fix.setTags)) {
+        if (key in base) next[key] = base[key]
+        else delete next[key]
+      }
+      for (const key of fix.unsetTags) {
+        if (key in base) next[key] = base[key]
+      }
+
+      if (sameTags(entity.tags ?? {}, next)) continue
+      context.perform(
+        iDGlobal.actionChangeTags(fix.entityId, next),
+        'Removed MapRoulette suggested tag change'
+      )
+      reverted.push(fix.entityId)
+    } catch (error) {
+      logger.warn('Could not revert suggested tag change', { entityId: fix.entityId, error })
+    }
+  }
+  return reverted
+}
