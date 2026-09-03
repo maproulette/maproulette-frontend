@@ -22,7 +22,7 @@ export const SortByFilter = () => {
         value={sortBy || 'name'}
         onValueChange={(value) => setSortBy(value as ExtendedFindParamsSortBy)}
       >
-        <SelectTrigger className="h-9 w-28">
+        <SelectTrigger className="h-9 w-32">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -34,6 +34,11 @@ export const SortByFilter = () => {
           <SelectItem value="popularity">{t('common.popular', undefined, 'Popular')}</SelectItem>
           <SelectItem value="difficulty">
             {t('common.difficulty', undefined, 'Difficulty')}
+          </SelectItem>
+          <SelectItem value="featured">{t('common.featured', undefined, 'Featured')}</SelectItem>
+          <SelectItem value="tag_fix">{t('common.tagFix', undefined, 'Tag Fix')}</SelectItem>
+          <SelectItem value="cooperative">
+            {t('common.cooperative', undefined, 'Cooperative')}
           </SelectItem>
         </SelectContent>
       </Select>

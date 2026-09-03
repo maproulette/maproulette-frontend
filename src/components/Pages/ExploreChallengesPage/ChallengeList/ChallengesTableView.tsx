@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { ChallengeTaxonomy } from '@/components/shared/ChallengeTaxonomy'
 import { Badge } from '@/components/ui/Badge'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import {
@@ -12,6 +13,7 @@ import {
 import { useIntl } from '@/i18n'
 import { getParentInfo } from '@/lib/challengeParent'
 import { isChallengeComplete } from '@/lib/challengeStatus'
+import { getChallengeTaxonomy } from '@/lib/challengeTaxonomy'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
@@ -49,9 +51,7 @@ export const ChallengesTableView = () => {
             <TableHead className="text-center">
               {t('exploreChallenges.challengeList.table.contributors', undefined, 'Contributors')}
             </TableHead>
-            <TableHead className="text-center">
-              {t('common.priority', undefined, 'Priority')}
-            </TableHead>
+            <TableHead className="text-center">{t('common.type', undefined, 'Type')}</TableHead>
             <TableHead className="text-center">
               {t('common.difficulty', undefined, 'Difficulty')}
             </TableHead>
@@ -70,6 +70,7 @@ export const ChallengesTableView = () => {
         <TableBody>
           {challenges.map((challenge) => {
             const { name: parentName } = getParentInfo(challenge.parent)
+            const taxonomy = getChallengeTaxonomy(challenge, t)
             return (
               <TableRow key={challenge.id}>
                 <TableCell>
@@ -105,13 +106,8 @@ export const ChallengesTableView = () => {
                 <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
                 <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
                 <TableCell className="text-center">
-                  {challenge.featured ? (
-                    <Badge
-                      variant="secondary"
-                      className="bg-orange-100 text-orange-800 text-xs dark:bg-orange-900 dark:text-orange-200"
-                    >
-                      {t('exploreChallenges.challengeList.table.urgent', undefined, 'URGENT')}
-                    </Badge>
+                  {taxonomy.length > 0 ? (
+                    <ChallengeTaxonomy challenge={challenge} className="justify-center" />
                   ) : (
                     <span className="text-zinc-600 dark:text-slate-400">--</span>
                   )}

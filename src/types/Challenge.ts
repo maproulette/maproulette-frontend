@@ -22,8 +22,19 @@ export type PreferredChallengesParams =
   operations['challenge_preferred_challenges']['parameters']['query']
 export type FeaturedChallengesParams =
   operations['challenge_featured_challenges']['parameters']['query']
+/**
+ * `sortBy` is overridden rather than taken straight from the generated schema:
+ * the taxonomy sorts (`featured`, `tag_fix`, `cooperative`) are declared here
+ * until `openApiTypes.ts` is regenerated against a backend carrying them.
+ */
 export type ExploreChallengesParams =
-  operations['explore_challenge_list_challenges']['parameters']['query']
+  | (Omit<
+      NonNullable<operations['explore_challenge_list_challenges']['parameters']['query']>,
+      'sortBy'
+    > & {
+      sortBy?: ExtendedFindParamsSortBy
+    })
+  | undefined
 
 /**
  * Explore-challenges query params plus the boundary of the selected place.
@@ -99,7 +110,20 @@ export type Challenge = Omit<
 }
 
 /* Custom Types */
-export type ExtendedFindParamsSortBy = 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
+/**
+ * Sort orders the explore-challenges endpoint accepts. The last three are
+ * taxonomy sorts: they group a kind of challenge to the front rather than
+ * ordering by a column, and fall back to name inside the group.
+ */
+export type ExtendedFindParamsSortBy =
+  | 'name'
+  | 'created'
+  | 'modified'
+  | 'popularity'
+  | 'difficulty'
+  | 'featured'
+  | 'tag_fix'
+  | 'cooperative'
 
 /** Daily task status counts from `GET /data/challenge/{id}/activity` (legacy admin Recent Activity). */
 export type ChallengeActivityEntry = {

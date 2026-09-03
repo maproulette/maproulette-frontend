@@ -19,7 +19,16 @@ const challengesSearchSchema = z.object({
     .catch('Anything'),
   categories: z.string().optional(), // comma-separated string
   sortBy: z
-    .enum(['name', 'created', 'modified', 'popularity', 'difficulty'])
+    .enum([
+      'name',
+      'created',
+      'modified',
+      'popularity',
+      'difficulty',
+      'featured',
+      'tag_fix',
+      'cooperative',
+    ])
     .optional()
     .catch('name'),
   global: z.boolean().optional().catch(false),

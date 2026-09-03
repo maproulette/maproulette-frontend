@@ -8,6 +8,7 @@ import { formatDate } from '@/lib/date'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
+import { ChallengeTaxonomy } from './ChallengeTaxonomy'
 import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
 
@@ -123,13 +124,14 @@ export const ChallengeCard = ({
           />
 
           <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-2 text-xs text-zinc-500 dark:text-slate-300">
+            <span className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-slate-300">
               {getDifficultyLabel(t, challenge.difficulty)}
               {isComplete && (
                 <Badge variant="success" className="text-xs">
                   {t('common.completed', undefined, 'Completed')}
                 </Badge>
               )}
+              <ChallengeTaxonomy challenge={challenge} />
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
