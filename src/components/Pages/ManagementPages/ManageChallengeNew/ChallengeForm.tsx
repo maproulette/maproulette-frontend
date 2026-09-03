@@ -144,17 +144,17 @@ export const ChallengeForm = () => {
             )}
           />
 
-          <ChallengeImageSection />
-
-          <BasemapFields />
-
-          <TaskFieldsSection />
-
           <TaskDataSection
             dataSource={dataSource}
             challenge={challenge}
             sourceReadOnly={sourceReadOnly}
           />
+
+          <ChallengeImageSection />
+
+          <BasemapFields />
+
+          <TaskFieldsSection />
 
           {!isEdit && <AgreementSection />}
         </FormSectionGroup>

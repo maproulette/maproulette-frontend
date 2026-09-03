@@ -28,8 +28,6 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
   challengeData.osmIdProperty = values.osmIdProperty || null
   challengeData.preferredTags = values.preferredTags || null
   challengeData.limitTags = values.limitTags
-  challengeData.preferredReviewTags = values.preferredReviewTags || null
-  challengeData.limitReviewTags = values.limitReviewTags
   Object.assign(challengeData, basemapSubmission(values.basemap, values.basemapUrl ?? ''))
 
   // The data source is only set at creation. Editing a challenge changes

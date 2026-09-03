@@ -62,8 +62,6 @@ const makeBaseChallengeFormSchema = (t: T) =>
     // are the only tags accepted.
     preferredTags: z.string().optional().or(z.literal('')),
     limitTags: z.boolean(),
-    preferredReviewTags: z.string().optional().or(z.literal('')),
-    limitReviewTags: z.boolean(),
     basemap: z.string(),
     basemapUrl: z.string().optional().or(z.literal('')),
     teamImageId: z.number().nullable(),
@@ -163,8 +161,6 @@ export const buildFormValues = (
   osmIdProperty: challenge?.osmIdProperty ?? '',
   preferredTags: challenge?.preferredTags ?? '',
   limitTags: challenge?.limitTags ?? false,
-  preferredReviewTags: challenge?.preferredReviewTags ?? '',
-  limitReviewTags: challenge?.limitReviewTags ?? false,
   basemap: basemapSelection(challenge),
   basemapUrl: challenge?.customBasemap ?? '',
   teamImageId: challenge?.teamImageId ?? null,

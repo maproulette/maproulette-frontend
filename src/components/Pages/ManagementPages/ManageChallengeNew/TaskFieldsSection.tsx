@@ -128,55 +128,6 @@ export const TaskFieldsSection = () => {
           </FormItem>
         )}
       />
-
-      <FormField
-        control={form.control}
-        name="preferredReviewTags"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>
-              {t(
-                'manageChallengeNew.challengeForm.preferredReviewTagsLabel',
-                undefined,
-                'Preferred MR Tags (review)'
-              )}
-            </FormLabel>
-            <FormControl>
-              <Input placeholder="needs-survey, imagery-offset" {...field} />
-            </FormControl>
-            <FormDescription>
-              {t(
-                'manageChallengeNew.challengeForm.preferredReviewTagsDescription',
-                undefined,
-                'Comma-separated tags suggested during review instead of task completion.'
-              )}
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="limitReviewTags"
-        render={({ field }) => (
-          <FormItem className="flex flex-row items-start gap-2 space-y-0">
-            <FormControl>
-              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-            </FormControl>
-            <div className="grid gap-1 leading-none">
-              <FormLabel className="font-normal">
-                {t(
-                  'manageChallengeNew.challengeForm.limitReviewTagsLabel',
-                  undefined,
-                  'Only allow the preferred review tags above'
-                )}
-              </FormLabel>
-            </div>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
     </FormSection>
   )
 }
