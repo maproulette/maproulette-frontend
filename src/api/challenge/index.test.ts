@@ -5,6 +5,7 @@ import { challengeExports } from './exports'
 import { challengeFavorites } from './favorites'
 import { challenge } from './index'
 import { challengeLikes } from './likes'
+import { challengeReports } from './reports'
 import { challengeSingle } from './single'
 
 describe('challenge', () => {
@@ -16,6 +17,7 @@ describe('challenge', () => {
       ...challengeFavorites,
       ...challengeLikes,
       ...challengeComments,
+      ...challengeReports,
     }
 
     expect(Object.keys(challenge).sort()).toEqual(Object.keys(sources).sort())
@@ -60,6 +62,12 @@ describe('challenge', () => {
     }
   })
 
+  it('re-exports every member of challengeReports by identity', () => {
+    for (const [key, value] of Object.entries(challengeReports)) {
+      expect(challenge[key as keyof typeof challenge]).toBe(value)
+    }
+  })
+
   it('has no key collisions between the merged source modules', () => {
     const keySets = [
       Object.keys(challengeSingle),
@@ -67,6 +75,7 @@ describe('challenge', () => {
       Object.keys(challengeFavorites),
       Object.keys(challengeLikes),
       Object.keys(challengeComments),
+      Object.keys(challengeReports),
     ]
     const allKeys = keySets.flat()
     const uniqueKeys = new Set(allKeys)

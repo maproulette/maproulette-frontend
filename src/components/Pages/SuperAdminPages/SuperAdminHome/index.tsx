@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import {
   BarChart3,
   Database,
+  Flag,
   FolderKanban,
   ImageIcon,
   ListChecks,
@@ -102,6 +103,36 @@ export const SuperAdminHome = () => {
             <CardContent>
               <Button variant="outline" className="w-full">
                 {t('common.viewChallenges', undefined, 'View Challenges')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Link>
+
+        {/* Challenge reports */}
+        <Link to="/super-admin/challenge-reports">
+          <Card className="cursor-pointer transition-shadow hover:shadow-md">
+            <CardHeader>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900">
+                <Flag className="h-6 w-6 text-red-600 dark:text-red-400" />
+              </div>
+              <CardTitle>
+                {t('superAdminHome.cards.challengeReports.title', undefined, 'Challenge Reports')}
+              </CardTitle>
+              <CardDescription>
+                {t(
+                  'superAdminHome.cards.challengeReports.description',
+                  undefined,
+                  'Triage reports that a challenge is causing incorrect edits'
+                )}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="outline" className="w-full">
+                {t(
+                  'superAdminHome.cards.challengeReports.button',
+                  undefined,
+                  'View Challenge Reports'
+                )}
               </Button>
             </CardContent>
           </Card>

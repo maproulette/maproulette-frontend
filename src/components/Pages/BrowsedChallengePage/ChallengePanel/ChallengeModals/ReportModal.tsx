@@ -16,15 +16,15 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
-import { getParentInfo } from '@/lib/challengeParent'
+import { getErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import { markdownRemarkPlugins } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
+import { CHALLENGE_REPORT_MAX_LENGTH, CHALLENGE_REPORT_MIN_LENGTH } from '@/types/ChallengeReport'
 import { useChallengeModals } from './ChallengeModalsContext'
-import { getGitHubErrorMessage } from './ReportModalHelpers'
 
-const MIN_CHARACTERS = 100
-const MAX_CHARACTERS = 1000
+const MIN_CHARACTERS = CHALLENGE_REPORT_MIN_LENGTH
+const MAX_CHARACTERS = CHALLENGE_REPORT_MAX_LENGTH
 
 const getCharacterCountColor = (count: number) => {
   if (count >= MAX_CHARACTERS || count < MIN_CHARACTERS) {
@@ -52,7 +52,7 @@ export const ReportModal = () => {
   const [showingPreview, setShowingPreview] = useState(false)
   const [errors, setErrors] = useState({ input: false, checkbox: false })
 
-  const addCommentMutation = api.challenge.useAddChallengeComment()
+  const reportChallengeMutation = api.challenge.useReportChallenge()
 
   const characterCount = reportText.length
 
@@ -90,79 +90,14 @@ export const ReportModal = () => {
     setErrors({ input: false, checkbox: false })
 
     try {
-      const owner = window.env.VITE_GITHUB_ISSUES_API_OWNER
-      const repo = window.env.VITE_GITHUB_ISSUES_API_REPO
-      const token = window.env.VITE_GITHUB_ISSUES_API_TOKEN
-      const appUrl = window.env.VITE_APP_URL || window.location.origin
-      const osmServer = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
-      const userName = user?.osmProfile?.displayName || 'Unknown'
-      const challengeUrl = `${appUrl}/browse/challenges/${challenge.id}`
-      const userUrl = `${osmServer}/user/${encodeURIComponent(userName)}`
-
-      let issueUrl: string | null = null
-
-      if (owner && repo && token) {
-        const issueBody = `Challenge: [#${challenge.id} - ${challenge.name}](${challengeUrl})\n\nReported by: [${userName}](${userUrl})\n\n${reportText}`
-
-        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            Accept: 'application/vnd.github.v3+json',
-          },
-          body: JSON.stringify({
-            title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
-            body: issueBody,
-            state: 'open' as const,
-          }),
-        })
-
-        if (response.ok) {
-          const issueData = await response.json()
-          issueUrl = issueData.html_url
-
-          const { id: parentId, name: parentName } = getParentInfo(challenge.parent)
-          const commentText = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${challengeUrl})${
-            parentId
-              ? ` in project [#${parentId} - ${parentName}](${appUrl}/browse/projects/${parentId})`
-              : ''
-          }, has been reported by [${userName}](${userUrl}). Please use [this GitHub issue](${issueUrl}) to discuss.\n\nReport Content:\n${reportText}`
-
-          try {
-            addCommentMutation.mutate({ challengeId: challenge.id, comment: commentText })
-          } catch (commentError) {
-            logger.error('Failed to post comment', { error: String(commentError) })
-          }
-        } else {
-          const errorBody = await response.text()
-          let errorMessage = t(
-            'browsedChallengePage.challengeModals.reportModal.createIssueError',
-            { status: response.status, statusText: response.statusText },
-            'Failed to create GitHub issue: {status} {statusText}'
-          )
-          try {
-            const errorJson = JSON.parse(errorBody)
-            if (errorJson.message) {
-              errorMessage = getGitHubErrorMessage(t, response.status, errorJson.message)
-            }
-          } catch {
-            // Use default error message
-          }
-          toast.error(errorMessage)
-          throw new Error(errorMessage)
-        }
-      } else {
-        try {
-          addCommentMutation.mutate({
-            challengeId: challenge.id,
-            comment: `Challenge reported by ${userName}:\n\n${reportText}`,
-          })
-        } catch (commentError) {
-          logger.error('Failed to post comment', { error: String(commentError) })
-          throw commentError
-        }
-      }
+      // The reporter is taken from the session server-side, and the backend
+      // posts the accompanying challenge comment itself, so there is nothing
+      // to assemble here.
+      await reportChallengeMutation.mutateAsync({
+        challengeId: challenge.id,
+        comment: reportText,
+        email: email.trim() || undefined,
+      })
 
       resetForm()
       setReportOpen(false)
@@ -176,13 +111,14 @@ export const ReportModal = () => {
     } catch (error) {
       logger.error('Error submitting report', { error: String(error) })
       toast.error(
-        error instanceof Error
-          ? error.message
-          : t(
-              'browsedChallengePage.challengeModals.reportModal.submitError',
-              undefined,
-              'Failed to submit report. Please try again.'
-            )
+        await getErrorMessage(
+          error,
+          t(
+            'browsedChallengePage.challengeModals.reportModal.submitError',
+            undefined,
+            'Failed to submit report. Please try again.'
+          )
+        )
       )
     } finally {
       setIsSubmitting(false)
@@ -205,7 +141,7 @@ export const ReportModal = () => {
             {t(
               'browsedChallengePage.challengeModals.reportModal.description',
               undefined,
-              'You are about to report a Challenge. An issue will be created in a public GitHub repository and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.'
+              'You are about to report a Challenge. Your report goes to the MapRoulette administrators for review, and a comment naming you is posted on the Challenge so its creator knows it was raised. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.'
             )}
           </DialogDescription>
         </DialogHeader>

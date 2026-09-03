@@ -28,6 +28,7 @@ import { Route as AppSuperAdminSettingsRouteImport } from './routes/_app/super-a
 import { Route as AppSuperAdminProjectsRouteImport } from './routes/_app/super-admin/projects'
 import { Route as AppSuperAdminPluginsRouteImport } from './routes/_app/super-admin/plugins'
 import { Route as AppSuperAdminChallengesRouteImport } from './routes/_app/super-admin/challenges'
+import { Route as AppSuperAdminChallengeReportsRouteImport } from './routes/_app/super-admin/challenge-reports'
 import { Route as AppSuperAdminAnalyticsRouteImport } from './routes/_app/super-admin/analytics'
 import { Route as AppManageTasksRouteImport } from './routes/_app/manage/tasks'
 import { Route as AppManageProjectsRouteImport } from './routes/_app/manage/projects'
@@ -146,6 +147,12 @@ const AppSuperAdminChallengesRoute = AppSuperAdminChallengesRouteImport.update({
   path: '/challenges',
   getParentRoute: () => AppSuperAdminRouteRoute,
 } as any)
+const AppSuperAdminChallengeReportsRoute =
+  AppSuperAdminChallengeReportsRouteImport.update({
+    id: '/challenge-reports',
+    path: '/challenge-reports',
+    getParentRoute: () => AppSuperAdminRouteRoute,
+  } as any)
 const AppSuperAdminAnalyticsRoute = AppSuperAdminAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -285,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/manage/projects': typeof AppManageProjectsRoute
   '/manage/tasks': typeof AppManageTasksRoute
   '/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
+  '/super-admin/challenge-reports': typeof AppSuperAdminChallengeReportsRoute
   '/super-admin/challenges': typeof AppSuperAdminChallengesRoute
   '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
   '/super-admin/projects': typeof AppSuperAdminProjectsRoute
@@ -326,6 +334,7 @@ export interface FileRoutesByTo {
   '/manage/projects': typeof AppManageProjectsRoute
   '/manage/tasks': typeof AppManageTasksRoute
   '/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
+  '/super-admin/challenge-reports': typeof AppSuperAdminChallengeReportsRoute
   '/super-admin/challenges': typeof AppSuperAdminChallengesRoute
   '/super-admin/plugins': typeof AppSuperAdminPluginsRoute
   '/super-admin/projects': typeof AppSuperAdminProjectsRoute
@@ -368,6 +377,7 @@ export interface FileRoutesById {
   '/_app/manage/projects': typeof AppManageProjectsRoute
   '/_app/manage/tasks': typeof AppManageTasksRoute
   '/_app/super-admin/analytics': typeof AppSuperAdminAnalyticsRoute
+  '/_app/super-admin/challenge-reports': typeof AppSuperAdminChallengeReportsRoute
   '/_app/super-admin/challenges': typeof AppSuperAdminChallengesRoute
   '/_app/super-admin/plugins': typeof AppSuperAdminPluginsRoute
   '/_app/super-admin/projects': typeof AppSuperAdminProjectsRoute
@@ -413,6 +423,7 @@ export interface FileRouteTypes {
     | '/manage/projects'
     | '/manage/tasks'
     | '/super-admin/analytics'
+    | '/super-admin/challenge-reports'
     | '/super-admin/challenges'
     | '/super-admin/plugins'
     | '/super-admin/projects'
@@ -454,6 +465,7 @@ export interface FileRouteTypes {
     | '/manage/projects'
     | '/manage/tasks'
     | '/super-admin/analytics'
+    | '/super-admin/challenge-reports'
     | '/super-admin/challenges'
     | '/super-admin/plugins'
     | '/super-admin/projects'
@@ -495,6 +507,7 @@ export interface FileRouteTypes {
     | '/_app/manage/projects'
     | '/_app/manage/tasks'
     | '/_app/super-admin/analytics'
+    | '/_app/super-admin/challenge-reports'
     | '/_app/super-admin/challenges'
     | '/_app/super-admin/plugins'
     | '/_app/super-admin/projects'
@@ -664,6 +677,13 @@ declare module '@tanstack/react-router' {
       path: '/challenges'
       fullPath: '/super-admin/challenges'
       preLoaderRoute: typeof AppSuperAdminChallengesRouteImport
+      parentRoute: typeof AppSuperAdminRouteRoute
+    }
+    '/_app/super-admin/challenge-reports': {
+      id: '/_app/super-admin/challenge-reports'
+      path: '/challenge-reports'
+      fullPath: '/super-admin/challenge-reports'
+      preLoaderRoute: typeof AppSuperAdminChallengeReportsRouteImport
       parentRoute: typeof AppSuperAdminRouteRoute
     }
     '/_app/super-admin/analytics': {
@@ -917,6 +937,7 @@ const AppManageRouteRouteWithChildren = AppManageRouteRoute._addFileChildren(
 
 interface AppSuperAdminRouteRouteChildren {
   AppSuperAdminAnalyticsRoute: typeof AppSuperAdminAnalyticsRoute
+  AppSuperAdminChallengeReportsRoute: typeof AppSuperAdminChallengeReportsRoute
   AppSuperAdminChallengesRoute: typeof AppSuperAdminChallengesRoute
   AppSuperAdminPluginsRoute: typeof AppSuperAdminPluginsRoute
   AppSuperAdminProjectsRoute: typeof AppSuperAdminProjectsRoute
@@ -928,6 +949,7 @@ interface AppSuperAdminRouteRouteChildren {
 
 const AppSuperAdminRouteRouteChildren: AppSuperAdminRouteRouteChildren = {
   AppSuperAdminAnalyticsRoute: AppSuperAdminAnalyticsRoute,
+  AppSuperAdminChallengeReportsRoute: AppSuperAdminChallengeReportsRoute,
   AppSuperAdminChallengesRoute: AppSuperAdminChallengesRoute,
   AppSuperAdminPluginsRoute: AppSuperAdminPluginsRoute,
   AppSuperAdminProjectsRoute: AppSuperAdminProjectsRoute,

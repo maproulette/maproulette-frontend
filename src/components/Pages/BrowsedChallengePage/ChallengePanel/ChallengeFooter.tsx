@@ -17,7 +17,7 @@ import { ChallengeProgress } from './ChallengeProgress'
 export const ChallengeFooter = () => {
   const queryClient = useQueryClient()
   const navigateToTask = useNavigateToTask()
-  const { challenge, existingIssue, user } = useBrowsedChallengeContext()
+  const { challenge, openReport, user } = useBrowsedChallengeContext()
   const { challengeFooterExtensions } = usePluginContext()
   const { showMap, setShowMap } = useMapToggle()
   const { t } = useIntl()
@@ -91,28 +91,18 @@ export const ChallengeFooter = () => {
     <>
       <div className="shrink-0 rounded-b-lg bg-white dark:bg-slate-800">
         <ChallengeProgress />
-        {existingIssue && (
+        {openReport && (
           <div className="mt-3 flex justify-center">
-            <Button
-              variant="outline"
-              className="group h-auto gap-2 border-red-200 bg-red-50/50 px-3 py-2 hover:bg-red-100 hover:shadow-sm dark:border-red-800 dark:bg-red-900/10 dark:hover:bg-red-900/20"
-              onClick={() => window.open(existingIssue.html_url, '_blank')}
-              aria-label={t(
-                'browsedChallengePage.footer.viewReportedIssue',
-                undefined,
-                'View reported issue on GitHub'
-              )}
-            >
-              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] transition-all group-hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)] dark:group-hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+            <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50/50 px-3 py-2 dark:border-red-800 dark:bg-red-900/10">
+              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)]" />
               <p className="text-center text-red-600 text-xs dark:text-red-400">
                 {t(
                   'browsedChallengePage.footer.reportedIssueMessage',
                   undefined,
-                  'This challenge has been reported. Click here to view the issue.'
+                  'You have reported this challenge. It is awaiting review by the MapRoulette administrators.'
                 )}
               </p>
-              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] transition-all group-hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)] dark:group-hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-            </Button>
+            </div>
           </div>
         )}
         <div className="mt-3 flex flex-col gap-4">
