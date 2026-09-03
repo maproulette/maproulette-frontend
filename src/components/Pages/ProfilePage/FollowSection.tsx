@@ -1,14 +1,15 @@
 import { Link } from '@tanstack/react-router'
-import { UserCheck, UserPlus, Users } from 'lucide-react'
+import { Shield, ShieldOff, UserCheck, UserPlus, Users } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { FOLLOWER_STATUS } from '@/api/user/follow'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import { initials } from '@/lib/utils'
+import { cn, initials } from '@/lib/utils'
 import type { PublicUser } from '@/types/User'
 import { FollowedActivity } from './FollowedActivity'
 
@@ -54,6 +55,8 @@ export const FollowSection = ({ userId }: { userId: number }) => {
   })
 
   const followMutation = api.user.useFollowUser()
+  const blockMutation = api.user.useBlockFollower()
+  const unblockMutation = api.user.useUnblockFollower()
   const unfollowMutation = api.user.useUnfollowUser()
 
   const isFollowing = (myFollowing ?? []).some((user) => user.id === userId)
@@ -147,10 +150,70 @@ export const FollowSection = ({ userId }: { userId: number }) => {
               'Followers ({count})'
             )}
           </h3>
-          <UserList
-            users={followers ?? []}
-            emptyLabel={t('profilePage.follow.noFollowers', undefined, 'No followers yet.')}
-          />
+          {followers?.length ? (
+            <ul className="space-y-1">
+              {followers.map((follower) => {
+                const blocked = follower.status === FOLLOWER_STATUS.blocked
+                return (
+                  <li key={follower.user.id} className="flex items-center gap-2">
+                    <Link
+                      to="/profile/$userId"
+                      params={{ userId: String(follower.user.id) }}
+                      className={cn(
+                        'flex min-w-0 flex-1 items-center gap-2 text-sm',
+                        blocked && 'text-zinc-400 dark:text-zinc-500'
+                      )}
+                    >
+                      <Avatar className="size-6">
+                        <AvatarImage
+                          src={follower.user.osmProfile?.avatarURL}
+                          alt={follower.user.osmProfile?.displayName}
+                        />
+                        <AvatarFallback>
+                          {initials(follower.user.osmProfile?.displayName ?? '?')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="truncate">{follower.user.osmProfile?.displayName}</span>
+                      {blocked && (
+                        <span className="shrink-0 text-xs">
+                          {t('profilePage.follow.blockedLabel', undefined, '(blocked)')}
+                        </span>
+                      )}
+                    </Link>
+                    {isOwnProfile && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="gap-1.5"
+                        onClick={() =>
+                          (blocked ? unblockMutation : blockMutation).mutate({
+                            userId: follower.user.id ?? 0,
+                            currentUserId: authedUser?.id,
+                          })
+                        }
+                      >
+                        {blocked ? (
+                          <>
+                            <ShieldOff className="size-3.5" />
+                            {t('profilePage.follow.unblock', undefined, 'Unblock')}
+                          </>
+                        ) : (
+                          <>
+                            <Shield className="size-3.5" />
+                            {t('profilePage.follow.block', undefined, 'Block')}
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              {t('profilePage.follow.noFollowers', undefined, 'No followers yet.')}
+            </p>
+          )}
         </div>
       </div>
     </section>
