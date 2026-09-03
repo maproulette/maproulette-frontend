@@ -50,11 +50,11 @@ export const ManageTaskEdit = () => {
       errorTags: values.errorTags ?? task.errorTags ?? '',
     }
     await updateTaskMutation.mutateAsync({ taskId: taskIdNum, body })
-    navigate({ to: '/manage/task/$taskId', params: { taskId } })
+    navigate({ to: '/tasks/$taskId', params: { taskId } })
   }
 
   const handleCancel = () => {
-    navigate({ to: '/manage/task/$taskId', params: { taskId } })
+    navigate({ to: '/tasks/$taskId', params: { taskId } })
   }
 
   if (isLoading || !task || (task && challengeId && challengeLoading)) {

@@ -172,7 +172,7 @@ export const ChallengeTasksExplorerTaskTable = ({
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" size="sm" className="h-8 px-2" asChild>
-                        <Link to="/manage/task/$taskId" params={{ taskId: String(marker.id) }}>
+                        <Link to="/tasks/$taskId" params={{ taskId: String(marker.id) }}>
                           {t('common.view', undefined, 'View')}
                         </Link>
                       </Button>

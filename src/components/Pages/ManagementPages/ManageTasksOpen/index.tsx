@@ -24,7 +24,7 @@ export const ManageTasksOpen = () => {
   const handleView = (e: React.FormEvent) => {
     e.preventDefault()
     if (!isValidId) return
-    navigate({ to: '/manage/task/$taskId', params: { taskId: String(taskId) } })
+    navigate({ to: '/tasks/$taskId', params: { taskId: String(taskId) } })
   }
 
   const handleEdit = (e: React.FormEvent) => {

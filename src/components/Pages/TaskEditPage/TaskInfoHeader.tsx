@@ -1,36 +1,27 @@
 import { Link } from '@tanstack/react-router'
-import bbox from '@turf/bbox'
-import {
-  BookOpen,
-  ExternalLink,
-  Eye,
-  EyeOff,
-  FolderOpen,
-  Share2,
-  Star,
-  X,
-  ZoomIn,
-} from 'lucide-react'
+import { BookOpen, FolderOpen, MoreHorizontal, Pencil, Share2, Star, X } from 'lucide-react'
+import { useState } from 'react'
 import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import {
   EDITABLE_STATUSES,
   useTaskContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
-import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
-import {
-  getOsmServerUrl,
-  parseOsmFeatureFromTask,
-} from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { Button } from '@/components/ui/Button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
+import { canManageChallenge } from '@/lib/challengePermissions'
 import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
-import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import {
   challengeDescriptionText,
@@ -69,13 +60,13 @@ export const TaskInfoHeader = ({
 }) => {
   const { t } = useIntl()
   const { challenge } = useChallengeContext()
-  const { isAuthenticated } = useAuthContext()
+  const { isAuthenticated, user } = useAuthContext()
   const { isTaskEditableByPlugins } = usePluginContext()
-  const { map, markersHidden, setMarkersHidden } = useTaskMapContext()
   const { data: project } = api.project.getProject(challenge?.parent)
   const { task: contextTask } = useTaskContext()
   const { showView } = usePanelViewContext()
   const { recommended, markDescriptionRead } = useDescriptionRecommendation()
+  const [shareOpen, setShareOpen] = useState(false)
 
   const challengeDescription = challengeDescriptionText(challenge)
   const projectDescription = projectDescriptionText(project)
@@ -89,26 +80,10 @@ export const TaskInfoHeader = ({
   // (including plugin-unlocked revision flows)
   const canEdit = isAuthenticated && isLocked && isEditable
   const canSkip = EDITABLE_STATUSES.includes(status)
-
-  const osmFeature = parseOsmFeatureFromTask(task)
-  const osmServer = getOsmServerUrl()
-  const osmUrl =
-    task.name && osmFeature
-      ? `${osmServer}/${osmFeature.type}/${osmFeature.id}`
-      : task.name && /^(node|way|relation)\/\d+$/.test(String(task.name))
-        ? `${osmServer}/${task.name}`
-        : task.name && /^\d+$/.test(String(task.name))
-          ? `${osmServer}/way/${task.name}`
-          : null
-
-  const handleZoomToTask = () => {
-    if (!map?.current) return
-    map.current.fitBounds(bbox(task.geometries) as Bbox2D, {
-      padding: 50,
-      duration: 0,
-      maxZoom: 18,
-    })
-  }
+  // Editing the task's own record (name, instructions, geometry) is a challenge
+  // manager's job, and is reached from the overflow menu rather than a page of
+  // its own.
+  const canManageTask = canManageChallenge(user, challenge)
 
   const showActionRow = showActions && canEdit
 
@@ -139,74 +114,40 @@ export const TaskInfoHeader = ({
             </span>
           )}
           <div className="ml-auto flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className={cn(markersHidden && 'text-amber-600 dark:text-amber-400')}
-              onClick={() => setMarkersHidden(!markersHidden)}
-              aria-label={
-                markersHidden
-                  ? t('taskEditPage.taskInfoHeader.showMarkers', undefined, 'Show task markers')
-                  : t('taskEditPage.taskInfoHeader.hideMarkers', undefined, 'Hide task markers')
-              }
-              title={
-                markersHidden
-                  ? t('taskEditPage.taskInfoHeader.showMarkers', undefined, 'Show task markers')
-                  : t('taskEditPage.taskInfoHeader.hideMarkers', undefined, 'Hide task markers')
-              }
-            >
-              {markersHidden ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleZoomToTask}
-              aria-label={t('common.zoomToTask', undefined, 'Zoom to task')}
-              title={t('common.zoomToTask', undefined, 'Zoom to task')}
-            >
-              <ZoomIn className="size-4" />
-            </Button>
-            <Popover>
-              <PopoverTrigger asChild>
+            {task.id === contextTask.id && isEditable && <LockButton compact />}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label={t('common.shareTask', undefined, 'Share task')}
-                  title={t('common.shareTask', undefined, 'Share task')}
+                  aria-label={t('common.openMenu', undefined, 'Open menu')}
+                  title={t('common.openMenu', undefined, 'Open menu')}
+                >
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="flex cursor-pointer items-center gap-2"
+                  onSelect={() => setShareOpen(true)}
                 >
                   <Share2 className="size-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="end" className="w-80">
-                <SharePopoverContent
-                  url={`${window.location.origin}/tasks/${task.id}`}
-                  title={
-                    task.name
-                      ? t('common.taskWithName', { name: task.name }, 'Task: {name}')
-                      : t('common.taskWithId', { id: task.id }, 'Task #{id}')
-                  }
-                  description={challenge?.name}
-                />
-              </PopoverContent>
-            </Popover>
-            {osmUrl && (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                asChild
-                title={t('common.viewOnOsm', undefined, 'View on OSM')}
-              >
-                <a
-                  href={osmUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={t('common.viewOnOsm', undefined, 'View on OSM')}
-                >
-                  <ExternalLink className="size-4" />
-                </a>
-              </Button>
-            )}
-            {task.id === contextTask.id && isEditable && <LockButton compact />}
+                  {t('common.shareTask', undefined, 'Share task')}
+                </DropdownMenuItem>
+                {canManageTask && (
+                  <DropdownMenuItem asChild>
+                    <Link
+                      to="/manage/task/$taskId/edit"
+                      params={{ taskId: String(task.id) }}
+                      className="flex cursor-pointer items-center gap-2"
+                    >
+                      <Pencil className="size-4" />
+                      {t('common.editTask', undefined, 'Edit task')}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
             {onClose && (
               <Button
                 variant="ghost"
@@ -294,6 +235,24 @@ export const TaskInfoHeader = ({
           </div>
         )}
       </div>
+
+      {/* The share panel the overflow menu opens: copy link, QR code, native share. */}
+      <Dialog open={shareOpen} onOpenChange={setShareOpen}>
+        <DialogContent size="sm" className="p-0">
+          <DialogHeader className="sr-only">
+            <DialogTitle>{t('common.shareTask', undefined, 'Share task')}</DialogTitle>
+          </DialogHeader>
+          <SharePopoverContent
+            url={`${window.location.origin}/tasks/${task.id}`}
+            title={
+              task.name
+                ? t('common.taskWithName', { name: task.name }, 'Task: {name}')
+                : t('common.taskWithId', { id: task.id }, 'Task #{id}')
+            }
+            description={challenge?.name}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Action zone: Skip + Editor (only when user can edit) */}
       {showActionRow && (

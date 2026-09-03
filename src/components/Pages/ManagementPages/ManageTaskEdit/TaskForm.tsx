@@ -70,7 +70,10 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex min-h-0 flex-1 flex-col">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="absolute inset-0 flex min-h-0 flex-col"
+      >
         <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-1">
           <FormField
             control={form.control}
