@@ -14,6 +14,7 @@ vi.mock('intl-messageformat', async () => {
 })
 
 import { IntlMessageFormat } from 'intl-messageformat'
+import type { Locale } from './locales'
 import { clearFormatCache, formatMessage, loadCatalog } from './messageFormatting'
 
 const baseCatalog = enUS as Record<string, string>
@@ -132,11 +133,25 @@ describe('loadCatalog', () => {
   })
 
   it('falls back to the base catalog for a completely missing locale using the real loader', async () => {
-    // No de.json exists in messages/, so the default loader should reject and
-    // loadCatalog should fall back to the base catalog exactly like the
-    // explicit-rejection case above, exercising the real import() path.
-    const result = await loadCatalog('de')
+    // Translated catalogs now ship for every locale that has Transifex
+    // coverage, so this needs a tag that is genuinely absent from messages/ to
+    // make the default loader reject and exercise the real import() path.
+    const missingLocale = 'xx-XX' as unknown as Locale
+
+    const result = await loadCatalog(missingLocale)
 
     expect(result).toBe(baseCatalog)
+  })
+
+  it('merges a shipped translated catalog over the base catalog using the real loader', async () => {
+    // Guards the real import() path against a locale catalog that exists but
+    // is unreadable/malformed, which would silently degrade to English.
+    const result = await loadCatalog('fr')
+
+    expect(result).not.toBe(baseCatalog)
+    // Carried-over French translations are a subset of the source catalog, so
+    // every key still resolves while at least one differs from its English.
+    expect(Object.keys(result).length).toBe(Object.keys(baseCatalog).length)
+    expect(Object.entries(result).some(([k, v]) => v !== baseCatalog[k])).toBe(true)
   })
 })
