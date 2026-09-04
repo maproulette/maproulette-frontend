@@ -42,7 +42,7 @@ export const PendingInvitesSection = ({ invites }: Props) => {
         {t(
           'teams.pendingInvites.count',
           { count: invites.length },
-          'You have {count, plural, one {# pending invitation} other {# pending invitations}}'
+          '{count, plural, one {You have # pending invitation} other {You have # pending invitations}}'
         )}
       </h2>
       <ul className="space-y-2">

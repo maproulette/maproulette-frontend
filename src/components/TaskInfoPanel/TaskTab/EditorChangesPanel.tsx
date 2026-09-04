@@ -103,7 +103,7 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
               ? t(
                   'taskInfoPanel.editorChanges.diverged',
                   { count: editor?.divergedTagFixCount ?? 0 },
-                  '{count, plural, one {# element no longer matches} other {# elements no longer match}} what the challenge suggests.'
+                  '{count, plural, one {# element no longer matches what the challenge suggests.} other {# elements no longer match what the challenge suggests.}}'
                 )
               : t(
                   'taskInfoPanel.editorChanges.matches',
