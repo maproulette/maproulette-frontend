@@ -65,7 +65,7 @@
     "intl-messageformat": "^11.2.12",
     "ky": "^1.11.0",
     "lucide-react": "^0.544.0",
-    "maplibre-gl": "^5.16.0",
+    "maplibre-gl": "^5.24.0",
     "qrcode": "^1.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
