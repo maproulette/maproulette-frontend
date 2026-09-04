@@ -14,6 +14,7 @@ import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
+import { useWebGLContextRecovery } from '@/components/Map/useWebGLContextRecovery'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -45,6 +46,8 @@ export const ExploreChallengesMap = () => {
     setSpideredMarkers,
     setSpideredTaskData,
   } = useExploreChallengesMap()
+
+  const { mapKey, attachMap } = useWebGLContextRecovery(mapRef, setMapLoaded)
 
   const mvtSourceId = 'mvt-data'
   const mvtLayerId = 'mvt-hidden'
@@ -97,8 +100,9 @@ export const ExploreChallengesMap = () => {
     <div className="relative isolate h-full w-full">
       <div className="absolute inset-0 overflow-hidden rounded-lg">
         <MapGL
+          key={mapKey}
           id={mapId}
-          ref={mapRef}
+          ref={attachMap}
           hash
           initialViewState={{
             longitude: 0,

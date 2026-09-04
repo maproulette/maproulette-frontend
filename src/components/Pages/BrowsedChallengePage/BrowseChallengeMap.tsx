@@ -13,6 +13,7 @@ import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
+import { useWebGLContextRecovery } from '@/components/Map/useWebGLContextRecovery'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -50,13 +51,16 @@ export const BrowseChallengeMap = () => {
     initialViewState,
   } = useBrowseChallengeMap()
 
+  const { mapKey, attachMap } = useWebGLContextRecovery(mapRef, setMapLoaded)
+
   const { portalTarget } = useDrawerPortal()
 
   return (
     <div className="relative h-full w-full">
       <MapGL
+        key={mapKey}
         id={mapId}
-        ref={mapRef}
+        ref={attachMap}
         hash
         initialViewState={initialViewState}
         mapStyle={mapStyle}
