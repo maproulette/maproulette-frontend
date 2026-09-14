@@ -117,7 +117,7 @@ export const SuperAdminTeamImages = () => {
           {t(
             'superAdminTeamImages.subtitle',
             undefined,
-            'Images teams have requested for their challenges. Approving one makes it selectable by everyone on that team.'
+            'Images teams have requested for their challenges. A team carries a single image, so approving a request replaces the one that team is using, including on the challenges already showing it.'
           )}
         </p>
       </div>

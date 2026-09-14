@@ -8,7 +8,6 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { useIntl } from '@/i18n'
 import { resolveTeamImageUrl } from '@/lib/teamImage'
 import { cn } from '@/lib/utils'
-import type { TeamImage } from '@/types/TeamImage'
 import type { ChallengeFormValues } from './challengeFormSchema'
 
 interface ImageTileProps {
@@ -61,31 +60,24 @@ const ImageTile = ({ label, selected, onSelect, children, caption }: ImageTilePr
 )
 
 /**
- * Lets the challenge owner pick a display image from the approved images of
- * the teams they belong to. Images can't be uploaded here — they're requested
- * on the team's page and have to be approved by a super admin first — so a
- * user with no teams, or whose teams have no approved images yet, simply has
- * nothing to choose from.
+ * Lets the challenge owner pick a display image from the teams they belong to.
+ * Each team carries one image, so the choice is really which team's image to
+ * use. Images can't be uploaded here — they're requested on the team's page
+ * and have to be approved by a super admin first — so a user with no teams, or
+ * whose teams have no approved image yet, simply has nothing to choose from.
  */
 export const ChallengeImageSection = () => {
   const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
   const { data: images, isLoading, isError } = api.teamImage.available()
 
-  // Images stay grouped by team so a team's options sit together in the grid,
-  // but the team name rides along as each tile's caption instead of its own
-  // heading row — one heading per image wastes a lot of vertical space when a
-  // team has only contributed a picture or two.
-  const grouped = (images ?? []).reduce<Map<string, TeamImage[]>>((acc, image) => {
-    const key = image.teamName ?? String(image.teamId)
-    const existing = acc.get(key)
-    if (existing) existing.push(image)
-    else acc.set(key, [image])
-    return acc
-  }, new Map())
-  const ordered = [...grouped.entries()].flatMap(([teamName, teamImages]) =>
-    teamImages.map((image) => ({ image, teamName }))
-  )
+  // Each team carries one image, so this is simply one tile per team the user
+  // belongs to. The team name rides along as the tile's caption, since the
+  // picture alone doesn't say whose it is.
+  const options = (images ?? []).map((image) => ({
+    image,
+    teamName: image.teamName ?? String(image.teamId),
+  }))
 
   return (
     <FormSection
@@ -93,7 +85,7 @@ export const ChallengeImageSection = () => {
       description={t(
         'manageChallengeNew.challengeForm.imageDescription',
         undefined,
-        "An optional image shown on this challenge's card, chosen from your teams' approved images."
+        "An optional image shown on this challenge's card, chosen from the approved image of a team you belong to."
       )}
     >
       <FormField
@@ -130,7 +122,7 @@ export const ChallengeImageSection = () => {
                     <ImageOff className="h-6 w-6 text-zinc-400 dark:text-slate-500" />
                   </ImageTile>
 
-                  {ordered.map(({ image, teamName }) => (
+                  {options.map(({ image, teamName }) => (
                     <ImageTile
                       key={image.id}
                       label={image.name}
@@ -147,7 +139,7 @@ export const ChallengeImageSection = () => {
                   ))}
                 </ul>
 
-                {ordered.length === 0 && (
+                {options.length === 0 && (
                   <p className="rounded-lg border border-zinc-200 border-dashed p-3 text-sm text-zinc-600 dark:border-slate-700 dark:text-zinc-400">
                     {t(
                       'manageChallengeNew.challengeForm.imageNoneAvailable',

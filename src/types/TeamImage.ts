@@ -1,9 +1,14 @@
 import type { components } from './openApiTypes'
 
 /**
- * A team-owned challenge display image. Members request one; a super admin
+ * A team's challenge display image. Members request one; a super admin
  * approves it; from then on any member of that team can attach it to their
  * challenges.
+ *
+ * A team carries a single image. A request sits alongside the image the team
+ * is currently using until it is reviewed, and on approval takes its place,
+ * inheriting the challenges the old image was on. Rejected images stay behind
+ * as history, which is why a team's list can still hold several.
  */
 export type TeamImageStatus = 'pending' | 'approved' | 'rejected'
 
@@ -28,3 +33,6 @@ export const isPendingImage = (image: Pick<TeamImage, 'status'>): boolean =>
 
 export const isApprovedImage = (image: Pick<TeamImage, 'status'>): boolean =>
   image.status === TEAM_IMAGE_STATUS_APPROVED
+
+export const isRejectedImage = (image: Pick<TeamImage, 'status'>): boolean =>
+  image.status === TEAM_IMAGE_STATUS_REJECTED
