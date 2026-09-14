@@ -417,7 +417,7 @@ const Inbox = (props) => {
     );
   }
 
-  const totalPages = Math.ceil(data.length / pageSize);
+  const totalPages = Math.max(Math.ceil(data.length / pageSize), 1);
 
   return (
     <div className="mr-bg-gradient-r-green-dark-blue mr-px-6 mr-py-8 md:mr-py-12 mr-flex mr-justify-center mr-items-center">
