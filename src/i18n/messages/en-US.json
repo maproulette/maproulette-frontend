@@ -604,6 +604,7 @@
   "manageChallengeNew.challengeForm.descriptionPlaceholder": "Describe what this challenge is about...",
   "manageChallengeNew.challengeForm.difficultyPlaceholder": "Select difficulty",
   "manageChallengeNew.challengeForm.docsLinkText": "docs",
+  "manageChallengeNew.challengeForm.fieldErrorsTitle": "{count} fields need attention",
   "manageChallengeNew.challengeForm.geoJSONFileDescriptionAfter": "are supported.",
   "manageChallengeNew.challengeForm.geoJSONFileDescriptionBefore": "Upload a GeoJSON file from your computer. Standard GeoJSON and",
   "manageChallengeNew.challengeForm.geoJSONFileLabel": "GeoJSON File",

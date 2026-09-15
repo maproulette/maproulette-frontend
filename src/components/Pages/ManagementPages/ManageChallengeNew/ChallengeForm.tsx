@@ -10,6 +10,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { useIntl } from '@/i18n'
 import { getErrorMessage } from '@/lib/apiError'
+import { flattenFieldErrors } from '@/lib/formErrors'
 import { logger } from '@/lib/logger'
 import { AgreementSection } from './AgreementSection'
 import { BasemapFields } from './BasemapFields'
@@ -66,6 +67,10 @@ export const ChallengeForm = () => {
   const sourceReadOnly = isEdit
 
   const serverError = form.formState.errors.root?.serverError?.message
+  // The form is taller than its scroll box, so a field marked invalid can sit
+  // off screen with nothing but a disabled submit button to explain itself.
+  // Every field error is restated down here, next to that button.
+  const fieldErrors = flattenFieldErrors(form.formState.errors)
 
   // A server error describes the values as they were submitted, so retire the
   // banner as soon as the user starts changing them again.
@@ -174,6 +179,33 @@ export const ChallengeForm = () => {
                   )}
             </AlertTitle>
             <AlertDescription>{serverError}</AlertDescription>
+          </Alert>
+        )}
+        {fieldErrors.length > 0 && (
+          <Alert variant="destructive" className="mt-4 shrink-0">
+            <AlertTitle>
+              {t(
+                'manageChallengeNew.challengeForm.fieldErrorsTitle',
+                { count: fieldErrors.length },
+                '{count} fields need attention'
+              )}
+            </AlertTitle>
+            <AlertDescription>
+              <ul className="space-y-0.5">
+                {fieldErrors.map((error) => (
+                  <li key={error.name}>
+                    <button
+                      type="button"
+                      // Scrolls the offending field back into view and focuses it.
+                      onClick={() => form.setFocus(error.name as keyof ChallengeFormValues)}
+                      className="text-left underline-offset-2 hover:underline"
+                    >
+                      {error.message}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </AlertDescription>
           </Alert>
         )}
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
