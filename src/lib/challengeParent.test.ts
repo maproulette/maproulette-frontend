@@ -7,6 +7,22 @@ describe('getParentInfo', () => {
     expect(result).toEqual({ id: 42, name: 'My Project' })
   })
 
+  it("prefers the project's display name over its internal name", () => {
+    const result = getParentInfo({ id: 42, name: 'Home_14329', displayName: "Collin's Project" })
+    expect(result).toEqual({ id: 42, name: "Collin's Project" })
+  })
+
+  it('falls back to the internal name when the display name is unset', () => {
+    expect(getParentInfo({ id: 42, name: 'Home_14329', displayName: null })).toEqual({
+      id: 42,
+      name: 'Home_14329',
+    })
+    expect(getParentInfo({ id: 42, name: 'Home_14329', displayName: '' })).toEqual({
+      id: 42,
+      name: 'Home_14329',
+    })
+  })
+
   it('defaults name to "Unknown Project" when the parent object has no name', () => {
     const result = getParentInfo({ id: 42 })
     expect(result).toEqual({ id: 42, name: 'Unknown Project' })

@@ -5,8 +5,13 @@
 // display-ready { id, name }.
 export const getParentInfo = (parent: unknown) => {
   if (typeof parent === 'object' && parent !== null) {
-    const parentObj = parent as { id?: number; name?: string }
-    return { id: parentObj.id ?? null, name: parentObj.name || 'Unknown Project' }
+    const parentObj = parent as { id?: number; name?: string; displayName?: string | null }
+    // A project's `name` is its internal one; `displayName` is what the rest of
+    // the app shows, so prefer it and fall back only when it is unset.
+    return {
+      id: parentObj.id ?? null,
+      name: parentObj.displayName || parentObj.name || 'Unknown Project',
+    }
   }
   if (typeof parent === 'number' || typeof parent === 'string') {
     return { id: parent, name: 'Unknown Project' }

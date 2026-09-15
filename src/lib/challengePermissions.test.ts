@@ -64,6 +64,17 @@ describe('canManageChallenge', () => {
     expect(canManageChallenge(user, challenge)).toBe(true)
   })
 
+  it('matches a project grant when the parent is embedded rather than an id', () => {
+    // The team and saved-challenge endpoints embed the whole project, so the
+    // grant target has to be compared against the parent's id either way.
+    const user = makeUser({ osmId: 99, grants: [{ role: ROLE_ADMIN, targetId: 10 }] })
+    const challenge = {
+      owner: 1,
+      parent: { id: 10, name: 'Embedded Project' },
+    } as unknown as Challenge
+    expect(canManageChallenge(user, challenge)).toBe(true)
+  })
+
   it('returns false when the only grant is on a different project', () => {
     const user = makeUser({ osmId: 1, grants: [{ role: ROLE_ADMIN, targetId: 99 }] })
     const challenge = makeChallenge({ owner: 999, parent: 10 })

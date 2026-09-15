@@ -1,3 +1,4 @@
+import { getParentId } from '@/lib/challengeParent'
 import type { Challenge } from '@/types/Challenge'
 import type { User } from '@/types/User'
 
@@ -17,11 +18,13 @@ export const canManageChallenge = (
   const grants = user.grants ?? []
   if (grants.some((g) => g.role === ROLE_SUPER_USER)) return true
 
-  if (challenge.parent != null) {
+  // Endpoints disagree on whether `parent` is the project id or the embedded
+  // project, so normalize before comparing it against a grant's target.
+  const parentId = getParentId(challenge.parent)
+  if (parentId !== undefined) {
     const hasProjectGrant = grants.some(
       (g) =>
-        g.target?.objectId === challenge.parent &&
-        (g.role === ROLE_ADMIN || g.role === ROLE_WRITE_ACCESS)
+        g.target?.objectId === parentId && (g.role === ROLE_ADMIN || g.role === ROLE_WRITE_ACCESS)
     )
     if (hasProjectGrant) return true
   }
