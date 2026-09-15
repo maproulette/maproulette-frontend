@@ -3,6 +3,7 @@ import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { SidebarIndicator } from '@/components/shared/SidebarIndicator'
 import { Button } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { useIntl } from '@/i18n'
@@ -26,10 +27,16 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     isLiked,
     projectName,
     ownerName,
+    ownerTeamId,
+    ownerTeamName,
     formattedDate,
     user,
   } = useBrowsedChallengeContext()
   const name = challenge.name
+  // A team-owned challenge is credited to the team. Gate on the id rather than
+  // the name so the creator's name never flashes up before the team's arrives.
+  const ownedByTeam = ownerTeamId !== undefined
+  const bylineName = ownedByTeam ? ownerTeamName : ownerName
   const { openComments } = useChallengeModals()
   const { t } = useIntl()
   const needsSignIn = !user?.id
@@ -269,242 +276,276 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
         </div>
       )}
 
-      {/* Title Row - with ellipsis on opposite side when scrolled */}
-      <div
-        className={cn('flex items-center gap-2', isScrolled ? 'justify-between' : 'justify-start')}
-      >
-        <h1
-          className={cn(
-            'min-w-0 font-bold text-zinc-900 leading-tight tracking-tight transition-all duration-500 ease-in-out dark:text-white',
-            isScrolled
-              ? 'flex-1 truncate text-base'
-              : 'line-clamp-2 w-full break-words text-left font-semibold text-base'
-          )}
-        >
-          {name}
-        </h1>
-        {isScrolled && (
+      {/* Title and byline, with the owning team's image alongside them */}
+      <div className={cn(!isScrolled && 'flex items-start gap-4')}>
+        <div className={cn('min-w-0', !isScrolled && 'flex-1 space-y-2.5')}>
+          {/* Title Row - with ellipsis on opposite side when scrolled */}
           <div
-            className="relative z-10 flex items-center gap-1"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-            role="toolbar"
+            className={cn(
+              'flex items-center gap-2',
+              isScrolled ? 'justify-between' : 'justify-start'
+            )}
           >
-            <DisabledTooltip show={needsSignIn} message={likeSignInMsg}>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={handleLike}
-                disabled={needsSignIn}
-                aria-label={
-                  isLiked
-                    ? t(
-                        'browsedChallengePage.header.unlikeChallenge',
-                        undefined,
-                        'Unlike challenge'
-                      )
-                    : t('browsedChallengePage.header.likeChallenge', undefined, 'Like challenge')
-                }
-              >
-                <Heart
-                  className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
-                />
-              </Button>
-            </DisabledTooltip>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={openComments}
-              aria-label={t('browsedChallengePage.header.viewComments', undefined, 'View comments')}
-            >
-              <MessageSquare className="size-4" />
-            </Button>
-            <DisabledTooltip show={needsSignIn} message={saveSignInMsg}>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={handleFavorite}
-                disabled={needsSignIn}
-                aria-label={
-                  isFavorited
-                    ? t(
-                        'browsedChallengePage.header.removeFromFavorites',
-                        undefined,
-                        'Remove from favorites'
-                      )
-                    : t('browsedChallengePage.header.addToFavorites', undefined, 'Add to favorites')
-                }
-              >
-                <Bookmark
-                  className={cn(
-                    'size-4 transition-all',
-                    isFavorited && 'fill-yellow-500 text-yellow-500'
-                  )}
-                />
-              </Button>
-            </DisabledTooltip>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleShare}
-              aria-label={t(
-                'browsedChallengePage.header.shareChallenge',
-                undefined,
-                'Share challenge'
+            <h1
+              className={cn(
+                'min-w-0 font-bold text-zinc-900 leading-tight tracking-tight transition-all duration-500 ease-in-out dark:text-white',
+                isScrolled
+                  ? 'flex-1 truncate text-base'
+                  : 'line-clamp-2 w-full break-words text-left font-semibold text-base'
               )}
             >
-              <Share2 className="size-4" />
-            </Button>
-            <ChallengeActionButtons />
-          </div>
-        )}
-      </div>
-
-      {!isScrolled && (
-        <>
-          <div className="max-h-20 overflow-hidden opacity-100 transition-all duration-500 ease-in-out">
-            {(projectName || ownerName || formattedDate) && (
+              {name}
+            </h1>
+            {isScrolled && (
               <div
-                className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-slate-400"
+                className="relative z-10 flex items-center gap-1"
                 onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.stopPropagation()
-                  }
-                }}
+                onKeyDown={(e) => e.stopPropagation()}
                 role="toolbar"
               >
-                {projectName && projectId ? (
-                  <>
-                    <Link
-                      to="/project/$projectId"
-                      params={{ projectId: String(projectId) }}
-                      className="break-all font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {projectName}
-                    </Link>
-                    {(ownerName || formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-white">•</span>
-                    )}
-                  </>
-                ) : projectName ? (
-                  <>
-                    <span className="break-all font-medium">{projectName}</span>
-                    {(ownerName || formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-white">•</span>
-                    )}
-                  </>
-                ) : null}
-                {ownerName && (
-                  <>
-                    <span className="whitespace-nowrap">
-                      {t('browsedChallengePage.header.byPrefix', undefined, 'by')}{' '}
-                      <a
-                        href={`https://www.openstreetmap.org/user/${encodeURIComponent(ownerName)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {ownerName}
-                      </a>
-                    </span>
-                    {(formattedDate || likeCount > 0) && (
-                      <span className="text-zinc-400 dark:text-white">•</span>
-                    )}
-                  </>
-                )}
-                {formattedDate && (
-                  <>
-                    <span className="whitespace-nowrap">{formattedDate}</span>
-                    {likeCount > 0 && <span className="text-zinc-400 dark:text-white">•</span>}
-                  </>
-                )}
-                {likeCount > 0 && (
-                  <span className="whitespace-nowrap">
-                    {likeCount === 1
-                      ? t('browsedChallengePage.header.likeCountSingular', undefined, '1 like')
-                      : t(
-                          'browsedChallengePage.header.likeCountPlural',
-                          { count: likeCount },
-                          '{count} likes'
-                        )}
-                  </span>
-                )}
+                <DisabledTooltip show={needsSignIn} message={likeSignInMsg}>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={handleLike}
+                    disabled={needsSignIn}
+                    aria-label={
+                      isLiked
+                        ? t(
+                            'browsedChallengePage.header.unlikeChallenge',
+                            undefined,
+                            'Unlike challenge'
+                          )
+                        : t(
+                            'browsedChallengePage.header.likeChallenge',
+                            undefined,
+                            'Like challenge'
+                          )
+                    }
+                  >
+                    <Heart
+                      className={cn(
+                        'size-4 transition-all',
+                        isLiked && 'fill-red-500 text-red-500'
+                      )}
+                    />
+                  </Button>
+                </DisabledTooltip>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={openComments}
+                  aria-label={t(
+                    'browsedChallengePage.header.viewComments',
+                    undefined,
+                    'View comments'
+                  )}
+                >
+                  <MessageSquare className="size-4" />
+                </Button>
+                <DisabledTooltip show={needsSignIn} message={saveSignInMsg}>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={handleFavorite}
+                    disabled={needsSignIn}
+                    aria-label={
+                      isFavorited
+                        ? t(
+                            'browsedChallengePage.header.removeFromFavorites',
+                            undefined,
+                            'Remove from favorites'
+                          )
+                        : t(
+                            'browsedChallengePage.header.addToFavorites',
+                            undefined,
+                            'Add to favorites'
+                          )
+                    }
+                  >
+                    <Bookmark
+                      className={cn(
+                        'size-4 transition-all',
+                        isFavorited && 'fill-yellow-500 text-yellow-500'
+                      )}
+                    />
+                  </Button>
+                </DisabledTooltip>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleShare}
+                  aria-label={t(
+                    'browsedChallengePage.header.shareChallenge',
+                    undefined,
+                    'Share challenge'
+                  )}
+                >
+                  <Share2 className="size-4" />
+                </Button>
+                <ChallengeActionButtons />
               </div>
             )}
           </div>
-          {/* Like, Comments, Save, and Share Buttons - Bottom of Header */}
-          <div
-            className="relative z-10 mt-4 grid grid-cols-2 items-center gap-2 sm:flex sm:flex-wrap"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-            role="toolbar"
-          >
-            <DisabledTooltip
-              show={needsSignIn}
-              message={likeSignInMsg}
-              className="w-full sm:w-auto"
-            >
-              <Button
-                variant={isLiked ? 'default' : 'outline'}
-                size="sm"
-                className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-                onClick={handleLike}
-                disabled={needsSignIn}
-              >
-                <Heart
-                  className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
-                />
-                {isLiked
-                  ? t('browsedChallengePage.header.liked', undefined, 'Liked')
-                  : t('browsedChallengePage.header.like', undefined, 'Like')}
-              </Button>
-            </DisabledTooltip>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-              onClick={openComments}
-            >
-              <MessageSquare className="size-3.5" />
-              {t('browsedChallengePage.header.comments', undefined, 'Comments')}
-            </Button>
-            <DisabledTooltip
-              show={needsSignIn}
-              message={saveSignInMsg}
-              className="w-full sm:w-auto"
-            >
-              <Button
-                variant={isFavorited ? 'default' : 'outline'}
-                size="sm"
-                className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-                onClick={handleFavorite}
-                disabled={needsSignIn}
-              >
-                <Bookmark
-                  className={cn(
-                    'size-4 transition-all',
-                    isFavorited && 'fill-yellow-500 text-yellow-500'
+
+          {!isScrolled && (
+            <div className="max-h-20 overflow-hidden opacity-100 transition-all duration-500 ease-in-out">
+              {(projectName || bylineName || formattedDate) && (
+                <div
+                  className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-slate-400"
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.stopPropagation()
+                    }
+                  }}
+                  role="toolbar"
+                >
+                  {projectName && projectId ? (
+                    <>
+                      <Link
+                        to="/project/$projectId"
+                        params={{ projectId: String(projectId) }}
+                        className="break-all font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {projectName}
+                      </Link>
+                      {(bylineName || formattedDate || likeCount > 0) && (
+                        <span className="text-zinc-400 dark:text-white">•</span>
+                      )}
+                    </>
+                  ) : projectName ? (
+                    <>
+                      <span className="break-all font-medium">{projectName}</span>
+                      {(bylineName || formattedDate || likeCount > 0) && (
+                        <span className="text-zinc-400 dark:text-white">•</span>
+                      )}
+                    </>
+                  ) : null}
+                  {bylineName && (
+                    <>
+                      <span className="whitespace-nowrap">
+                        {t('browsedChallengePage.header.byPrefix', undefined, 'by')}{' '}
+                        {ownerTeamId !== undefined ? (
+                          <Link
+                            to="/teams/$teamId"
+                            params={{ teamId: String(ownerTeamId) }}
+                            className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {bylineName}
+                          </Link>
+                        ) : (
+                          <a
+                            href={`https://www.openstreetmap.org/user/${encodeURIComponent(bylineName)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {bylineName}
+                          </a>
+                        )}
+                      </span>
+                      {(formattedDate || likeCount > 0) && (
+                        <span className="text-zinc-400 dark:text-white">•</span>
+                      )}
+                    </>
                   )}
-                />
-                {isFavorited
-                  ? t('browsedChallengePage.header.saved', undefined, 'Saved')
-                  : t('common.save', undefined, 'Save')}
-              </Button>
-            </DisabledTooltip>
+                  {formattedDate && (
+                    <>
+                      <span className="whitespace-nowrap">{formattedDate}</span>
+                      {likeCount > 0 && <span className="text-zinc-400 dark:text-white">•</span>}
+                    </>
+                  )}
+                  {likeCount > 0 && (
+                    <span className="whitespace-nowrap">
+                      {likeCount === 1
+                        ? t('browsedChallengePage.header.likeCountSingular', undefined, '1 like')
+                        : t(
+                            'browsedChallengePage.header.likeCountPlural',
+                            { count: likeCount },
+                            '{count} likes'
+                          )}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        {/* Renders nothing when the owning team has no approved image */}
+        {!isScrolled && (
+          <SidebarIndicator
+            avatarUrl={challenge.avatarUrl}
+            className="relative top-auto right-auto h-16 w-16 shrink-0"
+          />
+        )}
+      </div>
+
+      {/* Like, Comments, Save, and Share Buttons - Bottom of Header */}
+      {!isScrolled && (
+        <div
+          className="relative z-10 mt-4 grid grid-cols-2 items-center gap-2 sm:flex sm:flex-wrap"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+          role="toolbar"
+        >
+          <DisabledTooltip show={needsSignIn} message={likeSignInMsg} className="w-full sm:w-auto">
             <Button
-              variant="outline"
+              variant={isLiked ? 'default' : 'outline'}
               size="sm"
               className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
-              onClick={handleShare}
+              onClick={handleLike}
+              disabled={needsSignIn}
             >
-              <Share2 className="size-3.5" />
-              {t('common.share', undefined, 'Share')}
+              <Heart
+                className={cn('size-4 transition-all', isLiked && 'fill-red-500 text-red-500')}
+              />
+              {isLiked
+                ? t('browsedChallengePage.header.liked', undefined, 'Liked')
+                : t('browsedChallengePage.header.like', undefined, 'Like')}
             </Button>
-          </div>
-        </>
+          </DisabledTooltip>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+            onClick={openComments}
+          >
+            <MessageSquare className="size-3.5" />
+            {t('browsedChallengePage.header.comments', undefined, 'Comments')}
+          </Button>
+          <DisabledTooltip show={needsSignIn} message={saveSignInMsg} className="w-full sm:w-auto">
+            <Button
+              variant={isFavorited ? 'default' : 'outline'}
+              size="sm"
+              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+              onClick={handleFavorite}
+              disabled={needsSignIn}
+            >
+              <Bookmark
+                className={cn(
+                  'size-4 transition-all',
+                  isFavorited && 'fill-yellow-500 text-yellow-500'
+                )}
+              />
+              {isFavorited
+                ? t('browsedChallengePage.header.saved', undefined, 'Saved')
+                : t('common.save', undefined, 'Save')}
+            </Button>
+          </DisabledTooltip>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+            onClick={handleShare}
+          >
+            <Share2 className="size-3.5" />
+            {t('common.share', undefined, 'Share')}
+          </Button>
+        </div>
       )}
     </div>
   )

@@ -18,6 +18,12 @@ type BrowsedChallengeContextType = {
   projectId?: number
   projectName?: string | null
   ownerName?: string
+  /**
+   * The team that owns this challenge, if one does. A team-owned challenge is
+   * credited to the team rather than to the person who created it.
+   */
+  ownerTeamId?: number
+  ownerTeamName?: string
   formattedDate?: string | null
   hasOverpass?: boolean
   /**
@@ -32,7 +38,11 @@ type BrowsedChallengeContextType = {
 const BrowsedChallengeContext = createContext<BrowsedChallengeContextType | undefined>(undefined)
 
 export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) => {
-  const { challenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
+  const { challenge: loadedChallenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
+  // The loader is typed from the OpenAPI spec, which doesn't declare every field
+  // the backend writes (see the notes on `Challenge`), so read it through the
+  // augmented type rather than the generated one.
+  const challenge: Challenge = loadedChallenge
   const { user } = useAuthContext()
 
   const { data: favoriteData } = api.challenge.isChallengeFavorited(challenge.id ?? 0)
@@ -50,6 +60,11 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   const { data: projectData } = api.project.getProject(challenge.parent)
 
   const { data: ownerData } = api.user.getPublicUser(challenge.owner)
+
+  // A team-owned challenge is the team's work, so the byline credits the team
+  // instead of whoever happened to create it.
+  const ownerTeamId = challenge.ownerTeamId ?? undefined
+  const { data: ownerTeam } = api.team.get(ownerTeamId)
 
   const projectName = projectData?.displayName || projectData?.name
 
@@ -76,6 +91,8 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       projectId: challenge.parent,
       projectName,
       ownerName: ownerData?.osmProfile?.displayName,
+      ownerTeamId,
+      ownerTeamName: ownerTeam?.name,
       formattedDate,
       hasOverpass,
       openReport,
@@ -90,6 +107,8 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       canManage,
       projectName,
       ownerData?.osmProfile?.displayName,
+      ownerTeamId,
+      ownerTeam?.name,
       formattedDate,
       hasOverpass,
       openReport,
