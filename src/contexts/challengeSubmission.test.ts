@@ -189,6 +189,43 @@ describe('buildChallengeSubmission', () => {
       })
     })
 
+    it('defers a newline-delimited file too, the shape MapRoulette 3 uploads and the backend accepts', async () => {
+      // One FeatureCollection per line, no record separators — a plain
+      // newline-delimited file. Parsing it inline is what produced
+      // "Unexpected non-whitespace character after JSON".
+      const collection = (name: string) =>
+        JSON.stringify({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: { type: 'Point', coordinates: [0, 0] },
+              properties: { name },
+            },
+          ],
+        })
+      const file = new File([`${collection('one')}\n${collection('two')}\n`], 'tasks.geojson', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+        },
+        true
+      )
+
+      expect(result.challengeData).not.toHaveProperty('localGeoJSON')
+      expect(result.localGeoJSONUpload).toEqual({
+        file,
+        lineByLine: true,
+        dataOriginDate: undefined,
+      })
+    })
+
     it('omits dataOriginDate on the deferred upload when none is provided', async () => {
       const lineByLineContent = `${RECORD_SEPARATOR}{"type":"Feature"}\n`
       const file = new File([lineByLineContent], 'sequence.geojsonl', {

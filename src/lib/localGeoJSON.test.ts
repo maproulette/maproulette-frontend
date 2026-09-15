@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { detectLocalGeoJSONSubmission, isLineByLineGeoJSONText } from './localGeoJSON.ts'
+import {
+  detectLocalGeoJSONSubmission,
+  isLineByLineGeoJSONText,
+  isNewlineDelimitedGeoJSONText,
+} from './localGeoJSON.ts'
 
 const RS = '\x1e'
 
@@ -27,14 +31,26 @@ describe('local GeoJSON submission detection', () => {
     })
   })
 
-  it('rejects newline-delimited GeoJSON without a leading record separator', async () => {
-    // Detection only recognizes RFC 7464 (leading RS); plain newline delimiters
-    // fall through to JSON.parse, which fails on multiple top-level objects.
+  it('detects newline-delimited GeoJSON with no record separators', async () => {
+    // What MapRoulette 3's own pre-bundled uploads look like: one collection
+    // per line, joined by plain newlines.
     const body = `${featureCollection('one')}\n${featureCollection('two')}\n`
     const file = new File([body], 'tasks.geojson')
 
     expect(isLineByLineGeoJSONText(body)).toBe(false)
-    await expect(detectLocalGeoJSONSubmission(file)).rejects.toThrow(SyntaxError)
+    expect(isNewlineDelimitedGeoJSONText(body)).toBe(true)
+    await expect(detectLocalGeoJSONSubmission(file)).resolves.toMatchObject({
+      kind: 'lineByLine',
+      file,
+    })
+  })
+
+  it('treats a pretty-printed single collection as one document, not many', async () => {
+    const body = JSON.stringify(JSON.parse(featureCollection('one')), null, 2)
+    const file = new File([body], 'tasks.geojson')
+
+    expect(isNewlineDelimitedGeoJSONText(body)).toBe(false)
+    await expect(detectLocalGeoJSONSubmission(file)).resolves.toMatchObject({ kind: 'json' })
   })
 
   it('parses unformatted GeoJSON as a JSON challenge payload', async () => {
