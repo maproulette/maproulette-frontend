@@ -136,6 +136,77 @@ test('every feature of a FeatureCollection task is listed, and one can be single
   await expect.poll(startMarkersOnScreen, { timeout: 10_000 }).toBeGreaterThan(0)
 })
 
+test('each geometry layer draws only its own kind of geometry', async ({
+  page,
+  request,
+  challenge,
+}) => {
+  test.setTimeout(90_000)
+
+  // A task mixing geometry types: a fill layer will fill the area a line
+  // encloses, and a circle layer will put a dot on every vertex of every
+  // feature, unless each layer is filtered to its own geometry.
+  const taskId = await createTaskWithGeometries(request, challenge.id, [
+    lineFeature(
+      [
+        [-95.456, 37.6866],
+        [-95.452, 37.6866],
+      ],
+      { name: 'A line' }
+    ),
+    {
+      type: 'Feature',
+      properties: { name: 'A polygon' },
+      geometry: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [-95.458, 37.685],
+            [-95.454, 37.685],
+            [-95.454, 37.6858],
+            [-95.458, 37.6858],
+            [-95.458, 37.685],
+          ],
+        ],
+      },
+    },
+    {
+      type: 'Feature',
+      properties: { name: 'A point' },
+      geometry: { type: 'Point', coordinates: [-95.4565, 37.6872] },
+    },
+  ])
+
+  await page.goto(`/tasks/${taskId}`)
+  await page.getByRole('button', { name: 'Map this task' }).click()
+  await expect(page.getByRole('button', { name: 'Fixed', exact: true })).toBeVisible({
+    timeout: 20_000,
+  })
+
+  const renderedByLayer = async () =>
+    page.evaluate(() => {
+      const map = (window as unknown as { __e2eMap?: maplibregl.Map }).__e2eMap
+      if (!map) return null
+      const kinds = (suffix: string) => {
+        const layers = map
+          .getStyle()
+          .layers.filter((layer) => layer.id.endsWith(suffix) && !layer.id.startsWith('task-'))
+          .map((layer) => layer.id)
+        if (layers.length === 0) return []
+        return [
+          ...new Set(map.queryRenderedFeatures({ layers }).map((f) => f.geometry.type)),
+        ].sort()
+      }
+      return { fill: kinds('-fill'), line: kinds('-line'), point: kinds('-point') }
+    })
+
+  await expect.poll(renderedByLayer, { timeout: 20_000 }).toEqual({
+    fill: ['Polygon'],
+    line: ['LineString'],
+    point: ['Point'],
+  })
+})
+
 test('direction indicators are drawn for bundled tasks too', async ({
   page,
   request,

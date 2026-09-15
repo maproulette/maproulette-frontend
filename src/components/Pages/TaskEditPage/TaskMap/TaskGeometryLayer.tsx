@@ -196,6 +196,10 @@ export const TaskGeometryLayer = () => {
           <Layer
             id={`${layerId}-fill`}
             type="fill"
+            // Without this a fill layer also fills the area a line encloses,
+            // and every task that happens to contain a polygon would paint
+            // over its own lines.
+            filter={['match', ['geometry-type'], ['Polygon', 'MultiPolygon'], true, false]}
             paint={getFillPaint() as maplibregl.FillLayerSpecification['paint']}
           />
         )}
@@ -219,6 +223,10 @@ export const TaskGeometryLayer = () => {
           <Layer
             id={`${layerId}-point`}
             type="circle"
+            // A circle layer draws a circle at every vertex of every feature,
+            // so without this one point feature covers the task's lines and
+            // polygons in dots.
+            filter={['match', ['geometry-type'], ['Point', 'MultiPoint'], true, false]}
             paint={getCirclePaint() as maplibregl.CircleLayerSpecification['paint']}
           />
         )}
