@@ -197,6 +197,7 @@
   "common.cooperative": "Cooperative",
   "common.copied": "Copied",
   "common.copy": "Copy",
+  "common.copyLink": "Copy link",
   "common.copyUrl": "Copy URL",
   "common.couldNotUpdateVisibility": "Could not update visibility",
   "common.createChallenge": "Create Challenge",
