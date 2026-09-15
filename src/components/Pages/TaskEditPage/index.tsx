@@ -5,7 +5,7 @@ import {
   DrawerPortalTarget,
 } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
-import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { useSetPageTitle } from '@/contexts/ChromeContext'
 import { EditorProvider, useEditorContext } from './contexts/EditorContext'
 import { IdEditorView } from './IdEditorView'
 import { TaskProviders } from './TaskLayout'
@@ -48,7 +48,7 @@ const TaskContent = () => {
 
 export const Task = () => {
   const { task } = useLoaderData({ from: '/_app/tasks/$taskId/' })
-  useSetPageTitleContext(task.name)
+  useSetPageTitle(task.name)
 
   return (
     <TaskProviders>

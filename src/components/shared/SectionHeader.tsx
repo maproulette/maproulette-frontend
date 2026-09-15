@@ -1,8 +1,6 @@
 import { Link, useMatches, useRouterState } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
-import { useBreadcrumbContext } from '@/contexts/BreadcrumbContext'
-import { useHeaderActionsContext } from '@/contexts/HeaderActionsContext'
-import { usePageTitleContext } from '@/contexts/PageTitleContext'
+import { useChrome } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
@@ -103,9 +101,11 @@ export const buildTitle = (
 
 export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: SectionHeaderProps) => {
   const { t } = useIntl()
-  const dynamicTitle = usePageTitleContext()
-  const headerActions = useHeaderActionsContext()
-  const breadcrumbOverride = useBreadcrumbContext()
+  const {
+    title: dynamicTitle,
+    actions: headerActions,
+    breadcrumbs: breadcrumbOverride,
+  } = useChrome()
   const matches = useMatches()
   const pathname = useRouterState({ select: (s) => s.location.pathname })
 

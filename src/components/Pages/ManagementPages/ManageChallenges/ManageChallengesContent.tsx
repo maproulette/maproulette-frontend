@@ -45,7 +45,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useSetHeaderActionsContext } from '@/contexts/HeaderActionsContext'
+import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
@@ -77,7 +77,7 @@ export const ManageChallengesContent = () => {
 
   const [showPanel, setShowPanel] = useState(true)
 
-  useSetHeaderActionsContext(
+  useSetHeaderActions(
     <Link to="/manage/challenge/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />

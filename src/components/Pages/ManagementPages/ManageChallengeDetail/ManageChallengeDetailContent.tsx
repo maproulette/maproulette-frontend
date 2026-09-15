@@ -33,8 +33,7 @@ import { Progress } from '@/components/ui/Progress'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useSetBreadcrumbContext } from '@/contexts/BreadcrumbContext'
-import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { useSetBreadcrumbs, useSetPageTitle } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
@@ -218,7 +217,7 @@ export const ManageChallengeDetailContent = () => {
   const toggleField = (field: 'enabled' | 'paused' | 'featured') => (id: number, value: boolean) =>
     updateChallengeMutation.mutateAsync({ challengeId: id, updates: { [field]: value } })
 
-  useSetPageTitleContext(challengeData?.name ?? null)
+  useSetPageTitle(challengeData?.name ?? null)
 
   const projectId = challengeData?.parent
   const breadcrumbs = useMemo(
@@ -243,7 +242,7 @@ export const ManageChallengeDetailContent = () => {
         : null,
     [projectId, challengeId, t]
   )
-  useSetBreadcrumbContext(breadcrumbs)
+  useSetBreadcrumbs(breadcrumbs)
 
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full">

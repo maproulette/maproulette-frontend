@@ -6,11 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useNavigationContext } from '@/contexts/NavigationContext'
+import { useChromeNavigation } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 
 export const MobileNav = () => {
-  const { allNavigationItems } = useNavigationContext()
+  const { navigationItems: allNavigationItems } = useChromeNavigation()
   const { t } = useIntl()
 
   return (

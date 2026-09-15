@@ -1,13 +1,13 @@
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
-import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { useSetPageTitle } from '@/contexts/ChromeContext'
 import { ChallengesList } from './ChallengesList'
 import { ProjectDetail } from './ProjectDetail'
 
 export const BrowsedProjectPageContent = () => {
   const { project } = useBrowsedProjectContext()
   const projectName = project?.displayName || project?.name || null
-  useSetPageTitleContext(projectName ?? null)
+  useSetPageTitle(projectName ?? null)
 
   return (
     <div className="h-full">

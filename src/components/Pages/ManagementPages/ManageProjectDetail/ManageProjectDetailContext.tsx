@@ -7,7 +7,7 @@ import {
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useSetPageTitleContext } from '@/contexts/PageTitleContext'
+import { useSetPageTitle } from '@/contexts/ChromeContext'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 
@@ -92,7 +92,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const { data: projectData, isLoading: isLoadingProject } = api.project.getProject(
     Number(projectId)
   )
-  useSetPageTitleContext(projectData?.displayName || projectData?.name || null)
+  useSetPageTitle(projectData?.displayName || projectData?.name || null)
 
   const { data: challenges, isLoading: isLoadingChallenges } = api.project.getProjectChallenges(
     Number(projectId)

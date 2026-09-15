@@ -51,7 +51,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { useSetHeaderActionsContext } from '@/contexts/HeaderActionsContext'
+import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
@@ -96,7 +96,7 @@ export const ManageProjectsContent = () => {
     setDeleteProjectConfirm,
   } = useManageProjectsContext()
 
-  useSetHeaderActionsContext(
+  useSetHeaderActions(
     <Link to="/manage/project/new">
       <Button size="sm" className="gap-1.5 rounded-full">
         <Plus className="h-4 w-4" />
