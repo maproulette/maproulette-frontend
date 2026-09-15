@@ -68,8 +68,8 @@ const TaskFeatures = ({
   const { t } = useIntl()
   const [open, setOpen] = useState(defaultOpen)
   const { inIdEditor, selectInEditor, handlers } = useTaskHighlighting()
-  const { data } = api.task.getTask(taskId)
-  const task = data as Task | undefined
+  // `getTask` already returns the generated task type, narrowed in @/types/Task
+  const { data: task } = api.task.getTask(taskId)
   const groups = task ? getTaskFeatureGroups(task) : []
 
   return (
