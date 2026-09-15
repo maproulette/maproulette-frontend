@@ -51,9 +51,7 @@ const TeamDetailLayout = () => {
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={70} minSize={40}>
-          <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
-            <TeamContentPanel />
-          </div>
+          <TeamContentPanel />
         </ResizablePanel>
       </ResizablePanelGroup>
 

@@ -10,6 +10,7 @@ import {
   Info,
   Pencil,
   Target,
+  Users,
 } from 'lucide-react'
 import { type ReactNode, useMemo, useState } from 'react'
 import { api } from '@/api'
@@ -40,6 +41,7 @@ import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelDat
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
+import { ChallengeManagersPanel } from './ChallengeManagersPanel'
 import { ChallengeRecentActivity } from './ChallengeRecentActivity'
 import { ChallengeTasksExplorerMain } from './ChallengeTasksExplorer'
 
@@ -396,6 +398,16 @@ export const ManageChallengeDetailContent = () => {
                     challengeData={challengeData}
                   />
                 </DialogActionButton>
+
+                {!isLoadingChallenge && challengeData?.id && (
+                  <DialogActionButton
+                    icon={<Users className="h-4 w-4" />}
+                    label={t('manageChallengeDetail.detail.managersLabel', undefined, 'Managers')}
+                    title={t('manageChallengeDetail.detail.managersLabel', undefined, 'Managers')}
+                  >
+                    <ChallengeManagersPanel challengeId={challengeData.id} />
+                  </DialogActionButton>
+                )}
 
                 {!isLoadingChallenge && challengeData?.id && (
                   <DialogActionButton

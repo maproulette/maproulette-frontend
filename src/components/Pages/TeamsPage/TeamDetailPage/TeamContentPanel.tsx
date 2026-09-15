@@ -28,9 +28,9 @@ export const TeamContentPanel = () => {
     <Tabs
       value={section}
       onValueChange={(value) => navigate({ to: '.', search: { section: value as TeamSection } })}
-      className="flex h-full min-h-0 flex-col gap-0"
+      className="flex h-full min-h-0 min-w-0 flex-col gap-0 pl-2"
     >
-      <div className="flex h-12 shrink-0 items-center border-zinc-200 border-b px-4 dark:border-slate-700">
+      <div className="shrink-0 pb-4">
         <TabsList>
           {TEAM_SECTIONS.map((value) => (
             <TabsTrigger key={value} value={value}>
@@ -40,7 +40,7 @@ export const TeamContentPanel = () => {
         </TabsList>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto p-4">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         <TabsContent value="users">
           <TeamMembersTable />
         </TabsContent>

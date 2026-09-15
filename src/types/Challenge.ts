@@ -102,6 +102,18 @@ export type Challenge = Omit<
   completionMetrics?: CompletionMetrics
 }
 
+/**
+ * A user granted a role on a single challenge, as opposed to one who reaches it
+ * through the parent project or the team that owns it. Declared here rather
+ * than coming from the generated schema: the backend writes it, but it is not
+ * declared in the API spec.
+ */
+export interface ChallengeManager {
+  userId: number
+  name: string
+  role: number
+}
+
 /* Custom Types */
 /**
  * Sort orders the explore-challenges endpoint accepts. `featured`, `tag_fix`

@@ -186,6 +186,43 @@ async function deleteTeam(request: APIRequestContext, id: number): Promise<void>
   }
 }
 
+/**
+ * Grants a team a role on a project, which is what the team detail page's
+ * Projects section lists. Mirrors the frontend's api.project.useSetTeamProjectRole.
+ */
+export async function grantTeamProjectRole(
+  request: APIRequestContext,
+  teamId: number,
+  projectId: number,
+  role = 1
+): Promise<void> {
+  const response = await request.post(
+    `${BACKEND_URL}/api/v2/team/${teamId}/project/${projectId}/${role}`,
+    { headers: { apiKey: SUPER_KEY } }
+  )
+  if (!response.ok()) {
+    throw new Error(`Failed to add team to project: ${response.status()} ${await response.text()}`)
+  }
+}
+
+/**
+ * Hands a challenge to a team, which is what puts it in that team's Challenges
+ * section and its image on the challenge's card.
+ */
+export async function giveChallengeToTeam(
+  request: APIRequestContext,
+  challengeId: number,
+  teamId: number | null
+): Promise<void> {
+  const response = await request.put(`${BACKEND_URL}/api/v2/challenge/${challengeId}`, {
+    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    data: { ownerTeamId: teamId },
+  })
+  if (!response.ok()) {
+    throw new Error(`Failed to set challenge team: ${response.status()} ${await response.text()}`)
+  }
+}
+
 export const test = base.extend<{
   project: TestProject
   challenge: TestChallenge

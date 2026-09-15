@@ -11,6 +11,7 @@ import type {
   Challenge,
   ChallengeActivityEntry,
   ChallengeGetResponse,
+  ChallengeManager,
   ChallengeStatsResponse,
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
@@ -191,6 +192,47 @@ export const challengeSingle = {
       queryKey: ['challenge', challengeId],
       queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<ChallengeGetResponse>(),
     }),
+
+  /**
+   * The users granted a role on this challenge itself, as opposed to those who
+   * reach it through the parent project or the team that owns it.
+   */
+  managers: (challengeId: number | undefined) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['challenge', challengeId, 'managers'],
+        queryFn: () =>
+          apiRequest.get(`api/v2/challenge/${challengeId}/managers`).json<ChallengeManager[]>(),
+        enabled: !!challengeId,
+      })
+    ),
+
+  useSetChallengeUserRole: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        userId,
+        role,
+      }: {
+        challengeId: number
+        userId: number
+        role: number
+      }) => apiRequest.post(`api/v2/challenge/${challengeId}/user/${userId}/${role}`).json(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
+    })
+  },
+
+  useRemoveChallengeUser: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, userId }: { challengeId: number; userId: number }) =>
+        apiRequest.delete(`api/v2/challenge/${challengeId}/user/${userId}`).json(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
+    })
+  },
 
   getChallengeTags: (challengeId: number) =>
     useQuery(

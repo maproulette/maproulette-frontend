@@ -16,16 +16,17 @@ test('a user can create a team, see it on the dashboard, and delete it', async (
   await page.getByRole('button', { name: 'Create team' }).click()
 
   // Successful creation navigates to the new team's detail page. The creator
-  // is shown as an active Admin member, not a pending invite to themselves.
+  // is shown as an active member, not a pending invite to themselves.
   await expect(page).toHaveURL(/\/teams\/\d+$/, { timeout: 15_000 })
   await expect(page.getByRole('heading', { name: teamName })).toBeVisible({ timeout: 15_000 })
   await expect(page.getByText('1 member')).toBeVisible()
 
   // The team shows up back on the dashboard as a card linking to its detail
-  // page, showing its real name and the creator's Admin role (not the
-  // creator's own name).
+  // page, showing its real name and the creator's role (not the creator's own
+  // name). The creator is the team's Owner: a team must always keep someone
+  // able to delete it, so whoever makes one starts out holding that.
   await page.goto('/dashboard')
-  const teamLink = page.getByRole('link', { name: new RegExp(`${teamName}.*Admin`) })
+  const teamLink = page.getByRole('link', { name: new RegExp(`${teamName}.*Owner`) })
   await expect(teamLink).toBeVisible({ timeout: 15_000 })
 
   // Clean up: delete the team from its detail page.
