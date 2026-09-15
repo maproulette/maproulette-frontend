@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CircleAlert } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -6,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
 import { Form, FormField, formSubmitDisabled } from '@/components/ui/Form'
 import { FormSectionGroup } from '@/components/ui/FormSection'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { useIntl } from '@/i18n'
@@ -181,34 +183,42 @@ export const ChallengeForm = () => {
             <AlertDescription>{serverError}</AlertDescription>
           </Alert>
         )}
-        {fieldErrors.length > 0 && (
-          <Alert variant="destructive" className="mt-4 shrink-0">
-            <AlertTitle>
-              {t(
-                'manageChallengeNew.challengeForm.fieldErrorsTitle',
-                { count: fieldErrors.length },
-                '{count} fields need attention'
-              )}
-            </AlertTitle>
-            <AlertDescription>
-              <ul className="space-y-0.5">
-                {fieldErrors.map((error) => (
-                  <li key={error.name}>
-                    <button
-                      type="button"
-                      // Scrolls the offending field back into view and focuses it.
-                      onClick={() => form.setFocus(error.name as keyof ChallengeFormValues)}
-                      className="text-left underline-offset-2 hover:underline"
-                    >
-                      {error.message}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </AlertDescription>
-          </Alert>
-        )}
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
+          {/* A field marked invalid can sit well outside the scrolled view, so
+            the count sits by the submit button and names them on demand. */}
+          {fieldErrors.length > 0 && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className="mr-auto flex items-center gap-1.5 text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400"
+                >
+                  <CircleAlert className="h-3.5 w-3.5 shrink-0" />
+                  {t(
+                    'manageChallengeNew.challengeForm.fieldErrorsTitle',
+                    { count: fieldErrors.length },
+                    '{count} fields need attention'
+                  )}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="start" side="top" className="w-80 p-2">
+                <ul className="space-y-0.5">
+                  {fieldErrors.map((error) => (
+                    <li key={error.name}>
+                      <button
+                        type="button"
+                        // Scrolls the offending field back into view and focuses it.
+                        onClick={() => form.setFocus(error.name as keyof ChallengeFormValues)}
+                        className="w-full rounded px-2 py-1 text-left text-xs text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                      >
+                        {error.message}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </PopoverContent>
+            </Popover>
+          )}
           <Button type="button" variant="outline" onClick={onCancel}>
             {t('common.cancel', undefined, 'Cancel')}
           </Button>
