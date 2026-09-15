@@ -11,7 +11,14 @@ import type {
 } from '@/types/User'
 import { apiRequest } from '../client'
 
-export type LockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
+/**
+ * The spec marks `bundledTasks` required, but the API leaves it out entirely
+ * for a task that isn't bundled, so it is optional here.
+ */
+type RawLockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
+export type LockedTaskData = Omit<RawLockedTaskData, 'bundledTasks'> & {
+  bundledTasks?: number[]
+}
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
 export type LeaderboardChallenge =
   components['schemas']['org.maproulette.framework.model.LeaderboardChallenge']

@@ -48,12 +48,12 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
                   'Task #{id}'
                 )}
               </span>
-              {lockedTask.bundledTasks.length > 1 && (
+              {(lockedTask.bundledTasks?.length ?? 0) > 1 && (
                 <span className="flex items-center gap-1">
                   <Package className="h-3 w-3" />
                   {t(
                     'dashboard.contributions.lockedTasks.bundleCount',
-                    { count: lockedTask.bundledTasks.length },
+                    { count: lockedTask.bundledTasks?.length ?? 0 },
                     '{count} tasks'
                   )}
                 </span>
