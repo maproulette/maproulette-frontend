@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { Separator } from '@/components/ui/Separator'
 import { useIntl } from '@/i18n'
+import { resolveTeamImageUrl } from '@/lib/teamImage'
 import { initials } from '@/lib/utils'
 import { TeamImagesSection } from '../TeamImagesSection'
 import { useTeamDetailContext } from './TeamDetailContext'
@@ -35,7 +36,7 @@ export const TeamDetailSidebar = () => {
       <div className="space-y-4 px-6 pt-6 pb-4">
         <div className="flex gap-4">
           <Avatar className="size-16 shrink-0">
-            <AvatarImage src={team.avatarURL ?? ''} alt={team.name} />
+            <AvatarImage src={resolveTeamImageUrl(team.avatarURL) ?? ''} alt={team.name} />
             <AvatarFallback>{initials(team.name)}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">

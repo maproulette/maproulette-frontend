@@ -3,6 +3,7 @@ import { Users } from 'lucide-react'
 import { api } from '@/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { useIntl } from '@/i18n'
+import { resolveTeamImageUrl } from '@/lib/teamImage'
 import { cn, initials } from '@/lib/utils'
 import type { TeamDisplayRole, TeamUser } from '@/types/Team'
 import { TeamDisplayRoleLabel, teamDisplayRole } from '@/types/Team'
@@ -33,7 +34,7 @@ export const TeamCard = ({ membership }: Props) => {
     >
       <div className="flex items-center gap-3 p-4">
         <Avatar className="size-10">
-          <AvatarImage src={team?.avatarURL ?? ''} alt={name} />
+          <AvatarImage src={resolveTeamImageUrl(team?.avatarURL) ?? ''} alt={name} />
           <AvatarFallback>
             {name ? initials(name) : <Users className="size-5" aria-hidden="true" />}
           </AvatarFallback>
