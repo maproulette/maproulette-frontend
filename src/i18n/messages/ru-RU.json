@@ -152,7 +152,6 @@
   "taskEditPage.taskActions.main.notAnIssue": "Не требует правок",
   "taskEditPage.taskMap.editInIdShort": "Изменить в iD",
   "taskInfoPanel.comments.systemUser": "Система",
-  "taskInfoPanel.data.properties": "Параметры",
   "taskInfoPanel.editorChanges.reset": "Сбросить",
   "taskPrioritizationPage.tierWarningBadges.noMatches": "Нет соответствий",
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Группа",

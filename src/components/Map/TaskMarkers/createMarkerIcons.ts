@@ -26,7 +26,7 @@ const STATUS_SYMBOL_SVG: Record<number, string> = {
  * `onRegistered` fires only when `addImage` actually runs (i.e. the icon
  * wasn't already registered by the time the image finished loading).
  */
-const registerIcon = (
+export const registerIcon = (
   map: React.RefObject<maplibregl.Map | null>,
   iconName: string,
   svg: string,

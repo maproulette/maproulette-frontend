@@ -8,6 +8,7 @@ import {
   useTaskContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
+import { BundleActions } from '@/components/TaskInfoPanel/BundleActions'
 import { Button } from '@/components/ui/Button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
 import {
@@ -261,6 +262,12 @@ export const TaskInfoHeader = ({
           <EditorButton task={task} />
         </div>
       )}
+
+      {/* Joining or leaving the bundle, for a task that isn't the primary one.
+        The wrapper collapses when there is no action to offer. */}
+      <div className="pt-3 empty:hidden">
+        <BundleActions task={task} />
+      </div>
     </div>
   )
 }

@@ -6,7 +6,6 @@ interface BundleStateIndicatorProps {
   canAddToBundle: boolean
   canRemoveFromBundle: boolean
   isInBundle: boolean
-  isPrimaryTask: boolean
   onAddToBundle?: () => void
   onRemoveFromBundle?: () => void
 }
@@ -15,7 +14,6 @@ export const BundleStateIndicator = ({
   canAddToBundle,
   canRemoveFromBundle,
   isInBundle,
-  isPrimaryTask,
   onAddToBundle,
   onRemoveFromBundle,
 }: BundleStateIndicatorProps) => {
@@ -46,19 +44,6 @@ export const BundleStateIndicator = ({
         <Trash2 className="mr-2 h-3.5 w-3.5" />
         {t('taskInfoPanel.taskTab.bundleState.removeFromBundle', undefined, 'Remove from Bundle')}
       </Button>
-    )
-  }
-
-  if (isInBundle && isPrimaryTask) {
-    return (
-      <div className="flex items-center justify-center gap-2 rounded-lg bg-purple-50 px-3 py-2 font-medium text-purple-700 text-xs dark:bg-purple-900/30 dark:text-purple-400">
-        <Package className="h-3.5 w-3.5" />
-        {t(
-          'taskInfoPanel.taskTab.bundleState.primaryInBundle',
-          undefined,
-          'Primary task in bundle'
-        )}
-      </div>
     )
   }
 

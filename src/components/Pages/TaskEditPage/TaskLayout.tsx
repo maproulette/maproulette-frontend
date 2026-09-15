@@ -7,6 +7,7 @@ import { PanelViewProvider } from './contexts/PanelViewContext'
 import { ProjectProvider } from './contexts/ProjectContext'
 import { TaskBundleProvider } from './contexts/TaskBundleContext'
 import { TaskProvider, useTaskContext } from './contexts/TaskContext'
+import { TaskFeatureProvider } from './contexts/TaskFeatureContext'
 import { TaskMapProvider } from './contexts/TaskMapContext'
 import { TaskEditMapProvider } from './TaskMap/TaskEditMapContext'
 import { useLassoEvents } from './TaskMap/useLassoEvents'
@@ -46,7 +47,11 @@ export const TaskProviders = ({ children }: { children: ReactNode }) => {
                   <OSMDataProvider>
                     <TaskEditMapProvider>
                       <LassoEventsInitializer />
-                      <PanelViewProvider>{children}</PanelViewProvider>
+                      {/* TaskFeatureProvider reaches for the map (to zoom to a
+                        feature) and the task, so it sits inside both. */}
+                      <TaskFeatureProvider>
+                        <PanelViewProvider>{children}</PanelViewProvider>
+                      </TaskFeatureProvider>
                     </TaskEditMapProvider>
                   </OSMDataProvider>
                 </TaskBundleProvider>

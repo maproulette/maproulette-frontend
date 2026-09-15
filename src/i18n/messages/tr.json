@@ -184,7 +184,6 @@
   "taskEditPage.taskActions.main.notAnIssue": "Hata bulunamadı",
   "taskEditPage.taskMap.editInIdShort": "iD Editör ile Düzenle",
   "taskInfoPanel.comments.systemUser": "Sistem",
-  "taskInfoPanel.data.properties": "Özellikler",
   "taskInfoPanel.drawer.startTask": "Göreve Başla",
   "taskInfoPanel.editorChanges.reset": "Yeniden ayarla",
   "taskPrioritizationPage.tierWarningBadges.noMatches": "Eşleşme yok",

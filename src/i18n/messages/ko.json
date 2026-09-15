@@ -181,7 +181,6 @@
   "taskEditPage.taskActions.main.notAnIssue": "문제 없음",
   "taskEditPage.taskMap.editInIdShort": "iD에서 편집",
   "taskInfoPanel.comments.systemUser": "시스템",
-  "taskInfoPanel.data.properties": "구성",
   "taskInfoPanel.drawer.startTask": "Start Task",
   "taskInfoPanel.editorChanges.reset": "초기화",
   "taskPrioritizationPage.tierWarningBadges.noMatches": "일치하는 결과 없음",

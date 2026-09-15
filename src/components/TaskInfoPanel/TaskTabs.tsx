@@ -8,7 +8,9 @@ import { TabsContent } from '@/components/ui/Tabs'
 import type { Task } from '@/types/Task'
 import { CommentsHistoryTab } from './CommentsHistoryTab'
 import { DataTab } from './DataTab/DataTab'
+import { FeaturesTab } from './FeaturesTab/FeaturesTab'
 import { TaskTabsList } from './TaskTabsList'
+import { useBundleTaskIds } from './useBundleTaskIds'
 
 interface TaskTabsProps {
   task: Task
@@ -18,7 +20,7 @@ interface TaskTabsProps {
   contentClassName?: string
 }
 
-const VALID_TABS = ['task', 'data', 'comments'] as const
+const VALID_TABS = ['task', 'features', 'data', 'comments'] as const
 
 export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsProps) => {
   const search = useRouterState({ select: (s) => s.location.search }) as { tab?: string }
@@ -35,15 +37,20 @@ export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsPro
 
   const commentsQueryResult = api.task.getTaskComments(task.id)
   const commentsCount = commentsQueryResult.data?.length ?? 0
+  // How many tasks the Features tab covers: this one, plus its bundle.
+  const taskCount = useBundleTaskIds(task).length
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex min-h-0 flex-1 flex-col">
-      <TaskTabsList commentsCount={commentsCount} />
+      <TaskTabsList commentsCount={commentsCount} taskCount={taskCount} />
 
       <ScrollArea className="min-h-0 flex-1">
         <div className={contentClassName ?? 'p-4'}>
           <TabsContent value="task" className="mt-0">
             {taskTabContent}
+          </TabsContent>
+          <TabsContent value="features" className="mt-0">
+            <FeaturesTab task={task} />
           </TabsContent>
           <TabsContent value="data" className="mt-0">
             <DataTab />

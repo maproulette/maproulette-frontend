@@ -14,6 +14,7 @@ import {
   EDITABLE_STATUSES,
   useTaskContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useAuthContext } from '@/contexts/AuthContext'
@@ -76,6 +77,7 @@ export const TaskMap = () => {
     selectedTaskIds,
     hoveredBundleTaskId,
   } = useTaskMapContext()
+  const { focusedFeatureKey, clearFocusedFeature } = useTaskFeatureContext()
 
   const {
     mapRef,
@@ -244,16 +246,34 @@ export const TaskMap = () => {
         )}
       </div>
 
-      {/* Drawing mode indicator */}
-      {drawingMode && (
-        <div className="-translate-x-1/2 absolute top-14 left-1/2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
-          {t(
-            'taskEditPage.taskMap.drawingModeHint',
-            undefined,
-            'Click and drag to select tasks • ESC to cancel'
-          )}
-        </div>
-      )}
+      {/* Drawing mode and single-feature indicators */}
+      <div className="-translate-x-1/2 absolute top-14 left-1/2 z-10 flex flex-col items-center gap-2">
+        {drawingMode && (
+          <div className="rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+            {t(
+              'taskEditPage.taskMap.drawingModeHint',
+              undefined,
+              'Click and drag to select tasks • ESC to cancel'
+            )}
+          </div>
+        )}
+        {focusedFeatureKey && (
+          <div className="flex items-center gap-2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+            {t(
+              'taskEditPage.taskMap.focusedFeatureHint',
+              undefined,
+              'Showing one feature of this task'
+            )}
+            <button
+              type="button"
+              onClick={clearFocusedFeature}
+              className="font-medium text-amber-400 underline-offset-2 hover:underline"
+            >
+              {t('taskEditPage.taskMap.showAllFeatures', undefined, 'Show all')}
+            </button>
+          </div>
+        )}
+      </div>
 
       <MapControls
         map={mapRef}

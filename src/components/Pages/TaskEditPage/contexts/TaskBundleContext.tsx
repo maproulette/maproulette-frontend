@@ -370,6 +370,9 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   return <TaskBundleContext.Provider value={value}>{children}</TaskBundleContext.Provider>
 }
 
+/** Null outside the task editor, e.g. in a task drawer on a browse page. */
+export const useOptionalTaskBundleContext = () => useContext(TaskBundleContext)
+
 export const useTaskBundleContext = () => {
   const context = useContext(TaskBundleContext)
   if (context === undefined) {

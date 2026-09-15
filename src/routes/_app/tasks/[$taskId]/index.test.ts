@@ -5,7 +5,7 @@ import { Route } from './index.tsx'
 // The route's search schema (`tab`) is a local, unexported const, so it's
 // reached the same way the router itself reaches it: off `Route.options`.
 const schema = Route.options.validateSearch as z.ZodType<{
-  tab?: 'task' | 'data' | 'comments'
+  tab?: 'task' | 'features' | 'data' | 'comments'
 }>
 
 describe('task route search schema', () => {
@@ -17,7 +17,7 @@ describe('task route search schema', () => {
     }
   })
 
-  it.each(['task', 'data', 'comments'] as const)('accepts the %s tab value', (tab) => {
+  it.each(['task', 'features', 'data', 'comments'] as const)('accepts the %s tab value', (tab) => {
     const result = schema.safeParse({ tab })
     expect(result.success).toBe(true)
     if (result.success) {

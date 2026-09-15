@@ -169,7 +169,6 @@
   "taskEditPage.taskActions.lockButton.locked": "任務已上鎖",
   "taskEditPage.taskActions.lockButton.unlock": "解鎖",
   "taskInfoPanel.comments.systemUser": "系統",
-  "taskInfoPanel.data.properties": "屬性",
   "taskInfoPanel.drawer.startTask": "開始任務",
   "taskInfoPanel.editorChanges.reset": "重置",
   "taskPrioritizationPage.tierWarningBadges.noMatches": "沒有吻合",

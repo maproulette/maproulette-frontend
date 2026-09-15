@@ -258,6 +258,9 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
+/** Null where no task is in scope; the panels are also used outside a task route. */
+export const useOptionalTaskContext = () => useContext(TaskContext)
+
 export const useTaskContext = () => {
   const context = useContext(TaskContext)
   if (context === undefined) {

@@ -1,7 +1,8 @@
-import { Crosshair, Eye, EyeOff, Filter, Globe } from 'lucide-react'
+import { Crosshair, Eye, EyeOff, Filter, Globe, MoveRight } from 'lucide-react'
 import { useMemo } from 'react'
 import type { MapControlButton } from '@/components/Map/MapControls'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
+import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { useIntl } from '@/i18n'
 import { useTaskEditMapContext } from './TaskEditMapContext'
@@ -14,6 +15,7 @@ export const useMapControlButtons = (
   const { markersHidden, setMarkersHidden } = useTaskMapContext()
   const { activeBundle, showBundleOnly, setShowBundleOnly } = useTaskBundleContext()
   const { showExploreLayer, setShowExploreLayer } = useTaskEditMapContext()
+  const { showDirectionIndicators, setShowDirectionIndicators } = useTaskFeatureContext()
   const { t } = useIntl()
 
   return useMemo(
@@ -54,6 +56,17 @@ export const useMapControlButtons = (
         binding: MAP_BINDINGS.toggleBundleOnly,
       },
       {
+        id: 'toggle-direction-indicators',
+        icon: MoveRight,
+        onClick: () => setShowDirectionIndicators(!showDirectionIndicators),
+        tooltip: showDirectionIndicators
+          ? t('taskMap.controls.hideDirectionIndicators', undefined, 'Hide direction indicators')
+          : t('taskMap.controls.showDirectionIndicators', undefined, 'Show direction indicators'),
+        disabled: !mapLoaded,
+        isActive: showDirectionIndicators,
+        binding: MAP_BINDINGS.toggleDirectionIndicators,
+      },
+      {
         id: 'toggle-explore-layer',
         icon: Globe,
         onClick: () => setShowExploreLayer(!showExploreLayer),
@@ -79,6 +92,8 @@ export const useMapControlButtons = (
       setShowBundleOnly,
       showExploreLayer,
       setShowExploreLayer,
+      showDirectionIndicators,
+      setShowDirectionIndicators,
       t,
     ]
   )

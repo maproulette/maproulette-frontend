@@ -4,6 +4,7 @@ import { useIntl } from '@/i18n'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { useEditorContext } from '../contexts/EditorContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
+import { useTaskFeatureContext } from '../contexts/TaskFeatureContext'
 import { useTaskMapContext } from '../contexts/TaskMapContext'
 import { useTaskEditMapContext } from './TaskEditMapContext'
 
@@ -23,6 +24,7 @@ export const MAP_BINDINGS = {
   toggleMarkers: { key: 'm' },
   toggleBundleOnly: { key: 'b' },
   toggleExploreLayer: { key: 'o', shift: true },
+  toggleDirectionIndicators: { key: 's' },
   startDrawing: { key: 'b', shift: true },
   exitMultiTask: { key: 'Delete' },
   cancel: { key: 'Esc' },
@@ -31,16 +33,12 @@ export const MAP_BINDINGS = {
 export const useTaskMapShortcuts = (fitToTask: () => void) => {
   const { activeBundle, showBundleOnly, setShowBundleOnly, setShowDeleteDialog } =
     useTaskBundleContext()
-  const {
-    map,
-    mapLoaded,
-    markersHidden,
-    setMarkersHidden,
-    drawingMode,
-    startDrawing,
-    cancelDrawing,
-  } = useTaskMapContext()
-  const { showExploreLayer, setShowExploreLayer } = useTaskEditMapContext()
+  const { map, markersHidden, setMarkersHidden, drawingMode, startDrawing, cancelDrawing } =
+    useTaskMapContext()
+  // The loaded flag every one of these shortcuts gates on comes from
+  // TaskEditMapContext: that is the one <MapGL onLoad> sets.
+  const { showExploreLayer, setShowExploreLayer, mapLoaded } = useTaskEditMapContext()
+  const { showDirectionIndicators, setShowDirectionIndicators } = useTaskFeatureContext()
   const { activeView, showMap } = useEditorContext()
   const { t } = useIntl()
 
@@ -88,6 +86,19 @@ export const useTaskMapShortcuts = (fitToTask: () => void) => {
         ),
         category: 'map',
         handler: () => setShowExploreLayer(!showExploreLayer),
+        enabled: mapLoaded,
+      },
+      {
+        // MapRoulette 3 replayed its line-drawing animation on this key; here
+        // it turns the standing direction indicators off and on instead.
+        ...MAP_BINDINGS.toggleDirectionIndicators,
+        description: t(
+          'taskMap.shortcuts.toggleDirectionIndicators',
+          undefined,
+          'Toggle direction indicators on task geometry'
+        ),
+        category: 'map',
+        handler: () => setShowDirectionIndicators(!showDirectionIndicators),
         enabled: mapLoaded,
       },
       {
@@ -158,6 +169,8 @@ export const useTaskMapShortcuts = (fitToTask: () => void) => {
       setMarkersHidden,
       showExploreLayer,
       setShowExploreLayer,
+      showDirectionIndicators,
+      setShowDirectionIndicators,
       drawingMode,
       cancelDrawing,
       startDrawing,

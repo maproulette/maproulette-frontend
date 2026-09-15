@@ -137,6 +137,9 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
   return <TaskMapContext.Provider value={value}>{children}</TaskMapContext.Provider>
 }
 
+/** Null outside the task editor, e.g. in a task drawer on a browse page. */
+export const useOptionalTaskMapContext = () => useContext(TaskMapContext)
+
 export const useTaskMapContext = () => {
   const context = useContext(TaskMapContext)
   if (context === undefined) {
