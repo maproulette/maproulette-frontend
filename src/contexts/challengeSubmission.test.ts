@@ -29,7 +29,7 @@ const baseValues: ChallengeFormValues = {
   limitTags: false,
   basemap: 'none',
   basemapUrl: '',
-  teamImageId: null,
+  ownerTeamId: null,
   automatedEditsCodeAgreement: true,
 }
 
@@ -47,7 +47,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
-          teamImageId: null,
+          ownerTeamId: null,
           osmIdProperty: null,
           preferredTags: null,
           limitTags: false,
@@ -86,7 +86,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
-          teamImageId: null,
+          ownerTeamId: null,
           osmIdProperty: null,
           preferredTags: null,
           limitTags: false,
@@ -123,7 +123,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
-          teamImageId: null,
+          ownerTeamId: null,
           osmIdProperty: null,
           preferredTags: null,
           limitTags: false,
@@ -242,7 +242,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
-          teamImageId: null,
+          ownerTeamId: null,
           osmIdProperty: null,
           preferredTags: null,
           limitTags: false,
@@ -283,21 +283,21 @@ describe('buildChallengeSubmission', () => {
 
 describe('buildChallengeSubmission team image handling', () => {
   it('sends the chosen team image id', async () => {
-    const result = await buildChallengeSubmission({ ...baseValues, teamImageId: 7 }, false)
-    expect(result.challengeData.teamImageId).toBe(7)
+    const result = await buildChallengeSubmission({ ...baseValues, ownerTeamId: 7 }, false)
+    expect(result.challengeData.ownerTeamId).toBe(7)
   })
 
   it('sends an explicit null to clear the image', async () => {
-    const result = await buildChallengeSubmission({ ...baseValues, teamImageId: null }, false)
+    const result = await buildChallengeSubmission({ ...baseValues, ownerTeamId: null }, false)
     // Omitting the key would mean "leave it alone" server-side, so clearing
     // has to be an explicit null rather than an absent field.
-    expect('teamImageId' in result.challengeData).toBe(true)
-    expect(result.challengeData.teamImageId).toBeNull()
+    expect('ownerTeamId' in result.challengeData).toBe(true)
+    expect(result.challengeData.ownerTeamId).toBeNull()
   })
 
   it('sends the image id when creating too', async () => {
-    const result = await buildChallengeSubmission({ ...baseValues, teamImageId: 3 }, true)
-    expect(result.challengeData.teamImageId).toBe(3)
+    const result = await buildChallengeSubmission({ ...baseValues, ownerTeamId: 3 }, true)
+    expect(result.challengeData.ownerTeamId).toBe(3)
   })
 
   it('treats a missing custom basemap url as no custom basemap', async () => {

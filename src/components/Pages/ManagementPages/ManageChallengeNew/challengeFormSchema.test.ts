@@ -37,7 +37,7 @@ const validValues: ChallengeFormValues = {
   limitTags: false,
   basemap: 'none',
   basemapUrl: '',
-  teamImageId: null,
+  ownerTeamId: null,
   automatedEditsCodeAgreement: true,
 }
 
@@ -99,7 +99,7 @@ describe('buildFormValues', () => {
       limitTags: false,
       basemap: 'none',
       basemapUrl: '',
-      teamImageId: null,
+      ownerTeamId: null,
       automatedEditsCodeAgreement: false,
     })
   })
@@ -131,7 +131,7 @@ describe('buildFormValues', () => {
       limitTags: false,
       basemap: 'none',
       basemapUrl: '',
-      teamImageId: null,
+      ownerTeamId: null,
       automatedEditsCodeAgreement: true,
     })
   })
@@ -394,42 +394,42 @@ describe('makeChallengeFormSchema', () => {
 
 describe('buildFormValues team image', () => {
   it('defaults to no image for a brand new challenge', () => {
-    expect(buildFormValues(undefined, 1).teamImageId).toBeNull()
+    expect(buildFormValues(undefined, 1).ownerTeamId).toBeNull()
   })
 
   it("carries over an existing challenge's image", () => {
-    const challenge = { teamImageId: 12 } as unknown as Challenge
-    expect(buildFormValues(challenge, 1).teamImageId).toBe(12)
+    const challenge = { ownerTeamId: 12 } as unknown as Challenge
+    expect(buildFormValues(challenge, 1).ownerTeamId).toBe(12)
   })
 
   it('normalizes a missing image to null rather than undefined', () => {
     // react-hook-form treats undefined as "uncontrolled", which would make the
     // picker stop reflecting the selection.
-    expect(buildFormValues({} as unknown as Challenge, 1).teamImageId).toBeNull()
+    expect(buildFormValues({} as unknown as Challenge, 1).ownerTeamId).toBeNull()
   })
 })
 
 describe('makeChallengeFormSchema team image', () => {
   it('accepts no image', () => {
     expect(
-      makeChallengeFormSchema(false, t).safeParse({ ...validValues, teamImageId: null }).success
+      makeChallengeFormSchema(false, t).safeParse({ ...validValues, ownerTeamId: null }).success
     ).toBe(true)
   })
 
   it('accepts an image id', () => {
     expect(
-      makeChallengeFormSchema(false, t).safeParse({ ...validValues, teamImageId: 4 }).success
+      makeChallengeFormSchema(false, t).safeParse({ ...validValues, ownerTeamId: 4 }).success
     ).toBe(true)
   })
 
   it('rejects a non-numeric image id', () => {
     expect(
-      makeChallengeFormSchema(false, t).safeParse({ ...validValues, teamImageId: 'four' }).success
+      makeChallengeFormSchema(false, t).safeParse({ ...validValues, ownerTeamId: 'four' }).success
     ).toBe(false)
   })
 
   it('requires the field to be present, so clearing is always explicit', () => {
-    const { teamImageId: _omitted, ...withoutImage } = validValues
+    const { ownerTeamId: _omitted, ...withoutImage } = validValues
     expect(makeChallengeFormSchema(false, t).safeParse(withoutImage).success).toBe(false)
   })
 })

@@ -71,14 +71,27 @@ export type Challenge = Omit<
   'tasksRemaining'
 > & {
   /**
-   * Root-relative path serving the challenge's `teamImageId` bytes, derived by
-   * the backend so clients never assemble it themselves. Resolve with
-   * `resolveTeamImageUrl` before using it as an `<img>` src.
+   * Root-relative path serving the image of the team that owns this
+   * challenge, derived by the backend so clients never assemble it themselves.
+   * Resolve with `resolveTeamImageUrl` before using it as an `<img>` src.
+   *
+   * Addressed by team rather than by image, so it always serves whatever that
+   * team currently has approved. A team with no approved image answers 404
+   * there, so treat a load failure as "no picture" rather than an error.
    *
    * Declared here rather than coming from the generated schema: the backend
    * writes it, but it is not declared on `BaseChallenge` in the API spec.
    */
   avatarUrl?: string | null
+  /**
+   * The team that owns this challenge, if one does. Owning it hands that
+   * team's owners, admins and managers the right to manage the challenge, and
+   * puts the team's image on its card.
+   *
+   * Declared here rather than coming from the generated schema: the backend
+   * writes it, but it is not declared on `BaseChallenge` in the API spec.
+   */
+  ownerTeamId?: number | null
   /**
    * Comma-separated MapRoulette tags a challenge suggests to mappers when they
    * complete a task. The backend accepts and returns it, but the spec declares

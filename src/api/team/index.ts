@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { Team, TeamRole, TeamUser } from '@/types/Team'
+import type { ManagedTeam, Team, TeamRole, TeamUser } from '@/types/Team'
 import { apiRequest } from '../client'
 
 export const team = {
@@ -9,6 +9,19 @@ export const team = {
         queryKey: ['team', teamId],
         queryFn: () => apiRequest.get(`api/v2/team/${teamId}`).json<Team>(),
         enabled: !!teamId,
+      })
+    ),
+
+  /**
+   * The teams the current user may give a challenge to — the ones whose
+   * content they run, each with the image that team puts on its challenges.
+   */
+  managed: (enabled = true) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['team', 'managed'],
+        queryFn: () => apiRequest.get('api/v2/teams/managed').json<ManagedTeam[]>(),
+        enabled,
       })
     ),
 

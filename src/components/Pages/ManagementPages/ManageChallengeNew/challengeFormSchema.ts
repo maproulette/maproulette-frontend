@@ -50,9 +50,10 @@ const makeBaseChallengeFormSchema = (t: T) =>
     localGeoJSON: z.instanceof(File).nullable().optional(),
     remoteGeoJSON: z.string().optional().or(z.literal('')),
     dataOriginDate: z.string().optional().or(z.literal('')),
-    // The team image shown on this challenge's card, or null for no image.
-    // Whether the id is one the user may actually use is enforced server-side,
-    // since the picker only ever offers their own teams' approved images.
+    // The team that owns this challenge, or null for no team. Owning it hands
+    // the team's managers the run of the challenge and puts the team's image
+    // on its card. Whether the id is one the user may actually use is enforced
+    // server-side, since the picker only ever offers teams they manage.
     // Basemap the challenge forces on its maps: a bundled style's name,
     // `custom` (paired with basemapUrl), or `none` to leave the mapper's own
     // preference in charge.
@@ -64,7 +65,7 @@ const makeBaseChallengeFormSchema = (t: T) =>
     limitTags: z.boolean(),
     basemap: z.string(),
     basemapUrl: z.string().optional().or(z.literal('')),
-    teamImageId: z.number().nullable(),
+    ownerTeamId: z.number().nullable(),
     automatedEditsCodeAgreement: z.boolean(),
   })
 
@@ -163,7 +164,7 @@ export const buildFormValues = (
   limitTags: challenge?.limitTags ?? false,
   basemap: basemapSelection(challenge),
   basemapUrl: challenge?.customBasemap ?? '',
-  teamImageId: challenge?.teamImageId ?? null,
+  ownerTeamId: challenge?.ownerTeamId ?? null,
   // Editing an existing challenge isn't an automated edit, so the agreement is
   // pre-satisfied; new challenges must explicitly accept it (see schema).
   automatedEditsCodeAgreement: challenge !== undefined,

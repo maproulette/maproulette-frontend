@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger'
 import { AgreementSection } from './AgreementSection'
 import { BasemapFields } from './BasemapFields'
 import { BasicInfoFields } from './BasicInfoFields'
-import { ChallengeImageSection } from './ChallengeImageSection'
+import { ChallengeTeamSection } from './ChallengeTeamSection'
 import {
   buildFormValues,
   type ChallengeFormValues,
@@ -150,7 +150,7 @@ export const ChallengeForm = () => {
             sourceReadOnly={sourceReadOnly}
           />
 
-          <ChallengeImageSection />
+          <ChallengeTeamSection />
 
           <BasemapFields />
 

@@ -19,9 +19,9 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
   let localGeoJSONUpload: LocalGeoJSONUpload | undefined
 
   // Always sent, including as an explicit null: the backend treats a missing
-  // key as "leave the image alone", so omitting it would make clearing an
-  // image impossible.
-  challengeData.teamImageId = values.teamImageId ?? null
+  // key as "leave ownership alone", so omitting it would make handing a
+  // challenge back from a team impossible.
+  challengeData.ownerTeamId = values.ownerTeamId ?? null
 
   // These are editable at any time, so they are assembled before the update
   // short-circuit below.

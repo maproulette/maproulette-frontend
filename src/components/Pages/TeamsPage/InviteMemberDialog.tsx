@@ -23,15 +23,24 @@ import {
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
-import { TEAM_ROLE_ADMIN, TEAM_ROLE_MEMBER, type TeamRole } from '@/types/Team'
+import {
+  roleDisplayName,
+  TEAM_ROLE_MEMBER,
+  TEAM_ROLE_OWNER,
+  TEAM_ROLES,
+  TeamDisplayRoleLabel,
+  type TeamRole,
+} from '@/types/Team'
 
 interface Props {
   teamId: number
   open: boolean
   onOpenChange: (open: boolean) => void
+  /** Only an owner may hand out the owner role, so only they see it offered. */
+  canAssignOwner: boolean
 }
 
-export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
+export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner }: Props) => {
   const { t } = useIntl()
   const [query, setQuery] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
@@ -111,12 +120,13 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange }: Props) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={String(TEAM_ROLE_MEMBER)}>
-                {t('common.member', undefined, 'Member')}
-              </SelectItem>
-              <SelectItem value={String(TEAM_ROLE_ADMIN)}>
-                {t('common.admin', undefined, 'Admin')}
-              </SelectItem>
+              {TEAM_ROLES.filter((option) => option !== TEAM_ROLE_OWNER || canAssignOwner).map(
+                (option) => (
+                  <SelectItem key={option} value={String(option)}>
+                    {TeamDisplayRoleLabel[roleDisplayName(option)]}
+                  </SelectItem>
+                )
+              )}
             </SelectContent>
           </Select>
         </div>

@@ -33,29 +33,6 @@ const anImage = (overrides: Partial<TeamImageType> = {}): TeamImageType => ({
   ...overrides,
 })
 
-describe('teamImage.available', () => {
-  it('fetches the approved images across the user’s teams', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([anImage()]), { status: 200 }))
-
-    const { result } = renderHook(() => teamImage.available(), { wrapper: queryClientWrapper() })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('GET')
-    expect(new URL(request.url).pathname).toContain('/api/v2/teamImages/available')
-    expect(result.current.data).toEqual([anImage()])
-  })
-
-  it('does not fetch when disabled', async () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    renderHook(() => teamImage.available(false), { wrapper: queryClientWrapper() })
-
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
 describe('teamImage.forTeam', () => {
   it('fetches a single team’s images', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([anImage()]), { status: 200 }))

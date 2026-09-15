@@ -15,17 +15,33 @@ import {
 } from '@/components/ui/AlertDialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { Loader } from '@/components/ui/Loader'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/Select'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useIntl } from '@/i18n'
+import { type TranslateFn, useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
 import type { TeamRole, TeamUser } from '@/types/Team'
 import {
+  isPendingInvite,
+  roleDisplayName,
+  roleManagesMembers,
+  roleOwnsTeam,
   TEAM_ROLE_ADMIN,
+  TEAM_ROLE_MANAGER,
   TEAM_ROLE_MEMBER,
+  TEAM_ROLE_OWNER,
+  TEAM_ROLES,
   TeamDisplayRoleLabel,
   teamDisplayRole,
+  teamRoleOf,
 } from '@/types/Team'
 import { InviteMemberDialog } from './InviteMemberDialog'
 import { TeamImagesSection } from './TeamImagesSection'
@@ -34,14 +50,36 @@ interface Props {
   teamId: number
 }
 
+// Members are grouped by role, most privileged first, so the shape of a team
+// reads off the page. Each heading is a literal `t` call rather than an id in
+// a table, so the message extractor can still find them.
+const ROLE_SECTIONS: { role: TeamRole; heading: (t: TranslateFn) => string }[] = [
+  { role: TEAM_ROLE_OWNER, heading: (t) => t('teams.detail.ownersHeading', undefined, 'Owners') },
+  { role: TEAM_ROLE_ADMIN, heading: (t) => t('teams.detail.adminsHeading', undefined, 'Admins') },
+  {
+    role: TEAM_ROLE_MANAGER,
+    heading: (t) => t('teams.detail.managersHeading', undefined, 'Managers'),
+  },
+  {
+    role: TEAM_ROLE_MEMBER,
+    heading: (t) => t('teams.detail.membersHeading', undefined, 'Members'),
+  },
+]
+
 const MemberRow = ({
   member,
   isAdmin,
+  canAssignOwner,
+  isLastOwner,
   currentUserId,
   teamId,
 }: {
   member: TeamUser
   isAdmin: boolean
+  /** Only an owner may hand out the owner role, so only they see it offered. */
+  canAssignOwner: boolean
+  /** A team always needs someone who can delete it, so its last owner is fixed in place. */
+  isLastOwner: boolean
   currentUserId: number | undefined
   teamId: number
 }) => {
@@ -83,39 +121,57 @@ const MemberRow = ({
         </div>
       </div>
       {isAdmin && member.userId !== currentUserId && (
-        <div className="flex gap-1">
-          {role === 'member' && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => handleRole(TEAM_ROLE_ADMIN)}
-              disabled={changeRole.isPending}
-            >
-              {t('teams.detail.promoteButton', undefined, 'Promote')}
-            </Button>
-          )}
-          {role === 'admin' && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => handleRole(TEAM_ROLE_MEMBER)}
-              disabled={changeRole.isPending}
-            >
-              {t('teams.detail.demoteButton', undefined, 'Demote')}
-            </Button>
-          )}
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={handleRemove}
-            disabled={removeMember.isPending}
-            aria-label={t('teams.detail.removeMemberAriaLabel', undefined, 'Remove member')}
+        <div className="flex items-center gap-1">
+          <DisabledTooltip
+            show={isLastOwner}
+            message={t(
+              'teams.detail.lastOwnerReason',
+              undefined,
+              'A team needs an owner. Make someone else an owner before changing this one.'
+            )}
           >
-            <Trash2 className="size-4" aria-hidden="true" />
-          </Button>
+            <Select
+              value={String(teamRoleOf(member))}
+              onValueChange={(value) => handleRole(Number(value) as TeamRole)}
+              disabled={changeRole.isPending || isLastOwner}
+            >
+              <SelectTrigger
+                size="sm"
+                className="w-32"
+                aria-label={t('teams.detail.roleLabel', undefined, 'Role')}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {TEAM_ROLES.filter((option) => option !== TEAM_ROLE_OWNER || canAssignOwner).map(
+                  (option) => (
+                    <SelectItem key={option} value={String(option)}>
+                      {TeamDisplayRoleLabel[roleDisplayName(option)]}
+                    </SelectItem>
+                  )
+                )}
+              </SelectContent>
+            </Select>
+          </DisabledTooltip>
+          <DisabledTooltip
+            show={isLastOwner}
+            message={t(
+              'teams.detail.lastOwnerRemoveReason',
+              undefined,
+              'A team needs an owner. Make someone else an owner before removing this one.'
+            )}
+          >
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={handleRemove}
+              disabled={removeMember.isPending || isLastOwner}
+              aria-label={t('teams.detail.removeMemberAriaLabel', undefined, 'Remove member')}
+            >
+              <Trash2 className="size-4" aria-hidden="true" />
+            </Button>
+          </DisabledTooltip>
         </div>
       )}
     </li>
@@ -143,11 +199,17 @@ export const TeamDetailPage = ({ teamId }: Props) => {
   }
 
   const me = members.find((m) => m.userId === user?.id)
-  const iAmAdmin = me !== undefined && teamDisplayRole(me) === 'admin'
+  const myRole = me && !isPendingInvite(me) ? teamRoleOf(me) : undefined
+  const iAmAdmin = myRole !== undefined && roleManagesMembers(myRole)
+  const iAmOwner = myRole !== undefined && roleOwnsTeam(myRole)
 
-  const admins = members.filter((m) => teamDisplayRole(m) === 'admin')
-  const regularMembers = members.filter((m) => teamDisplayRole(m) === 'member')
-  const invited = members.filter((m) => teamDisplayRole(m) === 'invited')
+  const joined = members.filter((m) => !isPendingInvite(m))
+  const invited = members.filter((m) => isPendingInvite(m))
+  const owners = joined.filter((m) => teamRoleOf(m) === TEAM_ROLE_OWNER)
+  // A team must always keep someone able to delete it, so its sole owner
+  // cannot be demoted or removed - the backend refuses either way, and the
+  // controls say so rather than letting the attempt fail.
+  const lastOwnerId = owners.length === 1 ? owners[0].userId : undefined
 
   const handleDelete = async () => {
     try {
@@ -196,53 +258,52 @@ export const TeamDetailPage = ({ teamId }: Props) => {
               <UserPlus className="size-4" aria-hidden="true" />{' '}
               {t('teams.detail.inviteButton', undefined, 'Invite')}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setConfirmDelete(true)}>
-              <Trash2 className="size-4" aria-hidden="true" />{' '}
-              {t('common.delete', undefined, 'Delete')}
-            </Button>
+            <DisabledTooltip
+              show={!iAmOwner}
+              message={t(
+                'teams.detail.deleteDisabledReason',
+                undefined,
+                'Only an owner of the team can delete it'
+              )}
+            >
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setConfirmDelete(true)}
+                disabled={!iAmOwner}
+              >
+                <Trash2 className="size-4" aria-hidden="true" />{' '}
+                {t('common.delete', undefined, 'Delete')}
+              </Button>
+            </DisabledTooltip>
           </div>
         )}
       </div>
 
       <TeamImagesSection teamId={teamId} isAdmin={iAmAdmin} currentUserId={user?.id} />
 
-      {admins.length > 0 && (
-        <section className="space-y-2">
-          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">
-            {t('teams.detail.adminsHeading', undefined, 'Admins')}
-          </h2>
-          <ul className="space-y-2">
-            {admins.map((m) => (
-              <MemberRow
-                key={m.id}
-                member={m}
-                isAdmin={iAmAdmin}
-                currentUserId={user?.id}
-                teamId={teamId}
-              />
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {regularMembers.length > 0 && (
-        <section className="space-y-2">
-          <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">
-            {t('teams.detail.membersHeading', undefined, 'Members')}
-          </h2>
-          <ul className="space-y-2">
-            {regularMembers.map((m) => (
-              <MemberRow
-                key={m.id}
-                member={m}
-                isAdmin={iAmAdmin}
-                currentUserId={user?.id}
-                teamId={teamId}
-              />
-            ))}
-          </ul>
-        </section>
-      )}
+      {ROLE_SECTIONS.map(({ role, heading }) => {
+        const roleMembers = joined.filter((m) => teamRoleOf(m) === role)
+        if (roleMembers.length === 0) return null
+        return (
+          <section key={role} className="space-y-2">
+            <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">{heading(t)}</h2>
+            <ul className="space-y-2">
+              {roleMembers.map((m) => (
+                <MemberRow
+                  key={m.id}
+                  member={m}
+                  isAdmin={iAmAdmin}
+                  canAssignOwner={iAmOwner}
+                  isLastOwner={m.userId === lastOwnerId}
+                  currentUserId={user?.id}
+                  teamId={teamId}
+                />
+              ))}
+            </ul>
+          </section>
+        )
+      })}
 
       {invited.length > 0 && iAmAdmin && (
         <section className="space-y-2">
@@ -255,6 +316,8 @@ export const TeamDetailPage = ({ teamId }: Props) => {
                 key={m.id}
                 member={m}
                 isAdmin={iAmAdmin}
+                canAssignOwner={iAmOwner}
+                isLastOwner={false}
                 currentUserId={user?.id}
                 teamId={teamId}
               />
@@ -263,7 +326,12 @@ export const TeamDetailPage = ({ teamId }: Props) => {
         </section>
       )}
 
-      <InviteMemberDialog teamId={teamId} open={inviteOpen} onOpenChange={setInviteOpen} />
+      <InviteMemberDialog
+        teamId={teamId}
+        open={inviteOpen}
+        onOpenChange={setInviteOpen}
+        canAssignOwner={iAmOwner}
+      />
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>

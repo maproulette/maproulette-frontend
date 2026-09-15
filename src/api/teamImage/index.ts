@@ -10,16 +10,6 @@ const invalidateAll = (queryClient: ReturnType<typeof useQueryClient>) =>
   queryClient.invalidateQueries({ queryKey: ['teamImage'] })
 
 export const teamImage = {
-  /** Approved images across every team the current user belongs to. */
-  available: (enabled = true) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['teamImage', 'available'],
-        queryFn: () => apiRequest.get('api/v2/teamImages/available').json<TeamImage[]>(),
-        enabled,
-      })
-    ),
-
   /** A single team's images, including ones pending review or rejected. */
   forTeam: (teamId: number | undefined) =>
     useQuery(

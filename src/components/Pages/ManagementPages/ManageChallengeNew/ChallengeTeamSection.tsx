@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { Check, ImageOff } from 'lucide-react'
+import { Check, Users, UsersRound } from 'lucide-react'
+import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { api } from '@/api'
 import { FormField, FormItem, FormMessage } from '@/components/ui/Form'
@@ -8,9 +9,10 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { useIntl } from '@/i18n'
 import { resolveTeamImageUrl } from '@/lib/teamImage'
 import { cn } from '@/lib/utils'
+import type { ManagedTeam } from '@/types/Team'
 import type { ChallengeFormValues } from './challengeFormSchema'
 
-interface ImageTileProps {
+interface TeamTileProps {
   label: string
   selected: boolean
   onSelect: () => void
@@ -19,12 +21,12 @@ interface ImageTileProps {
 }
 
 // Tiles live in a fixed-track grid so every option lines up regardless of how
-// many teams contributed images. Selection is drawn with an inset ring: the
-// form body scrolls, and anything painted outside the border box gets clipped
+// many teams the user runs. Selection is drawn with an inset ring: the form
+// body scrolls, and anything painted outside the border box gets clipped
 // against the scroll container's edge.
 const TILE_GRID = 'grid grid-cols-[repeat(auto-fill,minmax(6.5rem,7rem))] gap-3'
 
-const ImageTile = ({ label, selected, onSelect, children, caption }: ImageTileProps) => (
+const TeamTile = ({ label, selected, onSelect, children, caption }: TeamTileProps) => (
   <li>
     <button
       type="button"
@@ -60,37 +62,55 @@ const ImageTile = ({ label, selected, onSelect, children, caption }: ImageTilePr
 )
 
 /**
- * Lets the challenge owner pick a display image from the teams they belong to.
- * Each team carries one image, so the choice is really which team's image to
- * use. Images can't be uploaded here — they're requested on the team's page
- * and have to be approved by a super admin first — so a user with no teams, or
- * whose teams have no approved image yet, simply has nothing to choose from.
+ * A team's tile art: its challenge image if it has one, and a plain icon
+ * otherwise. The image url is addressed by team and 404s when the team has no
+ * approved image, so a load failure means "no picture", not a broken page.
  */
-export const ChallengeImageSection = () => {
+const TeamArt = ({ team }: { team: ManagedTeam }) => {
+  const [failed, setFailed] = useState(false)
+
+  if (!team.challengeImageUrl || failed) {
+    return <Users className="h-6 w-6 text-zinc-400 dark:text-slate-500" aria-hidden="true" />
+  }
+
+  return (
+    <img
+      src={resolveTeamImageUrl(team.challengeImageUrl)}
+      alt=""
+      className="h-full w-full object-cover"
+      onError={() => setFailed(true)}
+    />
+  )
+}
+
+/**
+ * Lets the challenge owner hand the challenge to one of their teams. The
+ * team's owners, admins and managers can then manage it, and the team's
+ * approved image becomes the picture on its card.
+ *
+ * Only teams the user runs are offered — belonging to a team is not licence to
+ * publish challenges under its name — so someone with no teams, or only
+ * memberships, simply has nothing to choose from.
+ */
+export const ChallengeTeamSection = () => {
   const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
-  const { data: images, isLoading, isError } = api.teamImage.available()
+  const { data: teams, isLoading, isError } = api.team.managed()
 
-  // Each team carries one image, so this is simply one tile per team the user
-  // belongs to. The team name rides along as the tile's caption, since the
-  // picture alone doesn't say whose it is.
-  const options = (images ?? []).map((image) => ({
-    image,
-    teamName: image.teamName ?? String(image.teamId),
-  }))
+  const options = teams ?? []
 
   return (
     <FormSection
-      title={t('manageChallengeNew.challengeForm.imageTitle', undefined, 'Challenge image')}
+      title={t('manageChallengeNew.challengeForm.teamTitle', undefined, 'Team')}
       description={t(
-        'manageChallengeNew.challengeForm.imageDescription',
+        'manageChallengeNew.challengeForm.teamDescription',
         undefined,
-        "An optional image shown on this challenge's card, chosen from the approved image of a team you belong to."
+        "An optional team to own this challenge. Everyone who manages that team can edit it, and the team's image becomes the picture on its card."
       )}
     >
       <FormField
         control={form.control}
-        name="teamImageId"
+        name="ownerTeamId"
         render={({ field }) => (
           <FormItem>
             {isLoading ? (
@@ -102,59 +122,54 @@ export const ChallengeImageSection = () => {
             ) : isError ? (
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 {t(
-                  'manageChallengeNew.challengeForm.imageLoadError',
+                  'manageChallengeNew.challengeForm.teamLoadError',
                   undefined,
-                  'Could not load your available images.'
+                  'Could not load your teams.'
                 )}
               </p>
             ) : (
               <div className="space-y-3">
                 <ul className={TILE_GRID}>
-                  <ImageTile
+                  <TeamTile
                     label={t(
-                      'manageChallengeNew.challengeForm.imageNoneOption',
+                      'manageChallengeNew.challengeForm.teamNoneOption',
                       undefined,
-                      'No image'
+                      'No team'
                     )}
                     selected={field.value == null}
                     onSelect={() => field.onChange(null)}
                   >
-                    <ImageOff className="h-6 w-6 text-zinc-400 dark:text-slate-500" />
-                  </ImageTile>
+                    <UsersRound
+                      className="h-6 w-6 text-zinc-400 dark:text-slate-500"
+                      aria-hidden="true"
+                    />
+                  </TeamTile>
 
-                  {options.map(({ image, teamName }) => (
-                    <ImageTile
-                      key={image.id}
-                      label={image.name}
-                      caption={teamName}
-                      selected={field.value === image.id}
-                      onSelect={() => field.onChange(image.id)}
+                  {options.map((managed) => (
+                    <TeamTile
+                      key={managed.team.id}
+                      label={managed.team.name}
+                      caption={managed.roleName}
+                      selected={field.value === managed.team.id}
+                      onSelect={() => field.onChange(managed.team.id)}
                     >
-                      <img
-                        src={resolveTeamImageUrl(image.url)}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    </ImageTile>
+                      <TeamArt team={managed} />
+                    </TeamTile>
                   ))}
                 </ul>
 
                 {options.length === 0 && (
                   <p className="rounded-lg border border-zinc-200 border-dashed p-3 text-sm text-zinc-600 dark:border-slate-700 dark:text-zinc-400">
                     {t(
-                      'manageChallengeNew.challengeForm.imageNoneAvailable',
+                      'manageChallengeNew.challengeForm.teamNoneAvailable',
                       undefined,
-                      "None of your teams have an approved image yet. Request one from your team's page — a super admin has to approve it before it can be used here."
+                      "You don't manage any teams yet. Only a team's owners, admins and managers can give it a challenge."
                     )}{' '}
                     <Link
                       to="/dashboard"
                       className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
-                      {t(
-                        'manageChallengeNew.challengeForm.imageGoToTeams',
-                        undefined,
-                        'Your teams'
-                      )}
+                      {t('manageChallengeNew.challengeForm.teamGoToTeams', undefined, 'Your teams')}
                     </Link>
                   </p>
                 )}
