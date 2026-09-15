@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { type APIRequestContext, test as base, type Page } from '@playwright/test'
 
 export const BACKEND_URL = 'http://localhost:9000'
@@ -223,12 +224,132 @@ export async function giveChallengeToTeam(
   }
 }
 
+export interface TestUser {
+  id: number
+  name: string
+  osmId: number
+}
+
+/**
+ * Runs SQL against the test stack's database.
+ *
+ * The backend has no endpoint that creates a user -- real ones only ever
+ * arrive through the OSM OAuth callback -- so a test needing a second person
+ * to act on has to put one in the database itself. This reaches into the
+ * compose stack to do it, which is why it is confined to this file.
+ */
+function runSql(sql: string): string {
+  const compose = process.env.MR_COMPOSE_COMMAND ?? 'docker'
+  return execFileSync(
+    compose,
+    [
+      'compose',
+      '-f',
+      'docker-compose.test.yaml',
+      'exec',
+      '-T',
+      'db',
+      'psql',
+      '-U',
+      'maproulette',
+      '-d',
+      'maproulette',
+      '-t',
+      '-A',
+      '-c',
+      sql,
+    ],
+    { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] }
+  ).trim()
+}
+
+/**
+ * A real user row, for tests that need somebody other than the super user to
+ * grant something to. They are only ever a target here, never an actor: this
+ * harness cannot authenticate as them (that needs an API key, see REVIEWER_KEY
+ * above).
+ */
+export function seedUser(name: string, osmId: number): TestUser {
+  const output = runSql(
+    `INSERT INTO users (osm_id, osm_created, name, oauth_token, oauth_secret)
+     VALUES (${osmId}, now(), '${name}', '', '') RETURNING id;`
+  )
+  // psql prints the returned row and then its own "INSERT 0 1" status line.
+  const id = Number(output.split('\n')[0]?.trim())
+  if (!Number.isInteger(id)) {
+    // Throwing matters: a NaN id makes every later assertion vacuously pass.
+    throw new Error(`Could not seed a user -- psql returned: ${JSON.stringify(output)}`)
+  }
+  return { id, name, osmId }
+}
+
+export function deleteSeededUser(user: TestUser): void {
+  try {
+    runSql(`DELETE FROM users WHERE id = ${user.id};`)
+  } catch (error) {
+    console.warn(`Seeded user ${user.id} teardown threw:`, error)
+  }
+}
+
+/** The tag changes a tag-fix task proposes for one OSM element. */
+export function tagFixWork(
+  elementId: string,
+  setTags: Record<string, string>,
+  unsetTags: string[] = []
+) {
+  return {
+    meta: { version: 2, type: 1 },
+    operations: [
+      {
+        operationType: 'modifyElement',
+        data: {
+          id: elementId,
+          operations: [
+            { operation: 'setTags', data: setTags },
+            ...(unsetTags.length > 0 ? [{ operation: 'unsetTags', data: unsetTags }] : []),
+          ],
+        },
+      },
+    ],
+  }
+}
+
+async function createTagFixTask(
+  request: APIRequestContext,
+  challengeId: number,
+  name: string
+): Promise<TestTask> {
+  const coordinates: [number, number] = [-95.454772, 37.6866588]
+  const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
+    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    data: {
+      name,
+      parent: challengeId,
+      instruction: 'The surface tag on this way looks wrong.',
+      geometries: {
+        type: 'FeatureCollection',
+        features: [{ type: 'Feature', geometry: { type: 'Point', coordinates }, properties: {} }],
+      },
+      priority: 0,
+      cooperativeWork: tagFixWork('way/123456', { surface: 'asphalt' }, ['fixme']),
+    },
+  })
+  if (!response.ok()) {
+    throw new Error(`Failed to create tag-fix task: ${response.status()} ${await response.text()}`)
+  }
+  const body = (await response.json()) as { id: number }
+  return { id: body.id, name, challengeId, coordinates }
+}
+
 export const test = base.extend<{
   project: TestProject
   challenge: TestChallenge
   task: TestTask
   secondTask: TestTask
   team: TestTeam
+  seededUser: TestUser
+  cooperativeChallenge: TestChallenge
+  tagFixTask: TestTask
   reviewerRequest: APIRequestContext
   reviewerPage: Page
 }>({
@@ -267,6 +388,38 @@ export const test = base.extend<{
     const team = await createTeam(request, uniqueName('e2e-team'))
     await use(team)
     await deleteTeam(request, team.id)
+  },
+
+  // A real second person to grant things to. OSM ids are namespaced well away
+  // from anything the other fixtures use so parallel-ish runs cannot collide.
+  seededUser: async ({ request: _request }, use) => {
+    const user = seedUser(
+      uniqueName('e2e-mapper').replace(/[^a-zA-Z0-9-]/g, ''),
+      900_000_000 + Math.floor(Math.random() * 90_000_000)
+    )
+    await use(user)
+    deleteSeededUser(user)
+  },
+
+  // A challenge becomes a tag-fix one by containing tag-fix work: the backend
+  // sets its cooperative type when a task carrying cooperativeWork is created,
+  // rather than taking it on the challenge itself. So the task comes first and
+  // the challenge fixture is what waits on it.
+  tagFixTask: async ({ request, project }, use) => {
+    const challenge = await createChallenge(request, project.id, uniqueName('e2e-tagfix'))
+    const task = await createTagFixTask(request, challenge.id, uniqueName('e2e-tagfix-task'))
+    await use(task)
+  },
+
+  cooperativeChallenge: async ({ request, tagFixTask }, use) => {
+    const response = await request.get(
+      `${BACKEND_URL}/api/v2/challenge/${tagFixTask.challengeId}`,
+      {
+        headers: { apiKey: SUPER_KEY },
+      }
+    )
+    const body = (await response.json()) as { id: number; name: string; parent: number }
+    await use({ id: body.id, name: body.name, projectId: body.parent })
   },
 
   // Direct-API second identity (see REVIEWER_KEY above). Behaves like the
