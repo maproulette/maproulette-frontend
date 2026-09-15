@@ -291,6 +291,29 @@ export function deleteSeededUser(user: TestUser): void {
   }
 }
 
+/**
+ * A tag-fix task modelled on a real cooperative challenge: a bakery in Salt
+ * Lake City that MapRoulette proposes adding `diet:vegetarian=yes` to.
+ *
+ * Real tag-fix challenges are uploaded as line-by-line GeoJSON, where each
+ * line is a FeatureCollection carrying `cooperativeWork` alongside its
+ * `features`, and the feature's own properties hold the element's tags with an
+ * `@id` naming it. Tasks here are created through the task endpoint instead
+ * (the upload path imports asynchronously and is not reliable to wait on), so
+ * the same two halves are passed separately -- but the shape of each is what a
+ * real challenge ships.
+ */
+export const TAG_FIX_ELEMENT_ID = 'node/2344998584'
+
+export const TAG_FIX_PROPERTIES = {
+  amenity: 'cafe',
+  'diet:vegetarian': 'yes',
+  name: "Carlucci's",
+  shop: 'bakery',
+  wheelchair: 'yes',
+  '@id': TAG_FIX_ELEMENT_ID,
+}
+
 /** The tag changes a tag-fix task proposes for one OSM element. */
 export function tagFixWork(
   elementId: string,
@@ -319,19 +342,25 @@ async function createTagFixTask(
   challengeId: number,
   name: string
 ): Promise<TestTask> {
-  const coordinates: [number, number] = [-95.454772, 37.6866588]
+  const coordinates: [number, number] = [-111.9003158, 40.7630373]
   const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
     headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
     data: {
       name,
       parent: challengeId,
-      instruction: 'The surface tag on this way looks wrong.',
+      instruction: 'Confirm this bakery serves vegetarian food.',
       geometries: {
         type: 'FeatureCollection',
-        features: [{ type: 'Feature', geometry: { type: 'Point', coordinates }, properties: {} }],
+        features: [
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates },
+            properties: TAG_FIX_PROPERTIES,
+          },
+        ],
       },
       priority: 0,
-      cooperativeWork: tagFixWork('way/123456', { surface: 'asphalt' }, ['fixme']),
+      cooperativeWork: tagFixWork(TAG_FIX_ELEMENT_ID, { 'diet:vegetarian': 'yes' }),
     },
   })
   if (!response.ok()) {

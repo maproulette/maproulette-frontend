@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures'
+import { expect, TAG_FIX_ELEMENT_ID, test } from './fixtures'
 
 // Tag-fix (cooperative) challenges: ones that ship a proposed set of tag
 // changes with each task, for the mapper to apply in the editor.
@@ -37,12 +37,15 @@ test('a tag-fix task shows the tag changes the challenge proposes', async ({
   // any, so it is what the task tab leads with.
   await expect(page.getByText('Suggested tag changes')).toBeVisible({ timeout: 30_000 })
 
-  // The element's current tags come from OpenStreetMap, which this stack
-  // cannot reach, so the proposal is stated as-is: the tag to set is an
-  // addition, and the tag to clear is a removal.
-  await expect(page.getByText('surface')).toBeVisible({ timeout: 15_000 })
-  await expect(page.getByText('asphalt')).toBeVisible()
-  await expect(page.getByText('fixme')).toBeVisible()
+  // The proposal names the element it applies to, and the tag it would set.
+  await expect(page.getByText(TAG_FIX_ELEMENT_ID)).toBeVisible({ timeout: 15_000 })
+  await expect(page.getByText('diet:vegetarian')).toBeVisible()
+  await expect(page.getByText('yes', { exact: true })).toBeVisible()
+
+  // Against a stack that can reach OpenStreetMap this would be a before/after
+  // diff instead, and an element that already carries the tag would be
+  // reported as needing nothing. tagDiff.test.ts covers both of those; here
+  // the element's tags are unknown, so the proposal is stated as-is.
 })
 
 test('an ordinary task shows no suggested changes', async ({ page, task }) => {
