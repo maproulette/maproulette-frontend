@@ -19,6 +19,7 @@ export const ManageProjectNew = () => {
       description: values.description || undefined,
       enabled: values.enabled,
       featured: values.featured,
+      ownerTeamId: values.ownerTeamId,
     })
 
     if (newProject.id) {

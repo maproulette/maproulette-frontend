@@ -13,7 +13,25 @@ const validValues: ProjectFormValues = {
   description: 'A description',
   enabled: true,
   featured: false,
+  ownerTeamId: null,
 }
+
+describe('makeProjectFormSchema owner team', () => {
+  it('accepts a project handed to a team', () => {
+    const result = makeProjectFormSchema(t).safeParse({ ...validValues, ownerTeamId: 7 })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts a project owned by nobody', () => {
+    const result = makeProjectFormSchema(t).safeParse({ ...validValues, ownerTeamId: null })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects an owner team that is not a team id', () => {
+    const result = makeProjectFormSchema(t).safeParse({ ...validValues, ownerTeamId: 'seven' })
+    expect(result.success).toBe(false)
+  })
+})
 
 describe('makeProjectFormSchema', () => {
   it('accepts a fully valid submission', () => {

@@ -16,6 +16,7 @@ import type {
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
+import type { Team } from '@/types/Team'
 import { apiRequest } from '../client'
 
 /**
@@ -206,6 +207,58 @@ export const challengeSingle = {
         enabled: !!challengeId,
       })
     ),
+
+  /**
+   * The teams granted a role on this challenge itself. Does not include the
+   * team that owns it, which manages it by ownership rather than by grant.
+   */
+  teamManagers: (challengeId: number | undefined) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['challenge', challengeId, 'teamManagers'],
+        queryFn: async () => {
+          const raw = await apiRequest
+            .get(`api/v2/teams/challengeManagers/${challengeId}`)
+            .json<Array<{ team: Team; grants?: Array<{ role: number }> }>>()
+          return (raw ?? []).map((entry) => ({
+            team: entry.team,
+            roles: (entry.grants ?? []).map((grant) => grant.role),
+          }))
+        },
+        enabled: !!challengeId,
+      })
+    ),
+
+  /**
+   * Set a team's role on a challenge, replacing whatever it held before. PUT
+   * rather than POST, so changing a role doesn't leave the team holding two.
+   */
+  useSetTeamChallengeRole: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        challengeId,
+        teamId,
+        role,
+      }: {
+        challengeId: number
+        teamId: number
+        role: number
+      }) => apiRequest.put(`api/v2/team/${teamId}/challenge/${challengeId}/${role}`).text(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
+    })
+  },
+
+  useRemoveTeamFromChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ challengeId, teamId }: { challengeId: number; teamId: number }) =>
+        apiRequest.delete(`api/v2/team/${teamId}/challenge/${challengeId}`).text(),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
+    })
+  },
 
   useSetChallengeUserRole: () => {
     const queryClient = useQueryClient()

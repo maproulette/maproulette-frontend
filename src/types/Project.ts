@@ -10,9 +10,13 @@ export type Project = components['schemas']['Project'] & {
   isArchived?: boolean
   completionMetrics?: CompletionMetrics
   /**
-   * The image of the team managing this project, derived server-side from the
-   * project's grants the way a challenge's is derived from its owning team.
-   * Absent when no team manages the project.
+   * The team that owns this project, if one does. Its managers run the project
+   * and its image is the picture on the card, exactly as for a challenge.
+   */
+  ownerTeamId?: number | null
+  /**
+   * The owning team's image, derived server-side from `ownerTeamId`. Absent
+   * when no team owns the project.
    */
   avatarUrl?: string | null
 }
