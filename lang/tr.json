@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Favori",
   "ChallengeDetails.controls.favorite.tooltip": "Favorilere kaydet",
   "ChallengeDetails.controls.goBack.label": "Geri Dön",
-  "ChallengeDetails.controls.modal.subtitle": "Bir Meydan Okuma bildirmek üzeresiniz. Bu [genel github deposunda](https://github.com/maproulette/challenge-reports/issues) bir sorun oluşturulacak ve Meydan Okuma oluşturucusuna e-posta yoluyla bildirimde bulunulacaktır. Herhangi bir takip görüşmesi orada yapılmalıdır. Bir Meydan Okuma bildirmek, onu hemen devre dışı bırakmaz. Lütfen bu meydan okumayla ilgili sorununuzun ne olduğunu ayrıntılı olarak açıklayın ve mümkünse belirli OSM değişiklik kümelerine bağlantı verin.",
   "ChallengeDetails.controls.preview.label": "Ön izleme",
   "ChallengeDetails.controls.reported_text": "Meydan okuma rapor edildi",
   "ChallengeDetails.controls.review.label": "Meydan okuma yaratıcısıyla iletişime geçmeye çalıştım",

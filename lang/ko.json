@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "즐겨찾기",
   "ChallengeDetails.controls.favorite.tooltip": "즐겨찾기에 저장",
   "ChallengeDetails.controls.goBack.label": "뒤로가기",
-  "ChallengeDetails.controls.modal.subtitle": "You are about to report a Challenge. An issue will be created in this [public github repository](https://github.com/maproulette/challenge-reports/issues) and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.",
   "ChallengeDetails.controls.preview.label": "미리보기",
   "ChallengeDetails.controls.reported_text": "This challenge has been reported",
   "ChallengeDetails.controls.review.label": "챌린지 생성자에게 연락을 시도했습니다.",

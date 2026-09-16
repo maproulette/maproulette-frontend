@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Als Favorit",
   "ChallengeDetails.controls.favorite.tooltip": "In Favoritenliste speichern",
   "ChallengeDetails.controls.goBack.label": "Zurück",
-  "ChallengeDetails.controls.modal.subtitle": "Du bist dabei, eine Challenge zu melden. Ein Problembericht wird in diesem [öffentlichen GitHub-Repository](https://github.com/maproulette/challenge-reports/issues) erstellt, und der Ersteller der Herausforderung wird per E-Mail benachrichtigt. Jegliche Folgediskussion sollte dort stattfinden. Das Melden einer Challenge deaktiviert sie nicht sofort. Bitte erkläre detailliert, was dein Problem mit dieser Challenge ist, und verlinke wenn möglich auf spezifische OSM-Änderungssätze.",
   "ChallengeDetails.controls.preview.label": "Vorschau",
   "ChallengeDetails.controls.reported_text": "Diese Challenge wurde gemeldet",
   "ChallengeDetails.controls.review.label": "Ich habe versucht, den Ersteller der Challenge zu kontaktieren",

@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Favoriet",
   "ChallengeDetails.controls.favorite.tooltip": "Opslaan naar Favorieten",
   "ChallengeDetails.controls.goBack.label": "Ga terug",
-  "ChallengeDetails.controls.modal.subtitle": "U staat op het punt een missie te rapporteren. Er zal hier  [public github repository](https://github.com/maproulette/challenge-reports/issues) een issue worden gemaakt en de maker van de uitdaging zal per e-mail in kennis worden gesteld. Alle verdere discussie zou daar plaats moeten vinden. Rapporteren van een missie schakelt hem niet onmiddellijk uit. Leg in detail uit wat het probleem is met deze uitdaging, indien mogelijk linken naar specifieke wijzigingensets van OSM.",
   "ChallengeDetails.controls.preview.label": "Voorbeeld",
   "ChallengeDetails.controls.reported_text": "Deze uitdaging is gerapporteerd",
   "ChallengeDetails.controls.review.label": "Ik heb geprobeerd contact op te nemen met de maker van de missie",

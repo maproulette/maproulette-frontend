@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Избранное",
   "ChallengeDetails.controls.favorite.tooltip": "Сохранить в избранное",
   "ChallengeDetails.controls.goBack.label": "Вернуться",
-  "ChallengeDetails.controls.modal.subtitle": "You are about to report a Challenge. An issue will be created in this [public github repository](https://github.com/maproulette/challenge-reports/issues) and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.",
   "ChallengeDetails.controls.preview.label": "Preview",
   "ChallengeDetails.controls.reported_text": "This challenge has been reported",
   "ChallengeDetails.controls.review.label": "I have attempted to contact the Challenge creator",

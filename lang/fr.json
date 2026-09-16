@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Mis en favoris",
   "ChallengeDetails.controls.favorite.tooltip": "Enregistrer en favoris",
   "ChallengeDetails.controls.goBack.label": "Retour",
-  "ChallengeDetails.controls.modal.subtitle": "Vous êtes sur le point de signaler un défi. Un ticket sera créé dans ce [dépôt GitHub public](https://github.com/maproulette/challenge-reports/issues) et son créateur sera averti par e-mail. Toute discussion ultérieure devra avoir lieu sur ce dépôt. Signaler un défi ne le désactive pas immédiatement. Veuillez expliquer en détail le problème rencontré avec ce défi, en incluant si possible des liens vers des ensembles de modifications spécifiques d'OSM .",
   "ChallengeDetails.controls.preview.label": "Prévisualisation",
   "ChallengeDetails.controls.reported_text": "Ce défi a été signalé",
   "ChallengeDetails.controls.review.label": "J'ai essayé de contacter le créateur du défi",

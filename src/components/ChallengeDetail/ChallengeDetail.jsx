@@ -11,6 +11,7 @@ import { Popup } from "react-leaflet";
 import { Link } from "react-router-dom";
 import AsManager from "../../interactions/User/AsManager";
 import { messagesByDifficulty } from "../../services/Challenge/ChallengeDifficulty/ChallengeDifficulty";
+import { fetchChallengeReports, isOpenReport } from "../../services/Challenge/ChallengeReports";
 import { isUsableChallengeStatus } from "../../services/Challenge/ChallengeStatus/ChallengeStatus";
 import { fromLatLngBounds } from "../../services/MapBounds/MapBounds";
 import WithCurrentChallenge from "../AdminPane/HOCs/WithCurrentChallenge/WithCurrentChallenge";
@@ -34,6 +35,7 @@ import SvgSymbol from "../SvgSymbol/SvgSymbol";
 import TaskClusterMap from "../TaskClusterMap/TaskClusterMap";
 import Taxonomy from "../Taxonomy/Taxonomy";
 import { ChallengeCommentsPane } from "./ChallengeCommentsPane";
+import ChallengeReportsModal from "./ChallengeReportsModal";
 import FlagModal from "./FlagModal";
 import messages from "./Messages";
 
@@ -43,11 +45,6 @@ const ClusterMap = WithChallengeTaskClusters(
 );
 
 const ProjectPicker = WithManageableProjects(ProjectPickerModal);
-
-const FLAG_REPO_NAME = window.env.REACT_APP_GITHUB_ISSUES_API_REPO;
-const FLAG_REPO_OWNER = window.env.REACT_APP_GITHUB_ISSUES_API_OWNER;
-const FLAG_TOKEN = window.env.REACT_APP_GITHUB_ISSUES_API_TOKEN;
-const FLAGGING_ACTIVE = FLAG_REPO_NAME && FLAG_REPO_OWNER && FLAG_TOKEN;
 
 const DETAIL_TABS = {
   OVERVIEW: "OVERVIEW",
@@ -69,7 +66,8 @@ export class ChallengeDetail extends Component {
         ? DETAIL_TABS.COMMENTS
         : DETAIL_TABS.OVERVIEW,
     flagLoading: true,
-    issue: undefined,
+    reports: [],
+    showingReports: false,
     displayInputError: false,
     displayCheckboxError: false,
     submittingFlag: false,
@@ -119,8 +117,8 @@ export class ChallengeDetail extends Component {
 
     const { url, params } = this.props.match;
 
-    if (FLAGGING_ACTIVE && !url.includes("virtual")) {
-      this.queryForIssue(params.challengeId);
+    if (!url.includes("virtual") && params.challengeId) {
+      this.loadReports(params.challengeId);
     }
   }
 
@@ -140,29 +138,22 @@ export class ChallengeDetail extends Component {
     }
   }
 
-  queryForIssue = async (id) => {
+  loadReports = async (id) => {
     this.setState({ flagLoading: true });
 
-    const owner = window.env.REACT_APP_GITHUB_ISSUES_API_OWNER;
-    const repo = window.env.REACT_APP_GITHUB_ISSUES_API_REPO;
-    const query = `q='Reported+Challenge+${
-      encodeURIComponent("#") + id
-    }'+in:title+state:open+repo:${owner}/${repo}`;
-    const response = await fetch(`https://api.github.com/search/issues?${query}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.github.text-match+json",
-      },
-    });
-
-    if (response.ok) {
-      const body = await response.json();
+    try {
+      const reports = await fetchChallengeReports(id);
       if (!this._isMounted) return;
-      if (body?.total_count) {
-        this.setState({ issue: body.items[0] });
+      this.setState({ reports });
+    } catch (error) {
+      // The reports decorate the page rather than carry it, so a failure here
+      // leaves the flag control in its unreported state instead of taking the
+      // challenge down with it.
+      console.error("Unable to load the reports on this challenge", error);
+    } finally {
+      if (this._isMounted) {
+        this.setState({ flagLoading: false });
       }
-
-      this.setState({ flagLoading: false });
     }
   };
 
@@ -174,8 +165,18 @@ export class ChallengeDetail extends Component {
     this.setState({ flagModal: false });
   };
 
-  onModalSubmit = (data) => {
-    this.setState({ flagModal: false, displayInputError: false, issue: data });
+  onReportsCancel = () => {
+    this.setState({ showingReports: false });
+  };
+
+  onModalSubmit = (report) => {
+    // Show the new report straight away rather than waiting on a refetch; the
+    // server returns the stored row, so this is the same shape the listing has.
+    this.setState({
+      flagModal: false,
+      displayInputError: false,
+      reports: [report].concat(this.state.reports),
+    });
   };
 
   handleInputError = () => {
@@ -194,11 +195,15 @@ export class ChallengeDetail extends Component {
   };
 
   handleFlagClick = () => {
-    if (this.state.issue) {
-      window.open(this.state.issue?.html_url, "_blank");
+    if (this.state.reports.length > 0) {
+      this.setState({ showingReports: true });
     } else {
       this.setState({ flagModal: true });
     }
+  };
+
+  handleFileReportFromListing = () => {
+    this.setState({ showingReports: false, flagModal: true });
   };
 
   projectPickerCanceled = () => {
@@ -423,6 +428,11 @@ export class ChallengeDetail extends Component {
       );
     }
 
+    // A challenge with a report still awaiting a decision is flagged to every
+    // reader, not only to whoever filed it.
+    const hasOpenReport = this.state.reports.some(isOpenReport);
+    const hasReports = this.state.reports.length > 0;
+
     let isSaved = false;
 
     if (_isObject(this.props.user) && !challenge.isVirtual) {
@@ -506,12 +516,15 @@ export class ChallengeDetail extends Component {
                 <Taxonomy {...challenge} isSaved={isSaved} />
                 <div className="mr-flex mr-items-center">
                   <h1 className="mr-card-challenge__title mr-mr-3">{challenge.name}</h1>
-                  {FLAGGING_ACTIVE &&
-                    !this.state.flagLoading &&
+                  {!this.state.flagLoading &&
                     !challenge.isVirtual &&
-                    this.props.user && (
+                    (this.props.user || hasOpenReport) && (
                       <div
-                        title={!this.state.issue ? "Report challenge" : "View github issue"}
+                        title={this.props.intl.formatMessage(
+                          hasReports
+                            ? messages.viewReportsTooltip
+                            : messages.reportChallengeTooltip,
+                        )}
                         className="mr-flex mr-align-center mr-cursor-pointer"
                         onClick={this.handleFlagClick}
                       >
@@ -519,10 +532,10 @@ export class ChallengeDetail extends Component {
                           sym="flag-icon"
                           viewBox="0 0 20 20"
                           className={`mr-w-4 mr-h-4 mr-fill-current mr-mr-2${
-                            this.state.issue ? " mr-fill-red-light mr-mt-4px" : ""
+                            hasOpenReport ? " mr-fill-red-light mr-mt-4px" : ""
                           }`}
                         />
-                        {this.state.issue && (
+                        {hasOpenReport && (
                           <div className="mr-text-red-light">
                             <FormattedMessage {...messages.reportedText} />
                           </div>
@@ -530,6 +543,14 @@ export class ChallengeDetail extends Component {
                       </div>
                     )}
                 </div>
+                {this.state.showingReports && (
+                  <ChallengeReportsModal
+                    {...this.props}
+                    reports={this.state.reports}
+                    onCancel={this.onReportsCancel}
+                    onFileReport={this.handleFileReportFromListing}
+                  />
+                )}
                 {this.state.flagModal && (
                   <FlagModal
                     {...this.props}

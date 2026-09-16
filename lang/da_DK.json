@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Favorit",
   "ChallengeDetails.controls.favorite.tooltip": "Gem til favoritter",
   "ChallengeDetails.controls.goBack.label": "Gå tilbage",
-  "ChallengeDetails.controls.modal.subtitle": "Du er ved at anmelde en udfordring. Der oprettes en sag i dette [offentlige github-arkiv](https://github.com/maproulette/challenge-reports/issues), og udfordringens ophavsmand får besked via e-mail. Eventuelle opfølgende diskussioner skal foregå der. At anmelde en udfordring deaktiverer den ikke med det samme. Forklar venligst detaljeret, hvad din indvending mod denne udfordring er, og link om muligt til specifikke OSM-ændringssæt.",
   "ChallengeDetails.controls.preview.label": "Forhåndsvisning",
   "ChallengeDetails.controls.reported_text": "Denne udfordring er blevet anmeldt",
   "ChallengeDetails.controls.review.label": "Jeg har forsøgt at kontakte skaberen af udfordringen.",

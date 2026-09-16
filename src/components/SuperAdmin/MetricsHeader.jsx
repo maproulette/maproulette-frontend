@@ -46,6 +46,12 @@ const MetricsHeader = (props) => {
             >
               <FormattedMessage {...messages.userLabel} />
             </button>
+            <button
+              className="mr-button mr-button--dark mr-button--small mr-mr-4"
+              onClick={() => handleTabToggle("reports")}
+            >
+              <FormattedMessage {...messages.reportsLabel} />
+            </button>
           </div>
           {props.currentTab === "challenges" && (
             <>
@@ -64,7 +70,7 @@ const MetricsHeader = (props) => {
               <SortUsersSelector {...props} />
             </>
           )}
-          <SearchBox {...props} setSearch={props.setSearch} />
+          {props.currentTab !== "reports" && <SearchBox {...props} setSearch={props.setSearch} />}
         </div>
       </div>
     </header>
