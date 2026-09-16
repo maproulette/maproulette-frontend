@@ -5,6 +5,7 @@ import { useChallengeModals } from './ChallengeModalsContext'
 import { CloneChallengeModal } from './CloneChallengeModal'
 import { CommentsModal } from './CommentsModal'
 import { OverpassModal } from './OverpassModal'
+import { ReportHistoryModal } from './ReportHistoryModal'
 import { ReportModal } from './ReportModal'
 
 export const ChallengeModals = () => {
@@ -15,6 +16,8 @@ export const ChallengeModals = () => {
   return (
     <>
       {user && <ReportModal />}
+      {/* Reports are public, so this one is not gated on being signed in. */}
+      <ReportHistoryModal />
       <CommentsModal />
       {hasOverpass && <OverpassModal />}
       {canClone && challenge.id && challenge.name && (

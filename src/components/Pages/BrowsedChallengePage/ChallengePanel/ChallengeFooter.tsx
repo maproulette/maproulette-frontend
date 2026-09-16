@@ -12,14 +12,16 @@ import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { useMapToggle } from '../MapToggleContext'
+import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 import { ChallengeProgress } from './ChallengeProgress'
 
 export const ChallengeFooter = () => {
   const queryClient = useQueryClient()
   const navigateToTask = useNavigateToTask()
-  const { challenge, openReport, user } = useBrowsedChallengeContext()
+  const { challenge, hasOpenReport, user } = useBrowsedChallengeContext()
   const { challengeFooterExtensions } = usePluginContext()
   const { showMap, setShowMap } = useMapToggle()
+  const { openReportHistory } = useChallengeModals()
   const { t } = useIntl()
 
   const { hasActions, tasksRemaining } = useChallengeProgress(
@@ -91,18 +93,27 @@ export const ChallengeFooter = () => {
     <>
       <div className="shrink-0 rounded-b-lg bg-white dark:bg-slate-800">
         <ChallengeProgress />
-        {openReport && (
-          <div className="mt-3 flex justify-center">
-            <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50/50 px-3 py-2 dark:border-red-800 dark:bg-red-900/10">
+        {hasOpenReport && (
+          <div className="mt-3">
+            <button
+              type="button"
+              onClick={openReportHistory}
+              title={t(
+                'browsedChallengePage.footer.reportedIssueTooltip',
+                undefined,
+                'View the reports on this challenge'
+              )}
+              className="flex w-full items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50/50 px-3 py-2 text-center transition-colors hover:bg-red-50 dark:border-red-800 dark:bg-red-900/10 dark:hover:bg-red-900/20"
+            >
               <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)]" />
-              <p className="text-center text-red-600 text-xs dark:text-red-400">
+              <span className="text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400">
                 {t(
                   'browsedChallengePage.footer.reportedIssueMessage',
                   undefined,
-                  'You have reported this challenge. It is awaiting review by the MapRoulette administrators.'
+                  'This challenge has been reported. Click to view the reports.'
                 )}
-              </p>
-            </div>
+              </span>
+            </button>
           </div>
         )}
         <div className="mt-3 flex flex-col gap-4">

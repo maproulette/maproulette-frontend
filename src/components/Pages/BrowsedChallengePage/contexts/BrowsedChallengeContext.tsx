@@ -5,7 +5,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { formatLongDate } from '@/lib/date'
 import type { Challenge } from '@/types/Challenge'
-import type { ChallengeReport } from '@/types/ChallengeReport'
+import { type ChallengeReport, isOpenReport } from '@/types/ChallengeReport'
 import type { User } from '@/types/User'
 
 type BrowsedChallengeContextType = {
@@ -27,11 +27,16 @@ type BrowsedChallengeContextType = {
   formattedDate?: string | null
   hasOverpass?: boolean
   /**
-   * The current user's own still-open report on this challenge, if they filed
-   * one. Reports are private to super admins, so this deliberately says nothing
-   * about reports other people may have filed.
+   * Whether anyone has an open report against this challenge, which is what the
+   * footer notice announces. Reports are public: filing one also posts a
+   * challenge comment naming the reporter and quoting what they wrote.
    */
-  openReport: ChallengeReport | null | undefined
+  hasOpenReport: boolean
+  /**
+   * The current user's own still-open report, if they filed one. Only used to
+   * keep them from filing a second one on top of it.
+   */
+  openReport: ChallengeReport | undefined
   isCheckingReport: boolean
 }
 
@@ -72,12 +77,13 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   const hasOverpass = !!challenge.overpassQL
   const canManage = canManageChallenge(user, challenge)
 
-  // Only the reporter's own open report -- enough to tell them a report is
-  // already pending without exposing anyone else's.
-  const { data: openReport, isLoading: isCheckingReport } = api.challenge.myOpenReport(
-    challenge.id,
-    !!user
-  )
+  // One listing answers both questions the page asks about reports: whether the
+  // challenge has been reported at all, and whether this reader is the one who
+  // reported it and so should not be invited to file another.
+  const { data: reports, isLoading: isCheckingReport } = api.challenge.forChallenge(challenge.id)
+  const openReports = useMemo(() => (reports ?? []).filter(isOpenReport), [reports])
+  const hasOpenReport = openReports.length > 0
+  const openReport = openReports.find((report) => !!user && report.reporterId === user.id)
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<BrowsedChallengeContextType>(
@@ -95,6 +101,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       ownerTeamName: ownerTeam?.name,
       formattedDate,
       hasOverpass,
+      hasOpenReport,
       openReport,
       isCheckingReport,
     }),
@@ -111,6 +118,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
       ownerTeam?.name,
       formattedDate,
       hasOverpass,
+      hasOpenReport,
       openReport,
       isCheckingReport,
     ]

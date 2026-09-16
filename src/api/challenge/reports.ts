@@ -4,25 +4,26 @@ import { apiRequest } from '../client'
 
 /**
  * Filing or triaging a report changes both the super admin listing and the
- * reporter's own "do I already have one open" lookup, so mutations invalidate
- * the whole namespace rather than reasoning about which lists moved.
+ * per-challenge listing the challenge page reads, so mutations invalidate the
+ * whole namespace rather than reasoning about which lists moved.
  */
 const invalidateAll = (queryClient: ReturnType<typeof useQueryClient>) =>
   queryClient.invalidateQueries({ queryKey: ['challengeReport'] })
 
 export const challengeReports = {
   /**
-   * The current user's own still-open report on a challenge, or null. The
-   * endpoint answers 204 when there is none, which has no JSON body.
+   * Every report filed against a challenge, newest first, resolved ones
+   * included, as anyone browsing the challenge may see them: the reporter is
+   * named, but their contact address and the admin-side triage details are
+   * stripped server-side, so a resolved report carries its outcome and nothing
+   * more.
    */
-  myOpenReport: (challengeId: number | undefined, enabled = true) =>
+  forChallenge: (challengeId: number | undefined, enabled = true) =>
     useQuery(
       queryOptions({
-        queryKey: ['challengeReport', 'mine', challengeId],
-        queryFn: async () => {
-          const response = await apiRequest.get(`api/v2/challenge/${challengeId}/report/mine`)
-          return response.status === 204 ? null : await response.json<ChallengeReport>()
-        },
+        queryKey: ['challengeReport', 'forChallenge', challengeId],
+        queryFn: () =>
+          apiRequest.get(`api/v2/challenge/${challengeId}/reports`).json<ChallengeReport[]>(),
         enabled: enabled && !!challengeId,
       })
     ),

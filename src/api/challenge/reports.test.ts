@@ -20,35 +20,25 @@ const report = {
   fullCount: 1,
 }
 
-describe('challengeReports.myOpenReport', () => {
-  it("fetches the user's own open report for a challenge", async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify(report), { status: 200 }))
+describe('challengeReports.forChallenge', () => {
+  it('fetches every report filed against a challenge', async () => {
+    const resolved = { ...report, id: 8, status: 2, statusName: 'dismissed' }
+    const fetchMock = stubFetch(new Response(JSON.stringify([report, resolved]), { status: 200 }))
 
-    const { result } = renderHook(() => challengeReports.myOpenReport(3), {
+    const { result } = renderHook(() => challengeReports.forChallenge(3), {
       wrapper: queryClientWrapper(),
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(report)
+    expect(result.current.data).toEqual([report, resolved])
     const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/challenge/3/report/mine')
-  })
-
-  it('resolves to null for the 204 the backend sends when there is no open report', async () => {
-    stubFetch(new Response(null, { status: 204 }))
-
-    const { result } = renderHook(() => challengeReports.myOpenReport(3), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toBeNull()
+    expect(request.url).toContain('api/v2/challenge/3/reports')
   })
 
   it('is disabled when challengeId is falsy', () => {
-    const fetchMock = stubFetch(new Response(null, { status: 204 }))
+    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
 
-    const { result } = renderHook(() => challengeReports.myOpenReport(undefined), {
+    const { result } = renderHook(() => challengeReports.forChallenge(undefined), {
       wrapper: queryClientWrapper(),
     })
 
@@ -57,9 +47,9 @@ describe('challengeReports.myOpenReport', () => {
   })
 
   it('is disabled when explicitly not enabled', () => {
-    const fetchMock = stubFetch(new Response(null, { status: 204 }))
+    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
 
-    const { result } = renderHook(() => challengeReports.myOpenReport(3, false), {
+    const { result } = renderHook(() => challengeReports.forChallenge(3, false), {
       wrapper: queryClientWrapper(),
     })
 

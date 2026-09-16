@@ -3,8 +3,10 @@
  * is causing incorrect edits -- as opposed to a bug or a feature request.
  *
  * Reports used to be filed as issues in a public GitHub repo. They are stored
- * in the MapRoulette database now, so a super admin triages them in-app and the
- * reporter's contact details stay private.
+ * in the MapRoulette database now, so a super admin triages them in-app. What a
+ * report says is readable by anyone on the challenge page -- filing one also
+ * posts a challenge comment saying the same thing -- but the reporter's contact
+ * details and the triage notes reach super admins only.
  *
  * Declared by hand rather than sourced from the generated schema so it stays
  * available until `openApiTypes.ts` is regenerated against a backend carrying
@@ -35,6 +37,8 @@ export type ChallengeReport = {
   comment: string
   status: number
   statusName: ChallengeReportStatusName | string
+  /* Like the email, the three triage fields below are stripped from the
+     per-challenge listing and reach super admins only. */
   reviewedBy?: number | null
   reviewedByName?: string | null
   reviewedAt?: string | null
