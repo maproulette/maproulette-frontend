@@ -1,7 +1,11 @@
 import classNames from "classnames";
 import { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { postChallengeComment } from "../../services/Challenge/ChallengeComments";
+import {
+  CHALLENGE_REPORT_MAX_LENGTH,
+  CHALLENGE_REPORT_MIN_LENGTH,
+  reportChallenge,
+} from "../../services/Challenge/ChallengeReports";
 import AutosuggestMentionTextArea from "../AutosuggestTextBox/AutosuggestMentionTextArea";
 import MarkdownContent from "../MarkdownContent/MarkdownContent";
 import messages from "./Messages";
@@ -14,43 +18,37 @@ export class FlagCommentInput extends Component {
     checked: false,
     emailValue: this.props.user.settings.email || "",
     submittingFlag: false,
+    submitError: null,
   };
 
   handleSubmit = async () => {
-    this.setState({ submittingFlag: true });
+    this.setState({ submittingFlag: true, submitError: null });
 
-    if (this.state.characterCount < 100) {
+    if (this.state.characterCount < CHALLENGE_REPORT_MIN_LENGTH) {
       this.props.handleInputError();
     } else if (!this.state.checked) {
       this.props.handleCheckboxError();
     } else {
-      const challenge = this.props.challenge;
-      const owner = window.env.REACT_APP_GITHUB_ISSUES_API_OWNER;
-      const repo = window.env.REACT_APP_GITHUB_ISSUES_API_REPO;
-      const body = `Challenge: [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) \n\n Reported by: [${this.props.user.osmProfile.displayName}](https://www.openstreetmap.org/user/${encodeURIComponent(this.props.user.osmProfile.displayName)})\n\n${this.state.value}`;
-      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
-        method: "POST",
-        body: JSON.stringify({
-          title: `Reported Challenge #${challenge.id} - ${challenge.name}`,
-          owner,
-          repo,
-          body,
-          state: "open",
-        }),
-        headers: {
-          Authorization: `token ${window.env.REACT_APP_GITHUB_ISSUES_API_TOKEN}`,
-          "Content-Type": "application/json",
-          Accept: "application/vnd.github.v3+json",
-        },
-      });
+      try {
+        // The reporter comes from the session server-side, and the backend
+        // posts the accompanying challenge comment itself, so the report text
+        // is all there is to send.
+        const report = await reportChallenge(
+          this.props.challenge.id,
+          this.state.value,
+          this.state.emailValue.trim() || undefined,
+        );
 
-      if (response.ok) {
-        const responseBody = await response.json();
-        this.props.onModalSubmit(responseBody);
-        const issue_link = responseBody.html_url;
-        const comment = `This challenge, challenge [#${challenge.id} - ${challenge.name}](${window.env.REACT_APP_URL}/browse/challenges/${challenge.id}) in project [#${challenge.parent.id} - ${challenge.parent.displayName}](${window.env.REACT_APP_URL}/browse/projects/${challenge.parent.id}), has been reported by [${this.props.user.osmProfile.displayName}](${window.env.REACT_APP_OSM_SERVER}/user/${encodeURIComponent(this.props.user.osmProfile.displayName)}). Please use [this GitHub issue](${issue_link}) to discuss. \n\n Report Content: \n ${this.state.value}`;
-        await postChallengeComment(challenge.id, comment);
+        this.props.onModalSubmit(report);
         this.props.handleViewCommentsSubmit();
+      } catch (error) {
+        // The server rejects a report that is too short or too long, carries a
+        // malformed email, or duplicates one the reporter already has open. Its
+        // message says which, so show it rather than failing silently.
+        this.setState({
+          submitError:
+            error.details?.message ?? this.props.intl.formatMessage(messages.reportSubmitError),
+        });
       }
     }
 
@@ -58,8 +56,8 @@ export class FlagCommentInput extends Component {
   };
 
   handleChange = (val) => {
-    if (val.length <= 1000) {
-      this.setState({ ...this.state, value: val, characterCount: val.length });
+    if (val.length <= CHALLENGE_REPORT_MAX_LENGTH) {
+      this.setState({ ...this.state, value: val, characterCount: val.length, submitError: null });
     }
   };
 
@@ -68,8 +66,8 @@ export class FlagCommentInput extends Component {
   };
 
   render() {
-    const maxCharacterCount = 1000;
-    const minCharacterCount = 100;
+    const maxCharacterCount = CHALLENGE_REPORT_MAX_LENGTH;
+    const minCharacterCount = CHALLENGE_REPORT_MIN_LENGTH;
     return (
       <div className="mr-mt-2">
         <label htmlFor="root_email" className="mr-text-white-50">
@@ -164,6 +162,7 @@ export class FlagCommentInput extends Component {
             <FormattedMessage {...messages.checkboxError} />
           </div>
         )}
+        {this.state.submitError && <div className="mr-text-red">{this.state.submitError}</div>}
         <div className="mr-flex mr-items-center mr-mt-6">
           <button
             className="mr-button mr-button--white mr-mr-12 mr-px-8"

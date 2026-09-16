@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Омиљено",
   "ChallengeDetails.controls.favorite.tooltip": "Сачувај у омиљене",
   "ChallengeDetails.controls.goBack.label": "Иди назад",
-  "ChallengeDetails.controls.modal.subtitle": "Овим ћете пријавити изазов. Направиће се пријава у овом [јавном github репозиторијуму](https://github.com/maproulette/challenge-reports/issues) и власник изазова ће бити обавештен е-мејлом. Свака наредна дискусија треба да се деси тамо. Пријава изазова га не искључује аутоматски. Молимо детаљно објасните Ваш проблем са овим изазовом, и ако можете укажите на конкретне OSM измене.",
   "ChallengeDetails.controls.preview.label": "Претпреглед",
   "ChallengeDetails.controls.reported_text": "Изазов је пријављен",
   "ChallengeDetails.controls.review.label": "Покушао сам да контактирам творца изазова",

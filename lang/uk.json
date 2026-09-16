@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Закріпити",
   "ChallengeDetails.controls.favorite.tooltip": "Додати в закладки",
   "ChallengeDetails.controls.goBack.label": "Повернутись",
-  "ChallengeDetails.controls.modal.subtitle": "Ви збираєтеся поскаржитись на Виклик. Скаргу буде створено в цьому [публічному репозиторії github](https://github.com/maproulette/challenge-reports/issues), а автора Виклику буде повідомлено електронною поштою. Будь-яке подальше обговорення має відбуватися там. Скарга на Виклик не відключає його негайно. Будь ласка, детально поясніть, у чому полягає ваша проблема з цим Викликом, якщо можливо, з посиланням на конкретні набори змін OSM.",
   "ChallengeDetails.controls.preview.label": "Перегляд",
   "ChallengeDetails.controls.reported_text": "На цей Виклик було створено скаргу",
   "ChallengeDetails.controls.review.label": "Я намагався звʼязатися з автором Виклику",

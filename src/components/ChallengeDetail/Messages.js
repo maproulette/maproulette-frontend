@@ -113,7 +113,7 @@ export default defineMessages({
   modalSubtitle: {
     id: "ChallengeDetails.controls.modal.subtitle",
     defaultMessage:
-      "You are about to report a Challenge. An issue will be created in this [public github repository](https://github.com/maproulette/challenge-reports/issues) and the Challenge creator will be notified by email. Any follow-up discussion should take place there. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.",
+      "You are about to report a Challenge. Your report goes to the MapRoulette administrators for review, and a comment naming you is posted on the Challenge so its creator knows it was raised. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.",
   },
 
   submitReport: {
@@ -134,6 +134,67 @@ export default defineMessages({
   reportedText: {
     id: "ChallengeDetails.controls.reported_text",
     defaultMessage: "This challenge has been reported",
+  },
+
+  reportChallengeTooltip: {
+    id: "ChallengeDetails.controls.report.tooltip",
+    defaultMessage: "Report challenge",
+  },
+
+  viewReportsTooltip: {
+    id: "ChallengeDetails.reports.view.tooltip",
+    defaultMessage: "View the reports on this challenge",
+  },
+
+  reportsModalTitle: {
+    id: "ChallengeDetails.reports.title",
+    defaultMessage: "Reports on This Challenge",
+  },
+
+  reportsModalSubtitle: {
+    id: "ChallengeDetails.reports.subtitle",
+    defaultMessage:
+      "Reports filed against this challenge and where each one stands. The MapRoulette administrators review every report.",
+  },
+
+  reportsModalEmpty: {
+    id: "ChallengeDetails.reports.empty",
+    defaultMessage: "No one has reported this challenge.",
+  },
+
+  reportedByOn: {
+    id: "ChallengeDetails.reports.reportedByOn",
+    defaultMessage: "Reported by {user} on {date}",
+  },
+
+  reportedByYou: {
+    id: "ChallengeDetails.reports.reportedByYou",
+    defaultMessage: "you",
+  },
+
+  unknownUser: {
+    id: "ChallengeDetails.reports.unknownUser",
+    defaultMessage: "Unknown",
+  },
+
+  reportAwaitingReview: {
+    id: "ChallengeDetails.reports.awaitingReview",
+    defaultMessage: "Awaiting review by the MapRoulette administrators.",
+  },
+
+  reportResolvedOn: {
+    id: "ChallengeDetails.reports.resolvedOn",
+    defaultMessage: "Marked {status} on {date}",
+  },
+
+  reportResolved: {
+    id: "ChallengeDetails.reports.resolved",
+    defaultMessage: "Marked {status}",
+  },
+
+  reportSubmitError: {
+    id: "ChallengeDetails.reports.submitError",
+    defaultMessage: "Failed to submit report. Please try again.",
   },
 
   email: {

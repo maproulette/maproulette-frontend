@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Preferito",
   "ChallengeDetails.controls.favorite.tooltip": "Salva nei preferiti",
   "ChallengeDetails.controls.goBack.label": "Torna indietro",
-  "ChallengeDetails.controls.modal.subtitle": "Stai per segnalare una Sfida. Verrà creato un issue in questo [repository pubblico di github](https://github.com/maproulette/challenge-reports/issues) e il creatore della sfida verrà avvisato via email. Qualsiasi discussione successiva dovrà proseguire lì. Segnalare una Sfida non la disabilita immediatamente. Si prega di spiegare in dettaglio qual è il problema con questa sfida, se possibile collegandosi a specifici changeset di OSM.",
   "ChallengeDetails.controls.preview.label": "Anteprima",
   "ChallengeDetails.controls.reported_text": "Questa sfida è stata segnalata",
   "ChallengeDetails.controls.review.label": "Ho cercato di contattare il creatore della sfida",

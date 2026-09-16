@@ -86,6 +86,12 @@ const apiRoutes = (factory) => {
       snapshot: factory.get("/snapshot/:id"),
       archive: factory.post("/challenge/:id/archive"),
       topTags: factory.get("/challenge/:id/topTags"),
+      // Reports against a challenge's design. Filing is open to any signed-in
+      // user and reading to anyone; the triage routes are superusers only.
+      report: factory.post("/challenge/:id/report"),
+      reports: factory.get("/challenge/:id/reports", { noCache: true }),
+      reportListing: factory.get("/challenge/reports", { noCache: true }),
+      reportStatus: factory.put("/challenge/report/:id/status"),
     },
     virtualChallenge: {
       single: factory.get("/virtualchallenge/:id"),

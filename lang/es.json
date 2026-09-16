@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Favorito",
   "ChallengeDetails.controls.favorite.tooltip": "Guardar en favoritos",
   "ChallengeDetails.controls.goBack.label": "Regresar",
-  "ChallengeDetails.controls.modal.subtitle": "Estás a punto de reportar un desafío. Se creará un problema en este [repositorio público de GitHub](https://github.com/maproulette/challenge-reports/issues) y se notificará al creador del desafío por correo electrónico. Cualquier discusión de seguimiento debe tener lugar allí. Reportar un desafío no lo desactiva inmediatamente. Explica en detalle cuál es tu problema con este desafío, si es posible, vinculando a conjuntos de cambios de OSM específicos.",
   "ChallengeDetails.controls.preview.label": "Vista previa",
   "ChallengeDetails.controls.reported_text": "Este desafío ha sido reportado",
   "ChallengeDetails.controls.review.label": "He intentado contactar al creador del desafío",

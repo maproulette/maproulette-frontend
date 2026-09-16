@@ -483,7 +483,6 @@
   "ChallengeDetails.controls.favorite.label": "Favoritar",
   "ChallengeDetails.controls.favorite.tooltip": "Guardar nos favoritos",
   "ChallengeDetails.controls.goBack.label": "Voltar",
-  "ChallengeDetails.controls.modal.subtitle": "Está prestes a reportar um desafio. Será criado um problema [neste repositório público do GitHub](https://github.com/maproulette/challenge-reports/issues) e o criador do desafio será notificado por e-mail. Qualquer acompanhamento da discussão deve ser feita lá. Comunicar um desafio não o desativa imediatamente. Por favor, explique em pormenor qual é o seu problema com este desafio, se possível referindo conjuntos de alterações no OpenStreetMap específicos.",
   "ChallengeDetails.controls.preview.label": "Pré-visualizar",
   "ChallengeDetails.controls.reported_text": "Este desafio foi reportado",
   "ChallengeDetails.controls.review.label": "Eu tentei entrar em contacto com o criador do desafio",
