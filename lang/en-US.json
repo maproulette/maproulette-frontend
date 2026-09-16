@@ -315,6 +315,7 @@
   "Admin.ProjectManagers.noManagers": "No Managers",
   "Admin.ProjectManagers.options.teams.label": "Team",
   "Admin.ProjectManagers.projectOwner": "Owner",
+  "Admin.ProjectManagersWidget.controls.teamRoleFollowsTeam": "Follows team roles",
   "Admin.ProjectsDashboard.help.info": "Projects serve as a means of grouping related challenges together. All challenges must belong to a project.",
   "Admin.ProjectsDashboard.newProject": "Add Project",
   "Admin.ProjectsDashboard.regenerateHomeProject": "Please sign out and sign back in to regenerate a fresh home project.",

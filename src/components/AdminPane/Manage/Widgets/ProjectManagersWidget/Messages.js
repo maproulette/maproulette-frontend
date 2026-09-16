@@ -4,6 +4,10 @@ import { defineMessages } from "react-intl";
  * Internationalized messages for use with ProjectManagersWidget
  */
 export default defineMessages({
+  teamRoleFollowsTeam: {
+    id: "Admin.ProjectManagersWidget.controls.teamRoleFollowsTeam",
+    defaultMessage: "Follows team roles",
+  },
   title: {
     id: "Widgets.ProjectManagersWidget.label",
     defaultMessage: "Project Managers",
