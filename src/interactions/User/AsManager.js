@@ -3,8 +3,9 @@ import _isObject from "lodash/isObject";
 import _map from "lodash/map";
 import _uniq from "lodash/uniq";
 import { GranteeType } from "../../services/Grant/GranteeType";
-import { ROLE_SUPERUSER, Role, rolesImply } from "../../services/Grant/Role";
+import { ROLE_SUPERUSER, Role, mostPrivilegedRole, rolesImply } from "../../services/Grant/Role";
 import { TargetType } from "../../services/Grant/TargetType";
+import { TeamRole } from "../../services/Team/Role";
 import { AsEndUser } from "./AsEndUser";
 
 /**
@@ -39,13 +40,19 @@ export class AsManager extends AsEndUser {
     // potentially more lenient, but helps prevent erroneous security errors in
     // the event of stale data (and the server will stop anything if the user
     // actually lacks permission)
+    //
+    // The server folds the project grants of every team the user belongs to
+    // into their grant list, so a grant found here is not necessarily theirs.
+    // Only grants made to the person count as their own; what a team confers
+    // is worked out from their role in it, by teamRolesOn below.
     const userGrants = _filter(
       this.user.grants,
       (grant) =>
         grant.role === ROLE_SUPERUSER ||
         (grant.target &&
           grant.target.objectType === TargetType.project &&
-          grant.target.objectId === project.id),
+          grant.target.objectId === project.id &&
+          this.isGrantToSelf(grant)),
     );
 
     const projectGrants = _filter(
@@ -56,7 +63,51 @@ export class AsManager extends AsEndUser {
         grant.grantee.granteeId === this.user.id,
     );
 
-    return _uniq(_map(userGrants.concat(projectGrants), "role"));
+    return _uniq(
+      _map(userGrants.concat(projectGrants), "role").concat(
+        this.teamRolesOn(TargetType.project, project.id),
+      ),
+    );
+  }
+
+  /**
+   * Whether a grant was made to this user rather than to a team they are on.
+   * A grant with no grantee recorded is treated as theirs, since the older
+   * shapes the server can return simply omit it.
+   */
+  isGrantToSelf(grant) {
+    return !grant.grantee || grant.grantee.granteeType === GranteeType.user;
+  }
+
+  /**
+   * The roles this user picks up on a target through teams attached to it.
+   *
+   * A team is attached to a project or challenge as a whole, and what each
+   * member may then do follows the role they hold in that team: an owner or
+   * admin acts as an admin, a manager as write. A plain member gets nothing,
+   * so belonging to a team is not the same as running its work.
+   *
+   * @param targetType - TargetType.project or TargetType.challenge
+   * @param targetId - the id of the project or challenge
+   */
+  teamRolesOn(targetType, targetId) {
+    const attachedTeamIds = _map(
+      _filter(
+        this.user?.grants,
+        (grant) =>
+          grant.grantee &&
+          grant.grantee.granteeType === GranteeType.group &&
+          grant.target &&
+          grant.target.objectType === targetType &&
+          grant.target.objectId === targetId,
+      ),
+      "grantee.granteeId",
+    );
+
+    return _filter(
+      _map(attachedTeamIds, (teamId) => mostPrivilegedRole(this.groupRoles({ id: teamId }))),
+      (role) => role !== undefined && role !== null && role <= Role.write,
+    );
   }
 
   /**
@@ -117,11 +168,42 @@ export class AsManager extends AsEndUser {
    * > this method will return false.
    */
   canManageChallenge(challenge) {
+    // A challenge can be owned by a team, or have one attached to it, either of
+    // which hands it to that team's managers regardless of any role they hold
+    // on the parent project
+    if (this.managesOwningTeam(challenge)) {
+      return true;
+    }
+
+    if (challenge?.id != null && this.teamRolesOn(TargetType.challenge, challenge.id).length > 0) {
+      return true;
+    }
+
     if (!_isObject(challenge.parent)) {
       return false;
     }
 
     return this.canManage(challenge.parent);
+  }
+
+  /**
+   * Determines if the user runs the content of the team that owns the given
+   * challenge, if a team owns it at all. Managers of a team create, edit and
+   * delete its challenges.
+   *
+   * Like projectRoles, this reads the roles the user has been granted rather
+   * than their accepted memberships, so someone invited to a team but yet to
+   * accept looks like a member here. That is the more lenient direction, which
+   * keeps stale data from producing spurious permission errors, and the server
+   * -- which does require an accepted membership -- stops anything real.
+   */
+  managesOwningTeam(challenge) {
+    const ownerTeamId = challenge?.ownerTeamId;
+    if (!Number.isFinite(ownerTeamId)) {
+      return false;
+    }
+
+    return this.satisfiesGroupRole({ id: ownerTeamId }, TeamRole.manager);
   }
 
   /**
@@ -142,6 +224,12 @@ export class AsManager extends AsEndUser {
     const projectChallenges = new Set();
 
     for (const challenge of challenges) {
+      // A team-owned challenge belongs to that team's managers whether or not
+      // they hold anything on the project it sits in
+      if (this.managesOwningTeam(challenge)) {
+        projectChallenges.add(challenge);
+      }
+
       // handle both normalized and denormalized challenges
       if (projectIds.indexOf(challenge?.parent?.id ?? challenge.parent) !== -1) {
         projectChallenges.add(challenge);

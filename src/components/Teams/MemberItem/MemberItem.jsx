@@ -4,6 +4,7 @@ import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import AsTeamMember from "../../../interactions/TeamMember/AsTeamMember";
 import AppErrors from "../../../services/Error/AppErrors";
+import { TeamRole, messagesByTeamRole } from "../../../services/Team/Role";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import Dropdown from "../../Dropdown/Dropdown";
 import RolePicker from "../../RolePicker/RolePicker";
@@ -23,6 +24,13 @@ const MemberItem = (props) => {
   }
 
   const teamMember = AsTeamMember(props.teamUser);
+  // A team is never left without an owner, so the server refuses to demote or
+  // remove its last one. Say so here rather than letting the change be made and
+  // bounced.
+  const isLastOwner = teamMember.isLastOwner(props.teamUsers);
+  // Handing someone ownership is an owner's call alone.
+  const unavailableRoles = props.userTeamMember.isTeamOwner() ? [] : [TeamRole.owner];
+
   return (
     <li className="mr-my-1">
       <div className="mr-flex mr-justify-between">
@@ -41,6 +49,13 @@ const MemberItem = (props) => {
               <RolePicker
                 {...props}
                 role={teamMember.highestRole()}
+                roles={[TeamRole.member, TeamRole.manager, TeamRole.admin, TeamRole.owner]}
+                messagesByRole={messagesByTeamRole}
+                unavailableRoles={unavailableRoles}
+                disabled={isLastOwner}
+                title={
+                  isLastOwner ? props.intl.formatMessage(messages.lastOwnerTooltip) : undefined
+                }
                 pickRole={(role) =>
                   updateRole({
                     variables: {
@@ -74,7 +89,9 @@ const MemberItem = (props) => {
                     />
                   </button>
                 )}
-                dropdownContent={() => <MemberControls {...props} teamMember={teamMember} />}
+                dropdownContent={() => (
+                  <MemberControls {...props} teamMember={teamMember} isLastOwner={isLastOwner} />
+                )}
               />
             )}
           </div>
@@ -88,6 +105,8 @@ MemberItem.propTypes = {
   user: PropTypes.object.isRequired,
   userTeamMember: PropTypes.object.isRequired,
   teamUser: PropTypes.object.isRequired,
+  /** Every member of the team, needed to spot the team's last owner */
+  teamUsers: PropTypes.array,
 };
 
 export default MemberItem;

@@ -192,7 +192,13 @@ export default class ProjectManagersWidget extends Component {
                 <BusySpinner />
               ) : (
                 <Fragment>
-                  {isLastAdmin || !user.canAdministrateProject(this.props.project) ? (
+                  {isTeam ? (
+                    // A team's members reach the project at the role they hold
+                    // in the team, so there is nothing to choose here.
+                    <span className="mr-text-white-50 mr-text-xs">
+                      <FormattedMessage {...messages.teamRoleFollowsTeam} />
+                    </span>
+                  ) : isLastAdmin || !user.canAdministrateProject(this.props.project) ? (
                     <FormattedMessage {...messagesByRole[managerRole]} />
                   ) : (
                     <select

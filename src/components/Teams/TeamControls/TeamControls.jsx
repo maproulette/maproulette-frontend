@@ -23,6 +23,10 @@ export const TeamControls = (props) => {
   }
 
   const isAdmin = props.teamMember.isUser(props.user) && props.teamMember.isTeamAdmin();
+  // Deleting a team takes its projects and challenges with it, so it is the one
+  // thing the server reserves to an owner rather than any admin.
+  const isOwner = props.teamMember.isUser(props.user) && props.teamMember.isTeamOwner();
+
   return (
     <ul className="mr-links-green-lighter">
       {!props.suppressView && (
@@ -38,22 +42,24 @@ export const TeamControls = (props) => {
             </a>
           </li>
 
-          <li key="delete-team" className="mr-my-1">
-            <ConfirmAction>
-              <a
-                onClick={() => {
-                  deleteTeam({
-                    variables: { teamId: props.teamMember.team.id },
-                    refetchQueries: ["MyTeams"],
-                  }).catch((error) => {
-                    props.addErrorWithDetails(AppErrors.team.failure, error.message);
-                  });
-                }}
-              >
-                <FormattedMessage {...messages.deleteTeamLabel} />
-              </a>
-            </ConfirmAction>
-          </li>
+          {isOwner && (
+            <li key="delete-team" className="mr-my-1">
+              <ConfirmAction>
+                <a
+                  onClick={() => {
+                    deleteTeam({
+                      variables: { teamId: props.teamMember.team.id },
+                      refetchQueries: ["MyTeams"],
+                    }).catch((error) => {
+                      props.addErrorWithDetails(AppErrors.team.failure, error.message);
+                    });
+                  }}
+                >
+                  <FormattedMessage {...messages.deleteTeamLabel} />
+                </a>
+              </ConfirmAction>
+            </li>
+          )}
         </Fragment>
       )}
       <AcceptInviteControlItem
