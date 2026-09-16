@@ -63,8 +63,19 @@ export const TaskMap = () => {
   const { user } = useAuthContext()
   // The challenge's basemap wins over the mapper's own default, which in turn
   // wins over the style they last picked with the Map style control. Resolved
-  // once on mount so switching styles mid-task isn't undone on every re-render.
-  const [mapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
+  // once, not on every render, so switching styles mid-task isn't undone - but
+  // re-resolved when the mapper lands in a *different* challenge, since the map
+  // is no longer rebuilt for them (MapStyleSwitcher drives the live map directly,
+  // so it is untouched by this).
+  const [mapStyle, setMapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
+  const styledChallengeIdRef = useRef(challenge?.id)
+
+  useEffect(() => {
+    if (styledChallengeIdRef.current === challenge?.id) return
+    styledChallengeIdRef.current = challenge?.id
+    setMapStyle(resolveMapStyle(challenge, user?.settings))
+  }, [challenge, user?.settings])
+
   const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
     useEditorContext()
   const prevActiveView = useRef(activeView)

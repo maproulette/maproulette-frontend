@@ -17,11 +17,24 @@ export const useMarkerIconsVersion = (mapLoaded: boolean, shouldCluster: boolean
     const map = mapRef.current.getMap()
     if (!map) return
 
-    createMarkerIcons({ current: map }, () => {
-      map.triggerRepaint()
+    const registerIcons = () => {
+      createMarkerIcons({ current: map }, () => {
+        map.triggerRepaint()
 
-      setIconsVersion((v) => v + 1)
-    })
+        setIconsVersion((v) => v + 1)
+      })
+    }
+
+    registerIcons()
+
+    // A newly loaded basemap style starts with no images of its own, so the
+    // icons go back on with each one - otherwise switching style (by hand, or
+    // by landing in a challenge with a different basemap) leaves the markers
+    // with nothing to draw. Re-registering is a no-op for icons still present.
+    map.on('style.load', registerIcons)
+    return () => {
+      map.off('style.load', registerIcons)
+    }
   }, [mapLoaded, mapRef, shouldCluster])
 
   return iconsVersion
