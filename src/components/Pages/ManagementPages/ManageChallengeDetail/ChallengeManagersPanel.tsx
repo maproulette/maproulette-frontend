@@ -16,7 +16,7 @@ import {
 import { Separator } from '@/components/ui/Separator'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import { PROJECT_ROLE, projectRoleOptions, strongestRole } from '@/lib/projectRoles'
+import { PROJECT_ROLE, projectRoleOptions, TEAM_ATTACHMENT_ROLE } from '@/lib/projectRoles'
 import { initials } from '@/lib/utils'
 
 /** Role picker for a challenge manager. Roles are the same set a project grants. */
@@ -65,7 +65,6 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
   const setTeamRole = api.challenge.useSetTeamChallengeRole()
   const removeTeam = api.challenge.useRemoveTeamFromChallenge()
   const [teamQuery, setTeamQuery] = useState('')
-  const [newTeamRole, setNewTeamRole] = useState<number>(PROJECT_ROLE.write)
   const addTeamId = useId()
   const { data: teamMatches } = api.team.findTeamsByName(teamQuery, 10, teamQuery.length > 2)
   // A team already granted a role here is edited in the list above, not added
@@ -111,7 +110,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
 
   const handleAddTeam = async (teamId: number, teamName: string) => {
     try {
-      await setTeamRole.mutateAsync({ challengeId, teamId, role: newTeamRole })
+      await setTeamRole.mutateAsync({ challengeId, teamId, role: TEAM_ATTACHMENT_ROLE })
       setTeamQuery('')
       toast.success(
         t(
@@ -229,20 +228,19 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
         {t('manageChallengeDetail.managers.teamsTitle', undefined, 'Teams')}
       </h4>
+      <p className="text-xs text-zinc-500 dark:text-slate-400">
+        {t(
+          'manageChallengeDetail.managers.teamsDescription',
+          undefined,
+          'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.'
+        )}
+      </p>
       <ul className="space-y-2">
-        {(teamManagers ?? []).map(({ team, roles }) => {
-          const role = strongestRole(roles) ?? PROJECT_ROLE.read
+        {(teamManagers ?? []).map(({ team }) => {
           return (
             <li key={team.id} className="flex items-center gap-2">
               <Users className="h-4 w-4 shrink-0 text-purple-400" />
               <span className="min-w-0 flex-1 truncate text-sm">{team.name}</span>
-              <RoleSelect
-                value={role}
-                disabled={setTeamRole.isPending}
-                onChange={(next) =>
-                  setTeamRole.mutate({ challengeId, teamId: team.id, role: next })
-                }
-              />
               <button
                 type="button"
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
@@ -280,7 +278,6 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
               'Team name'
             )}
           />
-          <RoleSelect value={newTeamRole} onChange={setNewTeamRole} />
         </div>
         {teamQuery.length > 2 && (
           <ul className="max-h-40 overflow-y-auto rounded-md border border-zinc-200 dark:border-slate-700">
