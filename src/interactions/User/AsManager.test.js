@@ -66,6 +66,20 @@ const groupMemberGrant987 = {
   role: Role.read,
   target: { objectType: TargetType.group, objectId: 987 },
 };
+// The server folds the project grants of a user's teams into their grant list,
+// so these arrive on the user looking much like their own.
+const teamProjectGrant = {
+  id: 9881,
+  role: Role.admin,
+  grantee: { granteeType: GranteeType.group, granteeId: 987 },
+  target: { objectType: TargetType.project, objectId: 789 },
+};
+const teamChallengeGrant = {
+  id: 9882,
+  role: Role.admin,
+  grantee: { granteeType: GranteeType.group, granteeId: 987 },
+  target: { objectType: TargetType.challenge, objectId: 7891 },
+};
 
 const powerUser = {
   id: 246,
@@ -294,6 +308,49 @@ describe("manageableChallenges", () => {
     expect(manageable).toContain(challenge123_1);
     expect(manageable).toContain(challenge123_2);
     expect(manageable).toContain(challenge456_1);
+  });
+});
+
+describe("a team attached to a project", () => {
+  // Project 789 is one no fixture user holds a grant on directly, so anything
+  // that passes here passes by way of the attached team.
+  const teamAdmin = { id: 611, grants: [groupAdminGrant987, teamProjectGrant] };
+  const teamManager = { id: 612, grants: [groupWriteGrant987, teamProjectGrant] };
+  const teamMember = { id: 613, grants: [groupMemberGrant987, teamProjectGrant] };
+
+  it("lets an admin of the team manage the project", () => {
+    expect(AsManager(teamAdmin).canAdministrateProject(project789)).toBe(true);
+  });
+
+  it("lets a manager of the team write, but not administrate", () => {
+    expect(AsManager(teamManager).canWriteProject(project789)).toBe(true);
+    expect(AsManager(teamManager).canAdministrateProject(project789)).toBe(false);
+  });
+
+  it("gives a plain member of the team nothing, whatever the grant says", () => {
+    // The grant names admin; the member's standing in the team is what counts,
+    // and the server refuses them, so the UI must not offer the controls.
+    expect(AsManager(teamMember).canManage(project789)).toBe(false);
+    expect(AsManager(teamMember).canReadProject(project789)).toBe(false);
+  });
+
+  it("gives nothing to someone who is not on the team", () => {
+    const outsider = { id: 614, grants: [teamProjectGrant] };
+    expect(AsManager(outsider).canManage(project789)).toBe(false);
+  });
+});
+
+describe("a team attached to a challenge", () => {
+  const challenge = { id: 7891, parent: project789 };
+
+  it("lets a manager of the team manage it", () => {
+    const manager = { id: 615, grants: [groupWriteGrant987, teamChallengeGrant] };
+    expect(AsManager(manager).canManageChallenge(challenge)).toBe(true);
+  });
+
+  it("gives a plain member nothing", () => {
+    const member = { id: 616, grants: [groupMemberGrant987, teamChallengeGrant] };
+    expect(AsManager(member).canManageChallenge(challenge)).toBe(false);
   });
 });
 
