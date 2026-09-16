@@ -59,6 +59,13 @@ const groupWriteGrant987 = {
   role: Role.write,
   target: { objectType: TargetType.group, objectId: 987 },
 };
+// Team roles are the grant roles under team-facing names: write is a team's
+// manager, read its plain member.
+const groupMemberGrant987 = {
+  id: 9873,
+  role: Role.read,
+  target: { objectType: TargetType.group, objectId: 987 },
+};
 
 const powerUser = {
   id: 246,
@@ -67,6 +74,7 @@ const powerUser = {
 const writeUser = { id: 910, grants: [writeGrant234, writeGrant102, groupWriteGrant987] };
 const superUser = { id: 135, grants: [superGrant] };
 const normalUser = { id: 790, osmProfile: { id: 987654321 }, grants: [] };
+const teamMemberUser = { id: 911, grants: [groupMemberGrant987] };
 
 const project123 = { id: 123, grants: [adminGrant123] };
 const project456 = { id: 456, grants: [readGrant456] };
@@ -286,6 +294,51 @@ describe("manageableChallenges", () => {
     expect(manageable).toContain(challenge123_1);
     expect(manageable).toContain(challenge123_2);
     expect(manageable).toContain(challenge456_1);
+  });
+});
+
+describe("canManageChallenge", () => {
+  // Project 789 is one no fixture user can manage, so anything that passes here
+  // passes by way of the owning team rather than the parent project.
+  const teamChallenge = { id: 7891, parent: project789, ownerTeamId: 987 };
+
+  it("returns true if the user manages the team that owns the challenge", () => {
+    expect(AsManager(writeUser).canManageChallenge(teamChallenge)).toBe(true);
+  });
+
+  it("returns true if the user owns or administrates that team", () => {
+    expect(AsManager(powerUser).canManageChallenge(teamChallenge)).toBe(true);
+  });
+
+  it("returns false for a plain member of the owning team", () => {
+    expect(AsManager(teamMemberUser).canManageChallenge(teamChallenge)).toBe(false);
+  });
+
+  it("returns false if the challenge is owned by some other team", () => {
+    const otherTeamChallenge = { id: 7892, parent: project789, ownerTeamId: 654 };
+
+    expect(AsManager(writeUser).canManageChallenge(otherTeamChallenge)).toBe(false);
+  });
+
+  it("still honors the parent project when no team owns the challenge", () => {
+    // canManageChallenge needs the parent denormalized; the bare-id fixtures
+    // above are what it documents as returning false.
+    expect(AsManager(powerUser).canManageChallenge({ id: 1231, parent: project123 })).toBe(true);
+    expect(AsManager(powerUser).canManageChallenge({ id: 7891, parent: project789 })).toBe(false);
+    expect(AsManager(powerUser).canManageChallenge(challenge123_1)).toBe(false);
+  });
+});
+
+describe("manageableChallenges with a team-owned challenge", () => {
+  it("includes a challenge owned by a team the user manages", () => {
+    const teamChallenge = { id: 7891, parent: project789, ownerTeamId: 987 };
+
+    const manageable = AsManager(writeUser).manageableChallenges(
+      [project123, project456, project789],
+      [challenge789_1, teamChallenge],
+    );
+
+    expect(manageable).toEqual([teamChallenge]);
   });
 });
 

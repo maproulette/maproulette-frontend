@@ -4,6 +4,7 @@ import _map from "lodash/map";
 import _uniq from "lodash/uniq";
 import { GranteeType } from "../../services/Grant/GranteeType";
 import { ROLE_SUPERUSER, Role, rolesImply } from "../../services/Grant/Role";
+import { TeamRole } from "../../services/Team/Role";
 import { TargetType } from "../../services/Grant/TargetType";
 import { AsEndUser } from "./AsEndUser";
 
@@ -117,11 +118,37 @@ export class AsManager extends AsEndUser {
    * > this method will return false.
    */
   canManageChallenge(challenge) {
+    // A challenge can be owned by a team, which hands it to that team's
+    // managers regardless of any role they hold on the parent project
+    if (this.managesOwningTeam(challenge)) {
+      return true;
+    }
+
     if (!_isObject(challenge.parent)) {
       return false;
     }
 
     return this.canManage(challenge.parent);
+  }
+
+  /**
+   * Determines if the user runs the content of the team that owns the given
+   * challenge, if a team owns it at all. Managers of a team create, edit and
+   * delete its challenges.
+   *
+   * Like projectRoles, this reads the roles the user has been granted rather
+   * than their accepted memberships, so someone invited to a team but yet to
+   * accept looks like a member here. That is the more lenient direction, which
+   * keeps stale data from producing spurious permission errors, and the server
+   * -- which does require an accepted membership -- stops anything real.
+   */
+  managesOwningTeam(challenge) {
+    const ownerTeamId = challenge?.ownerTeamId;
+    if (!Number.isFinite(ownerTeamId)) {
+      return false;
+    }
+
+    return this.satisfiesGroupRole({ id: ownerTeamId }, TeamRole.manager);
   }
 
   /**
@@ -142,6 +169,12 @@ export class AsManager extends AsEndUser {
     const projectChallenges = new Set();
 
     for (const challenge of challenges) {
+      // A team-owned challenge belongs to that team's managers whether or not
+      // they hold anything on the project it sits in
+      if (this.managesOwningTeam(challenge)) {
+        projectChallenges.add(challenge);
+      }
+
       // handle both normalized and denormalized challenges
       if (projectIds.indexOf(challenge?.parent?.id ?? challenge.parent) !== -1) {
         projectChallenges.add(challenge);
