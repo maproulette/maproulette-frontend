@@ -13,9 +13,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/AlertDialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
 import { useIntl } from '@/i18n'
 import { MoveChallengeModal } from '../MoveChallengeModal'
 import { useManageProjectDetailContext } from './ManageProjectDetailContext'
+import { ProjectManagersPanel } from './ProjectManagersPanel'
 
 /** Modals and confirmation dialogs used by the project detail page (move/clone/rebuild/delete). */
 export const ProjectDetailDialogs = () => {
@@ -32,11 +40,33 @@ export const ProjectDetailDialogs = () => {
     deleteProjectConfirm,
     setDeleteProjectConfirm,
     confirmDeleteProject,
+    managersModalOpen,
+    setManagersModalOpen,
   } = useManageProjectDetailContext()
 
   return (
     <>
       <MoveChallengeModal />
+
+      <Dialog open={managersModalOpen} onOpenChange={setManagersModalOpen}>
+        <DialogContent size="lg">
+          <DialogHeader>
+            <DialogTitle>
+              {t('manageProjectDetail.managers.modalTitle', undefined, 'Managers and teams')}
+            </DialogTitle>
+            <DialogDescription>
+              {t(
+                'manageProjectDetail.managers.modalDescription',
+                undefined,
+                'Who can manage this project, and at what level.'
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="max-h-[70vh] overflow-y-auto pr-1">
+            <ProjectManagersPanel />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {cloneModalChallenge && (
         <CloneChallengeModal

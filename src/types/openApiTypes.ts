@@ -4,6 +4,126 @@
  */
 
 export interface paths {
+  '/challenge/{challengeId}/report': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Report a Challenge
+     * @description Files a report against a challenge's design -- that it is poorly designed and is causing incorrect edits -- as opposed to a bug or a feature request. Any authenticated user may file one. The reporter is taken from the session, and filing also posts a challenge comment naming the reporter and quoting the report, which is what notifies the challenge owner. A reporter may only have one open report per challenge at a time.
+     */
+    post: operations['challenge_report_create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/{challengeId}/report/mine': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve Your Open Report on a Challenge
+     * @description Returns the requesting user's own still-open report against a challenge, so the UI can show that a report is already pending instead of inviting a duplicate. Only ever returns the caller's own report, so it requires no elevated permission. Responds 204 when the user has no open report.
+     */
+    get: operations['challenge_report_own_open']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/{challengeId}/reports': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List the Reports Against a Challenge
+     * @description Returns every report filed against a challenge, newest first, resolved ones included, so a reader can see what has been raised about it and where each report stands. Open to anyone, like the challenge comments that filing a report posts -- the reporter's identity and words are already public through those. The email a reporter volunteered for follow-up, and the admin side of the triage record (who ruled on a report and the note they left), are stripped; the outcome and its date remain.
+     */
+    get: operations['challenge_report_list_for_challenge']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/reports': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Challenge Reports
+     * @description Lists reports filed against challenges, newest first, for the admin triage dashboard. Restricted to superusers, because a report carries the reporter's identity and any email address they volunteered. Each returned report includes the total number of matches in fullCount.
+     */
+    get: operations['challenge_report_list']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/report/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve a Challenge Report
+     * @description Retrieves a single report against a challenge. Restricted to superusers.
+     */
+    get: operations['challenge_report_retrieve']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/challenge/report/{id}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Triage a Challenge Report
+     * @description Records an admin's decision on a report -- actioned, say after archiving the offending challenge, or dismissed. Reports are resolved rather than deleted so the record of what was raised and what was done about it survives. Restricted to superusers.
+     */
+    put: operations['challenge_report_update_status']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/challenge': {
     parameters: {
       query?: never
@@ -4381,6 +4501,70 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/team/{teamId}/challenge/{challengeId}/{role}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Set granted role of team on challenge
+     * @description Attaches a team to a challenge, clearing any prior attachment. What each member may then do follows the role they hold in the team. The role in the path is not read. Requires admin access to the challenge.
+     */
+    put: operations['team_set_granted_role_of_team_on_challenge']
+    /**
+     * Add team to challenge
+     * @description Attaches a team to a single challenge, which is how a team is let at one piece of work without being handed the whole project. What each member may then do follows the role they hold in the team. Distinct from a team owning the challenge, which additionally puts the team's image on its card. The role in the path is retained for symmetry with the project routes and is not read. Requires admin access to the challenge.
+     */
+    post: operations['team_add_team_to_challenge']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/team/{teamId}/challenge/{challengeId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Remove granted roles on challenge from team
+     * @description Remove every role a team was granted on a challenge. Requires admin access to the challenge.
+     */
+    delete: operations['team_remove_granted_roles_on_challenge_from_team']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/teams/challengeManagers/{challengeId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get teams managing challenge
+     * @description Retrieve the teams granted a role on a challenge, each with the grants it holds there. Does not include the team that owns the challenge, which manages it by ownership rather than by grant.
+     */
+    get: operations['team_get_teams_managing_challenge']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/teams/projectManagers/{projectId}': {
     parameters: {
       query?: never
@@ -5119,6 +5303,12 @@ export interface components {
       isArchived: boolean
       requireConfirmation: boolean
       completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
+      /** Format: int64 */
+      ownerTeamId?: number | null
+    }
+    'org.maproulette.framework.model.ManagingTeam': {
+      team: components['schemas']['org.maproulette.framework.model.Group']
+      grants: components['schemas']['org.maproulette.framework.model.Grant'][]
     }
     'org.maproulette.framework.model.TeamUser': {
       /** Format: int64 */
@@ -6002,6 +6192,34 @@ export interface components {
       completionPercentage?: number | null
       completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
     }
+    'org.maproulette.framework.model.ChallengeReport': {
+      /** Format: int64 */
+      id: number
+      /** Format: int64 */
+      challengeId: number
+      comment: string
+      /** Format: epoch */
+      reportedAt: number
+      /** Format: int32 */
+      status: number
+      challengeName?: string | null
+      challengeIsArchived?: boolean | null
+      /** Format: int64 */
+      projectId?: number | null
+      projectName?: string | null
+      /** Format: int64 */
+      reporterId?: number | null
+      reporterName?: string | null
+      reporterEmail?: string | null
+      /** Format: int64 */
+      reviewedBy?: number | null
+      reviewedByName?: string | null
+      /** Format: epoch */
+      reviewedAt?: number | null
+      reviewComment?: string | null
+      /** Format: int32 */
+      fullCount: number
+    }
     Project: {
       /**
        * Format: int64
@@ -6243,6 +6461,257 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  challenge_report_create: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge being reported */
+        challengeId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          /** @description The reporter's explanation of the problem, between 100 and 1000 characters */
+          comment: string
+          /** @description An optional contact address for follow-up. Visible only to superusers, never on the challenge itself. */
+          email?: string
+        }
+      }
+    }
+    responses: {
+      /** @description The newly created report */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeReport']
+        }
+      }
+      /** @description The comment is missing, too short, too long, the email is malformed, or the reporter already has an open report on this challenge */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The challenge was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_report_own_open: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge in question */
+        challengeId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The user's open report on this challenge */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeReport']
+        }
+      }
+      /** @description The user has no open report on this challenge */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_report_list_for_challenge: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge in question */
+        challengeId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The reports against this challenge */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeReport'][]
+        }
+      }
+    }
+  }
+  challenge_report_list: {
+    parameters: {
+      query?: {
+        /** @description Restrict to reports in one triage state */
+        status?: 'open' | 'actioned' | 'dismissed' | null
+        /** @description Restrict to reports against a single challenge */
+        challengeId?: number | null
+        /** @description Only include reports whose challenge is neither deleted nor archived, which is the set an admin can still act on */
+        activeOnly?: boolean
+        /** @description The maximum number of reports to return */
+        limit?: number
+        /** @description The zero-based page offset */
+        page?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The matching reports */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeReport'][]
+        }
+      }
+      /** @description The requested status is not a valid report status */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_report_retrieve: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the report */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The report */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeReport']
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The report was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  challenge_report_update_status: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the report being resolved */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': {
+          /**
+           * @description The triage state to move the report to
+           * @enum {string}
+           */
+          status: 'open' | 'actioned' | 'dismissed'
+          /** @description An optional note recording what was done about the report */
+          reviewComment?: string
+        }
+      }
+    }
+    responses: {
+      /** @description The updated report */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ChallengeReport']
+        }
+      }
+      /** @description The status is missing or not a valid report status */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The report was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   challenge_create: {
     parameters: {
       query?: never
@@ -14968,6 +15437,158 @@ export interface operations {
       }
       /** @description The user is not authorized to make this request */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_set_granted_role_of_team_on_challenge: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team to be granted the role */
+        teamId: number
+        /** @description The id of the challenge on which the role is to be granted */
+        challengeId: number
+        /** @description Either 1 - Admin, 2 - Write, 3 - Read */
+        role: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Ok with a standard message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team or the challenge was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_add_team_to_challenge: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team to be granted the role */
+        teamId: number
+        /** @description The id of the challenge on which the role is to be granted */
+        challengeId: number
+        /** @description Either 1 - Admin, 2 - Write, 3 - Read */
+        role: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Ok with a standard message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team or the challenge was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_remove_granted_roles_on_challenge_from_team: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the team to be removed */
+        teamId: number
+        /** @description The id of the challenge from which the team is to be removed */
+        challengeId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Ok with a standard message */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The team or the challenge was not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  team_get_teams_managing_challenge: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id of the challenge for which teams are desired */
+        challengeId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The teams granted a role on the challenge */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['org.maproulette.framework.model.ManagingTeam'][]
+        }
+      }
+      /** @description The user is not authorized to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The challenge was not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

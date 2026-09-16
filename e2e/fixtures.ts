@@ -1,7 +1,11 @@
 import { execFileSync } from 'node:child_process'
 import { type APIRequestContext, test as base, type Page } from '@playwright/test'
 
-export const BACKEND_URL = 'http://localhost:9000'
+// Where the test stack's backend is listening. Overridable so the stack can sit
+// beside a local development backend on 9000 rather than fighting it for the
+// port — set E2E_BACKEND_URL to match .env.test.local's VITE_API_BASE_URL, so
+// the browser and these fixtures talk to the same server.
+export const BACKEND_URL = process.env.E2E_BACKEND_URL ?? 'http://localhost:9000'
 export const SUPER_KEY = 'super-secret-key'
 
 // A second, distinct backend identity, for tests that need two separate
@@ -231,6 +235,41 @@ export interface TestUser {
 }
 
 /**
+ * A seeded user's own API key, in the "<userId>|<rawKey>" form the backend
+ * expects from anyone who is not using the super key.
+ *
+ * Minting it takes two calls, and only the second is useful: PUT .../apikey
+ * stores an encrypted key and hands back the encrypted value, which is not
+ * what a client sends. Reading the user back as the super user returns it
+ * decrypted and prefixed with the id, which is the usable form.
+ *
+ * This is what makes a second *acting* identity possible -- a real person who
+ * is not a superuser, so tests can cover what someone without elevated rights
+ * may do, and what they are refused.
+ */
+export async function mintApiKey(request: APIRequestContext, userId: number): Promise<string> {
+  const minted = await request.put(`${BACKEND_URL}/api/v2/user/${userId}/apikey`, {
+    headers: { apiKey: SUPER_KEY },
+  })
+  if (!minted.ok()) {
+    throw new Error(`Could not mint an API key: ${minted.status()} ${await minted.text()}`)
+  }
+
+  const reread = await request.get(`${BACKEND_URL}/api/v2/user/${userId}`, {
+    headers: { apiKey: SUPER_KEY },
+  })
+  if (!reread.ok()) {
+    throw new Error(`Could not read the user back: ${reread.status()} ${await reread.text()}`)
+  }
+
+  const body = (await reread.json()) as { apiKey?: string }
+  if (!body.apiKey?.includes('|')) {
+    throw new Error(`User ${userId} came back without a usable API key: ${body.apiKey}`)
+  }
+  return body.apiKey
+}
+
+/**
  * Runs SQL against the test stack's database.
  *
  * The backend has no endpoint that creates a user -- real ones only ever
@@ -370,7 +409,14 @@ async function createTagFixTask(
   return { id: body.id, name, challengeId, coordinates }
 }
 
+export interface TestActor {
+  request: APIRequestContext
+  user: TestUser
+  apiKey: string
+}
+
 export const test = base.extend<{
+  mapperRequest: TestActor
   project: TestProject
   challenge: TestChallenge
   task: TestTask
@@ -427,6 +473,25 @@ export const test = base.extend<{
       900_000_000 + Math.floor(Math.random() * 90_000_000)
     )
     await use(user)
+    deleteSeededUser(user)
+  },
+
+  // A real person who is not a superuser, with their own API key, so a test can
+  // act as someone with ordinary rights and see what they are refused.
+  mapperRequest: async ({ playwright, request }, use) => {
+    const user = seedUser(
+      uniqueName('e2e-actor').replace(/[^a-zA-Z0-9-]/g, ''),
+      910_000_000 + Math.floor(Math.random() * 80_000_000)
+    )
+    const key = await mintApiKey(request, user.id)
+    const context = await playwright.request.newContext({
+      baseURL: BACKEND_URL,
+      extraHTTPHeaders: { apiKey: key, 'Content-Type': 'application/json' },
+    })
+
+    await use({ request: context, user, apiKey: key })
+
+    await context.dispose()
     deleteSeededUser(user)
   },
 

@@ -22,6 +22,7 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { Project } from '@/types/Project'
+import { ProjectTeamSection } from './ProjectTeamSection'
 import { makeProjectFormSchema, type ProjectFormValues } from './projectFormSchema'
 
 export type { ProjectFormValues } from './projectFormSchema'
@@ -47,6 +48,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
       description: project?.description || '',
       enabled: project?.enabled ?? true,
       featured: project?.featured ?? false,
+      ownerTeamId: project?.ownerTeamId ?? null,
     },
   })
 
@@ -251,6 +253,8 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               />
             )}
           </FormSection>
+
+          <ProjectTeamSection />
         </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>

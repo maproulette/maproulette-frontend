@@ -17,7 +17,12 @@ import {
 import { Separator } from '@/components/ui/Separator'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import { PROJECT_ROLE, projectRoleOptions, strongestRole } from '@/lib/projectRoles'
+import {
+  PROJECT_ROLE,
+  projectRoleOptions,
+  strongestRole,
+  TEAM_ATTACHMENT_ROLE,
+} from '@/lib/projectRoles'
 import { initials } from '@/lib/utils'
 import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 
@@ -67,6 +72,13 @@ export const ProjectManagersPanel = () => {
   const addManagerId = useId()
   const { data: userMatches } = api.user.findUsers(userQuery, 10, userQuery.length > 2)
 
+  const [teamQuery, setTeamQuery] = useState('')
+  const addTeamId = useId()
+  const { data: teamMatches } = api.team.findTeamsByName(teamQuery, 10, teamQuery.length > 2)
+  // A team already managing the project is edited in the list above, not added
+  // again, so keep those out of the results.
+  const existingTeamIds = new Set((teamManagers ?? []).map(({ team }) => team.id))
+
   const handleAddUser = async (userId: number, displayName: string) => {
     try {
       await setUserRole.mutateAsync({ userId, projectId: id, role: newRole })
@@ -82,6 +94,25 @@ export const ProjectManagersPanel = () => {
       logger.error('Failed to grant project role', { userId, projectId: id, error })
       toast.error(
         t('manageProjectDetail.managers.addFailed', undefined, 'Could not add that manager')
+      )
+    }
+  }
+
+  const handleAddTeam = async (teamId: number, teamName: string) => {
+    try {
+      await setTeamRole.mutateAsync({ teamId, projectId: id, role: TEAM_ATTACHMENT_ROLE })
+      setTeamQuery('')
+      toast.success(
+        t(
+          'manageProjectDetail.managers.teamAdded',
+          { name: teamName },
+          '{name} can now manage this project'
+        )
+      )
+    } catch (error) {
+      logger.error('Failed to grant team project role', { teamId, projectId: id, error })
+      toast.error(
+        t('manageProjectDetail.managers.addTeamFailed', undefined, 'Could not add that team')
       )
     }
   }
@@ -185,44 +216,85 @@ export const ProjectManagersPanel = () => {
         )}
       </div>
 
-      {(teamManagers?.length ?? 0) > 0 && (
-        <>
-          <Separator />
-          <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-            {t('manageProjectDetail.managers.teamsTitle', undefined, 'Teams')}
-          </h4>
-          <ul className="space-y-2">
-            {(teamManagers ?? []).map(({ team, roles }) => {
-              const role = strongestRole(roles) ?? PROJECT_ROLE.read
-              return (
-                <li key={team.id} className="flex items-center gap-2">
-                  <Users className="h-4 w-4 shrink-0 text-purple-400" />
-                  <span className="min-w-0 flex-1 truncate text-sm">{team.name}</span>
-                  <RoleSelect
-                    value={role}
-                    disabled={setTeamRole.isPending}
-                    onChange={(next) =>
-                      setTeamRole.mutate({ teamId: team.id, projectId: id, role: next })
-                    }
-                  />
+      <Separator />
+      <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
+        {t('manageProjectDetail.managers.teamsTitle', undefined, 'Teams')}
+      </h4>
+      <p className="text-xs text-zinc-500 dark:text-slate-400">
+        {t(
+          'manageProjectDetail.managers.teamsDescription',
+          undefined,
+          'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.'
+        )}
+      </p>
+      <ul className="space-y-2">
+        {(teamManagers ?? []).map(({ team }) => {
+          return (
+            <li key={team.id} className="flex items-center gap-2">
+              <Users className="h-4 w-4 shrink-0 text-purple-400" />
+              <span className="min-w-0 flex-1 truncate text-sm">{team.name}</span>
+              <button
+                type="button"
+                className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
+                onClick={() => removeTeam.mutate({ teamId: team.id, projectId: id })}
+                aria-label={t(
+                  'manageProjectDetail.managers.removeTeam',
+                  { name: team.name },
+                  'Remove {name}'
+                )}
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          )
+        })}
+        {teamManagers?.length === 0 && (
+          <li className="text-sm text-zinc-500 dark:text-zinc-400">
+            {t('manageProjectDetail.managers.noTeams', undefined, 'No teams yet.')}
+          </li>
+        )}
+      </ul>
+
+      <div className="space-y-2">
+        <Label htmlFor={addTeamId}>
+          {t('manageProjectDetail.managers.addTeamLabel', undefined, 'Add a team')}
+        </Label>
+        <div className="flex gap-2">
+          <Input
+            id={addTeamId}
+            value={teamQuery}
+            onChange={(e) => setTeamQuery(e.target.value)}
+            placeholder={t(
+              'manageProjectDetail.managers.teamSearchPlaceholder',
+              undefined,
+              'Team name'
+            )}
+          />
+        </div>
+        {teamQuery.length > 2 && (
+          <ul className="max-h-40 overflow-y-auto rounded-md border border-zinc-200 dark:border-slate-700">
+            {(teamMatches ?? [])
+              .filter((match) => !existingTeamIds.has(match.id))
+              .map((match) => (
+                <li key={match.id}>
                   <button
                     type="button"
-                    className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
-                    onClick={() => removeTeam.mutate({ teamId: team.id, projectId: id })}
-                    aria-label={t(
-                      'manageProjectDetail.managers.removeTeam',
-                      { name: team.name },
-                      'Remove {name}'
-                    )}
+                    className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-50 dark:hover:bg-slate-800"
+                    onClick={() => handleAddTeam(match.id, match.name)}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Users className="h-3.5 w-3.5 text-zinc-400" />
+                    {match.name}
                   </button>
                 </li>
-              )
-            })}
+              ))}
+            {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
+              <li className="px-2 py-1.5 text-sm text-zinc-500">
+                {t('manageProjectDetail.managers.noTeamMatches', undefined, 'No matching teams')}
+              </li>
+            )}
           </ul>
-        </>
-      )}
+        )}
+      </div>
     </div>
   )
 }

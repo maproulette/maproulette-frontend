@@ -44,6 +44,8 @@ export interface ManageProjectDetailContextType {
   setDeleteChallengeId: (id: number | null) => void
   deleteProjectConfirm: boolean
   setDeleteProjectConfirm: (open: boolean) => void
+  managersModalOpen: boolean
+  setManagersModalOpen: (open: boolean) => void
 
   // Handlers
   handleArchiveProject: () => void
@@ -77,6 +79,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   // Local state
   const [searchQuery, setSearchQuery] = useState('')
   const [deleteProjectConfirm, setDeleteProjectConfirm] = useState(false)
+  const [managersModalOpen, setManagersModalOpen] = useState(false)
   const [cloneModalChallenge, setCloneModalChallenge] = useState<{
     id: number
     name: string
@@ -257,6 +260,8 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       setDeleteChallengeId,
       deleteProjectConfirm,
       setDeleteProjectConfirm,
+      managersModalOpen,
+      setManagersModalOpen,
       handleArchiveProject,
       handleToggleEnabled,
       confirmDeleteProject,
@@ -286,6 +291,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       rebuildModalChallenge,
       deleteChallengeId,
       deleteProjectConfirm,
+      managersModalOpen,
       handleArchiveProject,
       handleToggleEnabled,
       confirmDeleteProject,

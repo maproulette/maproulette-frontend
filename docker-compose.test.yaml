@@ -68,7 +68,9 @@ services:
       MR_OAUTH_CONSUMER_KEY: not_a_real_key
       MR_OAUTH_CONSUMER_SECRET: not_a_real_secret
     ports:
-      - "9000:80"
+      # Overridable so the stack can run beside a local development backend
+      # already holding 9000: set E2E_BACKEND_PORT to match .env.test.local.
+      - "${E2E_BACKEND_PORT:-9000}:80"
     cap_add:
       - NET_BIND_SERVICE
     healthcheck:

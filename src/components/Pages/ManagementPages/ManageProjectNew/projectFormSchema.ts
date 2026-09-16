@@ -33,6 +33,8 @@ export const makeProjectFormSchema = (t: T) =>
     description: z.string().optional().or(z.literal('')),
     enabled: z.boolean(),
     featured: z.boolean(),
+    /** The team that owns the project, or null when nobody does. */
+    ownerTeamId: z.number().nullable(),
   })
 
 export type ProjectFormValues = z.infer<ReturnType<typeof makeProjectFormSchema>>

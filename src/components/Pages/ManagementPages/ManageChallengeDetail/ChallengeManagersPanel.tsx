@@ -13,9 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { Separator } from '@/components/ui/Separator'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import { PROJECT_ROLE, projectRoleOptions } from '@/lib/projectRoles'
+import { PROJECT_ROLE, projectRoleOptions, TEAM_ATTACHMENT_ROLE } from '@/lib/projectRoles'
 import { initials } from '@/lib/utils'
 
 /** Role picker for a challenge manager. Roles are the same set a project grants. */
@@ -60,6 +61,16 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
   const addManagerId = useId()
   const { data: userMatches } = api.user.findUsers(userQuery, 10, userQuery.length > 2)
 
+  const { data: teamManagers } = api.challenge.teamManagers(challengeId)
+  const setTeamRole = api.challenge.useSetTeamChallengeRole()
+  const removeTeam = api.challenge.useRemoveTeamFromChallenge()
+  const [teamQuery, setTeamQuery] = useState('')
+  const addTeamId = useId()
+  const { data: teamMatches } = api.team.findTeamsByName(teamQuery, 10, teamQuery.length > 2)
+  // A team already granted a role here is edited in the list above, not added
+  // again, so keep those out of the results.
+  const existingTeamIds = new Set((teamManagers ?? []).map(({ team }) => team.id))
+
   const handleAddUser = async (userId: number, displayName: string) => {
     try {
       await setUserRole.mutateAsync({ challengeId, userId, role: newRole })
@@ -93,6 +104,25 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       logger.error('Failed to revoke challenge role', { userId, challengeId, error })
       toast.error(
         t('manageChallengeDetail.managers.removeFailed', undefined, 'Could not remove that manager')
+      )
+    }
+  }
+
+  const handleAddTeam = async (teamId: number, teamName: string) => {
+    try {
+      await setTeamRole.mutateAsync({ challengeId, teamId, role: TEAM_ATTACHMENT_ROLE })
+      setTeamQuery('')
+      toast.success(
+        t(
+          'manageChallengeDetail.managers.teamAdded',
+          { name: teamName },
+          '{name} can now manage this challenge'
+        )
+      )
+    } catch (error) {
+      logger.error('Failed to grant challenge team role', { teamId, challengeId, error })
+      toast.error(
+        t('manageChallengeDetail.managers.addTeamFailed', undefined, 'Could not add that team')
       )
     }
   }
@@ -188,6 +218,86 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             {userMatches?.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
                 {t('manageChallengeDetail.managers.noMatches', undefined, 'No matching users')}
+              </li>
+            )}
+          </ul>
+        )}
+      </div>
+
+      <Separator />
+      <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
+        {t('manageChallengeDetail.managers.teamsTitle', undefined, 'Teams')}
+      </h4>
+      <p className="text-xs text-zinc-500 dark:text-slate-400">
+        {t(
+          'manageChallengeDetail.managers.teamsDescription',
+          undefined,
+          'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.'
+        )}
+      </p>
+      <ul className="space-y-2">
+        {(teamManagers ?? []).map(({ team }) => {
+          return (
+            <li key={team.id} className="flex items-center gap-2">
+              <Users className="h-4 w-4 shrink-0 text-purple-400" />
+              <span className="min-w-0 flex-1 truncate text-sm">{team.name}</span>
+              <button
+                type="button"
+                className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
+                onClick={() => removeTeam.mutate({ challengeId, teamId: team.id })}
+                aria-label={t(
+                  'manageChallengeDetail.managers.removeTeam',
+                  { name: team.name },
+                  'Remove {name}'
+                )}
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          )
+        })}
+        {teamManagers?.length === 0 && (
+          <li className="text-sm text-zinc-500 dark:text-zinc-400">
+            {t('manageChallengeDetail.managers.noTeams', undefined, 'No teams yet.')}
+          </li>
+        )}
+      </ul>
+
+      <div className="space-y-2">
+        <Label htmlFor={addTeamId}>
+          {t('manageChallengeDetail.managers.addTeamLabel', undefined, 'Add a team')}
+        </Label>
+        <div className="flex gap-2">
+          <Input
+            id={addTeamId}
+            value={teamQuery}
+            onChange={(e) => setTeamQuery(e.target.value)}
+            placeholder={t(
+              'manageChallengeDetail.managers.teamSearchPlaceholder',
+              undefined,
+              'Team name'
+            )}
+          />
+        </div>
+        {teamQuery.length > 2 && (
+          <ul className="max-h-40 overflow-y-auto rounded-md border border-zinc-200 dark:border-slate-700">
+            {(teamMatches ?? [])
+              .filter((match) => !existingTeamIds.has(match.id))
+              .map((match) => (
+                <li key={match.id}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-50 dark:hover:bg-slate-800"
+                    onClick={() => handleAddTeam(match.id, match.name)}
+                  >
+                    <Users className="h-3.5 w-3.5 text-zinc-400" />
+                    {match.name}
+                  </button>
+                </li>
+              ))}
+            {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
+              <li className="px-2 py-1.5 text-sm text-zinc-500">
+                {t('manageChallengeDetail.managers.noTeamMatches', undefined, 'No matching teams')}
               </li>
             )}
           </ul>
