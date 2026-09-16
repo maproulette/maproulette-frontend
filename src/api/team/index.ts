@@ -62,12 +62,17 @@ export const team = {
       })
     ),
 
-  findTeamsByName: (q: string, enabled: boolean = true) =>
+  /**
+   * Teams whose name matches, for pickers. The backend names the parameter
+   * `name` and requires it, so sending anything else is rejected before the
+   * search runs.
+   */
+  findTeamsByName: (q: string, limit: number = 10, enabled: boolean = true) =>
     useQuery(
       queryOptions({
-        queryKey: ['team', 'find', q],
+        queryKey: ['team', 'find', { q, limit }],
         queryFn: () =>
-          apiRequest.get('api/v2/teams/find', { searchParams: { query: q } }).json<Team[]>(),
+          apiRequest.get('api/v2/teams/find', { searchParams: { name: q, limit } }).json<Team[]>(),
         enabled: enabled && q.length > 0,
         staleTime: 10_000,
       })

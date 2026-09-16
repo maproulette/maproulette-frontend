@@ -1,9 +1,11 @@
 import { Link } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 import { ProgressBar } from './ProgressBar'
+import { SidebarIndicator } from './SidebarIndicator'
 
 export interface ChallengeMeta {
   totalChallenges: number
@@ -29,6 +31,12 @@ export const ProjectCard = ({
   linkParams,
 }: ProjectCardProps) => {
   const { t } = useIntl()
+  // The image belongs to the team managing the project and is addressed by that
+  // team, so a project can carry a url and still have nothing to show when the
+  // team has no approved image. Space for it is only reserved while it renders.
+  const [imageFailed, setImageFailed] = useState(false)
+  useEffect(() => setImageFailed(false), [project.avatarUrl])
+  const showsImage = !!project.avatarUrl && !imageFailed
   const meta = challengeMeta ?? { totalChallenges: 0, pinned: 0, completed: 0 }
   const completionPercentage =
     meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
@@ -58,12 +66,20 @@ export const ProjectCard = ({
           {actions}
         </div>
       )}
+      <SidebarIndicator avatarUrl={project.avatarUrl} onLoadFailure={() => setImageFailed(true)} />
       <div className="p-4">
-        <div className="mb-2 text-xs text-zinc-500 dark:text-slate-300">
+        <div
+          className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
+        >
           {project.displayName || project.name}
         </div>
 
-        <h3 className="mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
+        <h3
+          className={cn(
+            'mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
+            showsImage && 'mr-16'
+          )}
+        >
           <span className="line-clamp-2">{project.displayName || project.name}</span>
         </h3>
 

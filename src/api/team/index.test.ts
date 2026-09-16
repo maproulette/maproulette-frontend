@@ -95,7 +95,10 @@ describe('team.findTeamsByName', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(teams)
     const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('query=alp')
+    // The backend requires `name`; it has no `query` parameter and rejects the
+    // request outright without this one.
+    expect(request.url).toContain('name=alp')
+    expect(request.url).toContain('limit=10')
   })
 
   it('is disabled when the query string is empty', () => {
@@ -110,7 +113,7 @@ describe('team.findTeamsByName', () => {
   it('is disabled when explicitly passed enabled: false, even with a non-empty query', () => {
     const fetchMock = stubFetch(new Response('[]', { status: 200 }))
 
-    const { result } = renderHook(() => team.findTeamsByName('alp', false), {
+    const { result } = renderHook(() => team.findTeamsByName('alp', 10, false), {
       wrapper: queryClientWrapper(),
     })
 

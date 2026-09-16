@@ -9,4 +9,10 @@ export type ProjectGetResponse =
 export type Project = components['schemas']['Project'] & {
   isArchived?: boolean
   completionMetrics?: CompletionMetrics
+  /**
+   * The image of the team managing this project, derived server-side from the
+   * project's grants the way a challenge's is derived from its owning team.
+   * Absent when no team manages the project.
+   */
+  avatarUrl?: string | null
 }

@@ -26,7 +26,9 @@ export const ProjectDetailSidebar = () => {
   const filteredChallengesCount = filteredChallenges.length
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+    // Scrolls rather than clips: the panel grows with the project's managers and
+    // teams, and the playbook footer below them would otherwise be cut off.
+    <div className="flex h-full flex-col overflow-y-auto rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
       {/* Header */}
       <div className="space-y-2.5 px-6 pt-6 pb-4">
         {/* Taxonomy badges */}
@@ -138,7 +140,7 @@ export const ProjectDetailSidebar = () => {
       </div>
 
       {/* Stats */}
-      <div className="flex-1 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+      <div className="min-h-0 flex-1 shrink-0 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
         <div className="space-y-3">
           {!(isLoadingProject || isLoadingChallenges) && (
             <>
