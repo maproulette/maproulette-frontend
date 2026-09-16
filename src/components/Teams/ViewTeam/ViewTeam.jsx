@@ -61,6 +61,7 @@ export const ViewTeam = (props) => {
             key={member.id}
             {...props}
             teamUser={member}
+            teamUsers={data.teamUsers}
             userTeamMember={userTeamMember}
           />
         ))}
@@ -77,6 +78,7 @@ export const ViewTeam = (props) => {
                 key={member.id}
                 {...props}
                 teamUser={member}
+                teamUsers={data.teamUsers}
                 userTeamMember={userTeamMember}
               />
             ))}
@@ -89,7 +91,7 @@ export const ViewTeam = (props) => {
           <h5 className="mr-mt-6 mr-mb-2 mr-text-base mr-text-yellow">
             <FormattedMessage {...messages.addMembersHeader} />
           </h5>
-          <AddTeamMember {...props} />
+          <AddTeamMember {...props} userTeamMember={userTeamMember} />
         </Fragment>
       )}
     </div>

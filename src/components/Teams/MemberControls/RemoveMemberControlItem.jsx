@@ -28,6 +28,25 @@ const RemoveMemberControlItem = (props) => {
     return <BusySpinner />;
   }
 
+  // A team is never left without an owner, so its last one can neither leave
+  // nor be removed.
+  if (props.isLastOwner) {
+    return (
+      <li className={props.className}>
+        <span
+          className="mr-text-white-50"
+          title={props.intl.formatMessage(messages.lastOwnerTooltip)}
+        >
+          {props.teamMember.isUser(props.user) ? (
+            <FormattedMessage {...messages.leaveTeamLabel} />
+          ) : (
+            <FormattedMessage {...messages.removeMemberLabel} />
+          )}
+        </span>
+      </li>
+    );
+  }
+
   return (
     <li className={props.className}>
       <ConfirmAction>
@@ -60,6 +79,8 @@ RemoveMemberControlItem.propTypes = {
   userTeamMember: PropTypes.object,
   teamMember: PropTypes.object.isRequired,
   refetchQueries: PropTypes.array,
+  /** True when this member is the only owner the team has */
+  isLastOwner: PropTypes.bool,
 };
 
 RemoveMemberControlItem.defaultProps = {

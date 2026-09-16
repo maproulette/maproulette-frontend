@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { injectIntl } from "react-intl";
 import AppErrors from "../../../services/Error/AppErrors";
+import { TeamRole, messagesByTeamRole } from "../../../services/Team/Role";
 import AutosuggestTextBox from "../../AutosuggestTextBox/AutosuggestTextBox";
 import BusySpinner from "../../BusySpinner/BusySpinner";
 import WithOSMUserSearch from "../../HOCs/WithOSMUserSearch/WithOSMUserSearch";
@@ -47,7 +48,15 @@ const AddTeamMember = (props) => {
           placeholder={props.intl.formatMessage(messages.osmUsername)}
         />
       </div>
-      {selectedUser && <RolePicker {...props} pickRole={inviteSelectedUser} />}
+      {selectedUser && (
+        <RolePicker
+          {...props}
+          roles={[TeamRole.member, TeamRole.manager, TeamRole.admin, TeamRole.owner]}
+          messagesByRole={messagesByTeamRole}
+          unavailableRoles={props.userTeamMember?.isTeamOwner() ? [] : [TeamRole.owner]}
+          pickRole={inviteSelectedUser}
+        />
+      )}
     </div>
   );
 };
