@@ -7,6 +7,7 @@ import {
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
 import { useSetPageTitle } from '@/contexts/ChromeContext'
 import { EditorProvider, useEditorContext } from './contexts/EditorContext'
+import { useTaskContext } from './contexts/TaskContext'
 import { IdEditorView } from './IdEditorView'
 import { TaskProviders } from './TaskLayout'
 import { TaskPanel } from './TaskPanel'
@@ -16,6 +17,7 @@ const viewPanelClass = (isActive: boolean) =>
 
 const TaskContent = () => {
   const { activeView, idEditorMounted, showMap } = useEditorContext()
+  const { task } = useTaskContext()
 
   return (
     <DrawerPortalProvider>
@@ -23,7 +25,7 @@ const TaskContent = () => {
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
             <div className="relative h-full overflow-hidden">
-              <TaskPanel />
+              <TaskPanel key={task.id} />
               <DrawerPortalTarget />
             </div>
           </ResizablePanel>

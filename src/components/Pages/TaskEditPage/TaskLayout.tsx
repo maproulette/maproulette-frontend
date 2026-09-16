@@ -27,7 +27,7 @@ const LassoEventsInitializer = () => {
 const CompletionResponsesForTask = ({ children }: { children: ReactNode }) => {
   const { task } = useTaskContext()
   return (
-    <CompletionResponsesProvider key={task.id} initial={task.completionResponses}>
+    <CompletionResponsesProvider resetKey={task.id} initial={task.completionResponses}>
       {children}
     </CompletionResponsesProvider>
   )

@@ -26,9 +26,12 @@ export const parseCompletionResponses = (raw: string | null | undefined): Comple
  * are submitted from the task completion modal.
  */
 export const CompletionResponsesProvider = ({
+  resetKey,
   initial,
   children,
 }: {
+  /** Discards the current answers and re-seeds from `initial` whenever it changes. */
+  resetKey?: string | number
   /** Responses already stored on the task, as the backend's JSON string. */
   initial?: string | null
   children: ReactNode
@@ -36,6 +39,16 @@ export const CompletionResponsesProvider = ({
   const [responses, setResponses] = useState<CompletionResponses>(() =>
     parseCompletionResponses(initial)
   )
+  const [seenResetKey, setSeenResetKey] = useState(resetKey)
+
+  // Re-seeded here during render rather than by a `key` on the provider. The whole
+  // task editor - the map included - hangs below this, so keying it meant moving to
+  // the next task tore down and rebuilt the MapLibre map just to clear a handful of
+  // form answers.
+  if (resetKey !== seenResetKey) {
+    setSeenResetKey(resetKey)
+    setResponses(parseCompletionResponses(initial))
+  }
 
   const setResponse = useCallback((name: string, value: unknown) => {
     setResponses((prev) => ({ ...prev, [name]: value }))
