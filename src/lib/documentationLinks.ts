@@ -3,6 +3,11 @@
 // its host is runtime-configurable via VITE_DOCS_BASE_URL — deployments that
 // run their own copy of the docs can point the whole app at it without a
 // rebuild.
+//
+// The file name deliberately avoids a leading "docs": Rollup names the emitted
+// chunk after this module, and deployments that proxy a docs site off the same
+// hostname tend to match /docs as a path substring, which would swallow
+// /assets/docs-<hash>.js and break every route that imports this table.
 
 const DEFAULT_DOCS_BASE_URL = 'https://learn.maproulette.org'
 

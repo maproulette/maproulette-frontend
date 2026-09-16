@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { navigation } from '@/data/site.json'
-import { docsUrl } from '@/lib/docs'
+import { docsUrl } from '@/lib/documentationLinks'
 import type { PluginNavigationItem } from '@/types/Plugin'
 
 /**
@@ -76,7 +76,7 @@ export const ChromeProvider = ({ children }: { children: ReactNode }) => {
       ...mainNavigation.map((item) => ({
         ...item,
         // The docs site's host is deployment-configurable, so site.json marks
-        // its entry with a placeholder that's resolved here (see lib/docs.ts).
+        // its entry with a placeholder that's resolved here (see lib/documentationLinks.ts).
         to: item.to === DOCS_NAV_PLACEHOLDER ? docsUrl() : item.to,
         id: item.to,
         icon: undefined,

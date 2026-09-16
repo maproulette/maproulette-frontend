@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
-import { docsUrl } from '@/lib/docs'
+import { docsUrl } from '@/lib/documentationLinks'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { initials } from '@/lib/utils'
 import { frontendVersion } from '@/lib/version'

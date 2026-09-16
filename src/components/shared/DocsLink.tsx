@@ -1,6 +1,6 @@
 import { BookOpen } from 'lucide-react'
 import type * as React from 'react'
-import { type DocsPage, docsUrl } from '@/lib/docs'
+import { type DocsPage, docsUrl } from '@/lib/documentationLinks'
 import { cn } from '@/lib/utils'
 
 interface DocsLinkProps extends Omit<React.ComponentProps<'a'>, 'href' | 'target' | 'rel'> {
@@ -20,7 +20,7 @@ interface DocsLinkProps extends Omit<React.ComponentProps<'a'>, 'href' | 'target
 
 /**
  * Link into the documentation site, opened in a new tab. The href is resolved
- * at render time from the configured docs base URL (see src/lib/docs.ts).
+ * at render time from the configured docs base URL (see src/lib/documentationLinks.ts).
  */
 export const DocsLink = ({ page, icon, label, className, children, ...props }: DocsLinkProps) => {
   const iconOnly = children === undefined

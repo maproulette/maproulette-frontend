@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { DOCS_PAGES, docsBaseUrl, docsUrl } from './docs.ts'
+import { DOCS_PAGES, docsBaseUrl, docsUrl } from './documentationLinks.ts'
 
 const setDocsBaseUrl = (value: string | undefined) => {
   ;(window.env as unknown as Record<string, string | undefined>).VITE_DOCS_BASE_URL = value
