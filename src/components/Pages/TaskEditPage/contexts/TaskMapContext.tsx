@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import type { TaskMarker } from '@/types/Task'
+import { useTaskContext } from './TaskContext'
 
 export const MAX_SELECTED_TASKS = 50
 
@@ -42,6 +43,7 @@ export interface TaskMapContextType {
 const TaskMapContext = createContext<TaskMapContextType | undefined>(undefined)
 
 export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
+  const { task } = useTaskContext()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [selectedMarker, setSelectedMarker] = useState<TaskMarker | null>(null)
@@ -57,6 +59,27 @@ export const TaskMapProvider = ({ children }: { children: ReactNode }) => {
   const [selectedTaskIds, setSelectedTaskIds] = useState<Set<number>>(new Set())
 
   const currentModeRef = useRef<LassoMode>(null)
+
+  // The map itself deliberately outlives a move to the next task, so everything
+  // pinned to the task the mapper just left - what they had selected, hidden or
+  // half-lassoed on it - is cleared here instead of by a remount. Only on an
+  // actual move: on the first task this would wipe whatever the mount-time
+  // effects below it have already set.
+  const clearedForTaskIdRef = useRef(task.id)
+  useEffect(() => {
+    if (clearedForTaskIdRef.current === task.id) return
+    clearedForTaskIdRef.current = task.id
+
+    setSelectedMarker(null)
+    setMarkersHidden(false)
+    setHoveredBundleTaskId(null)
+    setEmptyClickCount(0)
+    currentModeRef.current = null
+    setDrawingMode(null)
+    setIsDrawing(false)
+    setLassoPolygon(null)
+    setSelectedTaskIds(new Set())
+  }, [task.id])
 
   const triggerEmptyClick = () => {
     setEmptyClickCount((prev) => prev + 1)

@@ -1,4 +1,5 @@
-import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
+import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import { useTaskContext } from './TaskContext'
 
 export type PanelView = 'task' | 'challengeDescription' | 'projectDescription'
 
@@ -15,7 +16,14 @@ const PanelViewContext = createContext<PanelViewContextType | undefined>(undefin
  * rather than stacking a modal on top of the map.
  */
 export const PanelViewProvider = ({ children }: { children: ReactNode }) => {
+  const { task } = useTaskContext()
   const [view, setView] = useState<PanelView>('task')
+
+  // Moving to the next task puts the panel back on that task, not on whichever
+  // description the mapper had opened over it.
+  useEffect(() => {
+    setView('task')
+  }, [task.id])
 
   const value = useMemo(() => ({ view, showView: setView }), [view])
 
