@@ -160,7 +160,7 @@
     "tailwindcss-transition": "^1.0.5",
     "tailwindcss-visuallyhidden": "^1.0.2",
     "vite": "^8.0.16",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.11"
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"
