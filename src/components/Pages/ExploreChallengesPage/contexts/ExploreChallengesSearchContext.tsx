@@ -349,7 +349,10 @@ export const ExploreChallengesSearchContextProvider = ({
   // The box sent is the viewport narrowed to the place's own box, and the
   // place's exact boundary rides along as geometry below -- so results stay
   // bounded by the place even against a server too old to accept the boundary.
-  const viewportBounds = viewMode === 'grid-map' ? clampBoundsString(bounds) : DEFAULT_WORLD_BOUNDS
+  // The map view is the one that puts the list beside the markers, so it is
+  // also the one where the two have to agree.
+  const isMapView = viewMode === 'grid-map'
+  const viewportBounds = isMapView ? clampBoundsString(bounds) : DEFAULT_WORLD_BOUNDS
   const placeIntersection = locationBounds
     ? intersectBoundsStrings(viewportBounds, locationBounds)
     : viewportBounds
@@ -368,15 +371,19 @@ export const ExploreChallengesSearchContextProvider = ({
   const searchParams = useMemo<ExploreChallengesRequest>(
     () => ({
       bounds: effectiveBounds,
-      keywords: buildKeywords(selectedCategories, workOn),
-      difficulty: difficultyMap[difficulty],
+      // Beside the map these are dropped rather than merely hidden: the
+      // markers are unfiltered, so a list narrowed by controls this view
+      // doesn't even show would just look like missing data. The filter state
+      // itself is kept -- leaving the map view brings it back as it was.
+      keywords: isMapView ? undefined : buildKeywords(selectedCategories, workOn),
+      difficulty: isMapView ? undefined : difficultyMap[difficulty],
       // Sent explicitly: the toggle renders unset as off, so leaving the
       // param out and inheriting a server-side default would contradict it.
-      global: global ?? false,
+      global: isMapView ? false : (global ?? false),
       placeGeometryJson: placeFilter?.geometryJson,
       placeKey: placeFilter?.key,
     }),
-    [effectiveBounds, selectedCategories, workOn, difficulty, global, placeFilter]
+    [effectiveBounds, isMapView, selectedCategories, workOn, difficulty, global, placeFilter]
   )
 
   const navigate = useNavigate()
