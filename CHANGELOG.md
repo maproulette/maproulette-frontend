@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.5] - 2026-09-17
+
+Released with [maproulette-backend v4.10.0](https://github.com/maproulette/maproulette-backend/releases/tag/v4.10.0)
+
+* Fix footer link destination and aria-label by @jake-low in https://github.com/maproulette/maproulette-frontend/pull/2887
+* Use tabular numerals in lock timer to prevent layout shift by @jake-low in https://github.com/maproulette/maproulette-frontend/pull/2885
+* Bump shell-quote from 1.8.4 to 1.10.0 by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2883
+* Bump immutable from 5.1.6 to 5.1.9 by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2881
+* Bump postcss from 8.5.15 to 8.5.25 by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2888
+* [Transifex} Updates for project maproulette3 by @transifex-integration[bot] in https://github.com/maproulette/maproulette-frontend/pull/2875
+* Bump d3-color from 2.0.0 to 3.1.0 by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2889
+* Bump brace-expansion by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2901
+* fix translations for github integration by @CollinBeczak in https://github.com/maproulette/maproulette-frontend/pull/2904
+* add compatibility with new single task lock restriction and endpoints by @CollinBeczak in https://github.com/maproulette/maproulette-frontend/pull/2898
+* fix deprecated scss imports by @CollinBeczak in https://github.com/maproulette/maproulette-frontend/pull/2905
+* fix challengeid undefined bug when navigating to currently locked challenge by @CollinBeczak in https://github.com/maproulette/maproulette-frontend/pull/2906
+* Bump decode-uri-component and query-string by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2907
+* Bump browserslist from 4.23.0 to 4.28.8 by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2908
+* Inbox: show minimum 1 page by @homersimpsons in https://github.com/maproulette/maproulette-frontend/pull/2913
+* File challenge reports against the backend instead of GitHub by @CollinBeczak in https://github.com/maproulette/maproulette-frontend/pull/2917
+* Catch the old frontend up with the team owner role and team-conferred access by @CollinBeczak in https://github.com/maproulette/maproulette-frontend/pull/2918
+
+**Full Changelog**: https://github.com/maproulette/maproulette-frontend/compare/v3.18.4...v3.18.5
+
 ## [v3.18.4] - 2026-07-16
 
 Released with [maproulette-backend v4.9.5](https://github.com/maproulette/maproulette-backend/releases/tag/v4.9.5)
