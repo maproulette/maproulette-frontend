@@ -78,6 +78,7 @@ export const DescriptionBreadcrumbButton = ({
         <PopoverContent
           side="bottom"
           align="start"
+          aria-label={label}
           className="w-80 p-3"
           // Stays put until it's closed deliberately, and never steals focus on arrival.
           onEscapeKeyDown={(event) => event.preventDefault()}

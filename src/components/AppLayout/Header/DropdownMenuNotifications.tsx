@@ -61,6 +61,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
       <PopoverContent
         align="end"
         sideOffset={10}
+        aria-label={t('appLayout.header.notifications.panelAriaLabel', undefined, 'Notifications')}
         className="flex w-96 max-w-[calc(100vw-2rem)] flex-col p-4"
       >
         <Tabs defaultValue="unread" className="flex min-h-0 flex-1 flex-col">

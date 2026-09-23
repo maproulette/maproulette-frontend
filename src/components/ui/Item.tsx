@@ -48,8 +48,10 @@ export const Item = ({
   size = 'default',
   asChild = false,
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof itemVariants> & { asChild?: boolean }) => {
-  const Comp = asChild ? Slot : 'div'
+}: React.ComponentProps<'li'> & VariantProps<typeof itemVariants> & { asChild?: boolean }) => {
+  // ItemGroup renders a <ul>, and every current usage nests Item directly
+  // inside it — <li> keeps that valid instead of a <div> inside a <ul>.
+  const Comp = asChild ? Slot : 'li'
   return (
     <Comp
       data-slot="item"
@@ -110,7 +112,8 @@ export const ItemDescription = ({ className, ...props }: React.ComponentProps<'p
   <p
     data-slot="item-description"
     className={cn(
-      'line-clamp-2 text-balance font-normal text-sm text-zinc-500 leading-normal dark:text-zinc-400',
+      // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
+      'line-clamp-2 text-balance font-normal text-sm text-zinc-600 leading-normal dark:text-zinc-400',
       '[&>a:hover]:text-zinc-900 dark:[&>a:hover]:text-zinc-50 [&>a]:underline [&>a]:underline-offset-4',
       className
     )}

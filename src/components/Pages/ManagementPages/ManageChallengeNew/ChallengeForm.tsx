@@ -201,7 +201,16 @@ export const ChallengeForm = () => {
                   )}
                 </button>
               </PopoverTrigger>
-              <PopoverContent align="start" side="top" className="w-80 p-2">
+              <PopoverContent
+                align="start"
+                side="top"
+                className="w-80 p-2"
+                aria-label={t(
+                  'manageChallengeNew.challengeForm.fieldErrorsAriaLabel',
+                  undefined,
+                  'Fields that need attention'
+                )}
+              >
                 <ul className="space-y-0.5">
                   {fieldErrors.map((error) => (
                     <li key={error.name}>

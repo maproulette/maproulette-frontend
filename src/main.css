@@ -1,17 +1,54 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./styles/tokens.gen.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
-
   --shadow-lg: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
+@theme inline {
+  --color-primary: var(--color-brand-primary);
+  --color-secondary: var(--color-brand-secondary);
+  --font-sans: var(--font-brand-sans);
+}
+
 @layer base {
+  /* Lets the browser render native UI (scrollbars, form controls) with
+     dark-appropriate colors. `color-scheme` alone isn't reliably honored
+     for scrollbars across browsers, so the thumb/track colors below are
+     set explicitly too — applied globally (not opt-in like .scrollbar-thin)
+     so no scrollable element is left with a browser-default, low-contrast
+     scrollbar against a dark page. */
+  html {
+    color-scheme: light;
+    scrollbar-color: rgb(212 212 216) transparent; /* zinc-300 thumb */
+  }
+
+  .dark {
+    color-scheme: dark;
+    scrollbar-color: rgb(82 82 91) transparent; /* zinc-600 thumb */
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full;
+    background-color: rgb(212 212 216); /* zinc-300 */
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: rgb(82 82 91); /* zinc-600 */
+  }
+
   * {
     @apply border-zinc-200 outline-current/50 dark:border-slate-700;
   }

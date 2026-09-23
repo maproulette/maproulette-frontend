@@ -114,7 +114,13 @@ export const MapControls = ({
                     {t('map.controls.mapStyle', undefined, 'Map style')}
                   </TooltipContent>
                 </Tooltip>
-                <PopoverContent side="left" align="start" sideOffset={8} className="w-72">
+                <PopoverContent
+                  side="left"
+                  align="start"
+                  sideOffset={8}
+                  aria-label={t('map.controls.mapStyle', undefined, 'Map style')}
+                  className="w-72"
+                >
                   <MapStyleSwitcher map={map} mapLoaded={mapLoaded} />
                 </PopoverContent>
               </Popover>
