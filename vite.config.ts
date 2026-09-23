@@ -1,13 +1,21 @@
+/// <reference types="vitest/config" />
 import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join, resolve } from 'node:path'
+import path, { join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import viteReact from '@vitejs/plugin-react'
+import { playwright } from '@vitest/browser-playwright'
 import { loadEnv, type Plugin } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import { defineConfig } from 'vitest/config'
 
+const dirname =
+  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url))
+
+// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as {
   version: string
 }
@@ -80,14 +88,19 @@ function runtimeEnv(): Plugin {
       })
     },
     generateBundle() {
-      this.emitFile({ type: 'asset', fileName: 'env.json', source: json })
+      this.emitFile({
+        type: 'asset',
+        fileName: 'env.json',
+        source: json,
+      })
     },
   }
 }
-
 function pluginMiddleware(distDir: string) {
   return (
-    req: { url?: string },
+    req: {
+      url?: string
+    },
     res: {
       statusCode?: number
       setHeader: (k: string, v: string) => void
@@ -117,7 +130,6 @@ function pluginMiddleware(distDir: string) {
 function preservePlugins(): Plugin {
   let pluginsDir = ''
   let backupDir: string | null = null
-
   return {
     name: 'maproulette:preserve-plugins',
     configResolved(config) {
@@ -126,17 +138,23 @@ function preservePlugins(): Plugin {
     buildStart() {
       if (!existsSync(pluginsDir)) return
       backupDir = mkdtempSync(join(tmpdir(), 'mr-plugins-'))
-      cpSync(pluginsDir, join(backupDir, 'plugins'), { recursive: true })
+      cpSync(pluginsDir, join(backupDir, 'plugins'), {
+        recursive: true,
+      })
     },
     closeBundle() {
       if (!backupDir) return
-      cpSync(join(backupDir, 'plugins'), pluginsDir, { recursive: true })
-      rmSync(backupDir, { recursive: true, force: true })
+      cpSync(join(backupDir, 'plugins'), pluginsDir, {
+        recursive: true,
+      })
+      rmSync(backupDir, {
+        recursive: true,
+        force: true,
+      })
       backupDir = null
     },
   }
 }
-
 function servePlugins(): Plugin {
   let distDir: string
   return {
@@ -188,7 +206,6 @@ export default defineConfig({
     host: true,
   },
   test: {
-    setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
       include: [
@@ -236,7 +253,38 @@ export default defineConfig({
       ],
       reporter: ['text', 'html', 'json-summary'],
     },
-    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-    environment: 'node',
+    projects: [
+      {
+        extends: true,
+        test: {
+          setupFiles: ['./src/test/setup.ts'],
+          include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+          environment: 'node',
+        },
+      },
+      {
+        extends: true,
+        plugins: [
+          // The plugin will run tests for the stories defined in your Storybook config
+          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+        },
+      },
+    ],
   },
 })

@@ -45,7 +45,9 @@ export const FieldGroup = ({ className, ...props }: React.ComponentProps<'div'>)
 )
 
 export const fieldVariants = cva(
-  'group/field flex w-full gap-3 data-[invalid=true]:text-red-500 dark:data-[invalid=true]:text-red-900',
+  // red-500 fails WCAG AA contrast on light backgrounds (~3.5-3.8:1); red-600 clears it.
+  // dark:text-red-900 was near-invisible dark-red-on-near-black; red-400 is the correct pairing.
+  'group/field flex w-full gap-3 data-[invalid=true]:text-red-700 dark:data-[invalid=true]:text-red-400',
   {
     variants: {
       orientation: {
@@ -117,7 +119,8 @@ export const FieldDescription = ({ className, ...props }: React.ComponentProps<'
   <p
     data-slot="field-description"
     className={cn(
-      'font-normal text-sm text-zinc-500 leading-normal group-has-[[data-orientation=horizontal]]/field:text-balance dark:text-zinc-400',
+      // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
+      'font-normal text-sm text-zinc-600 leading-normal group-has-[[data-orientation=horizontal]]/field:text-balance dark:text-zinc-400',
       'nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 last:mt-0',
       '[&>a:hover]:text-zinc-900 dark:[&>a:hover]:text-zinc-50 [&>a]:underline [&>a]:underline-offset-4',
       className
@@ -190,7 +193,7 @@ export const FieldError = ({
     <div
       role="alert"
       data-slot="field-error"
-      className={cn('font-normal text-red-500 text-sm dark:text-red-900', className)}
+      className={cn('font-normal text-red-700 text-sm dark:text-red-400', className)}
       {...props}
     >
       {content}

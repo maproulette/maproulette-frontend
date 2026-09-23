@@ -91,7 +91,9 @@ export const FormLabel = ({
       data-slot="form-label"
       data-error={!!error}
       className={cn(
-        'data-[error=true]:text-red-500 dark:data-[error=true]:text-red-900',
+        // red-500 fails WCAG AA contrast on light backgrounds; dark:text-red-900 was
+        // near-invisible dark-red-on-near-black — red-600/red-400 is the correct pairing.
+        'data-[error=true]:text-red-700 dark:data-[error=true]:text-red-400',
         className
       )}
       htmlFor={formItemId}
@@ -121,7 +123,8 @@ export const FormDescription = ({ className, ...props }: React.ComponentProps<'p
     <p
       data-slot="form-description"
       id={formDescriptionId}
-      className={cn('text-sm text-zinc-500 dark:text-zinc-400', className)}
+      // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
+      className={cn('text-sm text-zinc-600 dark:text-zinc-400', className)}
       {...props}
     />
   )
@@ -139,7 +142,7 @@ export const FormMessage = ({ className, ...props }: React.ComponentProps<'p'>) 
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn('text-red-500 text-sm dark:text-red-900', className)}
+      className={cn('text-red-700 text-sm dark:text-red-400', className)}
       {...props}
     >
       {body}

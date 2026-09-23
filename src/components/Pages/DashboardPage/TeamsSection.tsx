@@ -19,7 +19,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
   const active = teamMemberships?.filter((m) => !isPendingInvite(m)) ?? []
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Users className="h-4 w-4 text-purple-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
@@ -74,7 +74,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
         )}
 
         {!isLoading && !error && (pending.length > 0 || active.length > 0) && (
-          <div className="space-y-3 rounded-xl bg-zinc-100 p-3 dark:bg-slate-950">
+          <div className="space-y-3">
             {pending.length > 0 && <PendingInvitesSection invites={pending} />}
             {active.length > 0 && (
               <div className="space-y-2">

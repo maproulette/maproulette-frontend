@@ -19,6 +19,8 @@ export const PopoverAnchor = ({
   <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />
 )
 
+// Radix renders this with role="dialog" — always pass `aria-label` (or
+// `aria-labelledby`), or screen readers announce it with no accessible name.
 export const PopoverContent = ({
   className,
   align = 'center',

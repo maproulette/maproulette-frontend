@@ -89,7 +89,8 @@ export const TableCell = ({ className, children, ref, ...props }: React.Componen
 export const TableCaption = ({ className, ref, ...props }: React.ComponentProps<'caption'>) => (
   <caption
     ref={ref}
-    className={cn('mt-4 text-sm text-zinc-500 dark:text-zinc-400', className)}
+    // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
+    className={cn('mt-4 text-sm text-zinc-600 dark:text-zinc-400', className)}
     {...props}
   />
 )
