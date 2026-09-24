@@ -15,7 +15,7 @@ const descriptor = {
   minWidth: 3,
   defaultWidth: 3,
   minHeight: 3,
-  defaultHeight: 6,
+  defaultHeight: 10,
 };
 
 export default class TaskInstructionsWidget extends Component {
@@ -25,7 +25,6 @@ export default class TaskInstructionsWidget extends Component {
      * and needs a loader to account for it.
      */
     collapsing: false,
-    expandedOnLoad: false,
   };
 
   resetLoader = () => {
@@ -80,19 +79,6 @@ export default class TaskInstructionsWidget extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    //When the page loads, the instructions widget should be expanded. Unfortunately this can't be checked
-    //onmount so it is checked here for now.  Refactor needed.
-    if (!this.state.expandedOnLoad) {
-      this.setState({ expandedOnLoad: true });
-
-      const { expandedHeight } = this.props.widgetConfiguration;
-
-      // Use the user's saved height if available, otherwise use default height
-      const height = Number.isFinite(expandedHeight) ? expandedHeight : descriptor.defaultHeight;
-
-      return this.props.updateWidgetHeight(this.props.widgetLayout.i, height);
-    }
-
     if (prevProps.collapseInstructions !== this.props.collapseInstructions) {
       this.adjustHeightForMinimization();
     }

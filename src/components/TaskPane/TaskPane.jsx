@@ -120,11 +120,11 @@ export const defaultWorkspaceSetupClassic = function (intl) {
       widgetDescriptor("TaskLocationWidget"),
     ],
     layout: [
-      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 10 },
       { i: generateWidgetId(), x: 4, y: 0, w: 8, h: 5 },
       { i: generateWidgetId(), x: 4, y: 5, w: 8, h: 21 },
-      { i: generateWidgetId(), x: 0, y: 4, w: 4, h: 7 },
-      { i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 10, w: 4, h: 7 },
+      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 8 },
     ],
     permanentWidgets: [
       // Cannot be removed from workspace
@@ -158,10 +158,10 @@ export const defaultWorkspaceSetupLeftPanel = function (intl, type = "leftPanel"
       widgetDescriptor("TaskLocationWidget"),
     ],
     layout: [
-      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 10 },
       { i: generateWidgetId(), x: 4, y: 0, w: 4, h: 5 },
-      { i: generateWidgetId(), x: 0, y: 4, w: 4, h: 9 },
-      { i: generateWidgetId(), x: 0, y: 11, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 10, w: 4, h: 9 },
+      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 8 },
     ],
     permanentWidgets: ["TaskCompletionWidget", "TagDiffWidget"],
     excludeWidgets: ["TaskReviewWidget", "TaskMapWidget"],
