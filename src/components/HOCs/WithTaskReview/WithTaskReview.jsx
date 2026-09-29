@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import AppErrors from "../../../services/Error/AppErrors";
 import { addError } from "../../../services/Error/Error";
 import { buildSearchURL } from "../../../services/SearchCriteria/SearchCriteria";
+import { addTaskComment } from "../../../services/Task/Task";
 import {
   cancelReviewClaim,
   completeBundleReview,
@@ -12,6 +13,7 @@ import {
   fetchNearbyReviewTasks,
   fetchTaskForReview,
   loadNextReviewTask,
+  updateTaskCompletionStatus,
 } from "../../../services/Task/TaskReview/TaskReview";
 import { TaskReviewLoadMethod } from "../../../services/Task/TaskReview/TaskReviewLoadMethod";
 import { TaskReviewStatus } from "../../../services/Task/TaskReview/TaskReviewStatus";
@@ -142,36 +144,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     /**
      * Standalone task-completion-status update used by reviewers from the
-     * Completion widget in the Review pane. Preserves the current review
-     * status (so it doesn't double-count as a review action) and does not
-     * navigate away from the current task — the reviewer is expected to
-     * continue reviewing after correcting the status.
+     * Completion widget in the Review pane. Leaves the review status and the
+     * original mapper's credit untouched, and does not navigate away from the
+     * current task — the reviewer is expected to continue reviewing after
+     * correcting the status.
      */
-    updateTaskCompletionStatus: (task, newTaskStatus, comment, taskBundle) => {
-      const submitAsMetaReview = asMetaReview(ownProps);
-      const action = taskBundle
-        ? completeBundleReview(
-            taskBundle.bundleId,
-            task.reviewStatus,
-            comment,
-            null,
-            newTaskStatus,
-            submitAsMetaReview,
-            undefined,
-          )
-        : completeReview(
-            task.id,
-            task.reviewStatus,
-            comment,
-            null,
-            newTaskStatus,
-            submitAsMetaReview,
-            undefined,
-          );
+    updateTaskCompletionStatus: (task, newTaskStatus, comment) => {
+      return dispatch(updateTaskCompletionStatus(task.id, newTaskStatus)).then((results) => {
+        if (comment) {
+          dispatch(addTaskComment(task.id, comment, newTaskStatus));
+        }
 
-      return dispatch(action).catch((error) => {
-        console.log(error);
-        dispatch(addError(AppErrors.task.updateFailure));
+        return results;
       });
     },
 

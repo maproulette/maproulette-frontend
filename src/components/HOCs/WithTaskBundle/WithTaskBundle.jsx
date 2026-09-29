@@ -127,11 +127,12 @@ export function WithTaskBundle(WrappedComponent) {
       try {
         const workspaceName = workspace?.name || name;
         const isCompletionWorkspace = ["taskCompletion"].includes(workspaceName);
+        const isReviewWorkspace = workspaceName === "taskReview";
         let reason = null;
         let bundleEditsDisabled = false;
 
         switch (true) {
-          case !isCompletionWorkspace:
+          case !isCompletionWorkspace && !isReviewWorkspace:
             reason = "workspace";
             bundleEditsDisabled = true;
             break;
@@ -153,23 +154,26 @@ export function WithTaskBundle(WrappedComponent) {
             bundleEditsDisabled = true;
             break;
 
-          case !(task?.reviewStatus === 2 || [0, 3, 6].includes(task?.status)):
+          case !isReviewWorkspace &&
+            !(task?.reviewStatus === 2 || [0, 3, 6].includes(task?.status)):
             reason = "doneOrReview";
             bundleEditsDisabled = true;
             break;
 
           default:
-            // Check mapper edit permissions
-            const hasNoCompletion = !task?.completedBy;
-            const isTaskCompleter = user.id === task?.completedBy;
-            const enableMapperEdits = hasNoCompletion || isTaskCompleter || user.isSuperUser;
-            const isReviewCompleted = task?.reviewStatus === 2;
-            const isTaskCompleted = [0, 3, 6].includes(task?.status);
-            const completionStatus = isReviewCompleted || isTaskCompleted;
+            if (!isReviewWorkspace) {
+              // Check mapper edit permissions
+              const hasNoCompletion = !task?.completedBy;
+              const isTaskCompleter = user.id === task?.completedBy;
+              const enableMapperEdits = hasNoCompletion || isTaskCompleter || user.isSuperUser;
+              const isReviewCompleted = task?.reviewStatus === 2;
+              const isTaskCompleted = [0, 3, 6].includes(task?.status);
+              const completionStatus = isReviewCompleted || isTaskCompleted;
 
-            if (!(enableMapperEdits && completionStatus)) {
-              reason = "mapperEdits";
-              bundleEditsDisabled = true;
+              if (!(enableMapperEdits && completionStatus)) {
+                reason = "mapperEdits";
+                bundleEditsDisabled = true;
+              }
             }
             break;
         }
