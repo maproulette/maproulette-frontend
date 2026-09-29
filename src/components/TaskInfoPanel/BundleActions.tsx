@@ -29,6 +29,7 @@ export const BundleActions = ({ task }: BundleActionsProps) => {
     bundleEditsDisabled,
     viewedTaskId,
     canAddSelectedMarkerToBundle,
+    isAddingToBundle,
     handleAddToBundle,
     handleRemoveFromBundle,
   } = bundleContext
@@ -43,6 +44,7 @@ export const BundleActions = ({ task }: BundleActionsProps) => {
   return (
     <BundleStateIndicator
       canAddToBundle={isViewedTask && canAddSelectedMarkerToBundle}
+      isAddingToBundle={isAddingToBundle}
       canRemoveFromBundle={isInBundle && !bundleEditsDisabled}
       isInBundle={isInBundle}
       onAddToBundle={handleAddToBundle}

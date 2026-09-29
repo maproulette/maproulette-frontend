@@ -60,6 +60,8 @@ export interface TaskBundleContextType {
   isViewedTaskInBundle: boolean
   /** Whether the currently selected (non-bundle) map marker can be added to the active bundle. */
   canAddSelectedMarkerToBundle: boolean
+  /** Whether a lock covering the new member is still in flight. */
+  isAddingToBundle: boolean
   handleAddToBundle: () => void
   handleRemoveFromBundle: () => void
   /** Updates the live lock to cover the given bundle's member tasks (or none, if null) -
@@ -67,6 +69,8 @@ export interface TaskBundleContextType {
    * useLassoBundleSync. Never touches the persisted task_bundles record; that only
    * happens when the task is actually submitted (see TaskActionModal). */
   persistBundle: (nextBundle: TaskBundle | null) => void
+  /** Same, but resolves once the lock covers the bundle, so callers can add members only after it does. */
+  lockBundleTasks: (nextBundle: TaskBundle | null) => Promise<unknown>
 }
 
 const TaskBundleContext = createContext<TaskBundleContextType | undefined>(undefined)
@@ -87,6 +91,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const [drawerTaskId, setDrawerTaskId] = useState<number | null>(null)
 
   const lockBundleMutation = api.task.useLockTaskBundle()
+  const isAddingToBundle = lockBundleMutation.isPending
 
   const persistBundle = useCallback(
     (nextBundle: TaskBundle | null) => {
@@ -94,6 +99,15 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       lockBundleMutation.mutate({ taskId: task.id, taskIds: memberTaskIds })
     },
     [task.id, lockBundleMutation.mutate]
+  )
+
+  const lockBundleTasks = useCallback(
+    (nextBundle: TaskBundle | null) =>
+      lockBundleMutation.mutateAsync({
+        taskId: task.id,
+        taskIds: nextBundle?.taskIds.filter((id) => id !== task.id) ?? [],
+      }),
+    [task.id, lockBundleMutation.mutateAsync]
   )
 
   const { data: dbBundle } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
@@ -182,8 +196,10 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       user?.id ?? null
     )
 
+  // A bundle hangs off the primary task's lock, so there is nothing to offer
+  // until it is held.
   const canAddSelectedMarkerToBundle =
-    isNonBundleSelection && !bundleEditsDisabled && isSelectedMarkerEligible
+    isLocked && isNonBundleSelection && !bundleEditsDisabled && isSelectedMarkerEligible
 
   // When the bundle changes, close drawer if task is no longer in bundle
   useEffect(() => {
@@ -239,35 +255,57 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   }, [confirmedBundleTaskIds, task.id, task.bundleId])
 
   // Reason: stable references returned from context — consumers use these as event handler dependencies
-  const handleAddToBundle = useCallback(() => {
-    if (bundleEditsDisabled || !selectedMarker) return
+  const handleAddToBundle = useCallback(async () => {
+    if (bundleEditsDisabled || !selectedMarker || isAddingToBundle) return
+    // A bundle is held together by the primary task's lock, so there is nothing
+    // to add a member to until that lock exists.
+    if (!isLocked) return
 
+    const addedId = selectedMarker.id
     let newBundle: TaskBundle
     if (!activeBundle) {
       newBundle = {
         bundleId: PENDING_BUNDLE_ID,
-        taskIds: [task.id, selectedMarker.id],
+        taskIds: [task.id, addedId],
         tasks: [task],
         name: `Bundle (pending)`,
       }
-      setActiveBundle(newBundle)
     } else {
-      if (activeBundle.taskIds.includes(selectedMarker.id)) return
+      if (activeBundle.taskIds.includes(addedId)) return
       newBundle = {
         ...activeBundle,
-        taskIds: [...activeBundle.taskIds, selectedMarker.id],
+        taskIds: [...activeBundle.taskIds, addedId],
         tasks: activeBundle.tasks,
       }
-      setActiveBundle(newBundle)
     }
 
-    persistBundle(newBundle)
-
-    // Move the newly added task into the drawer as a bundle task
-    const addedId = selectedMarker.id
-    setSelectedMarker(null)
-    setDrawerTaskId(addedId)
-  }, [bundleEditsDisabled, selectedMarker, activeBundle, task, setSelectedMarker, persistBundle])
+    try {
+      // The member has to be locked before it joins the bundle here, or the
+      // panel would show it bundled while someone else still holds it.
+      await lockBundleTasks(newBundle)
+      setActiveBundle(newBundle)
+      setSelectedMarker(null)
+      setDrawerTaskId(addedId)
+    } catch {
+      toast.error(
+        t(
+          'taskEditPage.taskBundle.addFailed',
+          undefined,
+          'Could not lock that task, so it was not added to the bundle.'
+        )
+      )
+    }
+  }, [
+    bundleEditsDisabled,
+    selectedMarker,
+    activeBundle,
+    task,
+    setSelectedMarker,
+    isLocked,
+    isAddingToBundle,
+    lockBundleTasks,
+    t,
+  ])
 
   const handleRemoveFromBundle = useCallback(() => {
     if (bundleEditsDisabled || !activeBundle) return
@@ -339,9 +377,11 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       viewedTaskBundleTaskIds,
       isViewedTaskInBundle,
       canAddSelectedMarkerToBundle,
+      isAddingToBundle,
       handleAddToBundle,
       handleRemoveFromBundle,
       persistBundle,
+      lockBundleTasks,
     }),
     [
       activeBundle,
@@ -361,9 +401,11 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       viewedTaskBundleTaskIds,
       isViewedTaskInBundle,
       canAddSelectedMarkerToBundle,
+      isAddingToBundle,
       handleAddToBundle,
       handleRemoveFromBundle,
       persistBundle,
+      lockBundleTasks,
     ]
   )
 
