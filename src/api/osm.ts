@@ -1,6 +1,7 @@
 /**
  * OSM API functions for fetching OpenStreetMap data
  */
+import { queryOptions } from '@tanstack/react-query'
 
 const OSM_SERVER = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
 const OSM_API_SERVER = window.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
@@ -112,6 +113,19 @@ export interface OSMChangeset {
 }
 
 export const osm = {
+  /**
+   * Shared query definition for one OSM element, so every caller hits the same
+   * cache entry. `idString` is `<type>/<id>`, e.g. `way/12345`.
+   */
+  elementOptions: (idString: string | null) =>
+    queryOptions({
+      queryKey: ['osm', 'element', idString],
+      queryFn: () => osm.fetchOSMElement(idString as string),
+      enabled: !!idString,
+      staleTime: 5 * 60 * 1000,
+      retry: false,
+    }),
+
   /**
    * Get the OSM server URL (for user-facing links)
    */

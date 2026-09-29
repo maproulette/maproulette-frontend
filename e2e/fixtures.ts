@@ -103,6 +103,38 @@ async function deleteProject(request: APIRequestContext, id: number): Promise<vo
   }
 }
 
+async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
+  try {
+    const whoami = await request.get(`${BACKEND_URL}/api/v2/user/whoami`, {
+      headers: { apiKey: SUPER_KEY },
+    })
+    if (!whoami.ok()) {
+      console.warn(`Lock teardown could not identify the acting user: ${whoami.status()}`)
+      return
+    }
+    const { id: userId } = (await whoami.json()) as { id: number }
+
+    const locked = await request.get(`${BACKEND_URL}/api/v2/user/${userId}/lockedTasks`, {
+      headers: { apiKey: SUPER_KEY },
+    })
+    if (!locked.ok()) {
+      console.warn(`Lock teardown could not list held locks: ${locked.status()}`)
+      return
+    }
+
+    for (const task of (await locked.json()) as { id: number }[]) {
+      const released = await request.get(`${BACKEND_URL}/api/v2/task/${task.id}/release`, {
+        headers: { apiKey: SUPER_KEY },
+      })
+      if (!released.ok()) {
+        console.warn(`Task ${task.id} lock teardown returned ${released.status()}`)
+      }
+    }
+  } catch (error) {
+    console.warn('Lock teardown threw:', error)
+  }
+}
+
 // Note: creating a challenge with `localGeoJSON`, or uploading tasks via the
 // addFileTasks endpoint, does not reliably produce tasks against the pinned
 // backend image (a server-side Scala collections bug silently fails async
@@ -431,6 +463,7 @@ export const test = base.extend<{
   project: async ({ request }, use) => {
     const project = await createProject(request, uniqueName('e2e-project'))
     await use(project)
+    await releaseHeldLocks(request)
     await deleteProject(request, project.id)
   },
 

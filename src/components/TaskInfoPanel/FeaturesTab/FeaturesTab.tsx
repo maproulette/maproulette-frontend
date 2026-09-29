@@ -1,5 +1,5 @@
 import { ChevronDown, MousePointerClick, Package, PanelRight, Star } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useOptionalEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { useOptionalTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
@@ -9,7 +9,7 @@ import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Task } from '@/types/Task'
 import { FeatureProperties, useMeasuredWidth } from '../FeatureProperties'
-import { getTaskFeatureGroups } from '../taskUtils/geometryUtils'
+import { countTaskFeatures, getTaskFeatureGroups } from '../taskUtils/geometryUtils'
 import { useBundleTaskIds } from '../useBundleTaskIds'
 
 /**
@@ -70,7 +70,8 @@ const TaskFeatures = ({
   const { inIdEditor, selectInEditor, handlers } = useTaskHighlighting()
   // `getTask` already returns the generated task type, narrowed in @/types/Task
   const { data: task } = api.task.getTask(taskId)
-  const groups = task ? getTaskFeatureGroups(task) : []
+  const groups = useMemo(() => (task ? getTaskFeatureGroups(task) : []), [task])
+  const featureCount = countTaskFeatures(groups)
 
   return (
     <Collapsible
@@ -98,7 +99,7 @@ const TaskFeatures = ({
             {task
               ? t(
                   'taskInfoPanel.features.featureCount',
-                  { count: groups.length },
+                  { count: featureCount },
                   '{count} features'
                 )
               : t('common.loading', undefined, 'Loading...')}
@@ -157,9 +158,9 @@ const TaskFeatures = ({
           ) : (
             groups.map((group) => (
               <FeatureProperties
-                key={group.key}
+                key={group.nodeKey}
                 group={group}
-                showFocusToggle={groups.length > 1}
+                showFocusToggle={featureCount > 1}
                 containerWidth={containerWidth}
               />
             ))

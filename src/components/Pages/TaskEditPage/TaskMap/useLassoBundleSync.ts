@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { toast } from 'sonner'
 import { api } from '@/api'
 import {
   PENDING_BUNDLE_ID,
@@ -10,16 +11,24 @@ import {
   MAX_SELECTED_TASKS,
   useTaskMapContext,
 } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { useIntl } from '@/i18n'
 
 export const useLassoBundleSync = () => {
   const { selectedTaskIds, clearSelection } = useTaskMapContext()
-  const { activeBundle, setActiveBundle, persistBundle } = useTaskBundleContext()
-  const { task } = useTaskContext()
+  const { t } = useIntl()
+  const { activeBundle, setActiveBundle, lockBundleTasks } = useTaskBundleContext()
+  const { task, isLocked } = useTaskContext()
   const primaryTaskId = task.id
   const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
 
   useEffect(() => {
     if (selectedTaskIds.size === 0) return
+    // A bundle hangs off the primary task's lock, so there is nothing to add to
+    // until it is held.
+    if (!isLocked) {
+      clearSelection()
+      return
+    }
 
     const selectedArray = Array.from(selectedTaskIds)
     let newBundle: TaskBundle | null = null
@@ -47,8 +56,19 @@ export const useLassoBundleSync = () => {
     }
 
     if (newBundle) {
-      setActiveBundle(newBundle)
-      persistBundle(newBundle)
+      const bundle = newBundle
+      // Members join the bundle only once the lock actually covers them.
+      lockBundleTasks(bundle)
+        .then(() => setActiveBundle(bundle))
+        .catch(() => {
+          toast.error(
+            t(
+              'taskEditPage.taskBundle.addFailed',
+              undefined,
+              'Could not lock that task, so it was not added to the bundle.'
+            )
+          )
+        })
     }
 
     // Clear selection after adding to bundle
@@ -57,8 +77,10 @@ export const useLassoBundleSync = () => {
     selectedTaskIds,
     activeBundle,
     setActiveBundle,
-    persistBundle,
+    lockBundleTasks,
     clearSelection,
+    isLocked,
+    t,
     primaryTaskId,
     primaryTaskData,
   ])

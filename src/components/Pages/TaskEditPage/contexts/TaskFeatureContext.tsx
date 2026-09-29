@@ -7,6 +7,17 @@ import type { Bbox2D } from '@/types/Map'
 import { useTaskContext } from './TaskContext'
 
 /**
+ * One node of the property list and the map geometry it stands for. `keys` are
+ * the `partKey`s to act on -- several of them where the node is a Multi* or a
+ * GeometryCollection -- while `nodeKey` says which row asked, so the row can
+ * show itself as the active one without the map caring.
+ */
+export interface FeatureSelection {
+  nodeKey: string
+  keys: string[]
+}
+
+/**
  * State shared between the task's property list and the map layers that draw
  * its geometry: which of the task's features is highlighted, which one (if
  * any) is being shown on its own, and whether direction indicators are drawn.
@@ -15,15 +26,15 @@ import { useTaskContext } from './TaskContext'
  * features, so the panel needs to be able to point at one of them on the map.
  */
 export interface TaskFeatureContextType {
-  /** Feature shown on its own, hiding every other one. Null when all show. */
-  focusedFeatureKey: string | null
-  /** Feature drawn emphasized, e.g. while its properties are hovered. */
-  highlightedFeatureKey: string | null
+  /** Geometry shown on its own, hiding every other one. Null when all show. */
+  focusedFeature: FeatureSelection | null
+  /** Geometry drawn emphasized, e.g. while its properties are hovered. */
+  highlightedFeature: FeatureSelection | null
   showDirectionIndicators: boolean
   setShowDirectionIndicators: (show: boolean) => void
-  focusFeature: (featureKey: string) => void
+  focusFeature: (selection: FeatureSelection) => void
   clearFocusedFeature: () => void
-  setHighlightedFeatureKey: (featureKey: string | null) => void
+  setHighlightedFeature: (selection: FeatureSelection | null) => void
   /** Fit the map to one feature's own extent. */
   zoomToFeature: (feature: Feature) => void
 }
@@ -36,23 +47,23 @@ const MAX_FEATURE_ZOOM = 19
 export const TaskFeatureProvider = ({ children }: { children: ReactNode }) => {
   const { map: mapRef } = useTaskMapContext()
   const { task } = useTaskContext()
-  const [focusedFeatureKey, setFocusedFeatureKey] = useState<string | null>(null)
-  const [highlightedFeatureKey, setHighlightedFeatureKey] = useState<string | null>(null)
+  const [focusedFeature, setFocusedFeature] = useState<FeatureSelection | null>(null)
+  const [highlightedFeature, setHighlightedFeature] = useState<FeatureSelection | null>(null)
   const [showDirectionIndicators, setShowDirectionIndicators] = useState(true)
 
   // Feature keys are scoped to a task, so both selections are meaningless once
   // the mapper moves on to the next one.
   useEffect(() => {
-    setFocusedFeatureKey(null)
-    setHighlightedFeatureKey(null)
+    setFocusedFeature(null)
+    setHighlightedFeature(null)
   }, [task.id])
 
   // Reason: stable references returned from context — consumers use these as event handler dependencies
-  const focusFeature = useCallback((featureKey: string) => {
-    setFocusedFeatureKey((current) => (current === featureKey ? null : featureKey))
+  const focusFeature = useCallback((selection: FeatureSelection) => {
+    setFocusedFeature((current) => (current?.nodeKey === selection.nodeKey ? null : selection))
   }, [])
 
-  const clearFocusedFeature = useCallback(() => setFocusedFeatureKey(null), [])
+  const clearFocusedFeature = useCallback(() => setFocusedFeature(null), [])
 
   const zoomToFeature = useCallback(
     (feature: Feature) => {
@@ -70,18 +81,18 @@ export const TaskFeatureProvider = ({ children }: { children: ReactNode }) => {
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: TaskFeatureContextType = useMemo(
     () => ({
-      focusedFeatureKey,
-      highlightedFeatureKey,
+      focusedFeature,
+      highlightedFeature,
       showDirectionIndicators,
       setShowDirectionIndicators,
       focusFeature,
       clearFocusedFeature,
-      setHighlightedFeatureKey,
+      setHighlightedFeature,
       zoomToFeature,
     }),
     [
-      focusedFeatureKey,
-      highlightedFeatureKey,
+      focusedFeature,
+      highlightedFeature,
       showDirectionIndicators,
       focusFeature,
       clearFocusedFeature,
