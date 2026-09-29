@@ -34,7 +34,7 @@ const inferOsmTypeFromGeometry = (
  * Try to extract an OSM feature (type + id) from a GeoJSON feature's properties.
  * Handles multiple property naming conventions used by different challenge creators.
  */
-const parseOsmFeatureFromProperties = (
+export const parseOsmFeatureFromProperties = (
   properties: Record<string, unknown>,
   geomType?: string
 ): OsmFeature | null => {
@@ -48,10 +48,11 @@ const parseOsmFeatureFromProperties = (
   }
 
   // 2. Look for a numeric ID (osmid, osm_id, @osmId) with an optional explicit type
-  const numericId = properties.osmid || properties.osm_id || properties['@osmId']
+  const numericId =
+    properties.osmid || properties.osm_id || properties['@osmId'] || properties.osmIdentifier
   if (numericId != null) {
     const numId = Number(numericId)
-    if (Number.isFinite(numId) && numId > 0) {
+    if (Number.isSafeInteger(numId) && numId > 0) {
       // Use explicit type if available, otherwise infer from geometry
       const osmType = properties['@type'] || properties.osm_type
       if (osmType) {
@@ -109,3 +110,5 @@ export const formatOsmEntities = (
   }
   return parts.join(',')
 }
+
+export const osmElementRef = (feature: OsmFeature): string => `${feature.type}/${feature.id}`
