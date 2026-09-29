@@ -1,8 +1,11 @@
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, Crosshair, Eye, EyeOff } from 'lucide-react'
-import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
+import { type ReactNode, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { api } from '@/api'
 import { useOptionalTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { useIntl } from '@/i18n'
+import { tagsFromOsmElement } from '@/lib/tagDiff'
 import { resolveFeatureStyle } from '@/lib/taskFeatureStyle'
 import { cn } from '@/lib/utils'
 import type { TaskFeatureGroup } from './taskUtils/geometryUtils'
@@ -114,6 +117,14 @@ interface FeaturePropertiesProps {
   containerWidth: number | null
 }
 
+const describeChildren = (group: TaskFeatureGroup) => {
+  const types = new Set(group.children.map((child) => child.geometryType))
+  if (types.size !== 1) return null
+  const type = [...types][0]?.toLowerCase()
+  if (!type) return null
+  return group.children.length === 1 ? type : `${type}s`
+}
+
 /**
  * The color the map draws this feature in, where its data asked for one, so a
  * row in the list can be matched to a line on the map at a glance.
@@ -147,15 +158,40 @@ export const FeatureProperties = ({
   const { t } = useIntl()
   const featureContext = useOptionalTaskFeatureContext()
   const [open, setOpen] = useState(false)
-  const isFocused = featureContext?.focusedFeatureKey === group.key
+  const osmRef = group.osmRef
+  const {
+    data: osmElement,
+    isLoading: osmLoading,
+    isError: osmFailed,
+  } = useQuery({ ...api.osm.elementOptions(osmRef), enabled: open && !!osmRef })
+  const osmTags = useMemo(() => (osmElement ? tagsFromOsmElement(osmElement) : {}), [osmElement])
+  const osmStatus = osmLoading
+    ? t('common.loading', undefined, 'Loading...')
+    : osmFailed
+      ? t(
+          'taskInfoPanel.properties.osmTagsFailed',
+          undefined,
+          'Could not load this element from OpenStreetMap.'
+        )
+      : Object.keys(osmTags).length === 0
+        ? t('taskInfoPanel.properties.osmTagsEmpty', undefined, 'No tags on this element.')
+        : null
+  const isFocused = featureContext?.focusedFeature?.nodeKey === group.nodeKey
   const propertyCount = Object.keys(group.properties).length
+  const childCount = group.children.length
+  const childType = describeChildren(group)
+  const canFocus = showFocusToggle && group.keys.length > 0
 
-  const label =
+  const namedLabel =
     group.name ??
-    t('taskInfoPanel.properties.featureLabel', { number: group.index + 1 }, 'Feature {number}')
+    (propertyCount > 0
+      ? t('taskInfoPanel.properties.featureLabel', { number: group.index + 1 }, 'Feature {number}')
+      : null)
+  const label = namedLabel ?? group.geometryType ?? ''
 
-  const highlight = (featureKey: string | null) =>
-    featureContext?.setHighlightedFeatureKey(featureKey)
+  const selection = { nodeKey: group.nodeKey, keys: group.keys }
+  const highlight = (highlighted: boolean) =>
+    featureContext?.setHighlightedFeature(highlighted ? selection : null)
 
   const focusLabel = isFocused
     ? t(
@@ -175,31 +211,53 @@ export const FeatureProperties = ({
         isFocused && 'border-amber-500 dark:border-amber-500'
       )}
       aria-label={label}
-      onMouseEnter={() => highlight(group.key)}
-      onMouseLeave={() => highlight(null)}
+      onMouseEnter={() => highlight(true)}
+      onMouseLeave={() => highlight(false)}
       // Keyboard users tabbing into the feature's controls get the same
       // emphasis on the map that hovering gives.
-      onFocus={() => highlight(group.key)}
-      onBlur={() => highlight(null)}
+      onFocus={() => highlight(true)}
+      onBlur={() => highlight(false)}
     >
       <div className="flex items-center gap-2 px-2 py-1.5">
         <CollapsibleTrigger className="flex min-w-0 flex-1 items-center gap-2 text-left">
           <FeatureSwatch group={group} />
-          <span className="min-w-0 truncate font-medium text-xs text-zinc-900 dark:text-white">
+          <span
+            className={cn(
+              'min-w-0 truncate font-medium text-xs text-zinc-900 dark:text-white',
+              !namedLabel && 'text-zinc-500 uppercase dark:text-slate-400'
+            )}
+          >
             {label}
           </span>
-          {group.geometryType && (
+          {namedLabel && group.geometryType && (
             <span className="shrink-0 text-[10px] text-zinc-500 uppercase dark:text-slate-400">
               {group.geometryType}
             </span>
           )}
-          <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
-            {t(
-              'taskInfoPanel.properties.propertyCount',
-              { count: propertyCount },
-              '{count} properties'
-            )}
-          </span>
+          {childCount > 0 && (
+            <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
+              {childType
+                ? t(
+                    'taskInfoPanel.properties.childCountTyped',
+                    { count: childCount, type: childType },
+                    '{count} {type}'
+                  )
+                : t(
+                    'taskInfoPanel.properties.childCount',
+                    { count: childCount },
+                    '{count} geometries'
+                  )}
+            </span>
+          )}
+          {propertyCount > 0 && (
+            <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
+              {t(
+                'taskInfoPanel.properties.propertyCount',
+                { count: propertyCount },
+                '{count} properties'
+              )}
+            </span>
+          )}
           <ChevronDown
             className={cn(
               'h-3.5 w-3.5 shrink-0 text-zinc-400 transition-transform',
@@ -218,10 +276,10 @@ export const FeatureProperties = ({
             >
               <Crosshair className="h-3.5 w-3.5" />
             </button>
-            {showFocusToggle && (
+            {canFocus && (
               <button
                 type="button"
-                onClick={() => featureContext.focusFeature(group.key)}
+                onClick={() => featureContext.focusFeature(selection)}
                 title={focusLabel}
                 aria-label={focusLabel}
                 aria-pressed={isFocused}
@@ -240,8 +298,45 @@ export const FeatureProperties = ({
       </div>
 
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-        <div className="border-zinc-200 border-t px-2 py-2 dark:border-slate-700">
-          {propertyCount === 0 ? (
+        <div className="space-y-2 border-zinc-200 border-t px-2 py-2 dark:border-slate-700">
+          {childCount > 0 && (
+            <div className="space-y-2 border-zinc-200 border-l pl-2 dark:border-slate-700">
+              {group.children.map((child) => (
+                <FeatureProperties
+                  key={child.nodeKey}
+                  group={child}
+                  showFocusToggle={showFocusToggle}
+                  containerWidth={containerWidth}
+                />
+              ))}
+            </div>
+          )}
+          {propertyCount > 0 && (
+            <PropertyRows properties={group.properties} containerWidth={containerWidth} />
+          )}
+          {osmRef && (
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5">
+                <span className="font-medium text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+                  {t('taskInfoPanel.properties.osmTags', undefined, 'Current OSM tags')}
+                </span>
+                <a
+                  href={`${api.osm.getOSMServerUrl()}/${osmRef}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[10px] text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  {osmRef}
+                </a>
+              </div>
+              {osmStatus ? (
+                <p className="text-xs text-zinc-500 dark:text-slate-400">{osmStatus}</p>
+              ) : (
+                <PropertyRows properties={osmTags} containerWidth={containerWidth} />
+              )}
+            </div>
+          )}
+          {propertyCount === 0 && childCount === 0 && (
             <p className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
                 'taskInfoPanel.properties.featureEmpty',
@@ -249,8 +344,6 @@ export const FeatureProperties = ({
                 'No properties on this feature.'
               )}
             </p>
-          ) : (
-            <PropertyRows properties={group.properties} containerWidth={containerWidth} />
           )}
         </div>
       </CollapsibleContent>
