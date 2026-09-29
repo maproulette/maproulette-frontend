@@ -29,7 +29,7 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
   const hasContributions = totalTasks > 0
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Activity className="h-4 w-4 text-indigo-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">

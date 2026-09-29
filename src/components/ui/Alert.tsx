@@ -10,9 +10,12 @@ const alertVariants = cva(
       variant: {
         default: 'bg-white text-zinc-950 dark:bg-slate-950 dark:text-zinc-50',
         destructive:
-          'text-red-500 bg-white [&>svg]:text-current *:data-[slot=alert-description]:text-red-500/90 dark:text-red-900 dark:bg-slate-950 dark:*:data-[slot=alert-description]:text-red-900/90',
+          // red-500 fails WCAG AA contrast on white (~3.8:1); red-600 clears it. dark:text-red-900
+          // was near-invisible dark-red-on-near-black — red-400 is the correct light-on-dark pairing.
+          'text-red-600 bg-white [&>svg]:text-current *:data-[slot=alert-description]:text-red-600 dark:text-red-400 dark:bg-slate-950 dark:*:data-[slot=alert-description]:text-red-400/90',
         warning:
-          'text-yellow-600 bg-white [&>svg]:text-current *:data-[slot=alert-description]:text-yellow-600/90 dark:text-yellow-500 dark:bg-slate-950 dark:*:data-[slot=alert-description]:text-yellow-500/90',
+          // yellow-600 fails WCAG AA contrast on white (~2.9:1); yellow-700 clears it (~4.9:1).
+          'text-yellow-700 bg-white [&>svg]:text-current *:data-[slot=alert-description]:text-yellow-700 dark:text-yellow-500 dark:bg-slate-950 dark:*:data-[slot=alert-description]:text-yellow-500/90',
       },
     },
     defaultVariants: {

@@ -1,0 +1,16 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "$value": "#2281c2",
+        "$type": "color",
+        "$description": "Primary interactive color (links, primary actions). From the v3 frontend's $blue (cornflower-blue)."
+      },
+      "secondary": {
+        "$value": "#00a592",
+        "$type": "color",
+        "$description": "Brand mark color (logo, navbar). From the v3 frontend's $green (persian green)."
+      }
+    }
+  }
+}

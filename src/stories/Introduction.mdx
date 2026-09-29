@@ -1,0 +1,62 @@
+import { ColorItem, ColorPalette, Meta } from '@storybook/addon-docs/blocks'
+
+import { ColorBrandPrimary, ColorBrandSecondary } from '../styles/tokens.gen'
+
+<Meta title="Introduction" />
+
+# MapRoulette Design System
+
+This Storybook documents the reusable UI primitives behind MapRoulette's v4 frontend — the
+React 19 + Vite + Tailwind rewrite. Use it to browse components in isolation, check their
+variants, and keep the app visually consistent as it grows.
+
+## Tech stack
+
+- **React 19** with **TypeScript**
+- **Tailwind CSS v4** — CSS-first config (no `tailwind.config.js`), theming via `@theme` in `src/main.css`
+- **Radix UI** primitives + **class-variance-authority** for variant styling
+- **TanStack Router** / **TanStack Query** for routing and data
+- **Biome** for linting and formatting
+
+## How this is organized
+
+Every component under `src/components/ui/` has a colocated `Component.stories.tsx` file. Stories
+are grounded in how each component is actually used elsewhere in the app rather than invented
+examples — check a story's `render` function to see a realistic composition.
+
+This currently covers the `ui/` primitive layer only. Extending stories to the larger
+feature-level components in `Pages/` and `shared/`, and a broader pass to DRY out duplicated
+markup across the app, are tracked as follow-up work.
+
+## Design tokens
+
+Brand colors live as a single source of truth in `design-tokens/color.tokens.json`, using the
+[W3C DTCG token format](https://tr.designtokens.org/format/) (`$value` / `$type`). Running
+`npm run tokens:build` compiles that file with [Style Dictionary](https://styledictionary.com/)
+into two generated outputs — `src/styles/tokens.gen.css` (CSS custom properties, wired into
+Tailwind's `@theme inline` as `bg-primary` / `text-primary` / `border-primary` utilities) and
+`src/styles/tokens.gen.ts` (the same values as TS constants, used for this Storybook's own
+branding in `.storybook/manager.ts`). One source, no repeated hex values.
+
+<ColorPalette>
+  <ColorItem
+    title="Primary"
+    subtitle="--color-primary · bg-primary / text-primary / border-primary"
+    colors={{ primary: ColorBrandPrimary }}
+  />
+  <ColorItem
+    title="Secondary"
+    subtitle="--color-secondary · bg-secondary / text-secondary / border-secondary"
+    colors={{ secondary: ColorBrandSecondary }}
+  />
+</ColorPalette>
+
+Semantic status colors (`success` / `warning` / `caution` / `info` / `destructive`) aren't
+tokenized yet — today each of `Button`, `Badge`, `Alert`, and `StatCard` defines its own shade
+for these, which is a known inconsistency queued for a later cleanup pass.
+
+## Dark mode
+
+Toggle the moon icon in the toolbar above to preview components in dark mode. It flips the same
+`.dark` class on `<html>` that the real app's theme switcher uses, so what you see here matches
+production.

@@ -52,7 +52,9 @@ export const SidePanel = ({
         onClick={onClose}
         aria-hidden="true"
       />
-      <aside
+      {/* A plain div, not <aside> — <aside>'s implicit "complementary" role
+          doesn't permit overriding to "dialog" (axe: aria-allowed-role). */}
+      <div
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel}
@@ -64,7 +66,7 @@ export const SidePanel = ({
         )}
       >
         {children}
-      </aside>
+      </div>
     </>
   )
 }

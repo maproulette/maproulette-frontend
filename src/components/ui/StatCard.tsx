@@ -44,7 +44,8 @@ export const StatCard = ({
 }: StatCardProps) => (
   <div className={cn(statCardVariants({ tone, size }), className)} {...props}>
     <div className="flex items-start justify-between gap-2">
-      <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+      {/* zinc-500 fails WCAG AA contrast on the tinted (blue-50/red-50/etc.) tone backgrounds (~4.4:1); zinc-600 clears it. */}
+      <span className="font-medium text-xs text-zinc-600 uppercase tracking-wide dark:text-zinc-400">
         {label}
       </span>
       {icon && <span className="text-zinc-400 dark:text-zinc-500">{icon}</span>}
@@ -52,7 +53,7 @@ export const StatCard = ({
     <span className="font-semibold text-2xl text-zinc-900 leading-none tracking-tight dark:text-zinc-50">
       {value}
     </span>
-    {description && <span className="text-xs text-zinc-500 dark:text-zinc-400">{description}</span>}
+    {description && <span className="text-xs text-zinc-600 dark:text-zinc-400">{description}</span>}
   </div>
 )
 

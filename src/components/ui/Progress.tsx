@@ -6,10 +6,14 @@ import { cn } from '@/lib/utils'
 export const Progress = ({
   className,
   value,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
   ...props
 }: React.ComponentProps<typeof ProgressPrimitive.Root>) => (
   <ProgressPrimitive.Root
     data-slot="progress"
+    aria-label={ariaLabel ?? (ariaLabelledby ? undefined : `${value ?? 0}% complete`)}
+    aria-labelledby={ariaLabelledby}
     className={cn(
       'relative h-2 w-full overflow-hidden rounded-full bg-zinc-900/20 dark:bg-slate-50/20',
       className

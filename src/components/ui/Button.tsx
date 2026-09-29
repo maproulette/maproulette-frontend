@@ -12,7 +12,8 @@ export const buttonVariants = cva(
         default:
           'bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 dark:bg-slate-50 dark:text-zinc-900 dark:hover:bg-slate-50/90',
         destructive:
-          'bg-red-500 text-white hover:bg-red-500/90 focus-visible:ring-red-500/20 dark:focus-visible:ring-red-500/40 dark:bg-red-500/60 dark:bg-red-900 dark:hover:bg-red-900/90 dark:focus-visible:ring-red-900/20 dark:dark:focus-visible:ring-red-900/40 dark:dark:bg-red-900/60',
+          // red-500 fails WCAG AA contrast with white text (~3.8:1); red-600 clears it.
+          'bg-red-600 text-white hover:bg-red-600/90 focus-visible:ring-red-600/20 dark:focus-visible:ring-red-600/40 dark:bg-red-900 dark:hover:bg-red-900/90 dark:focus-visible:ring-red-900/20',
         outline:
           'border border-zinc-300 bg-white shadow-xs dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700',
         secondary:
@@ -21,12 +22,15 @@ export const buttonVariants = cva(
           'hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-slate-100/50 dark:hover:bg-slate-800 dark:hover:text-zinc-50 dark:dark:hover:bg-slate-800/50',
         link: 'link',
         success:
-          'bg-green-600 text-white shadow-xs hover:bg-green-700 focus-visible:ring-green-600/20 dark:bg-green-600 dark:hover:bg-green-500 dark:focus-visible:ring-green-500/40',
+          // green-600 fails WCAG AA contrast with white text (~3.2:1); green-700 clears it.
+          'bg-green-700 text-white shadow-xs hover:bg-green-800 focus-visible:ring-green-700/20 dark:bg-green-700 dark:hover:bg-green-600 dark:focus-visible:ring-green-600/40',
         info: 'bg-blue-600 text-white shadow-xs hover:bg-blue-700 focus-visible:ring-blue-600/20 dark:bg-blue-600 dark:hover:bg-blue-500 dark:focus-visible:ring-blue-500/40',
         warning:
-          'bg-yellow-600 text-white shadow-xs hover:bg-yellow-700 focus-visible:ring-yellow-600/20 dark:bg-yellow-600 dark:hover:bg-yellow-500 dark:focus-visible:ring-yellow-500/40',
+          // yellow-600 fails WCAG AA contrast with white text (~2.9:1); yellow-800 clears it.
+          'bg-yellow-800 text-white shadow-xs hover:bg-yellow-900 focus-visible:ring-yellow-800/20 dark:bg-yellow-800 dark:hover:bg-yellow-700 dark:focus-visible:ring-yellow-700/40',
         caution:
-          'bg-orange-600 text-white shadow-xs hover:bg-orange-700 focus-visible:ring-orange-600/20 dark:bg-orange-600 dark:hover:bg-orange-500 dark:focus-visible:ring-orange-500/40',
+          // orange-600 fails WCAG AA contrast with white text (~3.6:1); orange-700 clears it.
+          'bg-orange-700 text-white shadow-xs hover:bg-orange-800 focus-visible:ring-orange-700/20 dark:bg-orange-700 dark:hover:bg-orange-600 dark:focus-visible:ring-orange-600/40',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

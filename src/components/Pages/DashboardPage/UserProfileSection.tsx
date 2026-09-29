@@ -38,7 +38,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
 
   return (
     <>
-      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
+      <div className="flex h-full flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900">
         {/* Profile Header */}
         <div className="flex flex-col items-center gap-3 border-zinc-200 border-b p-6 dark:border-slate-700/50">
           <div className="relative">

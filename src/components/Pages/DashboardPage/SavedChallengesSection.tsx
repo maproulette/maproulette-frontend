@@ -14,7 +14,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
   const { data: challenges, isLoading, error } = api.user.savedChallenges(userId, 10)
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-800">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900">
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Bookmark className="h-4 w-4 text-blue-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
@@ -26,7 +26,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
           </span>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto px-1 pb-4">
+      <div className="flex-1 overflow-y-auto p-3">
         {isLoading && (
           <div className="flex justify-center py-4">
             <Loader />
@@ -58,7 +58,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
         )}
 
         {!isLoading && !error && challenges && challenges.length > 0 && (
-          <div className="space-y-3 rounded-xl bg-zinc-100 p-3 dark:bg-slate-950">
+          <div className="space-y-3">
             {challenges.map((challenge) => (
               <ChallengeCard
                 key={challenge.id}

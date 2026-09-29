@@ -61,7 +61,8 @@ export const EmptyDescription = ({ className, ...props }: React.ComponentProps<'
   <div
     data-slot="empty-description"
     className={cn(
-      'text-sm/relaxed text-zinc-500 dark:text-zinc-400 [&>a:hover]:text-zinc-900 dark:[&>a:hover]:text-zinc-50 [&>a]:underline [&>a]:underline-offset-4',
+      // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
+      'text-sm/relaxed text-zinc-600 dark:text-zinc-400 [&>a:hover]:text-zinc-900 dark:[&>a:hover]:text-zinc-50 [&>a]:underline [&>a]:underline-offset-4',
       className
     )}
     {...props}

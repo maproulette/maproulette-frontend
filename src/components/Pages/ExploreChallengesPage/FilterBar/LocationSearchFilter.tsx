@@ -496,6 +496,11 @@ export const LocationSearchFilter = () => {
 
       <PopoverContent
         align="start"
+        aria-label={t(
+          'exploreChallenges.filterBar.location.suggestionsAriaLabel',
+          undefined,
+          'Location suggestions'
+        )}
         className="w-[var(--radix-popover-trigger-width)] p-0"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >

@@ -61,7 +61,15 @@ export const PropertyFilterButton = () => {
           <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-[32rem] max-w-[90vw] space-y-3">
+      <PopoverContent
+        align="start"
+        className="w-[32rem] max-w-[90vw] space-y-3"
+        aria-label={t(
+          'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
+          undefined,
+          'Filter by property'
+        )}
+      >
         <div>
           <p className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
             {t(
