@@ -8,7 +8,7 @@ import { DIRECTION_ICONS } from './directionIndicators'
  */
 
 const ARROW_SIZE = { width: 16, height: 16 }
-const ENDPOINT_SIZE = { width: 18, height: 18 }
+const ENDPOINT_SIZE = { width: 11, height: 11 }
 
 // Points east: with `symbol-placement: 'line'` MapLibre rotates the image to
 // the bearing of the line segment it lands on, so an east-facing arrow ends up
