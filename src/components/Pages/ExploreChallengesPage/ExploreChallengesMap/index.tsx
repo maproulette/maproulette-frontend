@@ -66,6 +66,8 @@ export const ExploreChallengesMap = () => {
             latitude: 0,
             zoom: 2,
           }}
+          refreshExpiredTiles={false}
+          maxTileCacheZoomLevels={10}
           mapStyle={getCurrentMapStyle()}
           onLoad={() => setMapLoaded(true)}
           onMove={handleMapMove}

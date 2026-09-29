@@ -88,7 +88,7 @@ export const TaskMap = () => {
     selectedTaskIds,
     hoveredBundleTaskId,
   } = useTaskMapContext()
-  const { focusedFeatureKey, clearFocusedFeature } = useTaskFeatureContext()
+  const { focusedFeature, clearFocusedFeature } = useTaskFeatureContext()
 
   const {
     mapRef,
@@ -160,6 +160,8 @@ export const TaskMap = () => {
           ref={mapRef}
           hash
           initialViewState={initialViewState}
+          refreshExpiredTiles={false}
+          maxTileCacheZoomLevels={10}
           mapStyle={mapStyle}
           onLoad={() => setMapLoaded(true)}
           onClick={onMapClick}
@@ -182,7 +184,7 @@ export const TaskMap = () => {
               id={exploreSourceId}
               type="vector"
               tiles={[exploreTileUrl]}
-              maxzoom={18}
+              maxzoom={12}
             >
               <Layer
                 id={exploreCirclesLayerId}
@@ -268,7 +270,7 @@ export const TaskMap = () => {
             )}
           </div>
         )}
-        {focusedFeatureKey && (
+        {focusedFeature && (
           <div className="flex items-center gap-2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
             {t(
               'taskEditPage.taskMap.focusedFeatureHint',

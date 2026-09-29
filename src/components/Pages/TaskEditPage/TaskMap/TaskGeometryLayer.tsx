@@ -39,8 +39,7 @@ export const TaskGeometryLayer = () => {
   const { activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const { challenge } = useChallengeContext()
-  const { focusedFeatureKey, highlightedFeatureKey, showDirectionIndicators } =
-    useTaskFeatureContext()
+  const { focusedFeature, highlightedFeature, showDirectionIndicators } = useTaskFeatureContext()
   const primaryTaskId = task.id
 
   const sourceId = useId()
@@ -109,8 +108,9 @@ export const TaskGeometryLayer = () => {
 
     // Focusing one feature hides the rest of the task's geometry, so a single
     // feature of a crowded FeatureCollection can be looked at on its own.
-    const features = focusedFeatureKey
-      ? allFeatures.filter((f) => f.properties?.featureKey === focusedFeatureKey)
+    const focusedKeys = focusedFeature?.keys
+    const features = focusedKeys
+      ? allFeatures.filter((f) => focusedKeys.includes(f.properties?.partKey))
       : allFeatures
 
     if (features.length === 0) return null
@@ -122,7 +122,7 @@ export const TaskGeometryLayer = () => {
     selectedTask,
     bundledTasks,
     activeBundle,
-    focusedFeatureKey,
+    focusedFeature,
     styleRules,
   ])
 
@@ -154,8 +154,8 @@ export const TaskGeometryLayer = () => {
   // the task's own default.
   const byEmphasis = (highlighted: unknown, selected: unknown, base: unknown) => {
     const cases: unknown[] = ['case']
-    if (highlightedFeatureKey) {
-      cases.push(['==', ['get', 'featureKey'], highlightedFeatureKey], highlighted)
+    if (highlightedFeature) {
+      cases.push(['in', ['get', 'partKey'], ['literal', highlightedFeature.keys]], highlighted)
     }
     if (selectedTaskId) {
       cases.push(['==', ['get', 'taskId'], selectedTaskId], selected)
@@ -184,7 +184,7 @@ export const TaskGeometryLayer = () => {
       SELECTED_COLOR,
       styled('mrMarkerColor', DEFAULT_COLOR)
     ),
-    'circle-radius': byEmphasis(9, 8, 6),
+    'circle-radius': byEmphasis(16.5, 14.5, 11),
     'circle-stroke-width': 4,
     'circle-stroke-color': '#ffffff',
   })
