@@ -32,12 +32,7 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
   // Current tags for the elements a tag fix names, so the suggestion can be
   // shown as a real before/after before the editor is even open.
   const elementQueries = useQueries({
-    queries: fixes.map((fix) => ({
-      queryKey: ['osm', 'element', fix.elementId],
-      queryFn: () => api.osm.fetchOSMElement(fix.elementId),
-      staleTime: 5 * 60 * 1000,
-      retry: false,
-    })),
+    queries: fixes.map((fix) => api.osm.elementOptions(fix.elementId)),
   })
 
   const pendingEdits = editor?.pendingEdits ?? []
