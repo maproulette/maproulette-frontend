@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { navigation } from '@/data/site.json'
+import { useIntl } from '@/i18n'
 import { docsUrl } from '@/lib/documentationLinks'
 import type { PluginNavigationItem } from '@/types/Plugin'
 
@@ -64,6 +65,24 @@ export const ChromeProvider = ({ children }: { children: ReactNode }) => {
 
   const { main: mainNavigation } = navigation
   const { navigationItems: pluginNavigationItems } = usePluginContext()
+  const { t } = useIntl()
+
+  // site.json carries the catalog id rather than the copy, so the nav is
+  // translated like the rest of the UI. The t() calls are spelled out here
+  // because scripts/extractMessages.mjs only sees literal ids.
+  const navigationLabels: Record<string, string> = useMemo(
+    () => ({
+      'appLayout.header.nav.dashboard': t('appLayout.header.nav.dashboard', undefined, 'Dashboard'),
+      'appLayout.header.nav.exploreChallenges': t(
+        'appLayout.header.nav.exploreChallenges',
+        undefined,
+        'Explore Challenges'
+      ),
+      'appLayout.header.nav.learn': t('appLayout.header.nav.learn', undefined, 'Learn'),
+      'appLayout.header.nav.donate': t('appLayout.header.nav.donate', undefined, 'Donate'),
+    }),
+    [t]
+  )
 
   const state = useMemo(() => ({ title, breadcrumbs, actions }), [title, breadcrumbs, actions])
 
@@ -79,11 +98,12 @@ export const ChromeProvider = ({ children }: { children: ReactNode }) => {
         // its entry with a placeholder that's resolved here (see lib/documentationLinks.ts).
         to: item.to === DOCS_NAV_PLACEHOLDER ? docsUrl() : item.to,
         id: item.to,
+        label: navigationLabels[item.labelId] ?? item.labelId,
         icon: undefined,
       })),
       ...pluginNavigationItems,
     ],
-    [mainNavigation, pluginNavigationItems]
+    [mainNavigation, navigationLabels, pluginNavigationItems]
   )
 
   const navigationValue = useMemo(() => ({ navigationItems }), [navigationItems])

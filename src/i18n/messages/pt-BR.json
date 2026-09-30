@@ -1,6 +1,9 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "Explore desafios",
+  "appLayout.header.nav.dashboard": "Painel",
+  "appLayout.header.nav.donate": "Doar",
+  "appLayout.header.nav.learn": "Aprender",
   "appLayout.header.userMenu.signOut": "Sair",
   "browsedChallengePage.actionButtons.manageChallenge": "Gerenciar desafio",
   "browsedChallengePage.challengeModals.actions.completed": "Concluído",

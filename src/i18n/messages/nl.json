@@ -51,6 +51,8 @@
   "appLayout.header.globalSearch.types.taskComment.label": "Opmerkingen taken zoeken",
   "appLayout.header.globalSearch.unifiedList.goToChallenge": "Ga naar uitdaging",
   "appLayout.header.globalSearch.unifiedList.goToProject": "Ga naar project",
+  "appLayout.header.nav.donate": "Doneren",
+  "appLayout.header.nav.learn": "Leren",
   "appLayout.header.nav.mobile": "Mobiele navigatie",
   "appLayout.header.nav.openInNewTab": "Open {label} in een nieuwe tab",
   "appLayout.header.notifications.triggerLabel": "Notificaties voor {name}",

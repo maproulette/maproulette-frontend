@@ -1,6 +1,9 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "도전 탐색",
+  "appLayout.header.nav.dashboard": "대시보드",
+  "appLayout.header.nav.donate": "후원",
+  "appLayout.header.nav.learn": "배우기",
   "appLayout.header.userMenu.signOut": "로그아웃",
   "browsedChallengePage.actionButtons.manageChallenge": "도전 관리하기",
   "browsedChallengePage.challengeModals.actions.completed": "Completed",

@@ -1,6 +1,8 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "Explore Challenges",
+  "appLayout.header.nav.dashboard": "Личный кабинет",
+  "appLayout.header.nav.learn": "Изучить",
   "appLayout.header.userMenu.signOut": "Выход",
   "browsedChallengePage.actionButtons.manageChallenge": "Управлять вызовом",
   "browsedChallengePage.challengeModals.comments.owner": "Владелец",

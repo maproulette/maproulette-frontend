@@ -20,7 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
-import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.json'
+import { baseMapOptions, editorOptions } from '@/data/account.json'
+import { localeOptions } from '@/i18n'
 import { FieldSubmit } from './FieldSubmit'
 import type { formSchema } from './formSchema'
 

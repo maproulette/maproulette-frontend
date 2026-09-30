@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { Field } from '@/components/ui/Field'
 import { formSubmitDisabled } from '@/components/ui/Form'
 import { Spinner } from '@/components/ui/Spinner'
@@ -14,16 +15,18 @@ export const FieldSubmit = ({
 }) => {
   return (
     <Field className={className} orientation="horizontal" {...props}>
-      <Button disabled={formSubmitDisabled({ isSubmitting, isDirty })} type="submit" size="lg">
-        {isSubmitting ? (
-          <>
-            <Spinner />
-            Submitting...
-          </>
-        ) : (
-          'Submit'
-        )}
-      </Button>
+      <DisabledTooltip show={!isDirty && !isSubmitting} message="No changes to save">
+        <Button disabled={formSubmitDisabled({ isSubmitting, isDirty })} type="submit" size="lg">
+          {isSubmitting ? (
+            <>
+              <Spinner />
+              Saving...
+            </>
+          ) : (
+            'Save Changes'
+          )}
+        </Button>
+      </DisabledTooltip>
     </Field>
   )
 }

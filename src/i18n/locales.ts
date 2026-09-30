@@ -1,24 +1,25 @@
-export const supportedLocales = [
-  'en-US',
-  'de',
-  'es',
-  'fr',
-  'it',
-  'ja',
-  'ko',
-  'nl',
-  'pl',
-  'pt-BR',
-  'pt-PT',
-  'ru-RU',
-  'sv',
-  'tr',
-  'uk',
-  'vi',
-  'zh-TW',
+export const localeOptions = [
+  { value: 'en-US', label: 'English (U.S.)' },
+  { value: 'de', label: 'Deutsch' },
+  { value: 'es', label: 'Español' },
+  { value: 'fr', label: 'Français' },
+  { value: 'it', label: 'Italiano' },
+  { value: 'ja', label: '日本語' },
+  { value: 'ko', label: '한국어' },
+  { value: 'nl', label: 'Nederlands' },
+  { value: 'pl', label: 'Polski' },
+  { value: 'pt-BR', label: 'Português Brasileiro' },
+  { value: 'pt-PT', label: 'Português Portugal' },
+  { value: 'ru-RU', label: 'Русский' },
+  { value: 'tr', label: 'Türkçe' },
+  { value: 'uk', label: 'Українська' },
+  { value: 'vi', label: 'tiếng Việt' },
+  { value: 'zh-TW', label: '國語' },
 ] as const
 
-export type Locale = (typeof supportedLocales)[number]
+export type Locale = (typeof localeOptions)[number]['value']
+
+export const supportedLocales: readonly Locale[] = localeOptions.map((option) => option.value)
 
 export const defaultLocale: Locale = 'en-US'
 

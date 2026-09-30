@@ -65,6 +65,7 @@ const TESTED_TSX_FILES = [
   'components/Pages/ManagementPages/ManageChallengeDetail/ChallengeRecentActivity.tsx',
   'components/Pages/ManagementPages/ManageChallengeDetail/ChallengeTasksExplorer/ChallengeTasksExplorerContext.tsx',
   'components/Pages/SettingsPage/UserSettingsForm/FieldApiKey.tsx',
+  'components/AppLayout/UserLocaleSync.tsx',
 ]
 
 // Emits the VITE_* settings to env.json so they can be loaded into window.env at

@@ -1,6 +1,9 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "Explore Challenges",
+  "appLayout.header.nav.dashboard": "Gösterge Paneli",
+  "appLayout.header.nav.donate": "Bağış Yap",
+  "appLayout.header.nav.learn": "Öğren",
   "appLayout.header.userMenu.signOut": "Çıkış yap",
   "browsedChallengePage.actionButtons.manageChallenge": "Görevi Yönet",
   "browsedChallengePage.challengeModals.actions.completed": "Tamamlandı",

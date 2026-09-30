@@ -3,6 +3,7 @@ import { Toaster } from 'sonner'
 import { BetaBanner } from '@/components/AppLayout/BetaBanner'
 import { Header } from '@/components/AppLayout/Header'
 import { SystemNotices } from '@/components/AppLayout/SystemNotices'
+import { UserLocaleSync } from '@/components/AppLayout/UserLocaleSync'
 import { WebSocketEventsListener } from '@/components/AppLayout/WebSocketEventsListener'
 import { CongratulateModal } from '@/components/shared/CongratulateModal'
 import { KeyboardShortcutsModal } from '@/components/shared/KeyboardShortcutsModal'
@@ -23,6 +24,7 @@ export const AppLayout = () => {
 
   return (
     <AuthProvider>
+      <UserLocaleSync />
       <AvatarProvider>
         <PluginProvider>
           <WebSocketProvider>

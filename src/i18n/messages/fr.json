@@ -1,6 +1,9 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "Découvrir des défis",
+  "appLayout.header.nav.dashboard": "Tableau de bord",
+  "appLayout.header.nav.donate": "Faire un don",
+  "appLayout.header.nav.learn": "Documentation (en)",
   "appLayout.header.userMenu.documentation": "Documentation",
   "appLayout.header.userMenu.signOut": "Déconnexion",
   "browsedChallengePage.actionButtons.manageChallenge": "Gérer le défi",

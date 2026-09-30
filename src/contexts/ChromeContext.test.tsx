@@ -11,6 +11,9 @@ const pluginNavigationItems = vi.hoisted(() => ({ current: [] as { id: string; t
 vi.mock('@/contexts/PluginContext', () => ({
   usePluginContext: () => ({ navigationItems: pluginNavigationItems.current }),
 }))
+// Stable t and context value, as the real IntlContext provides (t is a useCallback).
+const intl = { t: (_id: string, _values: unknown, defaultMessage: string) => defaultMessage }
+vi.mock('@/i18n', () => ({ useIntl: () => intl }))
 
 const {
   ChromeProvider,

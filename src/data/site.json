@@ -1,13 +1,13 @@
 {
   "navigation": {
     "main": [
-      { "to": "/dashboard", "label": "Dashboard" },
-      { "to": "/", "label": "Explore Challenges" },
-      { "to": "docs:", "openInNewTab": true, "label": "Learn" },
+      { "to": "/dashboard", "labelId": "appLayout.header.nav.dashboard" },
+      { "to": "/", "labelId": "appLayout.header.nav.exploreChallenges" },
+      { "to": "docs:", "openInNewTab": true, "labelId": "appLayout.header.nav.learn" },
       {
         "to": "https://openstreetmap.app.neoncrm.com/forms/maproulette",
         "openInNewTab": true,
-        "label": "Donate"
+        "labelId": "appLayout.header.nav.donate"
       }
     ]
   }

@@ -17,27 +17,5 @@
     { "value": "OpenAerialMapMosaic", "label": "OpenAerialMap Mosaic, by Kontur.io" },
     { "value": "MAPNIK", "label": "OpenStreetMap (Standard)" },
     { "value": "tf-cycle", "label": "Thunderforest OpenCycleMap" }
-  ],
-  "localeOptions": [
-    { "value": "en-US", "label": "English (U.S.)" },
-    { "value": "af", "label": "Afrikaans" },
-    { "value": "cs-CZ", "label": "Čeština" },
-    { "value": "de", "label": "Deutsch" },
-    { "value": "es", "label": "Español" },
-    { "value": "fa-IR", "label": "فارسی" },
-    { "value": "fr", "label": "Français" },
-    { "value": "it", "label": "Italiano" },
-    { "value": "ja", "label": "日本語" },
-    { "value": "ko", "label": "한국어" },
-    { "value": "nl", "label": "Nederlands" },
-    { "value": "pl", "label": "Polski" },
-    { "value": "pt-BR", "label": "Português Brasileiro" },
-    { "value": "pt-PT", "label": "Português Portugal" },
-    { "value": "ru-RU", "label": "Русский" },
-    { "value": "sr", "label": "Српски" },
-    { "value": "tr", "label": "Türkçe" },
-    { "value": "uk", "label": "Українська" },
-    { "value": "vi", "label": "tiếng Việt" },
-    { "value": "zh-TW", "label": "國語" }
   ]
 }

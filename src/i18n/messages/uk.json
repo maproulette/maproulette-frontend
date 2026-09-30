@@ -1,6 +1,9 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "Переглянути Виклики",
+  "appLayout.header.nav.dashboard": "Інформаційна панель",
+  "appLayout.header.nav.donate": "Пожертвувати",
+  "appLayout.header.nav.learn": "Дізнатись",
   "appLayout.header.userMenu.signOut": "Вийти",
   "browsedChallengePage.actionButtons.manageChallenge": "Керувати Викликом",
   "browsedChallengePage.challengeModals.actions.completed": "Завершено",

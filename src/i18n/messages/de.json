@@ -1,6 +1,9 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "Kampagnen entdecken",
+  "appLayout.header.nav.dashboard": "Übersicht",
+  "appLayout.header.nav.donate": "Spenden",
+  "appLayout.header.nav.learn": "Mehr erfahren",
   "appLayout.header.userMenu.documentation": "Dokumentation",
   "appLayout.header.userMenu.signOut": "Abmelden",
   "browsedChallengePage.actionButtons.manageChallenge": "Kampagne verwalten",

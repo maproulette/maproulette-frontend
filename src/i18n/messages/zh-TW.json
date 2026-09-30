@@ -1,6 +1,8 @@
 {
   "appLayout.header.appName": "MapRoulette",
   "appLayout.header.globalSearch.findFeatureByName.exploreChallenges": "探索挑戰",
+  "appLayout.header.nav.dashboard": "儀表板",
+  "appLayout.header.nav.learn": "學習",
   "appLayout.header.userMenu.documentation": "文件",
   "appLayout.header.userMenu.signOut": "登出",
   "browsedChallengePage.actionButtons.manageChallenge": "管理挑戰",

@@ -1,5 +1,6 @@
 import z from 'zod'
-import { baseMapOptions, editorOptions, localeOptions } from '@/data/account.json'
+import { baseMapOptions, editorOptions } from '@/data/account.json'
+import { localeOptions } from '@/i18n/locales'
 
 export const formSchema = z
   .object({
