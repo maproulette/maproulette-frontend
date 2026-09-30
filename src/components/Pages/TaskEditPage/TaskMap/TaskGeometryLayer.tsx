@@ -1,3 +1,4 @@
+import type * as maplibregl from 'maplibre-gl'
 import { useEffect, useId, useMemo, useState } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import { api } from '@/api'

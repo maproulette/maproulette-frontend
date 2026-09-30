@@ -1,4 +1,4 @@
-import { act, createElement, Fragment, type ReactNode } from 'react'
+import { act, createElement, Fragment, type FunctionComponent, type ReactNode } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 
 /**
@@ -13,7 +13,10 @@ export function renderHook<TProps, TResult>(
 ) {
   let currentProps = options?.initialProps as TProps
   let thrownError: unknown
-  const Wrapper = options?.wrapper ?? Fragment
+  const wrapper = options?.wrapper
+  const Wrapper: FunctionComponent<{ children?: ReactNode }> = wrapper
+    ? ({ children }) => wrapper({ children })
+    : Fragment
   // A stable ref object (not a getter) — `result` is destructured by callers,
   // so its `.current` must be mutated in place to stay live across renders.
   const result = { current: undefined as unknown as TResult }

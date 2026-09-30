@@ -1,3 +1,4 @@
+import type * as maplibregl from 'maplibre-gl'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'

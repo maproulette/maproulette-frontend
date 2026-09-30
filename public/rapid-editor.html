@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -32,14 +32,14 @@
     const RAPID_CDN_URL = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2.4.2/dist/'
 
 
-    let stylesheet = document.createElement('link')
+    const stylesheet = document.createElement('link')
     stylesheet.rel = 'stylesheet'
-    stylesheet.href = RAPID_CDN_URL + 'rapid.min.css'
+    stylesheet.href = `${RAPID_CDN_URL}rapid.min.css`
     document.head.append(stylesheet)
 
     async function setupRapid(container) {
 
-      await import(RAPID_CDN_URL + 'rapid.min.js')
+      await import(`${RAPID_CDN_URL}rapid.min.js`)
 
       if (typeof Rapid === 'undefined') {
         throw new Error(`The bundle loaded from ${RAPID_CDN_URL} did not set window.Rapid`)

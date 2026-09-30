@@ -15,9 +15,11 @@
     <script type="module">
         // Load runtime config, expose host React for plugins, then boot the app
         window.env = await fetch('/env.json').then((res) => res.json());
+
         import React from 'react';
-        import ReactDOM from 'react-dom';
         import * as jsxRuntime from 'react/jsx-runtime';
+        import ReactDOM from 'react-dom';
+
         window.React = React;
         window.ReactDOM = ReactDOM;
         window.jsxRuntime = jsxRuntime;

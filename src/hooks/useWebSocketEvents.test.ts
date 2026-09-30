@@ -443,9 +443,9 @@ describe('useWebSocketEvents', () => {
       const historyCall = invalidateSpy.mock.calls.find(
         ([arg]) => typeof (arg as { predicate?: unknown })?.predicate === 'function'
       )
-      expect(historyCall).toBeDefined()
+      if (!historyCall) throw new Error('No predicate-bearing invalidation was recorded')
       const predicate = (
-        historyCall?.[0] as unknown as { predicate: (q: { queryKey: unknown[] }) => boolean }
+        historyCall[0] as unknown as { predicate: (q: { queryKey: unknown[] }) => boolean }
       ).predicate
       expect(predicate({ queryKey: ['task', 'history', 1] })).toBe(true)
       expect(predicate({ queryKey: ['task', 'history', 2] })).toBe(true)

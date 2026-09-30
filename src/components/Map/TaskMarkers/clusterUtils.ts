@@ -1,4 +1,4 @@
-import type maplibregl from 'maplibre-gl'
+import type * as maplibregl from 'maplibre-gl'
 import { CLUSTER_CONFIG } from '@/components/Map/TaskMarkers/const'
 
 /** Minimal structural slice of `Supercluster` so callers don't have to plumb

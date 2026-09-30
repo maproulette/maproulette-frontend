@@ -2,7 +2,6 @@
 import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path, { join, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
@@ -12,11 +11,8 @@ import { loadEnv, type Plugin } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import { defineConfig } from 'vitest/config'
 
-const dirname =
-  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url))
-
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
-const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as {
+const pkg = JSON.parse(readFileSync(resolve(import.meta.dirname, 'package.json'), 'utf-8')) as {
   version: string
 }
 
@@ -194,7 +190,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': resolve(import.meta.dirname, './src'),
     },
   },
   preview: {
@@ -268,7 +264,7 @@ export default defineConfig({
           // The plugin will run tests for the stories defined in your Storybook config
           // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
           storybookTest({
-            configDir: path.join(dirname, '.storybook'),
+            configDir: path.join(import.meta.dirname, '.storybook'),
           }),
         ],
         test: {

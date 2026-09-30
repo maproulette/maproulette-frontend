@@ -28,7 +28,7 @@ interface WireGrant {
 }
 
 const grantsOf = (user: User | null | undefined): WireGrant[] =>
-  ((user?.grants ?? []) as unknown as WireGrant[]) ?? []
+  (user?.grants ?? []) as unknown as WireGrant[]
 
 export const isSuperUser = (user: User | null | undefined): boolean =>
   grantsOf(user).some((grant) => grant.role === ROLE_SUPER_USER)

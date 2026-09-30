@@ -93,5 +93,5 @@ const emptyLeaf = (): PropertyRuleLeaf => ({
   operator: 'equals',
 })
 
-export { emptyLeaf as createEmptyLeaf }
 export type { BinaryLeaf }
+export { emptyLeaf as createEmptyLeaf }

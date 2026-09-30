@@ -395,7 +395,7 @@ describe('project.useUpdateProject', () => {
       { ...projectA, enabled: false },
       projectB,
     ])
-    expect(result.current.isPending).toBe(true)
+    await waitFor(() => expect(result.current.isPending).toBe(true))
 
     releaseResponse()
     await waitFor(() => expect(result.current.isSuccess).toBe(true))

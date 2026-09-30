@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -33,7 +33,7 @@
   <script>
     var ID_CDN_URL = 'https://cdn.jsdelivr.net/npm/@openstreetmap/id@2.39.6/dist/';
 
-    window.setupiD = function () {
+    window.setupiD = () => {
       if (typeof iD === 'undefined') {
         throw new Error('iD editor failed to load from CDN');
       }
@@ -45,9 +45,9 @@
       var comment = params.get('comment') || '';
 
 
-      var zoom = 18, lat = 0, lng = 0;
+      var zoom = 18, lat = 0, lng = 0, parts;
       if (mapParam) {
-        var parts = mapParam.split('/');
+        parts = mapParam.split('/');
         if (parts.length === 3) {
           zoom = parseFloat(parts[0]);
           lat = parseFloat(parts[1]);

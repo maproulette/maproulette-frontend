@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { AlertCircle, ArrowLeft, Home, RefreshCw } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
 interface RouteErrorBoundaryProps {
-  error: Error
+  error: unknown
   reset?: () => void
 }
 
@@ -244,17 +244,22 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
  * - Generic errors
  */
 export const RouteErrorBoundary = ({ error, reset }: RouteErrorBoundaryProps) => {
+  const routeError = useMemo(
+    () => (error instanceof Error ? error : new Error(String(error))),
+    [error]
+  )
+
   // Log the error for debugging, once per occurrence rather than on every re-render
   useEffect(() => {
     logger.error('Route error caught', {
-      error: error.message,
-      stack: error.stack,
+      error: routeError.message,
+      stack: routeError.stack,
     })
-  }, [error])
+  }, [routeError])
 
   // Handle HTTP errors from API
-  if (error instanceof HTTPError) {
-    const status = error.response.status
+  if (routeError instanceof HTTPError) {
+    const status = routeError.response.status
 
     switch (status) {
       case 404:
@@ -266,12 +271,12 @@ export const RouteErrorBoundary = ({ error, reset }: RouteErrorBoundaryProps) =>
       case 500:
       case 502:
       case 503:
-        return <ServerError error={error} reset={reset} />
+        return <ServerError error={routeError} reset={reset} />
       default:
-        return <GenericHttpError error={error} reset={reset} />
+        return <GenericHttpError error={routeError} reset={reset} />
     }
   }
 
   // Handle generic errors
-  return <GenericError error={error} reset={reset} />
+  return <GenericError error={routeError} reset={reset} />
 }

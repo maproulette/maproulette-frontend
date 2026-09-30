@@ -3,15 +3,16 @@ import ky from 'ky'
 export const apiKey = window.env.VITE_SERVER_API_KEY
 
 export const apiRequest = ky.extend({
-  prefixUrl: window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000',
+  prefix: window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000',
   credentials: 'include',
   timeout: 60000,
   retry: {
     limit: 0,
   },
+  parseJson: (text) => (text === '' ? undefined : JSON.parse(text)),
   hooks: {
     beforeRequest: [
-      (request) => {
+      ({ request }) => {
         // Don't clobber Content-Type already set by ky (for json bodies) or by
         // the Request constructor (for FormData/URLSearchParams, which carries
         // the multipart boundary). Overwriting either breaks the body.

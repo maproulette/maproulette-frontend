@@ -1,7 +1,7 @@
-import type maplibregl from 'maplibre-gl'
+import type * as maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
-import Supercluster from 'supercluster'
+import Supercluster, { type PointFeature } from 'supercluster'
 import { api } from '@/api'
 import {
   boundsAreEqual,
@@ -270,7 +270,7 @@ export const useExploreChallengesMap = () => {
 
   const { backendClusterFeatures, pointFeatures } = useMemo(() => {
     const backendClusters: GeoJSON.Feature<GeoJSON.Point>[] = []
-    const points: Supercluster.PointFeature<PointProperties>[] = []
+    const points: PointFeature<PointProperties>[] = []
 
     for (const f of extractedFeatures) {
       const props = f.properties || {}

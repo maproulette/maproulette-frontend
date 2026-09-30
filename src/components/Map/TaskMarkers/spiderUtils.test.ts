@@ -1,4 +1,4 @@
-import type maplibregl from 'maplibre-gl'
+import type * as maplibregl from 'maplibre-gl'
 import { describe, expect, it } from 'vitest'
 import type { TaskMarker } from '@/types/Task'
 import { createSpiderGroup, detectVisualOverlaps } from './spiderUtils.ts'

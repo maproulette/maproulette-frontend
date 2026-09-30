@@ -1,4 +1,4 @@
-import maplibregl from 'maplibre-gl'
+import * as maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { Layer, Map as MapGL, Marker, Source } from 'react-map-gl/maplibre'

@@ -1,4 +1,4 @@
-import type maplibregl from 'maplibre-gl'
+import type * as maplibregl from 'maplibre-gl'
 import { PRIORITY_COLOR, PRIORITY_LABEL, type TaskPriorityValue } from '@/types/Priority'
 
 const PIXEL_RATIO = 4

@@ -519,9 +519,9 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'comments', 1] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 10] })
 
-    const statusUrl = new URL(
-      (fetchMock.mock.calls.find(([request]) => request.method === 'PUT')?.[0] as Request).url
-    )
+    const putCall = fetchMock.mock.calls.find(([request]) => request.method === 'PUT')
+    if (!putCall) throw new Error('No PUT request was recorded')
+    const statusUrl = new URL((putCall[0] as Request).url)
     expect(statusUrl.searchParams.get('pluginFlag')).toBe('true')
     expect(statusUrl.searchParams.has('omitted')).toBe(false)
     expect(statusUrl.searchParams.has('alsoOmitted')).toBe(false)

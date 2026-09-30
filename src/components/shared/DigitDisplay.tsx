@@ -17,11 +17,12 @@ interface Props {
   ariaLabel?: string
 }
 
-const splitDigits = (value: number, minDigits: number): string[] => {
+const splitDigits = (value: number, minDigits: number): { char: string; place: number }[] => {
   const safe = Math.max(0, Math.floor(value))
   const raw = safe.toString()
   const padding = Math.max(0, minDigits - raw.length)
-  return Array.from({ length: padding }, () => ' ').concat(raw.split(''))
+  const chars = Array.from({ length: padding }, () => ' ').concat(raw.split(''))
+  return chars.map((char, index) => ({ char, place: chars.length - 1 - index }))
 }
 
 export const DigitDisplay = ({
@@ -40,11 +41,11 @@ export const DigitDisplay = ({
       <span className="sr-only">
         {ariaLabel ?? t('shared.digitDisplay.pointsLabel', { value }, '{value} points')}
       </span>
-      {digits.map((digit, i) => {
-        const isBlank = digit === ' '
+      {digits.map(({ char, place }) => {
+        const isBlank = char === ' '
         return (
           <span
-            key={`${i}-${digit}`}
+            key={place}
             aria-hidden="true"
             className={cn(
               'inline-flex items-center justify-center rounded border',
@@ -54,7 +55,7 @@ export const DigitDisplay = ({
                 : 'border-zinc-200 bg-zinc-100 text-zinc-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
             )}
           >
-            {isBlank ? '0' : digit}
+            {isBlank ? '0' : char}
           </span>
         )
       })}

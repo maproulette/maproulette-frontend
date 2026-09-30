@@ -38,8 +38,8 @@ export const FeatureStyleLegend = ({ rules, defaultOpen = false }: Props) => {
       </Button>
       {open && (
         <ul className="space-y-1 border-zinc-200 border-t p-2 dark:border-slate-700">
-          {rules.map((rule, i) => (
-            <LegendEntry key={`${i}-${rule.propertySearch.key ?? 'rule'}`} rule={rule} />
+          {rules.map((rule) => (
+            <LegendEntry key={JSON.stringify(rule)} rule={rule} />
           ))}
         </ul>
       )}

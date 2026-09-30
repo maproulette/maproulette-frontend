@@ -1,3 +1,4 @@
+import type * as maplibregl from 'maplibre-gl'
 import { PRIORITY_COLOR } from '@/types/Priority'
 import { STATUS_CONFIG } from './const'
 import { TASK_TYPE_KEYS, TASK_TYPE_SYMBOL_SVG, type TaskTypeKey } from './taskTypes'

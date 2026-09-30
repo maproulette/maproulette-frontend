@@ -431,7 +431,7 @@ describe('userProfile.useUpdateUserSettings', () => {
         properties: { theme: 'dark' },
       })
     )
-    expect(result.current.isPending).toBe(true)
+    await waitFor(() => expect(result.current.isPending).toBe(true))
 
     releaseResponse()
     await waitFor(() => expect(result.current.isSuccess).toBe(true))

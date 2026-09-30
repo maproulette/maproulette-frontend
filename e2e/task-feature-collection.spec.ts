@@ -1,4 +1,5 @@
 import type { APIRequestContext } from '@playwright/test'
+import type * as maplibregl from 'maplibre-gl'
 import { BACKEND_URL, expect, SUPER_KEY, test } from './fixtures'
 
 // A task built from a GeoJSON FeatureCollection holds several features at

@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, ErrorComponent, RouterProvider } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
+import { setWorkerUrl } from 'maplibre-gl'
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { ThemeProvider } from '@/contexts/ThemeContext'
@@ -12,6 +14,8 @@ import './main.css'
 import { NotFound } from '@/components/shared/NotFound'
 import { Loader } from '@/components/ui/Loader'
 import { setAppRouter } from '@/lib/routerRef'
+
+setWorkerUrl(maplibreWorkerUrl)
 
 const queryClient = new QueryClient({
   defaultOptions: {

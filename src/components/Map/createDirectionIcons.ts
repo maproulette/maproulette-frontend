@@ -1,3 +1,4 @@
+import type * as maplibregl from 'maplibre-gl'
 import { registerIcon } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { DIRECTION_ICONS } from './directionIndicators'
 

@@ -1,4 +1,4 @@
-import type maplibregl from 'maplibre-gl'
+import type * as maplibregl from 'maplibre-gl'
 import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import type { TaskMarker } from '@/types/Task'
 
