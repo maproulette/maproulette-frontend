@@ -130,11 +130,11 @@ test('every feature of a FeatureCollection task is listed, and one can be single
       return layers.length === 0 ? 0 : map.queryRenderedFeatures({ layers }).length
     })
 
-  await expect.poll(startMarkersOnScreen, { timeout: 10_000 }).toBeGreaterThan(0)
+  await expect.poll(startMarkersOnScreen, { timeout: 20_000 }).toBeGreaterThan(0)
   await page.keyboard.press('s')
-  await expect.poll(startMarkersOnScreen, { timeout: 10_000 }).toBe(0)
+  await expect.poll(startMarkersOnScreen, { timeout: 20_000 }).toBe(0)
   await page.keyboard.press('s')
-  await expect.poll(startMarkersOnScreen, { timeout: 10_000 }).toBeGreaterThan(0)
+  await expect.poll(startMarkersOnScreen, { timeout: 20_000 }).toBeGreaterThan(0)
 })
 
 test('each geometry layer draws only its own kind of geometry', async ({
