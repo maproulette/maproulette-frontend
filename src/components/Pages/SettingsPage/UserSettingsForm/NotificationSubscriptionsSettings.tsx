@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { Button } from '@/components/ui/Button'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import { Label } from '@/components/ui/Label'
 import { Loader } from '@/components/ui/Loader'
@@ -13,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { Spinner } from '@/components/ui/Spinner'
 import {
   COUNT_FIELDS,
   type NotificationSubscriptions,
@@ -68,6 +70,13 @@ export const NotificationSubscriptionsSettings = ({ userId }: { userId: number }
     if (data) setDraft(withSubscriptionDefaults(data))
   }, [data])
 
+  const saved = data ? withSubscriptionDefaults(data) : null
+  const isDirty = Boolean(
+    draft &&
+      saved &&
+      [...SUBSCRIPTION_FIELDS, ...COUNT_FIELDS].some(({ key }) => draft[key] !== saved[key])
+  )
+
   if (isLoading) return <Loader message="Loading notification preferences..." />
   if (isError || !draft) {
     return (
@@ -90,7 +99,7 @@ export const NotificationSubscriptionsSettings = ({ userId }: { userId: number }
   }
 
   return (
-    <FieldSet>
+    <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>Notification Subscriptions</FieldLegend>
       <FieldDescription>
         Decide which MapRoulette notifications you would like to receive, along with whether you
@@ -100,7 +109,7 @@ export const NotificationSubscriptionsSettings = ({ userId }: { userId: number }
           Learn about notifications and email
         </DocsLink>
       </FieldDescription>
-      <FieldGroup>
+      <FieldGroup className="min-h-0 flex-auto overflow-y-auto">
         <div>
           {SUBSCRIPTION_FIELDS.map(({ key, label, description }) => (
             <SubscriptionRow
@@ -136,10 +145,24 @@ export const NotificationSubscriptionsSettings = ({ userId }: { userId: number }
         </FieldSet>
       </FieldGroup>
 
-      <div className="flex justify-end">
-        <Button type="button" onClick={handleSave} disabled={updateMutation.isPending}>
-          {updateMutation.isPending ? 'Saving...' : 'Submit'}
-        </Button>
+      <div className="shrink-0 border-zinc-200 border-t pt-4 dark:border-slate-700">
+        <DisabledTooltip show={!isDirty && !updateMutation.isPending} message="No changes to save">
+          <Button
+            type="button"
+            size="lg"
+            onClick={handleSave}
+            disabled={updateMutation.isPending || !isDirty}
+          >
+            {updateMutation.isPending ? (
+              <>
+                <Spinner />
+                Saving...
+              </>
+            ) : (
+              'Save Changes'
+            )}
+          </Button>
+        </DisabledTooltip>
       </div>
     </FieldSet>
   )

@@ -92,21 +92,21 @@ export const PluginSettings = () => {
   }
 
   return (
-    <FieldSet>
+    <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>Plugins</FieldLegend>
       <FieldDescription>
         Enable or disable plugins to customize your MapRoulette experience. Plugin navigation items
         will appear in the main navigation menu.
       </FieldDescription>
 
-      <Tabs defaultValue="my-plugins" className="mt-6">
+      <Tabs defaultValue="my-plugins" className="mt-6 flex min-h-0 flex-auto flex-col">
         <TabsList>
           <TabsTrigger value="my-plugins">My Plugins</TabsTrigger>
           <TabsTrigger value="workshop">Plugins Workshop</TabsTrigger>
         </TabsList>
 
         {/* My Plugins Tab */}
-        <TabsContent value="my-plugins" className="space-y-4">
+        <TabsContent value="my-plugins" className="min-h-0 flex-auto space-y-4 overflow-y-auto">
           {myPlugins.length === 0 ? (
             <div className="rounded-lg border border-zinc-300 border-dashed p-6 text-center dark:border-slate-700">
               <Puzzle className="mx-auto mb-3 size-12 text-zinc-400" />
@@ -178,7 +178,7 @@ export const PluginSettings = () => {
         </TabsContent>
 
         {/* Plugins Workshop Tab */}
-        <TabsContent value="workshop" className="space-y-6">
+        <TabsContent value="workshop" className="min-h-0 flex-auto space-y-6 overflow-y-auto">
           {/* Remote Plugin Manager */}
           <RemotePluginManager />
 

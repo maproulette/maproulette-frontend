@@ -78,9 +78,12 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto max-w-3xl space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mx-auto flex max-h-full min-h-0 w-full max-w-3xl flex-col gap-4 py-4"
+      >
         <h1 className="font-bold text-base">Account</h1>
-        <Tabs defaultValue="general">
+        <Tabs defaultValue="general" className="flex min-h-0 flex-auto flex-col">
           <TabsList>
             <TabsTrigger value="general">General</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
@@ -88,23 +91,38 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
             <TabsTrigger value="plugins">Plugins</TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>
-          <div className="rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
-            <FieldGroup>
-              <TabsContent value="general">
+          <div className="flex min-h-0 flex-auto flex-col rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
+            <FieldGroup className="min-h-0 flex-auto">
+              <TabsContent
+                value="general"
+                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
+              >
                 <GeneralSettings form={form}>
                   <PluginUserSettingsFields form={form} settings={user.settings} />
                 </GeneralSettings>
               </TabsContent>
-              <TabsContent value="notifications">
+              <TabsContent
+                value="notifications"
+                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
+              >
                 <NotificationsSettings form={form} />
               </TabsContent>
-              <TabsContent value="subscriptions">
+              <TabsContent
+                value="subscriptions"
+                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
+              >
                 <NotificationSubscriptionsSettings userId={user.id} />
               </TabsContent>
-              <TabsContent value="plugins">
+              <TabsContent
+                value="plugins"
+                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
+              >
                 <PluginSettings />
               </TabsContent>
-              <TabsContent value="api">
+              <TabsContent
+                value="api"
+                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
+              >
                 <ApiSettings />
               </TabsContent>
             </FieldGroup>

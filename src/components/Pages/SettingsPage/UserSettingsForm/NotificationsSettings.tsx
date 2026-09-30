@@ -19,10 +19,10 @@ export const NotificationsSettings = ({
   form: UseFormReturn<z.infer<typeof formSchema>>
 }) => {
   return (
-    <FieldSet>
+    <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>Notifications</FieldLegend>
       <FieldDescription>Manage your notification preferences.</FieldDescription>
-      <FieldGroup>
+      <FieldGroup className="min-h-0 flex-auto overflow-y-auto">
         <FormField
           control={form.control}
           name="email"

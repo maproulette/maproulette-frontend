@@ -7,7 +7,9 @@ export const SettingsPage = () => {
 
   return (
     <AuthGuard>
-      <div className="px-4">{user && <UserSettingsForm user={user} />}</div>
+      <div className="flex min-h-0 flex-1 flex-col px-4">
+        {user && <UserSettingsForm user={user} />}
+      </div>
     </AuthGuard>
   )
 }

@@ -33,10 +33,10 @@ export const GeneralSettings = ({
   children?: ReactNode
 }) => {
   return (
-    <FieldSet>
+    <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>General</FieldLegend>
       <FieldDescription>Update your general account settings and preferences.</FieldDescription>
-      <FieldGroup>
+      <FieldGroup className="min-h-0 flex-auto overflow-y-auto">
         <FormField
           control={form.control}
           name="locale"

@@ -6,10 +6,10 @@ export const ApiSettings = () => {
   const { user } = useAuthContext()
 
   return (
-    <FieldSet>
+    <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>API</FieldLegend>
       <FieldDescription>Manage your API preferences.</FieldDescription>
-      <FieldGroup>
+      <FieldGroup className="min-h-0 flex-auto overflow-y-auto">
         <FieldApiKey apiKey={user?.apiKey ?? ''} userId={user?.id} />
       </FieldGroup>
     </FieldSet>
