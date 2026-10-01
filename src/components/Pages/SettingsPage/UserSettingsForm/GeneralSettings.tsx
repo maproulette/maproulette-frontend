@@ -36,7 +36,7 @@ export const GeneralSettings = ({
     <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>General</FieldLegend>
       <FieldDescription>Update your general account settings and preferences.</FieldDescription>
-      <FieldGroup className="min-h-0 flex-auto overflow-y-auto">
+      <FieldGroup className="min-h-0 flex-auto overflow-y-auto px-1">
         <FormField
           control={form.control}
           name="locale"
