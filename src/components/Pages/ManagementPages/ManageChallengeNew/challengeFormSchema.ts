@@ -59,6 +59,7 @@ const makeBaseChallengeFormSchema = (t: T) =>
     // preference in charge.
     // Feature property holding each task's identifier; blank means "detect it".
     osmIdProperty: z.string().optional().or(z.literal('')),
+    taskBundleIdProperty: z.string().optional().or(z.literal('')),
     // Comma-separated MapRoulette tags suggested to mappers, and whether they
     // are the only tags accepted.
     preferredTags: z.string().optional().or(z.literal('')),
@@ -160,6 +161,7 @@ export const buildFormValues = (
   remoteGeoJSON: challenge?.remoteGeoJson ?? '',
   dataOriginDate: '',
   osmIdProperty: challenge?.osmIdProperty ?? '',
+  taskBundleIdProperty: challenge?.taskBundleIdProperty ?? '',
   preferredTags: challenge?.preferredTags ?? '',
   limitTags: challenge?.limitTags ?? false,
   basemap: basemapSelection(challenge),

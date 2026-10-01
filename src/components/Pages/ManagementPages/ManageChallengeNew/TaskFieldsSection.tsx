@@ -14,14 +14,20 @@ import { Input } from '@/components/ui/Input'
 import { useIntl } from '@/i18n'
 import type { ChallengeFormValues } from './challengeFormSchema'
 
+interface TaskFieldsSectionProps {
+  dataSource: ChallengeFormValues['dataSource']
+}
+
 /**
  * Challenge settings that govern how a challenge's tasks behave: which feature
- * property identifies the OSM element, and which MapRoulette tags mappers are
- * offered or restricted to.
+ * property identifies the OSM element, which property groups features into a
+ * single multi-feature task, and which MapRoulette tags mappers are offered or
+ * restricted to.
  */
-export const TaskFieldsSection = () => {
+export const TaskFieldsSection = ({ dataSource }: TaskFieldsSectionProps) => {
   const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
+  const bundlingUnavailable = dataSource === 'overpass'
 
   return (
     <FormSection
@@ -60,6 +66,52 @@ export const TaskFieldsSection = () => {
                   'About task identifiers'
                 )}
               </DocsLink>
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="taskBundleIdProperty"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              {t(
+                'manageChallengeNew.challengeForm.taskBundleIdPropertyLabel',
+                undefined,
+                'Task Bundle Id Property'
+              )}
+            </FormLabel>
+            <FormControl>
+              <Input
+                placeholder="bundle_id"
+                disabled={bundlingUnavailable}
+                title={
+                  bundlingUnavailable
+                    ? t(
+                        'manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning',
+                        undefined,
+                        'Grouping features into one task is not available for Overpass queries. Choose a GeoJSON source to use it.'
+                      )
+                    : undefined
+                }
+                {...field}
+              />
+            </FormControl>
+            <FormDescription>
+              {bundlingUnavailable
+                ? t(
+                    'manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning',
+                    undefined,
+                    'Grouping features into one task is not available for Overpass queries. Choose a GeoJSON source to use it.'
+                  )
+                : t(
+                    'manageChallengeNew.challengeForm.taskBundleIdPropertyDescription',
+                    undefined,
+                    'The feature property to treat as a bundle id. Features sharing a value become a single task with multiple features; features without the property stay as separate tasks. Leave blank for one task per feature.'
+                  )}
             </FormDescription>
             <FormMessage />
           </FormItem>

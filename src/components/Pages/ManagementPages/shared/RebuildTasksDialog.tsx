@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
+import { bundledGeoJSONFile } from '@/lib/taskBundling'
 import type { Challenge } from '@/types/Challenge'
 
 type SourceType = 'local' | 'remote' | 'overpass'
@@ -53,9 +54,16 @@ interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
   sourceType?: SourceType
+  taskBundleIdProperty?: string | null
 }
 
-export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType }: Props) => {
+export const RebuildTasksDialog = ({
+  challengeId,
+  open,
+  onOpenChange,
+  sourceType,
+  taskBundleIdProperty,
+}: Props) => {
   const { t } = useIntl()
   const [removeUnmatched, setRemoveUnmatched] = useState(false)
   const [localFile, setLocalFile] = useState<File | null>(null)
@@ -100,11 +108,14 @@ export const RebuildTasksDialog = ({ challengeId, open, onOpenChange, sourceType
       if (isLocal) {
         if (!localFile) return
         const text = await localFile.text()
+        const bundleIdProperty = taskBundleIdProperty?.trim()
         await uploadGeoJSON.mutateAsync({
           challengeId,
-          geoJSONFile: localFile,
+          geoJSONFile: bundleIdProperty
+            ? bundledGeoJSONFile(text, bundleIdProperty, localFile.name)
+            : localFile,
           options: {
-            lineByLine: detectLineByLine(text),
+            lineByLine: bundleIdProperty ? true : detectLineByLine(text),
             removeUnmatched,
             dataOriginDate: dataOriginDate ? new Date(dataOriginDate).toISOString() : undefined,
             skipSnapshot: true,

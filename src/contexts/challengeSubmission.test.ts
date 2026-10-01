@@ -3,7 +3,7 @@
 // use a real `File` instance for the localGeoJSON upload, so polyfill it from
 // `node:buffer` (available since Node 18.13) before any test runs.
 import { File as NodeFile } from 'node:buffer'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { buildChallengeSubmission } from './challengeSubmission'
 
@@ -25,6 +25,7 @@ const baseValues: ChallengeFormValues = {
   remoteGeoJSON: '',
   dataOriginDate: '',
   osmIdProperty: '',
+  taskBundleIdProperty: '',
   preferredTags: '',
   limitTags: false,
   basemap: 'none',
@@ -32,6 +33,10 @@ const baseValues: ChallengeFormValues = {
   ownerTeamId: null,
   automatedEditsCodeAgreement: true,
 }
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
 
 describe('buildChallengeSubmission', () => {
   describe('create mode (isCreate = true)', () => {
@@ -49,6 +54,7 @@ describe('buildChallengeSubmission', () => {
           difficulty: 2,
           ownerTeamId: null,
           osmIdProperty: null,
+          taskBundleIdProperty: null,
           preferredTags: null,
           limitTags: false,
           defaultBasemap: -1,
@@ -88,6 +94,7 @@ describe('buildChallengeSubmission', () => {
           difficulty: 2,
           ownerTeamId: null,
           osmIdProperty: null,
+          taskBundleIdProperty: null,
           preferredTags: null,
           limitTags: false,
           defaultBasemap: -1,
@@ -125,6 +132,7 @@ describe('buildChallengeSubmission', () => {
           difficulty: 2,
           ownerTeamId: null,
           osmIdProperty: null,
+          taskBundleIdProperty: null,
           preferredTags: null,
           limitTags: false,
           defaultBasemap: -1,
@@ -250,6 +258,132 @@ describe('buildChallengeSubmission', () => {
       })
     })
 
+    it('groups a local file by the bundle id property and defers it as a line-by-line upload', async () => {
+      const bundleFeature = (bundle: string, name: string) => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [0, 0] },
+        properties: { bundle, name },
+      })
+      const file = new File(
+        [
+          JSON.stringify({
+            type: 'FeatureCollection',
+            features: [
+              bundleFeature('a', 'one'),
+              bundleFeature('b', 'two'),
+              bundleFeature('a', 'three'),
+            ],
+          }),
+        ],
+        'tasks.geojson',
+        { type: 'application/json' }
+      )
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          taskBundleIdProperty: 'bundle',
+          dataOriginDate: '2024-03-01',
+        },
+        true
+      )
+
+      expect(result.challengeData.taskBundleIdProperty).toBe('bundle')
+      expect(result.challengeData).not.toHaveProperty('localGeoJSON')
+      const upload = result.localGeoJSONUpload
+      if (!upload) throw new Error('expected a deferred line-by-line upload')
+      expect(upload.lineByLine).toBe(true)
+      expect(upload.dataOriginDate).toBe('2024-03-01')
+
+      const lines = (await upload.file.text()).split('\n')
+      expect(lines).toHaveLength(2)
+      expect(JSON.parse(lines[0]).features).toHaveLength(2)
+      expect(JSON.parse(lines[1]).features).toHaveLength(1)
+    })
+
+    it('leaves a local file alone when no bundle id property is set', async () => {
+      const geoJSON = { type: 'FeatureCollection', features: [] }
+      const file = new File([JSON.stringify(geoJSON)], 'data.geojson', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          taskBundleIdProperty: '   ',
+        },
+        true
+      )
+
+      expect(result.challengeData.taskBundleIdProperty).toBeNull()
+      expect(result.challengeData.localGeoJSON).toEqual(geoJSON)
+      expect(result.localGeoJSONUpload).toBeUndefined()
+    })
+
+    it('downloads and groups a remote source, uploading it instead of leaving it remote', async () => {
+      const body = JSON.stringify({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [0, 0] },
+            properties: { bundle: 'a' },
+          },
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [1, 1] },
+            properties: { bundle: 'a' },
+          },
+        ],
+      })
+      const fetchMock = vi.fn().mockResolvedValue(new Response(body, { status: 200 }))
+      vi.stubGlobal('fetch', fetchMock)
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'remoteGeoJSON',
+          overpassQL: '',
+          remoteGeoJSON: 'https://example.com/data.geojson',
+          taskBundleIdProperty: 'bundle',
+        },
+        true
+      )
+
+      expect(fetchMock).toHaveBeenCalledWith('https://example.com/data.geojson')
+      expect(result.challengeData).not.toHaveProperty('remoteGeoJson')
+      const upload = result.localGeoJSONUpload
+      if (!upload) throw new Error('expected a deferred line-by-line upload')
+      expect(upload.lineByLine).toBe(true)
+
+      const lines = (await upload.file.text()).split('\n')
+      expect(lines).toHaveLength(1)
+      expect(JSON.parse(lines[0]).features).toHaveLength(2)
+    })
+
+    it('fails loudly when a remote source cannot be downloaded for grouping', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('nope', { status: 404 })))
+
+      await expect(
+        buildChallengeSubmission(
+          {
+            ...baseValues,
+            dataSource: 'remoteGeoJSON',
+            overpassQL: '',
+            remoteGeoJSON: 'https://example.com/missing.geojson',
+            taskBundleIdProperty: 'bundle',
+          },
+          true
+        )
+      ).rejects.toThrow(/HTTP 404/)
+    })
+
     it('defaults description and instruction to empty strings when blank', async () => {
       const result = await buildChallengeSubmission(
         { ...baseValues, description: '', instruction: '' },
@@ -281,6 +415,7 @@ describe('buildChallengeSubmission', () => {
           difficulty: 2,
           ownerTeamId: null,
           osmIdProperty: null,
+          taskBundleIdProperty: null,
           preferredTags: null,
           limitTags: false,
           defaultBasemap: -1,

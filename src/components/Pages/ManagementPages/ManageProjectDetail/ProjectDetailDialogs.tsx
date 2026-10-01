@@ -84,6 +84,7 @@ export const ProjectDetailDialogs = () => {
           onOpenChange={(open) => !open && setRebuildModalChallenge(null)}
           challengeId={rebuildModalChallenge.id}
           sourceType={getChallengeSourceType(rebuildModalChallenge)}
+          taskBundleIdProperty={rebuildModalChallenge.taskBundleIdProperty}
         />
       )}
 

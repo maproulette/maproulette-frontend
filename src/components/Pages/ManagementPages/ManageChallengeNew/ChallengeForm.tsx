@@ -161,7 +161,7 @@ export const ChallengeForm = () => {
 
           <BasemapFields />
 
-          <TaskFieldsSection />
+          <TaskFieldsSection dataSource={dataSource} />
 
           {!isEdit && <AgreementSection />}
         </FormSectionGroup>

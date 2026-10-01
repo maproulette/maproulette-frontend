@@ -461,6 +461,7 @@ export const ManageChallengeDetailContent = () => {
                 onOpenChange={setRebuildOpen}
                 challengeId={challengeData.id}
                 sourceType={getChallengeSourceType(challengeData)}
+                taskBundleIdProperty={challengeData.taskBundleIdProperty}
               />
             )}
             <DrawerPortalTarget />
