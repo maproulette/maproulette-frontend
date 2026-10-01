@@ -682,10 +682,16 @@ export const challengeSingle = {
     })
   },
 
-  refreshChallenge: async (challengeId: number, queryClient: QueryClient) => {
+  refreshChallenge: async (
+    challengeId: number,
+    queryClient: QueryClient,
+    { includeTaskMarkers = true }: { includeTaskMarkers?: boolean } = {}
+  ) => {
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] }),
-      queryClient.invalidateQueries({ queryKey: ['challenge', 'taskMarkers', challengeId] }),
+      ...(includeTaskMarkers
+        ? [queryClient.invalidateQueries({ queryKey: ['challenge', 'taskMarkers', challengeId] })]
+        : []),
       queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] }),
       queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] }),
     ])
