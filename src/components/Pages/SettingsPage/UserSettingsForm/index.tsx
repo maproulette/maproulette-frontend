@@ -38,7 +38,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
       await Promise.all([
         updateSettingsMutation.mutateAsync({
           userId: user.id,
-            settings: { ...user.settings, ...values } as unknown as UserSettings,
+          settings: { ...user.settings, ...values } as unknown as UserSettings,
         }),
         subscriptions.isDirty ? subscriptions.save() : null,
       ])
