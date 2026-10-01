@@ -17,6 +17,7 @@ import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const
 import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
+import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
 import {
   buildSelectedTaskCollection,
   convertTaskMarkersToGeoJSON,
@@ -378,6 +379,8 @@ export const MiniChallengeMap = ({
               : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
           }
         >
+          <TaskGeometryLayer selectedTaskId={activeSelectedTask?.id ?? null} />
+
           <ClusterSource clusteredData={clusteredGeoJSONData} selectedTaskData={selectedTaskData} />
 
           {spideredMarkers.size > 0 && (

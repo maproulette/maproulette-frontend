@@ -203,6 +203,8 @@ export const TaskMap = () => {
             </Source>
           )}
 
+          <TaskGeometryLayer />
+
           {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
 
           {!markersHidden && spideredMarkers.size > 0 && (
@@ -220,7 +222,6 @@ export const TaskMap = () => {
             />
           )}
 
-          <TaskGeometryLayer />
           <LassoLayer />
         </MapGL>
       </div>

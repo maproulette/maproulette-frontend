@@ -78,14 +78,14 @@ export const BrowseChallengeMap = () => {
             : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
         }
       >
+        <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
+
         {/* Selected task drawn on top via the shared selected overlay. Keeping
             it in its own 1-feature source keeps clicks O(1) at 10k+ tasks. */}
         <ClusterSource
           clusteredData={clusteredGeoJSONData}
           selectedTaskData={selectedTaskGeoJSON}
         />
-
-        <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
         {spideredMarkers.size > 0 && (
           <SpiderMarkers
