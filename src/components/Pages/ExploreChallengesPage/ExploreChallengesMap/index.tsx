@@ -100,14 +100,14 @@ export const ExploreChallengesMap = () => {
             />
           </Source>
 
+          <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
+
           {/* Visible clustered markers via Supercluster, with the selected task
               drawn on top via the shared selected overlay. */}
           <ClusterSource
             clusteredData={clusteredGeoJSONData}
             selectedTaskData={selectedTaskGeoJSON}
           />
-
-          <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
 
           {spideredMarkers.size > 0 && (
             <SpiderMarkers
