@@ -41,11 +41,16 @@ export const TabsTrigger = ({
 
 export const TabsContent = ({
   className,
+  fill = false,
   ...props
-}: React.ComponentProps<typeof TabsPrimitive.Content>) => (
+}: React.ComponentProps<typeof TabsPrimitive.Content> & { fill?: boolean }) => (
   <TabsPrimitive.Content
     data-slot="tabs-content"
-    className={cn('flex-1 outline-none', className)}
+    className={cn(
+      'flex-1 outline-none',
+      fill && 'min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col',
+      className
+    )}
     {...props}
   />
 )

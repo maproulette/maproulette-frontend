@@ -1,10 +1,17 @@
 import type { ReactNode } from 'react'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { AuthGuard } from '@/lib/AuthGuard'
+import { cn } from '@/lib/utils'
 
-export const ManageFormLayout = ({ children }: { children: ReactNode }) => (
+export const ManageFormLayout = ({
+  className,
+  children,
+}: {
+  className?: string
+  children: ReactNode
+}) => (
   <AuthGuard>
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
+    <div className={cn('flex min-h-0 flex-1 flex-col overflow-hidden', className)}>{children}</div>
   </AuthGuard>
 )
 

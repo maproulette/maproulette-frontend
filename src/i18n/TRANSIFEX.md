@@ -43,7 +43,7 @@ The GitHub Actions workflow should run `npm run i18n:extract` in "check" mode (n
 
 ## Adding a new locale
 
-1. Add its id to `src/i18n/locales.ts` → `supportedLocales`.
+1. Add its id to `src/i18n/locales.ts` → `localeOptions` (id plus the label shown in the language picker).
 2. Enable it in Transifex (or add a lang_map entry if the Transifex tag differs from the IETF tag).
 3. Next `npm run i18n:pull` will fetch it.
 

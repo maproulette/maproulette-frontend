@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { FieldDescription, FieldLegend, FieldSet } from '@/components/ui/Field'
 import { Label } from '@/components/ui/Label'
@@ -18,6 +18,18 @@ import {
   subscriptionLevelOptions,
   withSubscriptionDefaults,
 } from '@/lib/notificationSubscriptions'
+
+const ALL_SUBSCRIPTION_FIELDS = [...SUBSCRIPTION_FIELDS, ...COUNT_FIELDS]
+
+const SUBSCRIPTION_SECTIONS = [
+  { legend: 'Notify me about', fields: SUBSCRIPTION_FIELDS, options: subscriptionLevelOptions },
+  {
+    legend: 'Periodic summaries',
+    description: 'These are sent on a schedule rather than when something happens.',
+    fields: COUNT_FIELDS,
+    options: subscriptionFrequencyOptions,
+  },
+]
 
 interface RowProps {
   id: string
@@ -68,17 +80,16 @@ export const useNotificationSubscriptionsDraft = (userId: number): Subscriptions
   const updateMutation = api.user.useUpdateNotificationSubscriptions()
   const [draft, setDraft] = useState<NotificationSubscriptions | null>(null)
 
+  const saved = useMemo(() => (data ? withSubscriptionDefaults(data) : null), [data])
+
   // Seed the draft once the server's copy arrives, and whenever it changes
   // underneath us (another tab, say).
   useEffect(() => {
-    if (data) setDraft(withSubscriptionDefaults(data))
-  }, [data])
+    if (saved) setDraft(saved)
+  }, [saved])
 
-  const saved = data ? withSubscriptionDefaults(data) : null
   const isDirty = Boolean(
-    draft &&
-      saved &&
-      [...SUBSCRIPTION_FIELDS, ...COUNT_FIELDS].some(({ key }) => draft[key] !== saved[key])
+    draft && saved && ALL_SUBSCRIPTION_FIELDS.some(({ key }) => draft[key] !== saved[key])
   )
 
   return {
@@ -112,42 +123,25 @@ export const NotificationSubscriptionFields = ({
 
   return (
     <>
-      <FieldSet>
-        <FieldLegend variant="label">Notify me about</FieldLegend>
-        <div>
-          {SUBSCRIPTION_FIELDS.map(({ key, label, description }) => (
-            <SubscriptionRow
-              key={key}
-              id={`subscription-${key}`}
-              label={label}
-              description={description}
-              value={draft[key] as number}
-              options={subscriptionLevelOptions}
-              onChange={(value) => setField(key, value)}
-            />
-          ))}
-        </div>
-      </FieldSet>
-
-      <FieldSet>
-        <FieldLegend variant="label">Periodic summaries</FieldLegend>
-        <FieldDescription>
-          These are sent on a schedule rather than when something happens.
-        </FieldDescription>
-        <div>
-          {COUNT_FIELDS.map(({ key, label, description }) => (
-            <SubscriptionRow
-              key={key}
-              id={`subscription-${key}`}
-              label={label}
-              description={description}
-              value={draft[key] as number}
-              options={subscriptionFrequencyOptions}
-              onChange={(value) => setField(key, value)}
-            />
-          ))}
-        </div>
-      </FieldSet>
+      {SUBSCRIPTION_SECTIONS.map(({ legend, description, fields, options }) => (
+        <FieldSet key={legend}>
+          <FieldLegend variant="label">{legend}</FieldLegend>
+          {description ? <FieldDescription>{description}</FieldDescription> : null}
+          <div>
+            {fields.map(({ key, label, description: rowDescription }) => (
+              <SubscriptionRow
+                key={key}
+                id={`subscription-${key}`}
+                label={label}
+                description={rowDescription}
+                value={draft[key] as number}
+                options={options}
+                onChange={(value) => setField(key, value)}
+              />
+            ))}
+          </div>
+        </FieldSet>
+      ))}
     </>
   )
 }

@@ -16,19 +16,6 @@ import { NotificationsSettings } from './NotificationsSettings'
 import { PluginSettings } from './PluginSettings'
 import { PluginUserSettingsFields } from './PluginUserSettingsFields'
 
-const CORE_SETTINGS_KEYS = new Set([
-  'defaultEditor',
-  'defaultBasemap',
-  'defaultBasemapId',
-  'locale',
-  'email',
-  'emailOptIn',
-  'leaderboardOptOut',
-  'theme',
-  'disableTaskConfirm',
-  'allowFollowing',
-])
-
 export const UserSettingsForm = ({ user }: { user: User }) => {
   const updateSettingsMutation = api.user.useUpdateUserSettings()
   const subscriptions = useNotificationSubscriptionsDraft(user.id)
@@ -48,32 +35,13 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const pluginSettings: Record<string, unknown> = {}
-      for (const [key, value] of Object.entries(values)) {
-        if (!CORE_SETTINGS_KEYS.has(key)) {
-          pluginSettings[key] = value
-        }
-      }
-
-      await updateSettingsMutation.mutateAsync({
-        userId: user.id,
-        // UserSettings is generated from an OpenAPI spec that only types defaultBasemap
-        // as number | null, but the backend also accepts string basemap ids (see
-        // formSchema.ts / GeneralSettings.tsx) — the generated type is stale, not `values`.
-        settings: {
-          ...user.settings,
-          defaultEditor: values.defaultEditor,
-          defaultBasemap: values.defaultBasemap,
-          defaultBasemapId: values.defaultBasemapId,
-          locale: values.locale,
-          email: values.email,
-          allowFollowing: values.allowFollowing,
-          ...pluginSettings,
-        } as unknown as UserSettings,
-      })
-      if (subscriptions.isDirty) {
-        await subscriptions.save()
-      }
+      await Promise.all([
+        updateSettingsMutation.mutateAsync({
+          userId: user.id,
+            settings: { ...user.settings, ...values } as unknown as UserSettings,
+        }),
+        subscriptions.isDirty ? subscriptions.save() : null,
+      ])
 
       toast.success('User settings updated')
     } catch {
@@ -97,30 +65,18 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
           </TabsList>
           <div className="flex max-h-full min-h-0 flex-initial flex-col overflow-hidden rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
             <FieldGroup className="min-h-0 flex-auto">
-              <TabsContent
-                value="general"
-                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
-              >
+              <TabsContent value="general" fill>
                 <GeneralSettings form={form}>
                   <PluginUserSettingsFields form={form} settings={user.settings} />
                 </GeneralSettings>
               </TabsContent>
-              <TabsContent
-                value="notifications"
-                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
-              >
+              <TabsContent value="notifications" fill>
                 <NotificationsSettings form={form} subscriptions={subscriptions} />
               </TabsContent>
-              <TabsContent
-                value="plugins"
-                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
-              >
+              <TabsContent value="plugins" fill>
                 <PluginSettings />
               </TabsContent>
-              <TabsContent
-                value="api"
-                className="min-h-0 flex-auto data-[state=active]:flex data-[state=active]:flex-col"
-              >
+              <TabsContent value="api" fill>
                 <ApiSettings />
               </TabsContent>
             </FieldGroup>

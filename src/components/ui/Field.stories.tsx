@@ -78,7 +78,7 @@ export const FieldSetExample: Story = {
 
 export const AllVariants: Story = {
   render: () => (
-    <div className="flex flex-col gap-6">
+    <FieldGroup className="@container/field-group">
       {ORIENTATIONS.map((orientation) => (
         <Field key={orientation} orientation={orientation} className="max-w-md">
           <FieldContent>
@@ -88,6 +88,6 @@ export const AllVariants: Story = {
           <Input placeholder={orientation} />
         </Field>
       ))}
-    </div>
+    </FieldGroup>
   ),
 }

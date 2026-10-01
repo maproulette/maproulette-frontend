@@ -14,14 +14,16 @@ export const FieldSubmit = ({
   isSubmitting: boolean
   isDirty: boolean
 }) => {
+  const disabled = formSubmitDisabled({ isSubmitting, isDirty })
+
   return (
     <Field
       className={cn('shrink-0 border-zinc-200 border-t pt-4 dark:border-slate-700', className)}
       orientation="horizontal"
       {...props}
     >
-      <DisabledTooltip show={!isDirty && !isSubmitting} message="No changes to save">
-        <Button disabled={formSubmitDisabled({ isSubmitting, isDirty })} type="submit" size="lg">
+      <DisabledTooltip show={disabled && !isSubmitting} message="No changes to save">
+        <Button disabled={disabled} type="submit" size="lg">
           {isSubmitting ? (
             <>
               <Spinner />
