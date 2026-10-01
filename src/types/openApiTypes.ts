@@ -5849,6 +5849,8 @@ export interface components {
       id: number
       /** Format: int64 */
       parent: number
+      /** Format: int64 */
+      owner: number
       name: string
       enabled: boolean
       virtualParents?: Record<string, never> | null

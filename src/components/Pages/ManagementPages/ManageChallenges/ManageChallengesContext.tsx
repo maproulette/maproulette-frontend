@@ -22,6 +22,8 @@ export interface ManageChallengesContextType {
   setOnlyDiscoverable: (value: boolean) => void
   onlyArchived: boolean
   setOnlyArchived: (value: boolean) => void
+  onlyOwned: boolean
+  setOnlyOwned: (value: boolean) => void
   onlyPinned: boolean
   setOnlyPinned: (value: boolean) => void
 
@@ -47,6 +49,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const [searchQuery, setSearchQuery] = useState('')
   const [onlyDiscoverable, setOnlyDiscoverable] = useState(false)
   const [onlyArchived, setOnlyArchived] = useState(false)
+  const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyPinned, setOnlyPinned] = useState(false)
   const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
 
@@ -145,6 +148,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       .filter((challenge) => challenge.name.toLowerCase().includes(searchQuery.toLowerCase()))
       .filter((challenge) => (onlyDiscoverable ? !!challenge.enabled : true))
       .filter((challenge) => (onlyArchived ? !!challenge.isArchived : true))
+      .filter((challenge) => (onlyOwned ? challenge.owner === user?.osmProfile?.id : true))
       .filter((challenge) =>
         onlyPinned
           ? challenge.id != null
@@ -152,7 +156,16 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
             : false
           : true
       )
-  }, [challenges, searchQuery, onlyDiscoverable, onlyArchived, onlyPinned, pinnedChallengeIds])
+  }, [
+    challenges,
+    searchQuery,
+    onlyDiscoverable,
+    onlyArchived,
+    onlyOwned,
+    onlyPinned,
+    pinnedChallengeIds,
+    user?.osmProfile?.id,
+  ])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<ManageChallengesContextType>(
@@ -167,6 +180,8 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       setOnlyDiscoverable,
       onlyArchived,
       setOnlyArchived,
+      onlyOwned,
+      setOnlyOwned,
       onlyPinned,
       setOnlyPinned,
       deleteChallengeId,
@@ -186,6 +201,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       searchQuery,
       onlyDiscoverable,
       onlyArchived,
+      onlyOwned,
       onlyPinned,
       deleteChallengeId,
       confirmDeleteChallenge,

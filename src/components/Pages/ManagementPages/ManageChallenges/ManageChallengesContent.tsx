@@ -19,6 +19,7 @@ import {
   Play,
   Plus,
   Trash2,
+  User,
 } from 'lucide-react'
 import { useState } from 'react'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
@@ -63,6 +64,8 @@ export const ManageChallengesContent = () => {
     setOnlyDiscoverable,
     onlyArchived,
     setOnlyArchived,
+    onlyOwned,
+    setOnlyOwned,
     onlyPinned,
     setOnlyPinned,
     deleteChallengeId,
@@ -458,16 +461,23 @@ export const ManageChallengesContent = () => {
                 onCheckedChange={setOnlyArchived}
               />
               <FilterToggle
+                label={t('common.owned', undefined, 'Owned')}
+                icon={User}
+                checked={onlyOwned}
+                onCheckedChange={setOnlyOwned}
+              />
+              <FilterToggle
                 label={t('common.pinned', undefined, 'Pinned')}
                 icon={Pin}
                 checked={onlyPinned}
                 onCheckedChange={setOnlyPinned}
               />
               <ClearManageFiltersButton
-                hasActiveFilters={onlyDiscoverable || onlyArchived || onlyPinned}
+                hasActiveFilters={onlyDiscoverable || onlyArchived || onlyOwned || onlyPinned}
                 onClear={() => {
                   setOnlyDiscoverable(false)
                   setOnlyArchived(false)
+                  setOnlyOwned(false)
                   setOnlyPinned(false)
                 }}
               />
