@@ -41,18 +41,20 @@ export const ChallengeStatusIndicator = ({
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [currentTime, setCurrentTime] = useState(Date.now())
   const hasInitialRefresh = useRef(false)
+  const wasNonTerminal = useRef(false)
 
   const status = challenge.status ?? CHALLENGE_STATUS_NONE
   const statusMessage = challenge.statusMessage
 
   useEffect(() => {
     hasInitialRefresh.current = false
+    wasNonTerminal.current = false
     setStartTime(Date.now())
   }, [challengeId])
 
   useEffect(() => {
     if (!hasInitialRefresh.current && NON_TERMINAL_STATUSES.includes(status)) {
-      api.challenge.refreshChallenge(challengeId, queryClient)
+      api.challenge.refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
       setLastRefresh(Date.now())
       hasInitialRefresh.current = true
     }
@@ -62,10 +64,18 @@ export const ChallengeStatusIndicator = ({
   useEffect(() => {
     if (!NON_TERMINAL_STATUSES.includes(status)) return
     const refreshInterval = setInterval(() => {
-      api.challenge.refreshChallenge(challengeId, queryClient)
+      api.challenge.refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
       setLastRefresh(Date.now())
     }, 10000) // 10 seconds
     return () => clearInterval(refreshInterval)
+  }, [status, challengeId])
+
+  useEffect(() => {
+    const nonTerminal = NON_TERMINAL_STATUSES.includes(status)
+    if (wasNonTerminal.current && !nonTerminal) {
+      api.challenge.refreshChallenge(challengeId, queryClient)
+    }
+    wasNonTerminal.current = nonTerminal
   }, [status, challengeId])
 
   // Update current time every second for countdown display
