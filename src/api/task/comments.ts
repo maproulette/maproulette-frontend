@@ -1,6 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Comment } from '@/types/Comment'
-import type { TaskGetResponse, TaskHistoryAction } from '@/types/Task'
+import type { SessionHistoryItem, TaskGetResponse, TaskHistoryAction } from '@/types/Task'
 import { apiRequest } from '../client'
 
 export const taskComments = {
@@ -41,6 +41,16 @@ export const taskComments = {
       queryOptions({
         queryKey: ['task', 'history', taskId],
         queryFn: () => apiRequest.get(`api/v2/task/${taskId}/history`).json<TaskHistoryAction[]>(),
+        enabled: !!taskId,
+      })
+    ),
+
+  getTaskSessionHistory: (taskId: number) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['task', 'sessionHistory', taskId],
+        queryFn: () =>
+          apiRequest.get(`api/v2/task/${taskId}/sessionHistory`).json<SessionHistoryItem[]>(),
         enabled: !!taskId,
       })
     ),

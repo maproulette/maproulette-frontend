@@ -132,6 +132,46 @@ describe('taskComments.getTaskHistory', () => {
   })
 })
 
+describe('taskComments.getTaskSessionHistory', () => {
+  it('fetches session history for a task id', async () => {
+    const sessions = [
+      {
+        id: 1,
+        created: '2026-09-01T12:00:00.000Z',
+        user: { id: 1, username: 'alice' },
+        taskId: 9,
+        lockId: 4,
+        event: 'lock',
+        sessionType: 'Map',
+        subType: null,
+      },
+    ]
+    const fetchMock = stubFetch(new Response(JSON.stringify(sessions), { status: 200 }))
+
+    const { result } = renderHook(() => taskComments.getTaskSessionHistory(9), {
+      wrapper: queryClientWrapper(),
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual(sessions)
+    expect(new URL((fetchMock.mock.calls[0][0] as Request).url).pathname).toBe(
+      '/api/v2/task/9/sessionHistory'
+    )
+  })
+
+  it('is disabled when taskId is 0', () => {
+    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
+
+    const { result } = renderHook(() => taskComments.getTaskSessionHistory(0), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
 describe('taskComments.useAddTaskComment', () => {
   it('appends the new comment when comments are not yet cached and skips the challenge activity invalidation when no task is cached', async () => {
     const newComment = fakeComment({ id: 10, taskId: 5, comment: 'first!' })

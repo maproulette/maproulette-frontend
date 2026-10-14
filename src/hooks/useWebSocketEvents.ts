@@ -124,6 +124,7 @@ export const useWebSocketEvents = () => {
         // History always changes (every event creates a history entry); we can't
         // hydrate it from the message payload alone.
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', taskId] })
 
         // Aggregates only go stale when status actually changed. Lock/unlock
         // and unchanged-status updates leave counts untouched.
@@ -198,7 +199,7 @@ export const useWebSocketEvents = () => {
           queryClient.invalidateQueries({
             predicate: (query) =>
               query.queryKey[0] === 'task' &&
-              query.queryKey[1] === 'history' &&
+              (query.queryKey[1] === 'history' || query.queryKey[1] === 'sessionHistory') &&
               historyTaskIds.has(query.queryKey[2] as number),
           })
         }
@@ -224,6 +225,7 @@ export const useWebSocketEvents = () => {
         const challengeId = lastMessage.data.taskWithReview.task.parent
         queryClient.invalidateQueries({ queryKey: ['task', taskId] })
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', taskId] })
         invalidateChallengeAggregates(queryClient, challengeId)
         return
       }

@@ -37,7 +37,9 @@ export const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { task: loaderTask, challenge } = useLoaderData({ from: '/_app/tasks/$taskId/' })
-  const { claimTask: shouldClaimTask } = useSearch({ from: '/_app/tasks/$taskId/' })
+  const { claimTask: shouldClaimTask } = useSearch({
+    from: '/_app/tasks/$taskId/',
+  })
   const navigate = useNavigate()
   const { data: liveTask } = api.task.getTask(loaderTask.id)
   const task = liveTask ?? loaderTask

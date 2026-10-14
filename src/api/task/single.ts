@@ -73,6 +73,7 @@ export const taskSingle = {
       onSuccess: (lockedTask, taskId) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], lockedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', taskId] })
         invalidateLockedTasks(queryClient)
         if (lockedTask?.parent) {
           patchChallengeTaskMarker(queryClient, lockedTask.parent, taskId, {
@@ -97,6 +98,7 @@ export const taskSingle = {
       onSuccess: (unlockedTask, taskId) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], unlockedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', taskId] })
         invalidateLockedTasks(queryClient)
         if (unlockedTask?.parent) {
           patchChallengeTaskMarker(queryClient, unlockedTask.parent, taskId, {
@@ -122,8 +124,9 @@ export const taskSingle = {
       onError: (error, variables) => {
         logger.error('Failed to update bundle lock', { error, variables })
       },
-      onSuccess: () => {
+      onSuccess: (_data, { taskId }) => {
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', taskId] })
         invalidateLockedTasks(queryClient)
       },
     })
@@ -144,6 +147,7 @@ export const taskSingle = {
           queryClient.setQueryData<TaskGetResponse>(['task', taskId], { ...cached, status: 3 })
         }
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', taskId] })
         invalidateLockedTasks(queryClient)
         if (parent) {
           patchChallengeTaskMarker(queryClient, parent, taskId, { status: 3 })
@@ -170,6 +174,7 @@ export const taskSingle = {
       onSuccess: ({ updatedTask, oldStatus }, { taskId }) => {
         queryClient.setQueryData<TaskGetResponse>(['task', taskId], updatedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', taskId] })
         if (updatedTask?.parent) {
           patchChallengeTaskMarker(queryClient, updatedTask.parent, taskId, {
             status: updatedTask.status ?? undefined,
@@ -268,6 +273,7 @@ export const taskSingle = {
         const oldCached = queryClient.getQueryData<TaskGetResponse>(['task', variables.taskId])
         queryClient.setQueryData<TaskGetResponse>(['task', variables.taskId], updatedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', variables.taskId] })
+        queryClient.invalidateQueries({ queryKey: ['task', 'sessionHistory', variables.taskId] })
         invalidateLockedTasks(queryClient)
         if (variables.options?.comment) {
           queryClient.invalidateQueries({ queryKey: ['task', 'comments', variables.taskId] })

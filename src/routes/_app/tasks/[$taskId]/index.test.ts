@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest'
 import type { z } from 'zod'
 import { Route } from './index.tsx'
 
-// The route's search schema (`tab`) is a local, unexported const, so it's
+// The route's search schema is a local, unexported const, so it's
 // reached the same way the router itself reaches it: off `Route.options`.
 const schema = Route.options.validateSearch as z.ZodType<{
-  tab?: 'task' | 'features' | 'data' | 'comments'
+  tab?: 'task' | 'properties' | 'comments' | 'osm'
+  claimTask?: boolean
 }>
 
 describe('task route search schema', () => {

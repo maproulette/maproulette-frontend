@@ -114,3 +114,29 @@ export type TaskHistoryAction = {
    */
   [key: string]: unknown
 }
+
+export const SESSION_TYPES = ['Map', 'Custom'] as const
+export type SessionType = (typeof SESSION_TYPES)[number]
+
+export type SessionHistoryEvent = 'lock' | 'unlock'
+
+/** GET /task/:id/sessionHistory — lock/unlock events with acting user. */
+export type SessionHistoryItem = {
+  id: number
+  created: string
+  user: TaskHistoryUserRef | null
+  taskId: number
+  lockId: number
+  event: SessionHistoryEvent
+  sessionType: SessionType
+  subType: string | null
+}
+
+/* Task Tiles Types — query params from OpenAPI, plus z/bounds used by the MVT source builder */
+export type TaskTilesQueryParams = NonNullable<
+  operations['task_get_task_tiles']['parameters']['query']
+>
+export type TaskTilesParams = TaskTilesQueryParams & {
+  z: number
+  bounds: string
+}

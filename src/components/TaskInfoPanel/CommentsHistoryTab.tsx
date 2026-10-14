@@ -36,8 +36,10 @@ import {
   STATUS_PILL_COLORS,
   STATUS_TINT_COLORS,
 } from '@/lib/taskConstants'
+import { mergeHistoryFeeds } from '@/lib/taskHistoryFeed'
 import { cn } from '@/lib/utils'
-import type { TaskHistoryAction } from '@/types/Task'
+import type { SessionHistoryItem, TaskHistoryAction } from '@/types/Task'
+import { SessionHistoryItemRow } from './SessionHistoryItemRow'
 
 // Action types from the API — must match backend TaskLogEntry constants
 const ACTION_TYPE = {
@@ -117,15 +119,18 @@ export const CommentsHistoryTab = ({
   const { handleImageError, getImageSrc } = useAvatarContext()
   const { taskHistoryItemRenderers } = usePluginContext()
 
-  const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(resolvedTaskId)
+  const { data: taskHistory = [], isLoading: isHistoryLoading } =
+    api.task.getTaskHistory(resolvedTaskId)
+  const { data: sessionHistory = [], isLoading: isSessionLoading } =
+    api.task.getTaskSessionHistory(resolvedTaskId)
   const addCommentMutation = api.task.useAddTaskComment()
   const userOsmId = user?.osmProfile?.id
 
-  const sortedHistory = useMemo(() => {
-    return [...taskHistory].sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-    )
-  }, [taskHistory])
+  const sortedHistory = useMemo(
+    () => mergeHistoryFeeds(taskHistory, sessionHistory),
+    [taskHistory, sessionHistory]
+  )
+  const isLoading = isHistoryLoading || isSessionLoading
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -157,6 +162,31 @@ export const CommentsHistoryTab = ({
 
   if (!resolvedTaskId) {
     return null
+  }
+
+  const renderSessionItem = (item: SessionHistoryItem, index: number) => {
+    const pluginItem = {
+      taskId: item.taskId,
+      timestamp: item.created,
+      actionType: -1,
+      user: item.user,
+      event: item.event,
+      sessionType: item.sessionType,
+      subType: item.subType,
+      lockId: item.lockId,
+    } as import('@/types/Plugin').PluginTaskHistoryItem
+    for (const renderer of taskHistoryItemRenderers) {
+      if (!renderer.canRender(pluginItem)) continue
+      const Renderer = renderer.component
+      return (
+        <Renderer
+          key={`plugin-session-${renderer.id}-${item.id}`}
+          item={pluginItem}
+          index={index}
+        />
+      )
+    }
+    return <SessionHistoryItemRow key={`session-${item.id}`} item={item} />
   }
 
   const renderHistoryItem = (item: TaskHistoryAction, index: number) => {
@@ -319,7 +349,11 @@ export const CommentsHistoryTab = ({
             </div>
           ) : (
             sortedHistory
-              .map((item, index) => renderHistoryItem(item, index))
+              .map((entry, index) =>
+                entry.kind === 'session'
+                  ? renderSessionItem(entry.item, index)
+                  : renderHistoryItem(entry.item, index)
+              )
               .filter((item) => item !== null)
           )}
         </div>

@@ -148,7 +148,7 @@ describe('taskSingle.getTask', () => {
 describe('taskSingle.useLockTask', () => {
   it('locks a task, caches it, and patches the challenge marker with the current user id', async () => {
     const lockedTask = makeTask({ id: 1, parent: 10 })
-    stubFetch(new Response(JSON.stringify(lockedTask), { status: 200 }))
+    const fetchMock = stubFetch(new Response(JSON.stringify(lockedTask), { status: 200 }))
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(['user', 'whoami'], { id: 42 })
     queryClient.setQueryData(['challenge', 'taskMarkers', 10], {
@@ -166,6 +166,8 @@ describe('taskSingle.useLockTask', () => {
 
     expect(queryClient.getQueryData(['task', 1])).toEqual(lockedTask)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 1] })
+    const [request] = fetchMock.mock.calls[0] as [Request]
+    expect(new URL(request.url).searchParams.has('sessionType')).toBe(false)
     const markers = queryClient.getQueryData<{ markers: Array<{ id: number; lockedBy: number }> }>([
       'challenge',
       'taskMarkers',
@@ -280,6 +282,7 @@ describe('taskSingle.useLockTaskBundle', () => {
     const url = new URL(request.url)
     expect(url.pathname).toBe('/api/v2/task/1/lockBundle')
     expect(url.searchParams.getAll('taskIds')).toEqual(['2', '3'])
+    expect(url.searchParams.has('sessionType')).toBe(false)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
 

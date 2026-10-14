@@ -297,6 +297,7 @@ describe('useWebSocketEvents', () => {
       mount(queryClient)
 
       expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 1] })
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'sessionHistory', 1] })
     })
 
     it('invalidates challenge aggregates only when the status actually changed', () => {
@@ -450,6 +451,8 @@ describe('useWebSocketEvents', () => {
       expect(predicate({ queryKey: ['task', 'history', 1] })).toBe(true)
       expect(predicate({ queryKey: ['task', 'history', 2] })).toBe(true)
       expect(predicate({ queryKey: ['task', 'history', 3] })).toBe(false)
+      expect(predicate({ queryKey: ['task', 'sessionHistory', 1] })).toBe(true)
+      expect(predicate({ queryKey: ['task', 'sessionHistory', 3] })).toBe(false)
       expect(predicate({ queryKey: ['challenge', 10] })).toBe(false)
 
       // Both tasks changed status within the same challenge; only invalidated once.
@@ -644,6 +647,7 @@ describe('useWebSocketEvents', () => {
 
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 3] })
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 3] })
+        expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'sessionHistory', 3] })
         expect(invalidateChallengeAggregates).toHaveBeenCalledWith(queryClient, 20)
       }
     )
