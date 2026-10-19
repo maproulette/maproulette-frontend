@@ -202,20 +202,12 @@ export const challengeExplore = {
       },
     }),
 
-  // `getChallengesListingOptions` hits the same lightweight `/challenges/listing`
-  // endpoint (typed as `ChallengeListingResponse`), but existing callers of `listing`
-  // rely on the fuller `ChallengeGetResponse[]` shape, so the composed result is
-  // re-asserted to that type below to preserve their existing behavior/typing.
-  listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) => {
-    const queryClient = useQueryClient()
-    return useQuery({
+  // Thin hook over `getChallengesListingOptions`. `/challenges/listing` is a
+  // deliberately light endpoint (id, name, status flags)
+  listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) =>
+    useQuery({
       ...challengeExplore.getChallengesListingOptions(projectIds, { limit, page, onlyEnabled }),
-      select: (challenges) => {
-        seedChallengeCache(queryClient, challenges)
-        return challenges as unknown as ChallengeGetResponse[]
-      },
-    })
-  },
+    }),
 
   searchChallenges: ({ search = '' }: { search?: string } = {}) => {
     const queryClient = useQueryClient()
