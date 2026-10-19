@@ -51,7 +51,7 @@ export const ChallengeCard = ({
     segments,
     total: statsTotal,
     tasksRemaining: statsRemaining,
-  } = useChallengeProgress(challenge.id, challenge.completionMetrics)
+  } = useChallengeProgress(challenge.completionMetrics)
   const metricsRemaining = challenge.completionMetrics?.tasksRemaining
   const tasksRemaining = statsRemaining > 0 ? statsRemaining : (metricsRemaining ?? 0)
   const fallbackPercentage = challenge.completionPercentage || 0

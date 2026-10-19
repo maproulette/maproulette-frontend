@@ -154,6 +154,10 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   void queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] })
+  void queryClient.invalidateQueries({
+    predicate: ({ queryKey }) => holdsChallengeRecords(queryKey) && typeof queryKey[1] !== 'number',
+    refetchType: 'none',
+  })
 }
 
 /**

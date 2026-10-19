@@ -10,7 +10,6 @@ export const ChallengeProgress = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { openActions: onViewDetails } = useChallengeModals()
   const { completionPercentage, segments, hasActions } = useChallengeProgress(
-    challenge.id ?? 0,
     challenge.completionMetrics
   )
   const { t } = useIntl()
