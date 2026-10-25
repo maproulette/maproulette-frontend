@@ -148,7 +148,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       .filter((challenge) => challenge.name.toLowerCase().includes(searchQuery.toLowerCase()))
       .filter((challenge) => (onlyDiscoverable ? !!challenge.enabled : true))
       .filter((challenge) => (onlyArchived ? !!challenge.isArchived : true))
-      .filter((challenge) => (onlyOwned ? challenge.owner === user?.osmProfile?.id : true))
+      .filter((challenge) => (onlyOwned ? challenge.ownerId === user?.osmProfile?.id : true))
       .filter((challenge) =>
         onlyPinned
           ? challenge.id != null
