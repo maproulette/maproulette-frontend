@@ -168,7 +168,16 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
             : false
           : true
       )
-  }, [challenges, searchQuery, onlyDiscoverable, onlyArchived, onlyPinned, pinnedChallengeIds])
+  }, [
+    challenges,
+    searchQuery,
+    onlyDiscoverable,
+    onlyArchived,
+    onlyOwned,
+    onlyPinned,
+    pinnedChallengeIds,
+    user?.osmProfile?.id,
+  ])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<ManageChallengesContextType>(
