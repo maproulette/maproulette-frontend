@@ -1,5 +1,6 @@
-import { Loader2, SkipForward } from 'lucide-react'
+import { SkipForward } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 import { withBindingHint } from '@/lib/keyboardShortcuts'
 import type { Task } from '@/types/Task'
@@ -27,7 +28,7 @@ export const SkipButton = ({ task }: { task: Task }) => {
       )}
     >
       {isSkipping ? (
-        <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+        <Spinner size="sm" aria-hidden="true" />
       ) : (
         <SkipForward className="h-3.5 w-3.5" aria-hidden="true" />
       )}

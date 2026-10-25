@@ -49,9 +49,7 @@ export const LAYER_IDS = {
   points: POINTS_LAYER_ID,
   /** Created tasks (status == 0). Drawn on top so they're never occluded. */
   pointsCreated: POINTS_CREATED_LAYER_ID,
-  /** Selected (popup-open) task overlay, used by the non-bundle maps. Drawn on top
-   *  at 1.4x. The task-edit map instead styles selection in place on the base
-   *  layers, so the selected task clusters and spiders with everything else. */
+  /** Selected (popup-open) task overlay. Drawn on top at 1.4x. */
   selected: 'task-selected',
   /** All marker layers — use this for queryRenderedFeatures, click/hover checks,
    *  and the `interactiveLayerIds` prop. */

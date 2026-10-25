@@ -109,7 +109,7 @@ export const ReportModal = () => {
         )
       )
     } catch (error) {
-      logger.error('Error submitting report', { error: String(error) })
+      logger.error('Error submitting report', { error })
       toast.error(
         await getErrorMessage(
           error,

@@ -51,7 +51,7 @@ export const FindTask = () => {
   if (isLoading || isDebouncePending) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-12">
-        <Spinner className="h-8 w-8 text-blue-500" />
+        <Spinner size="lg" className="text-blue-500" />
         <p className="text-sm text-zinc-500 dark:text-slate-400">
           {t(
             'appLayout.header.globalSearch.findTask.lookingUp',

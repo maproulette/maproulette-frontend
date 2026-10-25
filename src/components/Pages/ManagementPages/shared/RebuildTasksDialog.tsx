@@ -130,7 +130,7 @@ export const RebuildTasksDialog = ({
       reset()
       onOpenChange(false)
     } catch (error) {
-      logger.error('Rebuild failed', { error: String(error) })
+      logger.error('Rebuild failed', { error })
       toast.error(
         t('managementPages.rebuildTasksDialog.toastError', undefined, 'Could not start rebuild')
       )

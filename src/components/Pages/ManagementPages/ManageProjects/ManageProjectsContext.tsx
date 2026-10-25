@@ -1,10 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { Project } from '@/types/Project'
 import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from './pinnedProjects'
+import { useProjectChallengeCounts } from './useProjectChallengeCounts'
 
 type ViewMode = 'grid' | 'list'
 
@@ -118,28 +118,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
     return byArchived
   }, [projectsSortedByPinned, onlyShowArchived, onlyShowPinned, pinnedProjectIds])
 
-  const projectIds = useMemo(
-    () => projects?.map((p) => p.id).filter((id): id is number => id != null) ?? [],
-    [projects]
-  )
-
-  const challengesListingQuery = api.challenge.getChallengesListingOptions(projectIds, {
-    limit: -1,
-    onlyEnabled: false,
-  })
-  const { data: challengesListing = [] } = useQuery({
-    ...challengesListingQuery,
-    enabled: projectIds.length > 0,
-  })
-
-  const challengeCountsByProjectId = useMemo(() => {
-    const map: Record<number, number> = {}
-    for (const c of challengesListing) {
-      const pid = c.parent
-      map[pid] = (map[pid] ?? 0) + 1
-    }
-    return map
-  }, [challengesListing])
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 
   // All useCallback hooks below are stored in the context value — stable references
   // prevent all context consumers from re-rendering on every provider render.

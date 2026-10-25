@@ -1,141 +1,68 @@
-import {
-  createContext,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
+import { api } from '@/api'
+import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
+import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
-import type { SpideredMarkers, TaskEditMapContextType } from './taskEditMapTypes'
-import { useClusteredGeoJSONData } from './useClusteredGeoJSONData'
+import type { TaskEditMapContextType } from './taskEditMapTypes'
 import { useInitialMapBounds } from './useInitialMapBounds'
 import { useMapViewport } from './useMapViewport'
-import { useMarkerIconsVersion } from './useMarkerIconsVersion'
-import { useSuperclusterIndex } from './useSuperclusterIndex'
-import { useTaskMapInteractions } from './useTaskMapInteractions'
-import { useTaskMarkerData } from './useTaskMarkerData'
-import { useTaskPointFeatures } from './useTaskPointFeatures'
 
 const TaskEditMapContext = createContext<TaskEditMapContextType | null>(null)
 
 export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const { task } = useTaskContext()
   const { map: mapRef } = useTaskMapContext()
+  const { showBundleOnly, activeBundle } = useTaskBundleContext()
 
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isClustered, setIsClustered] = useState<boolean>(true)
   const [showExploreLayer, setShowExploreLayer] = useState<boolean>(false)
-  const [spideredMarkers, setSpideredMarkers] = useState<SpideredMarkers>(new Map())
 
-  const primaryTaskId = task.id
-  const shouldCluster = true
+  const { data: taskMarkersData, isLoading: isLoadingMarkers } =
+    api.challenge.getChallengeTaskMarkers(task.parent)
 
-  // Spidered markers are positions fanned out around one overlap group on the
-  // task the mapper just left; the map survives the move, so they have to go.
-  const spideredForTaskIdRef = useRef(primaryTaskId)
-  useEffect(() => {
-    if (spideredForTaskIdRef.current === primaryTaskId) return
-    spideredForTaskIdRef.current = primaryTaskId
-    setSpideredMarkers(new Map())
-  }, [primaryTaskId])
+  const allMarkers = useMemo(() => flattenTaskMarkers(taskMarkersData), [taskMarkersData])
 
-  const {
-    isLoadingMarkers,
-    taskCount,
-    markersData,
-    bundleTaskIdsSet,
-    bundleFilterIds,
-    overlapData,
-    overlappingTaskIds,
-    overlapGroupsMap,
-  } = useTaskMarkerData()
+  const markers = useMemo(() => {
+    if (!showBundleOnly) return allMarkers
+    const shown = new Set([task.id, ...(activeBundle?.taskIds ?? [])])
+    return allMarkers.filter((marker) => shown.has(marker.id))
+  }, [allMarkers, showBundleOnly, activeBundle?.taskIds, task.id])
 
-  const { geoJSONData, pointFeatures } = useTaskPointFeatures(
-    markersData,
-    overlapData,
-    overlappingTaskIds,
-    bundleFilterIds
-  )
+  const markersById = useMemo(() => new Map(markers.map((m) => [m.id, m])), [markers])
 
   const { mapBounds, mapZoom } = useMapViewport(mapLoaded)
 
-  const { superclusterIndex, superclusterRef, isClusteringForced } = useSuperclusterIndex(
-    pointFeatures,
-    isClustered,
-    mapZoom
-  )
-
-  const iconsVersion = useMarkerIconsVersion(mapLoaded, shouldCluster)
-
-  const clusteredGeoJSONData = useClusteredGeoJSONData(
-    superclusterIndex,
-    mapBounds,
-    mapZoom,
-    iconsVersion,
-    spideredMarkers,
-    bundleTaskIdsSet,
-    overlapGroupsMap
-  )
-
   const initialBoundsApplied = useInitialMapBounds(mapLoaded, isLoadingMarkers)
-
-  const { onMapClick, onMouseMove } = useTaskMapInteractions(
-    markersData,
-    overlapGroupsMap,
-    superclusterRef,
-    setSpideredMarkers,
-    shouldCluster
-  )
 
   const value = useMemo(
     () => ({
       mapRef,
       mapLoaded,
       setMapLoaded,
-      taskCount,
-      shouldCluster,
-      markersData,
-      overlapData,
-      isLoadingMarkers,
-      onMapClick,
-      onMouseMove,
-      isClustered,
-      setIsClustered,
-      geoJSONData,
-      clusteredGeoJSONData,
-      primaryTaskId,
-      spideredMarkers,
-      setSpideredMarkers,
-      isClusteringForced,
-      initialBoundsApplied,
       mapBounds,
       mapZoom,
+      markers,
+      markersById,
+      isLoadingMarkers,
+      isClustered,
+      setIsClustered,
+      initialBoundsApplied,
       showExploreLayer,
       setShowExploreLayer,
     }),
     [
       mapRef,
       mapLoaded,
-      taskCount,
-      shouldCluster,
-      markersData,
-      overlapData,
-      isLoadingMarkers,
-      onMapClick,
-      onMouseMove,
-      isClustered,
-      geoJSONData,
-      clusteredGeoJSONData,
-      primaryTaskId,
-      spideredMarkers,
-      isClusteringForced,
-      initialBoundsApplied,
-      showExploreLayer,
       mapBounds,
       mapZoom,
+      markers,
+      markersById,
+      isLoadingMarkers,
+      isClustered,
+      initialBoundsApplied,
+      showExploreLayer,
     ]
   )
 

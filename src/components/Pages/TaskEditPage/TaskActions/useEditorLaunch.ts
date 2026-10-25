@@ -66,7 +66,7 @@ export const useEditorLaunch = (task: Task) => {
         const [lng, lat] = task.location.coordinates
         const zoom = 18
 
-        const checkinComment = buildChangesetComment(challenge, task.id)
+        const checkinComment = buildChangesetComment(challenge, task)
         const checkinSource = challenge?.checkinSource ?? ''
         const layerName = activeBundle
           ? `MR Bundle ${task.id} (${tasks.length} tasks)`
@@ -214,7 +214,7 @@ export const useEditorLaunch = (task: Task) => {
                 logger.warn('Failed to send reference layer to JOSM', {
                   taskId,
                   attachmentId: attachment.id,
-                  error: String(error),
+                  error,
                 })
               })
             }
@@ -232,7 +232,7 @@ export const useEditorLaunch = (task: Task) => {
           )
         }
       } catch (error) {
-        logger.error('Error opening editor', { error: String(error) })
+        logger.error('Error opening editor', { error })
         toast.error(
           t('taskEditPage.taskActions.editorButton.openFailed', undefined, 'Failed to open editor')
         )

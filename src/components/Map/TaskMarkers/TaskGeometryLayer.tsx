@@ -6,6 +6,7 @@ import { parseStyleRules } from '@/lib/taskFeatureStyle'
 
 interface TaskGeometryLayerProps {
   selectedTaskId: number | null
+  showDirections?: boolean
 }
 
 /**
@@ -13,7 +14,10 @@ interface TaskGeometryLayerProps {
  * (browse, explore, challenge management). Drawn through the same source the
  * task editor uses, so a feature keeps its size and color across maps.
  */
-export const TaskGeometryLayer = ({ selectedTaskId }: TaskGeometryLayerProps) => {
+export const TaskGeometryLayer = ({
+  selectedTaskId,
+  showDirections = true,
+}: TaskGeometryLayerProps) => {
   const { data: taskData } = api.task.getTask(selectedTaskId as number)
   const { data: challenge } = api.challenge.getChallenge(taskData?.parent ?? 0)
 
@@ -29,5 +33,5 @@ export const TaskGeometryLayer = ({ selectedTaskId }: TaskGeometryLayerProps) =>
     return null
   }
 
-  return <TaskGeometrySource geometries={geometries} emphasizedTaskId={selectedTaskId} />
+  return <TaskGeometrySource geometries={geometries} showDirections={showDirections} />
 }

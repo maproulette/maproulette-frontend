@@ -1,4 +1,4 @@
-import { BACKEND_URL, expect, SUPER_KEY, test } from './fixtures'
+import { BACKEND_URL, expect, test } from './fixtures'
 
 // Granting an individual user a role on a single challenge, which reaches
 // where the parent project's grants do not.
@@ -113,9 +113,7 @@ test("a manager's role can be changed, and they keep just the one", async ({
   // A user holds one role per challenge: re-granting replaces rather than
   // accumulates, so the server should report exactly one entry.
   await expect(async () => {
-    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}/managers`, {
-      headers: { apiKey: SUPER_KEY },
-    })
+    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}/managers`)
     const managers = (await response.json()) as Array<{ userId: number; role: number }>
     expect(managers).toHaveLength(1)
     expect(managers[0]).toMatchObject({ userId: seededUser.id, role: 1 })
@@ -136,9 +134,7 @@ test('a manager can be removed again', async ({ page, request, challenge, seeded
 
   await expect(dialog.getByText('No managers yet.')).toBeVisible({ timeout: 15_000 })
   await expect(async () => {
-    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}/managers`, {
-      headers: { apiKey: SUPER_KEY },
-    })
+    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}/managers`)
     expect(await response.json()).toEqual([])
   }).toPass({ timeout: 20_000 })
 })

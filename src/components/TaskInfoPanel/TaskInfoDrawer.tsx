@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
 import { TaskTabs } from './TaskTabs'
 
-const noop = () => {}
+const notLocked = async () => false
 
 interface TaskInfoDrawerProps {
   selectedTask: TaskMarker | null
@@ -90,8 +90,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
             isLocked: false,
             isLocking: false,
             lockedTasks: [],
-            lockTask: noop,
-            unlockTask: noop,
+            lockTask: notLocked,
+            unlockTask: notLocked,
           }
         : undefined,
     [task]

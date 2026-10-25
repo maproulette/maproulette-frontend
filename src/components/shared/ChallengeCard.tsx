@@ -13,8 +13,24 @@ import { ChallengeTaxonomy } from './ChallengeTaxonomy'
 import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
 
+type ChallengeCardChallenge = Pick<Challenge, 'id' | 'name' | 'parent' | 'status'> &
+  Partial<
+    Pick<
+      Challenge,
+      | 'avatarUrl'
+      | 'completionMetrics'
+      | 'completionPercentage'
+      | 'modified'
+      | 'lastTaskRefresh'
+      | 'difficulty'
+      | 'featured'
+      | 'cooperativeType'
+      | 'isGlobal'
+    >
+  >
+
 interface ChallengeCardProps {
-  challenge: Challenge
+  challenge: ChallengeCardChallenge
   /**
    * Project name to display. Endpoints differ on whether they embed the parent
    * project or return only its id, so callers that already know the project
@@ -132,7 +148,7 @@ export const ChallengeCard = ({
 
           <div className="flex items-center justify-between gap-2">
             <span className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-slate-300">
-              {getDifficultyLabel(t, challenge.difficulty)}
+              {challenge.difficulty != null && getDifficultyLabel(t, challenge.difficulty)}
               {isComplete && (
                 <Badge variant="success" className="text-xs">
                   {t('common.completed', undefined, 'Completed')}

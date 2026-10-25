@@ -1,10 +1,9 @@
-import { queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 import type { GetAllUsersParams, User } from '@/types/User'
 import { apiRequest, convertParamsToSearchParams } from '../client'
 
 export const userAdmin = {
   getAllUsers: (params?: GetAllUsersParams) => {
-    const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
         queryKey: ['user', 'all', params],
@@ -17,9 +16,6 @@ export const userAdmin = {
               }),
             })
             .json<User[]>()
-          for (const user of users) {
-            queryClient.setQueryData(['user', user.id], user)
-          }
           return users
         },
       })

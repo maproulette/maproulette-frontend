@@ -8,8 +8,7 @@ import type { TaskMarker } from '@/types/Task'
 
 export const useMapNavigation = (
   mapLoaded: boolean,
-  markers: TaskMarker[],
-  allMarkersMap: Map<number, TaskMarker>
+  markersById: ReadonlyMap<number, TaskMarker>
 ) => {
   const { map: mapRef } = useTaskMapContext()
   const { task } = useTaskContext()
@@ -22,12 +21,12 @@ export const useMapNavigation = (
   // Zoom to primary task when task changes or markers initially load
   useEffect(() => {
     if (!mapRef.current || !mapLoaded) return
-    if (markers.length === 0) return
+    if (markersById.size === 0) return
 
     // Only zoom if we haven't already zoomed to this task
     if (lastZoomedTaskIdRef.current === primaryTaskId) return
 
-    const primaryMarker = markers.find((m) => m.id === primaryTaskId)
+    const primaryMarker = markersById.get(primaryTaskId)
     if (primaryMarker?.location) {
       mapRef.current.jumpTo({
         center: [primaryMarker.location.lng, primaryMarker.location.lat],
@@ -35,7 +34,7 @@ export const useMapNavigation = (
       })
       lastZoomedTaskIdRef.current = primaryTaskId
     }
-  }, [mapLoaded, primaryTaskId, markers])
+  }, [mapLoaded, primaryTaskId, markersById])
 
   // Reason: stable callback prevents map event listener re-registration
   const handleCenterToTask = useCallback(() => {
@@ -44,7 +43,7 @@ export const useMapNavigation = (
     if (activeBundle && activeBundle.taskIds.length > 1) {
       // Center to bundle bounds
       const bundleMarkers = activeBundle.taskIds
-        .map((id) => allMarkersMap.get(id))
+        .map((id) => markersById.get(id))
         .filter((m): m is TaskMarker => m !== undefined && m.location !== undefined)
 
       if (bundleMarkers.length > 0) {
@@ -62,14 +61,14 @@ export const useMapNavigation = (
     }
 
     // Center to primary task
-    const primaryMarker = markers.find((m) => m.id === primaryTaskId)
+    const primaryMarker = markersById.get(primaryTaskId)
     if (primaryMarker?.location) {
       mapRef.current.jumpTo({
         center: [primaryMarker.location.lng, primaryMarker.location.lat],
         zoom: 16,
       })
     }
-  }, [mapRef, activeBundle, allMarkersMap, markers, primaryTaskId])
+  }, [mapRef, activeBundle, markersById, primaryTaskId])
 
   return { handleCenterToTask }
 }

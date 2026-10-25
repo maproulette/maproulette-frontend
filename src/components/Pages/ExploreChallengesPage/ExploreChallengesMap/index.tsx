@@ -1,19 +1,18 @@
 import { useId } from 'react'
 import { createPortal } from 'react-dom'
-import type { MapMouseEvent } from 'react-map-gl/maplibre'
-import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
+import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useDirectionsToggle } from '@/components/Map/directionsControlButton'
 import { MapControls } from '@/components/Map/MapControls'
+import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
 import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
-import { clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
 import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
 import { TaskGeometryLayer } from '@/components/Map/TaskMarkers/TaskGeometryLayer'
-import { useWebGLContextRecovery } from '@/components/Map/useWebGLContextRecovery'
+import { TaskPickerMenu } from '@/components/Map/TaskMarkers/TaskPickerMenu'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
@@ -40,13 +39,11 @@ export const ExploreChallengesMap = () => {
     handleMapClick,
     handleMapMouseMove,
     locationGeojson,
-    spideredMarkers,
-    spideredTaskData,
-    setSpideredMarkers,
-    setSpideredTaskData,
+    picker,
+    selectPickedTask,
+    closePicker,
   } = useExploreChallengesMap()
-
-  const { mapKey, attachMap } = useWebGLContextRecovery(mapRef, setMapLoaded)
+  const { showDirections, directionsButton } = useDirectionsToggle(mapLoaded)
 
   const mvtSourceId = 'mvt-data'
   const mvtLayerId = 'mvt-hidden'
@@ -57,35 +54,21 @@ export const ExploreChallengesMap = () => {
     <div className="relative isolate h-full w-full">
       <div className="absolute inset-0 overflow-hidden rounded-lg">
         <MapGL
-          key={mapKey}
           id={mapId}
-          ref={attachMap}
+          ref={mapRef}
           hash
           initialViewState={{
             longitude: 0,
             latitude: 0,
             zoom: 2,
           }}
-          refreshExpiredTiles={false}
-          maxTileCacheZoomLevels={10}
           mapStyle={getCurrentMapStyle()}
           onLoad={() => setMapLoaded(true)}
           onMove={handleMapMove}
           onMoveEnd={handleMapMoveEnd}
-          onClick={(e: MapMouseEvent) => {
-            handleMapClick(e)
-          }}
+          onClick={handleMapClick}
           onMouseMove={handleMapMouseMove}
-          interactiveLayerIds={
-            clusterLayer.id
-              ? [
-                  clusterLayer.id,
-                  LAYER_IDS.clusterCount,
-                  ...LAYER_IDS.allPoints,
-                  'spidered-markers-layer',
-                ]
-              : [...LAYER_IDS.allPoints, 'spidered-markers-layer']
-          }
+          interactiveLayerIds={[LAYER_IDS.clusters, LAYER_IDS.clusterCount, ...LAYER_IDS.allPoints]}
         >
           <LocationPolygonLayer locationGeojson={locationGeojson} />
 
@@ -100,7 +83,10 @@ export const ExploreChallengesMap = () => {
             />
           </Source>
 
-          <TaskGeometryLayer selectedTaskId={selectedTask?.id ?? null} />
+          <TaskGeometryLayer
+            selectedTaskId={selectedTask?.id ?? null}
+            showDirections={showDirections}
+          />
 
           {/* Visible clustered markers via Supercluster, with the selected task
               drawn on top via the shared selected overlay. */}
@@ -109,12 +95,8 @@ export const ExploreChallengesMap = () => {
             selectedTaskData={selectedTaskGeoJSON}
           />
 
-          {spideredMarkers.size > 0 && (
-            <SpiderMarkers
-              markers={spideredTaskData}
-              spiderPositions={spideredMarkers}
-              selectedTaskId={selectedTask?.id}
-            />
+          {picker && (
+            <TaskPickerMenu picker={picker} onSelect={selectPickedTask} onClose={closePicker} />
           )}
         </MapGL>
 
@@ -130,11 +112,7 @@ export const ExploreChallengesMap = () => {
         createPortal(
           <TaskInfoDrawer
             selectedTask={selectedTask}
-            onClose={() => {
-              setSelectedTask(null)
-              setSpideredMarkers(new Map())
-              setSpideredTaskData([])
-            }}
+            onClose={() => setSelectedTask(null)}
             mapRef={mapRef}
           />,
           portalTarget
@@ -153,6 +131,7 @@ export const ExploreChallengesMap = () => {
         showLayers={true}
         collapsible={true}
         defaultOpen={true}
+        customButtons={[directionsButton]}
       />
     </div>
   )

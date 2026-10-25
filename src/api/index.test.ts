@@ -111,12 +111,23 @@ describe('apiRequest beforeRequest hook', () => {
   })
 
   it('sets the apiKey header when an API key is configured', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
+    const mutableEnv = window.env as MutableEnv
+    const originalKey = mutableEnv.VITE_SERVER_API_KEY
+    mutableEnv.VITE_SERVER_API_KEY = 'configured-key'
+    vi.resetModules()
 
-    await apiRequest.get('some/path').json()
+    try {
+      const { apiRequest: freshApiRequest } = await import('./index')
+      const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
 
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.headers.get('apikey')).toBe(apiKey)
+      await freshApiRequest.get('some/path').json()
+
+      const [request] = fetchMock.mock.calls[0]
+      expect(request.headers.get('apikey')).toBe('configured-key')
+    } finally {
+      mutableEnv.VITE_SERVER_API_KEY = originalKey
+      vi.resetModules()
+    }
   })
 
   it('does not overwrite a content-type header already set on the request', async () => {

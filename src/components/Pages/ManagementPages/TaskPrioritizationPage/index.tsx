@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { api } from '@/api'
-import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
 import { DrawerPortalProvider } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
@@ -44,14 +44,7 @@ export const TaskPrioritizationPage = ({ challengeId }: Props) => {
     }
   }, [challengeQuery.data])
 
-  const markers = useMemo(() => {
-    const data = markersQuery.data
-    if (!data) return []
-    const { markers: m, overlapMarkers } = processMarkersData(data)
-    // Flatten overlap markers so every task participates in preview evaluation.
-    const flatOverlap = overlapMarkers.flatMap((o) => o.tasks)
-    return [...m, ...flatOverlap]
-  }, [markersQuery.data])
+  const markers = useMemo(() => flattenTaskMarkers(markersQuery.data), [markersQuery.data])
 
   if (challengeQuery.isLoading || !initialDraft) {
     return (

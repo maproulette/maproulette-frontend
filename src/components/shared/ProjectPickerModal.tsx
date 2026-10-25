@@ -1,10 +1,14 @@
-import { Archive, CheckCircle2, Eye, Loader2, Pin, User } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { Archive, Eye, Pin, User } from 'lucide-react'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { ProjectsTableView } from '@/components/Pages/ManagementPages/ManageProjects/ProjectsTableView'
 import { getPinnedProjectIds } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
+import { useProjectChallengeCounts } from '@/components/Pages/ManagementPages/ManageProjects/useProjectChallengeCounts'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
+import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -13,9 +17,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
+import { Spinner } from '@/components/ui/Spinner'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
-import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
 
 const PAGE_SIZE = 20
@@ -28,6 +32,9 @@ interface ProjectPickerModalProps {
   title?: string
   description?: string
   excludeProjectIds?: number[]
+  closeOnSelect?: boolean
+  disabled?: boolean
+  children?: ReactNode
 }
 
 export const ProjectPickerModal = ({
@@ -38,6 +45,9 @@ export const ProjectPickerModal = ({
   title,
   description,
   excludeProjectIds,
+  closeOnSelect = true,
+  disabled = false,
+  children,
 }: ProjectPickerModalProps) => {
   const { t } = useIntl()
   const resolvedTitle = title ?? t('common.selectAProject', undefined, 'Select a project')
@@ -54,6 +64,7 @@ export const ProjectPickerModal = ({
   const [onlyShowArchived, setOnlyShowArchived] = useState(false)
   const [onlyShowPinned, setOnlyShowPinned] = useState(false)
   const [loadedPages, setLoadedPages] = useState(1)
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   // Reset pagination when server-side filters change so a narrower result set
   // doesn't keep an oversized limit from a prior search.
@@ -74,6 +85,7 @@ export const ProjectPickerModal = ({
   })
 
   const hasNextPage = (projects?.length ?? 0) >= PAGE_SIZE * loadedPages
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 
   const { user } = useAuthContext()
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
@@ -98,7 +110,7 @@ export const ProjectPickerModal = ({
 
   const handleSelect = (project: Project) => {
     onSelectProject(project)
-    onOpenChange(false)
+    if (closeOnSelect) onOpenChange(false)
   }
 
   const hasActiveFilters = onlyEnabled || onlyOwned || onlyShowPinned || onlyShowArchived
@@ -150,58 +162,57 @@ export const ProjectPickerModal = ({
               setOnlyShowArchived(false)
             }}
           />
+          <div className="ml-auto">
+            <ViewModeToggle value={viewMode} onValueChange={setViewMode} />
+          </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 dark:border-slate-700">
+        <fieldset
+          disabled={disabled}
+          className="m-0 min-h-0 min-w-0 flex-1 overflow-y-auto border-0 p-0 disabled:opacity-50"
+        >
           {isLoading ? (
             <div className="flex items-center justify-center p-6">
-              <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+              <Spinner size="lg" className="text-zinc-400" />
             </div>
           ) : projectsToShow.length === 0 ? (
-            <div className="p-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="rounded-lg border border-zinc-200 p-6 text-center text-sm text-zinc-500 dark:border-slate-700 dark:text-zinc-400">
               {t('shared.projectPickerModal.noProjectsFound', undefined, 'No projects found.')}
             </div>
+          ) : viewMode === 'list' ? (
+            <ProjectsTableView
+              projects={projectsToShow}
+              challengeCountsByProjectId={challengeCountsByProjectId}
+              pinnedProjectIds={pinnedProjectIds}
+              onSelectProject={handleSelect}
+              selectedProjectId={selectedProjectId}
+            />
           ) : (
-            <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
-              {projectsToShow.map((project) => {
-                const isSelected = project.id != null && project.id === selectedProjectId
-                const isPinned = project.id != null && pinnedProjectIds.includes(project.id)
-                return (
-                  <li key={project.id}>
-                    <button
-                      type="button"
-                      onClick={() => handleSelect(project)}
-                      className={cn(
-                        'flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-slate-800/50',
-                        isSelected && 'bg-blue-50 dark:bg-blue-950/40'
-                      )}
-                    >
-                      <div className="flex min-w-0 items-center gap-2">
-                        {isPinned && (
-                          <Pin className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
-                        )}
-                        <span className="truncate font-medium text-zinc-900 dark:text-zinc-50">
-                          {project.displayName || project.name}
-                        </span>
-                        {project.id != null && (
-                          <span className="shrink-0 text-zinc-500 dark:text-zinc-400">
-                            {t('common.idNumberParenthetical', { id: project.id }, '(ID: {id})')}
-                          </span>
-                        )}
-                      </div>
-                      {isSelected && (
-                        <CheckCircle2 className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
-                      )}
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
+            <div
+              className="grid gap-4 p-1"
+              style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
+            >
+              {projectsToShow.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  challengeMeta={{
+                    totalChallenges:
+                      project.id != null ? (challengeCountsByProjectId[project.id] ?? 0) : 0,
+                    pinned: 0,
+                    completed: 0,
+                  }}
+                  onSelect={() => handleSelect(project)}
+                  selected={project.id != null && project.id === selectedProjectId}
+                />
+              ))}
+            </div>
           )}
 
           {!isLoading && projectsToShow.length > 0 && hasNextPage && (
             <div className="flex justify-center p-3">
               <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 className="rounded-full"
@@ -210,7 +221,7 @@ export const ProjectPickerModal = ({
               >
                 {isFetching ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Spinner />
                     {t('common.loading2', undefined, 'Loading...')}
                   </>
                 ) : (
@@ -219,7 +230,8 @@ export const ProjectPickerModal = ({
               </Button>
             </div>
           )}
-        </div>
+        </fieldset>
+        {children}
       </DialogContent>
     </Dialog>
   )

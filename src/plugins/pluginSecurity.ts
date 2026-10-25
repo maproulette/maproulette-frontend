@@ -18,13 +18,6 @@ const ALLOWED_PLUGIN_HOSTS = [
 ]
 
 /**
- * The origin the app itself is served from, or undefined outside a browser (the
- * node test environment defines `window` as a bare shim with no location).
- */
-const appOrigin = (): string | undefined =>
-  typeof window !== 'undefined' ? window.location?.origin : undefined
-
-/**
  * Parses a plugin URL the same way {@link validatePluginUrl} does, so a URL that
  * passed validation is guaranteed to parse for callers too. Absolute URLs parse
  * as-is; root-relative paths (`/plugins/foo.js` - the same-origin bundles the app
@@ -38,8 +31,7 @@ const appOrigin = (): string | undefined =>
 export const parsePluginUrl = (url: string): URL | null => {
   try {
     if (url.startsWith('/')) {
-      const origin = appOrigin()
-      return origin === undefined ? null : new URL(url, origin)
+      return new URL(url, window.location.origin)
     }
     return new URL(url)
   } catch {
@@ -67,7 +59,7 @@ export const validatePluginUrl = (url: string): boolean => {
   }
 
   // Same-origin bundles (e.g. /plugins/... served as static files) are always allowed.
-  if (parsed.origin === appOrigin()) {
+  if (parsed.origin === window.location.origin) {
     pluginLogger.debug('Plugin URL validated (same-origin)', { url })
     return true
   }

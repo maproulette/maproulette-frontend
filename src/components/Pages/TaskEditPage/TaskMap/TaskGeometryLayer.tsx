@@ -1,7 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { api } from '@/api'
-import { createDirectionIcons } from '@/components/Map/createDirectionIcons'
-import { DIRECTION_ICONS } from '@/components/Map/directionIndicators'
 import { TaskGeometrySource } from '@/components/Map/TaskMarkers/TaskGeometrySource'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
@@ -10,7 +8,6 @@ import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
 import { parseStyleRules } from '@/lib/taskFeatureStyle'
-import { useTaskEditMapContext } from './TaskEditMapContext'
 
 /**
  * TaskGeometryLayer that always shows the primary task's geometries,
@@ -23,17 +20,11 @@ import { useTaskEditMapContext } from './TaskEditMapContext'
  */
 export const TaskGeometryLayer = () => {
   const { selectedMarker } = useTaskMapContext()
-  // `mapLoaded` lives on TaskEditMapContext — that is the flag <MapGL onLoad>
-  // actually sets (TaskMapContext carries an identically named one that
-  // nothing ever flips).
-  const { mapRef, mapLoaded } = useTaskEditMapContext()
   const { activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { focusedFeature, highlightedFeature, showDirectionIndicators } = useTaskFeatureContext()
   const primaryTaskId = task.id
-
-  const [directionIconsReady, setDirectionIconsReady] = useState(false)
 
   // Always fetch the primary task's geometries
   const { data: primaryTask } = api.task.getTask(primaryTaskId)
@@ -45,26 +36,6 @@ export const TaskGeometryLayer = () => {
   // Fetch selected marker task data if there's a marker selected
   const selectedTaskId = selectedMarker?.id ?? null
   const { data: selectedTask } = api.task.getTask(selectedTaskId ?? 0)
-
-  useEffect(() => {
-    if (!mapLoaded) return
-    const map = mapRef.current?.getMap()
-    if (!map) return
-
-    const register = () =>
-      createDirectionIcons({ current: map }, () => setDirectionIconsReady(true))
-    register()
-
-    // Switching basemaps reloads the style and throws away registered images,
-    // so put them back as soon as a layer asks for one that has gone missing.
-    const onImageMissing = (event: { id: string }) => {
-      if (Object.values(DIRECTION_ICONS).some((name) => name === event.id)) register()
-    }
-    map.on('styleimagemissing', onImageMissing)
-    return () => {
-      map.off('styleimagemissing', onImageMissing)
-    }
-  }, [mapLoaded, mapRef])
 
   // Conditional styles configured on the challenge, applied on top of each
   // feature's own simplestyle properties.
@@ -120,8 +91,7 @@ export const TaskGeometryLayer = () => {
     <TaskGeometrySource
       geometries={geometries}
       highlightedKeys={highlightedFeature?.keys ?? null}
-      emphasizedTaskId={selectedTaskId}
-      showDirections={showDirectionIndicators && directionIconsReady}
+      showDirections={showDirectionIndicators}
     />
   )
 }

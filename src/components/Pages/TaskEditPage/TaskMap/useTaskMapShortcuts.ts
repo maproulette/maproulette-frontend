@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { DIRECTIONS_BINDING } from '@/components/Map/directionsControlButton'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { useIntl } from '@/i18n'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
@@ -24,7 +25,7 @@ export const MAP_BINDINGS = {
   toggleMarkers: { key: 'm' },
   toggleBundleOnly: { key: 'b' },
   toggleExploreLayer: { key: 'o', shift: true },
-  toggleDirectionIndicators: { key: 's' },
+  toggleDirectionIndicators: DIRECTIONS_BINDING,
   startDrawing: { key: 'b', shift: true },
   exitMultiTask: { key: 'Delete' },
   cancel: { key: 'Esc' },

@@ -6,12 +6,13 @@ import {
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { useAuthContext } from '@/contexts/AuthContext'
-import type { Challenge } from '@/types/Challenge'
+import type { ChallengeListing } from '@/types/Challenge'
 
 export interface ManageChallengesContextType {
   // Data
-  challenges: Challenge[]
-  filteredChallenges: Challenge[]
+  challenges: ChallengeListing[]
+  filteredChallenges: ChallengeListing[]
+  projectNamesById: Map<number, string>
   isLoading: boolean
   pinnedChallengeIds: number[]
 
@@ -34,9 +35,9 @@ export interface ManageChallengesContextType {
 
   // Actions
   toggleChallengePin: (challengeId: number) => void
-  toggleChallengeEnabled: (challenge: Challenge) => void
-  togglePaused: (challenge: Challenge) => void
-  archiveChallenge: (challenge: Challenge) => void
+  toggleChallengeEnabled: (challenge: ChallengeListing) => void
+  togglePaused: (challenge: ChallengeListing) => void
+  archiveChallenge: (challenge: ChallengeListing) => void
   rebuildChallenge: (challengeId: number) => void
 }
 
@@ -54,9 +55,20 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
 
   // API queries
-  const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects()
+  const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects({
+    onlyOwned,
+  })
   const managedProjectIds = useMemo(
     () => managedProjects?.map((p) => p.id).filter((id): id is number => id != null) ?? [],
+    [managedProjects]
+  )
+  const projectNamesById = useMemo(
+    () =>
+      new Map(
+        (managedProjects ?? []).flatMap((project) =>
+          project.id == null ? [] : [[project.id, project.displayName || project.name] as const]
+        )
+      ),
     [managedProjects]
   )
   const { data: challenges, isLoading: isLoadingChallenges } = api.challenge.listing(
@@ -103,7 +115,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   }, [deleteChallengeId, deleteChallengeMutation])
 
   const toggleChallengeEnabled = useCallback(
-    (challenge: Challenge) => {
+    (challenge: ChallengeListing) => {
       if (challenge.id == null) return
       updateChallengeMutation.mutate({
         challengeId: challenge.id,
@@ -114,7 +126,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   )
 
   const archiveChallenge = useCallback(
-    (challenge: Challenge) => {
+    (challenge: ChallengeListing) => {
       if (challenge.id == null) return
       archiveChallengeMutation.mutate({
         challengeId: challenge.id,
@@ -125,7 +137,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   )
 
   const togglePaused = useCallback(
-    (challenge: Challenge) => {
+    (challenge: ChallengeListing) => {
       if (challenge.id == null) return
       pauseChallengeMutation.mutate({
         challengeId: challenge.id,
@@ -156,22 +168,14 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
             : false
           : true
       )
-  }, [
-    challenges,
-    searchQuery,
-    onlyDiscoverable,
-    onlyArchived,
-    onlyOwned,
-    onlyPinned,
-    pinnedChallengeIds,
-    user?.osmProfile?.id,
-  ])
+  }, [challenges, searchQuery, onlyDiscoverable, onlyArchived, onlyPinned, pinnedChallengeIds])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<ManageChallengesContextType>(
     () => ({
       challenges: challenges ?? [],
       filteredChallenges,
+      projectNamesById,
       isLoading,
       pinnedChallengeIds,
       searchQuery,
@@ -196,6 +200,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
     [
       challenges,
       filteredChallenges,
+      projectNamesById,
       isLoading,
       pinnedChallengeIds,
       searchQuery,

@@ -40,7 +40,7 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
           : t('superAdminTeamImages.rejectSuccess', undefined, 'Image rejected')
       )
     } catch (error) {
-      logger.error('Team image review failed', { decision, error: String(error) })
+      logger.error('Team image review failed', { decision, error })
       toast.error(
         t('superAdminTeamImages.reviewError', undefined, 'Could not record that decision')
       )

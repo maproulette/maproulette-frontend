@@ -71,7 +71,7 @@ export const OSMDataProvider = ({ children }: { children: ReactNode }) => {
       const xmlData = await api.osm.fetchOSMData(bbox)
       setOsmData(xmlData)
     } catch (error) {
-      logger.error('Error fetching OSM data', { error: String(error) })
+      logger.error('Error fetching OSM data', { error })
 
       const errorMessage =
         error instanceof Error

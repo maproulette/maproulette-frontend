@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight, FolderOpen, Loader2, type LucideIcon, Target } from 'lucide-react'
+import { ChevronRight, FolderOpen, type LucideIcon, Target } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
@@ -276,7 +277,7 @@ export const UnifiedSearchList = () => {
     <ul className="space-y-1">
       {isLoading && (
         <li className="flex items-center justify-center py-2">
-          <Loader2 className="h-4 w-4 animate-spin text-emerald-600" />
+          <Spinner className="text-emerald-600" />
         </li>
       )}
       {allItems.map((item, index) => {

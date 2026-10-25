@@ -84,11 +84,7 @@ export const unclusteredPointLayer: LayerProps = {
   id: LAYER_IDS.points,
   type: 'symbol',
   source: LAYER_IDS.source,
-  // Non-Created tasks (status != 0). Bundled / primary / selected markers stay in
-  // this layer and are styled in place from their feature properties (the
-  // icon-image case below picks -bundled / -selected / -bundled-selected), so they
-  // spider and cluster with every other marker. Other maps that use a selected
-  // overlay simply never set these flags true, so this layer is unaffected there.
+  // Non-Created tasks (status != 0).
   filter: ['all', ['!', ['has', 'point_count']], ['!=', ['coalesce', ['get', 'status'], 0], 0]],
   minzoom: 2,
   maxzoom: 24,

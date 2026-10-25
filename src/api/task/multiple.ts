@@ -1,4 +1,4 @@
-import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import type { TaskPropertySearch } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
 import { metaReviewStatusesForApi } from '@/lib/challengeTaskTableSearch'
 import type {
@@ -42,47 +42,22 @@ const tasksBoundingBoxSearchParams = (query: TasksBoundingBoxQuery) => {
 }
 
 export const taskMultiple = {
-  getTasks: (taskIds: number[]) => {
-    const queryClient = useQueryClient()
-    return useQuery(
+  getTasks: (taskIds: number[]) =>
+    useQuery(
       queryOptions({
         queryKey: ['task', 'batch', [...taskIds].sort((a, b) => a - b)],
-        queryFn: async () => {
-          const cachedTasks: TaskGetResponse[] = []
-          const missingIds: number[] = []
-
-          for (const id of taskIds) {
-            const cached = queryClient.getQueryData<TaskGetResponse>(['task', id])
-            if (cached) {
-              cachedTasks.push(cached)
-            } else {
-              missingIds.push(id)
-            }
-          }
-
-          if (missingIds.length === 0) {
-            return cachedTasks
-          }
-
-          const fetched = await apiRequest
+        queryFn: () =>
+          apiRequest
             .get('api/v2/tasks', {
               searchParams: {
-                taskIds: missingIds.join(','),
+                taskIds: taskIds.join(','),
                 mapillary: 'false',
               },
             })
-            .json<TaskGetResponse[]>()
-
-          for (const task of fetched) {
-            queryClient.setQueryData(['task', task.id], task)
-          }
-
-          return [...cachedTasks, ...fetched]
-        },
+            .json<TaskGetResponse[]>(),
         enabled: taskIds.length > 0,
       })
-    )
-  },
+    ),
 
   getTaskMarkers: (params: TaskMarkersParams) =>
     useQuery(

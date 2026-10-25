@@ -150,3 +150,83 @@
     border-left-color: white;
   }
 }
+
+.task-picker-popup .maplibregl-popup-content {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.task-picker-popup {
+  --picker-bg: #ffffff;
+  --picker-border: #e4e4e7;
+}
+
+.dark .task-picker-popup {
+  --picker-bg: #0f172a;
+  --picker-border: #334155;
+}
+
+.task-picker-popup .maplibregl-popup-tip {
+  display: none;
+}
+
+.task-picker-popup .maplibregl-popup-content::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--picker-bg);
+  border: 1px solid var(--picker-border);
+  transform: rotate(45deg);
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-content::after {
+  bottom: -6px;
+  border-top: none;
+  border-left: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-top .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-content::after {
+  top: -6px;
+  border-bottom: none;
+  border-right: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top .maplibregl-popup-content::after {
+  left: calc(50% - 6px);
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-content::after {
+  left: 12px;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-content::after {
+  right: 12px;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-left .maplibregl-popup-content::after {
+  left: -6px;
+  top: calc(50% - 6px);
+  border-top: none;
+  border-right: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-right .maplibregl-popup-content::after {
+  right: -6px;
+  top: calc(50% - 6px);
+  border-bottom: none;
+  border-left: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-center .maplibregl-popup-content::after {
+  display: none;
+}

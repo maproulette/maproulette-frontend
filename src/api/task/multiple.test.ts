@@ -15,11 +15,10 @@ const fakeTask = (id: number, extra: Record<string, unknown> = {}) =>
   ({ id, name: `task-${id}`, ...extra }) as unknown as TaskGetResponse
 
 describe('taskMultiple.getTasks', () => {
-  it('returns all tasks from cache without fetching when every id is already cached', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
+  it('fetches the requested ids from the batch endpoint', async () => {
+    const fetchedTasks = [fakeTask(1), fakeTask(2)]
+    const fetchMock = stubFetch(new Response(JSON.stringify(fetchedTasks), { status: 200 }))
     const queryClient = createTestQueryClient()
-    queryClient.setQueryData(['task', 1], fakeTask(1))
-    queryClient.setQueryData(['task', 2], fakeTask(2))
 
     const { result } = renderHook(() => taskMultiple.getTasks([1, 2]), {
       wrapper: queryClientWrapper(queryClient),
@@ -27,30 +26,13 @@ describe('taskMultiple.getTasks', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    expect(result.current.data).toEqual([fakeTask(1), fakeTask(2)])
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('fetches only the missing ids and merges them with the cached tasks, caching the fetched ones', async () => {
-    const fetchedTask = fakeTask(2)
-    const fetchMock = stubFetch(new Response(JSON.stringify([fetchedTask]), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    queryClient.setQueryData(['task', 1], fakeTask(1))
-
-    const { result } = renderHook(() => taskMultiple.getTasks([1, 2]), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual([fakeTask(1), fetchedTask])
+    expect(result.current.data).toEqual(fetchedTasks)
     expect(fetchMock).toHaveBeenCalledTimes(1)
     const [request] = fetchMock.mock.calls[0]
     const url = new URL((request as Request).url)
     expect(url.pathname).toBe('/api/v2/tasks')
-    expect(url.searchParams.get('taskIds')).toBe('2')
+    expect(url.searchParams.get('taskIds')).toBe('1,2')
     expect(url.searchParams.get('mapillary')).toBe('false')
-    expect(queryClient.getQueryData(['task', 2])).toEqual(fetchedTask)
   })
 
   it('is disabled when given an empty array of task ids', () => {

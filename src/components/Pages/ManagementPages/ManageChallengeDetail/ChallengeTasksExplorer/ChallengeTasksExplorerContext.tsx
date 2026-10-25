@@ -1,7 +1,7 @@
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { coordInBbox, parseBoundsString } from '@/components/Map/mapUtils'
-import { processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
 import { binaryToTaskPropertySearch } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
@@ -121,7 +121,7 @@ export const ChallengeTasksExplorerProvider = ({
     api.task.getTaskIdsMatchingProperties(challengeId, taskPropertySearch, { enabled })
   const propertyFilterActive = !!taskPropertySearch
 
-  const markers = useMemo(() => processMarkersData(taskMarkersData).markers, [taskMarkersData])
+  const markers = useMemo(() => flattenTaskMarkers(taskMarkersData), [taskMarkersData])
 
   // Markers passed to the map: filtered by status/priority only (not viewport,
   // to avoid a feedback loop where panning the map hides tasks that would then

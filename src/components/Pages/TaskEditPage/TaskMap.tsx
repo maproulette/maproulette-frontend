@@ -1,14 +1,15 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { Layer, Map as MapGL, Source } from 'react-map-gl/maplibre'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
+import { MapGL } from '@/components/Map/MapGL'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
-import { ClusterSource } from '@/components/Map/TaskMarkers/ClusterSource'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
-import { LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { SpiderMarkers } from '@/components/Map/TaskMarkers/SpiderMarkers'
+import { type MarkerStyle, statusPinIcon } from '@/components/Map/TaskMarkers/markerStyle'
+import { TaskMarkersLayer } from '@/components/Map/TaskMarkers/TaskMarkersLayer'
+import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import {
   EDITABLE_STATUSES,
@@ -27,12 +28,11 @@ import { LassoLayer } from './TaskMap/LassoLayer'
 import { MultiTaskPanel } from './TaskMap/MultiTaskPanel'
 import { useTaskEditMapContext } from './TaskMap/TaskEditMapContext'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
-import { useAllMarkersMap } from './TaskMap/useAllMarkersMap'
 import { useLassoBundleSync } from './TaskMap/useLassoBundleSync'
 import { useMapControlButtons } from './TaskMap/useMapControlButtons'
 import { useMapNavigation } from './TaskMap/useMapNavigation'
 import { useMarkerVisibility } from './TaskMap/useMarkerVisibility'
-import { useStyledClusteredData } from './TaskMap/useStyledClusteredData'
+import { useTaskMapHighlights } from './TaskMap/useTaskMapHighlights'
 import { MAP_BINDINGS, useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 
 const OsmIcon = ({ className }: { className?: string }) => (
@@ -57,7 +57,7 @@ export const TaskMap = () => {
   const mapId = useId()
   const exploreSourceId = useId()
   const exploreCirclesLayerId = useId()
-  const { bundleEditsDisabled, activeBundle } = useTaskBundleContext()
+  const { bundleEditsDisabled } = useTaskBundleContext()
   const { task, isLocked } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { user } = useAuthContext()
@@ -80,33 +80,42 @@ export const TaskMap = () => {
     useEditorContext()
   const prevActiveView = useRef(activeView)
   const isEditableStatus = EDITABLE_STATUSES.includes(task.status ?? 0)
-  const {
-    selectedMarker,
-    markersHidden,
-    activeTaskId,
-    drawingMode,
-    selectedTaskIds,
-    hoveredBundleTaskId,
-  } = useTaskMapContext()
+  const { markersHidden, drawingMode, setSelectedMarker, triggerEmptyClick } = useTaskMapContext()
   const { focusedFeature, clearFocusedFeature } = useTaskFeatureContext()
 
   const {
     mapRef,
     mapLoaded,
     setMapLoaded,
-    markersData,
-    overlapData,
+    markers,
+    markersById,
     isLoadingMarkers,
-    onMapClick,
-    onMouseMove,
     isClustered,
     setIsClustered,
-    primaryTaskId,
-    spideredMarkers,
-    clusteredGeoJSONData,
     initialBoundsApplied,
     showExploreLayer,
   } = useTaskEditMapContext()
+
+  const highlighted = useTaskMapHighlights(markersById)
+
+  const markerStyle = useCallback(
+    (marker: TaskMarker): MarkerStyle => ({
+      icon: statusPinIcon(marker),
+      opacity: isTaskEligibleForBundle(marker, task.bundleId ?? null, user?.id ?? null) ? 1 : 0.4,
+      size: 1,
+    }),
+    [task.bundleId, user?.id]
+  )
+
+  const selectTask = useCallback(
+    (marker: TaskMarker) => setSelectedMarker(marker.id === task.id ? null : marker),
+    [setSelectedMarker, task.id]
+  )
+
+  const clearSelection = useCallback(() => {
+    setSelectedMarker(null)
+    triggerEmptyClick()
+  }, [setSelectedMarker, triggerEmptyClick])
 
   const exploreTileUrl = useMemo(
     () =>
@@ -135,10 +144,7 @@ export const TaskMap = () => {
     ;(window as unknown as { __e2eMap?: maplibregl.Map }).__e2eMap = mapRef.current.getMap()
   }, [mapLoaded, mapRef])
 
-  const allMarkersMap = useAllMarkersMap(markersData.markers, overlapData.overlaps)
-  const styledClusteredData = useStyledClusteredData(clusteredGeoJSONData)
-
-  const { handleCenterToTask } = useMapNavigation(mapLoaded, markersData.markers, allMarkersMap)
+  const { handleCenterToTask } = useMapNavigation(mapLoaded, markersById)
 
   useTaskMapShortcuts(handleCenterToTask)
 
@@ -160,22 +166,8 @@ export const TaskMap = () => {
           ref={mapRef}
           hash
           initialViewState={initialViewState}
-          refreshExpiredTiles={false}
-          maxTileCacheZoomLevels={10}
           mapStyle={mapStyle}
           onLoad={() => setMapLoaded(true)}
-          onClick={onMapClick}
-          onMouseMove={onMouseMove}
-          interactiveLayerIds={
-            spideredMarkers.size > 0
-              ? [
-                  LAYER_IDS.clusters,
-                  LAYER_IDS.clusterCount,
-                  ...LAYER_IDS.allPoints,
-                  'spidered-markers-layer',
-                ]
-              : [LAYER_IDS.clusters, LAYER_IDS.clusterCount, ...LAYER_IDS.allPoints]
-          }
           cursor={drawingMode ? 'crosshair' : undefined}
         >
           {showExploreLayer && (
@@ -205,20 +197,15 @@ export const TaskMap = () => {
 
           <TaskGeometryLayer />
 
-          {!markersHidden && <ClusterSource clusteredData={styledClusteredData} />}
-
-          {!markersHidden && spideredMarkers.size > 0 && (
-            <SpiderMarkers
-              markers={Array.from(spideredMarkers.keys())
-                .map((id) => allMarkersMap.get(id))
-                .filter((m): m is TaskMarker => m !== undefined)}
-              spiderPositions={spideredMarkers}
-              primaryTaskId={primaryTaskId}
-              activeBundle={activeBundle}
-              selectedTaskId={selectedMarker?.id ?? null}
-              activeTaskId={activeTaskId}
-              lassoSelectedTaskIds={selectedTaskIds}
-              hoveredTaskId={hoveredBundleTaskId}
+          {!markersHidden && (
+            <TaskMarkersLayer
+              markers={markers}
+              cluster={isClustered}
+              markerStyle={markerStyle}
+              highlighted={highlighted}
+              interactive={!drawingMode}
+              onSelectTask={selectTask}
+              onEmptyClick={clearSelection}
             />
           )}
 

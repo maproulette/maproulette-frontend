@@ -1,7 +1,5 @@
-import { ChevronDown } from 'lucide-react'
-import { api } from '@/api'
+import { ProjectPickerButton } from '@/components/shared/ProjectPickerButton'
 import { ProjectPickerModal } from '@/components/shared/ProjectPickerModal'
-import { Button } from '@/components/ui/Button'
 import {
   FormControl,
   FormDescription,
@@ -10,7 +8,6 @@ import {
   FormMessage,
 } from '@/components/ui/Form'
 import { useIntl } from '@/i18n'
-import { cn } from '@/lib/utils'
 
 interface ProjectPickerFieldProps {
   value: number
@@ -29,28 +26,12 @@ export const ProjectPickerField = ({
   onOpenChange,
 }: ProjectPickerFieldProps) => {
   const { t } = useIntl()
-  const { data: selectedProject } = api.project.getProject(value > 0 ? value : undefined)
-  const label = selectedProject
-    ? `${selectedProject.id} - ${selectedProject.displayName || selectedProject.name}`
-    : value > 0
-      ? t('common.projectWithId', { id: value }, 'Project #{id}')
-      : t('common.selectAProject', undefined, 'Select a project')
 
   return (
     <FormItem>
       <FormLabel>{t('common.project', undefined, 'Project')}</FormLabel>
       <FormControl>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => onOpenChange(true)}
-          className="w-full justify-between font-normal"
-        >
-          <span className={cn('truncate', value > 0 ? '' : 'text-zinc-500 dark:text-zinc-400')}>
-            {label}
-          </span>
-          <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+        <ProjectPickerButton projectId={value} onClick={() => onOpenChange(true)} />
       </FormControl>
       <FormDescription>
         {t(

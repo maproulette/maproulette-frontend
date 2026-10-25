@@ -48,14 +48,16 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
+import { isStartableChallengeStatus } from '@/lib/challengeStatus'
 import { cn } from '@/lib/utils'
-import type { Challenge } from '@/types/Challenge'
+import type { ChallengeListing } from '@/types/Challenge'
 import { useManageChallengesContext } from './ManageChallengesContext'
 
 export const ManageChallengesContent = () => {
   const { t } = useIntl()
   const {
     filteredChallenges,
+    projectNamesById,
     isLoading,
     pinnedChallengeIds,
     searchQuery,
@@ -89,8 +91,8 @@ export const ManageChallengesContent = () => {
     </Link>
   )
 
-  const buildChallengeActions = (challenge: Challenge, isPinned: boolean) => {
-    const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
+  const buildChallengeActions = (challenge: ChallengeListing, isPinned: boolean) => {
+    const canStart = isStartableChallengeStatus(challenge.status)
     return (
       <div className="flex items-center gap-1">
         {challenge.id != null && (
@@ -498,6 +500,7 @@ export const ManageChallengesContent = () => {
                     return (
                       <ChallengeCard
                         challenge={challenge}
+                        parentName={projectNamesById.get(challenge.parent)}
                         linkTo="/manage/challenge/$challengeId"
                         linkParams={{ challengeId: challenge.id.toString() }}
                         actions={buildChallengeActions(challenge, isPinned)}

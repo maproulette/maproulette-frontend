@@ -68,7 +68,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
           : t('superAdminChallengeReports.dismissedSuccess', undefined, 'Report dismissed')
       )
     } catch (error) {
-      logger.error('Challenge report triage failed', { status, error: String(error) })
+      logger.error('Challenge report triage failed', { status, error })
       toast.error(
         await getErrorMessage(
           error,

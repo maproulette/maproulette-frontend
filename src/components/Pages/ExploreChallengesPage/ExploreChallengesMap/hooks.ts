@@ -14,8 +14,11 @@ import {
   flyToClusterExpansion,
 } from '@/components/Map/TaskMarkers/clusterUtils'
 import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
-import { createMarkerIcons } from '@/components/Map/TaskMarkers/createMarkerIcons'
-import { createSpiderGroup, detectVisualOverlaps } from '@/components/Map/TaskMarkers/spiderUtils'
+import {
+  type MarkerExtent,
+  pinExtent,
+  type TaskPickerState,
+} from '@/components/Map/TaskMarkers/TaskPickerMenu'
 import type { TaskTypeKey } from '@/components/Map/TaskMarkers/taskTypes'
 import { useChallengeTypes } from '@/components/Map/TaskMarkers/useChallengeTypes'
 import type { Bbox2D } from '@/types/Map'
@@ -25,6 +28,7 @@ import { useExploreChallengesSearchContext } from '../contexts/ExploreChallenges
 const API_BASE_URL = window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 const MVT_SOURCE_ID = 'mvt-data'
 const MVT_SOURCE_LAYER = 'default'
+const OVERLAP_PIN_EXTENT: MarkerExtent = { above: 44, below: 0, halfWidth: 16 }
 
 interface PointProperties {
   id?: number
@@ -39,6 +43,8 @@ interface PointProperties {
   overlapTaskCount?: number
   _weight: number
 }
+
+type ExploreTaskMarker = TaskMarker & { typeKey?: TaskTypeKey | null }
 
 interface ClusterProperties {
   totalCount: number
@@ -60,14 +66,8 @@ export const useExploreChallengesMap = () => {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isLoadingMarkers, setIsLoadingMarkers] = useState(true)
   const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
-  const [spideredMarkers, setSpideredMarkers] = useState<
-    Map<number, { original: [number, number]; spidered: [number, number] }>
-  >(new Map())
-  const [spideredTaskData, setSpideredTaskData] = useState<TaskMarker[]>([])
-  const [pendingOverlap, setPendingOverlap] = useState<{
-    taskIds: number[]
-    coords: [number, number]
-  } | null>(null)
+  const [picker, setPicker] = useState<TaskPickerState | null>(null)
+  const [pendingOverlapIds, setPendingOverlapIds] = useState<number[]>([])
   const boundsUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const [extractedFeatures, setExtractedFeatures] = useState<GeoJSON.Feature<GeoJSON.Point>[]>([])
@@ -86,12 +86,6 @@ export const useExploreChallengesMap = () => {
 
   const selectedTaskGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     if (!selectedTask?.location) {
-      return { type: 'FeatureCollection', features: [] }
-    }
-    // When the selected task is spidered, SpiderMarkers already draws it (with
-    // the -selected variant) at its fanned-out position. Skip the overlay so it
-    // doesn't also render a second copy at the original location.
-    if (spideredMarkers.has(selectedTask.id)) {
       return { type: 'FeatureCollection', features: [] }
     }
     const typeKey = (selectedTask as TaskMarker & { typeKey?: TaskTypeKey | null }).typeKey ?? null
@@ -114,17 +108,7 @@ export const useExploreChallengesMap = () => {
         },
       ],
     }
-  }, [selectedTask, spideredMarkers])
-
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-
-    createMarkerIcons({ current: map }, () => {
-      map.triggerRepaint()
-    })
-  }, [mapLoaded, mapRef])
+  }, [selectedTask])
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return
@@ -209,7 +193,7 @@ export const useExploreChallengesMap = () => {
     const map = mapRef.current.getMap()
 
     const onSourceLoading = (e: maplibregl.MapSourceDataEvent) => {
-      if (e.sourceId === MVT_SOURCE_ID) setIsLoadingMarkers(true)
+      if (e.sourceId === MVT_SOURCE_ID) queueMicrotask(() => setIsLoadingMarkers(true))
     }
     const onIdle = () => setIsLoadingMarkers(false)
 
@@ -404,7 +388,6 @@ export const useExploreChallengesMap = () => {
         }
 
         const pointProps = c.properties as PointProperties
-        if (pointProps.id != null && spideredMarkers.has(pointProps.id)) continue
 
         const typeKey =
           pointProps.challenge_id != null
@@ -436,7 +419,6 @@ export const useExploreChallengesMap = () => {
       // Cluster toggle off — emit each point feature as an individual marker.
       for (const p of pointFeatures) {
         const props = p.properties
-        if (props.id != null && spideredMarkers.has(props.id)) continue
 
         const typeKey =
           props.challenge_id != null ? (challengeTypeMap.get(props.challenge_id) ?? null) : null
@@ -469,7 +451,6 @@ export const useExploreChallengesMap = () => {
     mapBounds,
     mapZoom,
     mapZoomExact,
-    spideredMarkers,
     challengeTypeMap,
   ])
 
@@ -499,136 +480,107 @@ export const useExploreChallengesMap = () => {
     }, 300)
   }, [setBounds, mapRef, bounds])
 
-  const handleMapClick = useCallback(async (e: MapMouseEvent) => {
-    if (!e.features || e.features.length === 0) {
-      setSpideredMarkers(new Map())
-      setSpideredTaskData([])
+  const handleMapClick = useCallback((e: MapMouseEvent) => {
+    setPicker(null)
+    setPendingOverlapIds([])
+
+    const feature = e.features?.[0]
+    if (!feature || feature.geometry.type !== 'Point') {
       setSelectedTask(null)
-      setPendingOverlap(null)
       return
     }
 
-    const feature = e.features[0]
-    if (!feature) {
-      setSpideredMarkers(new Map())
-      setSpideredTaskData([])
-      setSelectedTask(null)
-      setPendingOverlap(null)
-      return
-    }
-
-    if (!mapRef.current) return
-    const map = mapRef.current.getMap()
+    const map = mapRef.current?.getMap()
     if (!map) return
-
-    if (
-      feature.layer?.id === 'spidered-markers-layer' &&
-      feature.properties?.id !== undefined &&
-      feature.geometry.type === 'Point'
-    ) {
-      const taskId = feature.properties.id as number
-      const coords = feature.geometry.coordinates as [number, number]
-      const typeKey = (feature.properties.typeKey as TaskTypeKey | undefined) ?? null
-      setSelectedTask({
-        id: taskId,
-        location: { lng: coords[0], lat: coords[1] },
-        status: (feature.properties.status as number) ?? 0,
-        priority: (feature.properties.priority as number) ?? 0,
-        ...(typeKey ? { typeKey } : {}),
-      } as TaskMarker & { typeKey?: TaskTypeKey | null })
-      setPendingOverlap(null)
-      return
-    }
+    const coords = feature.geometry.coordinates as [number, number]
 
     const isClusterFeature =
       feature.properties?.cluster_id !== undefined || feature.properties?.point_count !== undefined
-
-    if (isClusterFeature && feature.geometry.type === 'Point') {
-      const coordinates = feature.geometry.coordinates as [number, number]
-      const clusterId = feature.properties.cluster_id as number | undefined
-      flyToClusterExpansion(map, superclusterRef.current, clusterId, coordinates)
-      setSpideredMarkers(new Map())
-      setSpideredTaskData([])
-      setPendingOverlap(null)
+    if (isClusterFeature) {
+      flyToClusterExpansion(map, superclusterRef.current, feature.properties.cluster_id, coords)
       return
     }
 
-    if (
-      LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
-      feature.properties?.isOverlapping === true &&
-      feature.geometry.type === 'Point'
-    ) {
-      const taskIdsStr = feature.properties?.task_ids_str as string | undefined
-      if (taskIdsStr) {
-        const taskIds = taskIdsStr.split(',').map(Number)
-        const coords = feature.geometry.coordinates as [number, number]
-        const tasks: TaskMarker[] = taskIds.map((id) => ({
+    const taskIdsStr = feature.properties?.task_ids_str as string | undefined
+    if (feature.properties?.isOverlapping === true && taskIdsStr) {
+      const taskIds = taskIdsStr.split(',').map(Number)
+      setPicker({
+        lngLat: coords,
+        extent: OVERLAP_PIN_EXTENT,
+        markers: taskIds.map((id) => ({
           id,
           location: { lng: coords[0], lat: coords[1] },
           status: 0,
           priority: 0,
-        }))
-        const spiderGroup = createSpiderGroup(tasks, coords, map)
-        setSpideredMarkers(spiderGroup)
-        setSpideredTaskData(tasks)
-        setSelectedTask(null)
-        setPendingOverlap({ taskIds, coords })
-      }
+        })),
+        total: taskIds.length,
+      })
+      setPendingOverlapIds(taskIds)
+      setSelectedTask(null)
       return
     }
 
-    if (
-      LAYER_IDS.allPoints.includes(feature.layer?.id ?? '') &&
-      feature.properties?.id !== undefined &&
-      feature.geometry.type === 'Point'
-    ) {
-      const clickPoint = e.point
-      const visuallyOverlapping = detectVisualOverlaps(map, clickPoint, LAYER_IDS.allPoints, 15)
-
-      if (visuallyOverlapping.length > 1) {
-        const coordinates: [number, number] = [e.lngLat.lng, e.lngLat.lat]
-        const spiderGroup = createSpiderGroup(visuallyOverlapping, coordinates, map)
-        setSpideredMarkers(spiderGroup)
-        setSpideredTaskData(visuallyOverlapping)
-        setSelectedTask(null)
-        setPendingOverlap(null)
-        return
-      }
-
-      const taskId = feature.properties.id as number
-      const coords = feature.geometry.coordinates as [number, number]
-      const typeKey = (feature.properties.typeKey as TaskTypeKey | undefined) ?? null
-      setSpideredMarkers(new Map())
-      setSpideredTaskData([])
-      setSelectedTask({
-        id: taskId,
-        location: { lng: coords[0], lat: coords[1] },
-        status: (feature.properties.status as number) ?? 0,
-        priority: (feature.properties.priority as number) ?? 0,
+    const pinned = new Map<number, ExploreTaskMarker>()
+    for (const f of e.features ?? []) {
+      if (!LAYER_IDS.allPoints.includes(f.layer?.id ?? '') || f.geometry.type !== 'Point') continue
+      const id = f.properties?.id as number | undefined
+      if (id === undefined || pinned.has(id)) continue
+      const [lng, lat] = f.geometry.coordinates as [number, number]
+      const typeKey = (f.properties.typeKey as TaskTypeKey | undefined) ?? null
+      pinned.set(id, {
+        id,
+        location: { lng, lat },
+        status: (f.properties.status as number) ?? 0,
+        priority: (f.properties.priority as number) ?? 0,
         ...(typeKey ? { typeKey } : {}),
-      } as TaskMarker & { typeKey?: TaskTypeKey | null })
-      setPendingOverlap(null)
+      })
+    }
+
+    const [topPin] = pinned.values()
+    if (pinned.size > 1 && topPin) {
+      setPicker({
+        lngLat: [topPin.location.lng, topPin.location.lat],
+        extent: pinExtent(),
+        markers: [...pinned.values()],
+        total: pinned.size,
+      })
+      setSelectedTask(null)
       return
     }
 
-    setSpideredMarkers(new Map())
-    setSpideredTaskData([])
-    setSelectedTask(null)
-    setPendingOverlap(null)
+    setSelectedTask(pinned.values().next().value ?? null)
   }, [])
 
-  const { data: overlapTasksData } = api.task.getTasks(pendingOverlap?.taskIds ?? [])
+  const selectPickedTask = useCallback((marker: TaskMarker) => {
+    setPicker(null)
+    setPendingOverlapIds([])
+    setSelectedTask(marker)
+  }, [])
+
+  const closePicker = useCallback(() => {
+    setPicker(null)
+    setPendingOverlapIds([])
+  }, [])
+
+  const { data: overlapTasksData } = api.task.getTasks(pendingOverlapIds)
 
   useEffect(() => {
-    if (!pendingOverlap || !overlapTasksData) return
+    if (!overlapTasksData) return
     const tasksById = new Map(overlapTasksData.map((t) => [t.id, t]))
-    setSpideredTaskData((prev) =>
-      prev.map((m) => {
-        const t = tasksById.get(m.id)
-        return t ? { ...m, status: t.status ?? m.status, priority: t.priority ?? m.priority } : m
-      })
+    setPicker((prev) =>
+      prev
+        ? {
+            ...prev,
+            markers: prev.markers.map((m) => {
+              const t = tasksById.get(m.id)
+              return t
+                ? { ...m, status: t.status ?? m.status, priority: t.priority ?? m.priority }
+                : m
+            }),
+          }
+        : prev
     )
-  }, [pendingOverlap, overlapTasksData])
+  }, [overlapTasksData])
 
   const handleMapMouseMove = useCallback((e: MapMouseEvent) => {
     if (!mapRef.current) return
@@ -641,7 +593,6 @@ export const useExploreChallengesMap = () => {
     for (const id of LAYER_IDS.allPoints) {
       if (map.getLayer(id)) layersToQuery.push(id)
     }
-    if (map.getLayer('spidered-markers-layer')) layersToQuery.push('spidered-markers-layer')
 
     if (layersToQuery.length === 0) {
       map.getCanvas().style.cursor = ''
@@ -657,8 +608,7 @@ export const useExploreChallengesMap = () => {
       const isMarker =
         LAYER_IDS.allPoints.includes(f.layer?.id ?? '') ||
         f.layer?.id === LAYER_IDS.clusters ||
-        f.layer?.id === LAYER_IDS.clusterCount ||
-        f.layer?.id === 'spidered-markers-layer'
+        f.layer?.id === LAYER_IDS.clusterCount
 
       if (isCluster || isMarker) {
         map.getCanvas().style.cursor = 'pointer'
@@ -693,10 +643,9 @@ export const useExploreChallengesMap = () => {
     handleMapMouseMove,
     setCluster,
     locationGeojson,
-    spideredMarkers,
-    spideredTaskData,
-    setSpideredMarkers,
-    setSpideredTaskData,
+    picker,
+    selectPickedTask,
+    closePicker,
     zoom,
   }
 }

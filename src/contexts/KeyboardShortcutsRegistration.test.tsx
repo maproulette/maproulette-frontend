@@ -30,9 +30,7 @@ const mount = (ui: ReactNode) => {
   })
 }
 afterEach(() => {
-  try {
-    act(() => root.unmount())
-  } catch {}
+  act(() => root.unmount())
   container?.remove()
 })
 

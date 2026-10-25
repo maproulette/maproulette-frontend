@@ -1,5 +1,6 @@
-import { Map as MapGL, Marker, NavigationControl } from 'react-map-gl/maplibre'
+import { Marker, NavigationControl } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { TASK_MARKER_SIZE, taskMarkerDataUri } from '@/components/Map/TaskMarkers/createMarkerIcons'
 import { cn } from '@/lib/utils'

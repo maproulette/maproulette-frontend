@@ -1,4 +1,4 @@
-import { BACKEND_URL, expect, SUPER_KEY, test } from './fixtures'
+import { BACKEND_URL, expect, test } from './fixtures'
 
 // Attaching a team to a single challenge, which reaches that challenge alone
 // without handing over the whole project. Users could always be granted a role
@@ -13,8 +13,7 @@ const attachTeamToChallenge = async (
   challengeId: number
 ) => {
   const response = await request.post(
-    `${BACKEND_URL}/api/v2/team/${teamId}/challenge/${challengeId}/2`,
-    { headers: { apiKey: SUPER_KEY } }
+    `${BACKEND_URL}/api/v2/team/${teamId}/challenge/${challengeId}/2`
   )
   if (!response.ok()) {
     throw new Error(
@@ -99,8 +98,7 @@ test('attaching a team to a challenge leaves its project alone', async ({
   // Reaching one challenge is the whole point of granting here rather than on
   // the project, so the project must not pick the team up.
   const response = await request.get(
-    `${BACKEND_URL}/api/v2/teams/projectManagers/${challenge.projectId}`,
-    { headers: { apiKey: SUPER_KEY } }
+    `${BACKEND_URL}/api/v2/teams/projectManagers/${challenge.projectId}`
   )
   const body = (await response.json()) as Array<{ team: { id: number } }>
   expect(body.some((entry) => entry.team.id === team.id)).toBe(false)

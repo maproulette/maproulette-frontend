@@ -30,9 +30,6 @@ describe('userAdmin.getAllUsers', () => {
     const url = new URL(request.url)
     expect(url.searchParams.get('limit')).toBe('50')
     expect(url.searchParams.get('page')).toBe('0')
-
-    expect(queryClient.getQueryData(['user', 1])).toEqual(users[0])
-    expect(queryClient.getQueryData(['user', 2])).toEqual(users[1])
   })
 
   it('fetches users using the provided limit/page params', async () => {

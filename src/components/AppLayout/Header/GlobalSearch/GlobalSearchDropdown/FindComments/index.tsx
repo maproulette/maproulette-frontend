@@ -135,7 +135,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
               : 'flex items-center justify-center gap-2 py-2'
           }
         >
-          <Spinner className="h-4 w-4 text-blue-500" />
+          <Spinner className="text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
             {t('common.updatingResults', undefined, 'Updating results...')}
           </p>
@@ -144,7 +144,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
-          <Spinner className="h-8 w-8 text-blue-500" />
+          <Spinner size="lg" className="text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
             {t(
               'appLayout.header.globalSearch.findComments.loading',

@@ -1,4 +1,4 @@
-import { BACKEND_URL, expect, giveChallengeToTeam, SUPER_KEY, test } from './fixtures'
+import { BACKEND_URL, expect, giveChallengeToTeam, test } from './fixtures'
 
 // Handing a challenge to a team: the team becomes its byline and the team's
 // image goes on its card.
@@ -66,9 +66,7 @@ test('choosing a team on the form gives the challenge to that team', async ({
   // The form's own round trip is what matters here: read the challenge back
   // rather than trusting the page it navigates to.
   await expect(async () => {
-    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}`, {
-      headers: { apiKey: SUPER_KEY },
-    })
+    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}`)
     const body = (await response.json()) as { ownerTeamId?: number | null }
     expect(body.ownerTeamId).toBe(team.id)
   }).toPass({ timeout: 20_000 })

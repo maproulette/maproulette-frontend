@@ -18,7 +18,6 @@ export interface CreateTaskBundleRequest {
 
 export const taskBundleQueries = {
   getTaskBundle: (bundleId: number, lockTasks = false) => {
-    const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
         queryKey: ['taskBundle', bundleId, { lockTasks }],
@@ -28,11 +27,6 @@ export const taskBundleQueries = {
               searchParams: { lockTasks: lockTasks.toString() },
             })
             .json<TaskBundleResponse>()
-          if (bundle.tasks) {
-            for (const task of bundle.tasks) {
-              queryClient.setQueryData(['task', task.id], task)
-            }
-          }
           return bundle
         },
         enabled: !!bundleId,
@@ -51,12 +45,6 @@ export const taskBundleQueries = {
           .json<TaskBundleResponse>(),
       onSuccess: (bundle) => {
         queryClient.setQueryData(['taskBundle', bundle.bundleId, { lockTasks: false }], bundle)
-        if (bundle.tasks) {
-          for (const task of bundle.tasks) {
-            queryClient.setQueryData(['task', task.id], task)
-          }
-        }
-
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
         invalidateLockedTasks(queryClient)
       },
@@ -77,12 +65,6 @@ export const taskBundleQueries = {
           ['taskBundle', variables.bundleId, { lockTasks: false }],
           updatedBundle
         )
-        if (updatedBundle.tasks) {
-          for (const task of updatedBundle.tasks) {
-            queryClient.setQueryData(['task', task.id], task)
-          }
-        }
-
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
         invalidateLockedTasks(queryClient)
       },

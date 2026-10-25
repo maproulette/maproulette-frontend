@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 
 interface ChallengeTaxonomyProps {
-  challenge: Pick<Challenge, 'featured' | 'cooperativeType' | 'isGlobal'>
+  challenge: Partial<Pick<Challenge, 'featured' | 'cooperativeType' | 'isGlobal'>>
   className?: string
 }
 

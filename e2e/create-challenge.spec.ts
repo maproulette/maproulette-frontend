@@ -26,6 +26,8 @@ test('a user can submit the create-challenge form with a local GeoJSON file', as
   await page.getByLabel('Name').fill('E2E test challenge')
   await page.getByLabel('Description').fill('Created by the create-challenge E2E test.')
   await page.getByLabel('Instructions').fill('Verify the task and mark it as fixed.')
+  await page.getByLabel('Changeset comment').fill('Fixed E2E test tasks')
+  await page.getByLabel('Changeset source').fill('Bing')
 
   await page.getByRole('radio', { name: /upload a geojson file/i }).check()
 

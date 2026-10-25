@@ -1,8 +1,11 @@
 // In the browser, index.html loads env.json into window.env before the app
 // boots. Tests have no env.json, so seed window.env from Vite's import.meta.env
 // (populated from .env.test). The node environment used by *.test.ts has no
-// window, so define one first.
+// window or location, so define them first.
 globalThis.window ??= globalThis as Window & typeof globalThis
+;(globalThis as { location?: Location }).location ??= new URL(
+  'https://maproulette.test/'
+) as unknown as Location
 window.env = { ...import.meta.env } as AppEnv
 
 // The node environment used by *.test.ts predates Node's global File (added in

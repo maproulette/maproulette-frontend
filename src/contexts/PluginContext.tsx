@@ -179,10 +179,8 @@ const PluginProviderInner = ({
     }
 
     pluginRegistry.setApiContext(apiContext)
-    if (typeof window !== 'undefined') {
-      ;(window as unknown as { __maproulettePluginApi?: PluginApiContext }).__maproulettePluginApi =
-        apiContext
-    }
+    ;(window as unknown as { __maproulettePluginApi?: PluginApiContext }).__maproulettePluginApi =
+      apiContext
   }, [theme, user])
 
   useEffect(() => {

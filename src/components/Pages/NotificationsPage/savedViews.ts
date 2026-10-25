@@ -25,7 +25,7 @@ export const loadSavedViews = (): SavedView[] => {
         v.state !== null
     )
   } catch (error) {
-    logger.warn('Failed to load saved notification views', { error: String(error) })
+    logger.warn('Failed to load saved notification views', { error })
     return []
   }
 }
@@ -34,7 +34,7 @@ export const persistSavedViews = (views: SavedView[]) => {
   try {
     localStorage.setItem(SAVED_VIEWS_KEY, JSON.stringify(views))
   } catch (error) {
-    logger.warn('Failed to persist saved notification views', { error: String(error) })
+    logger.warn('Failed to persist saved notification views', { error })
     throw error
   }
 }

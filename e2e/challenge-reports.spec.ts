@@ -1,4 +1,4 @@
-import { BACKEND_URL, expect, SUPER_KEY, test } from './fixtures'
+import { BACKEND_URL, expect, test } from './fixtures'
 
 // Reporting a challenge, end to end: a mapper files one, a second mapper files
 // their own, and a super admin triages them.
@@ -100,7 +100,6 @@ test('a mapper sees the reports on a challenge, without the admin side of them',
 
   // The super admin does see it.
   const asAdmin = await request.get(`${BACKEND_URL}/api/v2/challenge/reports`, {
-    headers: { apiKey: SUPER_KEY },
     params: { challengeId: challenge.id },
   })
   const adminView = (await asAdmin.json()) as Array<{ reporterEmail?: string | null }>
@@ -118,12 +117,9 @@ test('two different mappers can each report the same challenge', async ({
   })
 
   // A second real identity, built the same way the fixture builds the first.
-  const { mintApiKey, seedUser, deleteSeededUser } = await import('./fixtures')
+  const { newSessionRequest, seedUser, deleteSeededUser } = await import('./fixtures')
   const second = seedUser(`e2e-second-${Date.now()}`, 920_000_000 + Math.floor(Math.random() * 1e7))
-  const secondKey = await mintApiKey(request, second.id)
-  const secondContext = await playwright.request.newContext({
-    extraHTTPHeaders: { apiKey: secondKey, 'Content-Type': 'application/json' },
-  })
+  const secondContext = await newSessionRequest(playwright.request, second)
 
   try {
     const response = await secondContext.post(
@@ -134,7 +130,6 @@ test('two different mappers can each report the same challenge', async ({
     expect(response.status()).toBe(201)
 
     const all = await request.get(`${BACKEND_URL}/api/v2/challenge/reports`, {
-      headers: { apiKey: SUPER_KEY },
       params: { challengeId: challenge.id },
     })
     const reports = (await all.json()) as Array<{ reporterId: number }>
@@ -159,7 +154,7 @@ test('a super admin can action a report, and the reporter sees the outcome only'
   const report = (await filed.json()) as { id: number }
 
   const decided = await request.put(`${BACKEND_URL}/api/v2/challenge/report/${report.id}/status`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: { status: 'actioned', reviewComment: 'archived the challenge' },
   })
   expect(decided.ok()).toBe(true)
@@ -194,7 +189,7 @@ test('resolving a report frees the reporter to raise the challenge again', async
   const report = (await filed.json()) as { id: number }
 
   await request.put(`${BACKEND_URL}/api/v2/challenge/report/${report.id}/status`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: { status: 'dismissed' },
   })
 

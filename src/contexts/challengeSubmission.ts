@@ -11,6 +11,7 @@ export type LocalGeoJSONUpload = {
 }
 
 const BUNDLED_UPLOAD_FILENAME = 'bundled-tasks.geojson'
+const MAPROULETTE_HASHTAG = /(^|\s)#maproulette(?![\w-])/i
 
 const fetchRemoteGeoJSON = async (url: string) => {
   let response: Response
@@ -18,7 +19,8 @@ const fetchRemoteGeoJSON = async (url: string) => {
     response = await fetch(url)
   } catch (error) {
     throw new Error(
-      `Could not download GeoJSON from ${url} to group its features. The server must allow cross-origin requests from MapRoulette, or the file can be uploaded directly instead. (${String(error)})`
+      `Could not download GeoJSON from ${url} to group its features. The server must allow cross-origin requests from MapRoulette, or the file can be uploaded directly instead. (${String(error)})`,
+      { cause: error }
     )
   }
 
@@ -47,6 +49,12 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
 
   // These are editable at any time, so they are assembled before the update
   // short-circuit below.
+  const checkinComment = values.checkinComment.trim()
+  challengeData.checkinComment =
+    isCreate && !MAPROULETTE_HASHTAG.test(checkinComment)
+      ? `${checkinComment} #maproulette`
+      : checkinComment
+  challengeData.checkinSource = values.checkinSource.trim()
   challengeData.osmIdProperty = values.osmIdProperty || null
   challengeData.preferredTags = values.preferredTags || null
   challengeData.limitTags = values.limitTags

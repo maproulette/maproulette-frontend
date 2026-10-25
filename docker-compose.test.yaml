@@ -50,20 +50,17 @@ services:
       MR_DATABASE_URL: jdbc:postgresql://db:5432/maproulette
       MR_DATABASE_USERNAME: maproulette
       MR_DATABASE_PASSWORD: hunter2
-      # Must match VITE_SERVER_API_KEY in .env.test. Any request bearing this
-      # value in the `apiKey` header is treated by the backend as a super-user,
-      # so every request the E2E harness makes by default runs with full
-      # privileges — there's no built-in way to exercise a non-admin user or
-      # real permission boundaries (e.g. review workflows, /super-admin/*
-      # access checks) against this stack. See the REVIEWER_KEY fixture in
-      # e2e/fixtures.ts for the (manual, out-of-band) way to provision a
-      # second, non-super-user identity, and the skip comment in
-      # e2e/super-admin.spec.ts for a concrete case this limitation blocks.
-      MR_SUPER_KEY: super-secret-key
+      # Also the key Play signs session cookies with, so e2e/fixtures.ts signs
+      # its own with it to log in as seeded users. API keys, which the harness
+      # used before, were removed from the backend in 7a8cdb17.
       APPLICATION_SECRET: test-application-secret-at-least-32-chars
       MAPROULETTE_SECRET_KEY: test-maproulette-secret-key-at-least-32-chars
+      # The OSM id of the harness's super user (SUPER_USER_OSM_ID in
+      # e2e/fixtures.ts). The backend only promotes it at boot, so global setup
+      # seeds the user and then restarts the backend once.
+      MR_SUPER_ACCOUNTS: "800000000"
       # OAuth values are required for the backend to boot but are not used
-      # (the tests all use API key auth)
+      # (the harness signs its own session cookies; see e2e/fixtures.ts)
       MR_OSM_SERVER: https://master.apis.dev.openstreetmap.org
       MR_OAUTH_CONSUMER_KEY: not_a_real_key
       MR_OAUTH_CONSUMER_SECRET: not_a_real_secret

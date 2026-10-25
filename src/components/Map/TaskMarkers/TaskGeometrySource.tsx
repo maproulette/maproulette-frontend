@@ -1,5 +1,6 @@
-import { useId, useMemo } from 'react'
-import { Layer, Source } from 'react-map-gl/maplibre'
+import { useEffect, useId, useMemo, useState } from 'react'
+import { Layer, Source, useMap } from 'react-map-gl/maplibre'
+import { createDirectionIcons } from '@/components/Map/createDirectionIcons'
 import {
   buildDirectionEndpoints,
   DIRECTION_ICONS,
@@ -7,7 +8,6 @@ import {
 } from '@/components/Map/directionIndicators'
 
 const DEFAULT_COLOR = '#6366f1' // indigo
-const SELECTED_COLOR = '#8b5cf6' // purple (matches marker highlight)
 const HIGHLIGHT_COLOR = '#f59e0b' // amber (feature picked out from the panel)
 const NO_OUTLINE = 'rgba(0, 0, 0, 0)'
 const OUTLINE_EXTRA_WIDTH = 8
@@ -16,8 +16,6 @@ interface TaskGeometrySourceProps {
   geometries: GeoJSON.FeatureCollection
   /** Part keys of the one feature picked out from a task's property list. */
   highlightedKeys?: string[] | null
-  /** Task whose geometry is outlined as the selected one. */
-  emphasizedTaskId?: number | null
   showDirections?: boolean
 }
 
@@ -26,16 +24,41 @@ interface TaskGeometrySourceProps {
  * so a line or point is the same weight and color whether it is seen while
  * mapping, browsing a challenge, or managing one.
  *
- * A feature keeps its own colors when it is selected or picked out; the
- * emphasis is an outline drawn around it, so a challenge's styling still reads
- * on the task being worked on.
+ * A feature keeps its own colors when it is picked out; the emphasis is an
+ * outline drawn around it, so a challenge's styling still reads on the task
+ * being worked on.
  */
+const useDirectionIcons = (enabled: boolean) => {
+  const { current: mapRef } = useMap()
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const map = mapRef?.getMap()
+    if (!enabled || !map) return
+
+    const register = () => createDirectionIcons({ current: map }, () => setReady(true))
+    register()
+
+    // Switching basemaps reloads the style and throws away registered images,
+    // so put them back as soon as a layer asks for one that has gone missing.
+    const onImageMissing = (event: { id: string }) => {
+      if (Object.values(DIRECTION_ICONS).some((name) => name === event.id)) register()
+    }
+    map.on('styleimagemissing', onImageMissing)
+    return () => {
+      map.off('styleimagemissing', onImageMissing)
+    }
+  }, [mapRef, enabled])
+
+  return enabled && ready
+}
+
 export const TaskGeometrySource = ({
   geometries,
   highlightedKeys = null,
-  emphasizedTaskId = null,
-  showDirections = false,
+  showDirections: showDirectionsWanted = false,
 }: TaskGeometrySourceProps) => {
+  const showDirections = useDirectionIcons(showDirectionsWanted)
   const sourceId = useId()
   const layerId = useId()
   const endpointSourceId = useId()
@@ -59,23 +82,13 @@ export const TaskGeometrySource = ({
   const showArrows = showDirections && hasDirectionalGeometry(geometries.features)
   const showEndpoints = showDirections && (directionEndpoints?.features.length ?? 0) > 0
 
-  // Emphasis follows the same precedence everywhere: the feature picked out
-  // from the property list wins, then the task of a selected marker, then
-  // nothing. It only ever decides the outline -- the feature's own colors are
-  // left alone.
-  const byEmphasis = (highlighted: unknown, selected: unknown, base: unknown) => {
-    const cases: unknown[] = ['case']
-    if (highlightedKeys?.length) {
-      cases.push(['in', ['get', 'partKey'], ['literal', highlightedKeys]], highlighted)
-    }
-    if (emphasizedTaskId) {
-      cases.push(['==', ['get', 'taskId'], emphasizedTaskId], selected)
-    }
-    cases.push(base)
-    return cases.length === 2 ? base : cases
-  }
-
-  const hasEmphasis = Boolean(highlightedKeys?.length) || Boolean(emphasizedTaskId)
+  // Only the feature picked out from the property list is emphasized, and only
+  // by its outline -- the feature's own colors are left alone.
+  const hasEmphasis = Boolean(highlightedKeys?.length)
+  const byEmphasis = (highlighted: unknown, base: unknown) =>
+    hasEmphasis
+      ? ['case', ['in', ['get', 'partKey'], ['literal', highlightedKeys]], highlighted, base]
+      : base
 
   // A feature's own color, where the data gave it one.
   const styled = (property: string, fallback: unknown) => ['coalesce', ['get', property], fallback]
@@ -94,7 +107,7 @@ export const TaskGeometrySource = ({
   // Drawn under the feature and wider than it, so what shows is a ring around
   // the feature's own stroke rather than a recoloring of it.
   const getOutlinePaint = () => ({
-    'line-color': byEmphasis(HIGHLIGHT_COLOR, SELECTED_COLOR, NO_OUTLINE),
+    'line-color': byEmphasis(HIGHLIGHT_COLOR, NO_OUTLINE),
     'line-width': ['+', styled('mrStrokeWidth', 4), OUTLINE_EXTRA_WIDTH],
     'line-opacity': 1,
   })
@@ -102,8 +115,8 @@ export const TaskGeometrySource = ({
   const getCirclePaint = () => ({
     'circle-color': styled('mrMarkerColor', DEFAULT_COLOR),
     'circle-radius': 11,
-    'circle-stroke-width': byEmphasis(6, 6, 4),
-    'circle-stroke-color': byEmphasis(HIGHLIGHT_COLOR, SELECTED_COLOR, '#ffffff'),
+    'circle-stroke-width': byEmphasis(6, 4),
+    'circle-stroke-color': byEmphasis(HIGHLIGHT_COLOR, '#ffffff'),
   })
 
   return (

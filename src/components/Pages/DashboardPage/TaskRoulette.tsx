@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
@@ -47,9 +46,7 @@ const RIM_SPOKES = spokes(8, POCKET_INNER_RADIUS + 15, 49.5)
 const CONE_SPOKES = spokes(8, 11, POCKET_INNER_RADIUS)
 
 const prefersReducedMotion = (): boolean =>
-  typeof window !== 'undefined' &&
-  !!window.matchMedia &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -59,7 +56,6 @@ const ballDropTransition = `transform ${BALL_DROP_DURATION}ms cubic-bezier(0.45,
 
 export const TaskRoulette = () => {
   const { t } = useIntl()
-  const queryClient = useQueryClient()
   // Gradients are referenced by id across the three stacked layers, so they have to be
   // unique per instance; useId's punctuation is stripped to keep url(#...) refs simple.
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '')
@@ -100,7 +96,7 @@ export const TaskRoulette = () => {
 
     // Settle the fetch into a value either way, so a rejection while the wheel is
     // still turning isn't reported as an unhandled rejection.
-    const settled = fetchRandomTaskByDifficulty(difficulty, queryClient).then(
+    const settled = fetchRandomTaskByDifficulty(difficulty).then(
       (picked) => ({ picked }),
       (error: unknown) => ({ error })
     )

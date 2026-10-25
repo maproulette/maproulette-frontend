@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { defaultLocale, type Locale, resolveInitialLocale } from './locales'
+import { type Locale, resolveInitialLocale } from './locales'
 import {
   baseCatalog,
   type FormatValues,
@@ -36,7 +36,6 @@ interface ProviderProps {
 
 export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
   const [locale, setLocaleState] = useState<Locale>(() => {
-    if (typeof window === 'undefined') return initialLocale ?? defaultLocale
     const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY)
     return resolveInitialLocale(initialLocale ?? stored ?? undefined)
   })
@@ -53,10 +52,8 @@ export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
   }, [locale])
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(LOCALE_STORAGE_KEY, locale)
-      document.documentElement.lang = locale
-    }
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, locale)
+    document.documentElement.lang = locale
   }, [locale])
 
   const setLocale = useCallback((next: Locale) => setLocaleState(next), [])

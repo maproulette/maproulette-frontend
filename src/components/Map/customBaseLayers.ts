@@ -63,7 +63,6 @@ export const customBaseLayerStyle = (layer: CustomBaseLayer): StyleSpecification
 }
 
 const readStored = (): CustomBaseLayer[] => {
-  if (typeof window === 'undefined') return []
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     const parsed = raw ? JSON.parse(raw) : []
@@ -74,7 +73,6 @@ const readStored = (): CustomBaseLayer[] => {
 }
 
 const writeStored = (layers: CustomBaseLayer[]): void => {
-  if (typeof window === 'undefined') return
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layers))
   } catch {

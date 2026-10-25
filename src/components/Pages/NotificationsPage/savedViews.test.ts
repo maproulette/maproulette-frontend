@@ -86,9 +86,7 @@ describe('persistSavedViews', () => {
     const warnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => {})
 
     expect(() => persistSavedViews([validView])).toThrow(error)
-    expect(warnSpy).toHaveBeenCalledWith('Failed to persist saved notification views', {
-      error: String(error),
-    })
+    expect(warnSpy).toHaveBeenCalledWith('Failed to persist saved notification views', { error })
 
     setItemSpy.mockRestore()
     warnSpy.mockRestore()

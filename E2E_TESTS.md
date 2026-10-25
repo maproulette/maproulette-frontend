@@ -1,14 +1,20 @@
 # Playwright E2E Tests
 
-What `npm run test:e2e` covers, grouped by feature. **43 tests across 21 spec
-files**: 41 run, and 2 are skipped because they need a second *authenticated*
-identity the harness cannot provision on its own (see
-[Not covered](#not-covered)).
+What `npm run test:e2e` covers, grouped by feature. **71 tests across 26 spec
+files**, all of which run.
 
 Specs live in [`e2e/`](e2e/); shared setup and API helpers are in
 [`e2e/fixtures.ts`](e2e/fixtures.ts). Most fixtures build their data over HTTP;
 `seedUser` is the exception and writes to the stack's database directly,
 because the backend has no endpoint that creates users.
+
+Every request runs as a seeded super user unless a test asks for someone else.
+The backend no longer takes API keys, and a real login needs OpenStreetMap, so
+the harness logs in by signing the backend's session cookie itself with the
+test stack's `APPLICATION_SECRET` (`sessionCookie` in `e2e/fixtures.ts`). Any
+seeded user can be acted as this way (`mapperRequest`, `reviewerPage`).
+`e2e/global-setup.ts` seeds the super user and restarts the backend once so it
+picks them up from `MR_SUPER_ACCOUNTS`, which it reads only at boot.
 
 ---
 
@@ -44,7 +50,7 @@ because the backend has no endpoint that creates users.
 
 **Locking** — [`task-locking.spec.ts`](e2e/task-locking.spec.ts)
 - A second user is told a task is locked when they open it after the first
-  user *(needs `E2E_REVIEWER_API_KEY`)*
+  user
 
 ## Projects
 
@@ -104,6 +110,15 @@ because the backend has no endpoint that creates users.
 **Profile** — [`profile-settings.spec.ts`](e2e/profile-settings.spec.ts)
 - A user can update their custom basemap URL setting
 
+## Super admin
+
+**Users** — [`super-admin.spec.ts`](e2e/super-admin.spec.ts)
+- The users page lists the authenticated super user, and search filters it
+
+**Challenge reports** — [`challenge-reports.spec.ts`](e2e/challenge-reports.spec.ts)
+- Ordinary mappers file reports, and are held to one open report each
+- Only a super admin sees reporters' contact details or can rule on a report
+
 ## Explore
 
 **Location** — [`explore-location.spec.ts`](e2e/explore-location.spec.ts)
@@ -113,26 +128,11 @@ because the backend has no endpoint that creates users.
 
 ## Not covered
 
-Every request the harness makes carries `MR_SUPER_KEY`, which the backend maps
-to a single synthetic super user rather than to any row in the users table. No
-endpoint creates users — real ones only arrive through OSM OAuth — so anything
-needing a second person, or needing permissions to actually bite, is out of
-reach.
-
-- **Acting *as* a granted user.** A user can be seeded into the database to be
-  granted a role (`seedUser` in `e2e/fixtures.ts`), so granting, re-roling and
-  revoking are all covered. What that grant actually lets them *do* is not:
-  authenticating as them needs an API key. That is covered in the backend's
-  `ChallengeServiceSpec`.
+- **Logging in.** The harness signs its own session cookies, so the OSM OAuth
+  flow itself is never exercised.
 - **Applying a tag fix.** The apply step runs inside an embedded iD editor
   against real OpenStreetMap data the test stack cannot reach. What a tag-fix
   challenge and its tasks propose is covered; carrying it out is not.
-- **Super admin** — [`super-admin.spec.ts`](e2e/super-admin.spec.ts) is
-  `test.skip`: the users page needs a real super-admin-granted identity.
-  `src/lib/SuperAdminGuard.test.ts` unit-tests the guard predicate instead.
-- **Two-user task locking** — runs only when `E2E_REVIEWER_API_KEY` is set to a
-  real user's `"<userId>|<rawKey>"` key. Provisioning one is a manual,
-  out-of-band step documented in `e2e/fixtures.ts`.
 - **Review workflow** — no specs at all; there is no reviewer UI yet.
 
 ## Running them

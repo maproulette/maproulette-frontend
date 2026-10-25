@@ -1,5 +1,5 @@
 import type { APIRequestContext } from '@playwright/test'
-import { BACKEND_URL, expect, SUPER_KEY, test } from './fixtures'
+import { BACKEND_URL, expect, test } from './fixtures'
 
 // A task built from a GeoJSON FeatureCollection holds several features at
 // once. All of them belong to the one task: they are drawn together, listed
@@ -22,7 +22,7 @@ const createTaskWithGeometries = async (
   features: unknown[]
 ): Promise<number> => {
   const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: {
       name: `fc-task-${Date.now()}-${Math.round(Math.random() * 1e6)}`,
       parent: challengeId,

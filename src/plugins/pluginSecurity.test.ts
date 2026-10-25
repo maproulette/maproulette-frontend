@@ -104,8 +104,6 @@ describe('getAllowedPluginHosts', () => {
   })
 })
 
-// The node test environment shims `window` as a bare global with no location, so
-// same-origin handling is only reachable with an origin stubbed in.
 describe('validatePluginUrl (same-origin bundles)', () => {
   it('allows a root-relative bundle path once the app origin is known', () => {
     vi.stubGlobal('location', { origin: 'https://mr.example.org' })
@@ -117,16 +115,6 @@ describe('validatePluginUrl (same-origin bundles)', () => {
     vi.stubGlobal('location', { origin: 'https://mr.example.org' })
 
     expect(validatePluginUrl('https://mr.example.org/plugins/review.js')).toBe(true)
-  })
-
-  it('rejects a root-relative path when there is no app origin to resolve it against', () => {
-    expect(validatePluginUrl('/plugins/review.js')).toBe(false)
-  })
-
-  it('rejects a root-relative path outside a browser altogether', () => {
-    vi.stubGlobal('window', undefined)
-
-    expect(validatePluginUrl('/plugins/review.js')).toBe(false)
   })
 })
 
@@ -143,10 +131,6 @@ describe('parsePluginUrl', () => {
     expect(parsePluginUrl('/plugins/review.js')?.href).toBe(
       'https://mr.example.org/plugins/review.js'
     )
-  })
-
-  it('returns null for a root-relative path with no app origin', () => {
-    expect(parsePluginUrl('/plugins/review.js')).toBeNull()
   })
 
   it('returns null for junk rather than absorbing it as a relative path', () => {

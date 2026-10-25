@@ -14,8 +14,6 @@ vi.mock('@/api', () => ({
 const challenge = (id: number, extra: Record<string, unknown> = {}) =>
   ({ id, paused: false, ...extra }) as unknown as Parameters<typeof startableChallenges>[0][number]
 
-const queryClient = {} as Parameters<typeof fetchRandomTaskByDifficulty>[1]
-
 beforeEach(() => {
   vi.clearAllMocks()
 })
@@ -38,19 +36,19 @@ describe('fetchRandomTaskByDifficulty', () => {
     fetchChallengesByDifficulty.mockResolvedValue([challenge(11), challenge(12)])
     getRandomTask.mockResolvedValue([{ id: 99 }])
 
-    const picked = await fetchRandomTaskByDifficulty(3, queryClient, () => 0)
+    const picked = await fetchRandomTaskByDifficulty(3, () => 0)
 
     expect(picked?.task).toEqual({ id: 99 })
     expect(picked?.challenge.id).toBe(11)
     expect(fetchChallengesByDifficulty).toHaveBeenCalledWith(3, 50)
-    expect(getRandomTask).toHaveBeenCalledWith(11, queryClient)
+    expect(getRandomTask).toHaveBeenCalledWith(11)
   })
 
   it('moves on to another challenge when the first hands back no task', async () => {
     fetchChallengesByDifficulty.mockResolvedValue([challenge(11), challenge(12)])
     getRandomTask.mockResolvedValueOnce([]).mockResolvedValueOnce([{ id: 42 }])
 
-    const picked = await fetchRandomTaskByDifficulty(1, queryClient, () => 0)
+    const picked = await fetchRandomTaskByDifficulty(1, () => 0)
 
     expect(picked?.task).toEqual({ id: 42 })
     // The challenge that actually produced the task, not the one that came up empty.
@@ -62,14 +60,14 @@ describe('fetchRandomTaskByDifficulty', () => {
     fetchChallengesByDifficulty.mockResolvedValue([challenge(11), challenge(12)])
     getRandomTask.mockResolvedValue([])
 
-    expect(await fetchRandomTaskByDifficulty(2, queryClient, () => 0)).toBeNull()
+    expect(await fetchRandomTaskByDifficulty(2, () => 0)).toBeNull()
     expect(getRandomTask.mock.calls.map((call) => call[0])).toEqual([11, 12])
   })
 
   it('returns null when no challenge at that difficulty is startable', async () => {
     fetchChallengesByDifficulty.mockResolvedValue([challenge(11, { paused: true })])
 
-    expect(await fetchRandomTaskByDifficulty(2, queryClient, () => 0)).toBeNull()
+    expect(await fetchRandomTaskByDifficulty(2, () => 0)).toBeNull()
     expect(getRandomTask).not.toHaveBeenCalled()
   })
 })

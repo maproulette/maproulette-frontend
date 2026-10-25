@@ -64,7 +64,7 @@ export const PluginSettings = () => {
       }
     } catch (error) {
       toast.error('Failed to add plugin')
-      logger.error('Failed to add plugin', { error: String(error) })
+      logger.error('Failed to add plugin', { error })
     }
   }
 
@@ -78,7 +78,7 @@ export const PluginSettings = () => {
       toast.success(`"${pluginName}" removed from your plugins`)
     } catch (error) {
       toast.error('Failed to remove plugin')
-      logger.error('Failed to remove plugin', { error: String(error) })
+      logger.error('Failed to remove plugin', { error })
     }
   }
 

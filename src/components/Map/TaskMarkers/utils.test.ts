@@ -1,12 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import type { TaskMarker } from '@/types/Task'
 import {
-  buildSelectedTaskCollection,
-  calculateTaskCount,
-  convertTaskMarkersToGeoJSON,
+  flattenTaskMarkers,
   isTaskEligibleForBundle,
   isValidLocation,
-  processMarkersData,
   TASK_STATUS,
 } from './utils.ts'
 
@@ -68,148 +65,28 @@ describe('isTaskEligibleForBundle', () => {
   })
 })
 
-describe('buildSelectedTaskCollection', () => {
-  const notSpidered = { has: () => false }
-  const spideredSet = { has: (id: number) => id === 1 }
+describe('flattenTaskMarkers', () => {
+  it('returns no markers for input that is not a markers response', () => {
+    expect(flattenTaskMarkers(null)).toEqual([])
+    expect(flattenTaskMarkers('nope')).toEqual([])
+    expect(flattenTaskMarkers({ foo: 'bar' })).toEqual([])
+    expect(flattenTaskMarkers([marker()])).toEqual([])
+  })
 
-  it('returns an empty collection when marker is null or undefined', () => {
-    expect(buildSelectedTaskCollection(null, notSpidered)).toEqual({
-      type: 'FeatureCollection',
-      features: [],
+  it('includes the tasks the backend groups under overlaps, which it leaves out of markers', () => {
+    const single = marker({ id: 1 })
+    const stacked = [marker({ id: 2 }), marker({ id: 3 })]
+    const result = flattenTaskMarkers({
+      markers: [single],
+      overlaps: [{ tasks: stacked, location: { lng: 10, lat: 20 } }],
     })
-    expect(buildSelectedTaskCollection(undefined, notSpidered)).toEqual({
-      type: 'FeatureCollection',
-      features: [],
-    })
+    expect(result.map((m) => m.id)).toEqual([1, 2, 3])
   })
 
-  it('returns an empty collection when the marker has no location', () => {
-    const noLocation = marker({ location: undefined as unknown as TaskMarker['location'] })
-    expect(buildSelectedTaskCollection(noLocation, notSpidered)).toEqual({
-      type: 'FeatureCollection',
-      features: [],
-    })
-  })
-
-  it('returns an empty collection when the marker is spidered', () => {
-    expect(buildSelectedTaskCollection(marker({ id: 1 }), spideredSet)).toEqual({
-      type: 'FeatureCollection',
-      features: [],
-    })
-  })
-
-  it('builds a single-feature collection for a valid, non-spidered marker', () => {
-    const result = buildSelectedTaskCollection(marker({ id: 1, priority: 2 }), notSpidered)
-    expect(result).toEqual({
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: { type: 'Point', coordinates: [10, 20] },
-          properties: { id: 1, status: TASK_STATUS.CREATED, priority: 2 },
-        },
-      ],
-    })
-  })
-})
-
-describe('convertTaskMarkersToGeoJSON', () => {
-  it('converts a TaskMarker into a point feature', () => {
-    const result = convertTaskMarkersToGeoJSON([marker({ id: 1, bundleId: 3, lockedBy: 4 })])
-    expect(result.features).toHaveLength(1)
-    expect(result.features[0]).toMatchObject({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [10, 20] },
-      properties: {
-        id: 1,
-        status: TASK_STATUS.CREATED,
-        priority: 0,
-        bundleId: 3,
-        lockedBy: 4,
-        cluster: false,
-        isOverlapping: false,
-        isSelected: false,
-        isHovered: false,
-        isHighlighted: false,
-      },
-    })
-  })
-
-  it('defaults bundleId and lockedBy to null when absent', () => {
-    const result = convertTaskMarkersToGeoJSON([marker({ id: 1 })])
-    expect(result.features[0].properties).toMatchObject({ bundleId: null, lockedBy: null })
-  })
-
-  it('skips markers with no location', () => {
-    const result = convertTaskMarkersToGeoJSON([
-      marker({ id: 1, location: undefined as unknown as TaskMarker['location'] }),
-    ])
-    expect(result.features).toHaveLength(0)
-  })
-
-  it('converts multiple markers', () => {
-    const result = convertTaskMarkersToGeoJSON([marker({ id: 1 }), marker({ id: 2 })])
-    expect(result.features).toHaveLength(2)
-    expect(result.type).toBe('FeatureCollection')
-  })
-})
-
-describe('calculateTaskCount', () => {
-  it('returns 0 for null/undefined/falsy input', () => {
-    expect(calculateTaskCount(null)).toBe(0)
-    expect(calculateTaskCount(undefined)).toBe(0)
-  })
-
-  it('counts the markers array in the backend response shape', () => {
-    expect(calculateTaskCount({ markers: [marker(), marker()] })).toBe(2)
-  })
-
-  it('returns 0 when markers is missing or not an array', () => {
-    expect(calculateTaskCount({ overlaps: [] })).toBe(0)
-    expect(calculateTaskCount({ markers: 'nope' })).toBe(0)
-  })
-
-  it('returns 0 for an unrecognized object shape', () => {
-    expect(calculateTaskCount({ foo: 'bar' })).toBe(0)
-  })
-
-  it('returns 0 for non-object input', () => {
-    expect(calculateTaskCount('nope')).toBe(0)
-    expect(calculateTaskCount(42)).toBe(0)
-  })
-})
-
-describe('processMarkersData', () => {
-  it('returns empty results for falsy input', () => {
-    expect(processMarkersData(null)).toEqual({ markers: [], overlapMarkers: [] })
-  })
-
-  it('handles the backend response shape with markers and overlaps arrays', () => {
-    const m = marker({ id: 1 })
-    const overlap = { tasks: [marker({ id: 2 })], location: { lng: 1, lat: 2 } }
-    const result = processMarkersData({ markers: [m], overlaps: [overlap] })
-    expect(result).toEqual({ markers: [m], overlapMarkers: [overlap] })
-  })
-
-  it('defaults to empty arrays when markers/overlaps fields are not arrays', () => {
-    const result = processMarkersData({ markers: 'nope', overlaps: null })
-    expect(result).toEqual({ markers: [], overlapMarkers: [] })
-  })
-
-  it('returns empty results when the overlaps key is missing', () => {
-    expect(processMarkersData({ markers: [marker()] })).toEqual({
-      markers: [],
-      overlapMarkers: [],
-    })
-  })
-
-  it('returns empty results for an unrecognized object shape', () => {
-    expect(processMarkersData({ foo: 'bar' })).toEqual({ markers: [], overlapMarkers: [] })
-  })
-
-  it('returns empty results for non-object input', () => {
-    expect(processMarkersData('nope')).toEqual({ markers: [], overlapMarkers: [] })
-    expect(processMarkersData([marker()])).toEqual({ markers: [], overlapMarkers: [] })
+  it('reads whichever of markers and overlaps is present', () => {
+    expect(flattenTaskMarkers({ markers: [marker()] })).toHaveLength(1)
+    expect(flattenTaskMarkers({ overlaps: [{ tasks: [marker()] }] })).toHaveLength(1)
+    expect(flattenTaskMarkers({ markers: 'nope', overlaps: null })).toEqual([])
   })
 })
 

@@ -200,6 +200,8 @@ export const MapControls = ({
                       size="icon"
                       onClick={button.onClick}
                       disabled={button.disabled}
+                      aria-label={button.tooltip}
+                      aria-pressed={button.isActive}
                       className={cn(
                         mapButtonClass,
                         button.isActive && 'text-blue-400 hover:text-blue-300'

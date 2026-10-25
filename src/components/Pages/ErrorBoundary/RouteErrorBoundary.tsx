@@ -246,10 +246,7 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
 export const RouteErrorBoundary = ({ error, reset }: RouteErrorBoundaryProps) => {
   // Log the error for debugging, once per occurrence rather than on every re-render
   useEffect(() => {
-    logger.error('Route error caught', {
-      error: error.message,
-      stack: error.stack,
-    })
+    logger.error('Route error caught', { error })
   }, [error])
 
   // Handle HTTP errors from API

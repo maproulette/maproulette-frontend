@@ -64,7 +64,7 @@ export const FindFeatureByName = () => {
       {/* Loading indicator sticky at top while fetching */}
       {(isFetching || isDebouncePending) && !isLoading && totalResults > 0 && (
         <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-slate-950/90">
-          <Spinner className="h-4 w-4 text-blue-500" />
+          <Spinner className="text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
             {t('common.updatingResults', undefined, 'Updating results...')}
           </p>
@@ -73,7 +73,7 @@ export const FindFeatureByName = () => {
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
-          <Spinner className="h-8 w-8 text-blue-500" />
+          <Spinner size="lg" className="text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
             {t('common.loading2', undefined, 'Loading...')}
           </p>

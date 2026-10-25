@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef } from 'react'
-import { api } from '@/api'
-import { isTaskEligibleForBundle, processMarkersData } from '@/components/Map/TaskMarkers/utils'
+import { useEffect, useRef } from 'react'
+import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import {
@@ -10,6 +9,7 @@ import {
 import { useAuthContext } from '@/contexts/AuthContext'
 import type { TaskMarker } from '@/types/Task'
 import { getTasksInPolygon } from './lassoUtils'
+import { useTaskEditMapContext } from './TaskEditMapContext'
 
 /**
  * Binds mouse event listeners for lasso drawing on the map canvas.
@@ -29,10 +29,7 @@ export const useLassoEvents = () => {
   const { activeBundle } = useTaskBundleContext()
   const { user } = useAuthContext()
 
-  const challengeId = task.parent
-  const { data: taskMarkersData } = api.challenge.getChallengeTaskMarkers(challengeId)
-  // Reason: transforms markers data for lasso selection geometry
-  const markersData = useMemo(() => processMarkersData(taskMarkersData), [taskMarkersData])
+  const { markers } = useTaskEditMapContext()
 
   // Create a set of excluded task IDs (primary + bundled)
   const excludedIdsRef = useRef(new Set<number>())
@@ -53,7 +50,7 @@ export const useLassoEvents = () => {
     const primaryTaskBundleId = task.bundleId ?? null
     const currentUserId = user?.id ?? null
     const eligible = new Set<number>()
-    for (const marker of markersData.markers) {
+    for (const marker of markers) {
       if (
         isTaskEligibleForBundle(
           { status: marker.status, bundleId: marker.bundleId, lockedBy: marker.lockedBy },
@@ -65,12 +62,12 @@ export const useLassoEvents = () => {
       }
     }
     eligibleIdsRef.current = eligible
-  }, [markersData, task.bundleId, user?.id])
+  }, [markers, task.bundleId, user?.id])
 
-  const markersRef = useRef<TaskMarker[]>(markersData.markers)
+  const markersRef = useRef<TaskMarker[]>(markers)
   useEffect(() => {
-    markersRef.current = markersData.markers
-  }, [markersData])
+    markersRef.current = markers
+  }, [markers])
 
   const isMouseDownRef = useRef(false)
   const pointsRef = useRef<[number, number][]>([])

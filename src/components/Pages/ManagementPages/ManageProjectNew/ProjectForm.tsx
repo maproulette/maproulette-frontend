@@ -78,7 +78,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               'Failed to save project. Please try again.'
             )
       toast.error(errorMessage)
-      logger.error('Failed to save project', { error: String(error) })
+      logger.error('Failed to save project', { error })
     }
   }
 

@@ -1,4 +1,4 @@
-import { MiniChallengeMap } from '../MiniChallengeMap'
+import { ChallengeTasksMap } from '@/components/Map/ChallengeTasksMap'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
 
 /** Mini map showing the current (status/priority filtered) task markers. */
@@ -8,11 +8,12 @@ export const ChallengeTasksExplorerMapPanel = () => {
 
   return (
     <div className="relative h-full">
-      <MiniChallengeMap
+      <ChallengeTasksMap
         markers={mapMarkers}
         isLoading={isLoading}
-        containerClassName="h-full w-full rounded-lg border border-zinc-200 dark:border-slate-700"
-        onBoundsStringChange={setViewportBounds}
+        showLegend={false}
+        className="rounded-lg border border-zinc-200 dark:border-slate-700"
+        onBoundsChange={setViewportBounds}
         selectedTask={selectedTask}
         onSelectTask={setSelectedTask}
       />

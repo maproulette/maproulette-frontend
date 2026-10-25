@@ -96,9 +96,22 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const persistBundle = useCallback(
     (nextBundle: TaskBundle | null) => {
       const memberTaskIds = nextBundle?.taskIds.filter((id) => id !== task.id) ?? []
-      lockBundleMutation.mutate({ taskId: task.id, taskIds: memberTaskIds })
+      lockBundleMutation.mutate(
+        { taskId: task.id, taskIds: memberTaskIds },
+        {
+          onError: () => {
+            toast.error(
+              t(
+                'taskEditPage.taskBundle.lockUpdateFailed',
+                undefined,
+                'Could not update the tasks that were locked with this bundle.'
+              )
+            )
+          },
+        }
+      )
     },
-    [task.id, lockBundleMutation.mutate]
+    [task.id, lockBundleMutation.mutate, t]
   )
 
   const lockBundleTasks = useCallback(
@@ -146,13 +159,28 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     if (!activeBundle) return
     // Release the lock's bundled tasks too - otherwise other tabs would still see them as
     // locked/bundled even though this tab has moved on to just the primary.
-    persistBundle(null)
+    lockBundleTasks(null)
+      .then(() => {
+        toast.success(
+          t(
+            'taskEditPage.taskBundle.clearedSuccess',
+            undefined,
+            'Now working on only the primary task'
+          )
+        )
+      })
+      .catch(() => {
+        toast.error(
+          t(
+            'taskEditPage.taskBundle.lockUpdateFailed',
+            undefined,
+            'Could not update the tasks that were locked with this bundle.'
+          )
+        )
+      })
     clearBundle()
-    toast.success(
-      t('taskEditPage.taskBundle.clearedSuccess', undefined, 'Now working on only the primary task')
-    )
     setShowDeleteDialog(false)
-  }, [activeBundle, clearBundle, persistBundle])
+  }, [activeBundle, clearBundle, lockBundleTasks, t])
 
   const bundleTaskIds = activeBundle?.taskIds ?? [task.id]
   const isNonBundleSelection = selectedMarker !== null && !bundleTaskIds.includes(selectedMarker.id)

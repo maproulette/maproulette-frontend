@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.64.0",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^10.6.0",
     "@storybook/addon-vitest": "^10.6.0",
@@ -103,7 +103,7 @@
     "dotenv": "^16.4.7",
     "happy-dom": "^20.9.0",
     "openapi-typescript": "^7.10.1",
-    "playwright": "^1.60.0",
+    "playwright": "^1.64.0",
     "source-map-explorer": "^2.5.3",
     "storybook": "^10.6.0",
     "storybook-dark-mode": "^5.0.0",

@@ -16,6 +16,7 @@ export type ChallengeTaskMarkersResponse =
 
 export type ChallengeListingResponse =
   paths['/challenges/listing']['get']['responses']['200']['content']['application/json']
+export type ChallengeListing = ChallengeListingResponse[number]
 
 /*  Parameters  */
 export type PreferredChallengesParams =

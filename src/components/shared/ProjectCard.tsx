@@ -20,6 +20,8 @@ interface ProjectCardProps {
   actions?: React.ReactNode
   linkTo?: string
   linkParams?: Record<string, string>
+  onSelect?: () => void
+  selected?: boolean
 }
 
 export const ProjectCard = ({
@@ -29,6 +31,8 @@ export const ProjectCard = ({
   className,
   linkTo,
   linkParams,
+  onSelect,
+  selected = false,
 }: ProjectCardProps) => {
   const { t } = useIntl()
   // The image belongs to the team managing the project and is addressed by that
@@ -41,16 +45,14 @@ export const ProjectCard = ({
   const completionPercentage =
     meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
   const lastUpdated = project.modified
+  const cardClassName = cn(
+    'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
+    selected && 'ring-2 ring-blue-500 dark:ring-blue-400',
+    className
+  )
 
-  return (
-    <Link
-      to={linkTo ?? '/project/$projectId'}
-      params={linkParams ?? { projectId: String(project.id) }}
-      className={cn(
-        'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
-        className
-      )}
-    >
+  const content = (
+    <>
       {actions && (
         <div
           className="absolute top-3 right-3 z-10 flex items-center gap-1"
@@ -123,6 +125,29 @@ export const ProjectCard = ({
           </div>
         </div>
       </div>
+    </>
+  )
+
+  if (onSelect) {
+    return (
+      <button
+        type="button"
+        onClick={onSelect}
+        aria-pressed={selected}
+        className={cn(cardClassName, 'w-full text-left')}
+      >
+        {content}
+      </button>
+    )
+  }
+
+  return (
+    <Link
+      to={linkTo ?? '/project/$projectId'}
+      params={linkParams ?? { projectId: String(project.id) }}
+      className={cardClassName}
+    >
+      {content}
     </Link>
   )
 }

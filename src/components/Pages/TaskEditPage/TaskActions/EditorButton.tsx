@@ -78,7 +78,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
         }
       )
     } catch (error) {
-      logger.error('Error setting default editor', { error: String(error) })
+      logger.error('Error setting default editor', { error })
     } finally {
       setIsSaving(false)
     }

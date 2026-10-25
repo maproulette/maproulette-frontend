@@ -29,8 +29,8 @@ export interface TaskContextType {
   isLocked: boolean
   isLocking: boolean
   lockedTasks: number[]
-  lockTask: () => void
-  unlockTask: () => void
+  lockTask: () => Promise<boolean>
+  unlockTask: () => Promise<boolean>
 }
 
 export const TaskContext = createContext<TaskContextType | undefined>(undefined)
@@ -69,38 +69,38 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const attemptLock = useCallback(
-    (taskId: number) => {
-      lockTaskMutation.mutate(taskId, {
-        onSuccess: (data) => {
-          setIsLocked(true)
-          lockedTaskIdRef.current = taskId
-          setLockedTasks(data.lockBundledTasks.filter((id) => id !== taskId))
-          navigate({
-            to: '/tasks/$taskId',
-            params: { taskId: String(taskId) },
-            search: (prev) => ({ ...prev, claimTask: undefined }),
-            replace: true,
-          })
-        },
-        onError: async (error) => {
-          setIsLocked(false)
-          const conflict = await getLockConflictInfo(error)
-          if (conflict) {
-            setLockConflict(conflict)
-            return
-          }
-          logger.error('Failed to lock task', { taskId, error })
-          toast.error(
-            t(
-              'taskEditPage.taskActions.lockButton.lockConflict',
-              undefined,
-              'This task is currently locked by another mapper. Try again later or pick a different task.'
-            )
+    async (taskId: number): Promise<boolean> => {
+      try {
+        const data = await lockTaskMutation.mutateAsync(taskId)
+        setIsLocked(true)
+        lockedTaskIdRef.current = taskId
+        setLockedTasks(data.lockBundledTasks.filter((id) => id !== taskId))
+        navigate({
+          to: '/tasks/$taskId',
+          params: { taskId: String(taskId) },
+          search: (prev) => ({ ...prev, claimTask: undefined }),
+          replace: true,
+        })
+        return true
+      } catch (error) {
+        setIsLocked(false)
+        const conflict = await getLockConflictInfo(error)
+        if (conflict) {
+          setLockConflict(conflict)
+          return false
+        }
+        logger.error('Failed to lock task', { taskId, error })
+        toast.error(
+          t(
+            'taskEditPage.taskActions.lockButton.lockConflict',
+            undefined,
+            'This task is currently locked by another mapper. Try again later or pick a different task.'
           )
-        },
-      })
+        )
+        return false
+      }
     },
-    [lockTaskMutation, navigate, t]
+    [lockTaskMutation.mutateAsync, navigate, t]
   )
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     if (challenge?.paused) return
 
     hasAttemptedLock.current = true
-    attemptLock(task.id)
+    void attemptLock(task.id)
   }, [shouldClaimTask, task, isAuthenticated, isEditable, challenge?.paused, attemptLock])
 
   // We deliberately do NOT release the lock on unmount (navigating away, closing the tab,
@@ -208,24 +208,32 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [isLocked, lockConflict])
 
-  const lockTask = useCallback(() => {
-    if (!task || challenge?.paused) return
-    attemptLock(task.id)
+  const lockTask = useCallback(async () => {
+    if (!task || challenge?.paused) return false
+    return attemptLock(task.id)
   }, [task, challenge?.paused, attemptLock])
 
-  const unlockTask = useCallback(() => {
-    if (!task) return
-    unlockTaskMutation.mutate(task.id, {
-      onSuccess: () => clearLockState(task.id),
-    })
-  }, [task, unlockTaskMutation, clearLockState])
+  const unlockTask = useCallback(async () => {
+    if (!task) return false
+    try {
+      await unlockTaskMutation.mutateAsync(task.id)
+      clearLockState(task.id)
+      return true
+    } catch (error) {
+      logger.error('Failed to unlock task', { taskId: task.id, error })
+      toast.error(
+        t('taskEditPage.taskActions.lockButton.unlockFailed', undefined, 'Failed to unlock task')
+      )
+      return false
+    }
+  }, [task, unlockTaskMutation.mutateAsync, clearLockState, t])
 
   const handleConfirmSwitchLock = useCallback(() => {
     if (!task || !lockConflict) return
     unlockTaskMutation.mutate(lockConflict.lockedTaskId, {
       onSettled: () => {
         setLockConflict(null)
-        attemptLock(task.id)
+        void attemptLock(task.id)
       },
     })
   }, [task, lockConflict, unlockTaskMutation, attemptLock])

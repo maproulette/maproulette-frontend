@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { logger } from '@/lib/logger'
 
 interface Config<TKey extends string> {
   available: TKey[]
@@ -9,7 +10,6 @@ const storageKey = (tableId: string) => `mr4:columns:${tableId}`
 
 export const useColumnConfig = <TKey extends string>(tableId: string, defaults: Config<TKey>) => {
   const [config, setConfig] = useState<Config<TKey>>(() => {
-    if (typeof window === 'undefined') return defaults
     try {
       const raw = window.localStorage.getItem(storageKey(tableId))
       if (!raw) return defaults
@@ -26,11 +26,10 @@ export const useColumnConfig = <TKey extends string>(tableId: string, defaults: 
   })
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
     try {
       window.localStorage.setItem(storageKey(tableId), JSON.stringify(config))
-    } catch {
-      /* ignore */
+    } catch (error) {
+      logger.warn(`Failed to persist column config for ${tableId}`, { error })
     }
   }, [tableId, config])
 

@@ -52,7 +52,7 @@ const setJSONCookie = (name: string, value: unknown, days?: number): void => {
     const jsonString = JSON.stringify(value)
     setCookie(name, jsonString, days)
   } catch (error) {
-    logger.error(`Failed to set cookie ${name}`, { error: String(error) })
+    logger.error(`Failed to set cookie ${name}`, { error })
   }
 }
 
@@ -62,7 +62,7 @@ const getJSONCookie = <T,>(name: string): T | null => {
     if (!cookieValue) return null
     return JSON.parse(cookieValue) as T
   } catch (error) {
-    logger.error(`Failed to get cookie ${name}`, { error: String(error) })
+    logger.error(`Failed to get cookie ${name}`, { error })
     return null
   }
 }

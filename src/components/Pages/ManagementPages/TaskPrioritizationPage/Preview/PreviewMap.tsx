@@ -1,30 +1,20 @@
-import bbox from '@turf/bbox'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
-import {
-  Layer,
-  Map as MapGL,
-  type MapMouseEvent,
-  type MapRef,
-  Source,
-  useMap,
-} from 'react-map-gl/maplibre'
-import Supercluster from 'supercluster'
+import { Layer, type MapRef, Source, useMap } from 'react-map-gl/maplibre'
 import { MapControls } from '@/components/Map/MapControls'
+import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
-import { mapBoundsToBbox } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
-import { clusterCountLayer, clusterLayer } from '@/components/Map/TaskMarkers/clusterLayers'
-import { flyToClusterExpansion } from '@/components/Map/TaskMarkers/clusterUtils'
-import { CLUSTER_RADIUS_PX, LAYER_IDS } from '@/components/Map/TaskMarkers/const'
+import type { HighlightedMarker, MarkerStyle } from '@/components/Map/TaskMarkers/markerStyle'
+import { TaskMarkersLayer } from '@/components/Map/TaskMarkers/TaskMarkersLayer'
+import { useFitToMarkers } from '@/components/Map/TaskMarkers/useFitToMarkers'
 import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
-import type { Bbox2D } from '@/types/Map'
 import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { usePrioritizationContext } from '../PrioritizationContext'
 import { useTaskPreview } from '../TaskPreviewContext'
-import { createPriorityMarkerIcons, PRIORITY_PIN_PREFIX } from './createPriorityMarkerIcons'
+import { createPriorityMarkerIcons, priorityPinName } from './createPriorityMarkerIcons'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 interface PreviewMapRenderCtx {
@@ -48,17 +38,11 @@ const BOUNDS_OUTLINE_COLORS: Record<TaskPriorityValue, string> = {
   2: PRIORITY_COLOR[2].hex,
 }
 
-interface ClusterProperties {
-  cluster: true
-  cluster_id: number
-  point_count: number
-}
-
-interface PointProperties {
-  cluster?: false
-  id: number
-  priority: TaskPriorityValue
-}
+const priorityPinStyle = (marker: TaskMarker): MarkerStyle => ({
+  icon: priorityPinName(marker.priority as TaskPriorityValue),
+  opacity: 1,
+  size: 0.9,
+})
 
 export const PreviewMap = ({
   externalMapRef,
@@ -70,103 +54,37 @@ export const PreviewMap = ({
   const { t } = useIntl()
   const mapId = useId()
   const idPrefix = useId().replace(/:/g, '-')
-  // Shared cluster layers from clusterLayers.ts target source id `LAYER_IDS.source`
-  // and define layer ids `LAYER_IDS.clusters` / `LAYER_IDS.clusterCount`; reuse them
-  // so the cluster bubble + count styling matches every other map. The unclustered
-  // priority pin layer below is preview-specific (priority pins, not status pins).
-  const tasksSourceId = LAYER_IDS.source
-  const tasksLayerId = `${idPrefix}-tasks-pins`
-  const clustersLayerId = LAYER_IDS.clusters
-  const clusterCountLayerId = LAYER_IDS.clusterCount
   const localMapRef = useRef<MapRef | null>(null)
   const mapRef = externalMapRef ?? localMapRef
   const [mapLoaded, setMapLoaded] = useState(false)
-  const initialFitAppliedRef = useRef(false)
   const { markers, preview } = useTaskPreview()
   const { draft } = usePrioritizationContext()
-
   const [cluster, setCluster] = useState(true)
-  const [mapZoom, setMapZoom] = useState(2)
-  const [mapBounds, setMapBounds] = useState<Bbox2D>([-180, -85, 180, 85])
-  const superclusterRef = useRef<Supercluster<PointProperties, ClusterProperties> | null>(null)
 
   useEffect(() => {
     onMapLoaded?.(mapLoaded)
   }, [mapLoaded, onMapLoaded])
 
-  const pointFeatures = useMemo<GeoJSON.Feature<GeoJSON.Point, PointProperties>[]>(() => {
-    const features: GeoJSON.Feature<GeoJSON.Point, PointProperties>[] = []
-    for (const marker of markers) {
-      if (!marker.location) continue
-      const computed = (preview.byTaskId.get(marker.id) ?? 1) as TaskPriorityValue
-      features.push({
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [marker.location.lng, marker.location.lat],
-        },
-        properties: {
-          cluster: false,
-          id: marker.id,
-          priority: computed,
-        },
-      })
-    }
-    return features
-  }, [markers, preview.byTaskId])
-
-  const allPointsFC = useMemo<GeoJSON.FeatureCollection>(
-    () => ({ type: 'FeatureCollection', features: pointFeatures }),
-    [pointFeatures]
+  const previewMarkers = useMemo(
+    () => markers.map((marker) => ({ ...marker, priority: preview.byTaskId.get(marker.id) ?? 1 })),
+    [markers, preview.byTaskId]
   )
 
-  // Build a single Supercluster index over the point features; toggling the UI
-  // off just bypasses the cluster query and renders the raw points instead.
-  const superclusterIndex = useMemo(() => {
-    if (pointFeatures.length === 0) return null
-    const index = new Supercluster<PointProperties, ClusterProperties>({
-      radius: CLUSTER_RADIUS_PX,
-      maxZoom: 22,
-      minZoom: 0,
-    })
-    index.load(pointFeatures)
-    return index
-  }, [pointFeatures])
+  const markersById = useMemo(() => new Map(markers.map((m) => [m.id, m])), [markers])
 
-  useEffect(() => {
-    superclusterRef.current = superclusterIndex
-  }, [superclusterIndex])
+  const highlighted = useMemo<HighlightedMarker[]>(() => {
+    const selected = previewMarkers.find((m) => m.id === selectedTaskId)
+    return selected
+      ? [{ marker: selected, style: { ...priorityPinStyle(selected), size: 1.4 } }]
+      : []
+  }, [previewMarkers, selectedTaskId])
 
-  const clusteredFC = useMemo<GeoJSON.FeatureCollection>(() => {
-    if (!cluster || !superclusterIndex || pointFeatures.length === 0) {
-      return allPointsFC
-    }
-    const effectiveZoom = mapZoom < 0 ? 0 : Math.floor(mapZoom)
-    const clusters = superclusterIndex.getClusters(mapBounds, effectiveZoom)
-    return {
-      type: 'FeatureCollection',
-      features: clusters.map((c) => {
-        if (c.properties && 'point_count' in c.properties) {
-          const props = c.properties as ClusterProperties
-          return {
-            type: 'Feature' as const,
-            geometry: c.geometry,
-            properties: {
-              cluster: true,
-              cluster_id: props.cluster_id,
-              point_count: props.point_count,
-            },
-          }
-        }
-        const p = c.properties as PointProperties
-        return {
-          type: 'Feature' as const,
-          geometry: c.geometry,
-          properties: { id: p.id, priority: p.priority },
-        }
-      }),
-    }
-  }, [cluster, superclusterIndex, mapBounds, mapZoom, allPointsFC, pointFeatures.length])
+  const selectTask = useCallback(
+    (marker: TaskMarker) => onTaskSelect?.(markersById.get(marker.id) ?? marker),
+    [markersById, onTaskSelect]
+  )
+
+  useFitToMarkers(mapRef, mapLoaded, markers, false, { padding: 40, duration: 0 })
 
   const tierBoundsLayers = useMemo(
     () => [
@@ -176,95 +94,6 @@ export const PreviewMap = ({
     ],
     [draft.high.bounds, draft.medium.bounds, draft.low.bounds]
   )
-
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current || initialFitAppliedRef.current) return
-    if (allPointsFC.features.length === 0) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-    map.fitBounds(bbox(allPointsFC) as Bbox2D, { padding: 40, duration: 0, maxZoom: 16 })
-    initialFitAppliedRef.current = true
-  }, [mapLoaded, allPointsFC, mapRef])
-
-  // Track viewport so Supercluster can reproject after pan/zoom.
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-    const update = () => {
-      setMapBounds(mapBoundsToBbox(map.getBounds()))
-      setMapZoom(map.getZoom())
-    }
-    update()
-    map.on('move', update)
-    map.on('moveend', update)
-    return () => {
-      map.off('move', update)
-      map.off('moveend', update)
-    }
-  }, [mapLoaded, mapRef])
-
-  const markersById = useMemo(() => {
-    const map = new Map<number, TaskMarker>()
-    for (const m of markers) map.set(m.id, m)
-    return map
-  }, [markers])
-
-  const handleClick = useCallback(
-    (event: MapMouseEvent) => {
-      const feature = event.features?.[0]
-      if (!feature) return
-
-      // Cluster click → fly to the expansion zoom returned by Supercluster.
-      const clusterId = feature.properties?.cluster_id as number | undefined
-      const pointCount = feature.properties?.point_count as number | undefined
-      if (clusterId !== undefined && pointCount !== undefined && mapRef.current) {
-        const map = mapRef.current.getMap()
-        if (feature.geometry.type !== 'Point' || !map) return
-        const coordinates = feature.geometry.coordinates as [number, number]
-        flyToClusterExpansion(map, superclusterRef.current, clusterId, coordinates)
-        return
-      }
-
-      if (!onTaskSelect) return
-      const rawId = feature.properties?.id
-      const id = typeof rawId === 'string' ? Number(rawId) : (rawId as number | undefined)
-      if (!id || !Number.isFinite(id)) {
-        onTaskSelect(null)
-        return
-      }
-      const marker = markersById.get(id)
-      if (marker) onTaskSelect(marker)
-    },
-    [mapRef, markersById, onTaskSelect]
-  )
-
-  const interactiveLayerIds = useMemo(
-    () => [tasksLayerId, clustersLayerId, clusterCountLayerId],
-    [tasksLayerId, clustersLayerId, clusterCountLayerId]
-  )
-
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current) return
-    const map = mapRef.current.getMap()
-    if (!map) return
-    const onEnter = () => {
-      map.getCanvas().style.cursor = 'pointer'
-    }
-    const onLeave = () => {
-      map.getCanvas().style.cursor = ''
-    }
-    for (const layerId of interactiveLayerIds) {
-      map.on('mouseenter', layerId, onEnter)
-      map.on('mouseleave', layerId, onLeave)
-    }
-    return () => {
-      for (const layerId of interactiveLayerIds) {
-        map.off('mouseenter', layerId, onEnter)
-        map.off('mouseleave', layerId, onLeave)
-      }
-    }
-  }, [mapLoaded, mapRef, interactiveLayerIds])
 
   return (
     <div
@@ -279,55 +108,17 @@ export const PreviewMap = ({
         mapStyle={getCurrentMapStyle()}
         style={{ width: '100%', height: '100%' }}
         onLoad={() => setMapLoaded(true)}
-        onClick={handleClick}
-        interactiveLayerIds={interactiveLayerIds}
-        attributionControl={false}
         dragRotate={false}
         touchPitch={false}
       >
         <PriorityIconLoader />
-        <Source id={tasksSourceId} type="geojson" data={clusteredFC}>
-          <Layer {...clusterLayer} />
-          <Layer {...clusterCountLayer} />
-          <Layer
-            id={tasksLayerId}
-            type="symbol"
-            layout={{
-              'icon-image': [
-                'concat',
-                `${PRIORITY_PIN_PREFIX}-`,
-                ['to-string', ['get', 'priority']],
-              ],
-              'icon-size': 0.9,
-              'icon-anchor': 'bottom',
-              'icon-allow-overlap': true,
-              'icon-ignore-placement': true,
-            }}
-            filter={
-              selectedTaskId != null
-                ? ['all', ['!', ['has', 'point_count']], ['!=', ['get', 'id'], selectedTaskId]]
-                : ['!', ['has', 'point_count']]
-            }
-          />
-          {selectedTaskId != null && (
-            <Layer
-              id={`${tasksLayerId}-selected`}
-              type="symbol"
-              layout={{
-                'icon-image': [
-                  'concat',
-                  `${PRIORITY_PIN_PREFIX}-`,
-                  ['to-string', ['get', 'priority']],
-                ],
-                'icon-size': 1.4,
-                'icon-anchor': 'bottom',
-                'icon-allow-overlap': true,
-                'icon-ignore-placement': true,
-              }}
-              filter={['all', ['!', ['has', 'point_count']], ['==', ['get', 'id'], selectedTaskId]]}
-            />
-          )}
-        </Source>
+        <TaskMarkersLayer
+          markers={previewMarkers}
+          cluster={cluster}
+          markerStyle={priorityPinStyle}
+          highlighted={highlighted}
+          onSelectTask={selectTask}
+        />
         {tierBoundsLayers.map(({ priority, fc }) =>
           fc && fc.features.length > 0 ? (
             <Source
@@ -377,7 +168,7 @@ export const PreviewMap = ({
           className="pointer-events-none absolute top-3 right-3 z-10 inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white/95 px-2.5 py-1.5 font-medium text-xs text-zinc-700 shadow-sm dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-200"
           aria-live="polite"
         >
-          <Spinner className="size-3.5" />
+          <Spinner size="sm" />
           {t('taskPrioritizationPage.previewMap.updatingPreview', undefined, 'Updating preview…')}
         </div>
       )}
@@ -395,6 +186,9 @@ const PriorityIconLoader = () => {
     const onStyle = () => createPriorityMarkerIcons(map, () => map.triggerRepaint())
     if (map.isStyleLoaded()) onStyle()
     else map.once('load', onStyle)
+    return () => {
+      map.off('load', onStyle)
+    }
   }, [current])
   return null
 }

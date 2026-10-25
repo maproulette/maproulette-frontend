@@ -19,6 +19,8 @@ const baseValues: ChallengeFormValues = {
   description: 'A description',
   instruction: 'Some instructions',
   difficulty: 2,
+  checkinComment: 'Fixed roads #maproulette',
+  checkinSource: 'Bing',
   dataSource: 'overpass',
   overpassQL: 'way[highway=primary];',
   localGeoJSON: null,
@@ -52,6 +54,8 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
           ownerTeamId: null,
           osmIdProperty: null,
           taskBundleIdProperty: null,
@@ -92,6 +96,8 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
           ownerTeamId: null,
           osmIdProperty: null,
           taskBundleIdProperty: null,
@@ -130,6 +136,8 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
           ownerTeamId: null,
           osmIdProperty: null,
           taskBundleIdProperty: null,
@@ -393,6 +401,33 @@ describe('buildChallengeSubmission', () => {
       expect(result.challengeData.description).toBe('')
       expect(result.challengeData.instruction).toBe('')
     })
+
+    it('appends the #maproulette hashtag to the changeset comment when it is missing', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinComment: '  Fixed roads  ' },
+        true
+      )
+
+      expect(result.challengeData.checkinComment).toBe('Fixed roads #maproulette')
+    })
+
+    it('does not treat a longer hashtag like #maproulette-beta as the #maproulette hashtag', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinComment: 'Fixed roads #maproulette-beta' },
+        true
+      )
+
+      expect(result.challengeData.checkinComment).toBe('Fixed roads #maproulette-beta #maproulette')
+    })
+
+    it('trims surrounding whitespace from the changeset source', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinSource: '  Bing; survey  ' },
+        true
+      )
+
+      expect(result.challengeData.checkinSource).toBe('Bing; survey')
+    })
   })
 
   describe('edit mode (isCreate = false)', () => {
@@ -413,6 +448,8 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
           ownerTeamId: null,
           osmIdProperty: null,
           taskBundleIdProperty: null,
@@ -449,6 +486,15 @@ describe('buildChallengeSubmission', () => {
 
       expect(result.challengeData.description).toBeUndefined()
       expect(result.challengeData.instruction).toBeUndefined()
+    })
+
+    it('leaves the changeset comment as entered, without appending the hashtag', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinComment: 'Fixed roads' },
+        false
+      )
+
+      expect(result.challengeData.checkinComment).toBe('Fixed roads')
     })
   })
 })

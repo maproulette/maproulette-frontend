@@ -1,4 +1,3 @@
-import type { QueryClient } from '@tanstack/react-query'
 import { api } from '@/api'
 import type { Challenge } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
@@ -32,7 +31,6 @@ export interface RouletteResult {
  */
 export const fetchRandomTaskByDifficulty = async (
   difficulty: RouletteDifficulty,
-  queryClient: QueryClient,
   random: () => number = Math.random
 ): Promise<RouletteResult | null> => {
   const challenges = await api.challenge.fetchChallengesByDifficulty(
@@ -43,7 +41,7 @@ export const fetchRandomTaskByDifficulty = async (
 
   for (let attempt = 0; attempt < MAX_CHALLENGE_ATTEMPTS && candidates.length > 0; attempt += 1) {
     const [challenge] = candidates.splice(Math.floor(random() * candidates.length), 1)
-    const tasks = await api.challenge.getRandomTask(challenge.id, queryClient)
+    const tasks = await api.challenge.getRandomTask(challenge.id)
     if (tasks[0]) return { task: tasks[0], challenge }
   }
 

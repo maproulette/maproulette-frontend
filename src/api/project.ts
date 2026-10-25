@@ -2,7 +2,6 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/r
 import type { Challenge } from '@/types/Challenge'
 import type { Project, ProjectGetResponse } from '@/types/Project'
 import type { Team } from '@/types/Team'
-import { seedChallengeCache } from './challenge/single'
 import { apiRequest } from './client'
 
 interface ProjectRoleVariables {
@@ -35,7 +34,6 @@ export const project = {
     onlyEnabled?: boolean
     page?: number
   } = {}) => {
-    const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
         queryKey: ['project', 'featured', { limit, onlyEnabled, page }],
@@ -45,9 +43,6 @@ export const project = {
               searchParams: { limit, onlyEnabled, page },
             })
             .json<Project[]>()
-          for (const p of projects) {
-            queryClient.setQueryData(['project', p.id], p)
-          }
           return projects
         },
       })
@@ -82,7 +77,6 @@ export const project = {
     onlyOwned?: boolean
     searchString?: string
   } = {}) => {
-    const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
         queryKey: ['project', 'managed', { limit, page, onlyEnabled, onlyOwned, searchString }],
@@ -98,9 +92,6 @@ export const project = {
               },
             })
             .json<Project[]>()
-          for (const p of projects) {
-            queryClient.setQueryData(['project', p.id], p)
-          }
           return projects
         },
         placeholderData: (prev) => prev,
@@ -125,19 +116,10 @@ export const project = {
       enabled: !!projectId,
     }),
 
-  getProjectChallenges: (projectId: number | undefined, limit = 100, page = 0) => {
-    const queryClient = useQueryClient()
-    return useQuery({
-      ...project.getProjectChallengesOptions(projectId ?? 0, limit, page),
-      select: (challenges) => {
-        seedChallengeCache(queryClient, challenges)
-        return challenges
-      },
-    })
-  },
+  getProjectChallenges: (projectId: number | undefined, limit = 100, page = 0) =>
+    useQuery(project.getProjectChallengesOptions(projectId ?? 0, limit, page)),
 
   searchProjects: ({ search = '' }: { search?: string } = {}) => {
-    const queryClient = useQueryClient()
     return useQuery(
       queryOptions({
         queryKey: ['project', 'search', { search }],
@@ -149,9 +131,6 @@ export const project = {
               },
             })
             .json<Project[]>()
-          for (const p of projects) {
-            queryClient.setQueryData(['project', p.id], p)
-          }
           return projects
         },
         enabled: search.length > 0,

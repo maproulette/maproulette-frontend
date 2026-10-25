@@ -31,9 +31,11 @@ const SALT_LAKE = {
 }
 
 test('picking a location moves the map to it', async ({ page }) => {
-  await page.route('**nominatim.openstreetmap.org/search**', (route) =>
-    route.fulfill({ json: [SALT_LAKE] })
-  )
+  let searchRequests = 0
+  await page.route('**nominatim.openstreetmap.org/search**', (route) => {
+    searchRequests++
+    return route.fulfill({ json: [SALT_LAKE] })
+  })
   await page.route('**nominatim.openstreetmap.org/lookup**', (route) =>
     route.fulfill({ json: [SALT_LAKE] })
   )
@@ -56,11 +58,15 @@ test('picking a location moves the map to it', async ({ page }) => {
 
   const locationInput = page.getByPlaceholder(/search location/i)
   await locationInput.click()
-  await locationInput.fill('Salt Lake City')
+  await locationInput.pressSequentially('Salt Lake City')
+  await page.waitForTimeout(1500)
+  expect(searchRequests).toBe(0)
+  await locationInput.press('Enter')
 
   // Suggestions are `role="option"` buttons that split the display name into a
   // primary line and a muted remainder, so match the option, not the full name.
   await page.getByRole('option').filter({ hasText: 'Salt Lake City' }).first().click()
+  expect(searchRequests).toBe(1)
 
   // Fitting a city-sized box: zoomed well in, centred on the place.
   await expect.poll(() => camera()?.zoom ?? 0, { timeout: 20_000 }).toBeGreaterThan(8)

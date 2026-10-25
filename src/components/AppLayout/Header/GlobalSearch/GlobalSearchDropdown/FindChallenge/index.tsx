@@ -149,7 +149,7 @@ export const FindChallenge = () => {
           {isLoadingMore && isFetching && results.length > 0 && (
             <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-white/80 backdrop-blur-sm dark:bg-slate-950/80">
               <div className="flex flex-col items-center gap-3">
-                <Spinner className="h-8 w-8 text-blue-500" />
+                <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-600 dark:text-slate-400">
                   {t(
                     'appLayout.header.globalSearch.findChallenge.loadingMore',
@@ -164,7 +164,7 @@ export const FindChallenge = () => {
           <div className="space-y-3 pb-4">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center gap-3 py-12">
-                <Spinner className="h-8 w-8 text-blue-500" />
+                <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-500 dark:text-slate-400">
                   {t('common.loadingChallenges', undefined, 'Loading challenges...')}
                 </p>

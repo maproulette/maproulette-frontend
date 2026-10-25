@@ -1,5 +1,6 @@
-import { Crosshair, Eye, EyeOff, Filter, Globe, MoveRight } from 'lucide-react'
+import { Crosshair, Eye, EyeOff, Filter, Globe } from 'lucide-react'
 import { useMemo } from 'react'
+import { directionsControlButton } from '@/components/Map/directionsControlButton'
 import type { MapControlButton } from '@/components/Map/MapControls'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
@@ -55,17 +56,12 @@ export const useMapControlButtons = (
         isActive: showBundleOnly,
         binding: MAP_BINDINGS.toggleBundleOnly,
       },
-      {
-        id: 'toggle-direction-indicators',
-        icon: MoveRight,
-        onClick: () => setShowDirectionIndicators(!showDirectionIndicators),
-        tooltip: showDirectionIndicators
-          ? t('taskMap.controls.hideDirectionIndicators', undefined, 'Hide direction indicators')
-          : t('taskMap.controls.showDirectionIndicators', undefined, 'Show direction indicators'),
+      directionsControlButton({
+        show: showDirectionIndicators,
+        onToggle: setShowDirectionIndicators,
         disabled: !mapLoaded,
-        isActive: showDirectionIndicators,
-        binding: MAP_BINDINGS.toggleDirectionIndicators,
-      },
+        t,
+      }),
       {
         id: 'toggle-explore-layer',
         icon: Globe,

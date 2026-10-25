@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
@@ -24,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Textarea } from '@/components/ui/Textarea'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useCompletionResponses } from '@/contexts/CompletionResponsesContext'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { usePluginContext } from '@/contexts/PluginContext'
@@ -34,7 +34,9 @@ import { getApiErrorMessage } from '@/lib/apiError'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { logger } from '@/lib/logger'
 import { getStatusLabel } from '@/lib/taskConstants'
+import { getAppSetting, withAppSetting } from '@/lib/userProperties'
 import type { Task } from '@/types/Task'
+import type { UserProperties } from '@/types/User'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
 import { LockConflictModal } from './TaskActions/LockConflictModal'
 import { TaskNearbyMap } from './TaskNearbyMap'
@@ -48,6 +50,16 @@ const SUBMIT_BINDINGS: ShortcutBinding[] = [
   { key: 'Enter', shift: true },
   { key: 'Enter', ctrlOrCmd: true },
 ]
+
+const LOAD_METHOD_APP_ID = 'mr3Frontend'
+const LOAD_METHOD_KEY = 'loadMethod'
+
+type NextTaskType = 'nearby' | 'random'
+
+const readNextTaskType = (properties: UserProperties | null | undefined): NextTaskType =>
+  getAppSetting(properties, LOAD_METHOD_APP_ID, LOAD_METHOD_KEY) === 'proximity'
+    ? 'nearby'
+    : 'random'
 
 interface TaskActionModalProps {
   open: boolean
@@ -70,7 +82,6 @@ export const TaskActionModal = ({
   onSubmittingChange,
 }: TaskActionModalProps) => {
   const { t } = useIntl()
-  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { taskActionExtensions: extensions } = usePluginContext()
   const navigateToTask = useNavigateToTask()
@@ -79,6 +90,7 @@ export const TaskActionModal = ({
   const tagsId = useId()
   const randomId = useId()
   const nearbyId = useId()
+  const { user } = useAuthContext()
   const STATUS_OPTIONS = [
     { value: 1, label: t('common.fixed', undefined, 'Fixed') },
     {
@@ -98,7 +110,9 @@ export const TaskActionModal = ({
   const [newStatus, setNewStatus] = useState(initialStatus)
   const [comment, setComment] = useState('')
   const [tags, setTags] = useState('')
-  const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>('random')
+  const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>(() =>
+    readNextTaskType(user?.properties)
+  )
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
   const [formState, setFormState] = useState<Record<string, unknown>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -109,15 +123,29 @@ export const TaskActionModal = ({
   const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
   const createBundleMutation = api.taskBundle.useCreateTaskBundle()
   const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
+  const updateUserSettingsMutation = api.user.useUpdateUserSettings()
   const lockConflict = useLockConflict()
   const { activeBundle, initialBundle } = useTaskBundleContext()
-  const currentStatus = task.status ?? 0
-  const currentStatusLabel =
-    getStatusLabel(t, currentStatus) || t('common.unknown', undefined, 'Unknown')
+  const [currentStatus, setCurrentStatus] = useState(task.status ?? 0)
+  const [animationDone, setAnimationDone] = useState(false)
 
   useEffect(() => {
     setNewStatus(initialStatus)
   }, [initialStatus])
+
+  useEffect(() => {
+    if (open) {
+      setCurrentStatus(task.status ?? 0)
+      setNextTaskType(readNextTaskType(user?.properties))
+    }
+
+    if (!open) {
+      setAnimationDone(false)
+      return
+    }
+    const timeout = window.setTimeout(() => setAnimationDone(true), 300)
+    return () => window.clearTimeout(timeout)
+  }, [open])
 
   // Keep the parent in sync so it can hold the completion buttons (disabled) in place
   // through the submit-and-navigate transition.
@@ -201,15 +229,35 @@ export const TaskActionModal = ({
           })
         } catch (error) {
           logger.error('Failed to save completion responses', { taskId: task.id, error })
+          toast.error(
+            t(
+              'taskEditPage.taskActionModal.toast.responsesFailed',
+              undefined,
+              'The task status was saved, but your answers to the form could not be.'
+            )
+          )
         }
       }
 
       if (comment.trim()) {
-        addTaskCommentMutation.mutate({
-          taskId: task.id,
-          commentText: comment.trim(),
-        })
+        try {
+          await addTaskCommentMutation.mutateAsync({
+            taskId: task.id,
+            commentText: comment.trim(),
+          })
+        } catch (error) {
+          logger.error('Failed to add task comment', { taskId: task.id, error })
+          toast.error(
+            t(
+              'taskEditPage.taskActionModal.toast.commentFailed',
+              undefined,
+              'The task status was saved, but your comment could not be.'
+            )
+          )
+        }
       }
+
+      if (nextTaskType !== readNextTaskType(user?.properties)) saveNextTaskType(nextTaskType)
 
       toast.success(
         t(
@@ -229,7 +277,7 @@ export const TaskActionModal = ({
           const taskCandidates =
             nextTaskType === 'nearby'
               ? await api.challenge.fetchTasksNearby(task.parent, task.id, 1)
-              : await api.challenge.getRandomTask(task.parent, queryClient)
+              : await api.challenge.getRandomTask(task.parent)
           if (taskCandidates && taskCandidates.length > 0) {
             await navigateToTask(taskCandidates[0].id)
           } else {
@@ -261,7 +309,7 @@ export const TaskActionModal = ({
       })
       if (isLockConflict) return
 
-      logger.error('Error updating task', { error: String(error) })
+      logger.error('Error updating task', { error })
       toast.error(
         (await getApiErrorMessage(error)) ??
           t(
@@ -309,10 +357,24 @@ export const TaskActionModal = ({
     setComment('')
     setTags('')
     setNewStatus(initialStatus)
-    setNextTaskType('random')
     setSelectedNearbyTaskId(null)
     setFormState({})
     onOpenChange(false)
+  }
+
+  const saveNextTaskType = (value: NextTaskType) => {
+    setNextTaskType(value)
+    if (!user?.id) return
+    updateUserSettingsMutation.mutate({
+      userId: user.id,
+      settings: user.settings ?? {},
+      properties: withAppSetting(
+        user.properties,
+        LOAD_METHOD_APP_ID,
+        LOAD_METHOD_KEY,
+        value === 'nearby' ? 'proximity' : 'random'
+      ),
+    })
   }
 
   return (
@@ -326,6 +388,9 @@ export const TaskActionModal = ({
           onOpenAutoFocus={(event) => {
             event.preventDefault()
             commentRef.current?.focus()
+          }}
+          onAnimationEnd={(event) => {
+            if (event.target === event.currentTarget && open) setAnimationDone(true)
           }}
         >
           <DialogHeader>
@@ -349,7 +414,9 @@ export const TaskActionModal = ({
               </Label>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
-                  <span className="font-medium text-sm">{currentStatusLabel}</span>
+                  <span className="font-medium text-sm">
+                    {getStatusLabel(t, currentStatus) || t('common.unknown', undefined, 'Unknown')}
+                  </span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-zinc-500" />
                 <Select
@@ -437,7 +504,7 @@ export const TaskActionModal = ({
               <Label>{t('taskEditPage.taskActionModal.nextTask', undefined, 'Next Task')}</Label>
               <RadioGroup
                 value={nextTaskType}
-                onValueChange={(value) => setNextTaskType(value as 'nearby' | 'random')}
+                onValueChange={(value) => setNextTaskType(value as NextTaskType)}
               >
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
@@ -493,11 +560,15 @@ export const TaskActionModal = ({
               {/* Nearby Map */}
               {nextTaskType === 'nearby' && (
                 <div className="mt-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
-                  <TaskNearbyMap
-                    currentTask={task}
-                    selectedTaskId={selectedNearbyTaskId}
-                    onTaskSelect={setSelectedNearbyTaskId}
-                  />
+                  {animationDone ? (
+                    <TaskNearbyMap
+                      currentTask={task}
+                      selectedTaskId={selectedNearbyTaskId}
+                      onTaskSelect={setSelectedNearbyTaskId}
+                    />
+                  ) : (
+                    <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
+                  )}
                 </div>
               )}
             </div>

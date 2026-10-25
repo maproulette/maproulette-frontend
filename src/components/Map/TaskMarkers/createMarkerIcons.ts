@@ -1,6 +1,6 @@
 import { PRIORITY_COLOR } from '@/types/Priority'
 import { STATUS_CONFIG } from './const'
-import { TASK_TYPE_KEYS, TASK_TYPE_SYMBOL_SVG, type TaskTypeKey } from './taskTypes'
+import { isTaskTypeKey, TASK_TYPE_SYMBOL_SVG, type TaskTypeKey } from './taskTypes'
 
 const PIXEL_RATIO = 4
 
@@ -34,27 +34,15 @@ export const registerIcon = (
   onRegistered?: () => void
 ) => {
   const currentMap = map.current
-  if (!currentMap) return
-
-  try {
-    if (currentMap.hasImage(iconName)) {
-      return
-    }
-  } catch {
-    return
-  }
+  if (!currentMap?.style || currentMap.hasImage(iconName)) return
 
   const icon = new Image(size.width * PIXEL_RATIO, size.height * PIXEL_RATIO)
   icon.src = `data:image/svg+xml;base64,${btoa(svg)}`
   icon.onload = () => {
     const mapInstance = map.current
-    if (!mapInstance) return
-    try {
-      if (!mapInstance.hasImage(iconName)) {
-        mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
-        onRegistered?.()
-      }
-    } catch {}
+    if (!mapInstance?.style || mapInstance.hasImage(iconName)) return
+    mapInstance.addImage(iconName, icon, { pixelRatio: PIXEL_RATIO })
+    onRegistered?.()
   }
 }
 
@@ -116,263 +104,178 @@ const buildDualBorderMarkerSvg = (
     ${getStatusSymbol(status)}
   </svg>`
 
-export const createMarkerIcons = (
-  map: React.RefObject<maplibregl.Map | null>,
-  onComplete?: () => void
-) => {
-  if (!map.current) return
+const BORDER_COLORS: Record<string, string> = {
+  selected: '#8b5cf6',
+  bundled: '#22c55e',
+  primary: '#f59e0b',
+  hovered: '#3b82f6',
+  lasso: '#eab308',
+}
 
-  let iconsLoaded = 0
-  let callbackFired = false
+type Border =
+  | { kind: 'plain' }
+  | { kind: 'single'; color: string }
+  | { kind: 'dual'; outer: string; inner: string }
 
-  const addIconsWhenReady = () => {
-    const currentMap = map.current
-    if (!currentMap) return
+const parseBorder = (suffix: string | undefined): Border | null => {
+  if (!suffix) return { kind: 'plain' }
+  if (BORDER_COLORS[suffix]) return { kind: 'single', color: BORDER_COLORS[suffix] }
+  const inner = suffix.endsWith('-selected')
+    ? BORDER_COLORS[suffix.slice(0, -'-selected'.length)]
+    : undefined
+  return inner ? { kind: 'dual', outer: BORDER_COLORS.selected, inner } : null
+}
 
-    const getBorderSuffix = (borderColor: string): string => {
-      switch (borderColor) {
-        case '#8b5cf6':
-          return 'selected'
-        case '#22c55e':
-          return 'bundled'
-        case '#f59e0b':
-          return 'primary'
-        case '#eab308':
-          return 'lasso'
-        default:
-          return 'selected'
-      }
-    }
+const buildPinSvg = (status: number, priority: number, border: Border): string => {
+  const { color } = STATUS_CONFIG[status]
+  switch (border.kind) {
+    case 'plain':
+      return buildMarkerSvg(color, '#000000', status, priority)
+    case 'single':
+      return buildMarkerSvg(color, border.color, status, priority)
+    case 'dual':
+      return buildDualBorderMarkerSvg(color, border.outer, border.inner, status, priority)
+  }
+}
 
-    const createMarkerIcon = (
-      status: string,
-      color: string,
-      priority: number,
-      borderColor?: string,
-      suffixOverride?: string
-    ) => {
-      const iconName = borderColor
-        ? `marker-pin-${status}-${priority}-${suffixOverride ?? getBorderSuffix(borderColor)}`
-        : `marker-pin-${status}-${priority}`
+const TYPE_PIN_COLOR = '#22d3ee'
 
-      const pinSvg = buildMarkerSvg(color, borderColor ?? '#000000', Number(status), priority)
+const buildTypeMarkerSvg = (typeKey: TaskTypeKey, priority: number, borderColor: string) => `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 36">
+    ${buildPriorityClipDef()}
+    <path data-name="Background" fill="${TYPE_PIN_COLOR}" d="${BG_PATH}"/>
+    ${buildPrioritySlice(priority)}
+    <path data-name="Border" fill="${borderColor}" d="${BORDER_PATH}"/>
+    <circle data-name="Marker label background" fill="#FFFFFF" cx="13.5" cy="13.5" r="7.5"/>
+    ${TASK_TYPE_SYMBOL_SVG[typeKey]}
+  </svg>`
 
-      registerIcon(map, iconName, pinSvg, TASK_MARKER_SIZE, () => {
-        iconsLoaded++
-        if (onComplete && iconsLoaded >= 20 && !callbackFired) {
-          callbackFired = true
-          onComplete()
-        }
-      })
-    }
+const OVERLAP_SIZE = { width: 32, height: 44 }
+const OVERLAP_FILL = '#1e3a8a'
+const OVERLAP_PATH = 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z'
 
-    const createDualBorderMarkerIcon = (
-      status: string,
-      color: string,
-      priority: number,
-      outerColor: string,
-      innerColor: string,
-      suffix: string
-    ) => {
-      const iconName = `marker-pin-${status}-${priority}-${suffix}`
+const buildOverlapSvg = (taskCount: number | 'many', border: Border): string => {
+  const twoDigits = typeof taskCount === 'number' && taskCount >= 10
+  const label = taskCount === 'many' ? '20+' : String(taskCount)
+  const outline =
+    border.kind === 'dual'
+      ? `<path d="${OVERLAP_PATH}" fill="${OVERLAP_FILL}" stroke="${border.outer}" stroke-width="5" stroke-linejoin="round"/>
+         <path d="${OVERLAP_PATH}" fill="none" stroke="${border.inner}" stroke-width="2" stroke-linejoin="round"/>`
+      : `<path d="${OVERLAP_PATH}" fill="${OVERLAP_FILL}" stroke="${border.kind === 'single' ? border.color : 'white'}" stroke-width="${border.kind === 'single' ? 3 : 2}" stroke-linejoin="round"/>`
 
-      const pinSvg = buildDualBorderMarkerSvg(
-        color,
-        outerColor,
-        innerColor,
-        Number(status),
-        priority
-      )
+  return `
+    <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
+      ${outline}
+      <circle cx="12" cy="12" r="7" fill="white"/>
+      <text x="12" y="${twoDigits ? 15 : 16}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${twoDigits ? 9 : 10}" font-weight="bold" fill="${OVERLAP_FILL}">${label}</text>
+    </svg>`
+}
 
-      registerIcon(map, iconName, pinSvg, TASK_MARKER_SIZE, () => {
-        iconsLoaded++
-      })
-    }
+type MarkerIcon = { svg: string; size: { width: number; height: number } }
 
-    const PRIORITY_LEVELS = [0, 1, 2]
-    Object.entries(STATUS_CONFIG).forEach(([status, { color }]) => {
-      PRIORITY_LEVELS.forEach((priority) => {
-        createMarkerIcon(status, color, priority)
-
-        createMarkerIcon(status, color, priority, '#8b5cf6')
-
-        createMarkerIcon(status, color, priority, '#22c55e')
-
-        createMarkerIcon(status, color, priority, '#f59e0b')
-
-        createMarkerIcon(status, color, priority, '#3b82f6', 'hovered')
-
-        createMarkerIcon(status, color, priority, '#eab308')
-
-        createDualBorderMarkerIcon(
-          status,
-          color,
-          priority,
-          '#8b5cf6',
-          '#22c55e',
-          'bundled-selected'
-        )
-
-        createDualBorderMarkerIcon(
-          status,
-          color,
-          priority,
-          '#8b5cf6',
-          '#f59e0b',
-          'primary-selected'
-        )
-
-        createDualBorderMarkerIcon(status, color, priority, '#8b5cf6', '#eab308', 'lasso-selected')
-      })
-    })
-
-    const TYPE_PIN_COLOR = '#22d3ee'
-    const buildTypeMarkerSvg = (typeKey: TaskTypeKey, priority: number, borderColor: string) => `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 36">
-        ${buildPriorityClipDef()}
-        <path data-name="Background" fill="${TYPE_PIN_COLOR}" d="${BG_PATH}"/>
-        ${buildPrioritySlice(priority)}
-        <path data-name="Border" fill="${borderColor}" d="${BORDER_PATH}"/>
-        <circle data-name="Marker label background" fill="#FFFFFF" cx="13.5" cy="13.5" r="7.5"/>
-        ${TASK_TYPE_SYMBOL_SVG[typeKey]}
-      </svg>`
-
-    const createTypeMarkerIcon = (
-      typeKey: TaskTypeKey,
-      priority: number,
-      borderColor: string = '#000000',
-      suffix?: string
-    ) => {
-      const iconName = suffix
-        ? `marker-type-${typeKey}-${priority}-${suffix}`
-        : `marker-type-${typeKey}-${priority}`
-      const pinSvg = buildTypeMarkerSvg(typeKey, priority, borderColor)
-      registerIcon(map, iconName, pinSvg, TASK_MARKER_SIZE)
-    }
-
-    TASK_TYPE_KEYS.forEach((typeKey) => {
-      ;[0, 1, 2].forEach((priority) => {
-        createTypeMarkerIcon(typeKey, priority)
-        // Purple-bordered selected variant — same border treatment as
-        // marker-pin-…-selected, so the type indicator stays visible when a
-        // task is clicked or rendered on the spider/selected overlay.
-        createTypeMarkerIcon(typeKey, priority, '#8b5cf6', 'selected')
-      })
-    })
-
-    const createOverlapIcon = (
-      taskCount: number | string,
-      iconName: string,
-      borderColor?: string,
-      borderWidth = 4
-    ) => {
-      const displayText = typeof taskCount === 'number' ? String(taskCount) : taskCount
-      const fontSize = typeof taskCount === 'number' && taskCount >= 10 ? '9' : '10'
-      const textY = typeof taskCount === 'number' && taskCount >= 10 ? '15' : '16'
-
-      const darkBlue = '#1e3a8a'
-
-      const overlapPinSvg = borderColor
-        ? `
-        <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
-                fill="${darkBlue}" stroke="${borderColor}" stroke-width="${borderWidth}" stroke-linejoin="round"/>
-          <circle cx="12" cy="12" r="7" fill="white"/>
-          <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
-        </svg>`
-        : `
-        <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
-                fill="${darkBlue}" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-          <circle cx="12" cy="12" r="7" fill="white"/>
-          <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
-        </svg>`
-
-      registerIcon(map, iconName, overlapPinSvg, { width: 32, height: 44 })
-    }
-
-    const createDualBorderOverlapIcon = (
-      taskCount: number | string,
-      iconName: string,
-      outerColor: string,
-      innerColor: string
-    ) => {
-      const displayText = typeof taskCount === 'number' ? String(taskCount) : taskCount
-      const fontSize = typeof taskCount === 'number' && taskCount >= 10 ? '9' : '10'
-      const textY = typeof taskCount === 'number' && taskCount >= 10 ? '15' : '16'
-      const darkBlue = '#1e3a8a'
-
-      const overlapPinSvg = `
-        <svg width="32" height="44" viewBox="-4 -4 32 44" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
-                fill="${darkBlue}" stroke="${outerColor}" stroke-width="5" stroke-linejoin="round"/>
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"
-                fill="none" stroke="${innerColor}" stroke-width="2" stroke-linejoin="round"/>
-          <circle cx="12" cy="12" r="7" fill="white"/>
-          <text x="12" y="${textY}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="bold" fill="${darkBlue}">${displayText}</text>
-        </svg>`
-
-      registerIcon(map, iconName, overlapPinSvg, { width: 32, height: 44 })
-    }
-
-    for (let taskCount = 2; taskCount <= 20; taskCount++) {
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}`)
-
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-selected`, '#8b5cf6', 3)
-
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-bundled`, '#22c55e', 3)
-
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-primary`, '#f59e0b', 3)
-
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-hovered`, '#3b82f6', 3)
-
-      createOverlapIcon(taskCount, `marker-overlap-${taskCount}-lasso`, '#eab308', 3)
-
-      createDualBorderOverlapIcon(
-        taskCount,
-        `marker-overlap-${taskCount}-bundled-selected`,
-        '#8b5cf6',
-        '#22c55e'
-      )
-
-      createDualBorderOverlapIcon(
-        taskCount,
-        `marker-overlap-${taskCount}-primary-selected`,
-        '#8b5cf6',
-        '#f59e0b'
-      )
-
-      createDualBorderOverlapIcon(
-        taskCount,
-        `marker-overlap-${taskCount}-lasso-selected`,
-        '#8b5cf6',
-        '#eab308'
-      )
-    }
-
-    createOverlapIcon('20+', 'marker-overlap-many')
-    createOverlapIcon('20+', 'marker-overlap-many-selected', '#8b5cf6', 3)
-    createOverlapIcon('20+', 'marker-overlap-many-bundled', '#22c55e', 3)
-    createOverlapIcon('20+', 'marker-overlap-many-primary', '#f59e0b', 3)
-    createOverlapIcon('20+', 'marker-overlap-many-hovered', '#3b82f6', 3)
-    createOverlapIcon('20+', 'marker-overlap-many-lasso', '#eab308', 3)
-    createDualBorderOverlapIcon('20+', 'marker-overlap-many-bundled-selected', '#8b5cf6', '#22c55e')
-    createDualBorderOverlapIcon('20+', 'marker-overlap-many-primary-selected', '#8b5cf6', '#f59e0b')
-    createDualBorderOverlapIcon('20+', 'marker-overlap-many-lasso-selected', '#8b5cf6', '#eab308')
+export const markerIcon = (name: string): MarkerIcon | null => {
+  const pin = /^marker-pin-(\d+)-([0-2])(?:-(.+))?$/.exec(name)
+  if (pin) {
+    const status = Number(pin[1])
+    const border = parseBorder(pin[3])
+    if (!STATUS_CONFIG[status] || !border) return null
+    return { svg: buildPinSvg(status, Number(pin[2]), border), size: TASK_MARKER_SIZE }
   }
 
-  const currentMap = map.current
-  if (!currentMap) return
-
-  if (currentMap.isStyleLoaded()) {
-    addIconsWhenReady()
-  } else {
-    const onStyleLoad = () => {
-      if (map.current) {
-        addIconsWhenReady()
-        map.current.off('styledata', onStyleLoad)
-      }
+  const type = /^marker-type-([a-z]+)-([0-2])(-selected)?$/.exec(name)
+  if (type) {
+    const typeKey = type[1]
+    if (!isTaskTypeKey(typeKey)) return null
+    const borderColor = type[3] ? BORDER_COLORS.selected : '#000000'
+    return {
+      svg: buildTypeMarkerSvg(typeKey, Number(type[2]), borderColor),
+      size: TASK_MARKER_SIZE,
     }
-    currentMap.on('styledata', onStyleLoad)
+  }
+
+  const overlap = /^marker-overlap-(\d+|many)(?:-(.+))?$/.exec(name)
+  if (overlap) {
+    const border = parseBorder(overlap[2])
+    if (!border) return null
+    const taskCount = overlap[1] === 'many' ? 'many' : Number(overlap[1])
+    return { svg: buildOverlapSvg(taskCount, border), size: OVERLAP_SIZE }
+  }
+
+  return null
+}
+
+const RENDERED_ICON_LIMIT = 64
+const renderedIcons = new Map<string, HTMLImageElement>()
+const pendingIcons = new Map<string, Promise<HTMLImageElement>>()
+
+const cachedIcon = (name: string): HTMLImageElement | undefined => {
+  const icon = renderedIcons.get(name)
+  if (icon) {
+    renderedIcons.delete(name)
+    renderedIcons.set(name, icon)
+  }
+  return icon
+}
+
+const cacheIcon = (name: string, icon: HTMLImageElement) => {
+  renderedIcons.set(name, icon)
+  for (const oldest of renderedIcons.keys()) {
+    if (renderedIcons.size <= RENDERED_ICON_LIMIT) break
+    renderedIcons.delete(oldest)
+  }
+}
+
+const renderIcon = (name: string, { svg, size }: MarkerIcon): Promise<HTMLImageElement> => {
+  const pending = pendingIcons.get(name)
+  if (pending) return pending
+
+  const icon = new Image(size.width * PIXEL_RATIO, size.height * PIXEL_RATIO)
+  const rendered = new Promise<HTMLImageElement>((resolve, reject) => {
+    icon.onload = () => resolve(icon)
+    icon.onerror = () => reject(new Error(`Could not render map icon "${name}"`))
+    icon.src = `data:image/svg+xml;base64,${btoa(svg)}`
+  })
+    .then(() => {
+      cacheIcon(name, icon)
+      return icon
+    })
+    .finally(() => pendingIcons.delete(name))
+
+  pendingIcons.set(name, rendered)
+  return rendered
+}
+
+export const attachMarkerIcons = (map: maplibregl.Map): (() => void) => {
+  let attached = true
+
+  const onImageMissing = ({ id }: { id: string }) => {
+    const cached = cachedIcon(id)
+    if (cached) {
+      map.addImage(id, cached, { pixelRatio: PIXEL_RATIO })
+      return
+    }
+
+    const icon = markerIcon(id)
+    if (!icon) return
+
+    const width = icon.size.width * PIXEL_RATIO
+    const height = icon.size.height * PIXEL_RATIO
+    map.addImage(
+      id,
+      { width, height, data: new Uint8Array(width * height * 4) },
+      { pixelRatio: PIXEL_RATIO }
+    )
+
+    void renderIcon(id, icon).then((rendered) => {
+      if (!attached || !map.hasImage(id)) return
+      map.updateImage(id, rendered)
+      map.triggerRepaint()
+    })
+  }
+
+  map.on('styleimagemissing', onImageMissing)
+  return () => {
+    attached = false
+    map.off('styleimagemissing', onImageMissing)
   }
 }

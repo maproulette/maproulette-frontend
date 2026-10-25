@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getParentId, getParentInfo, withScalarParent } from './challengeParent'
+import { getParentId, getParentInfo } from './challengeParent'
 
 describe('getParentInfo', () => {
   it('extracts id and name from a parent object', () => {
@@ -89,29 +89,5 @@ describe('getParentId', () => {
     expect(getParentId(null)).toBeUndefined()
     expect(getParentId(undefined)).toBeUndefined()
     expect(getParentId(true)).toBeUndefined()
-  })
-})
-
-describe('withScalarParent', () => {
-  it('collapses an embedded parent project object to its id', () => {
-    const challenge = { id: 1, name: 'C', parent: { id: 42, name: 'My Project' } }
-    expect(withScalarParent(challenge)).toEqual({ id: 1, name: 'C', parent: 42 })
-  })
-
-  it('returns the same object when parent is already scalar', () => {
-    const challenge = { id: 1, name: 'C', parent: 42 }
-    expect(withScalarParent(challenge)).toBe(challenge)
-  })
-
-  it('returns the same object when parent is missing', () => {
-    // Annotated so the object literal isn't a weak-type mismatch against the
-    // `{ parent?: unknown }` constraint - the value under test is parent-less.
-    const challenge: { id: number; name: string; parent?: unknown } = { id: 1, name: 'C' }
-    expect(withScalarParent(challenge)).toBe(challenge)
-  })
-
-  it('leaves an id-less parent object alone rather than dropping it', () => {
-    const challenge = { id: 1, parent: { name: 'Orphan Project' } }
-    expect(withScalarParent(challenge)).toBe(challenge)
   })
 })

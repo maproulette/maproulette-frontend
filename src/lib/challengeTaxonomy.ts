@@ -29,7 +29,7 @@ export interface ChallengeTaxonomyEntry {
  * challenge is an ordinary one, so callers can skip rendering entirely.
  */
 export const getChallengeTaxonomy = (
-  challenge: Pick<Challenge, 'featured' | 'cooperativeType' | 'isGlobal'>,
+  challenge: Partial<Pick<Challenge, 'featured' | 'cooperativeType' | 'isGlobal'>>,
   t: TranslateFn
 ): ChallengeTaxonomyEntry[] => {
   const entries: ChallengeTaxonomyEntry[] = []

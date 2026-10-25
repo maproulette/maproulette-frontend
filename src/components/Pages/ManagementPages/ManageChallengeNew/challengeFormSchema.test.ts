@@ -27,6 +27,8 @@ const validValues: ChallengeFormValues = {
   description: 'A description',
   instruction: 'Some instructions',
   difficulty: 1,
+  checkinComment: 'Fixed roads',
+  checkinSource: 'Bing',
   dataSource: 'overpass',
   overpassQL: 'a query',
   localGeoJSON: null,
@@ -89,6 +91,8 @@ describe('buildFormValues', () => {
       description: '',
       instruction: '',
       difficulty: 1,
+      checkinComment: '',
+      checkinSource: '',
       dataSource: 'overpass',
       overpassQL: '',
       localGeoJSON: null,
@@ -112,6 +116,8 @@ describe('buildFormValues', () => {
       description: 'Existing description',
       instruction: 'Existing instructions',
       difficulty: 3,
+      checkinComment: 'Existing comment #maproulette',
+      checkinSource: 'Bing',
       overpassQL: 'existing query',
       remoteGeoJson: '',
     } as unknown as Challenge
@@ -122,6 +128,8 @@ describe('buildFormValues', () => {
       description: 'Existing description',
       instruction: 'Existing instructions',
       difficulty: 3,
+      checkinComment: 'Existing comment #maproulette',
+      checkinSource: 'Bing',
       dataSource: 'overpass',
       overpassQL: 'existing query',
       localGeoJSON: null,
@@ -189,6 +197,28 @@ describe('makeChallengeFormSchema', () => {
       expect(result.success).toBe(false)
       expect(result.success ? undefined : result.error.issues[0].message).toBe(
         'Please select a project'
+      )
+    })
+
+    it.each([true, false])('rejects a blank changeset comment (isEdit=%s)', (isEdit) => {
+      const result = makeChallengeFormSchema(isEdit, t).safeParse({
+        ...validValues,
+        checkinComment: '   ',
+      })
+      expect(result.success).toBe(false)
+      expect(result.success ? undefined : result.error.issues[0].message).toBe(
+        'A changeset comment is required'
+      )
+    })
+
+    it.each([true, false])('rejects a blank changeset source (isEdit=%s)', (isEdit) => {
+      const result = makeChallengeFormSchema(isEdit, t).safeParse({
+        ...validValues,
+        checkinSource: '   ',
+      })
+      expect(result.success).toBe(false)
+      expect(result.success ? undefined : result.error.issues[0].message).toBe(
+        'A changeset source is required'
       )
     })
 

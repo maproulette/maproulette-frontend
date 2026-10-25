@@ -1,5 +1,6 @@
-import { CheckCircle2, Loader2 } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
@@ -19,7 +20,7 @@ export const ListFooter = () => {
         >
           {isFetchingNextPage ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Spinner />
               {t('common.loading2', undefined, 'Loading...')}
             </>
           ) : (

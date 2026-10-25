@@ -4,7 +4,6 @@ import {
   queryOptions,
   useInfiniteQuery,
   useQuery,
-  useQueryClient,
 } from '@tanstack/react-query'
 import { HTTPError } from 'ky'
 import { logger } from '@/lib/logger'
@@ -20,7 +19,6 @@ import type {
   PreferredChallengesResponse,
 } from '@/types/Challenge'
 import { apiRequest, convertParamsToSearchParams } from '../client'
-import { seedChallengeCache } from './single'
 
 const EXPLORE_CHALLENGES_URL = 'api/v2/challenges/exploreChallenges'
 
@@ -106,60 +104,43 @@ export const challengeExplore = {
       })
     ),
 
-  featuredChallenges: (params: FeaturedChallengesParams) => {
-    const queryClient = useQueryClient()
-    return useQuery(
+  featuredChallenges: (params: FeaturedChallengesParams) =>
+    useQuery(
       queryOptions({
         queryKey: ['challenge', 'featured', params],
-        queryFn: async () => {
-          const challenges = await apiRequest
+        queryFn: () =>
+          apiRequest
             .get(`api/v2/challenges/featured`, {
               searchParams: params,
             })
-            .json<FeaturedChallengesResponse[]>()
-          seedChallengeCache(queryClient, challenges)
-          return challenges
-        },
+            .json<FeaturedChallengesResponse[]>(),
       })
-    )
-  },
+    ),
 
-  exploreChallenges: (params: ExploreChallengesParams) => {
-    const queryClient = useQueryClient()
-    return useQuery(
+  exploreChallenges: (params: ExploreChallengesParams) =>
+    useQuery(
       queryOptions({
         queryKey: ['challenge', 'explore', params],
-        queryFn: async () => {
-          const challenges = await apiRequest
+        queryFn: () =>
+          apiRequest
             .get(`api/v2/challenges/exploreChallenges`, {
               searchParams: params ? convertParamsToSearchParams(params) : undefined,
             })
-            .json<ChallengeGetResponse[]>()
-          seedChallengeCache(queryClient, challenges)
-          return challenges
-        },
+            .json<ChallengeGetResponse[]>(),
         placeholderData: (previousData) => previousData,
       })
-    )
-  },
+    ),
 
   exploreChallengesInfinite: (
     params: ExploreChallengesRequest | undefined,
     options?: { enabled?: boolean }
   ) => {
-    const queryClient = useQueryClient()
     const { placeGeometryJson, placeKey, ...queryParams } = params ?? {}
     return useInfiniteQuery(
       infiniteQueryOptions({
         queryKey: ['challenge', 'exploreInfinite', queryParams, placeKey ?? null],
-        queryFn: async ({ pageParam = 0 }) => {
-          const challenges = await fetchExploreChallengesPage(
-            { ...queryParams, offset: pageParam },
-            placeGeometryJson
-          )
-          seedChallengeCache(queryClient, challenges)
-          return challenges
-        },
+        queryFn: ({ pageParam = 0 }) =>
+          fetchExploreChallengesPage({ ...queryParams, offset: pageParam }, placeGeometryJson),
         initialPageParam: 0,
         getNextPageParam: (lastPage, allPages) => {
           const limit = params?.limit ?? 10
@@ -187,8 +168,8 @@ export const challengeExplore = {
           onlyEnabled: options?.onlyEnabled ?? false,
         },
       ],
-      queryFn: async () => {
-        const challenges = await apiRequest
+      queryFn: () =>
+        apiRequest
           .get('api/v2/challenges/listing', {
             searchParams: {
               projectIds: projectIds.join(','),
@@ -197,36 +178,27 @@ export const challengeExplore = {
               onlyEnabled: options?.onlyEnabled ?? false,
             },
           })
-          .json<ChallengeListingResponse>()
-        return challenges
-      },
+          .json<ChallengeListingResponse>(),
     }),
 
-  // Thin hook over `getChallengesListingOptions`. `/challenges/listing` is a
-  // deliberately light endpoint (id, name, status flags)
   listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) =>
-    useQuery({
-      ...challengeExplore.getChallengesListingOptions(projectIds, { limit, page, onlyEnabled }),
-    }),
+    useQuery(
+      challengeExplore.getChallengesListingOptions(projectIds, { limit, page, onlyEnabled })
+    ),
 
-  searchChallenges: ({ search = '' }: { search?: string } = {}) => {
-    const queryClient = useQueryClient()
-    return useQuery(
+  searchChallenges: ({ search = '' }: { search?: string } = {}) =>
+    useQuery(
       queryOptions({
         queryKey: ['challenge', 'search', { search }],
-        queryFn: async () => {
-          const challenges = await apiRequest
+        queryFn: () =>
+          apiRequest
             .get('api/v2/challenges/search', {
               searchParams: {
                 search,
               },
             })
-            .json<ChallengeGetResponse[]>()
-          seedChallengeCache(queryClient, challenges)
-          return challenges
-        },
+            .json<ChallengeGetResponse[]>(),
         enabled: search.length > 0,
       })
-    )
-  },
+    ),
 }

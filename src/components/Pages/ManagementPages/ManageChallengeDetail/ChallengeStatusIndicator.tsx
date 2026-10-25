@@ -1,9 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { AlertCircle, Loader2 } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Panel } from '@/components/ui/Panel'
+import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 import {
   CHALLENGE_STATUS_BUILDING,
@@ -41,18 +42,20 @@ export const ChallengeStatusIndicator = ({
   const [lastRefresh, setLastRefresh] = useState(Date.now())
   const [currentTime, setCurrentTime] = useState(Date.now())
   const hasInitialRefresh = useRef(false)
+  const wasNonTerminal = useRef(false)
 
   const status = challenge.status ?? CHALLENGE_STATUS_NONE
   const statusMessage = challenge.statusMessage
 
   useEffect(() => {
     hasInitialRefresh.current = false
+    wasNonTerminal.current = false
     setStartTime(Date.now())
   }, [challengeId])
 
   useEffect(() => {
     if (!hasInitialRefresh.current && NON_TERMINAL_STATUSES.includes(status)) {
-      api.challenge.refreshChallenge(challengeId, queryClient)
+      api.challenge.refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
       setLastRefresh(Date.now())
       hasInitialRefresh.current = true
     }
@@ -62,10 +65,18 @@ export const ChallengeStatusIndicator = ({
   useEffect(() => {
     if (!NON_TERMINAL_STATUSES.includes(status)) return
     const refreshInterval = setInterval(() => {
-      api.challenge.refreshChallenge(challengeId, queryClient)
+      api.challenge.refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
       setLastRefresh(Date.now())
     }, 10000) // 10 seconds
     return () => clearInterval(refreshInterval)
+  }, [status, challengeId])
+
+  useEffect(() => {
+    const nonTerminal = NON_TERMINAL_STATUSES.includes(status)
+    if (wasNonTerminal.current && !nonTerminal) {
+      api.challenge.refreshChallenge(challengeId, queryClient)
+    }
+    wasNonTerminal.current = nonTerminal
   }, [status, challengeId])
 
   // Update current time every second for countdown display
@@ -102,7 +113,7 @@ export const ChallengeStatusIndicator = ({
 
     return (
       <Alert className="mb-4 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
-        <Loader2 className="h-4 w-4 animate-spin text-blue-600 dark:text-blue-400" />
+        <Spinner className="text-blue-600 dark:text-blue-400" />
         <AlertTitle className="flex items-center gap-2 text-blue-900 dark:text-blue-100">
           {isUpdating
             ? t(
@@ -249,7 +260,7 @@ export const ChallengeStatusIndicator = ({
   if (status === CHALLENGE_STATUS_DELETING_TASKS) {
     return (
       <Alert className="mb-4 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
-        <Loader2 className="h-4 w-4 animate-spin text-orange-600 dark:text-orange-400" />
+        <Spinner className="text-orange-600 dark:text-orange-400" />
         <AlertTitle className="text-orange-900 dark:text-orange-100">
           {t('manageChallengeDetail.statusIndicator.deletingTitle', undefined, 'Deleting Tasks...')}
         </AlertTitle>

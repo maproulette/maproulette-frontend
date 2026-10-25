@@ -7,6 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { logger } from '@/lib/logger'
 import type { CustomOverlay } from '@/types/MapLayer'
 
 const OVERLAYS_STORAGE_KEY = 'mr4:map:overlays'
@@ -25,7 +26,6 @@ interface VisibleLayersContextValue {
 const VisibleLayersContext = createContext<VisibleLayersContextValue | null>(null)
 
 const readJSON = <T,>(key: string, fallback: T): T => {
-  if (typeof window === 'undefined') return fallback
   try {
     const raw = window.localStorage.getItem(key)
     return raw ? (JSON.parse(raw) as T) : fallback
@@ -35,11 +35,10 @@ const readJSON = <T,>(key: string, fallback: T): T => {
 }
 
 const writeJSON = (key: string, value: unknown): void => {
-  if (typeof window === 'undefined') return
   try {
     window.localStorage.setItem(key, JSON.stringify(value))
-  } catch {
-    /* ignore */
+  } catch (error) {
+    logger.warn(`Failed to persist ${key} to localStorage`, { error })
   }
 }
 

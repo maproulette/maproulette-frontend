@@ -8,7 +8,6 @@ import {
   EyeOff,
   FileDown,
   FolderKanban,
-  Loader2,
   MoreHorizontal,
   PanelLeftClose,
   PanelLeftOpen,
@@ -51,6 +50,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
+import { Spinner } from '@/components/ui/Spinner'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
@@ -511,7 +511,7 @@ export const ManageProjectsContent = () => {
                   >
                     {isFetching ? (
                       <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Spinner />
                         {t('common.loading2', undefined, 'Loading...')}
                       </>
                     ) : (

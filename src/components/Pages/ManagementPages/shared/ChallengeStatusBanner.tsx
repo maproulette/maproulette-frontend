@@ -1,5 +1,5 @@
-import { Loader2 } from 'lucide-react'
 import { Progress } from '@/components/ui/Progress'
+import { Spinner } from '@/components/ui/Spinner'
 import { useIntl } from '@/i18n'
 
 export interface ChallengeStatusInfo {
@@ -28,10 +28,7 @@ export const ChallengeStatusBanner = ({ info }: Props) => {
       aria-live="polite"
       className="flex items-center gap-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm dark:border-amber-900 dark:bg-amber-950/40"
     >
-      <Loader2
-        className="size-4 animate-spin text-amber-600 dark:text-amber-400"
-        aria-hidden="true"
-      />
+      <Spinner className="text-amber-600 dark:text-amber-400" aria-hidden="true" />
       <div className="flex-1">
         <div className="font-medium">
           {t(

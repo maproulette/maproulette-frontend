@@ -50,105 +50,16 @@ export const isTaskEligibleForBundle = (
   return true
 }
 
-/**
- * Builds the 1-feature overlay collection for the selected task, used by the maps
- * that render selection as a separate top overlay. Empty when nothing is selected
- * or the marker is spidered (SpiderMarkers draws the -selected variant then).
- */
-export const buildSelectedTaskCollection = (
-  marker: TaskMarker | null | undefined,
-  spidered: { has: (id: number) => boolean }
-): GeoJSON.FeatureCollection => {
-  if (!marker?.location || spidered.has(marker.id)) {
-    return { type: 'FeatureCollection', features: [] }
-  }
-  return {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [marker.location.lng, marker.location.lat] },
-        properties: { id: marker.id, status: marker.status, priority: marker.priority },
-      },
-    ],
-  }
-}
+export const flattenTaskMarkers = (taskMarkersData: unknown): TaskMarker[] => {
+  if (typeof taskMarkersData !== 'object' || taskMarkersData === null) return []
 
-export const convertTaskMarkersToGeoJSON = (markers: TaskMarker[]): GeoJSON.FeatureCollection => {
-  const features: GeoJSON.Feature[] = markers
-    .map((marker): GeoJSON.Feature | null => {
-      if (!marker.location) return null
-
-      const properties: Record<string, unknown> = {
-        id: marker.id,
-        status: marker.status,
-        priority: marker.priority,
-        bundleId: marker.bundleId ?? null,
-        lockedBy: marker.lockedBy ?? null,
-        cluster: false,
-        isOverlapping: false,
-        isSelected: false,
-        isHovered: false,
-        isHighlighted: false,
-      }
-
-      return {
-        type: 'Feature',
-        properties,
-        geometry: {
-          type: 'Point',
-          coordinates: [marker.location.lng, marker.location.lat],
-        },
-      } as GeoJSON.Feature
-    })
-    .filter((f): f is GeoJSON.Feature => f !== null)
-
-  return {
-    type: 'FeatureCollection',
-    features,
-  }
-}
-
-export const calculateTaskCount = (taskMarkersData: unknown): number => {
-  if (
-    typeof taskMarkersData !== 'object' ||
-    taskMarkersData === null ||
-    !('markers' in taskMarkersData) ||
-    !Array.isArray((taskMarkersData as { markers?: unknown }).markers)
-  ) {
-    return 0
-  }
-
-  return (taskMarkersData as { markers: unknown[] }).markers.length
-}
-
-export const processMarkersData = (
-  taskMarkersData: unknown
-): {
-  markers: TaskMarker[]
-  overlapMarkers: Array<{ tasks: TaskMarker[]; location: { lng: number; lat: number } }>
-} => {
-  if (
-    typeof taskMarkersData !== 'object' ||
-    taskMarkersData === null ||
-    !('markers' in taskMarkersData) ||
-    !('overlaps' in taskMarkersData)
-  ) {
-    return { markers: [], overlapMarkers: [] }
-  }
-
-  const data = taskMarkersData as {
-    markers?: unknown
-    overlaps?: unknown
-  }
-
+  const data = taskMarkersData as { markers?: unknown; overlaps?: unknown }
   const markers = Array.isArray(data.markers) ? (data.markers as TaskMarker[]) : []
-
-  const overlapMarkers = Array.isArray(data.overlaps)
-    ? (data.overlaps as Array<{ tasks: TaskMarker[]; location: { lng: number; lat: number } }>)
+  const overlaps = Array.isArray(data.overlaps)
+    ? (data.overlaps as Array<{ tasks?: TaskMarker[] }>)
     : []
 
-  return { markers, overlapMarkers }
+  return [...markers, ...overlaps.flatMap((overlap) => overlap.tasks ?? [])]
 }
 
 export const isValidLocation = (

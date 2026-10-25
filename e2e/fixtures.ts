@@ -1,50 +1,89 @@
 import { execFileSync } from 'node:child_process'
-import { type APIRequestContext, test as base, type Page } from '@playwright/test'
+import { createHash, createHmac, randomUUID } from 'node:crypto'
+import { type APIRequest, type APIRequestContext, test as base, type Page } from '@playwright/test'
 
 // Where the test stack's backend is listening. Overridable so the stack can sit
 // beside a local development backend on 9000 rather than fighting it for the
 // port — set E2E_BACKEND_URL to match .env.test.local's VITE_API_BASE_URL, so
 // the browser and these fixtures talk to the same server.
 export const BACKEND_URL = process.env.E2E_BACKEND_URL ?? 'http://localhost:9000'
-export const SUPER_KEY = 'super-secret-key'
 
-// A second, distinct backend identity, for tests that need two separate
-// users (e.g. a mapper who completes a task and a separate reviewer who
-// accepts or rejects it) — a workflow with zero coverage today because
-// every fixture above authenticates as the same single synthetic identity.
-//
-// SUPER_KEY can't just be duplicated with a different string: the backend
-// maps *any* value configured as its `MR_SUPER_KEY` to the exact same
-// singleton `User.superUser` object (see `getSessionByApiKey` in
-// maproulette-backend's `SessionManager.scala`), so a second "super key"
-// would still be the identical identity, not a second one. A genuine second
-// identity has to be a real user's own per-user API key, in the
-// "<userId>|<rawKey>" form the backend expects from anyone who isn't using
-// the super key. This repo/harness has no OAuth-free way to create that
-// user — real users are only ever created via the OSM OAuth callback flow
-// (see `SessionManager.getUser`), which this harness doesn't perform — so
-// provisioning one is a manual, one-time, out-of-band step:
-//   1. Create a real user in the test backend's database (e.g. a one-time
-//      real OSM OAuth login against the test backend, or a direct DB seed
-//      by whoever administers the test environment).
-//   2. As the super user (already available to this harness), call
-//      `PUT /user/:userId/apikey` for that user's id to mint their API key.
-//   3. Set the returned "<userId>|<rawKey>" value as `E2E_REVIEWER_API_KEY`
-//      in the environment (or `.env.test`) before running specs that use
-//      the `reviewerRequest` / `reviewerPage` fixtures below.
-// Until that's done, those fixtures throw with this same explanation rather
-// than silently running as the primary identity.
-const REVIEWER_KEY = process.env.E2E_REVIEWER_API_KEY
+// The user every request runs as unless a test picks someone else.
+// docker-compose.test.yaml lists this OSM id in MR_SUPER_ACCOUNTS, which the
+// backend reads only at boot, so e2e/global-setup.ts seeds the user and
+// restarts the backend once to have them promoted to super user.
+export const SUPER_USER_OSM_ID = 800_000_000
+export const SUPER_USER_TOKEN = 'e2e-super-user-token'
 
-function requireReviewerKey(): string {
-  if (!REVIEWER_KEY) {
-    throw new Error(
-      'The reviewerRequest/reviewerPage fixture requires E2E_REVIEWER_API_KEY to be set to a ' +
-        'real user\'s "<userId>|<rawKey>" API key. See the comment above REVIEWER_KEY in ' +
-        'e2e/fixtures.ts for how to provision one.'
-    )
+// Must match APPLICATION_SECRET in docker-compose.test.yaml.
+const APPLICATION_SECRET = 'test-application-secret-at-least-32-chars'
+
+export interface SessionUser {
+  id: number
+  osmId: number
+  token: string
+}
+
+/**
+ * Logs in as a user the way the backend does after an OSM login.
+ *
+ * The backend no longer accepts API keys (maproulette-backend 7a8cdb17), and a
+ * real login needs OSM itself. What a login leaves behind, though, is just a
+ * Play session cookie: a JWT signed with the application secret, naming the
+ * user and carrying a hash of their stored OSM token (see AuthController's
+ * callback and SessionManager.sessionUser). The test stack's secret is known,
+ * so the harness signs the same cookie itself for any user it has seeded.
+ */
+export function sessionCookie(user: SessionUser): string {
+  const encode = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url')
+  const now = Math.floor(Date.now() / 1000)
+  const unsigned = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({
+    data: {
+      tokenHash: createHash('sha256').update(user.token).digest('hex'),
+      userId: String(user.id),
+      osmId: String(user.osmId),
+      userTick: String(Date.now()),
+    },
+    nbf: now,
+    iat: now,
+  })}`
+  const signature = createHmac('sha256', APPLICATION_SECRET).update(unsigned).digest('base64url')
+  return `${unsigned}.${signature}`
+}
+
+export function storageStateFor(user: SessionUser) {
+  return {
+    cookies: [
+      {
+        name: 'PLAY_SESSION',
+        value: sessionCookie(user),
+        domain: new URL(BACKEND_URL).hostname,
+        path: '/',
+        expires: -1,
+        httpOnly: true,
+        secure: false,
+        sameSite: 'Lax' as const,
+      },
+    ],
+    origins: [],
   }
-  return REVIEWER_KEY
+}
+
+export function superUser(): SessionUser {
+  const id = Number(process.env.E2E_SUPER_USER_ID)
+  if (!Number.isInteger(id)) {
+    throw new Error('E2E_SUPER_USER_ID is not set; e2e/global-setup.ts should have set it')
+  }
+  return { id, osmId: SUPER_USER_OSM_ID, token: SUPER_USER_TOKEN }
+}
+
+/** A request context that acts as `user`, for tests that need someone other than the super user. */
+export function newSessionRequest(api: APIRequest, user: SessionUser) {
+  return api.newContext({
+    baseURL: BACKEND_URL,
+    storageState: storageStateFor(user),
+    extraHTTPHeaders: { 'Content-Type': 'application/json' },
+  })
 }
 
 const uniqueName = (prefix: string) =>
@@ -75,7 +114,7 @@ export interface TestTeam {
 
 async function createProject(request: APIRequestContext, name: string): Promise<TestProject> {
   const response = await request.post(`${BACKEND_URL}/api/v2/project`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: {
       name,
       displayName: name,
@@ -92,9 +131,7 @@ async function createProject(request: APIRequestContext, name: string): Promise<
 
 async function deleteProject(request: APIRequestContext, id: number): Promise<void> {
   try {
-    const response = await request.delete(`${BACKEND_URL}/api/v2/project/${id}?immediate=true`, {
-      headers: { apiKey: SUPER_KEY },
-    })
+    const response = await request.delete(`${BACKEND_URL}/api/v2/project/${id}?immediate=true`)
     if (!response.ok()) {
       console.warn(`Project ${id} teardown returned ${response.status()}: ${await response.text()}`)
     }
@@ -103,29 +140,40 @@ async function deleteProject(request: APIRequestContext, id: number): Promise<vo
   }
 }
 
+/**
+ * Drops locks left behind on tasks that no longer exist.
+ *
+ * A lock can land after releaseHeldLocks has run (Start Challenge claims its
+ * task in the background, and a test may finish before it does). Deleting the
+ * project then deletes the task but not its lock, and the backend goes on
+ * counting it against the user, who cannot lock anything else for the next
+ * hour.
+ */
+function clearOrphanedLocks(): void {
+  try {
+    runSql('DELETE FROM locked WHERE item_type = 2 AND item_id NOT IN (SELECT id FROM tasks);')
+  } catch (error) {
+    console.warn('Orphaned lock teardown threw:', error)
+  }
+}
+
 async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
   try {
-    const whoami = await request.get(`${BACKEND_URL}/api/v2/user/whoami`, {
-      headers: { apiKey: SUPER_KEY },
-    })
+    const whoami = await request.get(`${BACKEND_URL}/api/v2/user/whoami`)
     if (!whoami.ok()) {
       console.warn(`Lock teardown could not identify the acting user: ${whoami.status()}`)
       return
     }
     const { id: userId } = (await whoami.json()) as { id: number }
 
-    const locked = await request.get(`${BACKEND_URL}/api/v2/user/${userId}/lockedTasks`, {
-      headers: { apiKey: SUPER_KEY },
-    })
+    const locked = await request.get(`${BACKEND_URL}/api/v2/user/${userId}/lockedTasks`)
     if (!locked.ok()) {
       console.warn(`Lock teardown could not list held locks: ${locked.status()}`)
       return
     }
 
     for (const task of (await locked.json()) as { id: number }[]) {
-      const released = await request.get(`${BACKEND_URL}/api/v2/task/${task.id}/release`, {
-        headers: { apiKey: SUPER_KEY },
-      })
+      const released = await request.get(`${BACKEND_URL}/api/v2/task/${task.id}/release`)
       if (!released.ok()) {
         console.warn(`Task ${task.id} lock teardown returned ${released.status()}`)
       }
@@ -146,13 +194,15 @@ async function createChallenge(
   name: string
 ): Promise<TestChallenge> {
   const response = await request.post(`${BACKEND_URL}/api/v2/challenge`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: {
       parent: projectId,
       name,
       description: 'E2E test challenge',
       instruction: 'Fix the identified issue.',
       difficulty: 2,
+      checkinComment: 'E2E test changeset #maproulette',
+      checkinSource: 'Bing',
       enabled: true,
       featured: false,
       overpassQL: '',
@@ -173,7 +223,7 @@ async function createTask(
   coordinates: [number, number] = [-95.454772, 37.6866588]
 ): Promise<TestTask> {
   const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: {
       name,
       parent: challengeId,
@@ -197,7 +247,7 @@ async function createTask(
 // delete and need their own teardown below.
 async function createTeam(request: APIRequestContext, name: string): Promise<TestTeam> {
   const response = await request.post(`${BACKEND_URL}/api/v2/team`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     // `id` and `groupType` are required by the backend's Group writer even on
     // a create, and the frontend sends the same two placeholders (see
     // api.team.useCreateTeam).
@@ -212,9 +262,7 @@ async function createTeam(request: APIRequestContext, name: string): Promise<Tes
 
 async function deleteTeam(request: APIRequestContext, id: number): Promise<void> {
   try {
-    const response = await request.delete(`${BACKEND_URL}/api/v2/team/${id}`, {
-      headers: { apiKey: SUPER_KEY },
-    })
+    const response = await request.delete(`${BACKEND_URL}/api/v2/team/${id}`)
     if (!response.ok()) {
       console.warn(`Team ${id} teardown returned ${response.status()}: ${await response.text()}`)
     }
@@ -234,8 +282,7 @@ export async function grantTeamProjectRole(
   role = 1
 ): Promise<void> {
   const response = await request.post(
-    `${BACKEND_URL}/api/v2/team/${teamId}/project/${projectId}/${role}`,
-    { headers: { apiKey: SUPER_KEY } }
+    `${BACKEND_URL}/api/v2/team/${teamId}/project/${projectId}/${role}`
   )
   if (!response.ok()) {
     throw new Error(`Failed to add team to project: ${response.status()} ${await response.text()}`)
@@ -252,7 +299,7 @@ export async function giveChallengeToTeam(
   teamId: number | null
 ): Promise<void> {
   const response = await request.put(`${BACKEND_URL}/api/v2/challenge/${challengeId}`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: { ownerTeamId: teamId },
   })
   if (!response.ok()) {
@@ -260,45 +307,8 @@ export async function giveChallengeToTeam(
   }
 }
 
-export interface TestUser {
-  id: number
+export interface TestUser extends SessionUser {
   name: string
-  osmId: number
-}
-
-/**
- * A seeded user's own API key, in the "<userId>|<rawKey>" form the backend
- * expects from anyone who is not using the super key.
- *
- * Minting it takes two calls, and only the second is useful: PUT .../apikey
- * stores an encrypted key and hands back the encrypted value, which is not
- * what a client sends. Reading the user back as the super user returns it
- * decrypted and prefixed with the id, which is the usable form.
- *
- * This is what makes a second *acting* identity possible -- a real person who
- * is not a superuser, so tests can cover what someone without elevated rights
- * may do, and what they are refused.
- */
-export async function mintApiKey(request: APIRequestContext, userId: number): Promise<string> {
-  const minted = await request.put(`${BACKEND_URL}/api/v2/user/${userId}/apikey`, {
-    headers: { apiKey: SUPER_KEY },
-  })
-  if (!minted.ok()) {
-    throw new Error(`Could not mint an API key: ${minted.status()} ${await minted.text()}`)
-  }
-
-  const reread = await request.get(`${BACKEND_URL}/api/v2/user/${userId}`, {
-    headers: { apiKey: SUPER_KEY },
-  })
-  if (!reread.ok()) {
-    throw new Error(`Could not read the user back: ${reread.status()} ${await reread.text()}`)
-  }
-
-  const body = (await reread.json()) as { apiKey?: string }
-  if (!body.apiKey?.includes('|')) {
-    throw new Error(`User ${userId} came back without a usable API key: ${body.apiKey}`)
-  }
-  return body.apiKey
 }
 
 /**
@@ -309,41 +319,40 @@ export async function mintApiKey(request: APIRequestContext, userId: number): Pr
  * to act on has to put one in the database itself. This reaches into the
  * compose stack to do it, which is why it is confined to this file.
  */
-function runSql(sql: string): string {
-  const compose = process.env.MR_COMPOSE_COMMAND ?? 'docker'
+export function runSql(sql: string): string {
+  return compose([
+    'exec',
+    '-T',
+    'db',
+    'psql',
+    '-U',
+    'maproulette',
+    '-d',
+    'maproulette',
+    '-t',
+    '-A',
+    '-c',
+    sql,
+  ])
+}
+
+export function compose(args: string[]): string {
   return execFileSync(
-    compose,
-    [
-      'compose',
-      '-f',
-      'docker-compose.test.yaml',
-      'exec',
-      '-T',
-      'db',
-      'psql',
-      '-U',
-      'maproulette',
-      '-d',
-      'maproulette',
-      '-t',
-      '-A',
-      '-c',
-      sql,
-    ],
+    process.env.MR_COMPOSE_COMMAND ?? 'docker',
+    ['compose', '-f', 'docker-compose.test.yaml', ...args],
     { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] }
   ).trim()
 }
 
 /**
  * A real user row, for tests that need somebody other than the super user to
- * grant something to. They are only ever a target here, never an actor: this
- * harness cannot authenticate as them (that needs an API key, see REVIEWER_KEY
- * above).
+ * grant something to, or to act as (see sessionCookie).
  */
 export function seedUser(name: string, osmId: number): TestUser {
+  const token = randomUUID()
   const output = runSql(
     `INSERT INTO users (osm_id, osm_created, name, oauth_token, oauth_secret)
-     VALUES (${osmId}, now(), '${name}', '', '') RETURNING id;`
+     VALUES (${osmId}, now(), '${name}', '${token}', '') RETURNING id;`
   )
   // psql prints the returned row and then its own "INSERT 0 1" status line.
   const id = Number(output.split('\n')[0]?.trim())
@@ -351,7 +360,7 @@ export function seedUser(name: string, osmId: number): TestUser {
     // Throwing matters: a NaN id makes every later assertion vacuously pass.
     throw new Error(`Could not seed a user -- psql returned: ${JSON.stringify(output)}`)
   }
-  return { id, name, osmId }
+  return { id, name, osmId, token }
 }
 
 export function deleteSeededUser(user: TestUser): void {
@@ -415,7 +424,7 @@ async function createTagFixTask(
 ): Promise<TestTask> {
   const coordinates: [number, number] = [-111.9003158, 40.7630373]
   const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
-    headers: { apiKey: SUPER_KEY, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     data: {
       name,
       parent: challengeId,
@@ -444,7 +453,6 @@ async function createTagFixTask(
 export interface TestActor {
   request: APIRequestContext
   user: TestUser
-  apiKey: string
 }
 
 export const test = base.extend<{
@@ -457,14 +465,28 @@ export const test = base.extend<{
   seededUser: TestUser
   cooperativeChallenge: TestChallenge
   tagFixTask: TestTask
+  reviewer: TestUser
   reviewerRequest: APIRequestContext
   reviewerPage: Page
 }>({
+  // Every browser page and request runs as the super user unless a test asks
+  // for someone else.
+  storageState: async ({ playwright: _playwright }, use) => {
+    await use(storageStateFor(superUser()))
+  },
+
+  request: async ({ playwright, storageState }, use) => {
+    const request = await playwright.request.newContext({ storageState })
+    await use(request)
+    await request.dispose()
+  },
+
   project: async ({ request }, use) => {
     const project = await createProject(request, uniqueName('e2e-project'))
     await use(project)
     await releaseHeldLocks(request)
     await deleteProject(request, project.id)
+    clearOrphanedLocks()
   },
 
   // Deleting `project` (above) cascades to its challenges and tasks on the
@@ -509,20 +531,16 @@ export const test = base.extend<{
     deleteSeededUser(user)
   },
 
-  // A real person who is not a superuser, with their own API key, so a test can
-  // act as someone with ordinary rights and see what they are refused.
-  mapperRequest: async ({ playwright, request }, use) => {
+  // A real person who is not a superuser, logged in as themselves, so a test
+  // can act as someone with ordinary rights and see what they are refused.
+  mapperRequest: async ({ playwright }, use) => {
     const user = seedUser(
       uniqueName('e2e-actor').replace(/[^a-zA-Z0-9-]/g, ''),
       910_000_000 + Math.floor(Math.random() * 80_000_000)
     )
-    const key = await mintApiKey(request, user.id)
-    const context = await playwright.request.newContext({
-      baseURL: BACKEND_URL,
-      extraHTTPHeaders: { apiKey: key, 'Content-Type': 'application/json' },
-    })
+    const context = await newSessionRequest(playwright.request, user)
 
-    await use({ request: context, user, apiKey: key })
+    await use({ request: context, user })
 
     await context.dispose()
     deleteSeededUser(user)
@@ -539,47 +557,30 @@ export const test = base.extend<{
   },
 
   cooperativeChallenge: async ({ request, tagFixTask }, use) => {
-    const response = await request.get(
-      `${BACKEND_URL}/api/v2/challenge/${tagFixTask.challengeId}`,
-      {
-        headers: { apiKey: SUPER_KEY },
-      }
-    )
+    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${tagFixTask.challengeId}`)
     const body = (await response.json()) as { id: number; name: string; parent: number }
     await use({ id: body.id, name: body.name, projectId: body.parent })
   },
 
-  // Direct-API second identity (see REVIEWER_KEY above). Behaves like the
-  // built-in `request` fixture, except every call automatically carries the
-  // reviewer's apiKey header instead of the caller having to pass one.
-  reviewerRequest: async ({ playwright }, use) => {
-    const reviewerKey = requireReviewerKey()
-    const context = await playwright.request.newContext({
-      baseURL: BACKEND_URL,
-      extraHTTPHeaders: { apiKey: reviewerKey, 'Content-Type': 'application/json' },
-    })
+  // A second person, for tests that need two separate users at once (e.g. a
+  // mapper who locks a task and another who finds it locked).
+  reviewer: async ({ request: _request }, use) => {
+    const user = seedUser(
+      uniqueName('e2e-reviewer').replace(/[^a-zA-Z0-9-]/g, ''),
+      990_000_000 + Math.floor(Math.random() * 9_000_000)
+    )
+    await use(user)
+    deleteSeededUser(user)
+  },
+
+  reviewerRequest: async ({ playwright, reviewer }, use) => {
+    const context = await newSessionRequest(playwright.request, reviewer)
     await use(context)
     await context.dispose()
   },
 
-  // Browser-driven second identity. The frontend reads its apiKey once per
-  // page load from a single static /env.json served by the Vite dev server
-  // (see vite.config.ts's `runtimeEnv` plugin and the boot script in
-  // index.html) — that file is generated once from `.env.test` when the dev
-  // server starts, so every `page` in a test run would otherwise fetch the
-  // exact same apiKey, making a second *browser* identity structurally
-  // impossible without a frontend change. This fixture works around that by
-  // intercepting only this context's own /env.json request and swapping in
-  // the reviewer's key, so pages from this fixture see a different apiKey
-  // than pages from the default `page` fixture, without touching app code.
-  reviewerPage: async ({ browser }, use) => {
-    const reviewerKey = requireReviewerKey()
-    const context = await browser.newContext()
-    await context.route('**/env.json', async (route) => {
-      const response = await route.fetch()
-      const env = (await response.json()) as Record<string, unknown>
-      await route.fulfill({ response, json: { ...env, VITE_SERVER_API_KEY: reviewerKey } })
-    })
+  reviewerPage: async ({ browser, reviewer }, use) => {
+    const context = await browser.newContext({ storageState: storageStateFor(reviewer) })
     const page = await context.newPage()
     await use(page)
     await context.close()

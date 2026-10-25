@@ -64,7 +64,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
               'Failed to save task. Please try again.'
             )
       toast.error(message)
-      logger.error('Failed to save task', { error: String(error) })
+      logger.error('Failed to save task', { error })
     }
   }
 

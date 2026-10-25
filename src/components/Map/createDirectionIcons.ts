@@ -43,12 +43,10 @@ export const createDirectionIcons = (
   // case, and the layers still need to know they can draw).
   const reportWhenReady = () => {
     const mapInstance = map.current
-    if (!mapInstance) return
-    try {
-      if (Object.values(DIRECTION_ICONS).every((name) => mapInstance.hasImage(name))) {
-        onReady?.()
-      }
-    } catch {}
+    if (!mapInstance?.style) return
+    if (Object.values(DIRECTION_ICONS).every((name) => mapInstance.hasImage(name))) {
+      onReady?.()
+    }
   }
 
   const addIcons = () => {

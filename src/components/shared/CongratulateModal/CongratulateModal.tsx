@@ -7,9 +7,7 @@ import { LevelUpContent } from './variants/LevelUp'
 import { StreakMilestoneContent } from './variants/StreakMilestone'
 
 const prefersReducedMotion = (): boolean =>
-  typeof window !== 'undefined' &&
-  window.matchMedia &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
 export const CongratulateModal = () => {
   const { current, dismiss } = useCongratulate()

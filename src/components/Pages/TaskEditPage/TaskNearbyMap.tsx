@@ -1,10 +1,11 @@
 import maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
-import { Layer, Map as MapGL, Marker, Source } from 'react-map-gl/maplibre'
+import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
 import { api } from '@/api'
+import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
@@ -182,7 +183,7 @@ export const TaskSelectionMap = ({
       </MapGL>
 
       {/* Task count indicator */}
-      <div className="absolute right-2 bottom-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
+      <div className="absolute top-2 right-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
         {t(
           'taskEditPage.taskNearbyMap.nearbyCount',
           { count: nearbyTasks.length },

@@ -45,6 +45,28 @@ const makeBaseChallengeFormSchema = (t: T) =>
         )
       ),
     difficulty: z.number().min(1).max(3),
+    checkinComment: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(
+          'manageChallengeNew.challengeForm.validation.checkinCommentRequired',
+          undefined,
+          'A changeset comment is required'
+        )
+      ),
+    checkinSource: z
+      .string()
+      .trim()
+      .min(
+        1,
+        t(
+          'manageChallengeNew.challengeForm.validation.checkinSourceRequired',
+          undefined,
+          'A changeset source is required'
+        )
+      ),
     dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
     overpassQL: z.string().optional().or(z.literal('')),
     localGeoJSON: z.instanceof(File).nullable().optional(),
@@ -155,6 +177,8 @@ export const buildFormValues = (
   description: challenge?.description ?? '',
   instruction: challenge?.instruction ?? '',
   difficulty: challenge?.difficulty ?? 1,
+  checkinComment: challenge?.checkinComment ?? '',
+  checkinSource: challenge?.checkinSource ?? '',
   dataSource: getDefaultDataSource(challenge),
   overpassQL: challenge?.overpassQL ?? '',
   localGeoJSON: null,

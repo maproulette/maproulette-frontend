@@ -27,3 +27,9 @@ export const isChallengeComplete = (
 ): boolean =>
   challenge.status === CHALLENGE_STATUS_FINISHED ||
   (completionPercentage ?? challenge.completionPercentage ?? 0) >= 100
+
+export const isStartableChallengeStatus = (status: number | null | undefined): boolean =>
+  status == null ||
+  status === CHALLENGE_STATUS_NONE ||
+  status === CHALLENGE_STATUS_READY ||
+  status === CHALLENGE_STATUS_PARTIALLY_LOADED

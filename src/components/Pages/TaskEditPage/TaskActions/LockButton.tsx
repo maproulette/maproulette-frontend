@@ -19,14 +19,16 @@ export const LockButton = ({ compact = false }: { compact?: boolean }) => {
     'This challenge is currently paused. Tasks cannot be locked until it is resumed.'
   )
 
-  const handleLockTask = () => {
-    lockTask()
-    toast.success(t('taskEditPage.taskActions.lockButton.locked', undefined, 'Task locked'))
+  const handleLockTask = async () => {
+    if (await lockTask()) {
+      toast.success(t('taskEditPage.taskActions.lockButton.locked', undefined, 'Task locked'))
+    }
   }
 
-  const handleUnlockTask = () => {
-    unlockTask()
-    toast.success(t('taskEditPage.taskActions.lockButton.unlocked', undefined, 'Task unlocked'))
+  const handleUnlockTask = async () => {
+    if (await unlockTask()) {
+      toast.success(t('taskEditPage.taskActions.lockButton.unlocked', undefined, 'Task unlocked'))
+    }
   }
 
   // Don't show lock button if not authenticated

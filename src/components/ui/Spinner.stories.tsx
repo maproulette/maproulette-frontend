@@ -15,5 +15,5 @@ type Story = StoryObj<typeof Spinner>
 export const Default: Story = {}
 
 export const Large: Story = {
-  args: { className: 'size-8 animate-spin' },
+  args: { size: 'lg' },
 }

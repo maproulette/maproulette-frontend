@@ -125,13 +125,11 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   /** Mark elements as the task's own, which is what focus mode keeps visible. */
   const markTaskEntities = useCallback((entityIds: string[]) => {
     if (!focusModeRef.current) return
-    try {
-      const surface = idContextRef.current?.surface?.()
-      if (!surface) return
-      for (const id of entityIds) {
-        surface.selectAll(`.${id}`).classed('mr-task', true)
-      }
-    } catch {}
+    const surface = idContextRef.current?.surface?.()
+    if (!surface) return
+    for (const id of entityIds) {
+      surface.selectAll(`.${id}`).classed('mr-task', true)
+    }
   }, [])
 
   const bundledTaskIds = useMemo(
@@ -194,7 +192,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   const buildHash = useCallback(() => {
     const params = new URLSearchParams()
     params.set('map', `${position.zoom}/${position.lat}/${position.lng}`)
-    params.set('comment', buildChangesetComment(challenge, task.id))
+    params.set('comment', buildChangesetComment(challenge, task))
     if (task.id) params.set('maproulette_task', task.id.toString())
     if (osmEntityIds.length > 0) params.set('id', osmEntityIds.join(','))
 
@@ -322,65 +320,63 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
       }
       idContextRef.current = context
 
-      try {
-        const iframeDoc = iframe.contentDocument
-        if (iframeDoc) {
-          const style = iframeDoc.createElement('style')
-          style.id = 'mr-custom-styles'
-          style.textContent = `
-            /* iD puts a way's entity id on the same path as its paint class
-               (path.shadow.w123) but wraps a node's paints in a group that
-               carries the id (g.n123 > .shadow), so both forms are needed. */
-            .mr-active .shadow,
-            path.mr-active.shadow { stroke: #a855f7 !important; stroke-opacity: 0.95 !important; }
-            .mr-active .stroke,
-            path.mr-active.stroke { stroke: #a855f7 !important; stroke-opacity: 0.9 !important; }
+      const iframeDoc = iframe.contentDocument
+      if (iframeDoc) {
+        const style = iframeDoc.createElement('style')
+        style.id = 'mr-custom-styles'
+        style.textContent = `
+          /* iD puts a way's entity id on the same path as its paint class
+             (path.shadow.w123) but wraps a node's paints in a group that
+             carries the id (g.n123 > .shadow), so both forms are needed. */
+          .mr-active .shadow,
+          path.mr-active.shadow { stroke: #a855f7 !important; stroke-opacity: 0.95 !important; }
+          .mr-active .stroke,
+          path.mr-active.stroke { stroke: #a855f7 !important; stroke-opacity: 0.9 !important; }
 
 
-            .mr-focus-mode .layer-osm path,
-            .mr-focus-mode .layer-osm circle,
-            .mr-focus-mode .layer-osm text,
-            .mr-focus-mode .layer-osm use,
-            .mr-focus-mode .layer-osm image {
-              display: none !important;
-            }
+          .mr-focus-mode .layer-osm path,
+          .mr-focus-mode .layer-osm circle,
+          .mr-focus-mode .layer-osm text,
+          .mr-focus-mode .layer-osm use,
+          .mr-focus-mode .layer-osm image {
+            display: none !important;
+          }
 
-            /* iD hit-tests against its own touch/target layers, which are
-               separate from the drawn geometry above. Hiding the drawing alone
-               left invisible elements still clickable, so those layers are
-               taken out of hit-testing too. */
-            .mr-focus-mode .layer-touch,
-            .mr-focus-mode .layer-touch *,
-            .mr-focus-mode .layer-osm .shadow,
-            .mr-focus-mode .layer-osm .target {
-              pointer-events: none !important;
-            }
-            .mr-focus-mode .layer-osm .mr-task,
-            .mr-focus-mode .layer-osm .mr-task *,
-            .mr-focus-mode .layer-osm .highlighted,
-            .mr-focus-mode .layer-osm .highlighted *,
-            .mr-focus-mode .layer-osm .selected,
-            .mr-focus-mode .layer-osm .selected *,
-            /* The task's own elements stay both visible and clickable. */
-            .mr-focus-mode .layer-touch .mr-task,
-            .mr-focus-mode .layer-touch .mr-task *,
-            .mr-focus-mode .layer-touch .selected,
-            .mr-focus-mode .layer-touch .selected * {
-              pointer-events: auto !important;
-            }
-            .mr-focus-mode .layer-osm .mr-active,
-            .mr-focus-mode .layer-osm .mr-active * {
-              /* These selectors carry more classes than the hide rule above,
-                 so they win it back. Display has to be reverted explicitly now
-                 that focus mode removes the other elements rather than fading
-                 them: opacity alone would leave them hidden. */
-              display: revert !important;
-              opacity: 1 !important;
-            }
-          `
-          iframeDoc.head.appendChild(style)
-        }
-      } catch {}
+          /* iD hit-tests against its own touch/target layers, which are
+             separate from the drawn geometry above. Hiding the drawing alone
+             left invisible elements still clickable, so those layers are
+             taken out of hit-testing too. */
+          .mr-focus-mode .layer-touch,
+          .mr-focus-mode .layer-touch *,
+          .mr-focus-mode .layer-osm .shadow,
+          .mr-focus-mode .layer-osm .target {
+            pointer-events: none !important;
+          }
+          .mr-focus-mode .layer-osm .mr-task,
+          .mr-focus-mode .layer-osm .mr-task *,
+          .mr-focus-mode .layer-osm .highlighted,
+          .mr-focus-mode .layer-osm .highlighted *,
+          .mr-focus-mode .layer-osm .selected,
+          .mr-focus-mode .layer-osm .selected *,
+          /* The task's own elements stay both visible and clickable. */
+          .mr-focus-mode .layer-touch .mr-task,
+          .mr-focus-mode .layer-touch .mr-task *,
+          .mr-focus-mode .layer-touch .selected,
+          .mr-focus-mode .layer-touch .selected * {
+            pointer-events: auto !important;
+          }
+          .mr-focus-mode .layer-osm .mr-active,
+          .mr-focus-mode .layer-osm .mr-active * {
+            /* These selectors carry more classes than the hide rule above,
+               so they win it back. Display has to be reverted explicitly now
+               that focus mode removes the other elements rather than fading
+               them: opacity alone would leave them hidden. */
+            display: revert !important;
+            opacity: 1 !important;
+          }
+        `
+        iframeDoc.head.appendChild(style)
+      }
 
       const iDGlobalForHighlight = getIdGlobal(iframe.contentWindow)
       let prevHighlightId: string | null = null
@@ -521,11 +517,9 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   // editor first loads with focus mode already on.
   useEffect(() => {
     if (isLoading) return
-    try {
-      const mapContainer = iframeRef.current?.contentDocument?.querySelector('.ideditor')
-      mapContainer?.classList.toggle('mr-focus-mode', focusMode)
-      markTaskEntities(osmEntityIds)
-    } catch {}
+    const mapContainer = iframeRef.current?.contentDocument?.querySelector('.ideditor')
+    mapContainer?.classList.toggle('mr-focus-mode', focusMode)
+    markTaskEntities(osmEntityIds)
   }, [focusMode, isLoading, osmEntityIds, markTaskEntities])
 
   // Keep the editor in step with the bundle: a task joining brings its
@@ -561,9 +555,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     const [lng, lat] = task.location.coordinates
     ctx.map().centerZoom([lng, lat], 18)
 
-    try {
-      ctx.defaultChangesetComment(buildChangesetComment(challenge, task.id))
-    } catch {}
+    ctx.defaultChangesetComment(buildChangesetComment(challenge, task))
 
     // Select the new task's elements, now if iD has them and otherwise as soon
     // as the recentred map has downloaded them.
@@ -577,11 +569,9 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     return () => {
       const context = idContextRef.current
       if (!context) return
-      try {
-        context.history?.().on('change.maproulette', null)
-        context.history?.().on('merge.maproulette', null)
-        context.map?.().on('move.maproulette', null)
-      } catch {}
+      context.history?.().on('change.maproulette', null)
+      context.history?.().on('merge.maproulette', null)
+      context.map?.().on('move.maproulette', null)
     }
   }, [])
 

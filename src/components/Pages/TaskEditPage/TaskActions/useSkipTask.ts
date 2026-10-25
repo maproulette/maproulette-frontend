@@ -31,7 +31,7 @@ export const useSkipTask = (task: Task) => {
         logger.warn('Skip endpoint failed, falling back to client-side unlock', { error })
       })
 
-      const randomTasks = await api.challenge.getRandomTask(task.parent, queryClient)
+      const randomTasks = await api.challenge.getRandomTask(task.parent)
       if (randomTasks && randomTasks.length > 0) {
         await navigateToTask(randomTasks[0].id)
       } else {

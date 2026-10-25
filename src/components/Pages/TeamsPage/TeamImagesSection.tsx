@@ -35,7 +35,7 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
       await deleteImage.mutateAsync(image.id)
       toast.success(t('teamImages.deleteSuccess', undefined, 'Image removed'))
     } catch (error) {
-      logger.error('Team image delete failed', { error: String(error) })
+      logger.error('Team image delete failed', { error })
       toast.error(t('teamImages.deleteError', undefined, 'Could not remove image'))
     }
   }
@@ -139,7 +139,7 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
       setName('')
       if (fileInputRef.current) fileInputRef.current.value = ''
     } catch (error) {
-      logger.error('Team image request failed', { error: String(error) })
+      logger.error('Team image request failed', { error })
       toast.error(t('teamImages.requestError', undefined, 'Could not submit the image'))
     }
   }

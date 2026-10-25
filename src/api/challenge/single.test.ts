@@ -17,7 +17,6 @@ import {
   invalidateChallengeAggregates,
   patchChallengeInCaches,
   patchChallengeTaskMarker,
-  seedChallengeCache,
 } from './single'
 
 afterEach(() => {
@@ -386,16 +385,13 @@ describe('challengeSingle.getChallengeTaskMarkers', () => {
 })
 
 describe('challengeSingle.getRandomTask', () => {
-  it('fetches a random task and caches it', async () => {
+  it('fetches a random task', async () => {
     const tasks = [{ id: 11 }, { id: 22 }] as unknown as Task[]
     const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-    const queryClient = createTestQueryClient()
 
-    const result = await challengeSingle.getRandomTask(9, queryClient)
+    const result = await challengeSingle.getRandomTask(9)
 
     expect(result).toEqual(tasks)
-    expect(queryClient.getQueryData(['task', 11])).toEqual(tasks[0])
-    expect(queryClient.getQueryData(['task', 22])).toEqual(tasks[1])
 
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('api/v2/challenge/9/tasks/random')
@@ -404,15 +400,13 @@ describe('challengeSingle.getRandomTask', () => {
 })
 
 describe('challengeSingle.getFirstTask', () => {
-  it('fetches the first task in the challenge and caches it', async () => {
+  it('fetches the first task in the challenge', async () => {
     const tasks = [{ id: 33 }] as unknown as Task[]
     const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-    const queryClient = createTestQueryClient()
 
-    const result = await challengeSingle.getFirstTask(9, queryClient)
+    const result = await challengeSingle.getFirstTask(9)
 
     expect(result).toEqual(tasks)
-    expect(queryClient.getQueryData(['task', 33])).toEqual(tasks[0])
 
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('api/v2/challenge/9/tasks')
@@ -449,7 +443,7 @@ describe('challengeSingle.fetchTasksNearby', () => {
 })
 
 describe('challengeSingle.getTasksNearby', () => {
-  it('fetches nearby tasks and caches each one', async () => {
+  it('fetches nearby tasks', async () => {
     const tasks = [{ id: 5 }, { id: 6 }] as unknown as Task[]
     stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
     const queryClient = createTestQueryClient()
@@ -460,8 +454,6 @@ describe('challengeSingle.getTasksNearby', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(tasks)
-    expect(queryClient.getQueryData(['task', 5])).toEqual(tasks[0])
-    expect(queryClient.getQueryData(['task', 6])).toEqual(tasks[1])
   })
 
   it('is disabled when taskId is falsy', () => {
@@ -872,6 +864,58 @@ describe('challengeSingle.useUploadGeoJSON', () => {
     expect(url.searchParams.get('skipSnapshot')).toBe('false')
     expect(url.searchParams.get('dataOriginDate')).toBe('2024-06-01')
   })
+
+  it('uploads a line-by-line file in chunks of 100 lines', async () => {
+    const fetchMock = vi.fn(async (_request: Request) => new Response('null', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { result } = renderHook(() => challengeSingle.useUploadGeoJSON(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    const lines = Array.from({ length: 250 }, (_, i) => `{"type":"Feature","id":${i}}`)
+    const file = new File(
+      [`${lines.slice(0, 120).join('\n')}\n\n${lines.slice(120).join('\n')}\n`],
+      'tasks.geojson'
+    )
+    result.current.mutate({
+      challengeId: 72,
+      geoJSONFile: file,
+      options: {
+        lineByLine: true,
+        removeUnmatched: true,
+        skipSnapshot: false,
+        dataOriginDate: '2024-06-01',
+      },
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(fetchMock).toHaveBeenCalledTimes(3)
+    const uploads = await Promise.all(
+      fetchMock.mock.calls.map(async ([request]) => ({
+        params: new URL(request.url).searchParams,
+        lines: (await ((await request.clone().formData()).get('json') as File).text()).split('\n'),
+      }))
+    )
+
+    expect(uploads.map((upload) => upload.lines.length)).toEqual([100, 100, 50])
+    expect(uploads.flatMap((upload) => upload.lines)).toEqual(lines)
+    expect(uploads.map((upload) => upload.params.get('removeUnmatched'))).toEqual([
+      'true',
+      'false',
+      'false',
+    ])
+    expect(uploads.map((upload) => upload.params.get('skipSnapshot'))).toEqual([
+      'false',
+      'true',
+      'true',
+    ])
+    for (const upload of uploads) {
+      expect(upload.params.get('lineByLine')).toBe('true')
+      expect(upload.params.get('dataOriginDate')).toBe('2024-06-01')
+    }
+  })
 })
 
 describe('challengeSingle.refreshChallenge', () => {
@@ -959,37 +1003,6 @@ describe('challengeSingle.useArchiveChallenge', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 100] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
-  })
-})
-
-describe('seedChallengeCache', () => {
-  it('seeds one cache entry per challenge, collapsing an expanded parent to its id', () => {
-    const queryClient = createTestQueryClient()
-
-    seedChallengeCache(queryClient, [
-      { id: 7, name: 'seven', parent: { id: 1, displayName: 'Project' } },
-      { id: 8, name: 'eight', parent: 2 },
-    ])
-
-    expect(queryClient.getQueryData(['challenge', 7])).toEqual({
-      id: 7,
-      name: 'seven',
-      parent: 1,
-    })
-    expect(queryClient.getQueryData(['challenge', 8])).toEqual({
-      id: 8,
-      name: 'eight',
-      parent: 2,
-    })
-  })
-
-  it('skips entries with no id to key the cache on', () => {
-    const queryClient = createTestQueryClient()
-    const setQueryData = vi.spyOn(queryClient, 'setQueryData')
-
-    seedChallengeCache(queryClient, [{ name: 'nameless' }, { id: 0 }])
-
-    expect(setQueryData).not.toHaveBeenCalled()
   })
 })
 
