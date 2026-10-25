@@ -60,7 +60,7 @@ const ALL_STATUS_FIELDS = [
   'validated',
 ] as const
 
-export const useChallengeProgress = (metrics: CompletionMetrics) => {
+export const useChallengeProgress = (metrics?: CompletionMetrics) => {
   const summedTotal = metrics
     ? ALL_STATUS_FIELDS.reduce((acc, field) => acc + (metrics[field] ?? 0), 0)
     : 0
