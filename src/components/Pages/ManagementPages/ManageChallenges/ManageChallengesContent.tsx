@@ -22,6 +22,11 @@ import {
   User,
 } from 'lucide-react'
 import { useState } from 'react'
+import { api } from '@/api'
+import {
+  getChallengeSourceType,
+  RebuildTasksDialog,
+} from '@/components/Pages/ManagementPages/shared/RebuildTasksDialog'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { DocsLink } from '@/components/shared/DocsLink'
@@ -77,7 +82,8 @@ export const ManageChallengesContent = () => {
     toggleChallengeEnabled,
     togglePaused,
     archiveChallenge,
-    rebuildChallenge,
+    rebuildChallengeId,
+    setRebuildChallengeId,
   } = useManageChallengesContext()
 
   const [showPanel, setShowPanel] = useState(true)
@@ -255,7 +261,7 @@ export const ManageChallengesContent = () => {
             )}
             {challenge.id != null && (
               <DropdownMenuItem
-                onClick={() => rebuildChallenge(challenge.id)}
+                onClick={() => setRebuildChallengeId(challenge.id)}
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Hammer className="h-4 w-4" />
@@ -553,6 +559,32 @@ export const ManageChallengesContent = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {rebuildChallengeId != null && (
+        <ChallengeRebuildDialog
+          challengeId={rebuildChallengeId}
+          onClose={() => setRebuildChallengeId(null)}
+        />
+      )}
     </div>
+  )
+}
+
+const ChallengeRebuildDialog = ({
+  challengeId,
+  onClose,
+}: {
+  challengeId: number
+  onClose: () => void
+}) => {
+  const { data: challenge } = api.challenge.getChallenge(challengeId)
+  if (!challenge) return null
+  return (
+    <RebuildTasksDialog
+      open
+      onOpenChange={(open) => !open && onClose()}
+      challengeId={challengeId}
+      sourceType={getChallengeSourceType(challenge)}
+      taskBundleIdProperty={challenge.taskBundleIdProperty}
+    />
   )
 }

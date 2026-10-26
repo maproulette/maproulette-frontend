@@ -38,7 +38,8 @@ export interface ManageChallengesContextType {
   toggleChallengeEnabled: (challenge: ChallengeListing) => void
   togglePaused: (challenge: ChallengeListing) => void
   archiveChallenge: (challenge: ChallengeListing) => void
-  rebuildChallenge: (challengeId: number) => void
+  rebuildChallengeId: number | null
+  setRebuildChallengeId: (id: number | null) => void
 }
 
 const ManageChallengesContext = createContext<ManageChallengesContextType | undefined>(undefined)
@@ -53,6 +54,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyPinned, setOnlyPinned] = useState(false)
   const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
+  const [rebuildChallengeId, setRebuildChallengeId] = useState<number | null>(null)
 
   // API queries
   const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects({
@@ -84,7 +86,6 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
   const pauseChallengeMutation = api.challenge.usePauseChallenge()
-  const rebuildChallengeMutation = api.challenge.useRebuildChallenge()
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
 
   const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
@@ -147,13 +148,6 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
     [pauseChallengeMutation]
   )
 
-  const rebuildChallenge = useCallback(
-    (challengeId: number) => {
-      rebuildChallengeMutation.mutate({ challengeId })
-    },
-    [rebuildChallengeMutation]
-  )
-
   const filteredChallenges = useMemo(() => {
     const list = challenges ?? []
     return list
@@ -204,7 +198,8 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       toggleChallengeEnabled,
       togglePaused,
       archiveChallenge,
-      rebuildChallenge,
+      rebuildChallengeId,
+      setRebuildChallengeId,
     }),
     [
       challenges,
@@ -223,7 +218,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       toggleChallengeEnabled,
       togglePaused,
       archiveChallenge,
-      rebuildChallenge,
+      rebuildChallengeId,
     ]
   )
 

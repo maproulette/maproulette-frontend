@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { useIntl } from '@/i18n'
+import { getErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import { bundledGeoJSONFile } from '@/lib/taskBundling'
 import type { Challenge } from '@/types/Challenge'
@@ -124,15 +125,16 @@ export const RebuildTasksDialog = ({
       } else {
         await rebuild.mutateAsync({ challengeId, removeUnmatched, skipSnapshot: true })
       }
-      toast.success(
-        t('managementPages.rebuildTasksDialog.toastStarted', undefined, 'Rebuild started')
-      )
+      toast.success(t('common.tasksRebuilt', undefined, 'Tasks rebuilt'))
       reset()
       onOpenChange(false)
     } catch (error) {
       logger.error('Rebuild failed', { error })
       toast.error(
-        t('managementPages.rebuildTasksDialog.toastError', undefined, 'Could not start rebuild')
+        await getErrorMessage(
+          error,
+          t('common.rebuildTasksFailed', undefined, 'Could not rebuild tasks')
+        )
       )
     }
   }

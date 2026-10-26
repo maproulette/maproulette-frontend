@@ -634,6 +634,7 @@ export const challengeSingle = {
           .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
             body: formData,
             searchParams,
+            timeout: false,
           })
           .json<void>()
       },
@@ -747,10 +748,10 @@ export const challengeSingle = {
         if (removeUnmatched !== undefined) searchParams.removeUnmatched = String(removeUnmatched)
         if (skipSnapshot !== undefined) searchParams.skipSnapshot = String(skipSnapshot)
         return apiRequest
-          .put(`api/v2/challenge/${challengeId}/rebuild`, { searchParams })
+          .put(`api/v2/challenge/${challengeId}/rebuild`, { searchParams, timeout: false })
           .json<void>()
       },
-      onSuccess: (_, variables) => {
+      onSettled: (_, _error, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })

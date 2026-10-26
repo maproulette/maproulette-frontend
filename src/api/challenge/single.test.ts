@@ -1250,4 +1250,19 @@ describe('challengeSingle.useRebuildChallenge', () => {
     expect(url.searchParams.get('removeUnmatched')).toBe('true')
     expect(url.searchParams.get('skipSnapshot')).toBe('false')
   })
+
+  it('refreshes the challenge when the rebuild fails', async () => {
+    stubFetch(new Response('{"status":"KO","message":"Overpass is busy"}', { status: 400 }))
+    const queryClient = createTestQueryClient()
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    const { result } = renderHook(() => challengeSingle.useRebuildChallenge(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+
+    result.current.mutate({ challengeId: 112 })
+
+    await waitFor(() => expect(result.current.isError).toBe(true))
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 112] })
+  })
 })
