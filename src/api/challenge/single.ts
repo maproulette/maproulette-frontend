@@ -159,18 +159,6 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   })
 }
 
-const LINE_BY_LINE_UPLOAD_CHUNK_SIZE = 100
-
-const lineByLineChunks = async (file: File) => {
-  const lines = (await file.text()).split('\n').filter((line) => line.trim() !== '')
-  const chunks: File[] = []
-  for (let start = 0; start < lines.length; start += LINE_BY_LINE_UPLOAD_CHUNK_SIZE) {
-    const chunkLines = lines.slice(start, start + LINE_BY_LINE_UPLOAD_CHUNK_SIZE)
-    chunks.push(new File([chunkLines.join('\n')], file.name, { type: file.type }))
-  }
-  return chunks
-}
-
 export const challengeSingle = {
   getChallenge: (challengeId: number) =>
     useQuery(
@@ -616,7 +604,7 @@ export const challengeSingle = {
   useUploadGeoJSON: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: async ({
+      mutationFn: ({
         challengeId,
         geoJSONFile,
         options,
@@ -639,31 +627,15 @@ export const challengeSingle = {
           searchParams.dataOriginDate = options.dataOriginDate
         }
 
-        const upload = (file: File, params: Record<string, string>) => {
-          const formData = new FormData()
-          formData.append('json', file)
+        const formData = new FormData()
+        formData.append('json', geoJSONFile)
 
-          return apiRequest
-            .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
-              body: formData,
-              searchParams: params,
-            })
-            .json<void>()
-        }
-
-        const chunks = options?.lineByLine ? await lineByLineChunks(geoJSONFile) : []
-        if (chunks.length === 0) {
-          return upload(geoJSONFile, searchParams)
-        }
-
-        for (const [index, chunk] of chunks.entries()) {
-          await upload(
-            chunk,
-            index === 0
-              ? searchParams
-              : { ...searchParams, removeUnmatched: 'false', skipSnapshot: 'true' }
-          )
-        }
+        return apiRequest
+          .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
+            body: formData,
+            searchParams,
+          })
+          .json<void>()
       },
       onSuccess: (_data, variables) => {
         // Invalidate challenge task markers since tasks changed

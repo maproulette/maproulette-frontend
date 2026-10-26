@@ -864,58 +864,6 @@ describe('challengeSingle.useUploadGeoJSON', () => {
     expect(url.searchParams.get('skipSnapshot')).toBe('false')
     expect(url.searchParams.get('dataOriginDate')).toBe('2024-06-01')
   })
-
-  it('uploads a line-by-line file in chunks of 100 lines', async () => {
-    const fetchMock = vi.fn(async (_request: Request) => new Response('null', { status: 200 }))
-    vi.stubGlobal('fetch', fetchMock)
-
-    const { result } = renderHook(() => challengeSingle.useUploadGeoJSON(), {
-      wrapper: queryClientWrapper(),
-    })
-
-    const lines = Array.from({ length: 250 }, (_, i) => `{"type":"Feature","id":${i}}`)
-    const file = new File(
-      [`${lines.slice(0, 120).join('\n')}\n\n${lines.slice(120).join('\n')}\n`],
-      'tasks.geojson'
-    )
-    result.current.mutate({
-      challengeId: 72,
-      geoJSONFile: file,
-      options: {
-        lineByLine: true,
-        removeUnmatched: true,
-        skipSnapshot: false,
-        dataOriginDate: '2024-06-01',
-      },
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(fetchMock).toHaveBeenCalledTimes(3)
-    const uploads = await Promise.all(
-      fetchMock.mock.calls.map(async ([request]) => ({
-        params: new URL(request.url).searchParams,
-        lines: (await ((await request.clone().formData()).get('json') as File).text()).split('\n'),
-      }))
-    )
-
-    expect(uploads.map((upload) => upload.lines.length)).toEqual([100, 100, 50])
-    expect(uploads.flatMap((upload) => upload.lines)).toEqual(lines)
-    expect(uploads.map((upload) => upload.params.get('removeUnmatched'))).toEqual([
-      'true',
-      'false',
-      'false',
-    ])
-    expect(uploads.map((upload) => upload.params.get('skipSnapshot'))).toEqual([
-      'false',
-      'true',
-      'true',
-    ])
-    for (const upload of uploads) {
-      expect(upload.params.get('lineByLine')).toBe('true')
-      expect(upload.params.get('dataOriginDate')).toBe('2024-06-01')
-    }
-  })
 })
 
 describe('challengeSingle.refreshChallenge', () => {
