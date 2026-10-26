@@ -160,6 +160,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       .filter((challenge) => challenge.name.toLowerCase().includes(searchQuery.toLowerCase()))
       .filter((challenge) => (onlyDiscoverable ? !!challenge.enabled : true))
       .filter((challenge) => (onlyArchived ? !!challenge.isArchived : true))
+      .filter((challenge) => (onlyOwned ? challenge.ownerId === user?.osmProfile?.id : true))
       .filter((challenge) =>
         onlyPinned
           ? challenge.id != null
@@ -167,7 +168,16 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
             : false
           : true
       )
-  }, [challenges, searchQuery, onlyDiscoverable, onlyArchived, onlyPinned, pinnedChallengeIds])
+  }, [
+    challenges,
+    searchQuery,
+    onlyDiscoverable,
+    onlyArchived,
+    onlyOwned,
+    onlyPinned,
+    pinnedChallengeIds,
+    user?.osmProfile?.id,
+  ])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<ManageChallengesContextType>(

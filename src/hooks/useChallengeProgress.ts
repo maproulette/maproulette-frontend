@@ -1,6 +1,4 @@
-import { api } from '@/api'
 import type { ProgressSegment } from '@/components/shared/ProgressBar'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import type { CompletionMetrics } from '@/types/Challenge'
 
@@ -48,7 +46,7 @@ const REMAINING_FILL_STYLE = { color: '#9ca3af', opacity: 0.45 }
 
 // All per-status fields the backend reports; used to derive a total when
 // `actions.total` is missing or zero (the backend sometimes omits it even when
-// individual counts are present, which used to hide the progress bar entirely).
+// individual metrics are present, which used to hide the progress bar entirely).
 const ALL_STATUS_FIELDS = [
   'fixed',
   'falsePositive',
@@ -62,36 +60,27 @@ const ALL_STATUS_FIELDS = [
   'validated',
 ] as const
 
-export const useChallengeProgress = (challengeId: number, fallback?: CompletionMetrics) => {
-  const { isAuthenticated } = useAuthContext()
-  // /api/v2/data/challenge/:id requires auth; skip it for logged-out users and
-  // fall back to the listing-provided metrics instead of a doomed 401 request.
-  const { data: challengeStatsData } = api.challenge.getChallengeStats(challengeId, isAuthenticated)
-  // Prefer per-challenge stats when loaded; otherwise use the listing-provided
-  // metrics so list views show segmented bars without waiting on per-card
-  // requests. Both shapes share the same per-status field names.
-  const counts: Partial<Record<(typeof ALL_STATUS_FIELDS)[number] | 'total', number>> | undefined =
-    challengeStatsData?.[0]?.actions ?? fallback
-
-  const summedTotal = counts
-    ? ALL_STATUS_FIELDS.reduce((acc, field) => acc + (counts[field] ?? 0), 0)
+export const useChallengeProgress = (metrics?: CompletionMetrics) => {
+  const summedTotal = metrics
+    ? ALL_STATUS_FIELDS.reduce((acc, field) => acc + (metrics[field] ?? 0), 0)
     : 0
-  const total = counts?.total && counts.total > 0 ? counts.total : summedTotal
+  const total = metrics?.total && metrics.total > 0 ? metrics.total : summedTotal
 
   const completionPercentage = (() => {
-    if (total === 0 || !counts) return 0
-    const completed = (counts.fixed || 0) + (counts.falsePositive || 0) + (counts.alreadyFixed || 0)
+    if (total === 0 || !metrics) return 0
+    const completed =
+      (metrics.fixed || 0) + (metrics.falsePositive || 0) + (metrics.alreadyFixed || 0)
     return Math.round((completed / total) * 100)
   })()
 
   const buildSegments = (): ProgressSegment[] => {
-    if (total === 0 || !counts) return []
+    if (total === 0 || !metrics) return []
 
     const completed: ProgressSegment[] = []
     const remaining: ProgressSegment[] = []
 
     for (const status of COMPLETED_STATUSES) {
-      const count = counts[status]
+      const count = metrics[status]
       if (count && count > 0) {
         completed.push({
           key: status,
@@ -104,7 +93,7 @@ export const useChallengeProgress = (challengeId: number, fallback?: CompletionM
       }
     }
 
-    const tooHardCount = counts[PROBLEM_STATUS] ?? 0
+    const tooHardCount = metrics[PROBLEM_STATUS] ?? 0
     if (tooHardCount > 0) {
       remaining.push({
         key: PROBLEM_STATUS,
@@ -134,9 +123,10 @@ export const useChallengeProgress = (challengeId: number, fallback?: CompletionM
   }
 
   const segments = buildSegments()
-  const hasActions = !!counts && total > 0
+  const hasActions = !!metrics && total > 0
 
-  const tasksRemaining = (counts?.available ?? 0) + (counts?.skipped ?? 0) + (counts?.tooHard ?? 0)
+  const tasksRemaining =
+    (metrics?.available ?? 0) + (metrics?.skipped ?? 0) + (metrics?.tooHard ?? 0)
 
   return { completionPercentage, segments, hasActions, total, tasksRemaining }
 }

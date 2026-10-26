@@ -22,10 +22,7 @@ export const ChallengeFooter = () => {
   const { openReportHistory } = useChallengeModals()
   const { t } = useIntl()
 
-  const { hasActions, tasksRemaining } = useChallengeProgress(
-    challenge.id ?? 0,
-    challenge.completionMetrics
-  )
+  const { hasActions, tasksRemaining } = useChallengeProgress(challenge.completionMetrics)
 
   const [isLoadingTask, setIsLoadingTask] = useState(false)
 

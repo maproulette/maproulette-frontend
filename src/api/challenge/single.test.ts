@@ -118,7 +118,23 @@ describe('invalidateChallengeAggregates', () => {
     expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 7] })
     expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'stats', 7] })
     expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'activity', 7] })
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(spy).toHaveBeenCalledTimes(4)
+  })
+
+  it('marks listing caches stale, leaving unrelated challenge caches alone', () => {
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['challenge', 'exploreInfinite', {}, null], { pages: [[{ id: 7 }]] })
+    queryClient.setQueryData(['project', 'challenges', 1], [{ id: 7 }])
+    queryClient.setQueryData(['challenge', 99], { id: 99 })
+    queryClient.setQueryData(['challenge', 'stats', 99], [])
+
+    invalidateChallengeAggregates(queryClient, 7)
+
+    const state = (key: unknown[]) => queryClient.getQueryState(key)
+    expect(state(['challenge', 'exploreInfinite', {}, null])?.isInvalidated).toBe(true)
+    expect(state(['project', 'challenges', 1])?.isInvalidated).toBe(true)
+    expect(state(['challenge', 99])?.isInvalidated).toBe(false)
+    expect(state(['challenge', 'stats', 99])?.isInvalidated).toBe(false)
   })
 })
 

@@ -5856,6 +5856,13 @@ export interface components {
       status?: number | null
       isArchived: boolean
       paused: boolean
+      /** Format: int64 */
+      ownerId: number
+      completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
+      /** Format: int32 */
+      difficulty: number
+      /** Format: epoch */
+      modified: number
     }
     'org.maproulette.framework.model.MapillaryImage': {
       key: string

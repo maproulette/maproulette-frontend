@@ -12,14 +12,17 @@ const challengeSearchSchema = z.object({
 export const Route = createFileRoute('/_app/challenge/$challengeId/')({
   validateSearch: challengeSearchSchema,
   staticData: { pageTitle: 'Browse Challenge' },
-  loader: async ({ params: { challengeId }, context: { queryClient } }) => {
+  loader: async ({ params: { challengeId }, context: { queryClient }, preload }) => {
     const id = Number(challengeId)
 
     // Kick off the (often large, slow) task-marker fetch but DON'T await it —
     // the map reads the same query and shows its loading indicator while it
-    // streams in. Starting it here also warms it on hover-preload. Only the
-    // challenge details block navigation, as before.
-    void queryClient.prefetchQuery(api.challenge.getChallengeTaskMarkersOptions(id))
+    // streams in. Skipped on hover-preload so browsing a challenge list doesn't
+    // fire a marker request per hovered challenge. Only the challenge details
+    // block navigation, as before.
+    if (!preload) {
+      void queryClient.prefetchQuery(api.challenge.getChallengeTaskMarkersOptions(id))
+    }
 
     try {
       const challenge = await queryClient.ensureQueryData(api.challenge.getChallengeOptions(id))
