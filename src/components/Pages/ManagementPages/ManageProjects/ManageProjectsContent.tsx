@@ -453,17 +453,19 @@ export const ManageProjectsContent = () => {
                   renderItem={(proj) => {
                     const projectId = proj.id
                     const isPinned = projectId != null && pinnedProjectIds.includes(projectId)
-                    const count =
-                      projectId != null ? (challengesPerProject[projectId]?.total ?? 0) : 0
+                    const totalTasks = proj.completionMetrics?.total ?? 0
+                    const completed = totalTasks - (proj.completionMetrics?.tasksRemaining ?? 0)
+                    const challengeStats = challengesPerProject[projectId]
                     const challengeMeta: ChallengeMeta = {
-                      totalChallenges: count,
-                      pinned: 0,
-                      completed: 0,
+                      totalTasks,
+                      completed,
                     }
                     return (
                       <ProjectCard
                         project={proj}
                         challengeMeta={challengeMeta}
+                        totalChallenges={challengeStats?.total}
+                        completedChallenges={challengeStats?.completed}
                         linkTo="/manage/project/$projectId"
                         linkParams={{ projectId: String(projectId) }}
                         actions={buildProjectActions(proj, isPinned)}

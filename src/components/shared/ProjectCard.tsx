@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { cn } from '@/lib/utils'
@@ -8,14 +7,15 @@ import { ProgressBar } from './ProgressBar'
 import { SidebarIndicator } from './SidebarIndicator'
 
 export interface ChallengeMeta {
-  totalChallenges: number
-  pinned: number
+  totalTasks: number
   completed: number
 }
 
 interface ProjectCardProps {
   project: Project
   challengeMeta?: ChallengeMeta
+  totalChallenges?: number
+  completedChallenges?: number
   className?: string
   actions?: React.ReactNode
   linkTo?: string
@@ -27,6 +27,8 @@ interface ProjectCardProps {
 export const ProjectCard = ({
   project,
   challengeMeta,
+  totalChallenges,
+  completedChallenges,
   actions,
   className,
   linkTo,
@@ -35,15 +37,10 @@ export const ProjectCard = ({
   selected = false,
 }: ProjectCardProps) => {
   const { t } = useIntl()
-  // The image belongs to the team managing the project and is addressed by that
-  // team, so a project can carry a url and still have nothing to show when the
-  // team has no approved image. Space for it is only reserved while it renders.
-  const [imageFailed, setImageFailed] = useState(false)
-  useEffect(() => setImageFailed(false), [project.avatarUrl])
-  const showsImage = !!project.avatarUrl && !imageFailed
-  const meta = challengeMeta ?? { totalChallenges: 0, pinned: 0, completed: 0 }
   const completionPercentage =
-    meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
+    challengeMeta && challengeMeta.totalTasks > 0
+      ? Math.round((challengeMeta.completed / challengeMeta.totalTasks) * 100)
+      : undefined
   const lastUpdated = project.modified
   const cardClassName = cn(
     'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
@@ -53,65 +50,60 @@ export const ProjectCard = ({
 
   const content = (
     <>
-      {actions && (
-        <div
-          className="absolute top-3 right-3 z-10 flex items-center gap-1"
-          // The card is a Link, and Radix menus portal but still bubble React events
-          // through it, so keep any action click from navigating to the project.
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-          }}
-          onKeyDown={(e) => e.stopPropagation()}
-          role="toolbar"
-        >
-          {actions}
-        </div>
-      )}
-      <SidebarIndicator avatarUrl={project.avatarUrl} onLoadFailure={() => setImageFailed(true)} />
       <div className="p-4">
-        <div
-          className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
-        >
-          {project.displayName || project.name}
+        <div className="flex items-center justify-between pb-2">
+          <h3
+            className={cn(
+              'flex items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white'
+            )}
+          >
+            <span className="line-clamp-2">{project.displayName || project.name}</span>
+          </h3>
+          <div className="flex items-center gap-2">
+            {actions && (
+              <div
+                onClick={(e) => e.preventDefault()}
+                onKeyDown={(e) => e.stopPropagation()}
+                className="flex items-center gap-1"
+                role="toolbar"
+              >
+                {actions}
+              </div>
+            )}
+            <SidebarIndicator avatarUrl={project.avatarUrl} />
+          </div>
         </div>
-
-        <h3
-          className={cn(
-            'mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
-            showsImage && 'mr-16'
-          )}
-        >
-          <span className="line-clamp-2">{project.displayName || project.name}</span>
-        </h3>
 
         <div>
-          <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
-            <span className="font-semibold text-zinc-900 dark:text-white">
-              {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
-            </span>{' '}
-            {t('common.tasksRemaining2', undefined, 'tasks remaining')}
-          </div>
-
+          {challengeMeta ? (
+            <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
+              <span className="font-semibold text-zinc-900 dark:text-white">
+                {challengeMeta.totalTasks - challengeMeta.completed} / {challengeMeta.totalTasks}
+              </span>{' '}
+              {t('common.tasksRemaining2', undefined, 'tasks remaining')}
+            </div>
+          ) : null}
           <ProgressBar percentage={completionPercentage} className="mb-3" />
-
           <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-slate-300">
             <span className="flex items-center gap-3">
               <span>
-                {t(
-                  'shared.projectCard.totalChallenges',
-                  { count: meta.totalChallenges },
-                  'Total Challenges: {count}'
-                )}
+                {totalChallenges
+                  ? t(
+                      'shared.projectCard.totalChallenges',
+                      { count: totalChallenges },
+                      'Total Challenges: {count}'
+                    )
+                  : null}
               </span>
               <span className="text-emerald-500">
-                {t('shared.projectCard.completed', { count: meta.completed }, 'Completed: {count}')}
+                {completedChallenges
+                  ? t(
+                      'shared.projectCard.completed',
+                      { count: completedChallenges },
+                      'Completed: {count}'
+                    )
+                  : null}
               </span>
-              {meta.pinned > 0 && (
-                <span className="text-yellow-500">
-                  {t('shared.projectCard.pinned', { count: meta.pinned }, 'Pinned: {count}')}
-                </span>
-              )}
             </span>
             {lastUpdated ? (
               <span>

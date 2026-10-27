@@ -46,10 +46,7 @@ export const SidebarIndicator = ({
         setFailed(true)
         onLoadFailure?.()
       }}
-      className={cn(
-        'absolute top-12 right-4 h-12 w-12 rounded-lg bg-zinc-100 object-cover dark:bg-slate-700',
-        className
-      )}
+      className={cn('h-12 w-12 rounded-lg bg-zinc-100 object-cover dark:bg-slate-700', className)}
     />
   )
 }
