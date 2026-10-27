@@ -34,7 +34,7 @@ test('a user can create, edit and delete a project through the management UI', a
   })
   await expect(page.getByText('Created by the project-management E2E test.')).toBeVisible()
 
-  await page.getByRole('button', { name: 'Edit project' }).click()
+  await page.getByRole('link', { name: 'Edit project' }).click()
 
   // Scoped by level because the form's own "Project details" section heading
   // otherwise matches this case-insensitively too.

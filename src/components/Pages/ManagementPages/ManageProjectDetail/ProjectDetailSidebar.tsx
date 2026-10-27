@@ -79,28 +79,34 @@ export const ProjectDetailSidebar = () => {
       {/* Action buttons */}
       <div className="shrink-0 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
         <div className="flex flex-col gap-2">
-          <Link to="/project/$projectId" params={{ projectId }} className="block">
-            <Button variant="outline" size="sm" className="w-full justify-start gap-2 rounded-full">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="w-full justify-start gap-2 rounded-full"
+          >
+            <Link to="/project/$projectId" params={{ projectId }}>
               <Eye className="h-4 w-4" />
               {t('manageProjectDetail.content.viewProjectPage', undefined, 'View project page')}
-            </Button>
-          </Link>
-          <Link to="/manage/project/$projectId/edit" params={{ projectId }} className="block">
-            <Button variant="outline" size="sm" className="w-full justify-start gap-2 rounded-full">
+            </Link>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="w-full justify-start gap-2 rounded-full"
+          >
+            <Link to="/manage/project/$projectId/edit" params={{ projectId }}>
               <Pencil className="h-4 w-4" />
               {t('common.editProject', undefined, 'Edit project')}
-            </Button>
-          </Link>
-          <Link
-            to="/manage/challenge/new"
-            search={{ projectId: Number(projectId) }}
-            className="block"
-          >
-            <Button size="sm" className="w-full justify-start gap-2 rounded-full">
+            </Link>
+          </Button>
+          <Button asChild size="sm" className="w-full justify-start gap-2 rounded-full">
+            <Link to="/manage/challenge/new" search={{ projectId: Number(projectId) }}>
               <Plus className="h-4 w-4" />
               {t('manageProjectDetail.content.createChallenge', undefined, 'Create challenge')}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           {!isLoadingProject && projectData?.id != null && (
             <>
               <Button

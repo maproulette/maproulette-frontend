@@ -102,12 +102,12 @@ export const ProjectDetail = () => {
 
           {/* Action button row — mirrors browse challenge panel's pill row */}
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <Link to="/manage/project/$projectId" params={{ projectId: String(project.id) }}>
-              <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
+            <Button asChild variant="outline" size="sm" className="gap-1.5 rounded-full">
+              <Link to="/manage/project/$projectId" params={{ projectId: String(project.id) }}>
                 <Pencil className="size-4" />
                 {t('common.manage', undefined, 'Manage')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
             <Button
               variant="outline"
               size="sm"

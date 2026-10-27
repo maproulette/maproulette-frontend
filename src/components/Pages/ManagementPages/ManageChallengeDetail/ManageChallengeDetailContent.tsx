@@ -337,44 +337,38 @@ export const ManageChallengeDetailContent = () => {
 
             <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t dark:border-slate-700/50">
               <div className="flex flex-col gap-2 px-6 py-4">
-                <Link to="/challenge/$challengeId" params={{ challengeId }} className="block">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start gap-2 rounded-full"
-                  >
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start gap-2 rounded-full"
+                >
+                  <Link to="/challenge/$challengeId" params={{ challengeId }}>
                     <Eye className="h-4 w-4" />
                     {t('common.browseChallenge', undefined, 'Browse challenge')}
-                  </Button>
-                </Link>
-                <Link
-                  to="/manage/challenge/$challengeId/edit"
-                  params={{ challengeId }}
-                  className="block"
-                >
-                  <Button size="sm" className="w-full justify-start gap-2 rounded-full">
+                  </Link>
+                </Button>
+                <Button asChild size="sm" className="w-full justify-start gap-2 rounded-full">
+                  <Link to="/manage/challenge/$challengeId/edit" params={{ challengeId }}>
                     <Pencil className="h-4 w-4" />
                     {t('common.editChallenge', undefined, 'Edit challenge')}
-                  </Button>
-                </Link>
-                <Link
-                  to="/manage/challenge/$challengeId/prioritization"
-                  params={{ challengeId }}
-                  className="block"
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start gap-2 rounded-full"
                 >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start gap-2 rounded-full"
-                  >
+                  <Link to="/manage/challenge/$challengeId/prioritization" params={{ challengeId }}>
                     <Target className="h-4 w-4" />
                     {t(
                       'manageChallengeDetail.detail.configurePrioritization',
                       undefined,
                       'Configure prioritization'
                     )}
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
 
                 {!isLoadingChallenge && challengeData?.id != null && (
                   <Button

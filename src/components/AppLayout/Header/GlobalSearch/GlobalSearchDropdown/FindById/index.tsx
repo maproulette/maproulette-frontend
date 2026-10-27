@@ -8,7 +8,7 @@ import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 const cardClassName = cn(
-  'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+  'group stretched-link-container flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
   'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
   'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
 )
@@ -194,13 +194,7 @@ export const FindById = () => {
             {results.map((result) => {
               const Icon = result.icon
               return (
-                <Link
-                  key={result.type}
-                  to={result.href}
-                  params={result.params}
-                  onClick={onResultSelect}
-                  className={cardClassName}
-                >
+                <div key={result.type} className={cardClassName}>
                   <div className="flex min-w-0 flex-1 items-center gap-3">
                     <div className="shrink-0 rounded-md bg-zinc-100 p-2 dark:bg-slate-800">
                       <Icon className="h-4 w-4 text-zinc-600 dark:text-slate-400" />
@@ -208,12 +202,19 @@ export const FindById = () => {
                     <div className="min-w-0 flex-1">
                       <p className="text-xs text-zinc-500 dark:text-slate-400">{result.label}</p>
                       <h3 className="truncate font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                        {result.name}
+                        <Link
+                          to={result.href}
+                          params={result.params}
+                          onClick={onResultSelect}
+                          className="stretched-link"
+                        >
+                          {result.name}
+                        </Link>
                       </h3>
                     </div>
                   </div>
                   <ChevronRight className="mt-2 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-                </Link>
+                </div>
               )
             })}
           </div>

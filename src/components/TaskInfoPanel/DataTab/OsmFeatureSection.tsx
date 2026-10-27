@@ -8,7 +8,7 @@ import { parseOsmFeatureFromTask } from '../taskUtils/osmUtils'
 const HISTORY_ZOOM = 16
 
 const linkCardClass =
-  'flex items-center justify-between gap-2 rounded bg-zinc-100 p-2 transition-colors hover:bg-zinc-200 dark:bg-slate-800/50 dark:hover:bg-slate-800'
+  'stretched-link-container flex items-center justify-between gap-2 rounded bg-zinc-100 p-2 transition-colors hover:bg-zinc-200 dark:bg-slate-800/50 dark:hover:bg-slate-800'
 
 /**
  * Recent changesets around the task, which is how a mapper tells whether
@@ -40,22 +40,24 @@ const AreaHistory = () => {
           'View recent changes in the area around this task'
         )}
       </p>
-      <a
-        href={`${api.osm.getOSMServerUrl()}/history#map=${HISTORY_ZOOM}/${lat}/${lon}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={linkCardClass}
-      >
+      <div className={linkCardClass}>
         <div>
           <div className="font-medium text-blue-600 text-sm dark:text-blue-400">
-            {t('taskInfoPanel.data.osmHistoryAtLocation', undefined, 'OSM History at Location')}
+            <a
+              href={`${api.osm.getOSMServerUrl()}/history#map=${HISTORY_ZOOM}/${lat}/${lon}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="stretched-link"
+            >
+              {t('taskInfoPanel.data.osmHistoryAtLocation', undefined, 'OSM History at Location')}
+            </a>
           </div>
           <div className="mt-0.5 text-xs text-zinc-500 dark:text-slate-400">
             {t('taskInfoPanel.data.recentEditsNear', { location }, 'Recent edits near {location}')}
           </div>
         </div>
         <ExternalLink className="h-4 w-4 shrink-0 text-zinc-400 dark:text-slate-500" />
-      </a>
+      </div>
     </div>
   )
 }
@@ -69,15 +71,17 @@ export const OsmFeatureSection = () => {
   return (
     <div className="space-y-4">
       {osmFeature ? (
-        <a
-          href={`${osmServer}/${osmFeature.type}/${osmFeature.id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={linkCardClass}
-        >
+        <div className={linkCardClass}>
           <div>
             <div className="font-medium text-blue-600 text-sm dark:text-blue-400">
-              {osmFeature.type}/{osmFeature.id}
+              <a
+                href={`${osmServer}/${osmFeature.type}/${osmFeature.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="stretched-link"
+              >
+                {osmFeature.type}/{osmFeature.id}
+              </a>
             </div>
             <div className="mt-0.5 text-xs text-zinc-500 dark:text-slate-400">
               {t(
@@ -88,7 +92,7 @@ export const OsmFeatureSection = () => {
             </div>
           </div>
           <ExternalLink className="h-4 w-4 shrink-0 text-zinc-400 dark:text-slate-500" />
-        </a>
+        </div>
       ) : (
         <p className="text-xs text-zinc-500 dark:text-slate-400">
           {t(

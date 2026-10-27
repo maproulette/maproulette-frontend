@@ -26,8 +26,9 @@ test('a user can create a team, see it on the dashboard, and delete it', async (
   // name). The creator is the team's Owner: a team must always keep someone
   // able to delete it, so whoever makes one starts out holding that.
   await page.goto('/dashboard')
-  const teamLink = page.getByRole('link', { name: new RegExp(`${teamName}.*Owner`) })
+  const teamLink = page.getByRole('link', { name: teamName, exact: true })
   await expect(teamLink).toBeVisible({ timeout: 15_000 })
+  await expect(page.locator('div.group', { has: teamLink })).toContainText('Owner')
 
   // Clean up: delete the team from its detail page.
   await teamLink.click()

@@ -84,7 +84,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
                   : 'border-zinc-200 hover:bg-zinc-50 dark:border-slate-700 dark:hover:bg-slate-800'
               )}
             >
-              <div className="font-medium text-sm">{style.name}</div>
+              <span className="block font-medium text-sm">{style.name}</span>
             </button>
             {custom && (
               <button

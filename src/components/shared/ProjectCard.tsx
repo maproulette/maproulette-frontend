@@ -46,34 +46,42 @@ export const ProjectCard = ({
     meta.totalChallenges > 0 ? Math.round((meta.completed / meta.totalChallenges) * 100) : 0
   const lastUpdated = project.modified
   const cardClassName = cn(
-    'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
+    'group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
     selected && 'ring-2 ring-blue-500 dark:ring-blue-400',
     className
   )
 
-  const content = (
-    <>
+  const title = project.displayName || project.name
+  const titleTarget = onSelect ? (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-pressed={selected}
+      className="stretched-link cursor-pointer text-left"
+    >
+      {title}
+    </button>
+  ) : (
+    <Link
+      to={linkTo ?? '/project/$projectId'}
+      params={linkParams ?? { projectId: String(project.id) }}
+      className="stretched-link"
+    >
+      {title}
+    </Link>
+  )
+
+  return (
+    <div className={cardClassName}>
       {actions && (
-        <div
-          className="absolute top-3 right-3 z-10 flex items-center gap-1"
-          // The card is a Link, and Radix menus portal but still bubble React events
-          // through it, so keep any action click from navigating to the project.
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-          }}
-          onKeyDown={(e) => e.stopPropagation()}
-          role="toolbar"
-        >
-          {actions}
-        </div>
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
       )}
       <SidebarIndicator avatarUrl={project.avatarUrl} onLoadFailure={() => setImageFailed(true)} />
       <div className="p-4">
         <div
           className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
         >
-          {project.displayName || project.name}
+          {title}
         </div>
 
         <h3
@@ -82,7 +90,7 @@ export const ProjectCard = ({
             showsImage && 'mr-16'
           )}
         >
-          <span className="line-clamp-2">{project.displayName || project.name}</span>
+          <span className="line-clamp-2">{titleTarget}</span>
         </h3>
 
         <div>
@@ -125,29 +133,6 @@ export const ProjectCard = ({
           </div>
         </div>
       </div>
-    </>
-  )
-
-  if (onSelect) {
-    return (
-      <button
-        type="button"
-        onClick={onSelect}
-        aria-pressed={selected}
-        className={cn(cardClassName, 'w-full text-left')}
-      >
-        {content}
-      </button>
-    )
-  }
-
-  return (
-    <Link
-      to={linkTo ?? '/project/$projectId'}
-      params={linkParams ?? { projectId: String(project.id) }}
-      className={cardClassName}
-    >
-      {content}
-    </Link>
+    </div>
   )
 }

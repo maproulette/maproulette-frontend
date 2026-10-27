@@ -10,7 +10,7 @@ import { getStatusLabel } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 
 const cardClassName = cn(
-  'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+  'group stretched-link-container flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
   'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
   'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
 )
@@ -117,18 +117,19 @@ export const FindFeatureByName = () => {
               </div>
               <div className="space-y-2">
                 {projects.map((project) => (
-                  <Link
-                    key={`p-${project.id}`}
-                    to="/manage/project/$projectId"
-                    params={{ projectId: String(project.id) }}
-                    onClick={onResultSelect}
-                    className={cardClassName}
-                  >
+                  <div key={`p-${project.id}`} className={cardClassName}>
                     <div className="flex min-w-0 flex-1 items-center gap-3">
                       <FolderOpen className="h-5 w-5 shrink-0 text-zinc-400 dark:text-slate-500" />
                       <div className="min-w-0 flex-1">
                         <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                          {project.displayName || project.name}
+                          <Link
+                            to="/manage/project/$projectId"
+                            params={{ projectId: String(project.id) }}
+                            onClick={onResultSelect}
+                            className="stretched-link"
+                          >
+                            {project.displayName || project.name}
+                          </Link>
                         </h3>
                         {project.description && (
                           <p className="line-clamp-1 text-xs text-zinc-500 dark:text-slate-400">
@@ -138,7 +139,7 @@ export const FindFeatureByName = () => {
                       </div>
                     </div>
                     <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
@@ -166,18 +167,19 @@ export const FindFeatureByName = () => {
               </div>
               <div className="space-y-2">
                 {challenges.map((challenge) => (
-                  <Link
-                    key={`c-${challenge.id}`}
-                    to="/manage/challenge/$challengeId"
-                    params={{ challengeId: String(challenge.id) }}
-                    onClick={onResultSelect}
-                    className={cardClassName}
-                  >
+                  <div key={`c-${challenge.id}`} className={cardClassName}>
                     <div className="flex min-w-0 flex-1 items-center gap-3">
                       <Trophy className="h-5 w-5 shrink-0 text-zinc-400 dark:text-slate-500" />
                       <div className="min-w-0 flex-1">
                         <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                          {challenge.name}
+                          <Link
+                            to="/manage/challenge/$challengeId"
+                            params={{ challengeId: String(challenge.id) }}
+                            onClick={onResultSelect}
+                            className="stretched-link"
+                          >
+                            {challenge.name}
+                          </Link>
                         </h3>
                         {challenge.description && (
                           <p className="line-clamp-1 text-xs text-zinc-500 dark:text-slate-400">
@@ -187,7 +189,7 @@ export const FindFeatureByName = () => {
                       </div>
                     </div>
                     <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
@@ -213,17 +215,18 @@ export const FindFeatureByName = () => {
                     getStatusLabel(t, task.status ?? -1) ||
                     t('common.unknown', undefined, 'Unknown')
                   return (
-                    <Link
-                      key={`t-${task.id}`}
-                      to={`/challenge/${task.parent}/task/${task.id}` as string}
-                      onClick={onResultSelect}
-                      className={cardClassName}
-                    >
+                    <div key={`t-${task.id}`} className={cardClassName}>
                       <div className="flex min-w-0 flex-1 items-center gap-3">
                         <ListTodo className="h-5 w-5 shrink-0 text-zinc-400 dark:text-slate-500" />
                         <div className="min-w-0 flex-1">
                           <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                            {task.name}
+                            <Link
+                              to={`/challenge/${task.parent}/task/${task.id}` as string}
+                              onClick={onResultSelect}
+                              className="stretched-link"
+                            >
+                              {task.name}
+                            </Link>
                           </h3>
                           <p className="text-xs text-zinc-500 dark:text-slate-400">
                             {task.challengeName} &middot; {statusLabel}
@@ -231,7 +234,7 @@ export const FindFeatureByName = () => {
                         </div>
                       </div>
                       <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-                    </Link>
+                    </div>
                   )
                 })}
               </div>

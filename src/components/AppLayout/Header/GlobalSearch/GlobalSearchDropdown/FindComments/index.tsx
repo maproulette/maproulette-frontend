@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import type { Comment } from '@/types/Comment'
 
 const cardClassName = cn(
-  'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+  'group stretched-link-container flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
   'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
   'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
 )
@@ -19,16 +19,20 @@ const TaskCommentCard = ({ comment }: { comment: Comment }) => {
   const { t } = useIntl()
   const { onResultSelect } = useGlobalSearchContext()
   return (
-    <Link
-      to="/tasks/$taskId"
-      params={{
-        taskId: String(comment.taskId),
-      }}
-      onClick={onResultSelect}
-      className={cardClassName}
-    >
+    <div className={cardClassName}>
       <div className="min-w-0 flex-1 space-y-2">
-        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">{comment.comment}</p>
+        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">
+          <Link
+            to="/tasks/$taskId"
+            params={{
+              taskId: String(comment.taskId),
+            }}
+            onClick={onResultSelect}
+            className="stretched-link"
+          >
+            {comment.comment}
+          </Link>
+        </p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
             {t(
@@ -47,7 +51,7 @@ const TaskCommentCard = ({ comment }: { comment: Comment }) => {
         </div>
       </div>
       <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-    </Link>
+    </div>
   )
 }
 
@@ -55,14 +59,18 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
   const { t } = useIntl()
   const { onResultSelect } = useGlobalSearchContext()
   return (
-    <Link
-      to="/manage/challenge/$challengeId"
-      params={{ challengeId: String(comment.challengeId) }}
-      onClick={onResultSelect}
-      className={cardClassName}
-    >
+    <div className={cardClassName}>
       <div className="min-w-0 flex-1 space-y-2">
-        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">{comment.comment}</p>
+        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">
+          <Link
+            to="/manage/challenge/$challengeId"
+            params={{ challengeId: String(comment.challengeId) }}
+            onClick={onResultSelect}
+            className="stretched-link"
+          >
+            {comment.comment}
+          </Link>
+        </p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
             {t(
@@ -81,7 +89,7 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
         </div>
       </div>
       <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-    </Link>
+    </div>
   )
 }
 

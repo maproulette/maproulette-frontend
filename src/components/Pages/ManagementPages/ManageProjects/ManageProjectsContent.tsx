@@ -97,12 +97,12 @@ export const ManageProjectsContent = () => {
   } = useManageProjectsContext()
 
   useSetHeaderActions(
-    <Link to="/manage/project/new">
-      <Button size="sm" className="gap-1.5 rounded-full">
+    <Button asChild size="sm" className="gap-1.5 rounded-full">
+      <Link to="/manage/project/new">
         <Plus className="h-4 w-4" />
         {t('common.createProject', undefined, 'Create Project')}
-      </Button>
-    </Link>
+      </Link>
+    </Button>
   )
 
   const buildProjectActions = (proj: Project, isPinned: boolean) => {
@@ -446,12 +446,12 @@ export const ManageProjectsContent = () => {
                     </EmptyDescription>
                   </EmptyHeader>
                   <EmptyContent>
-                    <Link to="/manage/project/new">
-                      <Button>
+                    <Button asChild>
+                      <Link to="/manage/project/new">
                         <Plus />
                         {t('common.createProject', undefined, 'Create Project')}
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                   </EmptyContent>
                 </Empty>
               )

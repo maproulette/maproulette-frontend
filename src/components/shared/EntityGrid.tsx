@@ -41,9 +41,11 @@ export const EntityGrid = <T,>({
           <EmptyTitle>{emptyState.title}</EmptyTitle>
           <EmptyDescription>{emptyState.description}</EmptyDescription>
           {emptyState.actionLabel && emptyState.actionTo && (
-            <Link to={emptyState.actionTo} search={emptyState.actionSearch}>
-              <Button>{emptyState.actionLabel}</Button>
-            </Link>
+            <Button asChild>
+              <Link to={emptyState.actionTo} search={emptyState.actionSearch}>
+                {emptyState.actionLabel}
+              </Link>
+            </Button>
           )}
         </EmptyContent>
       </Empty>

@@ -84,6 +84,19 @@
   @apply cursor-pointer text-current underline underline-offset-4 dark:hover:text-green-400 hover:text-green-600 transition-colors [&.active]:text-green-600 dark:[&.active]:text-green-400;
 }
 
+@utility stretched-link {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  @apply outline-none;
+}
+
+@utility stretched-link-container {
+  @apply relative has-[.stretched-link:focus-visible]:ring-[3px] has-[.stretched-link:focus-visible]:ring-zinc-950/50 dark:has-[.stretched-link:focus-visible]:ring-zinc-300/50;
+}
+
 @utility container {
   margin-inline: auto;
   padding-inline: 4rem;

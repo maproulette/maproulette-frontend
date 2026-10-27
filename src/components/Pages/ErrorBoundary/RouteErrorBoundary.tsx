@@ -48,12 +48,12 @@ const NotFoundError = () => {
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t('errorBoundary.actions.goBack', undefined, 'Go Back')}
           </Button>
-          <Link to="/">
-            <Button>
+          <Button asChild>
+            <Link to="/">
               <Home className="mr-2 h-4 w-4" />
               {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </>
       }
     />
@@ -77,12 +77,12 @@ const ForbiddenError = () => {
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t('errorBoundary.actions.goBack', undefined, 'Go Back')}
           </Button>
-          <Link to="/">
-            <Button>
+          <Button asChild>
+            <Link to="/">
               <Home className="mr-2 h-4 w-4" />
               {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </>
       }
     />
@@ -101,12 +101,12 @@ const UnauthorizedError = () => {
       )}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       actions={
-        <Link to="/">
-          <Button>
+        <Button asChild>
+          <Link to="/">
             <Home className="mr-2 h-4 w-4" />
             {t('errorBoundary.actions.goToLogin', undefined, 'Go to Login')}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       }
     />
   )
@@ -138,12 +138,12 @@ const ServerError = ({ error, reset }: { error: HTTPError; reset?: () => void })
               {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
             </Button>
           )}
-          <Link to="/">
-            <Button>
+          <Button asChild>
+            <Link to="/">
               <Home className="mr-2 h-4 w-4" />
               {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </>
       }
     />
@@ -180,12 +180,12 @@ const GenericHttpError = ({ error, reset }: { error: HTTPError; reset?: () => vo
               {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
             </Button>
           )}
-          <Link to="/">
-            <Button>
+          <Button asChild>
+            <Link to="/">
               <Home className="mr-2 h-4 w-4" />
               {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </>
       }
     />
@@ -220,12 +220,12 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
               {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
             </Button>
           )}
-          <Link to="/">
-            <Button>
+          <Button asChild>
+            <Link to="/">
               <Home className="mr-2 h-4 w-4" />
               {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </>
       }
     />

@@ -265,11 +265,11 @@ export const UnifiedSearchList = () => {
 
   if (allItems.length === 0 && !isLoading) {
     return (
-      <div className="py-6 text-center">
+      <span className="py-6 text-center">
         <p className="text-xs text-zinc-500 dark:text-slate-400">
           {t('common.noResultsFound', undefined, 'No results found')}
         </p>
-      </div>
+      </span>
     )
   }
 
@@ -305,8 +305,8 @@ export const UnifiedSearchList = () => {
                     : 'border-transparent hover:border-emerald-200 hover:bg-emerald-50 dark:hover:border-emerald-900/50 dark:hover:bg-emerald-900/10'
                 )}
               >
-                <div className="flex items-center gap-2.5">
-                  <div
+                <span className="flex items-center gap-2.5">
+                  <span
                     className={cn(
                       'rounded-md p-1.5 transition-colors',
                       isSelected
@@ -322,7 +322,7 @@ export const UnifiedSearchList = () => {
                           : 'text-zinc-600 group-hover:text-emerald-600 dark:text-slate-400 dark:group-hover:text-emerald-400'
                       )}
                     />
-                  </div>
+                  </span>
                   <span
                     className={cn(
                       'truncate font-medium text-sm transition-colors',
@@ -333,7 +333,7 @@ export const UnifiedSearchList = () => {
                   >
                     {item.title}
                   </span>
-                </div>
+                </span>
               </button>
             </li>
           )
@@ -345,14 +345,9 @@ export const UnifiedSearchList = () => {
 
         return (
           <li key={item.id} data-item-index={index}>
-            <Link
-              to={item.href}
-              params={item.params}
-              onClick={item.onClick}
-              onMouseEnter={() => setSelectedIndex(index)}
-              tabIndex={-1}
+            <div
               className={cn(
-                'group flex items-center justify-between rounded-lg border px-3 py-2',
+                'group stretched-link-container flex items-center justify-between rounded-lg border px-3 py-2',
                 'transition-all duration-200',
                 isSelected
                   ? 'border-emerald-200 bg-emerald-50 shadow-md dark:border-emerald-900/50 dark:bg-emerald-900/10'
@@ -380,7 +375,16 @@ export const UnifiedSearchList = () => {
                           : 'text-zinc-900 group-hover:text-emerald-600 dark:text-white dark:group-hover:text-emerald-400'
                       )}
                     >
-                      {item.title}
+                      <Link
+                        to={item.href}
+                        params={item.params}
+                        onClick={item.onClick}
+                        onMouseEnter={() => setSelectedIndex(index)}
+                        tabIndex={-1}
+                        className="stretched-link"
+                      >
+                        {item.title}
+                      </Link>
                     </h3>
                     {item.badge && (
                       <span
@@ -396,7 +400,7 @@ export const UnifiedSearchList = () => {
                 </div>
               </div>
               <ChevronRight className="ml-2 h-4 w-4 shrink-0 text-zinc-400 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-500 dark:text-slate-500 dark:group-hover:text-emerald-400" />
-            </Link>
+            </div>
           </li>
         )
       })}

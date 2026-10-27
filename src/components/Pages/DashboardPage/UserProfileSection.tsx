@@ -90,7 +90,7 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
           onClick={() => setLevelModalOpen(true)}
           className="cursor-pointer px-6 py-4 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50"
         >
-          <div className="mb-2 flex items-center justify-between text-sm">
+          <span className="mb-2 flex items-center justify-between text-sm">
             <span className="font-medium text-zinc-700 dark:text-slate-300">
               {t('common.level', { level: userLevel }, 'Level {level}')}
             </span>
@@ -104,13 +104,13 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
                 '{current} / {total} to next level'
               )}
             </span>
-          </div>
-          <div className="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-700">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-500"
+          </span>
+          <span className="block h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-700">
+            <span
+              className="block h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-500"
               style={{ width: `${levelProgress}%` }}
             />
-          </div>
+          </span>
         </button>
 
         {/* Random-task roulette - hidden until we're ready to launch it */}

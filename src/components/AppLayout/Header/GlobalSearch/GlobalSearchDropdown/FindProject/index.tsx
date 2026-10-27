@@ -131,20 +131,24 @@ export const FindProject = () => {
             ) : (
               <>
                 {results.map((result: Project) => (
-                  <Link
+                  <div
                     key={result.id}
-                    to="/project/$projectId"
-                    params={{ projectId: String(result.id) }}
-                    onClick={onResultSelect}
                     className={cn(
-                      'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+                      'group stretched-link-container flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
                       'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
                       'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
                     )}
                   >
                     <div className="min-w-0 flex-1 space-y-2">
                       <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                        {result.displayName || result.name}
+                        <Link
+                          to="/project/$projectId"
+                          params={{ projectId: String(result.id) }}
+                          onClick={onResultSelect}
+                          className="stretched-link"
+                        >
+                          {result.displayName || result.name}
+                        </Link>
                       </h3>
                       {result.description && (
                         <p className="line-clamp-2 text-sm text-zinc-600 leading-relaxed dark:text-slate-400">
@@ -153,7 +157,7 @@ export const FindProject = () => {
                       )}
                     </div>
                     <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-                  </Link>
+                  </div>
                 ))}
 
                 {hasMore && <div ref={loadMoreRef} className="h-4" />}

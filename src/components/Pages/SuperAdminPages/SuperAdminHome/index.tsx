@@ -37,182 +37,192 @@ export const SuperAdminHome = () => {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {/* Users */}
-        <Link to="/super-admin/users">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
-                <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <CardTitle>{t('superAdminHome.cards.users.title', undefined, 'Users')}</CardTitle>
-              <CardDescription>
-                {t(
-                  'superAdminHome.cards.users.description',
-                  undefined,
-                  'Manage all platform users and permissions'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
-                {t('superAdminHome.cards.users.button', undefined, 'View Users')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
+              <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/users" className="stretched-link">
+                {t('superAdminHome.cards.users.title', undefined, 'Users')}
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.users.description',
+                undefined,
+                'Manage all platform users and permissions'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>{t('superAdminHome.cards.users.button', undefined, 'View Users')}</span>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Projects */}
-        <Link to="/super-admin/projects">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
-                <FolderKanban className="h-6 w-6 text-green-600 dark:text-green-400" />
-              </div>
-              <CardTitle>{t('common.projects', undefined, 'Projects')}</CardTitle>
-              <CardDescription>
-                {t(
-                  'common.viewManageProjectsSubtitle',
-                  undefined,
-                  'View and manage all projects across the platform'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
-                {t('common.viewProjects', undefined, 'View Projects')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900">
+              <FolderKanban className="h-6 w-6 text-green-600 dark:text-green-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/projects" className="stretched-link">
+                {t('common.projects', undefined, 'Projects')}
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'common.viewManageProjectsSubtitle',
+                undefined,
+                'View and manage all projects across the platform'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>{t('common.viewProjects', undefined, 'View Projects')}</span>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Challenges */}
-        <Link to="/super-admin/challenges">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
-                <ListChecks className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-              </div>
-              <CardTitle>{t('common.challenges', undefined, 'Challenges')}</CardTitle>
-              <CardDescription>
-                {t(
-                  'superAdminHome.cards.challenges.description',
-                  undefined,
-                  'Browse and manage all challenges'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
-                {t('common.viewChallenges', undefined, 'View Challenges')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900">
+              <ListChecks className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/challenges" className="stretched-link">
+                {t('common.challenges', undefined, 'Challenges')}
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.challenges.description',
+                undefined,
+                'Browse and manage all challenges'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>{t('common.viewChallenges', undefined, 'View Challenges')}</span>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Challenge reports */}
-        <Link to="/super-admin/challenge-reports">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900">
-                <Flag className="h-6 w-6 text-red-600 dark:text-red-400" />
-              </div>
-              <CardTitle>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900">
+              <Flag className="h-6 w-6 text-red-600 dark:text-red-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/challenge-reports" className="stretched-link">
                 {t('superAdminHome.cards.challengeReports.title', undefined, 'Challenge Reports')}
-              </CardTitle>
-              <CardDescription>
-                {t(
-                  'superAdminHome.cards.challengeReports.description',
-                  undefined,
-                  'Triage reports that a challenge is causing incorrect edits'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.challengeReports.description',
+                undefined,
+                'Triage reports that a challenge is causing incorrect edits'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>
                 {t(
                   'superAdminHome.cards.challengeReports.button',
                   undefined,
                   'View Challenge Reports'
                 )}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+              </span>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Team challenge images */}
-        <Link to="/super-admin/team-images">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-pink-100 dark:bg-pink-900">
-                <ImageIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />
-              </div>
-              <CardTitle>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-pink-100 dark:bg-pink-900">
+              <ImageIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/team-images" className="stretched-link">
                 {t('superAdminHome.cards.teamImages.title', undefined, 'Team Images')}
-              </CardTitle>
-              <CardDescription>
-                {t(
-                  'superAdminHome.cards.teamImages.description',
-                  undefined,
-                  'Review challenge images teams have requested'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
-                {t('superAdminHome.cards.teamImages.button', undefined, 'Review Images')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.teamImages.description',
+                undefined,
+                'Review challenge images teams have requested'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>{t('superAdminHome.cards.teamImages.button', undefined, 'Review Images')}</span>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Plugins */}
-        <Link to="/super-admin/plugins">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900">
-                <Puzzle className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-              </div>
-              <CardTitle>{t('superAdminHome.cards.plugins.title', undefined, 'Plugins')}</CardTitle>
-              <CardDescription>
-                {t(
-                  'superAdminHome.cards.plugins.description',
-                  undefined,
-                  'Manage plugins and integrations'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
-                {t('superAdminHome.cards.plugins.button', undefined, 'View Plugins')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-900">
+              <Puzzle className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/plugins" className="stretched-link">
+                {t('superAdminHome.cards.plugins.title', undefined, 'Plugins')}
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.plugins.description',
+                undefined,
+                'Manage plugins and integrations'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>{t('superAdminHome.cards.plugins.button', undefined, 'View Plugins')}</span>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Analytics */}
-        <Link to="/super-admin/analytics">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900">
-                <BarChart3 className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-              </div>
-              <CardTitle>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900">
+              <BarChart3 className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/analytics" className="stretched-link">
                 {t('superAdminHome.cards.analytics.title', undefined, 'Analytics')}
-              </CardTitle>
-              <CardDescription>
-                {t(
-                  'superAdminHome.cards.analytics.description',
-                  undefined,
-                  'View platform-wide analytics and metrics'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
-                {t('superAdminHome.cards.analytics.button', undefined, 'View Analytics')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.analytics.description',
+                undefined,
+                'View platform-wide analytics and metrics'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>{t('superAdminHome.cards.analytics.button', undefined, 'View Analytics')}</span>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Database */}
         <Card className="opacity-50">
@@ -237,30 +247,30 @@ export const SuperAdminHome = () => {
         </Card>
 
         {/* Settings */}
-        <Link to="/super-admin/settings">
-          <Card className="cursor-pointer transition-shadow hover:shadow-md">
-            <CardHeader>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 dark:bg-slate-800">
-                <Settings className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
-              </div>
-              <CardTitle>
+        <Card className="stretched-link-container transition-shadow hover:shadow-md">
+          <CardHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-zinc-100 dark:bg-slate-800">
+              <Settings className="h-6 w-6 text-zinc-600 dark:text-zinc-400" />
+            </div>
+            <CardTitle>
+              <Link to="/super-admin/settings" className="stretched-link">
                 {t('superAdminHome.cards.settings.title', undefined, 'Settings')}
-              </CardTitle>
-              <CardDescription>
-                {t(
-                  'superAdminHome.cards.settings.description',
-                  undefined,
-                  'Platform settings and configuration'
-                )}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full">
-                {t('superAdminHome.cards.settings.button', undefined, 'View Settings')}
-              </Button>
-            </CardContent>
-          </Card>
-        </Link>
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'superAdminHome.cards.settings.description',
+                undefined,
+                'Platform settings and configuration'
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <span>{t('superAdminHome.cards.settings.button', undefined, 'View Settings')}</span>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

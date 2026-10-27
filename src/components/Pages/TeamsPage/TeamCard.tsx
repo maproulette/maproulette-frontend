@@ -27,11 +27,7 @@ export const TeamCard = ({ membership }: Props) => {
     membership.teamName || t('common.team', { teamId: membership.teamId }, 'Team #{teamId}')
   const role = teamDisplayRole(membership)
   return (
-    <Link
-      to="/teams/$teamId"
-      params={{ teamId: String(membership.teamId) }}
-      className="group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110"
-    >
+    <div className="group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110">
       <div className="flex items-center gap-3 p-4">
         <Avatar className="size-10">
           <AvatarImage src={resolveTeamImageUrl(team?.avatarURL) ?? ''} alt={name} />
@@ -41,7 +37,13 @@ export const TeamCard = ({ membership }: Props) => {
         </Avatar>
         <div className="min-w-0 flex-1">
           <div className="truncate font-semibold text-base text-zinc-900 leading-tight dark:text-white">
-            {name}
+            <Link
+              to="/teams/$teamId"
+              params={{ teamId: String(membership.teamId) }}
+              className="stretched-link"
+            >
+              {name}
+            </Link>
           </div>
           <span
             className={cn(
@@ -53,6 +55,6 @@ export const TeamCard = ({ membership }: Props) => {
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

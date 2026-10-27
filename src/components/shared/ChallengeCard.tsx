@@ -86,30 +86,14 @@ export const ChallengeCard = ({
   const displayParentName = parentName ?? embeddedParentName
 
   return (
-    <Link
-      to={linkTo ?? '/challenge/$challengeId'}
-      params={linkParams ?? { challengeId: challenge.id.toString() }}
-      search={linkSearch}
-      onClick={onLinkClick}
+    <div
       className={cn(
-        'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
+        'group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
         className
       )}
     >
       {actions && (
-        <div
-          className="absolute top-3 right-3 z-10 flex items-center gap-1"
-          // The card is a Link, and Radix menus portal but still bubble React events
-          // through it, so keep any action click from navigating to the challenge.
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-          }}
-          onKeyDown={(e) => e.stopPropagation()}
-          role="toolbar"
-        >
-          {actions}
-        </div>
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
       )}
       <SidebarIndicator
         avatarUrl={challenge.avatarUrl}
@@ -128,7 +112,17 @@ export const ChallengeCard = ({
             showsImage && 'mr-16'
           )}
         >
-          <span className="line-clamp-2">{challenge.name}</span>
+          <span className="line-clamp-2">
+            <Link
+              to={linkTo ?? '/challenge/$challengeId'}
+              params={linkParams ?? { challengeId: challenge.id.toString() }}
+              search={linkSearch}
+              onClick={onLinkClick}
+              className="stretched-link"
+            >
+              {challenge.name}
+            </Link>
+          </span>
         </h3>
 
         <div>
@@ -168,6 +162,6 @@ export const ChallengeCard = ({
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

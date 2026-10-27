@@ -31,14 +31,18 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
       </div>
       <div className="space-y-1.5">
         {lockedTasks.map((lockedTask) => (
-          <Link
+          <div
             key={lockedTask.id}
-            to="/tasks/$taskId"
-            params={{ taskId: String(lockedTask.id) }}
-            className="block rounded-lg border border-zinc-200 bg-white px-3 py-2 transition-colors hover:border-amber-400 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-amber-500/60"
+            className="stretched-link-container rounded-lg border border-zinc-200 bg-white px-3 py-2 transition-colors hover:border-amber-400 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-amber-500/60"
           >
             <div className="flex items-center gap-1.5 font-medium text-emerald-400 text-sm">
-              <span className="truncate">{lockedTask.parentName}</span>
+              <Link
+                to="/tasks/$taskId"
+                params={{ taskId: String(lockedTask.id) }}
+                className="stretched-link truncate"
+              >
+                {lockedTask.parentName}
+              </Link>
             </div>
             <div className="mt-0.5 flex items-center gap-2 text-xs text-zinc-500 dark:text-slate-400">
               <span>
@@ -62,7 +66,7 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
                 <span className="ml-auto">{formatTimeAgo(new Date(lockedTask.startedAt))}</span>
               ) : null}
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

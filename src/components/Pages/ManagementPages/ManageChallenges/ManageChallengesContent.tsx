@@ -89,12 +89,12 @@ export const ManageChallengesContent = () => {
   const [showPanel, setShowPanel] = useState(true)
 
   useSetHeaderActions(
-    <Link to="/manage/challenge/new">
-      <Button size="sm" className="gap-1.5 rounded-full">
+    <Button asChild size="sm" className="gap-1.5 rounded-full">
+      <Link to="/manage/challenge/new">
         <Plus className="h-4 w-4" />
         {t('common.createChallenge', undefined, 'Create Challenge')}
-      </Button>
-    </Link>
+      </Link>
+    </Button>
   )
 
   const buildChallengeActions = (challenge: ChallengeListing, isPinned: boolean) => {

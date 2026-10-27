@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { ExternalLink, Package, Play, Share2, X, ZoomIn } from 'lucide-react'
 import { useMemo } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
@@ -33,7 +33,6 @@ interface TaskInfoDrawerProps {
 
 export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawerProps) => {
   const { t } = useIntl()
-  const navigate = useNavigate()
   const navigateToTask = useNavigateToTask()
 
   const { data: fullTask } = api.task.getTask(selectedTask?.id ?? 0)
@@ -248,21 +247,16 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                       {bundleData.taskIds
                         .filter((id) => id !== task.id)
                         .map((taskId) => (
-                          <button
+                          <Link
                             key={taskId}
-                            type="button"
-                            onClick={() =>
-                              navigate({
-                                to: '/tasks/$taskId',
-                                params: { taskId: taskId.toString() },
-                              })
-                            }
+                            to="/tasks/$taskId"
+                            params={{ taskId: taskId.toString() }}
                             className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
                           >
                             <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
                               {t('common.taskWithId', { id: taskId }, 'Task #{id}')}
                             </span>
-                          </button>
+                          </Link>
                         ))}
                     </div>
                   </div>

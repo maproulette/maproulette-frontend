@@ -29,7 +29,7 @@ export const MultiTaskPanel = () => {
     >
       {/* Header - always visible, clickable to expand/collapse */}
       <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
-        <div className="flex items-center gap-2">
+        <span className="flex items-center gap-2">
           <Users className="h-4 w-4 text-blue-500" />
           <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
             {activeBundle ? (
@@ -47,7 +47,7 @@ export const MultiTaskPanel = () => {
               t('taskMap.multiTaskPanel.title', undefined, 'Work on multiple tasks')
             )}
           </span>
-        </div>
+        </span>
         <ChevronDown
           className={cn(
             'h-4 w-4 text-zinc-400 transition-transform',
