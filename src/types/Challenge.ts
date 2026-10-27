@@ -48,21 +48,8 @@ export type ExploreChallengesRequest = NonNullable<ExploreChallengesParams> & {
  * CompletionMetrics case class. Stored directly on the object so consumers do
  * not need to fetch a separate stats endpoint.
  */
-export type CompletionMetrics = {
-  total: number
-  available: number
-  fixed: number
-  falsePositive: number
-  skipped: number
-  deleted: number
-  alreadyFixed: number
-  tooHard: number
-  answered: number
-  validated: number
-  disabled: number
-  /** Derived: available + skipped + tooHard */
-  tasksRemaining: number
-}
+export type CompletionMetrics =
+  components['schemas']['org.maproulette.framework.model.CompletionMetrics']
 
 /* Types From API */
 // `tasksRemaining` has moved into `completionMetrics`; omit it from the
