@@ -18,7 +18,6 @@ const useManageProjectsState = () => {
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyShowArchived, setOnlyShowArchived] = useState(false)
   const [onlyShowPinned, setOnlyShowPinned] = useState(false)
-  const [showPanel, setShowPanel] = useState(true)
   const [deleteProjectConfirm, setDeleteProjectConfirm] = useState<{
     projectId: number
     projectName: string
@@ -139,8 +138,6 @@ const useManageProjectsState = () => {
     setOnlyShowPinned,
     viewMode,
     setViewMode,
-    showPanel,
-    setShowPanel,
     loadMore,
     pinnedProjectIds,
     toggleProjectPin,

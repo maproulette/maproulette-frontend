@@ -1,20 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import {
   Archive,
-  BookOpen,
   Copy,
   Eye,
   EyeOff,
-  FolderKanban,
   Hammer,
   ListChecks,
-  ListOrdered,
   MoreHorizontal,
-  PanelLeftClose,
   PanelLeftOpen,
   Pause,
   Pencil,
-  PencilLine,
   Pin,
   Play,
   Plus,
@@ -24,7 +19,6 @@ import {
 import { useState } from 'react'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
-import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
 import { SearchBar } from '@/components/shared/SearchBar'
@@ -51,6 +45,7 @@ import { useIntl } from '@/i18n'
 import { isStartableChallengeStatus } from '@/lib/challengeStatus'
 import { cn } from '@/lib/utils'
 import type { ChallengeListing } from '@/types/Challenge'
+import { ManageInfoPanel } from '../shared/ManageInfoPanel'
 import { useManageChallengesContext } from './ManageChallengesContext'
 
 export const ManageChallengesContent = () => {
@@ -294,138 +289,42 @@ export const ManageChallengesContent = () => {
     <div className="h-full">
       <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-3' : '')}>
         {showPanel && (
-          <aside className="h-full min-h-0 overflow-hidden">
-            <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
-              <div className="flex items-start justify-between px-6 pt-6 pb-2">
-                <div className="space-y-2.5">
-                  <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    {t(
-                      'manageChallenges.content.aboutChallengesTitle',
-                      undefined,
-                      'About Challenges'
-                    )}
-                  </h2>
-                  <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    {t(
-                      'manageChallenges.content.aboutChallengesBody',
-                      undefined,
-                      'Challenges contain tasks that mappers work through to improve OpenStreetMap data.'
-                    )}
-                  </p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 shrink-0"
-                  onClick={() => setShowPanel(false)}
-                  title={t('common.hidePanel', undefined, 'Hide panel')}
-                >
-                  <PanelLeftClose className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
-                <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
-                  <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageChallenges.content.tipWriteClearInstructionsTitle',
-                        undefined,
-                        'Write clear instructions'
-                      )}
-                    </p>
-                    <p>
-                      {t(
-                        'manageChallenges.content.tipWriteClearInstructionsBody',
-                        undefined,
-                        'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.'
-                      )}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageChallenges.content.tipSetDifficultyTitle',
-                        undefined,
-                        'Set appropriate difficulty'
-                      )}
-                    </p>
-                    <p>
-                      {t(
-                        'manageChallenges.content.tipSetDifficultyBody',
-                        undefined,
-                        'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.'
-                      )}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageChallenges.content.tipMonitorProgressTitle',
-                        undefined,
-                        'Monitor progress'
-                      )}
-                    </p>
-                    <p>
-                      {t(
-                        'manageChallenges.content.tipMonitorProgressBody',
-                        undefined,
-                        'Check completion rates and review feedback. Archive challenges once all tasks are resolved.'
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
-                <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-                  {t('manageChallenges.content.quickLinks', undefined, 'Quick Links')}
-                </p>
-                <div className="space-y-2">
-                  <Link
-                    to="/manage/projects"
-                    className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
-                  >
-                    <FolderKanban className="h-3.5 w-3.5 text-zinc-500" />
-                    {t('manageChallenges.content.manageProjectsLink', undefined, 'Manage Projects')}
-                  </Link>
-                  <DocsLink
-                    page="creatingAChallenge"
-                    icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
-                    className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
-                  >
-                    {t(
-                      'manageChallenges.content.challengeCreationGuideLink',
-                      undefined,
-                      'Challenge Creation Guide'
-                    )}
-                  </DocsLink>
-                  <DocsLink
-                    page="taskPriorityRules"
-                    icon={<ListOrdered className="h-3.5 w-3.5 text-zinc-500" />}
-                    className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
-                  >
-                    {t(
-                      'manageChallenges.content.taskPriorityRulesLink',
-                      undefined,
-                      'Task Priority Rules'
-                    )}
-                  </DocsLink>
-                  <DocsLink
-                    page="bulkEditingChallenges"
-                    icon={<PencilLine className="h-3.5 w-3.5 text-zinc-500" />}
-                    className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
-                  >
-                    {t(
-                      'manageChallenges.content.bulkEditingLink',
-                      undefined,
-                      'Bulk Editing Challenges'
-                    )}
-                  </DocsLink>
-                </div>
-              </div>
-            </div>
-          </aside>
+          <ManageInfoPanel
+            title={t('manageChallenges.content.aboutChallengesTitle')}
+            description={t('manageChallenges.content.aboutChallengesBody')}
+            sections={[
+              {
+                id: 'manageChallenges.content.tipWriteClearInstructionsTitle',
+                title: t('manageChallenges.content.tipWriteClearInstructionsTitle'),
+                description: t('manageChallenges.content.tipWriteClearInstructionsBody'),
+              },
+              {
+                id: 'manageChallenges.content.tipSetDifficultyTitle',
+                title: t('manageChallenges.content.tipSetDifficultyTitle'),
+                description: t('manageChallenges.content.tipSetDifficultyBody'),
+              },
+              {
+                id: 'manageChallenges.content.tipMonitorProgressTitle',
+                title: t('manageChallenges.content.tipMonitorProgressTitle'),
+                description: t('manageChallenges.content.tipMonitorProgressBody'),
+              },
+            ]}
+            docs={[
+              {
+                page: 'creatingAChallenge',
+                text: t('manageChallenges.content.challengeCreationGuideLink'),
+              },
+              {
+                page: 'taskPriorityRules',
+                text: t('manageChallenges.content.taskPriorityRulesLink'),
+              },
+              {
+                page: 'bulkEditingChallenges',
+                text: t('manageChallenges.content.bulkEditingLink'),
+              },
+            ]}
+            onClose={() => setShowPanel(false)}
+          />
         )}
 
         <div

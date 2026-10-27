@@ -1,19 +1,16 @@
 import { Link } from '@tanstack/react-router'
 import {
   Archive,
-  BookOpen,
   CheckCircle2,
   Eye,
   FolderKanban,
-  PanelLeftClose,
   PanelLeftOpen,
   Pin,
   Plus,
   User,
-  Users,
 } from 'lucide-react'
+import { useState } from 'react'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
-import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
 import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
@@ -32,14 +29,11 @@ import { Spinner } from '@/components/ui/Spinner'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
+import { ManageInfoPanel } from '../shared/ManageInfoPanel'
 import { DeleteProjectDialog } from './DeleteProjectDialog'
 import { useManageProjectsContext } from './ManageProjectsContext'
 import { ProjectActions } from './ProjectActions'
 import { ProjectsTableView } from './ProjectsTableView'
-
-// Shared styling for the docs links in the "Helpful Docs" panel.
-const DOCS_LINK_CLASS =
-  'gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200'
 
 export const ManageProjectsContent = () => {
   const { t } = useIntl()
@@ -60,13 +54,13 @@ export const ManageProjectsContent = () => {
     setOnlyShowPinned,
     viewMode,
     setViewMode,
-    showPanel,
-    setShowPanel,
     loadMore,
     pinnedProjectIds,
     toggleProjectPin,
     challengesPerProject,
   } = useManageProjectsContext()
+
+  const [showPanel, setShowPanel] = useState(true)
 
   useSetHeaderActions(
     <Link to="/manage/project/new">
@@ -81,106 +75,34 @@ export const ManageProjectsContent = () => {
     <div className="h-full">
       <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-4' : '')}>
         {showPanel && (
-          <aside className="h-full min-h-0 overflow-hidden">
-            <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
-              <div className="flex items-start justify-between px-6 pt-6 pb-2">
-                <div className="space-y-2.5">
-                  <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    {t('manageProjects.content.aboutTitle', undefined, 'About Projects')}
-                  </h2>
-                  <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    {t(
-                      'manageProjects.content.aboutDescription',
-                      undefined,
-                      'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.'
-                    )}
-                  </p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 shrink-0"
-                  onClick={() => setShowPanel(false)}
-                  title={t('common.hidePanel', undefined, 'Hide panel')}
-                >
-                  <PanelLeftClose className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
-                <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
-                  <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t('manageProjects.content.tipScopeTitle', undefined, 'Define scope early')}
-                    </p>
-                    <p>
-                      {t(
-                        'manageProjects.content.tipScopeBody',
-                        undefined,
-                        'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.'
-                      )}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageProjects.content.tipPublishTitle',
-                        undefined,
-                        'Publish intentionally'
-                      )}
-                    </p>
-                    <p>
-                      {t(
-                        'manageProjects.content.tipPublishBody',
-                        undefined,
-                        'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.'
-                      )}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t('manageProjects.content.tipOwnershipTitle', undefined, 'Share ownership')}
-                    </p>
-                    <p>
-                      {t(
-                        'manageProjects.content.tipOwnershipBody',
-                        undefined,
-                        'Add co-managers before launch so triage, support, and archival responsibilities are covered.'
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
-                <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-                  {t('manageProjects.content.helpfulDocs', undefined, 'Helpful Docs')}
-                </p>
-                <div className="space-y-2">
-                  <DocsLink
-                    icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
-                    className={DOCS_LINK_CLASS}
-                  >
-                    {t('manageProjects.content.learnHub', undefined, 'Learn Hub')}
-                  </DocsLink>
-                  <DocsLink
-                    page="creatingAChallenge"
-                    icon={<Users className="h-3.5 w-3.5 text-zinc-500" />}
-                    className={DOCS_LINK_CLASS}
-                  >
-                    {t('manageProjects.content.challengeCreation', undefined, 'Challenge Creation')}
-                  </DocsLink>
-                  <DocsLink
-                    page="projectsAndProjectManagers"
-                    icon={<FolderKanban className="h-3.5 w-3.5 text-zinc-500" />}
-                    className={DOCS_LINK_CLASS}
-                  >
-                    {t('manageProjects.content.projectManagement', undefined, 'Project Management')}
-                  </DocsLink>
-                </div>
-              </div>
-            </div>
-          </aside>
+          <ManageInfoPanel
+            title={t('manageProjects.content.aboutTitle')}
+            description={t('manageProjects.content.aboutDescription')}
+            sections={[
+              {
+                id: 'manageProjects.content.tipScopeTitle',
+                title: t('manageProjects.content.tipScopeTitle'),
+                description: t('manageProjects.content.tipScopeBody'),
+              },
+              {
+                id: 'manageProjects.content.tipPublishTitle',
+                title: t('manageProjects.content.tipPublishTitle'),
+                description: t('manageProjects.content.tipPublishBody'),
+              },
+              {
+                id: 'manageProjects.content.tipOwnershipTitle',
+                title: t('manageProjects.content.tipOwnershipTitle'),
+                description: t('manageProjects.content.tipOwnershipBody'),
+              },
+            ]}
+            docs={[
+              {
+                page: 'projectsAndProjectManagers',
+                text: t('manageProjects.content.projectManagement'),
+              },
+            ]}
+            onClose={() => setShowPanel(false)}
+          />
         )}
 
         <div
