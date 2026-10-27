@@ -25,16 +25,6 @@ import { FilterToggle } from '@/components/shared/FilterToggle'
 import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/AlertDialog'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -55,6 +45,7 @@ import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
+import { DeleteProjectDialog } from './DeleteProjectDialog'
 import { useManageProjectsContext } from './ManageProjectsContext'
 import { ProjectsTableView } from './ProjectsTableView'
 
@@ -90,10 +81,7 @@ export const ManageProjectsContent = () => {
     updateProject,
     handleExportCsv,
     handleArchiveProject,
-    deleteProjectConfirm,
     handleDeleteProject,
-    confirmDeleteProject,
-    setDeleteProjectConfirm,
   } = useManageProjectsContext()
 
   useSetHeaderActions(
@@ -534,35 +522,7 @@ export const ManageProjectsContent = () => {
           </div>
         </div>
       </div>
-
-      <AlertDialog
-        open={!!deleteProjectConfirm}
-        onOpenChange={(open) => !open && setDeleteProjectConfirm(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t('common.deleteProject2', undefined, 'Delete project?')}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {t(
-                'manageProjects.content.deleteProjectDescription',
-                { projectName: deleteProjectConfirm?.projectName ?? '' },
-                'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.'
-              )}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteProject}
-              className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
-            >
-              {t('common.delete', undefined, 'Delete')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteProjectDialog />
     </div>
   )
 }
