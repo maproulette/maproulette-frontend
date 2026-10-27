@@ -85,7 +85,7 @@ export const ProjectPickerModal = ({
   })
 
   const hasNextPage = (projects?.length ?? 0) >= PAGE_SIZE * loadedPages
-  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects ?? [])
 
   const { user } = useAuthContext()
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
@@ -198,7 +198,7 @@ export const ProjectPickerModal = ({
                   project={project}
                   challengeMeta={{
                     totalChallenges:
-                      project.id != null ? (challengeCountsByProjectId[project.id] ?? 0) : 0,
+                      project.id != null ? (challengeCountsByProjectId[project.id]?.total ?? 0) : 0,
                     pinned: 0,
                     completed: 0,
                   }}

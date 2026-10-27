@@ -77,7 +77,7 @@ export const ManageProjectsContent = () => {
     loadMore,
     pinnedProjectIds,
     toggleProjectPin,
-    challengeCountsByProjectId,
+    challengesPerProject,
     updateProject,
     handleExportCsv,
     handleArchiveProject,
@@ -409,7 +409,7 @@ export const ManageProjectsContent = () => {
               (projectsToShow?.length ?? 0) > 0 ? (
                 <ProjectsTableView
                   projects={projectsToShow}
-                  challengeCountsByProjectId={challengeCountsByProjectId}
+                  challengeCountsByProjectId={challengesPerProject}
                   pinnedProjectIds={pinnedProjectIds}
                   onTogglePin={toggleProjectPin}
                   onExportCsv={handleExportCsv}
@@ -454,7 +454,7 @@ export const ManageProjectsContent = () => {
                     const projectId = proj.id
                     const isPinned = projectId != null && pinnedProjectIds.includes(projectId)
                     const count =
-                      projectId != null ? (challengeCountsByProjectId[projectId] ?? 0) : 0
+                      projectId != null ? (challengesPerProject[projectId]?.total ?? 0) : 0
                     const challengeMeta: ChallengeMeta = {
                       totalChallenges: count,
                       pinned: 0,

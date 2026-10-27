@@ -158,6 +158,7 @@ export const challengeExplore = {
     options?: { limit?: number; page?: number; onlyEnabled?: boolean }
   ) =>
     queryOptions({
+      enabled: projectIds.length > 0,
       queryKey: [
         'challenge',
         'listing',

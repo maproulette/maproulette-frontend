@@ -28,10 +28,11 @@ import {
 } from '@/components/ui/Table'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
+import type { ChallengeCounts } from './useProjectChallengeCounts'
 
 interface ProjectsTableViewProps {
   projects: Project[]
-  challengeCountsByProjectId?: Record<number, number>
+  challengeCountsByProjectId?: Record<number, ChallengeCounts>
   pinnedProjectIds?: number[]
   onTogglePin?: (projectId: number) => void
   onExportCsv?: (projectId: number) => void
@@ -156,7 +157,7 @@ export const ProjectsTableView = ({
                   {project.id}
                 </TableCell>
                 <TableCell className="hidden text-center md:table-cell">
-                  {project.id != null ? (challengeCountsByProjectId[project.id] ?? '—') : '—'}
+                  {project.id != null ? (challengeCountsByProjectId[project.id]?.total ?? '—') : '—'}
                 </TableCell>
                 <TableCell className="hidden max-w-[240px] truncate text-zinc-600 lg:table-cell dark:text-zinc-400">
                   {project.description || '—'}

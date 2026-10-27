@@ -68,7 +68,7 @@ const useManageProjectsState = () => {
     return byArchived
   }, [projectsSortedByPinned, onlyShowArchived, onlyShowPinned, pinnedProjectIds])
 
-  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
+  const challengesPerProject = useProjectChallengeCounts(projects ?? [])
 
   const handleExportCsv = (projectId: number) => {
     const name =
@@ -144,7 +144,7 @@ const useManageProjectsState = () => {
     loadMore,
     pinnedProjectIds,
     toggleProjectPin,
-    challengeCountsByProjectId,
+    challengesPerProject,
     updateProject,
     handleExportCsv,
     handleArchiveProject,
