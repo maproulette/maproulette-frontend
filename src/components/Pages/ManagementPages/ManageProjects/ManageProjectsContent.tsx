@@ -3,18 +3,12 @@ import {
   Archive,
   BookOpen,
   CheckCircle2,
-  Copy,
   Eye,
-  EyeOff,
-  FileDown,
   FolderKanban,
-  MoreHorizontal,
   PanelLeftClose,
   PanelLeftOpen,
-  Pencil,
   Pin,
   Plus,
-  Trash2,
   User,
   Users,
 } from 'lucide-react'
@@ -27,12 +21,6 @@ import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import { Button } from '@/components/ui/Button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu'
-import {
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -44,9 +32,9 @@ import { Spinner } from '@/components/ui/Spinner'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
-import type { Project } from '@/types/Project'
 import { DeleteProjectDialog } from './DeleteProjectDialog'
 import { useManageProjectsContext } from './ManageProjectsContext'
+import { ProjectActions } from './ProjectActions'
 import { ProjectsTableView } from './ProjectsTableView'
 
 // Shared styling for the docs links in the "Helpful Docs" panel.
@@ -78,10 +66,6 @@ export const ManageProjectsContent = () => {
     pinnedProjectIds,
     toggleProjectPin,
     challengesPerProject,
-    updateProject,
-    handleExportCsv,
-    handleArchiveProject,
-    handleDeleteProject,
   } = useManageProjectsContext()
 
   useSetHeaderActions(
@@ -92,150 +76,6 @@ export const ManageProjectsContent = () => {
       </Button>
     </Link>
   )
-
-  const buildProjectActions = (proj: Project, isPinned: boolean) => {
-    const projectId = proj.id
-    return (
-      <div className="flex items-center gap-1">
-        {projectId != null && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={(e) => {
-              e.preventDefault()
-              toggleProjectPin(projectId)
-            }}
-            title={
-              isPinned
-                ? t('common.unpinProject', undefined, 'Unpin project')
-                : t('common.pinProject', undefined, 'Pin project')
-            }
-            aria-label={
-              isPinned
-                ? t('common.unpinProject', undefined, 'Unpin project')
-                : t('common.pinProject', undefined, 'Pin project')
-            }
-          >
-            <Pin
-              className={cn(
-                'h-4 w-4',
-                isPinned
-                  ? 'text-amber-600 dark:text-amber-400'
-                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-              )}
-            />
-          </Button>
-        )}
-        {projectId != null && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={(e) => {
-              e.preventDefault()
-              updateProject(projectId, { enabled: !(proj.enabled ?? false) })
-            }}
-            title={
-              proj.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
-            }
-            aria-label={
-              proj.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
-            }
-          >
-            {proj.enabled ? (
-              <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            ) : (
-              <EyeOff className="h-4 w-4 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400" />
-            )}
-          </Button>
-        )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <Link
-                to="/manage/project/$projectId"
-                params={{ projectId: String(projectId) }}
-                className="flex cursor-pointer items-center gap-2"
-              >
-                <Eye className="h-4 w-4" />
-                {t('common.viewProject', undefined, 'View project')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to="/manage/project/$projectId/edit"
-                params={{ projectId: String(projectId) }}
-                className="flex cursor-pointer items-center gap-2"
-              >
-                <Pencil className="h-4 w-4" />
-                {t('common.editProject', undefined, 'Edit project')}
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to="/manage/challenge/new"
-                search={{ projectId: Number(projectId) }}
-                className="flex cursor-pointer items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                {t('common.addChallenge', undefined, 'Add challenge')}
-              </Link>
-            </DropdownMenuItem>
-            {projectId != null && (
-              <DropdownMenuItem
-                onClick={() => handleExportCsv(projectId)}
-                className="flex cursor-pointer items-center gap-2"
-              >
-                <FileDown className="h-4 w-4" />
-                {t('common.exportCsv', undefined, 'Export CSV')}
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuItem
-              onClick={() => {
-                const url = `${window.location.origin}/manage/project/${projectId}`
-                void navigator.clipboard.writeText(url)
-              }}
-              className="flex cursor-pointer items-center gap-2"
-            >
-              <Copy className="h-4 w-4" />
-              {t('common.copyUrl', undefined, 'Copy URL')}
-            </DropdownMenuItem>
-            {projectId != null && (
-              <DropdownMenuItem
-                onClick={() => handleArchiveProject(projectId, proj.isArchived ?? false)}
-                className="flex cursor-pointer items-center gap-2"
-              >
-                <Archive className="h-4 w-4" />
-                {proj.isArchived
-                  ? t('common.unarchiveProject', undefined, 'Unarchive project')
-                  : t('common.archiveProject', undefined, 'Archive project')}
-              </DropdownMenuItem>
-            )}
-            {projectId != null && (
-              <DropdownMenuItem
-                onClick={() => handleDeleteProject(projectId, proj.displayName || proj.name)}
-                className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
-              >
-                <Trash2 className="h-4 w-4" />
-                {t('common.deleteProject', undefined, 'Delete project')}
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    )
-  }
 
   return (
     <div className="h-full">
@@ -412,9 +252,6 @@ export const ManageProjectsContent = () => {
                   challengeCountsByProjectId={challengesPerProject}
                   pinnedProjectIds={pinnedProjectIds}
                   onTogglePin={toggleProjectPin}
-                  onExportCsv={handleExportCsv}
-                  onArchiveProject={handleArchiveProject}
-                  onDeleteProject={handleDeleteProject}
                 />
               ) : (
                 <Empty>
@@ -468,7 +305,7 @@ export const ManageProjectsContent = () => {
                         completedChallenges={challengeStats?.completed}
                         linkTo="/manage/project/$projectId"
                         linkParams={{ projectId: String(projectId) }}
-                        actions={buildProjectActions(proj, isPinned)}
+                        actions={<ProjectActions project={proj} isPinned={isPinned} />}
                       />
                     )
                   }}

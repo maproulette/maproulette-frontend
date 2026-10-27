@@ -1,23 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import {
-  Archive,
-  Copy,
-  Eye,
-  FileDown,
-  MoreHorizontal,
-  Pencil,
-  Pin,
-  Plus,
-  Trash2,
-} from 'lucide-react'
+import { Pin } from 'lucide-react'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu'
 import {
   Table,
   TableBody,
@@ -28,6 +12,7 @@ import {
 } from '@/components/ui/Table'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
+import { ProjectActionsMenu } from './ProjectActionsMenu'
 import type { ChallengeCounts } from './useProjectChallengeCounts'
 
 interface ProjectsTableViewProps {
@@ -35,9 +20,6 @@ interface ProjectsTableViewProps {
   challengeCountsByProjectId?: Record<number, ChallengeCounts>
   pinnedProjectIds?: number[]
   onTogglePin?: (projectId: number) => void
-  onExportCsv?: (projectId: number) => void
-  onArchiveProject?: (projectId: number, isArchived: boolean) => void
-  onDeleteProject?: (projectId: number, projectName: string) => void
   onSelectProject?: (project: Project) => void
   selectedProjectId?: number
 }
@@ -47,9 +29,6 @@ export const ProjectsTableView = ({
   challengeCountsByProjectId = {},
   pinnedProjectIds = [],
   onTogglePin,
-  onExportCsv,
-  onArchiveProject,
-  onDeleteProject,
   onSelectProject,
   selectedProjectId,
 }: ProjectsTableViewProps) => {
@@ -157,101 +136,16 @@ export const ProjectsTableView = ({
                   {project.id}
                 </TableCell>
                 <TableCell className="hidden text-center md:table-cell">
-                  {project.id != null ? (challengeCountsByProjectId[project.id]?.total ?? '—') : '—'}
+                  {project.id != null
+                    ? (challengeCountsByProjectId[project.id]?.total ?? '—')
+                    : '—'}
                 </TableCell>
                 <TableCell className="hidden max-w-[240px] truncate text-zinc-600 lg:table-cell dark:text-zinc-400">
                   {project.description || '—'}
                 </TableCell>
                 {showActions && (
                   <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">
-                            {t('common.openMenu', undefined, 'Open menu')}
-                          </span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to="/manage/project/$projectId"
-                            params={{ projectId: String(project.id) }}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Eye className="h-4 w-4" />
-                            {t('common.viewProject', undefined, 'View project')}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to="/manage/project/$projectId/edit"
-                            params={{ projectId: String(project.id) }}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Pencil className="h-4 w-4" />
-                            {t('common.editProject', undefined, 'Edit project')}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to="/manage/challenge/new"
-                            search={{ projectId: Number(project.id) }}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Plus className="h-4 w-4" />
-                            {t('common.addChallenge', undefined, 'Add challenge')}
-                          </Link>
-                        </DropdownMenuItem>
-                        {onExportCsv && project.id != null && (
-                          <DropdownMenuItem
-                            onClick={() => onExportCsv(project.id as number)}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <FileDown className="h-4 w-4" />
-                            {t('common.exportCsv', undefined, 'Export CSV')}
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onClick={() => {
-                            const url = `${window.location.origin}/manage/project/${project.id}`
-                            void navigator.clipboard.writeText(url)
-                          }}
-                          className="flex cursor-pointer items-center gap-2"
-                        >
-                          <Copy className="h-4 w-4" />
-                          {t('common.copyUrl', undefined, 'Copy URL')}
-                        </DropdownMenuItem>
-                        {onArchiveProject && project.id != null && (
-                          <DropdownMenuItem
-                            onClick={() =>
-                              onArchiveProject(project.id as number, project.isArchived ?? false)
-                            }
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Archive className="h-4 w-4" />
-                            {project.isArchived
-                              ? t('common.unarchiveProject', undefined, 'Unarchive project')
-                              : t('common.archiveProject', undefined, 'Archive project')}
-                          </DropdownMenuItem>
-                        )}
-                        {onDeleteProject && project.id != null && (
-                          <DropdownMenuItem
-                            onClick={() =>
-                              onDeleteProject(
-                                project.id as number,
-                                project.displayName || project.name
-                              )
-                            }
-                            className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            {t('common.deleteProject', undefined, 'Delete project')}
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <ProjectActionsMenu project={project} />
                   </TableCell>
                 )}
               </TableRow>
