@@ -70,12 +70,14 @@ export const project = {
     onlyEnabled = false,
     onlyOwned = false,
     searchString = '',
+    enabled = true,
   }: {
     limit?: number
     page?: number
     onlyEnabled?: boolean
     onlyOwned?: boolean
     searchString?: string
+    enabled?: boolean
   } = {}) => {
     return useQuery(
       queryOptions({
@@ -95,6 +97,7 @@ export const project = {
           return projects
         },
         placeholderData: (prev) => prev,
+        enabled,
       })
     )
   },

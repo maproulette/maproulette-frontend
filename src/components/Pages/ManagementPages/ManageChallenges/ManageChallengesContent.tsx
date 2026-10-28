@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import {
   Archive,
   BookOpen,
+  CheckCircle2,
   Copy,
   Eye,
   EyeOff,
@@ -51,6 +52,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
+import { Spinner } from '@/components/ui/Spinner'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { isStartableChallengeStatus } from '@/lib/challengeStatus'
@@ -61,9 +63,11 @@ import { useManageChallengesContext } from './ManageChallengesContext'
 export const ManageChallengesContent = () => {
   const { t } = useIntl()
   const {
-    filteredChallenges,
-    projectNamesById,
+    challenges,
     isLoading,
+    isFetching,
+    hasNextPage,
+    loadMore,
     pinnedChallengeIds,
     searchQuery,
     setSearchQuery,
@@ -499,14 +503,14 @@ export const ManageChallengesContent = () => {
             >
               {!isLoading && (
                 <EntityGrid
-                  items={filteredChallenges || []}
+                  items={challenges}
                   renderItem={(challenge) => {
                     const isPinned =
                       challenge.id != null && pinnedChallengeIds.includes(challenge.id)
                     return (
                       <ChallengeCard
                         challenge={challenge}
-                        parentName={projectNamesById.get(challenge.parent)}
+                        parentName={challenge.parentName ?? undefined}
                         linkTo="/manage/challenge/$challengeId"
                         linkParams={{ challengeId: challenge.id.toString() }}
                         actions={buildChallengeActions(challenge, isPinned)}
@@ -528,6 +532,39 @@ export const ManageChallengesContent = () => {
                 />
               )}
             </div>
+
+            {!isLoading &&
+              challenges.length > 0 &&
+              (hasNextPage ? (
+                <div className="flex justify-center p-4">
+                  <Button
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={loadMore}
+                    disabled={isFetching}
+                  >
+                    {isFetching ? (
+                      <>
+                        <Spinner />
+                        {t('common.loading2', undefined, 'Loading...')}
+                      </>
+                    ) : (
+                      t('common.loadMore', undefined, 'Load More')
+                    )}
+                  </Button>
+                </div>
+              ) : (
+                <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-slate-700">
+                  <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
+                  <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
+                    {t(
+                      'common.youveReachedTheEndOfTheList',
+                      undefined,
+                      "You've reached the end of the list"
+                    )}
+                  </p>
+                </div>
+              ))}
           </div>
         </div>
       </div>

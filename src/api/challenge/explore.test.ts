@@ -323,37 +323,63 @@ describe('challengeExplore.getChallengesListingOptions', () => {
   })
 })
 
-describe('challengeExplore.listing', () => {
-  it('fetches a challenge listing with default limit/page/onlyEnabled', async () => {
-    const fetchMock = stubFetch(
-      new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
-    )
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => challengeExplore.listing([1, 2]), {
-      wrapper: queryClientWrapper(client),
+describe('challengeExplore.listingInfinite', () => {
+  it('sends the filters and asks for the next page by page number', async () => {
+    const fetchMock = vi.fn(async (request: Request) => {
+      if (request.url.includes('page=0')) {
+        return new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
+      }
+      return new Response(JSON.stringify([]), { status: 200 })
     })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { result, rerender } = renderHook(
+      () =>
+        challengeExplore.listingInfinite(
+          [1, 2],
+          {
+            searchString: 'roads',
+            onlyEnabled: true,
+            onlyArchived: false,
+            onlyOwned: true,
+            challengeIds: '7,8',
+          },
+          { limit: 2 }
+        ),
+      { wrapper: queryClientWrapper() }
+    )
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([challengeA, challengeB])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('limit=100')
-    expect(request.url).toContain('page=0')
-    expect(request.url).toContain('onlyEnabled=false')
+    const firstCall = fetchMock.mock.calls[0][0] as Request
+    expect(firstCall.url).toContain('api/v2/challenges/listing')
+    expect(firstCall.url).toContain('projectIds=1%2C2')
+    expect(firstCall.url).toContain('limit=2')
+    expect(firstCall.url).toContain('searchString=roads')
+    expect(firstCall.url).toContain('onlyEnabled=true')
+    expect(firstCall.url).toContain('onlyOwned=true')
+    expect(firstCall.url).toContain('challengeIds=7%2C8')
+    expect(result.current.hasNextPage).toBe(true)
+
+    await act(async () => {
+      await result.current.fetchNextPage()
+    })
+    rerender()
+    expect(result.current.data?.pages.length).toBe(2)
+    expect(result.current.hasNextPage).toBe(false)
+    const secondCall = fetchMock.mock.calls[1][0] as Request
+    expect(secondCall.url).toContain('page=1')
   })
 
-  it('honors explicit limit, page, and onlyEnabled values', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
+  it('does not fetch when disabled', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
 
-    const { result } = renderHook(() => challengeExplore.listing([1], 5, 2, true), {
-      wrapper: queryClientWrapper(),
-    })
+    const { result } = renderHook(
+      () => challengeExplore.listingInfinite([], {}, { enabled: false }),
+      { wrapper: queryClientWrapper() }
+    )
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('limit=5')
-    expect(request.url).toContain('page=2')
-    expect(request.url).toContain('onlyEnabled=true')
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })
 

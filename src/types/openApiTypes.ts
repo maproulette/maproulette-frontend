@@ -400,7 +400,7 @@ export interface paths {
     }
     /**
      * List challenges in specified projects
-     * @description Retrieves a lightweight listing of challenges, with just a few basic fields for each, that belong to the specified project(s).
+     * @description Retrieves a lightweight listing of challenges, with just a few basic fields for each, that belong to the specified project(s), ordered by name.
      */
     get: operations['challenge_list_challenges_in_specified_projects']
     put?: never
@@ -5863,6 +5863,7 @@ export interface components {
       difficulty: number
       /** Format: epoch */
       modified: number
+      parentName?: string | null
     }
     'org.maproulette.framework.model.MapillaryImage': {
       key: string
@@ -7388,6 +7389,14 @@ export interface operations {
         onlyEnabled?: boolean
         /** @description This field will be ignored for this request */
         parentId?: number
+        /** @description Only return challenges whose name contains this string. */
+        searchString?: string
+        /** @description Whether to only return challenges owned by the authenticated user. Default value is false. */
+        onlyOwned?: boolean
+        /** @description Whether to only return archived challenges. Default value is false. */
+        onlyArchived?: boolean
+        /** @description Comma-separated list of challenge ids to restrict the listing to. Default value is empty string, ie. no restriction. */
+        challengeIds?: string
       }
       header?: never
       path?: never

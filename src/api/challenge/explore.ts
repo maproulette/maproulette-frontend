@@ -10,6 +10,7 @@ import { logger } from '@/lib/logger'
 import type {
   Challenge,
   ChallengeGetResponse,
+  ChallengeListingFilters,
   ChallengeListingResponse,
   ExploreChallengesParams,
   ExploreChallengesRequest,
@@ -181,9 +182,32 @@ export const challengeExplore = {
           .json<ChallengeListingResponse>(),
     }),
 
-  listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) =>
-    useQuery(
-      challengeExplore.getChallengesListingOptions(projectIds, { limit, page, onlyEnabled })
+  listingInfinite: (
+    projectIds: number[],
+    filters: ChallengeListingFilters,
+    { limit = 20, enabled = true }: { limit?: number; enabled?: boolean } = {}
+  ) =>
+    useInfiniteQuery(
+      infiniteQueryOptions({
+        queryKey: ['challenge', 'listing', 'infinite', projectIds, { limit, ...filters }],
+        queryFn: ({ pageParam }) =>
+          apiRequest
+            .get('api/v2/challenges/listing', {
+              searchParams: {
+                projectIds: projectIds.join(','),
+                limit,
+                page: pageParam,
+                onlyEnabled: false,
+                ...filters,
+              },
+            })
+            .json<ChallengeListingResponse>(),
+        initialPageParam: 0,
+        getNextPageParam: (lastPage, allPages) =>
+          lastPage.length < limit ? undefined : allPages.length,
+        placeholderData: keepPreviousData,
+        enabled,
+      })
     ),
 
   searchChallenges: ({ search = '' }: { search?: string } = {}) =>
