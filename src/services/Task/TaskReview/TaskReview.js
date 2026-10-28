@@ -641,6 +641,35 @@ export const completeBundleReview = function (
 };
 
 /**
+ * Updates the completion status of a task being reviewed, leaving its review
+ * status untouched. Credit for the task stays with the original mapper.
+ */
+export const updateTaskCompletionStatus = function (taskId, newTaskStatus) {
+  return function (dispatch) {
+    return new Endpoint(api.task.updateCompletionStatus, {
+      schema: taskSchema(),
+      variables: { id: taskId, status: newTaskStatus },
+    })
+      .execute()
+      .then((normalizedResults) => {
+        dispatch(receiveTasks(normalizedResults.entities));
+        return normalizedResults;
+      })
+      .catch((error) => {
+        if (isSecurityError(error)) {
+          handleExposeError(error, dispatch);
+        } else {
+          dispatch(addError(AppErrors.task.updateFailure));
+          console.log(error.response || error);
+        }
+
+        fetchTask(taskId)(dispatch);
+        throw error;
+      });
+  };
+};
+
+/**
  * Fetches a list of challenges which have review tasks
  */
 export const fetchReviewChallenges = function (

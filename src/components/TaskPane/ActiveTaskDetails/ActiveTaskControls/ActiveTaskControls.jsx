@@ -147,7 +147,6 @@ export class ActiveTaskControls extends Component {
           this.props.task,
           taskStatus,
           this.state.comment,
-          taskBundle,
         );
         return;
       }
@@ -237,6 +236,8 @@ export class ActiveTaskControls extends Component {
   confirmCompletion = async () => {
     try {
       await this.complete(this.state.confirmingStatus);
+    } catch (error) {
+      console.error("Error completing task:", error);
     } finally {
       this.resetConfirmation();
     }
