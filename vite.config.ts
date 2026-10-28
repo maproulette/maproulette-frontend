@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import { playwright } from '@vitest/browser-playwright'
-import { loadEnv, type Plugin } from 'vite'
+import { loadEnv, type Plugin, type ProxyOptions } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import { defineConfig } from 'vitest/config'
 
@@ -73,26 +73,63 @@ const TESTED_TSX_FILES = [
 // local .env file. For release builds, env.json is written to dist/ and contains
 // defaults (from .env.example) which can be overridden at deploy time (e.g. via
 // env vars on the Docker container; see docker/90-write-env-to-json.sh)
+//
+// In dev mode the backend is proxied through the dev server, and env.json points
+// VITE_API_BASE_URL at the dev server itself. This keeps the backend's session
+// cookie first-party, which a SameSite=Lax cookie needs when the backend is
+// remote (e.g. developing against production).
 function runtimeEnv(): Plugin {
-  let json: string
+  let env: Record<string, string>
   return {
     name: 'maproulette:runtime-env',
-    configResolved(config) {
-      json = JSON.stringify(loadEnv(config.mode, config.root, 'VITE_'), null, 2)
+    config(config, { mode, command }) {
+      env = loadEnv(mode, resolve(config.root ?? process.cwd()), 'VITE_')
+      if (command !== 'serve') return
+      const target = env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
+      const http: ProxyOptions = {
+        target,
+        changeOrigin: true,
+        cookieDomainRewrite: '',
+        configure: (proxy) => {
+          // The backend derives the OAuth redirect_uri from Origin, falling
+          // back to its configured frontend. Browsers omit Origin on
+          // same-origin GETs, so supply the dev server's.
+          proxy.on('proxyReq', (proxyReq, req) => {
+            if (!req.headers.origin) proxyReq.setHeader('origin', `http://${req.headers.host}`)
+          })
+          // The dev server is plain http, where browsers may drop Secure cookies.
+          proxy.on('proxyRes', (res) => {
+            res.headers['set-cookie'] = res.headers['set-cookie']?.map((c) =>
+              c.replace(/;\s*Secure/i, '')
+            )
+          })
+        },
+      }
+      return {
+        server: {
+          proxy: {
+            '/api': http,
+            '/auth': http,
+            '/ws': { target, changeOrigin: true, ws: true },
+          },
+        },
+      }
     },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         if (req.url !== '/env.json') return next()
         res.setHeader('Content-Type', 'application/json')
         res.setHeader('Cache-Control', 'no-store')
-        res.end(json)
+        res.end(
+          JSON.stringify({ ...env, VITE_API_BASE_URL: `http://${req.headers.host}` }, null, 2)
+        )
       })
     },
     generateBundle() {
       this.emitFile({
         type: 'asset',
         fileName: 'env.json',
-        source: json,
+        source: JSON.stringify(env, null, 2),
       })
     },
   }
