@@ -98,7 +98,7 @@ export const ProjectCard = ({
             <span className="font-semibold text-zinc-900 dark:text-white">
               {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
             </span>{' '}
-            {t('common.tasksRemaining2', undefined, 'tasks remaining')}
+            {t('shared.projectCard.challengesRemaining', undefined, 'challenges remaining')}
           </div>
 
           <ProgressBar percentage={completionPercentage} className="mb-3" />
