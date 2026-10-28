@@ -64,7 +64,6 @@
     "fontsource-bungee-shade": "^3.1.5",
     "fuse.js": "^6.2.0",
     "geojson-validation": "^1.0.2",
-    "geojsontoosm": "^0.0.3",
     "intl-messageformat": "^10.7.15",
     "leaflet": "^1.9.4",
     "leaflet-lasso": "^2.2.13",

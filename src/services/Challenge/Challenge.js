@@ -1,5 +1,4 @@
 import { format, parseISO, startOfDay } from "date-fns";
-import geojsontoosm from "geojsontoosm";
 import _clone from "lodash/clone";
 import _cloneDeep from "lodash/cloneDeep";
 import _compact from "lodash/compact";
@@ -106,41 +105,6 @@ export const buildLinkToExportGeoJSON = function (challengeId, criteria, timezon
       timezone,
     )}&filename=${encodeURIComponent(filename)}`
   );
-};
-
-export const exportOSMData = function (url, filename) {
-  return new Endpoint(
-    { url: () => url, method: "post", options: { noCache: true } },
-    {
-      method: "post",
-    },
-  )
-    .execute()
-    .then((geojson) => {
-      const osmData = geojsontoosm(geojson).replace(
-        'generator="geojsontoosm"',
-        'generator="geojsontoosm" download="never" upload="never"',
-      );
-
-      //https://stackoverflow.com/questions/5143504/how-to-create-and-download-an-xml-file-on-the-fly-using-javascript
-      const file = `${filename}.osm`;
-      const pom = document.createElement("a");
-      const bb = new Blob([osmData], { type: "text/plain" });
-
-      if (process.env.NODE_ENV !== "test") {
-        pom.setAttribute("href", window.URL.createObjectURL(bb));
-      }
-      pom.setAttribute("download", file);
-      pom.dataset.downloadurl = ["text/plain", pom.download, pom.href].join(":");
-      pom.draggable = true;
-      pom.classList.add("dragout");
-      pom.click();
-
-      return osmData;
-    })
-    .catch((error) => {
-      console.log(error.response || error);
-    });
 };
 
 // Helper function to build query filters for export links

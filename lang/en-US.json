@@ -409,7 +409,6 @@
   "Admin.manageTasks.controls.clearFilters.label": "Clear Filters",
   "Admin.manageTasks.controls.configureColumns.label": "Configure Columns",
   "Admin.manageTasks.controls.exportGeoJSON.label": "Export GeoJSON",
-  "Admin.manageTasks.controls.exportOSMData.label": "Export OSM Data",
   "Admin.manageTasks.controls.exportReviewerMetaCSV.label": "Export Meta-Review Coverage CSV",
   "Admin.manageTasks.controls.exportTaskReviewHistory.label": "Export Task Review History CSV",
   "Admin.manageTasks.controls.filterList.label": "Filter By:",

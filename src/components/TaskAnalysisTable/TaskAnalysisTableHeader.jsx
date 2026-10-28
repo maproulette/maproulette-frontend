@@ -6,11 +6,7 @@ import PropTypes from "prop-types";
 import { Component, Fragment } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import AsManager from "../../interactions/User/AsManager";
-import {
-  buildLinkToExportCSV,
-  buildLinkToExportGeoJSON,
-  exportOSMData,
-} from "../../services/Challenge/Challenge";
+import { buildLinkToExportCSV, buildLinkToExportGeoJSON } from "../../services/Challenge/Challenge";
 import {
   buildLinkTaskReviewHistoryCSV,
   buildLinkToMapperExportCSV,
@@ -338,42 +334,6 @@ export class TaskAnalysisTableHeader extends Component {
                             <FormattedMessage {...messages.exportGeoJSONLabel} />
                           </button>
                         </form>
-                      </li>
-                    </ul>
-                    <ul className="mr-list-dropdown mr-mt-2">
-                      <li>
-                        <div
-                          onClick={() =>
-                            exportOSMData(
-                              buildLinkToExportGeoJSON(
-                                this.props.challenge?.id,
-                                this.props.criteria,
-                                this.props.currentTimezone,
-                                `challenge_${this.props.challenge?.id}.geojson`,
-                              ),
-                              `Challenge_${this.props.challenge?.id}`,
-                            )
-                          }
-                        >
-                          <input
-                            type="hidden"
-                            name="taskPropertySearch"
-                            value={JSON.stringify(
-                              this.props.criteria?.filters?.taskPropertySearch ?? {},
-                            )}
-                          />
-                          <button
-                            type="submit"
-                            className="mr-flex mr-items-center mr-text-green-lighter mr-bg-transparent mr-align-top"
-                          >
-                            <SvgSymbol
-                              sym="download-icon"
-                              viewBox="0 0 20 20"
-                              className="mr-w-4 mr-h-4 mr-fill-current mr-mr-2"
-                            />
-                            <FormattedMessage {...messages.exportOSMDataLabel} />
-                          </button>
-                        </div>
                       </li>
                     </ul>
                     <ul className="mr-list-dropdown">
