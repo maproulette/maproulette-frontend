@@ -198,9 +198,12 @@ export const ProjectPickerModal = ({
                   project={project}
                   challengeMeta={{
                     totalChallenges:
-                      project.id != null ? (challengeCountsByProjectId[project.id] ?? 0) : 0,
+                      project.id != null ? (challengeCountsByProjectId[project.id]?.total ?? 0) : 0,
                     pinned: 0,
-                    completed: 0,
+                    completed:
+                      project.id != null
+                        ? (challengeCountsByProjectId[project.id]?.completed ?? 0)
+                        : 0,
                   }}
                   onSelect={() => handleSelect(project)}
                   selected={project.id != null && project.id === selectedProjectId}

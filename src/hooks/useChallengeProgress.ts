@@ -60,18 +60,24 @@ const ALL_STATUS_FIELDS = [
   'validated',
 ] as const
 
-export const useChallengeProgress = (metrics?: CompletionMetrics) => {
+const getTotal = (metrics?: CompletionMetrics) => {
   const summedTotal = metrics
     ? ALL_STATUS_FIELDS.reduce((acc, field) => acc + (metrics[field] ?? 0), 0)
     : 0
-  const total = metrics?.total && metrics.total > 0 ? metrics.total : summedTotal
+  return metrics?.total && metrics.total > 0 ? metrics.total : summedTotal
+}
 
-  const completionPercentage = (() => {
-    if (total === 0 || !metrics) return 0
-    const completed =
-      (metrics.fixed || 0) + (metrics.falsePositive || 0) + (metrics.alreadyFixed || 0)
-    return Math.round((completed / total) * 100)
-  })()
+export const getCompletionPercentage = (metrics?: CompletionMetrics) => {
+  const total = getTotal(metrics)
+  if (total === 0 || !metrics) return 0
+  const completed =
+    (metrics.fixed || 0) + (metrics.falsePositive || 0) + (metrics.alreadyFixed || 0)
+  return Math.round((completed / total) * 100)
+}
+
+export const useChallengeProgress = (metrics?: CompletionMetrics) => {
+  const total = getTotal(metrics)
+  const completionPercentage = getCompletionPercentage(metrics)
 
   const buildSegments = (): ProgressSegment[] => {
     if (total === 0 || !metrics) return []

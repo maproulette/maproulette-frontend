@@ -465,12 +465,12 @@ export const ManageProjectsContent = () => {
                   renderItem={(proj) => {
                     const projectId = proj.id
                     const isPinned = projectId != null && pinnedProjectIds.includes(projectId)
-                    const count =
-                      projectId != null ? (challengeCountsByProjectId[projectId] ?? 0) : 0
+                    const counts =
+                      projectId != null ? challengeCountsByProjectId[projectId] : undefined
                     const challengeMeta: ChallengeMeta = {
-                      totalChallenges: count,
+                      totalChallenges: counts?.total ?? 0,
                       pinned: 0,
-                      completed: 0,
+                      completed: counts?.completed ?? 0,
                     }
                     return (
                       <ProjectCard

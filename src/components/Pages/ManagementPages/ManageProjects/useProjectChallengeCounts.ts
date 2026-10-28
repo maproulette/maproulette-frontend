@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { api } from '@/api'
+import { getCompletionPercentage } from '@/hooks/useChallengeProgress'
+import { isChallengeComplete } from '@/lib/challengeStatus'
 import type { Project } from '@/types/Project'
 
 export const useProjectChallengeCounts = (projects: Project[] | undefined) => {
@@ -19,10 +21,14 @@ export const useProjectChallengeCounts = (projects: Project[] | undefined) => {
   })
 
   return useMemo(() => {
-    const map: Record<number, number> = {}
+    const map: Record<number, { total: number; completed: number }> = {}
     for (const c of challengesListing) {
-      const pid = c.parent
-      map[pid] = (map[pid] ?? 0) + 1
+      const counts = map[c.parent] ?? { total: 0, completed: 0 }
+      const complete = isChallengeComplete(c, getCompletionPercentage(c.completionMetrics))
+      map[c.parent] = {
+        total: counts.total + 1,
+        completed: counts.completed + (complete ? 1 : 0),
+      }
     }
     return map
   }, [challengesListing])

@@ -44,7 +44,7 @@ interface ManageProjectsContextType {
   toggleProjectPin: (projectId: number) => void
 
   // Challenge counts
-  challengeCountsByProjectId: Record<number, number>
+  challengeCountsByProjectId: Record<number, { total: number; completed: number }>
 
   // Mutations
   updateProject: (projectId: number, updates: Partial<Project>) => void
