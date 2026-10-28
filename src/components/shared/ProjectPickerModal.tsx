@@ -6,10 +6,10 @@ import { getPinnedProjectIds } from '@/components/Pages/ManagementPages/ManagePr
 import { useProjectChallengeCounts } from '@/components/Pages/ManagementPages/ManageProjects/useProjectChallengeCounts'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
 import { ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
-import { Button } from '@/components/ui/Button'
 import {
   Dialog,
   DialogContent,
@@ -213,26 +213,15 @@ export const ProjectPickerModal = ({
             </div>
           )}
 
-          {!isLoading && projectsToShow.length > 0 && hasNextPage && (
-            <div className="flex justify-center p-3">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="rounded-full"
-                onClick={() => setLoadedPages((p) => p + 1)}
-                disabled={isFetching}
-              >
-                {isFetching ? (
-                  <>
-                    <Spinner />
-                    {t('common.loading2', undefined, 'Loading...')}
-                  </>
-                ) : (
-                  t('common.loadMore', undefined, 'Load More')
-                )}
-              </Button>
-            </div>
+          {!isLoading && projectsToShow.length > 0 && (
+            <LoadMoreFooter
+              hasNextPage={hasNextPage}
+              isFetching={isFetching}
+              onLoadMore={() => setLoadedPages((p) => p + 1)}
+              showEndOfList={false}
+              size="sm"
+              className="p-3"
+            />
           )}
         </fieldset>
         {children}

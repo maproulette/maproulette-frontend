@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import {
   Archive,
   BookOpen,
-  CheckCircle2,
   Copy,
   Eye,
   EyeOff,
@@ -33,6 +32,7 @@ import { ClearManageFiltersButton } from '@/components/shared/ClearManageFilters
 import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
 import { SearchBar } from '@/components/shared/SearchBar'
 import {
   AlertDialog,
@@ -52,7 +52,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { Spinner } from '@/components/ui/Spinner'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { isStartableChallengeStatus } from '@/lib/challengeStatus'
@@ -533,38 +532,13 @@ export const ManageChallengesContent = () => {
               )}
             </div>
 
-            {!isLoading &&
-              challenges.length > 0 &&
-              (hasNextPage ? (
-                <div className="flex justify-center p-4">
-                  <Button
-                    variant="outline"
-                    className="rounded-full"
-                    onClick={loadMore}
-                    disabled={isFetching}
-                  >
-                    {isFetching ? (
-                      <>
-                        <Spinner />
-                        {t('common.loading2', undefined, 'Loading...')}
-                      </>
-                    ) : (
-                      t('common.loadMore', undefined, 'Load More')
-                    )}
-                  </Button>
-                </div>
-              ) : (
-                <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-slate-700">
-                  <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
-                  <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
-                    {t(
-                      'common.youveReachedTheEndOfTheList',
-                      undefined,
-                      "You've reached the end of the list"
-                    )}
-                  </p>
-                </div>
-              ))}
+            {!isLoading && challenges.length > 0 && (
+              <LoadMoreFooter
+                hasNextPage={hasNextPage}
+                isFetching={isFetching}
+                onLoadMore={loadMore}
+              />
+            )}
           </div>
         </div>
       </div>
