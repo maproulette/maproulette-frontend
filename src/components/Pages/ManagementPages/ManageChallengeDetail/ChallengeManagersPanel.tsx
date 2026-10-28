@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Separator } from '@/components/ui/Separator'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { PROJECT_ROLE, projectRoleOptions, TEAM_ATTACHMENT_ROLE } from '@/lib/projectRoles'
@@ -59,14 +60,24 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
   const [userQuery, setUserQuery] = useState('')
   const [newRole, setNewRole] = useState<number>(PROJECT_ROLE.write)
   const addManagerId = useId()
-  const { data: userMatches } = api.user.findUsers(userQuery, 10, userQuery.length > 2)
+  const debouncedUserQuery = useDebouncedValue(userQuery)
+  const { data: userMatches } = api.user.findUsers(
+    debouncedUserQuery,
+    10,
+    debouncedUserQuery.length > 2
+  )
 
   const { data: teamManagers } = api.challenge.teamManagers(challengeId)
   const setTeamRole = api.challenge.useSetTeamChallengeRole()
   const removeTeam = api.challenge.useRemoveTeamFromChallenge()
   const [teamQuery, setTeamQuery] = useState('')
   const addTeamId = useId()
-  const { data: teamMatches } = api.team.findTeamsByName(teamQuery, 10, teamQuery.length > 2)
+  const debouncedTeamQuery = useDebouncedValue(teamQuery)
+  const { data: teamMatches } = api.team.findTeamsByName(
+    debouncedTeamQuery,
+    10,
+    debouncedTeamQuery.length > 2
+  )
   // A team already granted a role here is edited in the list above, not added
   // again, so keep those out of the results.
   const existingTeamIds = new Set((teamManagers ?? []).map(({ team }) => team.id))

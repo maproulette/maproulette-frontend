@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight, FolderOpen, ListTodo, Trophy } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { DEFAULT_WORLD_BOUNDS } from '@/components/Map/mapUtils'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { getStatusLabel } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -18,16 +18,10 @@ const cardClassName = cn(
 export const FindFeatureByName = () => {
   const { t } = useIntl()
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
-  const [debouncedQuery, setDebouncedQuery] = useState('')
   const trimmed = searchQuery.trim()
   const hasSearchQuery = trimmed.length > 0
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(trimmed)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [trimmed])
+  const debouncedQuery = useDebouncedValue(trimmed)
 
   // Default queries (shown when no search text)
   const defaultChallenges = api.challenge.exploreChallenges({

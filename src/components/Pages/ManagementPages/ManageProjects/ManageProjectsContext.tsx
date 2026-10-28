@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import type { Project } from '@/types/Project'
 import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from './pinnedProjects'
 import { useProjectChallengeCounts } from './useProjectChallengeCounts'
@@ -74,10 +75,12 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
     projectName: string
   } | null>(null)
 
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
+
   // Reset loaded pages when server-side filters change
   useEffect(() => {
     setLoadedPages(1)
-  }, [searchQuery, onlyEnabled, onlyOwned])
+  }, [debouncedSearchQuery, onlyEnabled, onlyOwned])
 
   const {
     data: projects,
@@ -86,7 +89,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
   } = api.project.getManagedProjects({
     limit: PAGE_SIZE * loadedPages,
     page: 0,
-    searchString: searchQuery,
+    searchString: debouncedSearchQuery,
     onlyEnabled,
     onlyOwned,
   })

@@ -6,6 +6,7 @@ import {
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { ChallengeListing } from '@/types/Challenge'
 
@@ -63,6 +64,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const [rebuildChallengeId, setRebuildChallengeId] = useState<number | null>(null)
 
   // API queries
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
   const superUser = isSuperUser(user)
   const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects({
     limit: -1,
@@ -86,7 +88,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   } = api.challenge.listingInfinite(
     superUser ? [] : managedProjectIds,
     {
-      searchString: searchQuery,
+      searchString: debouncedSearchQuery,
       onlyEnabled: onlyDiscoverable,
       onlyArchived,
       onlyOwned,

@@ -13,6 +13,7 @@ import {
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type {
@@ -82,7 +83,7 @@ export const FindChallenge = () => {
     return result
   }, [urlDifficulty, urlWorkOn, urlCategories, urlSortBy, urlGlobal, limit])
 
-  const trimmedSearchQuery = searchQuery.trim()
+  const trimmedSearchQuery = useDebouncedValue(searchQuery.trim())
   const hasSearchQuery = trimmedSearchQuery.length > 0
 
   const searchQueryResult = api.challenge.searchChallenges({ search: trimmedSearchQuery })

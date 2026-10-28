@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight, ListTodo } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { getStatusLabel } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
@@ -11,16 +11,10 @@ import { cn } from '@/lib/utils'
 export const FindTask = () => {
   const { t } = useIntl()
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
-  const [debouncedId, setDebouncedId] = useState(0)
   const trimmed = searchQuery.trim()
   const numericId = /^\d+$/.test(trimmed) ? parseInt(trimmed, 10) : 0
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedId(numericId)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [numericId])
+  const debouncedId = useDebouncedValue(numericId)
 
   const taskQuery = api.task.getTask(debouncedId || 0)
   const isLoading = debouncedId > 0 && taskQuery.isLoading

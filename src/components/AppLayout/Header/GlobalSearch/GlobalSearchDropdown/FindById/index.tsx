@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight, FolderOpen, Hash, ListTodo, Target } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
@@ -16,16 +16,10 @@ const cardClassName = cn(
 export const FindById = () => {
   const { t } = useIntl()
   const { searchQuery, onResultSelect } = useGlobalSearchContext()
-  const [debouncedId, setDebouncedId] = useState(0)
   const trimmed = searchQuery.trim()
   const numericId = /^\d+$/.test(trimmed) ? parseInt(trimmed, 10) : 0
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedId(numericId)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [numericId])
+  const debouncedId = useDebouncedValue(numericId)
 
   // Single unified ID lookup
   const { data, isLoading, isFetching } = api.search.searchById({ id: debouncedId })

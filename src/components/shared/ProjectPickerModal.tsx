@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/Dialog'
 import { Spinner } from '@/components/ui/Spinner'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
 
@@ -68,9 +69,11 @@ export const ProjectPickerModal = ({
 
   // Reset pagination when server-side filters change so a narrower result set
   // doesn't keep an oversized limit from a prior search.
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
+
   useEffect(() => {
     setLoadedPages(1)
-  }, [searchQuery, onlyEnabled, onlyOwned])
+  }, [debouncedSearchQuery, onlyEnabled, onlyOwned])
 
   const {
     data: projects,
@@ -79,7 +82,7 @@ export const ProjectPickerModal = ({
   } = api.project.getManagedProjects({
     limit: PAGE_SIZE * loadedPages,
     page: 0,
-    searchString: searchQuery,
+    searchString: debouncedSearchQuery,
     onlyEnabled,
     onlyOwned,
     enabled: open,
