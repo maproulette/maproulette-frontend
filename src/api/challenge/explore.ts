@@ -105,7 +105,10 @@ export const challengeExplore = {
       })
     ),
 
-  featuredChallenges: (params: FeaturedChallengesParams) =>
+  featuredChallenges: (
+    params: FeaturedChallengesParams,
+    { enabled = true }: { enabled?: boolean } = {}
+  ) =>
     useQuery(
       queryOptions({
         queryKey: ['challenge', 'featured', params],
@@ -115,6 +118,7 @@ export const challengeExplore = {
               searchParams: params,
             })
             .json<FeaturedChallengesResponse[]>(),
+        enabled,
       })
     ),
 

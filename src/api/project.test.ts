@@ -45,6 +45,17 @@ describe('project.featuredProjects', () => {
     expect(request.url).toContain('onlyEnabled=false')
     expect(request.url).toContain('page=2')
   })
+
+  it('does not fetch when disabled', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+
+    const { result } = renderHook(() => project.featuredProjects({ enabled: false }), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
 })
 
 describe('project.getProject', () => {

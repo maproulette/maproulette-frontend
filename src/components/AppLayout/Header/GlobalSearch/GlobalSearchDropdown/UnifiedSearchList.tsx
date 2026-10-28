@@ -56,12 +56,10 @@ export const UnifiedSearchList = () => {
   const challenges = Array.isArray(rawChallenges) ? rawChallenges : []
 
   const { data: featuredProjectsData = [], isLoading: isLoadingFeaturedProjects } =
-    api.project.featuredProjects({ limit: 2 })
+    api.project.featuredProjects({ limit: 2, enabled: isOpen })
 
   const { data: featuredChallengesData, isLoading: isLoadingFeatured } =
-    api.challenge.featuredChallenges({
-      limit: 2,
-    })
+    api.challenge.featuredChallenges({ limit: 2 }, { enabled: isOpen })
 
   const featuredChallenges: ChallengeGetResponse[] = Array.isArray(featuredChallengesData)
     ? featuredChallengesData

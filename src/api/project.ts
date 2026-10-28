@@ -29,10 +29,12 @@ export const project = {
     limit = 10,
     onlyEnabled = true,
     page = 0,
+    enabled = true,
   }: {
     limit?: number
     onlyEnabled?: boolean
     page?: number
+    enabled?: boolean
   } = {}) => {
     return useQuery(
       queryOptions({
@@ -45,6 +47,7 @@ export const project = {
             .json<Project[]>()
           return projects
         },
+        enabled,
       })
     )
   },

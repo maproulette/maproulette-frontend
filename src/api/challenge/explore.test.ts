@@ -44,6 +44,18 @@ describe('challengeExplore.featuredChallenges', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([challengeA, challengeB])
   })
+
+  it('does not fetch when disabled', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+
+    const { result } = renderHook(
+      () => challengeExplore.featuredChallenges({ limit: 2 }, { enabled: false }),
+      { wrapper: queryClientWrapper() }
+    )
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
 })
 
 describe('challengeExplore.exploreChallenges', () => {
