@@ -5,7 +5,10 @@ import { getCompletionPercentage } from '@/hooks/useChallengeProgress'
 import { isChallengeComplete } from '@/lib/challengeStatus'
 import type { Project } from '@/types/Project'
 
-export const useProjectChallengeCounts = (projects: Project[] | undefined) => {
+export const useProjectChallengeCounts = (
+  projects: Project[] | undefined,
+  { enabled = true }: { enabled?: boolean } = {}
+) => {
   const projectIds = useMemo(
     () => projects?.map((p) => p.id).filter((id): id is number => id != null) ?? [],
     [projects]
@@ -17,7 +20,7 @@ export const useProjectChallengeCounts = (projects: Project[] | undefined) => {
   })
   const { data: challengesListing = [] } = useQuery({
     ...challengesListingQuery,
-    enabled: projectIds.length > 0,
+    enabled: enabled && projectIds.length > 0,
   })
 
   return useMemo(() => {

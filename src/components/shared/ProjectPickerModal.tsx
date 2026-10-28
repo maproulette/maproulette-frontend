@@ -82,10 +82,11 @@ export const ProjectPickerModal = ({
     searchString: searchQuery,
     onlyEnabled,
     onlyOwned,
+    enabled: open,
   })
 
   const hasNextPage = (projects?.length ?? 0) >= PAGE_SIZE * loadedPages
-  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects, { enabled: open })
 
   const { user } = useAuthContext()
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
