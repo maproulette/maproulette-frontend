@@ -127,7 +127,7 @@
     "@testing-library/react-hooks": "^8.0.1",
     "@types/node": "^22.10.5",
     "@vitejs/plugin-react-swc": "^4.3.1",
-    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/coverage-v8": "^4.1.12",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
@@ -157,7 +157,7 @@
     "tailwindcss-transition": "^1.0.5",
     "tailwindcss-visuallyhidden": "^1.0.2",
     "vite": "^8.3.5",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"
