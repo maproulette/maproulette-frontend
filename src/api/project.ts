@@ -1,6 +1,15 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  type InfiniteData,
+  infiniteQueryOptions,
+  keepPreviousData,
+  queryOptions,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
-import type { Project, ProjectGetResponse } from '@/types/Project'
+import type { ManagedProjectsFilters, Project, ProjectGetResponse } from '@/types/Project'
 import type { Team } from '@/types/Team'
 import { apiRequest } from './client'
 
@@ -105,6 +114,27 @@ export const project = {
     )
   },
 
+  managedProjectsInfinite: (
+    filters: ManagedProjectsFilters,
+    { limit = 20, enabled = true }: { limit?: number; enabled?: boolean } = {}
+  ) =>
+    useInfiniteQuery(
+      infiniteQueryOptions({
+        queryKey: ['project', 'managedInfinite', { limit, ...filters }],
+        queryFn: ({ pageParam }) =>
+          apiRequest
+            .get('api/v2/projects/managed', {
+              searchParams: { limit, page: pageParam, ...filters },
+            })
+            .json<Project[]>(),
+        initialPageParam: 0,
+        getNextPageParam: (lastPage, allPages) =>
+          lastPage.length < limit ? undefined : allPages.length,
+        placeholderData: keepPreviousData,
+        enabled,
+      })
+    ),
+
   getProjectChallengesOptions: (projectId: number, limit = 100, page = 0) =>
     queryOptions({
       queryKey: ['project', 'challenges', projectId, { limit, page }],
@@ -170,6 +200,7 @@ export const project = {
           { queryKey: ['project', 'managed'] },
           (oldProjects) => (oldProjects ? [newProject, ...oldProjects] : [newProject])
         )
+        queryClient.invalidateQueries({ queryKey: ['project', 'managedInfinite'] })
       },
     })
   },
@@ -194,6 +225,9 @@ export const project = {
         const previousManaged = queryClient.getQueriesData<Project[]>({
           queryKey: ['project', 'managed'],
         })
+        const previousManagedPages = queryClient.getQueriesData<InfiniteData<Project[]>>({
+          queryKey: ['project', 'managedInfinite'],
+        })
         if (previousProject) {
           queryClient.setQueryData<ProjectGetResponse>(['project', projectId], {
             ...previousProject,
@@ -203,7 +237,17 @@ export const project = {
         queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>
           oldProjects?.map((p) => (p.id === projectId ? { ...p, ...updates } : p))
         )
-        return { previousProject, previousManaged }
+        queryClient.setQueriesData<InfiniteData<Project[]>>(
+          { queryKey: ['project', 'managedInfinite'] },
+          (old) =>
+            old && {
+              ...old,
+              pages: old.pages.map((page) =>
+                page.map((p) => (p.id === projectId ? { ...p, ...updates } : p))
+              ),
+            }
+        )
+        return { previousProject, previousManaged, previousManagedPages }
       },
       onError: (_error, variables, context) => {
         if (context?.previousProject) {
@@ -212,7 +256,10 @@ export const project = {
             context.previousProject
           )
         }
-        for (const [queryKey, data] of context?.previousManaged ?? []) {
+        for (const [queryKey, data] of [
+          ...(context?.previousManaged ?? []),
+          ...(context?.previousManagedPages ?? []),
+        ]) {
           queryClient.setQueryData(queryKey, data)
         }
       },
@@ -221,6 +268,7 @@ export const project = {
         queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>
           oldProjects?.map((p) => (p.id === updatedProject.id ? updatedProject : p))
         )
+        queryClient.invalidateQueries({ queryKey: ['project', 'managedInfinite'] })
       },
     })
   },
@@ -239,6 +287,7 @@ export const project = {
         queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (old) =>
           old?.filter((p) => p.id !== variables.projectId)
         )
+        queryClient.invalidateQueries({ queryKey: ['project', 'managedInfinite'] })
       },
     })
   },

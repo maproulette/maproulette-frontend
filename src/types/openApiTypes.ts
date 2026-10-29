@@ -10731,6 +10731,10 @@ export interface operations {
         searchString?: string
         /** @description The column to sort by. Default column is "display_name" */
         sort?: string
+        /** @description Only return projects with this archived state. By default archived and unarchived projects are both returned. */
+        isArchived?: boolean
+        /** @description Comma-separated list of project ids to restrict the listing to. Default value is empty string, ie. no restriction. */
+        projectIds?: string
       }
       header?: never
       path?: never

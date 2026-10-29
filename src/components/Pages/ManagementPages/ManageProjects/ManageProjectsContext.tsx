@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
@@ -64,7 +64,6 @@ const ManageProjectsContext = createContext<ManageProjectsContextType | undefine
 export const ManageProjectsProvider = ({ children }: { children: ReactNode }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [loadedPages, setLoadedPages] = useState(1)
   const [onlyEnabled, setOnlyEnabled] = useState(false)
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyShowArchived, setOnlyShowArchived] = useState(false)
@@ -77,33 +76,28 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
 
   const debouncedSearchQuery = useDebouncedValue(searchQuery)
 
-  // Reset loaded pages when server-side filters change
-  useEffect(() => {
-    setLoadedPages(1)
-  }, [debouncedSearchQuery, onlyEnabled, onlyOwned])
-
-  const {
-    data: projects,
-    isLoading,
-    isFetching,
-  } = api.project.getManagedProjects({
-    limit: PAGE_SIZE * loadedPages,
-    page: 0,
-    searchString: debouncedSearchQuery,
-    onlyEnabled,
-    onlyOwned,
-  })
-
-  const hasNextPage = (projects?.length ?? 0) >= PAGE_SIZE * loadedPages
-
   const { user } = useAuthContext()
+  const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
+  const canList = !onlyShowPinned || pinnedProjectIds.length > 0
+
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
+    api.project.managedProjectsInfinite(
+      {
+        searchString: debouncedSearchQuery,
+        onlyEnabled,
+        onlyOwned,
+        isArchived: onlyShowArchived,
+        projectIds: onlyShowPinned ? pinnedProjectIds.join(',') : '',
+      },
+      { limit: PAGE_SIZE, enabled: canList }
+    )
+  const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
+
   const updateSettingsMutation = api.user.useUpdateUserSettings()
   const updateProjectMutation = api.project.useUpdateProject()
   const deleteProjectMutation = api.project.useDeleteProject()
-  const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
 
-  const projectsSortedByPinned = useMemo(() => {
-    if (!projects?.length) return projects ?? []
+  const projectsToShow = useMemo(() => {
     const set = new Set(pinnedProjectIds)
     return [...projects].sort((a, b) => {
       const aPinned = a.id != null && set.has(a.id) ? 1 : 0
@@ -112,15 +106,6 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
     })
   }, [projects, pinnedProjectIds])
 
-  const projectsToShow = useMemo(() => {
-    const list = projectsSortedByPinned ?? []
-    const byArchived = list.filter((p) => (p.isArchived ?? false) === onlyShowArchived)
-    if (onlyShowPinned) {
-      return byArchived.filter((p) => p.id != null && pinnedProjectIds.includes(p.id))
-    }
-    return byArchived
-  }, [projectsSortedByPinned, onlyShowArchived, onlyShowPinned, pinnedProjectIds])
-
   const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 
   // All useCallback hooks below are stored in the context value — stable references
@@ -128,8 +113,8 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
   const handleExportCsv = useCallback(
     (projectId: number) => {
       const name =
-        projects?.find((p) => p.id === projectId)?.displayName ??
-        projects?.find((p) => p.id === projectId)?.name
+        projects.find((p) => p.id === projectId)?.displayName ??
+        projects.find((p) => p.id === projectId)?.name
       const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '-') : ''
       void api.project.exportProjectTasksCsv(
         projectId,
@@ -185,13 +170,13 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
   )
 
   const loadMore = useCallback(() => {
-    setLoadedPages((p) => p + 1)
-  }, [])
+    void fetchNextPage()
+  }, [fetchNextPage])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<ManageProjectsContextType>(
     () => ({
-      projects: projects ?? [],
+      projects,
       projectsToShow,
       isLoading,
       isFetching,
