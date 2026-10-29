@@ -5727,12 +5727,12 @@ export interface components {
       isArchived: boolean
       paused: boolean
       /** Format: int64 */
-      ownerId?: number
-      completionMetrics?: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
+      ownerId: number
+      completionMetrics: components['schemas']['org.maproulette.framework.model.CompletionMetrics']
       /** Format: int32 */
-      difficulty?: number
+      difficulty: number
       /** Format: epoch */
-      modified?: number
+      modified: number
       parentName?: string | null
     }
     'org.maproulette.framework.model.MapillaryImage': {
@@ -7257,8 +7257,6 @@ export interface operations {
         page?: number
         /** @description Flag to set if only wanting enabled Challenges returned. Default value is true. */
         onlyEnabled?: boolean
-        /** @description This field will be ignored for this request */
-        parentId?: number
         /** @description Only return challenges whose name contains this string. */
         searchString?: string
         /** @description Whether to only return challenges owned by the authenticated user. Default value is false. */
@@ -7267,6 +7265,8 @@ export interface operations {
         onlyArchived?: boolean
         /** @description Comma-separated list of challenge ids to restrict the listing to. Default value is empty string, ie. no restriction. */
         challengeIds?: string
+        /** @description This field will be ignored for this request */
+        parentId?: number
       }
       header?: never
       path?: never
@@ -10556,7 +10556,7 @@ export interface operations {
         /** @description The column to sort by. Default column is "display_name" */
         sort?: string
         /** @description Only return projects with this archived state. By default archived and unarchived projects are both returned. */
-        isArchived?: boolean
+        isArchived?: boolean | null
         /** @description Comma-separated list of project ids to restrict the listing to. Default value is empty string, ie. no restriction. */
         projectIds?: string
       }
