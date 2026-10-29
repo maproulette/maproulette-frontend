@@ -290,7 +290,7 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
 })
 
 describe('challengeExplore.listingInfinite', () => {
-  it('sends the filters and asks for the next page by page number', async () => {
+  it('sends the filters and asks for the next page by row offset', async () => {
     const fetchMock = vi.fn(async (request: Request) => {
       if (request.url.includes('page=0')) {
         return new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
@@ -333,7 +333,7 @@ describe('challengeExplore.listingInfinite', () => {
     expect(result.current.data?.pages.length).toBe(2)
     expect(result.current.hasNextPage).toBe(false)
     const secondCall = fetchMock.mock.calls[1][0] as Request
-    expect(secondCall.url).toContain('page=1')
+    expect(secondCall.url).toContain('page=2')
   })
 
   it('does not fetch when disabled', () => {

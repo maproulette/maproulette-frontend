@@ -180,7 +180,7 @@ export const challengeExplore = {
             .json<ChallengeListingResponse>(),
         initialPageParam: 0,
         getNextPageParam: (lastPage, allPages) =>
-          lastPage.length < limit ? undefined : allPages.length,
+          lastPage.length < limit ? undefined : allPages.length * limit,
         placeholderData: keepPreviousData,
         enabled,
       })
