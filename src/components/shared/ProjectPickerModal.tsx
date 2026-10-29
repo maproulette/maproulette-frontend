@@ -85,7 +85,7 @@ export const ProjectPickerModal = ({
       { limit: PAGE_SIZE, enabled: canList }
     )
   const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
-  const challengeCountsByProjectId = useProjectChallengeCounts(projects, { enabled: open })
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 
   const projectsToShow = useMemo(() => {
     const set = new Set(pinnedProjectIds)

@@ -158,34 +158,6 @@ export const challengeExplore = {
     )
   },
 
-  getChallengesListingOptions: (
-    projectIds: number[],
-    options?: { limit?: number; page?: number; onlyEnabled?: boolean }
-  ) =>
-    queryOptions({
-      queryKey: [
-        'challenge',
-        'listing',
-        projectIds,
-        {
-          limit: options?.limit ?? -1,
-          page: options?.page ?? 0,
-          onlyEnabled: options?.onlyEnabled ?? false,
-        },
-      ],
-      queryFn: () =>
-        apiRequest
-          .get('api/v2/challenges/listing', {
-            searchParams: {
-              projectIds: projectIds.join(','),
-              limit: options?.limit ?? -1,
-              page: options?.page ?? 0,
-              onlyEnabled: options?.onlyEnabled ?? false,
-            },
-          })
-          .json<ChallengeListingResponse>(),
-    }),
-
   listingInfinite: (
     projectIds: number[],
     filters: ChallengeListingFilters,

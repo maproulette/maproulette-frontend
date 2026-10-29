@@ -1,36 +1,29 @@
 // @vitest-environment happy-dom
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { queryClientWrapper } from '@/test/queryClient'
+import { describe, expect, it } from 'vitest'
 import { renderHook } from '@/test/renderHook'
-import { stubFetch } from '@/test/stubFetch'
-import { waitFor } from '@/test/waitFor'
 import type { Project } from '@/types/Project'
 import { useProjectChallengeCounts } from './useProjectChallengeCounts'
 
-afterEach(() => {
-  vi.unstubAllGlobals()
-})
-
-const projects = [{ id: 1 }, { id: 2 }] as Project[]
-
 describe('useProjectChallengeCounts', () => {
-  it('fetches the listing for the given projects', async () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+  it('maps each project to the challenge counts the listing returned', () => {
+    const projects = [
+      { id: 1, challengeCounts: { total: 3, completed: 2 } },
+      { id: 2 },
+    ] as Project[]
 
-    renderHook(() => useProjectChallengeCounts(projects), { wrapper: queryClientWrapper() })
+    const { result } = renderHook(() => useProjectChallengeCounts(projects))
 
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('projectIds=1%2C2')
+    expect(result.current).toEqual({
+      1: { total: 3, completed: 2 },
+      2: { total: 0, completed: 0 },
+    })
   })
 
-  it('does not fetch when disabled', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+  it('skips projects without an id', () => {
+    const { result } = renderHook(() =>
+      useProjectChallengeCounts([{ challengeCounts: { total: 1, completed: 0 } }] as Project[])
+    )
 
-    renderHook(() => useProjectChallengeCounts(projects, { enabled: false }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(fetchMock).not.toHaveBeenCalled()
+    expect(result.current).toEqual({})
   })
 })

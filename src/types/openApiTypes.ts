@@ -2036,7 +2036,7 @@ export interface paths {
     }
     /**
      * List all the managed projects.
-     * @description Lists all the managed projects in the system for the authenticated user
+     * @description Lists all the managed projects in the system for the authenticated user, each with the number of challenges it contains and how many of them are complete
      */
     get: operations['project_list_all_the_managed_projects']
     put?: never
@@ -10748,7 +10748,13 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Project'][]
+          'application/json': (components['schemas']['Project'] & {
+            /** @description The number of challenges in the project, and how many of them are finished or have every task done. */
+            challengeCounts?: {
+              total?: number
+              completed?: number
+            }
+          })[]
         }
       }
     }

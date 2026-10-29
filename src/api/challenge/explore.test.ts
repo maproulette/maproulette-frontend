@@ -1,5 +1,4 @@
 // @vitest-environment happy-dom
-import { useQuery } from '@tanstack/react-query'
 import { act } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
@@ -287,51 +286,6 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
 
     const secondCall = fetchMock.mock.calls[1][0] as Request
     expect(secondCall.url).toContain('offset=2')
-  })
-})
-
-describe('challengeExplore.getChallengesListingOptions', () => {
-  it('builds the expected query key with default limit/onlyEnabled', () => {
-    const options = challengeExplore.getChallengesListingOptions([1, 2])
-
-    expect(options.queryKey).toEqual([
-      'challenge',
-      'listing',
-      [1, 2],
-      { limit: -1, page: 0, onlyEnabled: false },
-    ])
-  })
-
-  it('builds the expected query key with explicit limit, page, and onlyEnabled', () => {
-    const options = challengeExplore.getChallengesListingOptions([3], {
-      limit: 20,
-      page: 1,
-      onlyEnabled: true,
-    })
-
-    expect(options.queryKey).toEqual([
-      'challenge',
-      'listing',
-      [3],
-      { limit: 20, page: 1, onlyEnabled: true },
-    ])
-  })
-
-  it('fetches listing data with default limit/onlyEnabled when used as query options', async () => {
-    const listing = [{ id: 1, name: 'Challenge A' }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(listing), { status: 200 }))
-
-    const { result } = renderHook(
-      () => useQuery(challengeExplore.getChallengesListingOptions([1, 2])),
-      { wrapper: queryClientWrapper() }
-    )
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(listing)
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('projectIds=1%2C2')
-    expect(request.url).toContain('limit=-1')
-    expect(request.url).toContain('onlyEnabled=false')
   })
 })
 
