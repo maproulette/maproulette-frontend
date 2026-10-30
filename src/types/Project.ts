@@ -7,8 +7,8 @@ export type ProjectGetResponse =
 
 export type ManagedProjectsFilters = Pick<
   NonNullable<operations['project_list_all_the_managed_projects']['parameters']['query']>,
-  'searchString' | 'onlyEnabled' | 'onlyOwned' | 'isArchived' | 'projectIds'
->
+  'searchString' | 'onlyEnabled' | 'onlyOwned' | 'projectIds'
+> & { isArchived?: boolean }
 
 export type ProjectChallengeCounts = NonNullable<
   operations['project_list_all_the_managed_projects']['responses']['200']['content']['application/json'][number]['challengeCounts']
