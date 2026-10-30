@@ -1,15 +1,15 @@
 import { Archive, Eye, Pin, User } from 'lucide-react'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { ProjectsTableView } from '@/components/Pages/ManagementPages/ManageProjects/ProjectsTableView'
 import { getPinnedProjectIds } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { useProjectChallengeCounts } from '@/components/Pages/ManagementPages/ManageProjects/useProjectChallengeCounts'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
 import { ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
-import { Button } from '@/components/ui/Button'
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/Dialog'
 import { Spinner } from '@/components/ui/Spinner'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
 
@@ -63,50 +64,39 @@ export const ProjectPickerModal = ({
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyShowArchived, setOnlyShowArchived] = useState(false)
   const [onlyShowPinned, setOnlyShowPinned] = useState(false)
-  const [loadedPages, setLoadedPages] = useState(1)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
-  // Reset pagination when server-side filters change so a narrower result set
-  // doesn't keep an oversized limit from a prior search.
-  useEffect(() => {
-    setLoadedPages(1)
-  }, [searchQuery, onlyEnabled, onlyOwned])
-
-  const {
-    data: projects,
-    isLoading,
-    isFetching,
-  } = api.project.getManagedProjects({
-    limit: PAGE_SIZE * loadedPages,
-    page: 0,
-    searchString: searchQuery,
-    onlyEnabled,
-    onlyOwned,
-  })
-
-  const hasNextPage = (projects?.length ?? 0) >= PAGE_SIZE * loadedPages
-  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
 
   const { user } = useAuthContext()
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
   const excluded = useMemo(() => new Set(excludeProjectIds ?? []), [excludeProjectIds])
+  const canList = open && (!onlyShowPinned || pinnedProjectIds.length > 0)
+
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
+    api.project.managedProjectsInfinite(
+      {
+        searchString: debouncedSearchQuery,
+        onlyEnabled,
+        onlyOwned,
+        isArchived: onlyShowArchived,
+        projectIds: onlyShowPinned ? pinnedProjectIds.join(',') : '',
+      },
+      { limit: PAGE_SIZE, enabled: canList }
+    )
+  const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 
   const projectsToShow = useMemo(() => {
-    const list = projects ?? []
     const set = new Set(pinnedProjectIds)
-    const sorted = [...list].sort((a, b) => {
-      const aPinned = a.id != null && set.has(a.id) ? 1 : 0
-      const bPinned = b.id != null && set.has(b.id) ? 1 : 0
-      return bPinned - aPinned
-    })
-    const filtered = sorted.filter(
-      (p) => (p.isArchived ?? false) === onlyShowArchived && !(p.id != null && excluded.has(p.id))
-    )
-    if (onlyShowPinned) {
-      return filtered.filter((p) => p.id != null && set.has(p.id))
-    }
-    return filtered
-  }, [projects, pinnedProjectIds, onlyShowArchived, onlyShowPinned, excluded])
+    return projects
+      .filter((p) => !(p.id != null && excluded.has(p.id)))
+      .sort((a, b) => {
+        const aPinned = a.id != null && set.has(a.id) ? 1 : 0
+        const bPinned = b.id != null && set.has(b.id) ? 1 : 0
+        return bPinned - aPinned
+      })
+  }, [projects, pinnedProjectIds, excluded])
 
   const handleSelect = (project: Project) => {
     onSelectProject(project)
@@ -212,26 +202,15 @@ export const ProjectPickerModal = ({
             </div>
           )}
 
-          {!isLoading && projectsToShow.length > 0 && hasNextPage && (
-            <div className="flex justify-center p-3">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="rounded-full"
-                onClick={() => setLoadedPages((p) => p + 1)}
-                disabled={isFetching}
-              >
-                {isFetching ? (
-                  <>
-                    <Spinner />
-                    {t('common.loading2', undefined, 'Loading...')}
-                  </>
-                ) : (
-                  t('common.loadMore', undefined, 'Load More')
-                )}
-              </Button>
-            </div>
+          {!isLoading && projectsToShow.length > 0 && (
+            <LoadMoreFooter
+              hasNextPage={hasNextPage}
+              isFetching={isFetching}
+              onLoadMore={() => void fetchNextPage()}
+              showEndOfList={false}
+              size="sm"
+              className="p-3"
+            />
           )}
         </fieldset>
         {children}

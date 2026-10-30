@@ -10,16 +10,30 @@ const getCurrentUserId = (queryClient: ReturnType<typeof useQueryClient>): numbe
   return (me as { id?: number } | undefined)?.id ?? null
 }
 
+export const LOCKED_TASKS_INVALIDATION_DELAY_MS = 300
+
+const pendingLockedTasksInvalidations = new WeakMap<
+  ReturnType<typeof useQueryClient>,
+  ReturnType<typeof setTimeout>
+>()
+
 /**
  * Refresh the current user's "locked tasks" list (e.g. the dashboard block). Called whenever
  * their lock state changes - lock, unlock, or a status change that releases the lock - so the
  * list reflects reality without waiting for the 60s stale window.
  */
 export const invalidateLockedTasks = (queryClient: ReturnType<typeof useQueryClient>): void => {
-  const userId = getCurrentUserId(queryClient)
-  if (userId != null) {
-    queryClient.invalidateQueries({ queryKey: ['user', userId, 'lockedTasks'] })
-  }
+  clearTimeout(pendingLockedTasksInvalidations.get(queryClient))
+  pendingLockedTasksInvalidations.set(
+    queryClient,
+    setTimeout(() => {
+      pendingLockedTasksInvalidations.delete(queryClient)
+      const userId = getCurrentUserId(queryClient)
+      if (userId != null) {
+        queryClient.invalidateQueries({ queryKey: ['user', userId, 'lockedTasks'] })
+      }
+    }, LOCKED_TASKS_INVALIDATION_DELAY_MS)
+  )
 }
 
 export interface TaskSearchResult {
@@ -48,9 +62,12 @@ export const taskSingle = {
   startTask: (taskId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['task', taskId, 'start'],
+        queryKey: ['taskStart', taskId],
         queryFn: () => apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskStartResponse>(),
         enabled: !!taskId,
+        staleTime: Number.POSITIVE_INFINITY,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
       })
     ),
 
@@ -71,7 +88,10 @@ export const taskSingle = {
       mutationFn: (taskId: number) =>
         apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskStartResponse>(),
       onSuccess: (lockedTask, taskId) => {
-        queryClient.setQueryData<TaskGetResponse>(['task', taskId], lockedTask)
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+          ...lockedTask,
+          lockedBy: getCurrentUserId(queryClient),
+        })
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         invalidateLockedTasks(queryClient)
         if (lockedTask?.parent) {
@@ -95,7 +115,11 @@ export const taskSingle = {
       mutationFn: (taskId: number) =>
         apiRequest.get(`api/v2/task/${taskId}/release`).json<TaskGetResponse>(),
       onSuccess: (unlockedTask, taskId) => {
-        queryClient.setQueryData<TaskGetResponse>(['task', taskId], unlockedTask)
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+          ...unlockedTask,
+          lockedBy: null,
+          lockBundledTasks: [],
+        })
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         invalidateLockedTasks(queryClient)
         if (unlockedTask?.parent) {
@@ -122,7 +146,14 @@ export const taskSingle = {
       onError: (error, variables) => {
         logger.error('Failed to update bundle lock', { error, variables })
       },
-      onSuccess: () => {
+      onSuccess: (lock, { taskId }) => {
+        const lockedBy = getCurrentUserId(queryClient)
+        for (const id of new Set([taskId, lock.lockPrimaryTaskId, ...lock.lockBundledTasks])) {
+          queryClient.setQueryData<TaskGetResponse>(
+            ['task', id],
+            (cached) => cached && { ...cached, lockedBy, lockBundledTasks: lock.lockBundledTasks }
+          )
+        }
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
         invalidateLockedTasks(queryClient)
       },
@@ -141,7 +172,12 @@ export const taskSingle = {
         // Skip sets status to 3 (Skipped); patch the cached task instead of refetching.
         const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
         if (cached) {
-          queryClient.setQueryData<TaskGetResponse>(['task', taskId], { ...cached, status: 3 })
+          queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+            ...cached,
+            status: 3,
+            lockedBy: null,
+            lockBundledTasks: [],
+          })
         }
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         invalidateLockedTasks(queryClient)
@@ -165,10 +201,14 @@ export const taskSingle = {
       mutationFn: async ({ taskId, body }: { taskId: number; body: TaskGetResponse }) => {
         const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
         const updatedTask = await taskSingle.updateTask(taskId, body)
-        return { updatedTask, oldStatus: cached?.status ?? null }
+        return { updatedTask, oldStatus: cached?.status ?? null, cached }
       },
-      onSuccess: ({ updatedTask, oldStatus }, { taskId }) => {
-        queryClient.setQueryData<TaskGetResponse>(['task', taskId], updatedTask)
+      onSuccess: ({ updatedTask, oldStatus, cached }, { taskId }) => {
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+          ...updatedTask,
+          lockedBy: cached?.lockedBy,
+          lockBundledTasks: cached?.lockBundledTasks,
+        })
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         if (updatedTask?.parent) {
           patchChallengeTaskMarker(queryClient, updatedTask.parent, taskId, {

@@ -10,6 +10,7 @@ import { logger } from '@/lib/logger'
 import type {
   Challenge,
   ChallengeGetResponse,
+  ChallengeListingFilters,
   ChallengeListingResponse,
   ExploreChallengesParams,
   ExploreChallengesRequest,
@@ -104,7 +105,10 @@ export const challengeExplore = {
       })
     ),
 
-  featuredChallenges: (params: FeaturedChallengesParams) =>
+  featuredChallenges: (
+    params: FeaturedChallengesParams,
+    { enabled = true }: { enabled?: boolean } = {}
+  ) =>
     useQuery(
       queryOptions({
         queryKey: ['challenge', 'featured', params],
@@ -114,6 +118,7 @@ export const challengeExplore = {
               searchParams: params,
             })
             .json<FeaturedChallengesResponse[]>(),
+        enabled,
       })
     ),
 
@@ -153,37 +158,32 @@ export const challengeExplore = {
     )
   },
 
-  getChallengesListingOptions: (
+  listingInfinite: (
     projectIds: number[],
-    options?: { limit?: number; page?: number; onlyEnabled?: boolean }
+    filters: ChallengeListingFilters,
+    { limit = 20, enabled = true }: { limit?: number; enabled?: boolean } = {}
   ) =>
-    queryOptions({
-      queryKey: [
-        'challenge',
-        'listing',
-        projectIds,
-        {
-          limit: options?.limit ?? -1,
-          page: options?.page ?? 0,
-          onlyEnabled: options?.onlyEnabled ?? false,
-        },
-      ],
-      queryFn: () =>
-        apiRequest
-          .get('api/v2/challenges/listing', {
-            searchParams: {
-              projectIds: projectIds.join(','),
-              limit: options?.limit ?? -1,
-              page: options?.page ?? 0,
-              onlyEnabled: options?.onlyEnabled ?? false,
-            },
-          })
-          .json<ChallengeListingResponse>(),
-    }),
-
-  listing: (projectIds: number[], limit = 100, page = 0, onlyEnabled = false) =>
-    useQuery(
-      challengeExplore.getChallengesListingOptions(projectIds, { limit, page, onlyEnabled })
+    useInfiniteQuery(
+      infiniteQueryOptions({
+        queryKey: ['challenge', 'listing', 'infinite', projectIds, { limit, ...filters }],
+        queryFn: ({ pageParam }) =>
+          apiRequest
+            .get('api/v2/challenges/listing', {
+              searchParams: {
+                projectIds: projectIds.join(','),
+                limit,
+                page: pageParam,
+                onlyEnabled: false,
+                ...filters,
+              },
+            })
+            .json<ChallengeListingResponse>(),
+        initialPageParam: 0,
+        getNextPageParam: (lastPage, allPages) =>
+          lastPage.length < limit ? undefined : allPages.length * limit,
+        placeholderData: keepPreviousData,
+        enabled,
+      })
     ),
 
   searchChallenges: ({ search = '' }: { search?: string } = {}) =>

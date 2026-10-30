@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { useQuery } from '@tanstack/react-query'
+import { act } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
@@ -44,6 +45,17 @@ describe('project.featuredProjects', () => {
     expect(request.url).toContain('limit=5')
     expect(request.url).toContain('onlyEnabled=false')
     expect(request.url).toContain('page=2')
+  })
+
+  it('does not fetch when disabled', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+
+    const { result } = renderHook(() => project.featuredProjects({ enabled: false }), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })
 
@@ -324,7 +336,92 @@ describe('project.useCreateProject', () => {
   })
 })
 
+describe('project.managedProjectsInfinite', () => {
+  it('sends the filters and asks for the next page by page number', async () => {
+    const fetchMock = vi.fn(async (request: Request) => {
+      if (request.url.includes('page=0')) {
+        return new Response(JSON.stringify([projectA, projectB]), { status: 200 })
+      }
+      return new Response(JSON.stringify([]), { status: 200 })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const { result, rerender } = renderHook(
+      () =>
+        project.managedProjectsInfinite(
+          { searchString: 'roads', isArchived: false, projectIds: '1,2' },
+          { limit: 2 }
+        ),
+      { wrapper: queryClientWrapper() }
+    )
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    const firstCall = fetchMock.mock.calls[0][0] as Request
+    expect(firstCall.url).toContain('api/v2/projects/managed')
+    expect(firstCall.url).toContain('limit=2')
+    expect(firstCall.url).toContain('searchString=roads')
+    expect(firstCall.url).toContain('isArchived=false')
+    expect(firstCall.url).toContain('projectIds=1%2C2')
+    expect(result.current.hasNextPage).toBe(true)
+
+    await act(async () => {
+      await result.current.fetchNextPage()
+    })
+    rerender()
+    expect(result.current.data?.pages.length).toBe(2)
+    expect(result.current.hasNextPage).toBe(false)
+    const secondCall = fetchMock.mock.calls[1][0] as Request
+    expect(secondCall.url).toContain('page=1')
+  })
+
+  it('does not fetch when disabled', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+
+    const { result } = renderHook(() => project.managedProjectsInfinite({}, { enabled: false }), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+})
+
 describe('project.useUpdateProject', () => {
+  it('patches paged managed lists before the request resolves', async () => {
+    let releaseResponse: () => void = () => {}
+    const pending = new Promise<void>((resolve) => {
+      releaseResponse = resolve
+    })
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_request: Request) => {
+        await pending
+        return new Response(JSON.stringify({ ...projectA, isArchived: true }), { status: 200 })
+      })
+    )
+    const client = createTestQueryClient()
+    client.setQueryData(['project', 'managedInfinite', 'seed'], {
+      pages: [[projectA], [projectB]],
+      pageParams: [0, 1],
+    })
+
+    const { result } = renderHook(() => project.useUpdateProject(), {
+      wrapper: queryClientWrapper(client),
+    })
+    act(() => {
+      result.current.mutate({ projectId: 1, updates: { isArchived: true } })
+    })
+
+    await waitFor(() =>
+      expect(client.getQueryData(['project', 'managedInfinite', 'seed'])).toEqual({
+        pages: [[{ ...projectA, isArchived: true }], [projectB]],
+        pageParams: [0, 1],
+      })
+    )
+    releaseResponse()
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+  })
+
   it('updates the cached project and replaces the matching entry in managed lists', async () => {
     const updated = { id: 1, name: 'Updated', enabled: true }
     const fetchMock = stubFetch(new Response(JSON.stringify(updated), { status: 200 }))

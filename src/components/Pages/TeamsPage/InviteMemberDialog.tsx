@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { initials } from '@/lib/utils'
@@ -46,7 +47,8 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
   const [role, setRole] = useState<TeamRole>(TEAM_ROLE_MEMBER)
   const invite = api.team.useInviteMember()
-  const { data: users = [] } = api.user.findUsers(query, 8, query.length > 0)
+  const debouncedQuery = useDebouncedValue(query)
+  const { data: users = [] } = api.user.findUsers(debouncedQuery, 8, debouncedQuery.length > 0)
 
   useEffect(() => {
     if (!open) {

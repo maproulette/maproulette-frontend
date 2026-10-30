@@ -25,6 +25,10 @@ export type FeaturedChallengesParams =
   operations['challenge_featured_challenges']['parameters']['query']
 export type ExploreChallengesParams =
   operations['explore_challenge_list_challenges']['parameters']['query']
+export type ChallengeListingFilters = Pick<
+  NonNullable<operations['challenge_list_challenges_in_specified_projects']['parameters']['query']>,
+  'onlyEnabled' | 'searchString' | 'onlyOwned' | 'onlyArchived' | 'challengeIds'
+>
 
 /**
  * Explore-challenges query params plus the boundary of the selected place.

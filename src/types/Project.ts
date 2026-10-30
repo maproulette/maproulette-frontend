@@ -1,9 +1,18 @@
 import type { CompletionMetrics } from './Challenge'
-import type { components, paths } from './openApiTypes'
+import type { components, operations, paths } from './openApiTypes'
 
 /* Responses */
 export type ProjectGetResponse =
   paths['/project/{id}']['get']['responses']['200']['content']['application/json']
+
+export type ManagedProjectsFilters = Pick<
+  NonNullable<operations['project_list_all_the_managed_projects']['parameters']['query']>,
+  'searchString' | 'onlyEnabled' | 'onlyOwned' | 'projectIds'
+> & { isArchived?: boolean }
+
+export type ProjectChallengeCounts = NonNullable<
+  operations['project_list_all_the_managed_projects']['responses']['200']['content']['application/json'][number]['challengeCounts']
+>
 
 /* Types From API (isArchived supported by API but not in generated schema) */
 export type Project = components['schemas']['Project'] & {
@@ -19,4 +28,5 @@ export type Project = components['schemas']['Project'] & {
    * when no team owns the project.
    */
   avatarUrl?: string | null
+  challengeCounts?: ProjectChallengeCounts
 }

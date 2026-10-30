@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { initials } from '@/lib/utils'
 
@@ -27,7 +28,8 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
   const { t } = useIntl()
   const [query, setQuery] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
-  const { data: users = [] } = api.user.findUsers(query, 8, query.length > 0)
+  const debouncedQuery = useDebouncedValue(query)
+  const { data: users = [] } = api.user.findUsers(debouncedQuery, 8, debouncedQuery.length > 0)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

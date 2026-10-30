@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight, MessageCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { ChallengeCommentResponse } from '@/api/challenge/comments'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Comment } from '@/types/Comment'
@@ -96,7 +96,6 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
 export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge' }) => {
   const { t } = useIntl()
   const { searchQuery } = useGlobalSearchContext()
-  const [debouncedQuery, setDebouncedQuery] = useState('')
   const trimmed = searchQuery.trim()
   const hasSearchQuery = trimmed.length > 0
   const label =
@@ -105,12 +104,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
       : t('common.challenge', undefined, 'Challenge')
   const labelLower = label.toLowerCase()
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(trimmed)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [trimmed])
+  const debouncedQuery = useDebouncedValue(trimmed)
 
   const taskCommentResult = api.task.searchTaskComments({
     q: commentType === 'task' ? debouncedQuery : '',

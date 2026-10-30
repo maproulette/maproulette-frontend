@@ -32,6 +32,7 @@ import { ClearManageFiltersButton } from '@/components/shared/ClearManageFilters
 import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
 import { SearchBar } from '@/components/shared/SearchBar'
 import {
   AlertDialog,
@@ -61,9 +62,11 @@ import { useManageChallengesContext } from './ManageChallengesContext'
 export const ManageChallengesContent = () => {
   const { t } = useIntl()
   const {
-    filteredChallenges,
-    projectNamesById,
+    challenges,
     isLoading,
+    isFetching,
+    hasNextPage,
+    loadMore,
     pinnedChallengeIds,
     searchQuery,
     setSearchQuery,
@@ -499,14 +502,14 @@ export const ManageChallengesContent = () => {
             >
               {!isLoading && (
                 <EntityGrid
-                  items={filteredChallenges || []}
+                  items={challenges}
                   renderItem={(challenge) => {
                     const isPinned =
                       challenge.id != null && pinnedChallengeIds.includes(challenge.id)
                     return (
                       <ChallengeCard
                         challenge={challenge}
-                        parentName={projectNamesById.get(challenge.parent)}
+                        parentName={challenge.parentName ?? undefined}
                         linkTo="/manage/challenge/$challengeId"
                         linkParams={{ challengeId: challenge.id.toString() }}
                         actions={buildChallengeActions(challenge, isPinned)}
@@ -528,6 +531,14 @@ export const ManageChallengesContent = () => {
                 />
               )}
             </div>
+
+            {!isLoading && challenges.length > 0 && (
+              <LoadMoreFooter
+                hasNextPage={hasNextPage}
+                isFetching={isFetching}
+                onLoadMore={loadMore}
+              />
+            )}
           </div>
         </div>
       </div>

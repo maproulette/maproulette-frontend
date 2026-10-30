@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
@@ -15,7 +16,7 @@ export const FindProject = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
-  const trimmedSearchQuery = searchQuery.trim()
+  const trimmedSearchQuery = useDebouncedValue(searchQuery.trim())
   const hasSearchQuery = trimmedSearchQuery.length > 0
 
   const searchQueryResult = api.project.searchProjects({ search: trimmedSearchQuery })

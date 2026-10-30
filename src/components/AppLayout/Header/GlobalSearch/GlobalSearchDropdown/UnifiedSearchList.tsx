@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { ChallengeGetResponse } from '@/types/Challenge'
@@ -33,17 +34,11 @@ export const UnifiedSearchList = () => {
   const { t } = useIntl()
   const { searchQuery, onResultSelect, onSelectSearchType, isOpen } = useGlobalSearchContext()
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const [debouncedQuery, setDebouncedQuery] = useState('')
 
   const trimmedQuery = searchQuery.trim()
   const hasSearchQuery = trimmedQuery.length > 0
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(trimmedQuery)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [trimmedQuery])
+  const debouncedQuery = useDebouncedValue(trimmedQuery)
 
   const { data: rawProjects, isLoading: isLoadingProjects } = api.project.searchProjects({
     search: debouncedQuery,
@@ -56,12 +51,10 @@ export const UnifiedSearchList = () => {
   const challenges = Array.isArray(rawChallenges) ? rawChallenges : []
 
   const { data: featuredProjectsData = [], isLoading: isLoadingFeaturedProjects } =
-    api.project.featuredProjects({ limit: 2 })
+    api.project.featuredProjects({ limit: 2, enabled: isOpen })
 
   const { data: featuredChallengesData, isLoading: isLoadingFeatured } =
-    api.challenge.featuredChallenges({
-      limit: 2,
-    })
+    api.challenge.featuredChallenges({ limit: 2 }, { enabled: isOpen })
 
   const featuredChallenges: ChallengeGetResponse[] = Array.isArray(featuredChallengesData)
     ? featuredChallengesData

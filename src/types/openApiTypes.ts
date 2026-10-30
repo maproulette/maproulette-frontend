@@ -400,7 +400,7 @@ export interface paths {
     }
     /**
      * List challenges in specified projects
-     * @description Retrieves a lightweight listing of challenges, with just a few basic fields for each, that belong to the specified project(s).
+     * @description Retrieves a lightweight listing of challenges, with just a few basic fields for each, that belong to the specified project(s), ordered by name.
      */
     get: operations['challenge_list_challenges_in_specified_projects']
     put?: never
@@ -1058,26 +1058,6 @@ export interface paths {
     get: operations['challenge_match_osm_changesets']
     put?: never
     post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/project/{projectId}/challenge/{username}/{repo}/{name}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create Challenge from Github
-     * @description This will pull the following files from Github, ${name}_create.json, ${name}_geojson.json, ${name}_info.md, and create a Challenge from it. The create file will be the json used to create the challenge. Similarly to if you supplied json in the create method. The info.md file is just an informational file that can be used later for challenge information to the user. And geojson.json which is used to generate the tasks. If the challenge has been previously created, it will just update the tasks from the geojson
-     */
-    post: operations['challenge_create_challenge_from_github']
     delete?: never
     options?: never
     head?: never
@@ -2036,7 +2016,7 @@ export interface paths {
     }
     /**
      * List all the managed projects.
-     * @description Lists all the managed projects in the system for the authenticated user
+     * @description Lists all the managed projects in the system for the authenticated user, each with the number of challenges it contains and how many of them are complete
      */
     get: operations['project_list_all_the_managed_projects']
     put?: never
@@ -2948,10 +2928,15 @@ export interface paths {
     }
     /**
      * Updates Task Tags
-     * @description Updates the tags on the Task
+     * @deprecated
+     * @description Replaces the tags on the Task. Deprecated; use the PUT form, this GET will be removed once the frontends have switched. Requires write access to the task's challenge, or being the mapper or reviewer working on the task.
      */
-    get: operations['task_updates_task_tags']
-    put?: never
+    get: operations['task_updates_task_tags_get']
+    /**
+     * Updates Task Tags
+     * @description Replaces the tags on the Task
+     */
+    put: operations['task_updates_task_tags']
     post?: never
     delete?: never
     options?: never
@@ -4825,94 +4810,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/user/{userId}/following': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get users being followed by a user
-     * @description Get users being followed by a user
-     */
-    get: operations['follow_get_users_being_followed_by_a_user']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/user/{userId}/followers': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get users following a user
-     * @description Get users following a user
-     */
-    get: operations['follow_get_users_following_a_user']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/user/{userId}/follow': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Follow a user
-     * @description Begin following a user's MapRoulette activity
-     */
-    post: operations['follow_follow_a_user']
-    /**
-     * Stop following a user
-     * @description Stop following a user's MapRoulette activity
-     */
-    delete: operations['follow_stop_following_a_user']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/user/{userId}/block': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Block a follower
-     * @description Prevent a user from following this user
-     */
-    post: operations['follow_block_a_follower']
-    /**
-     * Stop blocking a follower
-     * @description Remove block preventing a user from following this user
-     */
-    delete: operations['follow_stop_blocking_a_follower']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/data/user/leaderboard': {
     parameters: {
       query?: never
@@ -4985,26 +4882,6 @@ export interface paths {
      * @description Fetches the top mappers for a specific project within a time period
      */
     get: operations['leaderboard_fetches_leaderboard_for_a_specific_project']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/data/user/{userId}/projectLeaderboard': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Fetches leaderboard stats with ranking for the user for a project
-     * @description Fetches user's current ranking and stats in the leaderboard along with a number of mappers above and below in the rankings.
-     */
-    get: operations['getProjectLeaderboardForUser']
     put?: never
     post?: never
     delete?: never
@@ -5395,7 +5272,6 @@ export interface components {
       /** Format: int32 */
       needsReview?: number | null
       isReviewer?: boolean | null
-      allowFollowing?: boolean | null
       /** Format: int32 */
       theme?: number | null
       customBasemaps?:
@@ -5464,10 +5340,6 @@ export interface components {
       } | null
       /** Format: int32 */
       score?: number | null
-      /** Format: int64 */
-      followingGroupId?: number | null
-      /** Format: int64 */
-      followersGroupId?: number | null
       achievements?: number[] | null
     }
     'org.maproulette.framework.model.TaskClusterSummary': {
@@ -5679,8 +5551,6 @@ export interface components {
       /** Format: int32 */
       team: number
       /** Format: int32 */
-      follow: number
-      /** Format: int32 */
       metaReview: number
       /** Format: int32 */
       reviewCount: number
@@ -5863,6 +5733,7 @@ export interface components {
       difficulty: number
       /** Format: epoch */
       modified: number
+      parentName?: string | null
     }
     'org.maproulette.framework.model.MapillaryImage': {
       key: string
@@ -7386,6 +7257,14 @@ export interface operations {
         page?: number
         /** @description Flag to set if only wanting enabled Challenges returned. Default value is true. */
         onlyEnabled?: boolean
+        /** @description Only return challenges whose name contains this string. */
+        searchString?: string
+        /** @description Whether to only return challenges owned by the authenticated user. Default value is false. */
+        onlyOwned?: boolean
+        /** @description Whether to only return archived challenges. Default value is false. */
+        onlyArchived?: boolean
+        /** @description Comma-separated list of challenge ids to restrict the listing to. Default value is empty string, ie. no restriction. */
+        challengeIds?: string
         /** @description This field will be ignored for this request */
         parentId?: number
       }
@@ -8585,52 +8464,6 @@ export interface operations {
         content?: never
       }
       /** @description No Challenge with provided ID found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  challenge_create_challenge_from_github: {
-    parameters: {
-      query?: {
-        rebuild?: boolean
-      }
-      header?: never
-      path: {
-        projectId: number
-        /** @description username of the github user that owns the repo */
-        username: string
-        /** @description Github repositories that contains the challenge files */
-        repo: string
-        /** @description The name of the challenge that prefixes all the github files */
-        name: string
-        /** @description The ID of the parent project */
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The retrieved Challenge */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.Challenge']
-        }
-      }
-      /** @description The user is not authorized to make this request */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description No Project with provided ID found */
       404: {
         headers: {
           [name: string]: unknown
@@ -10722,6 +10555,10 @@ export interface operations {
         searchString?: string
         /** @description The column to sort by. Default column is "display_name" */
         sort?: string
+        /** @description Only return projects with this archived state. By default archived and unarchived projects are both returned. */
+        isArchived?: boolean | null
+        /** @description Comma-separated list of project ids to restrict the listing to. Default value is empty string, ie. no restriction. */
+        projectIds?: string
       }
       header?: never
       path?: never
@@ -10735,7 +10572,13 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Project'][]
+          'application/json': (components['schemas']['Project'] & {
+            /** @description The number of challenges in the project, and how many of them are finished or have every task done. */
+            challengeCounts?: {
+              total?: number
+              completed?: number
+            }
+          })[]
         }
       }
     }
@@ -12330,6 +12173,51 @@ export interface operations {
       }
     }
   }
+  task_updates_task_tags_get: {
+    parameters: {
+      query: {
+        /** @description A complete comma separated list of tags. If empty, then all tags will be removed. */
+        tags: string
+      }
+      header?: never
+      path: {
+        /** @description The ID of the Task */
+        id: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The task's tags after the update */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user is not authenticated */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user may not change the tags on this task */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No task with the given id */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   task_updates_task_tags: {
     parameters: {
       query: {
@@ -12345,22 +12233,29 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description A basic 304 with NoContent will be returned on a successful delete */
-      304: {
+      /** @description The task's tags after the update */
+      200: {
         headers: {
           [name: string]: unknown
         }
         content?: never
       }
-      /** @description If no tags are supplied a BadRequest response will be returned */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description The user is not authorized to make this request */
+      /** @description The user is not authenticated */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description The user may not change the tags on this task */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description No task with the given id */
+      404: {
         headers: {
           [name: string]: unknown
         }
@@ -16064,162 +15959,6 @@ export interface operations {
       }
     }
   }
-  follow_get_users_being_followed_by_a_user: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description The id of the follower */
-        userId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The users followed by the specified user */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PublicUser'][]
-        }
-      }
-    }
-  }
-  follow_get_users_following_a_user: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description The id of the user being followed */
-        userId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description The users following the specified user */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': {
-            /** Format: int64 */
-            id?: number
-            user?: components['schemas']['PublicUser']
-            /** @description 0 if following, 1 if blocked */
-            status?: number
-          }[]
-        }
-      }
-    }
-  }
-  follow_follow_a_user: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description The id of the user to follow */
-        userId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Updated list of followed users */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PublicUser'][]
-        }
-      }
-    }
-  }
-  follow_stop_following_a_user: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description The id of the user to stop following */
-        userId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Updated list of followed users */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PublicUser'][]
-        }
-      }
-    }
-  }
-  follow_block_a_follower: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description The id of the user to block */
-        userId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Updated list of followers */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': {
-            /** Format: int64 */
-            id?: number
-            user?: components['schemas']['PublicUser']
-            /** @description 0 if following, 1 if blocked */
-            status?: number
-          }[]
-        }
-      }
-    }
-  }
-  follow_stop_blocking_a_follower: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description The id of the user to stop blocking */
-        userId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Updated list of followers */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': {
-            /** Format: int64 */
-            id?: number
-            user?: components['schemas']['PublicUser']
-            /** @description 0 if following, 1 if blocked */
-            status?: number
-          }[]
-        }
-      }
-    }
-  }
   leaderboard_fetches_the_mapper_leaderboard_stats: {
     parameters: {
       query?: {
@@ -16341,43 +16080,6 @@ export interface operations {
     responses: {
       /** @description List of leaderboard stats for the project */
       200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  getProjectLeaderboardForUser: {
-    parameters: {
-      query: {
-        /** @description The project id to search by */
-        projectId: number
-        /** @description The optional number of past months to search by (with 0 as current month and -1 as all time) */
-        monthDuration?: number
-        /** @description How many results before and after the found user to return */
-        bracket?: number
-      }
-      header?: never
-      path: {
-        /** @description User id to fetch ranking for. */
-        userId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description List of leaderboard stats */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['org.maproulette.framework.model.LeaderboardUser']
-        }
-      }
-      /** @description User not found */
-      404: {
         headers: {
           [name: string]: unknown
         }

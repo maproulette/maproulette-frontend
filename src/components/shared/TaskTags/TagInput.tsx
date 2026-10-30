@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { api } from '@/api'
 import { Input } from '@/components/ui/Input'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { TagChip } from './TagChip'
@@ -27,7 +28,8 @@ export const TagInput = ({
     placeholder ?? t('taskTags.tagInput.addTagPlaceholder', undefined, 'Add a tag…')
   const [input, setInput] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
-  const { data: suggestions = [] } = api.task.searchKeywords(input, 'tasks', 6)
+  const debouncedInput = useDebouncedValue(input)
+  const { data: suggestions = [] } = api.task.searchKeywords(debouncedInput, 'tasks', 6)
 
   const preferredSet = new Set(preferredTags.map(normalize))
   const valueSet = new Set(value.map(normalize))

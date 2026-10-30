@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Textarea } from '@/components/ui/Textarea'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn, initials } from '@/lib/utils'
 import { findMention, insertMention, type MentionMatch } from './mentionUtils'
@@ -13,15 +14,6 @@ interface Props {
   maxLength?: number
   disabled?: boolean
   onSubmitShortcut?: () => void
-}
-
-const useDebounced = (value: string, delay = 250) => {
-  const [debounced, setDebounced] = useState(value)
-  useEffect(() => {
-    const t = window.setTimeout(() => setDebounced(value), delay)
-    return () => window.clearTimeout(t)
-  }, [value, delay])
-  return debounced
 }
 
 export const CommentMentionInput = ({
@@ -36,7 +28,7 @@ export const CommentMentionInput = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [match, setMatch] = useState<MentionMatch | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const debouncedQuery = useDebounced(match?.query ?? '', 250)
+  const debouncedQuery = useDebouncedValue(match?.query ?? '')
   const { data: users = [] } = api.user.findUsers(
     debouncedQuery,
     6,

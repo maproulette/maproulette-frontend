@@ -117,6 +117,7 @@ export const ChallengeCard = ({
               to={linkTo ?? '/challenge/$challengeId'}
               params={linkParams ?? { challengeId: challenge.id.toString() }}
               search={linkSearch}
+              preload={false}
               onClick={onLinkClick}
               className="stretched-link"
             >
