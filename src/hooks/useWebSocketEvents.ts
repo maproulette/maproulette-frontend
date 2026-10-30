@@ -50,7 +50,10 @@ const invalidateOwnUserQueries = (
   userId: number
 ) => {
   queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
-  queryClient.invalidateQueries({ queryKey: ['user', userId] })
+  queryClient.invalidateQueries({
+    queryKey: ['user', userId],
+    predicate: (query) => query.queryKey[2] !== 'lockedTasks',
+  })
 }
 
 /**
@@ -102,10 +105,14 @@ export const useWebSocketEvents = () => {
         const oldStatus = cachedTask?.status ?? undefined
 
         // Patch the cached task with the new status instead of refetching.
-        if (newStatus !== undefined && cachedTask) {
+        if ((newStatus !== undefined || isLockEvent) && cachedTask) {
           queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
             ...cachedTask,
-            status: newStatus,
+            ...(newStatus !== undefined && { status: newStatus }),
+            ...(messageType === 'task-claimed' && {
+              lockedBy: lastMessage.data.byUser?.userId ?? null,
+            }),
+            ...(messageType === 'task-released' && { lockedBy: null, lockBundledTasks: [] }),
           })
         }
 
@@ -152,6 +159,7 @@ export const useWebSocketEvents = () => {
         const messageType = lastMessage.messageType
         const invalidatedChallenges = new Set<number>()
         const historyTaskIds = new Set<number>()
+        const releasedTaskIds = new Set<number>()
 
         // Lock events (claimed/released) carry a pre-update task snapshot, so their status is
         // stale when a status change also releases the lock. Only status-bearing events drive
@@ -170,7 +178,14 @@ export const useWebSocketEvents = () => {
               status: newStatus ?? cachedTask.status,
               bundleId: bundledTask.bundleId ?? cachedTask.bundleId,
               isBundlePrimary: bundledTask.isBundlePrimary ?? cachedTask.isBundlePrimary,
+              ...(messageType === 'tasks-claimed' && {
+                lockedBy: lastMessage.data.byUser?.userId ?? null,
+                lockBundledTasks: lastMessage.data.tasks.map((t) => t.id),
+              }),
             })
+            if (messageType === 'tasks-released') {
+              releasedTaskIds.add(bundledTask.id)
+            }
           }
 
           const markerPatch: Parameters<typeof patchChallengeTaskMarker>[3] = {}
@@ -192,6 +207,10 @@ export const useWebSocketEvents = () => {
             invalidateChallengeAggregates(queryClient, challengeId)
           }
         })
+
+        for (const id of releasedTaskIds) {
+          queryClient.invalidateQueries({ queryKey: ['task', id], exact: true })
+        }
 
         if (historyTaskIds.size > 0) {
           // One cache scan for the whole bundle instead of one invalidateQueries call per task.
