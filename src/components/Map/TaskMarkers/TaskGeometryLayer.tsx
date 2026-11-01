@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { api } from '@/api'
 import { TaskGeometrySource } from '@/components/Map/TaskMarkers/TaskGeometrySource'
 import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
-import { parseStyleRules } from '@/lib/taskFeatureStyle'
 
 interface TaskGeometryLayerProps {
   selectedTaskId: number | null
@@ -19,15 +18,12 @@ export const TaskGeometryLayer = ({
   showDirections = true,
 }: TaskGeometryLayerProps) => {
   const { data: taskData } = api.task.getTask(selectedTaskId as number)
-  const { data: challenge } = api.challenge.getChallenge(taskData?.parent ?? 0)
-
-  const styleRules = useMemo(() => parseStyleRules(challenge?.taskStyles), [challenge?.taskStyles])
 
   const geometries = useMemo(() => {
     if (!selectedTaskId || !taskData) return null
-    const decorated = decorateTaskFeatures(taskData, styleRules)
+    const decorated = decorateTaskFeatures(taskData)
     return decorated.features.length > 0 ? decorated : null
-  }, [selectedTaskId, taskData, styleRules])
+  }, [selectedTaskId, taskData])
 
   if (!geometries) {
     return null

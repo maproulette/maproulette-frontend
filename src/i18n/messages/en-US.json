@@ -891,7 +891,6 @@
   "map.controls.showControls": "Show controls",
   "map.controls.zoomIn": "Zoom in",
   "map.controls.zoomOut": "Zoom out",
-  "map.featureStyleLegend.styles": "Styles",
   "map.layerControl.customLayers.form.addLayer": "Add layer",
   "map.layerControl.customLayers.form.addTitle": "Add custom layer",
   "map.layerControl.customLayers.form.attribution": "Attribution",
