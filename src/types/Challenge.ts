@@ -97,13 +97,6 @@ export type Challenge = Omit<
    * writes it, but it is not declared on `BaseChallenge` in the API spec.
    */
   ownerTeamId?: number | null
-  /**
-   * Comma-separated MapRoulette tags a challenge suggests to mappers when they
-   * complete a task. The backend accepts and returns it, but the spec declares
-   * it on the create/update schema (`ChallengeExtra`) rather than
-   * `BaseChallenge`, so it is declared here too.
-   */
-  preferredTags?: string | null
   completionMetrics?: CompletionMetrics
 }
 

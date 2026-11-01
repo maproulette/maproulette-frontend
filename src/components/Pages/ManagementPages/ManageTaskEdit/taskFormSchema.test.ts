@@ -6,7 +6,6 @@ const validValues: TaskFormValues = {
   instruction: 'Some instructions',
   geometries: '{"type":"Point","coordinates":[0,0]}',
   status: 0,
-  errorTags: '',
 }
 
 describe('taskFormSchema', () => {
@@ -17,11 +16,6 @@ describe('taskFormSchema', () => {
 
   it('accepts an empty instruction', () => {
     const result = taskFormSchema.safeParse({ ...validValues, instruction: '' })
-    expect(result.success).toBe(true)
-  })
-
-  it('accepts an empty errorTags', () => {
-    const result = taskFormSchema.safeParse({ ...validValues, errorTags: '' })
     expect(result.success).toBe(true)
   })
 

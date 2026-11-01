@@ -56,7 +56,6 @@
   "common.manage": "Gestisci",
   "common.member": "Membro",
   "common.modified": "Modificato",
-  "common.mrTags": "Etichette MR",
   "common.name": "Nome",
   "common.newest": "Più nuovo",
   "common.noProjectsFound": "Nessun progetto trovato",
@@ -131,7 +130,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "Dettagli compito",
   "manageTaskNew.title": "Nuovo compito",
   "manageTasksOpen.or": "o",
-  "managementPages.bulkActionsToolbar.tag": "Tag",
   "managementPages.rebuildTasksDialog.introLocal": "La ricostruzione ti consentirà di caricare un nuovo file locale con i dati GeoJSON più recenti e ricostruire i compiti di sfida:",
   "managementPages.rebuildTasksDialog.introOverpass": "La ricostruzione eseguirà nuovamente la query Overpass e ricostruirà i compiti di sfida con i dati più recenti:",
   "managementPages.rebuildTasksDialog.learnMore": "Per saperne di più",
@@ -185,7 +183,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Gruppo",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "numbero",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "valore",
-  "taskTags.taskTags.editTags": "Modifica etichette",
   "teamImages.status.approved": "Approvato",
   "teams.form.descriptionDescription": "Una breve descrizione della squadra",
   "teams.form.nameDescription": "Il nome univoco della squadra"

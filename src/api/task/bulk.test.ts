@@ -54,30 +54,6 @@ describe('taskBulk.useBulkUpdateStatus', () => {
   })
 })
 
-describe('taskBulk.useBulkAddTags', () => {
-  it('GETs a tag update with comma-joined tags for every task id and invalidates task queries', async () => {
-    const fetchMock = stubFetch(new Response('', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskBulk.useBulkAddTags(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ taskIds: [4, 5], tags: ['foo', 'bar'] })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(fetchMock).toHaveBeenCalledTimes(2)
-    for (const [request] of fetchMock.mock.calls) {
-      const url = new URL((request as Request).url)
-      expect(url.searchParams.get('tags')).toBe('foo,bar')
-      expect(url.pathname).toMatch(/^\/api\/v2\/task\/[45]\/tags\/update$/)
-    }
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
-  })
-})
-
 describe('taskBulk.useBulkDelete', () => {
   it('DELETEs the given task ids and returns the bulk delete result', async () => {
     const deleteResult = { requested: 2, deleted: 1, denied: [2] }

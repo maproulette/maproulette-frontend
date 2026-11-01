@@ -1,13 +1,4 @@
-import {
-  Archive,
-  ArchiveRestore,
-  ChevronDown,
-  LockOpen,
-  Tag,
-  Trash2,
-  UserCog,
-  X,
-} from 'lucide-react'
+import { Archive, ArchiveRestore, ChevronDown, LockOpen, Trash2, UserCog, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -24,7 +15,6 @@ import { BulkClearLockDialog } from './BulkClearLockDialog'
 import { BulkDeleteDialog } from './BulkDeleteDialog'
 import { BulkReassignDialog } from './BulkReassignDialog'
 import { BulkStatusDialog } from './BulkStatusDialog'
-import { BulkTagDialog } from './BulkTagDialog'
 
 interface Props {
   selectedIds: number[]
@@ -34,12 +24,10 @@ interface Props {
 export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => {
   const { t } = useIntl()
   const [statusOpen, setStatusOpen] = useState(false)
-  const [tagOpen, setTagOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [reassignOpen, setReassignOpen] = useState(false)
   const [clearLockOpen, setClearLockOpen] = useState(false)
   const bulkStatus = api.task.useBulkUpdateStatus()
-  const bulkTags = api.task.useBulkAddTags()
   const bulkDelete = api.task.useBulkDelete()
   const bulkArchive = api.task.useBulkArchive()
   const bulkReassign = api.task.useBulkReassign()
@@ -62,25 +50,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
       logger.error('Bulk status failed', { error })
       toast.error(
         t('managementPages.bulkActionsToolbar.updateError', undefined, 'Could not update tasks')
-      )
-    }
-  }
-
-  const handleTags = async (tags: string[]) => {
-    try {
-      await bulkTags.mutateAsync({ taskIds: selectedIds, tags })
-      toast.success(
-        t(
-          'managementPages.bulkActionsToolbar.taggedToast',
-          { count: selectedIds.length },
-          '{count, plural, one {Tagged # task} other {Tagged # tasks}}'
-        )
-      )
-      onClearSelection()
-    } catch (error) {
-      logger.error('Bulk tag failed', { error })
-      toast.error(
-        t('managementPages.bulkActionsToolbar.tagError', undefined, 'Could not tag tasks')
       )
     }
   }
@@ -203,10 +172,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="outline" size="sm" onClick={() => setTagOpen(true)}>
-          <Tag className="size-3.5" aria-hidden="true" />{' '}
-          {t('managementPages.bulkActionsToolbar.tag', undefined, 'Tag')}
-        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
@@ -248,14 +213,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         onConfirm={(status) => {
           setStatusOpen(false)
           handleStatus(status)
-        }}
-      />
-      <BulkTagDialog
-        open={tagOpen}
-        onOpenChange={setTagOpen}
-        onConfirm={(tags) => {
-          setTagOpen(false)
-          handleTags(tags)
         }}
       />
       <BulkDeleteDialog

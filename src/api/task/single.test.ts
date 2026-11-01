@@ -490,12 +490,11 @@ describe('taskSingle.useUpdateTask', () => {
 })
 
 describe('taskSingle.useUpdateTaskStatus', () => {
-  it('builds a query string with tags and opaque plugin queryParams, posts a comment, and falls back to a GET when the PUT has no JSON body', async () => {
+  it('builds a query string with opaque plugin queryParams, posts a comment, and falls back to a GET when the PUT has no JSON body', async () => {
     const finalTask = makeTask({ id: 1, parent: 10, status: 2 })
     const fetchMock = stubRoutedFetch((request) => {
       const url = new URL(request.url)
       if (request.method === 'PUT' && url.pathname === '/api/v2/task/1/2') {
-        expect(url.searchParams.get('tags')).toBe('a,b')
         expect(url.searchParams.get('pluginFlag')).toBe('true')
         return new Response(null, { status: 204 })
       }
@@ -525,7 +524,6 @@ describe('taskSingle.useUpdateTaskStatus', () => {
       taskId: 1,
       status: 2,
       options: {
-        tags: ['a', 'b'],
         // A plugin passing an absent value must not turn into `?omitted=null`.
         queryParams: { pluginFlag: true, omitted: null, alsoOmitted: undefined },
         comment: 'looks good',
@@ -622,7 +620,6 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     const fetchMock = stubRoutedFetch((request) => {
       const url = new URL(request.url)
       expect(url.searchParams.get('pluginFlag')).toBe('false')
-      expect(url.searchParams.has('tags')).toBe(false)
       return new Response(JSON.stringify(finalTask), {
         status: 200,
         headers: { 'content-type': 'application/json' },
@@ -650,11 +647,9 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     )
   })
 
-  it('treats an empty tags array as absent, and skips aggregate invalidation when the status is unchanged', async () => {
+  it('skips aggregate invalidation when the status is unchanged', async () => {
     const finalTask = makeTask({ id: 4, parent: 7, status: 2 })
-    const fetchMock = stubRoutedFetch((request) => {
-      const url = new URL(request.url)
-      expect(url.searchParams.has('tags')).toBe(false)
+    const fetchMock = stubRoutedFetch(() => {
       return new Response(JSON.stringify(finalTask), {
         status: 200,
         headers: { 'content-type': 'application/json' },
@@ -671,7 +666,7 @@ describe('taskSingle.useUpdateTaskStatus', () => {
       wrapper: queryClientWrapper(queryClient),
     })
 
-    result.current.mutate({ taskId: 4, status: 2, options: { tags: [] } })
+    result.current.mutate({ taskId: 4, status: 2 })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 

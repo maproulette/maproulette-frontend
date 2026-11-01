@@ -48,7 +48,6 @@
   "common.manage": "Управлять",
   "common.member": "Участник",
   "common.modified": "Изменено",
-  "common.mrTags": "MR-теги",
   "common.name": "Название",
   "common.newest": "Новейшее",
   "common.noProjectsFound": "Не найдено проектов",
@@ -113,7 +112,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "Подробность задачи",
   "manageTaskNew.title": "Новая задача",
   "manageTasksOpen.or": "или",
-  "managementPages.bulkActionsToolbar.tag": "Тег",
   "managementPages.rebuildTasksDialog.introLocal": "Восстановление позволит вам наполнить новый локальный файл свежими данными GeoJSON и восстановить задачи вызова:",
   "managementPages.rebuildTasksDialog.learnMore": "Изучить больше",
   "managementPages.rebuildTasksDialog.proceed": "В процессе",
@@ -157,7 +155,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Группа",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "число",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "значение",
-  "taskTags.taskTags.editTags": "Изменить теги",
   "teamImages.status.approved": "Одобрено",
   "teams.form.descriptionDescription": "Краткое описание команды",
   "teams.form.nameDescription": "Уникальное название команды"

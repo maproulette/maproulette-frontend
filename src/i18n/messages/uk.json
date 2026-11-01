@@ -56,7 +56,6 @@
   "common.manage": "Керувати",
   "common.member": "Член",
   "common.modified": "Змінено",
-  "common.mrTags": "Теґи MapRoulette",
   "common.name": "Назва",
   "common.newest": "Найновіші",
   "common.noProjectsFound": "Не знайдено жодного проекту",
@@ -131,7 +130,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "Деталі завдання",
   "manageTaskNew.title": "Нове Завдання",
   "manageTasksOpen.or": "або",
-  "managementPages.bulkActionsToolbar.tag": "Теґ",
   "managementPages.rebuildTasksDialog.introLocal": "Процес перестворення завдань дозволить вам завантажити новий файл GeoJSON зі свіжими даними для створення наново завдань для Виклику:",
   "managementPages.rebuildTasksDialog.introOverpass": "Перестворення призведено для перезапуску запиту Overpass та перегенерації завдань Виклику на основі свіжих даних:",
   "managementPages.rebuildTasksDialog.learnMore": "Дізнатись ще",
@@ -185,7 +183,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Група",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "число",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "значення",
-  "taskTags.taskTags.editTags": "Змінити теґи",
   "teamImages.status.approved": "Ухвалено",
   "teams.form.descriptionDescription": "Скорочений опис команди",
   "teams.form.nameDescription": "Унікальна назва команди"

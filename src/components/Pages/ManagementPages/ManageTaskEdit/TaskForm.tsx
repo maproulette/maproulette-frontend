@@ -46,7 +46,6 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
       instruction: task.instruction ?? '',
       geometries: geometriesToString(task.geometries),
       status: task.status ?? 0,
-      errorTags: typeof task.errorTags === 'string' ? task.errorTags : '',
     },
   })
 
@@ -183,34 +182,6 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                     'manageTaskEdit.form.statusDescription',
                     undefined,
                     'Current status of the task'
-                  )}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="errorTags"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('common.mrTags', undefined, 'MR Tags')}</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder={t(
-                      'manageTaskEdit.form.mrTagsPlaceholder',
-                      undefined,
-                      'tag1, tag2'
-                    )}
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  {t(
-                    'manageTaskEdit.form.mrTagsDescription',
-                    undefined,
-                    'Optional MR tags to annotate this task (comma-separated)'
                   )}
                 </FormDescription>
                 <FormMessage />
