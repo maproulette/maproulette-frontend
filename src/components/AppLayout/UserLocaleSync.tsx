@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { isSupportedLocale, useIntl } from '@/i18n'
+import { normalizeLocale, useIntl } from '@/i18n'
 
 /**
  * Zero-DOM component that applies the signed-in user's saved language
@@ -10,10 +10,10 @@ import { isSupportedLocale, useIntl } from '@/i18n'
 export const UserLocaleSync = () => {
   const { user } = useAuthContext()
   const { locale, setLocale } = useIntl()
-  const preferred = user?.settings?.locale
+  const preferred = normalizeLocale(user?.settings?.locale)
 
   useEffect(() => {
-    if (isSupportedLocale(preferred) && preferred !== locale) {
+    if (preferred && preferred !== locale) {
       setLocale(preferred)
     }
   }, [preferred, locale, setLocale])

@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useIntl } from '@/i18n'
 import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
-import { formSchema } from './formSchema'
+import { formSchema, getDefaultValues } from './formSchema'
 import { GeneralSettings } from './GeneralSettings'
 import { useNotificationSubscriptionsDraft } from './NotificationSubscriptionFields'
 import { NotificationsSettings } from './NotificationsSettings'
@@ -23,13 +23,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      defaultEditor: user.settings.defaultEditor ?? -1,
-      defaultBasemap: user.settings.defaultBasemap ?? -1,
-      defaultBasemapId: user.settings.defaultBasemapId ?? '',
-      email: user.settings.email ?? '',
-      locale: user.settings.locale ?? locale,
-    },
+    defaultValues: getDefaultValues(user.settings, locale),
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {

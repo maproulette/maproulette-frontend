@@ -1,6 +1,7 @@
 import z from 'zod'
 import { baseMapOptions, editorOptions } from '@/data/account.json'
-import { localeOptions } from '@/i18n/locales'
+import { type Locale, localeOptions, normalizeLocale } from '@/i18n/locales'
+import type { UserSettings } from '@/types/User'
 
 export const formSchema = z
   .object({
@@ -30,3 +31,14 @@ export const formSchema = z
   })
   // Allow plugin-contributed settings fields (e.g. from getUserSettingsFields)
   .loose()
+
+export const getDefaultValues = (
+  settings: UserSettings,
+  fallbackLocale: Locale
+): z.infer<typeof formSchema> => ({
+  defaultEditor: settings.defaultEditor ?? -1,
+  defaultBasemap: settings.defaultBasemap ?? -1,
+  defaultBasemapId: settings.defaultBasemapId ?? '',
+  email: settings.email ?? '',
+  locale: normalizeLocale(settings.locale) ?? fallbackLocale,
+})

@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { defaultLocale, isSupportedLocale, resolveInitialLocale } from './locales.ts'
+import {
+  defaultLocale,
+  isSupportedLocale,
+  normalizeLocale,
+  resolveInitialLocale,
+} from './locales.ts'
 
 describe('isSupportedLocale', () => {
   it.each([
@@ -10,6 +15,20 @@ describe('isSupportedLocale', () => {
     ['', false],
   ] as const)('given locale %s, returns %s', (locale, expected) => {
     expect(isSupportedLocale(locale)).toBe(expected)
+  })
+})
+
+describe('normalizeLocale', () => {
+  it.each([
+    ['fr', 'fr'],
+    ['pt-BR', 'pt-BR'],
+    ['en', 'en-US'],
+    ['xx-XX', undefined],
+    ['', undefined],
+    [null, undefined],
+    [undefined, undefined],
+  ] as const)('given locale %s, returns %s', (locale, expected) => {
+    expect(normalizeLocale(locale)).toBe(expected)
   })
 })
 
