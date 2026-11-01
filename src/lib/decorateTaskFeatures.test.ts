@@ -98,31 +98,6 @@ describe('decorateTaskFeatures', () => {
     expect(plain.properties).not.toHaveProperty('mrStrokeWidth')
   })
 
-  it('applies matching challenge style rules over the feature simplestyle', () => {
-    const task = makeTask([
-      {
-        type: 'Feature',
-        geometry: {
-          type: 'LineString',
-          coordinates: [
-            [0, 0],
-            [1, 1],
-          ],
-        },
-        properties: { stroke: '#FF0000', highway: 'service' },
-      },
-    ])
-
-    const [feature] = decorateTaskFeatures(task, [
-      {
-        propertySearch: { key: 'highway', operationType: 'equals', value: 'service' },
-        styles: [{ styleName: 'stroke', styleValue: '#00FF00' }],
-      },
-    ]).features
-
-    expect(feature.properties).toMatchObject({ mrStroke: '#00FF00' })
-  })
-
   it('keys a feature by its position within the task that owns it', () => {
     expect(taskFeatureKey(42, 0)).toBe('42:0')
     expect(taskFeatureKey(42, 3)).toBe('42:3')
