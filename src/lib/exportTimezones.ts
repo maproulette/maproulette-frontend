@@ -3,8 +3,6 @@
  * offset of the form `+HH:MM` and applies it to the timestamp columns; GMT is
  * the default, which is what an export gets when nothing is chosen.
  */
-export const EXPORT_TIMEZONE_DEFAULT = ''
-
 const OFFSETS = [
   ['-12:00', 'UTC−12:00'],
   ['-11:00', 'UTC−11:00'],

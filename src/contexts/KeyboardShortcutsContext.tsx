@@ -70,7 +70,7 @@ export const useKeyboardShortcuts = () => {
  * The registry where there is one, or null. UI primitives live both inside and
  * outside it, so they ask rather than require.
  */
-export const useOptionalKeyboardShortcuts = () => useContext(KeyboardShortcutsContext)
+const useOptionalKeyboardShortcuts = () => useContext(KeyboardShortcutsContext)
 
 /**
  * Registers a component's shortcuts for as long as it is mounted.

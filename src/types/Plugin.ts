@@ -338,7 +338,7 @@ export interface TaskEditPolicy {
  * Challenge action tab contributed by a plugin.
  * The host renders the shared challenge progress widget and action button.
  */
-export interface ChallengeActionContext {
+interface ChallengeActionContext {
   challenge: unknown
   user?: {
     id: number
@@ -404,7 +404,7 @@ export interface UserSettingsFieldExtension {
 /**
  * Plugin metadata
  */
-export interface PluginMetadata {
+interface PluginMetadata {
   /** Unique identifier for the plugin */
   id: string
   /** Display name of the plugin */

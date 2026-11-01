@@ -1,7 +1,7 @@
 const NOMINATIM_BASE_URL =
   window.env.VITE_NOMINATIM_BASE_URL || 'https://nominatim.openstreetmap.org'
 
-export type OsmType = 'node' | 'way' | 'relation'
+type OsmType = 'node' | 'way' | 'relation'
 
 export interface PlaceSuggestion {
   display_name: string

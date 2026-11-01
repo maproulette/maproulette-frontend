@@ -6,7 +6,7 @@ import { TeamMembersTable } from './TeamMembersTable'
 import { TeamProjectsView } from './TeamProjectsView'
 
 export const TEAM_SECTIONS = ['users', 'projects', 'challenges'] as const
-export type TeamSection = (typeof TEAM_SECTIONS)[number]
+type TeamSection = (typeof TEAM_SECTIONS)[number]
 
 /**
  * Right-hand panel of the team detail page: a header naming what a team has,

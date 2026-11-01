@@ -14,7 +14,7 @@ export const COOPERATIVE_TYPE_CHANGEFILE = 2
 export const isCooperative = (cooperativeType: number | null | undefined): boolean =>
   cooperativeType === COOPERATIVE_TYPE_TAGS || cooperativeType === COOPERATIVE_TYPE_CHANGEFILE
 
-export type ChallengeTaxonomyKey = 'featured' | 'tagFix' | 'cooperative' | 'global'
+type ChallengeTaxonomyKey = 'featured' | 'tagFix' | 'cooperative' | 'global'
 
 export interface ChallengeTaxonomyEntry {
   key: ChallengeTaxonomyKey

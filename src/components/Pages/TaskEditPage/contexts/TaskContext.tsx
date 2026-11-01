@@ -15,7 +15,7 @@ import { LockConflictDialog } from './LockConflictDialog'
 // Statuses that allow editing: Created (0), Skipped (3), Too Hard/Can't Complete (6)
 export const EDITABLE_STATUSES = [0, 3, 6]
 
-export const isBaseEditableStatus = (status: number | null | undefined): boolean =>
+const isBaseEditableStatus = (status: number | null | undefined): boolean =>
   EDITABLE_STATUSES.includes(status ?? 0)
 
 // Well under the backend's 1-hour lock expiry (see Config.DEFAULT_TASK_LOCK_EXPIRY),

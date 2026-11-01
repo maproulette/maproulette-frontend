@@ -67,7 +67,7 @@ const getTotal = (metrics?: CompletionMetrics) => {
   return metrics?.total && metrics.total > 0 ? metrics.total : summedTotal
 }
 
-export const getCompletionPercentage = (metrics?: CompletionMetrics) => {
+const getCompletionPercentage = (metrics?: CompletionMetrics) => {
   const total = getTotal(metrics)
   if (total === 0 || !metrics) return 0
   const completed =

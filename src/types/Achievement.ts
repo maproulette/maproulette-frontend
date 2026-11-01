@@ -42,7 +42,7 @@ export const Achievement = {
   points1m: 28,
 } as const
 
-export type AchievementId = (typeof Achievement)[keyof typeof Achievement]
+type AchievementId = (typeof Achievement)[keyof typeof Achievement]
 
 export type AchievementCategory =
   | 'taskCompletion'

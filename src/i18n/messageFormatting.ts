@@ -7,7 +7,7 @@ export type MessageCatalog = Record<string, string>
 
 export const baseCatalog: MessageCatalog = enUS as MessageCatalog
 
-export type CatalogModule = { default: MessageCatalog }
+type CatalogModule = { default: MessageCatalog }
 export type CatalogLoader = (locale: Locale) => Promise<CatalogModule>
 
 // `loadOverride` defaults to the real dynamic import and only needs to be

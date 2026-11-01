@@ -42,7 +42,7 @@ const withRenderableId = (feature: GeoJSON.Feature): GeoJSON.Feature => {
   return rest as GeoJSON.Feature
 }
 
-export const taskFeatures = (task: Task): GeoJSON.Feature[] => {
+const taskFeatures = (task: Task): GeoJSON.Feature[] => {
   const flatten = (feature: GeoJSON.Feature): GeoJSON.Feature[] => {
     if (feature.geometry?.type !== 'GeometryCollection') return [feature]
     return feature.geometry.geometries.flatMap((geometry) =>

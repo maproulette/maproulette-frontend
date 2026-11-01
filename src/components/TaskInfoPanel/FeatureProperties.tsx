@@ -65,7 +65,7 @@ export const useMeasuredWidth = () => {
   return { containerRef, containerWidth }
 }
 
-export const PropertyRows = ({
+const PropertyRows = ({
   properties,
   containerWidth,
 }: {

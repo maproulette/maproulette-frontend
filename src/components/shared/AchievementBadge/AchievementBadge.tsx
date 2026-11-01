@@ -9,7 +9,7 @@ const sizeClasses = {
   lg: { box: 'h-32 w-32', icon: 'size-16', overlay: 'text-base' },
 } as const
 
-export type AchievementBadgeSize = keyof typeof sizeClasses
+type AchievementBadgeSize = keyof typeof sizeClasses
 
 interface Props {
   achievement: number | AchievementDefinition

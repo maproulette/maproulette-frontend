@@ -37,6 +37,7 @@ import {
   STATUS_TINT_COLORS,
 } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
+import type { PluginTaskHistoryItem } from '@/types/Plugin'
 import type { TaskHistoryAction } from '@/types/Task'
 
 // Action types from the API — must match backend TaskLogEntry constants
@@ -284,7 +285,7 @@ export const CommentsHistoryTab = ({
       )
     }
 
-    const pluginItem = item as import('@/types/Plugin').PluginTaskHistoryItem
+    const pluginItem = item as PluginTaskHistoryItem
     for (const renderer of taskHistoryItemRenderers) {
       if (!renderer.canRender(pluginItem)) continue
       const Renderer = renderer.component

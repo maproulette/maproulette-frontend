@@ -51,7 +51,7 @@ export function sessionCookie(user: SessionUser): string {
   return `${unsigned}.${signature}`
 }
 
-export function storageStateFor(user: SessionUser) {
+function storageStateFor(user: SessionUser) {
   return {
     cookies: [
       {
@@ -69,7 +69,7 @@ export function storageStateFor(user: SessionUser) {
   }
 }
 
-export function superUser(): SessionUser {
+function superUser(): SessionUser {
   const id = Number(process.env.E2E_SUPER_USER_ID)
   if (!Number.isInteger(id)) {
     throw new Error('E2E_SUPER_USER_ID is not set; e2e/global-setup.ts should have set it')
@@ -385,7 +385,7 @@ export function deleteSeededUser(user: TestUser): void {
  */
 export const TAG_FIX_ELEMENT_ID = 'node/2344998584'
 
-export const TAG_FIX_PROPERTIES = {
+const TAG_FIX_PROPERTIES = {
   amenity: 'cafe',
   'diet:vegetarian': 'yes',
   name: "Carlucci's",
@@ -395,11 +395,7 @@ export const TAG_FIX_PROPERTIES = {
 }
 
 /** The tag changes a tag-fix task proposes for one OSM element. */
-export function tagFixWork(
-  elementId: string,
-  setTags: Record<string, string>,
-  unsetTags: string[] = []
-) {
+function tagFixWork(elementId: string, setTags: Record<string, string>, unsetTags: string[] = []) {
   return {
     meta: { version: 2, type: 1 },
     operations: [

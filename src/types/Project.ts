@@ -10,7 +10,7 @@ export type ManagedProjectsFilters = Pick<
   'searchString' | 'onlyEnabled' | 'onlyOwned' | 'projectIds'
 > & { isArchived?: boolean }
 
-export type ProjectChallengeCounts = NonNullable<
+type ProjectChallengeCounts = NonNullable<
   operations['project_list_all_the_managed_projects']['responses']['200']['content']['application/json'][number]['challengeCounts']
 >
 

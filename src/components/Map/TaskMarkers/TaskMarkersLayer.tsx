@@ -25,7 +25,7 @@ import { useTaskMarkerResources } from '@/components/Map/TaskMarkers/useTaskMark
 import { isValidLocation } from '@/components/Map/TaskMarkers/utils'
 import type { TaskMarker } from '@/types/Task'
 
-export const CLUSTER_MAX_ZOOM = 16
+const CLUSTER_MAX_ZOOM = 16
 const PICKER_LIMIT = 100
 const SAME_SPOT_DEGREES = 1e-6
 const EXPAND_DURATION_MS = 600

@@ -1,5 +1,5 @@
+import type { Options } from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
-import type { PluggableList } from 'unified'
 
 /**
  * Shared remark plugins for all Markdown rendering.
@@ -11,4 +11,4 @@ import type { PluggableList } from 'unified'
  * who want the collapsing behavior can simply remove the line break in the
  * source text.
  */
-export const markdownRemarkPlugins: PluggableList = [remarkBreaks]
+export const markdownRemarkPlugins: Options['remarkPlugins'] = [remarkBreaks]

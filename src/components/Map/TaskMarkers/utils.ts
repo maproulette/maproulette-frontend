@@ -12,7 +12,7 @@ export const TASK_STATUS = {
 } as const
 
 // Statuses eligible for bundling: Created, Skipped, Too Hard (Can't Complete)
-export const BUNDLE_ELIGIBLE_STATUSES: Set<number> = new Set([
+const BUNDLE_ELIGIBLE_STATUSES: Set<number> = new Set([
   TASK_STATUS.CREATED,
   TASK_STATUS.SKIPPED,
   TASK_STATUS.TOO_HARD,

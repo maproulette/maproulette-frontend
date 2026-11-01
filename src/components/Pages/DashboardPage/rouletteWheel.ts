@@ -9,7 +9,7 @@ export const POCKET_ORDER = [
 const RED_NUMBERS = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36])
 
 export const CENTER = 50
-export const POCKET_OUTER_RADIUS = 44
+const POCKET_OUTER_RADIUS = 44
 export const POCKET_INNER_RADIUS = 31
 export const NUMBER_RADIUS = 37.5
 export const BALL_RADIUS = 47

@@ -5,8 +5,6 @@ export const PROJECT_ROLE = {
   read: 3,
 } as const
 
-export type ProjectRole = (typeof PROJECT_ROLE)[keyof typeof PROJECT_ROLE]
-
 export const projectRoleOptions = [
   {
     value: PROJECT_ROLE.admin,

@@ -6,7 +6,7 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { useTaskMapContext } from './TaskMapContext'
 
-export interface OSMDataContextType {
+interface OSMDataContextType {
   showOSMData: boolean
   setShowOSMData: Dispatch<SetStateAction<boolean>>
   osmData: Document | null

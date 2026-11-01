@@ -2,7 +2,7 @@ import { queryOptions, useQuery } from '@tanstack/react-query'
 import type { components } from '@/types/openApiTypes'
 import { apiRequest } from '../client'
 
-export type ServiceInfo = components['schemas']['org.maproulette.models.service.info.ServiceInfo']
+type ServiceInfo = components['schemas']['org.maproulette.models.service.info.ServiceInfo']
 
 export const serviceApi = {
   info: () =>

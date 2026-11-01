@@ -27,7 +27,7 @@ const STYLE_NAME_FOR_BASEMAP: Record<number, string> = {
 }
 
 /** The bundled style with this name, if there is one. */
-export const styleByName = (name: string | null | undefined): StyleSpecification | undefined =>
+const styleByName = (name: string | null | undefined): StyleSpecification | undefined =>
   name ? allMapStyles().find((style) => style.name === name) : undefined
 
 interface BasemapSettings {
