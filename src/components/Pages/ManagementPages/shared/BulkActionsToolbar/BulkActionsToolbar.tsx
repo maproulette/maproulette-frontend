@@ -1,4 +1,4 @@
-import { Archive, ArchiveRestore, ChevronDown, LockOpen, Trash2, UserCog, X } from 'lucide-react'
+import { Archive, ArchiveRestore, ChevronDown, Trash2, UserCog, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import { BulkClearLockDialog } from './BulkClearLockDialog'
 import { BulkDeleteDialog } from './BulkDeleteDialog'
 import { BulkReassignDialog } from './BulkReassignDialog'
 import { BulkStatusDialog } from './BulkStatusDialog'
@@ -26,12 +25,10 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
   const [statusOpen, setStatusOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [reassignOpen, setReassignOpen] = useState(false)
-  const [clearLockOpen, setClearLockOpen] = useState(false)
   const bulkStatus = api.task.useBulkUpdateStatus()
   const bulkDelete = api.task.useBulkDelete()
   const bulkArchive = api.task.useBulkArchive()
   const bulkReassign = api.task.useBulkReassign()
-  const bulkClearLock = api.task.useBulkClearLock()
 
   if (selectedIds.length === 0) return null
 
@@ -57,11 +54,11 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
   const handleDelete = async () => {
     try {
       const result = await bulkDelete.mutateAsync(selectedIds)
-      if (result.denied.length > 0) {
+      if (result.deleted < result.requested) {
         toast.warning(
           t(
             'managementPages.bulkActionsToolbar.deleteWarning',
-            { deleted: result.deleted, denied: result.denied.length },
+            { deleted: result.deleted, denied: result.requested - result.deleted },
             'Deleted {deleted} tasks; {denied} could not be deleted'
           )
         )
@@ -129,26 +126,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
     }
   }
 
-  const handleClearLock = async () => {
-    try {
-      await bulkClearLock.mutateAsync(selectedIds)
-      toast.success(
-        t(
-          'managementPages.bulkActionsToolbar.clearLockSuccess',
-          { count: selectedIds.length },
-          '{count, plural, one {Cleared lock on # task} other {Cleared lock on # tasks}}'
-        )
-      )
-      setClearLockOpen(false)
-      onClearSelection()
-    } catch (error) {
-      logger.error('Bulk clear lock failed', { error })
-      toast.error(
-        t('managementPages.bulkActionsToolbar.clearLockError', undefined, 'Could not clear locks')
-      )
-    }
-  }
-
   return (
     <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white p-3 shadow-lg dark:border-slate-700 dark:bg-slate-900">
       <span className="font-medium text-sm">
@@ -195,10 +172,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
           <UserCog className="size-3.5" aria-hidden="true" />{' '}
           {t('managementPages.bulkActionsToolbar.reassign', undefined, 'Reassign')}
         </Button>
-        <Button variant="outline" size="sm" onClick={() => setClearLockOpen(true)}>
-          <LockOpen className="size-3.5" aria-hidden="true" />{' '}
-          {t('managementPages.bulkActionsToolbar.clearLock', undefined, 'Clear lock')}
-        </Button>
         <Button variant="outline" size="sm" onClick={() => setDeleteOpen(true)}>
           <Trash2 className="size-3.5" aria-hidden="true" />{' '}
           {t('common.delete', undefined, 'Delete')}
@@ -228,13 +201,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         onConfirm={handleReassign}
         count={selectedIds.length}
         busy={bulkReassign.isPending}
-      />
-      <BulkClearLockDialog
-        open={clearLockOpen}
-        onOpenChange={setClearLockOpen}
-        onConfirm={handleClearLock}
-        count={selectedIds.length}
-        busy={bulkClearLock.isPending}
       />
     </div>
   )
