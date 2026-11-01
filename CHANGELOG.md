@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on
 [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [v3.18.8] - 2026-11-01
+
+* Add "Try the Beta" Banner by @mvexel in https://github.com/maproulette/maproulette-frontend/pull/2942
+* Bump vite from 8.0.16 to 8.3.5 by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2964
+* Bump vitest from 4.1.8 to 4.1.11 by @dependabot[bot] in https://github.com/maproulette/maproulette-frontend/pull/2912
+* Fix instruction widget resize not being persisted; make default height taller by @jake-low in https://github.com/maproulette/maproulette-frontend/pull/2925
+* Fix the Completion widget in the Review workspace by @CollinBeczak in https://github.com/maproulette/maproulette-frontend/pull/2927
+
+**Full Changelog**: https://github.com/maproulette/maproulette-frontend/compare/v3.18.7...v3.18.8
+
 ## [v3.18.7] - 2026-10-10
 
 * Remove GraphQL dependency
