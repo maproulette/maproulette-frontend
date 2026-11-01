@@ -109,6 +109,11 @@ export const taskSingle = {
         apiRequest.get(`api/v2/task/${taskId}/refreshLock`).json<TaskStartResponse>(),
     }),
 
+  useRequestUnlock: () =>
+    useMutation({
+      mutationFn: (taskId: number) => apiRequest.put(`api/v2/task/${taskId}/unlock/request`).text(),
+    }),
+
   useUnlockTask: () => {
     const queryClient = useQueryClient()
     return useMutation({
