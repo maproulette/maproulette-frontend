@@ -37,8 +37,7 @@ export interface ManageProjectDetailContextType {
   setViewMode: (mode: 'grid' | 'list') => void
 
   // Modal state
-  cloneModalChallenge: { id: number; name: string } | null
-  setCloneModalChallenge: (challenge: { id: number; name: string } | null) => void
+  cloneChallenge: (challenge: { id: number; name: string } | null) => void
   rebuildModalChallenge: Challenge | null
   setRebuildModalChallenge: (challenge: Challenge | null) => void
   deleteChallengeId: number | null
@@ -81,10 +80,6 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const [searchQuery, setSearchQuery] = useState('')
   const [deleteProjectConfirm, setDeleteProjectConfirm] = useState(false)
   const [managersModalOpen, setManagersModalOpen] = useState(false)
-  const [cloneModalChallenge, setCloneModalChallenge] = useState<{
-    id: number
-    name: string
-  } | null>(null)
   const [rebuildModalChallenge, setRebuildModalChallenge] = useState<Challenge | null>(null)
   const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
   const [onlyDiscoverable, setOnlyDiscoverable] = useState(false)
@@ -241,6 +236,17 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
     [pauseChallengeMutation, actionErrors]
   )
 
+  const cloneChallenge = useCallback(
+    (challenge: { id: number; name: string } | null) => {
+      if (!challenge) return
+      navigate({
+        to: '/manage/challenge/new',
+        search: { projectId: Number(projectId), cloneFrom: challenge.id },
+      })
+    },
+    [navigate, projectId]
+  )
+
   const rebuildChallenge = useCallback(
     (challengeId: number) => {
       const challenge = challenges?.find((c) => c.id === challengeId)
@@ -271,8 +277,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       setOnlyPinned,
       viewMode,
       setViewMode,
-      cloneModalChallenge,
-      setCloneModalChallenge,
+      cloneChallenge,
       rebuildModalChallenge,
       setRebuildModalChallenge,
       deleteChallengeId,
@@ -306,7 +311,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       onlyArchived,
       onlyPinned,
       viewMode,
-      cloneModalChallenge,
+      cloneChallenge,
       rebuildModalChallenge,
       deleteChallengeId,
       deleteProjectConfirm,

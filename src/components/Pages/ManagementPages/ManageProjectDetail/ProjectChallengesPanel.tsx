@@ -32,7 +32,7 @@ export const ProjectChallengesPanel = () => {
     toggleChallengePin: onTogglePin,
     toggleChallengeEnabled: onToggleEnabled,
     togglePaused: onTogglePaused,
-    setCloneModalChallenge: onClone,
+    cloneChallenge: onClone,
     archiveChallenge: onArchive,
     rebuildChallenge: onRebuild,
     setDeleteChallengeId: onDelete,

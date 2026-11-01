@@ -5,16 +5,24 @@ import { useIntl } from '@/i18n'
 
 interface ManageChallengeNewProps {
   projectId?: number
+  cloneFromChallengeId?: number
 }
 
-export const ManageChallengeNew = ({ projectId }: ManageChallengeNewProps) => {
+export const ManageChallengeNew = ({
+  projectId,
+  cloneFromChallengeId,
+}: ManageChallengeNewProps) => {
   const { t } = useIntl()
 
   return (
-    <CreateChallengeFormProvider projectId={projectId}>
+    <CreateChallengeFormProvider projectId={projectId} cloneFromChallengeId={cloneFromChallengeId}>
       <ManageFormLayout>
         <FormCard
-          title={t('common.createNewChallenge', undefined, 'Create New Challenge')}
+          title={
+            cloneFromChallengeId
+              ? t('common.cloneChallenge', undefined, 'Clone Challenge')
+              : t('common.createNewChallenge', undefined, 'Create New Challenge')
+          }
           description={t(
             'manageChallengeNew.pageDescription',
             undefined,

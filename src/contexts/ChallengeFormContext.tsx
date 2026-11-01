@@ -3,12 +3,17 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
+import {
+  buildCloneFormValues,
+  clonedChallengeSettings,
+} from '@/components/Pages/ManagementPages/ManageChallengeNew/cloneChallenge'
 import { buildChallengeSubmission } from '@/contexts/challengeSubmission'
 import { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
 
 interface ChallengeFormContextType {
   challenge?: Challenge
+  initialValues?: ChallengeFormValues
   projectId?: number
   isLoading: boolean
   onSubmit: (values: ChallengeFormValues) => Promise<void>
@@ -20,12 +25,21 @@ const ChallengeFormContext = createContext<ChallengeFormContextType | undefined>
 export const CreateChallengeFormProvider = ({
   children,
   projectId,
+  cloneFromChallengeId,
 }: {
   children: ReactNode
   projectId?: number
+  cloneFromChallengeId?: number
 }) => {
   const navigate = useNavigate()
   const { t } = useIntl()
+  const { data: cloneSource, isLoading: isLoadingCloneSource } = api.challenge.getChallenge(
+    cloneFromChallengeId ?? 0
+  )
+  const initialValues = useMemo(
+    () => (cloneSource ? buildCloneFormValues(cloneSource, projectId) : undefined),
+    [cloneSource, projectId]
+  )
   const createChallengeMutation = api.challenge.useCreateChallenge()
   const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
@@ -47,7 +61,9 @@ export const CreateChallengeFormProvider = ({
 
       const newChallenge = await createChallengeMutation.mutateAsync({
         projectId: selectedProjectId,
-        challengeData,
+        challengeData: cloneSource
+          ? { ...clonedChallengeSettings(cloneSource), ...challengeData }
+          : challengeData,
       })
 
       if (newChallenge.id && localGeoJSONUpload) {
@@ -83,7 +99,14 @@ export const CreateChallengeFormProvider = ({
         })
       }
     },
-    [createChallengeMutation, deleteChallengeMutation, navigate, uploadGeoJSONMutation, t]
+    [
+      createChallengeMutation,
+      deleteChallengeMutation,
+      navigate,
+      uploadGeoJSONMutation,
+      t,
+      cloneSource,
+    ]
   )
 
   const onCancel = useCallback(() => {
@@ -95,8 +118,8 @@ export const CreateChallengeFormProvider = ({
   }, [navigate, projectId])
 
   const value = useMemo<ChallengeFormContextType>(
-    () => ({ projectId, isLoading: false, onSubmit, onCancel }),
-    [projectId, onSubmit, onCancel]
+    () => ({ initialValues, projectId, isLoading: isLoadingCloneSource, onSubmit, onCancel }),
+    [initialValues, projectId, isLoadingCloneSource, onSubmit, onCancel]
   )
 
   return <ChallengeFormContext.Provider value={value}>{children}</ChallengeFormContext.Provider>

@@ -41,7 +41,7 @@ const isNameConflict = (message: string) => {
 
 export const ChallengeForm = () => {
   const { t } = useIntl()
-  const { challenge, projectId, onSubmit, onCancel } = useChallengeFormContext()
+  const { challenge, initialValues, projectId, onSubmit, onCancel } = useChallengeFormContext()
   const { user } = useAuthContext()
   const isEdit = !!challenge
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -52,8 +52,8 @@ export const ChallengeForm = () => {
   // `defaultValues` alone is read only on mount. `keepDirtyValues` keeps any
   // edits in progress from being clobbered by a background refetch.
   const values = useMemo(
-    () => (challenge ? buildFormValues(challenge, projectId ?? 0) : undefined),
-    [challenge, projectId]
+    () => (challenge ? buildFormValues(challenge, projectId ?? 0) : initialValues),
+    [challenge, projectId, initialValues]
   )
 
   const form = useForm<ChallengeFormValues>({

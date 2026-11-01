@@ -479,65 +479,6 @@ describe('challengeSingle.getTasksNearby', () => {
   })
 })
 
-describe('challengeSingle.useCloneChallenge', () => {
-  it('clones a challenge and invalidates related caches', async () => {
-    const cloned = { id: 21, name: 'Cloned' } as unknown as ChallengeGetResponse
-    const fetchMock = stubFetch(new Response(JSON.stringify(cloned), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const spy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => challengeSingle.useCloneChallenge(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ challengeId: 20, newName: 'Cloned Name/Weird' })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(cloned)
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('PUT')
-    expect(request.url).toContain(
-      `api/v2/challenge/20/clone/${encodeURIComponent('Cloned Name/Weird')}`
-    )
-    expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
-    expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'managed'] })
-    expect(spy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
-  })
-
-  it('omits the projectId query param when no target project is given', async () => {
-    const cloned = { id: 21, name: 'Cloned' } as unknown as ChallengeGetResponse
-    const fetchMock = stubFetch(new Response(JSON.stringify(cloned), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.useCloneChallenge(), {
-      wrapper: queryClientWrapper(),
-    })
-
-    result.current.mutate({ challengeId: 20, newName: 'Cloned' })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).searchParams.has('projectId')).toBe(false)
-  })
-
-  it('sends the target projectId when cloning into a chosen project', async () => {
-    const cloned = { id: 21, name: 'Cloned' } as unknown as ChallengeGetResponse
-    const fetchMock = stubFetch(new Response(JSON.stringify(cloned), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.useCloneChallenge(), {
-      wrapper: queryClientWrapper(),
-    })
-
-    result.current.mutate({ challengeId: 20, newName: 'Cloned', projectId: 7 })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).searchParams.get('projectId')).toBe('7')
-  })
-})
-
 type ChallengeDraft = Omit<Partial<Challenge>, 'dataOriginDate'> & {
   localGeoJSON?: string
   dataOriginDate?: string

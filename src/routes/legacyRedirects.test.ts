@@ -183,7 +183,7 @@ const EXPECTATIONS: Record<string, Expectation> = {
   './_app/admin/project/[$projectId]/challenge/[$challengeId]/clone.tsx': {
     legacyPath: '/admin/project/3/challenge/7/clone',
     to: '/manage/challenge/new',
-    search: { projectId: 3 },
+    search: { projectId: 3, cloneFrom: 7 },
   },
   './_app/admin/project/[$projectId]/challenge/[$challengeId]/task/[$taskId]/edit.tsx': {
     legacyPath: '/admin/project/3/challenge/7/task/9/edit',
