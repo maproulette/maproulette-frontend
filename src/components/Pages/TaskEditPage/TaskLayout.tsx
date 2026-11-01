@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { MapProvider } from 'react-map-gl/maplibre'
 import { CompletionResponsesProvider } from '@/contexts/CompletionResponsesContext'
 import { ChallengeProvider } from './contexts/ChallengeContext'
-import { OSMDataProvider } from './contexts/OSMDataContext'
 import { PanelViewProvider } from './contexts/PanelViewContext'
 import { ProjectProvider } from './contexts/ProjectContext'
 import { TaskBundleProvider } from './contexts/TaskBundleContext'
@@ -44,16 +43,14 @@ export const TaskProviders = ({ children }: { children: ReactNode }) => {
                 {/* TaskBundleProvider derives drawer/selection state from TaskMapContext
                   (e.g. selectedMarker), so it must be nested inside TaskMapProvider. */}
                 <TaskBundleProvider>
-                  <OSMDataProvider>
-                    <TaskEditMapProvider>
-                      <LassoEventsInitializer />
-                      {/* TaskFeatureProvider reaches for the map (to zoom to a
-                        feature) and the task, so it sits inside both. */}
-                      <TaskFeatureProvider>
-                        <PanelViewProvider>{children}</PanelViewProvider>
-                      </TaskFeatureProvider>
-                    </TaskEditMapProvider>
-                  </OSMDataProvider>
+                  <TaskEditMapProvider>
+                    <LassoEventsInitializer />
+                    {/* TaskFeatureProvider reaches for the map (to zoom to a
+                      feature) and the task, so it sits inside both. */}
+                    <TaskFeatureProvider>
+                      <PanelViewProvider>{children}</PanelViewProvider>
+                    </TaskFeatureProvider>
+                  </TaskEditMapProvider>
                 </TaskBundleProvider>
               </TaskMapProvider>
             </MapProvider>

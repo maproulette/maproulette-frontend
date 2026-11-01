@@ -44,79 +44,6 @@ describe('osm', () => {
     })
   })
 
-  describe('validateBBoxArea', () => {
-    it('accepts a small, valid bounding box', () => {
-      expect(osm.validateBBoxArea('-0.1,-0.1,0.1,0.1')).toEqual({ isValid: true })
-    })
-
-    it.each([
-      ['with non-numeric components', 'a,b,c,d'],
-      ['missing its 4th component', '1,2,3'],
-      ['with extra components', '1,2,3,4,5'],
-    ] as const)('rejects a bounding box %s', (_label, bbox) => {
-      expect(osm.validateBBoxArea(bbox)).toEqual({
-        isValid: false,
-        error: 'Invalid bounding box format',
-      })
-    })
-
-    it('rejects a bounding box whose area exceeds the maximum allowed', () => {
-      const result = osm.validateBBoxArea('0,0,1,1')
-      expect(result.isValid).toBe(false)
-      expect(result.error).toContain('too large')
-      expect(result.error).toContain('Maximum area: 0.25 square degrees')
-      expect(result.error).toContain('Current area: 1.0000 square degrees')
-    })
-  })
-
-  describe('fetchOSMData', () => {
-    it('throws without fetching when the bounding box is invalid', async () => {
-      const fetchMock = stubFetch(() => new Response('', { status: 200 }))
-
-      await expect(osm.fetchOSMData('a,b,c,d')).rejects.toThrow('Invalid bounding box format')
-      expect(fetchMock).not.toHaveBeenCalled()
-    })
-
-    it('throws without fetching when the bounding box area is too large', async () => {
-      const fetchMock = stubFetch(() => new Response('', { status: 200 }))
-
-      await expect(osm.fetchOSMData('0,0,1,1')).rejects.toThrow(/too large/)
-      expect(fetchMock).not.toHaveBeenCalled()
-    })
-
-    it('fetches and parses the map XML for a valid bounding box', async () => {
-      const xml = '<osm><node id="1" lat="1.5" lon="2.5"/></osm>'
-      const fetchMock = stubFetch(() => new Response(xml, { status: 200 }))
-
-      const doc = await osm.fetchOSMData('-0.1,-0.1,0.1,0.1')
-
-      expect(fetchMock).toHaveBeenCalledWith(`${OSM_API_SERVER}/api/0.6/map?bbox=-0.1,-0.1,0.1,0.1`)
-      expect(doc.querySelector('node')?.getAttribute('id')).toBe('1')
-    })
-
-    it('throws a mapped error message when the fetch fails', async () => {
-      stubFetch(() => new Response('', { status: 400 }))
-
-      await expect(osm.fetchOSMData('-0.1,-0.1,0.1,0.1')).rejects.toThrow(
-        'Request too large - please zoom in further'
-      )
-    })
-
-    it('falls back to a generic message if validation fails without an error string', async () => {
-      // validateBBoxArea always sets an error string alongside isValid: false, but
-      // fetchOSMData defensively falls back to a generic message in case it doesn't.
-      const fetchMock = stubFetch(() => new Response('', { status: 200 }))
-      const validateSpy = vi.spyOn(osm, 'validateBBoxArea').mockReturnValueOnce({ isValid: false })
-
-      try {
-        await expect(osm.fetchOSMData('-0.1,-0.1,0.1,0.1')).rejects.toThrow('Invalid bounding box')
-        expect(fetchMock).not.toHaveBeenCalled()
-      } finally {
-        validateSpy.mockRestore()
-      }
-    })
-  })
-
   describe('fetchOSMElement', () => {
     const xml =
       '<osm><node id="123" lat="1.5" visible="true"><tag k="highway" v="residential"/><tag k="oneway" v="yes"/></node></osm>'
@@ -382,19 +309,6 @@ describe('osm', () => {
       await osm.fetchOSMUser(7)
 
       expect(fetchMock).toHaveBeenCalledWith(`${OSM_API_SERVER}/api/0.6/user/7`)
-    })
-  })
-
-  describe('getBBoxString', () => {
-    it('builds a "minLon,minLat,maxLon,maxLat" string from map bounds', () => {
-      const bounds = {
-        getWest: () => -1.5,
-        getSouth: () => 2.25,
-        getEast: () => 1.5,
-        getNorth: () => 3.75,
-      }
-
-      expect(osm.getBBoxString(bounds)).toBe('-1.5,2.25,1.5,3.75')
     })
   })
 })
