@@ -174,7 +174,7 @@ export const buildFormValues = (
   name: challenge?.name ?? '',
   description: challenge?.description ?? '',
   instruction: challenge?.instruction ?? '',
-  difficulty: challenge?.difficulty ?? 1,
+  difficulty: challenge?.difficulty ?? 2,
   checkinComment: challenge?.checkinComment ?? '',
   checkinSource: challenge?.checkinSource ?? '',
   dataSource: getDefaultDataSource(challenge),

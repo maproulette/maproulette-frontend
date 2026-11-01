@@ -88,7 +88,7 @@ describe('buildFormValues', () => {
       name: '',
       description: '',
       instruction: '',
-      difficulty: 1,
+      difficulty: 2,
       checkinComment: '',
       checkinSource: '',
       dataSource: 'overpass',
@@ -150,9 +150,9 @@ describe('buildFormValues', () => {
     expect(buildFormValues(challenge, 55).projectId).toBe(55)
   })
 
-  it('defaults difficulty to 1 when the challenge has no difficulty set', () => {
+  it('defaults difficulty to 2 (normal) when the challenge has no difficulty set', () => {
     const challenge = { name: 'No difficulty' } as unknown as Challenge
-    expect(buildFormValues(challenge, 1).difficulty).toBe(1)
+    expect(buildFormValues(challenge, 1).difficulty).toBe(2)
   })
 
   it('always resets localGeoJSON to null and dataOriginDate to empty string, even for an existing challenge', () => {
