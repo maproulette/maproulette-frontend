@@ -445,6 +445,16 @@ export const challengeSingle = {
     })
   },
 
+  useRemoveChallengeKeywords: () =>
+    useMutation({
+      mutationFn: ({ challengeId, keywords }: { challengeId: number; keywords: string[] }) =>
+        apiRequest
+          .delete(`api/v2/challenge/${challengeId}/tags`, {
+            searchParams: { tags: keywords.join(',') },
+          })
+          .text(),
+    }),
+
   useUpdateChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({

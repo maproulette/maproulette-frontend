@@ -588,6 +588,25 @@ describe('challengeSingle.useCreateChallenge', () => {
   })
 })
 
+describe('challengeSingle.useRemoveChallengeKeywords', () => {
+  it('DELETEs the comma-joined keywords from the challenge', async () => {
+    const fetchMock = stubFetch(new Response('', { status: 200 }))
+    const { result } = renderHook(() => challengeSingle.useRemoveChallengeKeywords(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({ challengeId: 4, keywords: ['roads', 'lanes'] })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(request.method).toBe('DELETE')
+    const url = new URL(request.url)
+    expect(url.pathname).toBe('/api/v2/challenge/4/tags')
+    expect(url.searchParams.get('tags')).toBe('roads,lanes')
+  })
+})
+
 describe('challengeSingle.useUpdateChallenge', () => {
   it('updates a challenge and refreshes related caches', async () => {
     const updated = { id: 40, name: 'Updated' } as unknown as Challenge

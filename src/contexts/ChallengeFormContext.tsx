@@ -136,6 +136,7 @@ export const EditChallengeFormProvider = ({
   const navigate = useNavigate()
   const { data: challenge, isLoading } = api.challenge.getChallenge(challengeId)
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const removeKeywordsMutation = api.challenge.useRemoveChallengeKeywords()
   const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
 
   const onSubmit = useCallback(
@@ -145,6 +146,13 @@ export const EditChallengeFormProvider = ({
         false,
         isChallengeSourceEditable(challenge)
       )
+
+      const removedKeywords = ((challenge as Challenge | undefined)?.tags ?? []).filter(
+        (keyword) => keyword !== '' && !(challengeData.tags ?? []).includes(keyword)
+      )
+      if (removedKeywords.length > 0) {
+        await removeKeywordsMutation.mutateAsync({ challengeId, keywords: removedKeywords })
+      }
 
       await updateChallengeMutation.mutateAsync({
         challengeId,
@@ -167,7 +175,14 @@ export const EditChallengeFormProvider = ({
         params: { challengeId: String(challengeId) },
       })
     },
-    [challenge, challengeId, navigate, updateChallengeMutation, uploadGeoJSONMutation]
+    [
+      challenge,
+      challengeId,
+      navigate,
+      removeKeywordsMutation,
+      updateChallengeMutation,
+      uploadGeoJSONMutation,
+    ]
   )
 
   const onCancel = useCallback(() => {
