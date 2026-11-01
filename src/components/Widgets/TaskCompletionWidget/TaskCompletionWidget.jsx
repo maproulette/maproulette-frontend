@@ -73,7 +73,7 @@ export default class TaskCompletionWidget extends Component {
           )
         }
         noMain
-        permanent
+        permanent={!this.props.asReviewer}
       >
         {taskCount > 0 && (
           <div className="mr-text-pink-light mr-text-base">
