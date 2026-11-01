@@ -44,6 +44,8 @@ interface EditorContextType {
    * suggestion, discarding everything the mapper has done since.
    */
   resetToSuggestionRef: React.RefObject<(() => void) | null>
+  /** Populated by IdEditorView; discards every unsaved edit in the editor. */
+  discardIdEditsRef: React.RefObject<(() => void) | null>
 }
 
 const EditorContext = createContext<EditorContextType | null>(null)
@@ -56,6 +58,7 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const [editsDivergeFromSuggestion, setEditsDivergeFromSuggestion] = useState(false)
   const [pendingEdits, setPendingEdits] = useState<EntityEdit[]>([])
   const resetToSuggestionRef = useRef<(() => void) | null>(null)
+  const discardIdEditsRef = useRef<(() => void) | null>(null)
   const idViewportRef = useRef<EditorViewport | null>(null)
   const highlightIdEntityRef = useRef<((osmEntityId: string | null) => void) | null>(null)
   const taskToOsmIdRef = useRef<Record<number, string> | null>({})
@@ -105,6 +108,7 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
       pendingEdits,
       setPendingEdits,
       resetToSuggestionRef,
+      discardIdEditsRef,
     }),
     [
       activeView,

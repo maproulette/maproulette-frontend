@@ -14,6 +14,7 @@ import { TaskActionModal } from '../TaskActionModal'
 import { useMappingAvailability } from '../useTaskShortcuts'
 import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'
+import { useConfirmDiscardIdEdits } from './useConfirmDiscardIdEdits'
 
 /**
  * The status keys carried over from MapRoulette 3, kept on the left-hand
@@ -46,7 +47,10 @@ export const TaskActions = () => {
     label: string
   } | null>(null)
 
+  const confirmDiscardIdEdits = useConfirmDiscardIdEdits()
+
   const openModal = (status: number, label: string) => {
+    if (!confirmDiscardIdEdits()) return
     setModalConfig({ status, label })
     setIsModalOpen(true)
   }
@@ -140,7 +144,8 @@ export const TaskActions = () => {
 
   // Reason: stable shortcut definitions for keyboard handler registration.
   // completionActions is not a dependency: it is rebuilt every render, and its
-  // handlers only close over stable setState functions, so re-running on `t`
+  // handlers only close over stable setState functions and
+  // confirmDiscardIdEdits, which only changes with `t`, so re-running on `t`
   // (which is what changes its labels) is enough.
   const taskActionsShortcuts: KeyboardShortcut[] = useMemo(
     () =>

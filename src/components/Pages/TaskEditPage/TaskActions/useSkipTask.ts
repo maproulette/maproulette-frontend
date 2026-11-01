@@ -7,6 +7,7 @@ import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
+import { useConfirmDiscardIdEdits } from './useConfirmDiscardIdEdits'
 
 /**
  * Skipping the current task and moving on, shared by the skip button and the
@@ -22,9 +23,11 @@ export const useSkipTask = (task: Task) => {
   // the shortcut registration that depends on it.
   const { mutateAsync: skipMutation } = api.task.useSkipTask()
   const [isSkipping, setIsSkipping] = useState(false)
+  const confirmDiscardIdEdits = useConfirmDiscardIdEdits()
 
   const skipTask = useCallback(async () => {
     if (isSkipping) return
+    if (!confirmDiscardIdEdits()) return
     setIsSkipping(true)
     try {
       await skipMutation(task.id).catch((error) => {
@@ -51,7 +54,17 @@ export const useSkipTask = (task: Task) => {
     } finally {
       setIsSkipping(false)
     }
-  }, [isSkipping, skipMutation, task.id, task.parent, queryClient, navigateToTask, navigate, t])
+  }, [
+    isSkipping,
+    confirmDiscardIdEdits,
+    skipMutation,
+    task.id,
+    task.parent,
+    queryClient,
+    navigateToTask,
+    navigate,
+    t,
+  ])
 
   return { skipTask, isSkipping }
 }
