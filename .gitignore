@@ -20,7 +20,5 @@ dist/plugins/
 # Storybook
 /storybook-static/
 
-# TanStack Router auto-generated route tree
-src/routeTree.gen.ts
 # Local MCP server config
 .mcp.json
