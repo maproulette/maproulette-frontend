@@ -372,7 +372,7 @@ export const challengeSingle = {
 
   getRandomTask: (challengeId: number) =>
     apiRequest
-      .get(`api/v2/challenge/${challengeId}/tasks/random`, { searchParams: { limit: 1 } })
+      .get(`api/v2/challenge/${challengeId}/tasks/prioritizedTasks`, { searchParams: { limit: 1 } })
       .json<Task[]>(),
 
   // Any task in the challenge, regardless of status - used to drop into read-only

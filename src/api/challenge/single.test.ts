@@ -394,7 +394,7 @@ describe('challengeSingle.getRandomTask', () => {
     expect(result).toEqual(tasks)
 
     const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/challenge/9/tasks/random')
+    expect(request.url).toContain('api/v2/challenge/9/tasks/prioritizedTasks')
     expect(new URL(request.url).searchParams.get('limit')).toBe('1')
   })
 })
