@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
+import { isChallengeSourceEditable } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeFormSchema'
 import {
   buildCloneFormValues,
   clonedChallengeSettings,
@@ -135,22 +136,38 @@ export const EditChallengeFormProvider = ({
   const navigate = useNavigate()
   const { data: challenge, isLoading } = api.challenge.getChallenge(challengeId)
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
 
   const onSubmit = useCallback(
     async (values: ChallengeFormValues) => {
-      const { challengeData } = await buildChallengeSubmission(values, false)
+      const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(
+        values,
+        false,
+        isChallengeSourceEditable(challenge)
+      )
 
       await updateChallengeMutation.mutateAsync({
         challengeId,
         updates: challengeData,
       })
 
+      if (localGeoJSONUpload) {
+        await uploadGeoJSONMutation.mutateAsync({
+          challengeId,
+          geoJSONFile: localGeoJSONUpload.file,
+          options: {
+            lineByLine: localGeoJSONUpload.lineByLine,
+            dataOriginDate: localGeoJSONUpload.dataOriginDate,
+          },
+        })
+      }
+
       navigate({
         to: '/manage/challenge/$challengeId',
         params: { challengeId: String(challengeId) },
       })
     },
-    [challengeId, navigate, updateChallengeMutation]
+    [challenge, challengeId, navigate, updateChallengeMutation, uploadGeoJSONMutation]
   )
 
   const onCancel = useCallback(() => {

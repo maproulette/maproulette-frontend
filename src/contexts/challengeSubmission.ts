@@ -34,7 +34,11 @@ const fetchRemoteGeoJSON = async (url: string) => {
   return response.text()
 }
 
-export const buildChallengeSubmission = async (values: ChallengeFormValues, isCreate: boolean) => {
+export const buildChallengeSubmission = async (
+  values: ChallengeFormValues,
+  isCreate: boolean,
+  includeSource = isCreate
+) => {
   const challengeData: Partial<Challenge> & Record<string, unknown> = {
     name: values.name,
     description: isCreate ? values.description || '' : values.description || undefined,
@@ -63,11 +67,11 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
   const bundleIdProperty = values.taskBundleIdProperty?.trim() ?? ''
   challengeData.taskBundleIdProperty = bundleIdProperty || null
 
-  // The data source is only set at creation. Editing a challenge changes
-  // metadata only — regenerating tasks from a new/updated source is done via
-  // Rebuild Tasks — so the source fields are deliberately omitted on update to
-  // avoid disturbing existing tasks.
-  if (!isCreate) {
+  // The data source is set at creation, and on edit only while the challenge
+  // has no tasks yet (a failed or empty build). Otherwise editing changes
+  // metadata only — regenerating tasks is done via Rebuild Tasks — so the
+  // source fields are omitted to avoid disturbing existing tasks.
+  if (!includeSource) {
     return { challengeData, localGeoJSONUpload }
   }
 

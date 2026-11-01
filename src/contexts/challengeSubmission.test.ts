@@ -474,6 +474,31 @@ describe('buildChallengeSubmission', () => {
       expect(result.challengeData).not.toHaveProperty('localGeoJSON')
     })
 
+    it('sends the new source when the challenge has no tasks yet', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'overpass', overpassQL: 'way[building];' },
+        false,
+        true
+      )
+
+      expect(result.challengeData.overpassQL).toBe('way[building];')
+      expect(result.challengeData.checkinComment).toBe('Fixed roads #maproulette')
+    })
+
+    it('uploads a line-by-line file for a challenge with no tasks yet', async () => {
+      const file = new File([`${RECORD_SEPARATOR}{"type":"Feature"}\n`], 'sequence.geojsonl', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'localGeoJSON', localGeoJSON: file },
+        false,
+        true
+      )
+
+      expect(result.localGeoJSONUpload?.lineByLine).toBe(true)
+    })
+
     it('sets description and instruction to undefined (not empty string) when blank', async () => {
       const result = await buildChallengeSubmission(
         { ...baseValues, description: '', instruction: '' },

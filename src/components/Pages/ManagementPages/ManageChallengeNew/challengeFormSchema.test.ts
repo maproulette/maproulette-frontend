@@ -10,6 +10,7 @@ import {
   buildFormValues,
   type ChallengeFormValues,
   getDefaultDataSource,
+  isChallengeSourceEditable,
   makeChallengeFormSchema,
 } from './challengeFormSchema'
 
@@ -80,6 +81,21 @@ describe('getDefaultDataSource', () => {
 
   it('falls back to localGeoJSON when overpassQL and remoteGeoJson are both undefined', () => {
     expect(getDefaultDataSource({} as unknown as Challenge)).toBe('localGeoJSON')
+  })
+})
+
+describe('isChallengeSourceEditable', () => {
+  it('allows editing the source of a new challenge or one with no tasks', () => {
+    expect(isChallengeSourceEditable(undefined)).toBe(true)
+    expect(
+      isChallengeSourceEditable({ completionMetrics: { total: 0 } } as unknown as Challenge)
+    ).toBe(true)
+  })
+
+  it('keeps the source read-only once the challenge has tasks', () => {
+    expect(
+      isChallengeSourceEditable({ completionMetrics: { total: 4 } } as unknown as Challenge)
+    ).toBe(false)
   })
 })
 

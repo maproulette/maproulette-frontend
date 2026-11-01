@@ -156,6 +156,9 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
     }
   })
 
+export const isChallengeSourceEditable = (challenge: Challenge | undefined) =>
+  !challenge || (challenge.completionMetrics?.total ?? 0) === 0
+
 export const getDefaultDataSource = (
   challenge?: Challenge
 ): 'overpass' | 'localGeoJSON' | 'remoteGeoJSON' => {
