@@ -114,8 +114,8 @@ export const TaskActionModal = ({
   const [formState, setFormState] = useState<Record<string, unknown>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const addTaskCommentMutation = api.task.useAddTaskComment()
+  const addTaskBundleCommentMutation = api.task.useAddTaskBundleComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
-  const updateCompletionResponsesMutation = api.task.useUpdateCompletionResponses()
   const completionResponses = useCompletionResponses()
   const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
   const createBundleMutation = api.taskBundle.useCreateTaskBundle()
@@ -188,11 +188,17 @@ export const TaskActionModal = ({
         )
       )
 
+      const responses =
+        completionResponses && Object.keys(completionResponses.responses).length > 0
+          ? completionResponses.responses
+          : undefined
+
       if (resolvedBundleId != null) {
         await updateBundleStatusMutation.mutateAsync({
           bundleId: resolvedBundleId,
           primaryId: task.id,
           status: newStatus,
+          completionResponses: responses,
           queryParams: pluginQueryParams,
         })
       } else {
@@ -200,38 +206,28 @@ export const TaskActionModal = ({
           taskId: task.id,
           status: newStatus,
           options: {
+            completionResponses: responses,
             queryParams: pluginQueryParams,
           },
         })
       }
 
-      // Answers to any form fields embedded in the challenge's instructions.
-      // Saved after the status change, which has already succeeded on the
-      // server — a failure here must not fail the whole submission.
-      if (completionResponses && Object.keys(completionResponses.responses).length > 0) {
-        try {
-          await updateCompletionResponsesMutation.mutateAsync({
-            taskId: task.id,
-            responses: completionResponses.responses,
-          })
-        } catch (error) {
-          logger.error('Failed to save completion responses', { taskId: task.id, error })
-          toast.error(
-            t(
-              'taskEditPage.taskActionModal.toast.responsesFailed',
-              undefined,
-              'The task status was saved, but your answers to the form could not be.'
-            )
-          )
-        }
-      }
-
       if (comment.trim()) {
         try {
-          await addTaskCommentMutation.mutateAsync({
-            taskId: task.id,
-            commentText: comment.trim(),
-          })
+          if (resolvedBundleId != null) {
+            await addTaskBundleCommentMutation.mutateAsync({
+              bundleId: resolvedBundleId,
+              primaryTaskId: task.id,
+              commentText: comment.trim(),
+              actionId: newStatus,
+            })
+          } else {
+            await addTaskCommentMutation.mutateAsync({
+              taskId: task.id,
+              commentText: comment.trim(),
+              actionId: newStatus,
+            })
+          }
         } catch (error) {
           logger.error('Failed to add task comment', { taskId: task.id, error })
           toast.error(

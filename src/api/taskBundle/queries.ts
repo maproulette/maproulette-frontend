@@ -90,11 +90,13 @@ export const taskBundleQueries = {
         bundleId,
         primaryId,
         status,
+        completionResponses,
         queryParams,
       }: {
         bundleId: number
         primaryId: number
         status: number
+        completionResponses?: Record<string, unknown>
         /** Opaque query params contributed by plugins */
         queryParams?: Record<string, string | boolean | number | undefined | null>
       }) => {
@@ -106,7 +108,10 @@ export const taskBundleQueries = {
             }
           }
         }
-        await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, { searchParams })
+        await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, {
+          searchParams,
+          ...(completionResponses ? { json: completionResponses } : {}),
+        })
       },
       onSuccess: (_data, variables) => {
         queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })

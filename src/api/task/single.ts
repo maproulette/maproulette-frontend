@@ -233,17 +233,6 @@ export const taskSingle = {
    * instructions. Stored on the task and included in the challenge's CSV and
    * GeoJSON exports.
    */
-  useUpdateCompletionResponses: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ taskId, responses }: { taskId: number; responses: Record<string, unknown> }) =>
-        apiRequest.put(`api/v2/task/${taskId}/responses`, { json: responses }).text(),
-      onSuccess: (_data, { taskId }) => {
-        queryClient.invalidateQueries({ queryKey: ['task', taskId] })
-      },
-    })
-  },
-
   useUpdateTaskStatus: () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -256,6 +245,7 @@ export const taskSingle = {
         status: number
         options?: {
           comment?: string
+          completionResponses?: Record<string, unknown>
           /** Opaque query params contributed by plugins */
           queryParams?: Record<string, string | boolean | number | undefined | null>
         }
@@ -273,7 +263,10 @@ export const taskSingle = {
         const queryString = params.toString()
         const url = `api/v2/task/${taskId}/${status}${queryString ? `?${queryString}` : ''}`
 
-        const response = await apiRequest.put(url)
+        const response = await apiRequest.put(
+          url,
+          options?.completionResponses ? { json: options.completionResponses } : undefined
+        )
 
         // If comment is provided, add it separately. The status change above has
         // already succeeded on the server, so a failure here must not fail the
