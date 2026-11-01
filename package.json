@@ -17,7 +17,7 @@
     "lint": "biome lint",
     "lint:fix": "biome lint --unsafe --write",
     "format": "biome check --formatter-enabled=true --linter-enabled=false --assist-enabled=true --write",
-    "check": "tsc && biome check",
+    "check": "tsc && biome check && knip",
     "check:fix": "tsc && biome check --write",
     "check:force": "tsc && biome check --write --unsafe",
     "generate:api-types": "openapi-typescript http://localhost:9000/assets/swagger.json -o src/types/openApiTypes.ts && npm run format -- src/types/openApiTypes.ts",

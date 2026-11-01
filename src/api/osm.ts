@@ -7,12 +7,6 @@ const OSM_SERVER = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
 const OSM_API_SERVER = window.env.VITE_OSM_API_SERVER || 'https://api.openstreetmap.org'
 
 /**
- * Maximum allowed area for OSM data requests (0.25 square degrees)
- * This matches the OSM API 0.6 map endpoint limit
- */
-const MAX_OSM_AREA = 0.25
-
-/**
  * OSM API error codes and their meanings
  */
 const OSM_ERROR_MESSAGES: Record<number, string> = {
@@ -144,55 +138,6 @@ export const osm = {
   },
 
   /**
-   * Validate bounding box area against OSM API limits
-   * @param bbox Bounding box string in format "minLon,minLat,maxLon,maxLat"
-   * @returns Object with isValid boolean and error message if invalid
-   */
-  validateBBoxArea: (bbox: string): { isValid: boolean; error?: string } => {
-    const parts = bbox.split(',')
-    const [minLon, minLat, maxLon, maxLat] = parts.map(Number)
-
-    if (
-      parts.length !== 4 ||
-      Number.isNaN(minLon) ||
-      Number.isNaN(minLat) ||
-      Number.isNaN(maxLon) ||
-      Number.isNaN(maxLat)
-    ) {
-      return { isValid: false, error: 'Invalid bounding box format' }
-    }
-
-    const width = maxLon - minLon
-    const height = maxLat - minLat
-    const area = width * height
-
-    if (area > MAX_OSM_AREA) {
-      return {
-        isValid: false,
-        error: `The selected area is too large to load OSM data. Please zoom in further to view OSM features. Maximum area: ${MAX_OSM_AREA} square degrees. Current area: ${area.toFixed(4)} square degrees.`,
-      }
-    }
-
-    return { isValid: true }
-  },
-
-  /**
-   * Fetch OSM XML data for a bounding box
-   * @param bbox Bounding box string in format "minLon,minLat,maxLon,maxLat"
-   * @returns Promise resolving to parsed XML Document
-   * @throws Error if bounding box area exceeds limits or fetch fails
-   */
-  fetchOSMData: async (bbox: string): Promise<Document> => {
-    const validation = osm.validateBBoxArea(bbox)
-    if (!validation.isValid) {
-      throw new Error(validation.error || 'Invalid bounding box')
-    }
-
-    const uri = `${OSM_API_SERVER}/api/0.6/map?bbox=${bbox}`
-    return fetchXMLData(uri)
-  },
-
-  /**
    * Retrieve the current OpenStreetMap data for the given element
    * @param idString Element identifier in format `<type>/<id>` (e.g. `way/12345`)
    * @param asXML If true, returns the parsed XML Document instead of JSON
@@ -299,19 +244,5 @@ export const osm = {
     }
 
     return handleOSMError(response)
-  },
-
-  /**
-   * Convert map bounds to OSM API bbox string
-   * @param bounds MapLibre bounds object
-   * @returns Bounding box string "minLon,minLat,maxLon,maxLat"
-   */
-  getBBoxString: (bounds: {
-    getWest: () => number
-    getSouth: () => number
-    getEast: () => number
-    getNorth: () => number
-  }): string => {
-    return `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
   },
 }

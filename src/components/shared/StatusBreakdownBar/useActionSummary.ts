@@ -64,7 +64,7 @@ export interface ActionSummary {
   /** Non-zero segments, ordered by STATUS_ORDER. */
   segments: ActionSummarySegment[]
   /** Counts keyed by canonical status, zero-count entries omitted. Suitable
-   * for feeding into `StatusBreakdownBar` / `StatusBreakdownLegend`. */
+   * for feeding into `StatusBreakdownBar`. */
   counts: Partial<Record<StatusKey, number>>
 }
 
