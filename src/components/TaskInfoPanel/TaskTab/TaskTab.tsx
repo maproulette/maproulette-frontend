@@ -12,14 +12,15 @@ interface TaskTabProps {
 export const TaskTab = ({ task }: TaskTabProps) => {
   const { challenge } = useChallengeContext()
   const taskMap = useOptionalTaskEditMapContext()
+  const instruction = task.instruction || challenge?.instruction
   return (
     <div className="space-y-4">
       <EditorChangesPanel task={task} />
 
       <InstructionPanel
         taskInstruction={
-          challenge?.instruction
-            ? substituteMarkdownTaskProperties(challenge.instruction, task, {
+          instruction
+            ? substituteMarkdownTaskProperties(instruction, task, {
                 bounds: taskMap?.mapBounds,
                 zoom: taskMap?.mapZoom,
               })

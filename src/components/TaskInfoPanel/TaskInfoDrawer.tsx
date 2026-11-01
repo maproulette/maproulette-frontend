@@ -263,7 +263,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                 )}
 
                 {/* Challenge Instructions */}
-                {challenge?.instruction && task && (
+                {(task?.instruction || challenge?.instruction) && task && (
                   <div>
                     <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
                       {t('common.instructions', undefined, 'Instructions')}
@@ -282,7 +282,10 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                           ),
                         }}
                       >
-                        {substituteMarkdownTaskProperties(challenge.instruction, task)}
+                        {substituteMarkdownTaskProperties(
+                          task.instruction || challenge?.instruction || '',
+                          task
+                        )}
                       </ReactMarkdown>
                     </div>
                   </div>
