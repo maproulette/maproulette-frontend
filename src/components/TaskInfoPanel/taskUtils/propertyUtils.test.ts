@@ -3,6 +3,7 @@ import type { Task } from '@/types/Task'
 import {
   getMergedFeatureProperties,
   replacePropertyTags,
+  substituteMarkdownTaskProperties,
   substituteTaskProperties,
 } from './propertyUtils.ts'
 
@@ -71,7 +72,21 @@ describe('replacePropertyTags', () => {
 
   it('leaves unmatched tags untouched', () => {
     const result = replacePropertyTags('{{name}} and {{missing}}', { name: 'Main St' })
-    expect(result).toBe('Main St and {{missing}}')
+    expect(result).toBe('Main St and ')
+  })
+
+  it('replaces null values with an empty string', () => {
+    expect(replacePropertyTags('ref: {{ref}}', { ref: null })).toBe('ref: ')
+  })
+
+  it('leaves triple-brace tags alone', () => {
+    expect(replacePropertyTags('{{{name}}}', { name: 'Main St' })).toBe('{{{name}}}')
+  })
+
+  it('reads dotted names as nested paths when there is no matching key', () => {
+    expect(replacePropertyTags('{{a.b}} {{c.d}}', { a: { b: 'nested' }, 'c.d': 'flat' })).toBe(
+      'nested flat'
+    )
   })
 
   it('stringifies non-string values', () => {
@@ -95,9 +110,9 @@ describe('replacePropertyTags', () => {
 })
 
 describe('substituteTaskProperties', () => {
-  it('returns the original text unchanged when the task has no properties', () => {
+  it('blanks tags when the task has no properties', () => {
     const task = makeTask([])
-    expect(substituteTaskProperties('Fix the {{name}}', task)).toBe('Fix the {{name}}')
+    expect(substituteTaskProperties('Fix the {{name}}', task)).toBe('Fix the ')
   })
 
   it('substitutes tags using the task feature properties', () => {
@@ -133,8 +148,8 @@ describe('substituteTaskProperties with workspace properties', () => {
     expect(result).toBe('zoom 12 bbox -1,50,1,52')
   })
 
-  it('leaves a workspace tag alone when it cannot be resolved', () => {
-    expect(substituteTaskProperties('zoom {{#mapZoom}}', task)).toBe('zoom {{#mapZoom}}')
+  it('blanks a workspace tag when it cannot be resolved', () => {
+    expect(substituteTaskProperties('zoom {{#mapZoom}}', task)).toBe('zoom ')
   })
 
   it('treats a property name containing regex characters literally', () => {
@@ -145,6 +160,20 @@ describe('substituteTaskProperties with workspace properties', () => {
         features: [{ type: 'Feature', properties: { 'a.b': 'matched' } }],
       },
     } as unknown as Task
-    expect(substituteTaskProperties('{{a.b}} {{axb}}', weird)).toBe('matched {{axb}}')
+    expect(substituteTaskProperties('{{a.b}} {{axb}}', weird)).toBe('matched ')
+  })
+})
+
+describe('substituteMarkdownTaskProperties', () => {
+  const task = makeTask([feature({ name: 'Main St & Co' })])
+
+  it('URI-encodes values inside link URLs but not in the link text', () => {
+    expect(
+      substituteMarkdownTaskProperties('[{{name}}](https://example.com/?q={{name}})', task)
+    ).toBe('[Main St & Co](https://example.com/?q=Main%20St%20%26%20Co)')
+  })
+
+  it('leaves values outside links unencoded', () => {
+    expect(substituteMarkdownTaskProperties('Fix {{name}}', task)).toBe('Fix Main St & Co')
   })
 })

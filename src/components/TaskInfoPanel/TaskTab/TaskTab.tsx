@@ -1,6 +1,6 @@
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useOptionalTaskEditMapContext } from '@/components/Pages/TaskEditPage/TaskMap/TaskEditMapContext'
-import { substituteTaskProperties } from '@/components/TaskInfoPanel/taskUtils/propertyUtils'
+import { substituteMarkdownTaskProperties } from '@/components/TaskInfoPanel/taskUtils/propertyUtils'
 import type { Task } from '@/types/Task'
 import { EditorChangesPanel } from './EditorChangesPanel'
 import { InstructionPanel } from './InstructionPanel'
@@ -19,7 +19,7 @@ export const TaskTab = ({ task }: TaskTabProps) => {
       <InstructionPanel
         taskInstruction={
           challenge?.instruction
-            ? substituteTaskProperties(challenge.instruction, task, {
+            ? substituteMarkdownTaskProperties(challenge.instruction, task, {
                 bounds: taskMap?.mapBounds,
                 zoom: taskMap?.mapZoom,
               })

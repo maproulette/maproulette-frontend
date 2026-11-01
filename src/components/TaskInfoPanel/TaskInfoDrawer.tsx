@@ -10,7 +10,7 @@ import {
   getOsmServerUrl,
   parseOsmFeatureFromTask,
 } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
-import { substituteTaskProperties } from '@/components/TaskInfoPanel/taskUtils/propertyUtils'
+import { substituteMarkdownTaskProperties } from '@/components/TaskInfoPanel/taskUtils/propertyUtils'
 import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
@@ -282,7 +282,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                           ),
                         }}
                       >
-                        {substituteTaskProperties(challenge.instruction, task)}
+                        {substituteMarkdownTaskProperties(challenge.instruction, task)}
                       </ReactMarkdown>
                     </div>
                   </div>
