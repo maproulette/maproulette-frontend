@@ -19,6 +19,8 @@ const baseValues: ChallengeFormValues = {
   description: 'A description',
   instruction: 'Some instructions',
   difficulty: 2,
+  category: 'other',
+  additionalKeywords: '',
   checkinComment: 'Fixed roads #maproulette',
   checkinSource: 'Bing',
   dataSource: 'overpass',
@@ -52,6 +54,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -92,6 +95,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -130,6 +134,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -440,6 +445,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -519,5 +525,23 @@ describe('buildChallengeSubmission team image handling', () => {
       defaultBasemapId: null,
       customBasemap: null,
     })
+  })
+})
+
+describe('buildChallengeSubmission keywords', () => {
+  it.each([true, false])(
+    'sends the category keywords plus the additional keywords as tags (isCreate=%s)',
+    async (isCreate) => {
+      const { challengeData } = await buildChallengeSubmission(
+        { ...baseValues, category: 'water', additionalKeywords: 'lakes,,rivers' },
+        isCreate
+      )
+      expect(challengeData.tags).toEqual(['natural', 'water', 'lakes', 'rivers'])
+    }
+  )
+
+  it('sends no keywords for the Other category without additional keywords', async () => {
+    const { challengeData } = await buildChallengeSubmission(baseValues, true)
+    expect(challengeData.tags).toEqual([])
   })
 })

@@ -1,5 +1,6 @@
 import { basemapSubmission } from '@/components/Map/basemap'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
+import { buildChallengeTags } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeKeywords'
 import { detectLocalGeoJSONSubmission } from '@/lib/localGeoJSON'
 import { bundledGeoJSONFile } from '@/lib/taskBundling'
 import type { Challenge } from '@/types/Challenge'
@@ -39,6 +40,7 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
     description: isCreate ? values.description || '' : values.description || undefined,
     instruction: isCreate ? values.instruction || '' : values.instruction || undefined,
     difficulty: values.difficulty,
+    tags: buildChallengeTags(values.category, values.additionalKeywords),
   }
   let localGeoJSONUpload: LocalGeoJSONUpload | undefined
 

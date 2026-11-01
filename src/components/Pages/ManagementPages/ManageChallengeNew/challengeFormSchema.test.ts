@@ -27,6 +27,8 @@ const validValues: ChallengeFormValues = {
   description: 'A description',
   instruction: 'Some instructions',
   difficulty: 1,
+  category: 'other',
+  additionalKeywords: '',
   checkinComment: 'Fixed roads',
   checkinSource: 'Bing',
   dataSource: 'overpass',
@@ -82,6 +84,16 @@ describe('getDefaultDataSource', () => {
 })
 
 describe('buildFormValues', () => {
+  it('splits the challenge keywords into a category and additional keywords', () => {
+    const challenge = {
+      name: 'Keywords',
+      tags: ['', 'highway', 'sidewalks', 'building', 'crossings'],
+    } as unknown as Challenge
+    const values = buildFormValues(challenge, 1)
+    expect(values.category).toBe('navigation')
+    expect(values.additionalKeywords).toBe('sidewalks,crossings')
+  })
+
   it('builds defaults for a brand new challenge (no challenge provided)', () => {
     expect(buildFormValues(undefined, 42)).toEqual({
       projectId: 42,
@@ -89,6 +101,8 @@ describe('buildFormValues', () => {
       description: '',
       instruction: '',
       difficulty: 2,
+      category: 'other',
+      additionalKeywords: '',
       checkinComment: '',
       checkinSource: '',
       dataSource: 'overpass',
@@ -124,6 +138,8 @@ describe('buildFormValues', () => {
       description: 'Existing description',
       instruction: 'Existing instructions',
       difficulty: 3,
+      category: 'other',
+      additionalKeywords: '',
       checkinComment: 'Existing comment #maproulette',
       checkinSource: 'Bing',
       dataSource: 'overpass',
