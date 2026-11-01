@@ -32,7 +32,6 @@ const TESTED_COMPONENT_UTILS = [
   'ui/columnResizeUtils.ts',
   'shared/TaskPropertyQueryBuilder/backendRuleShape.ts',
   'shared/TaskPropertyQueryBuilder/propertyRuleConversion.ts',
-  'shared/TaskTags/taskTagsPermissions.ts',
   'AppLayout/Header/GlobalSearch/shared/searchTypes.ts',
   'TaskInfoPanel/taskUtils/osmUtils.ts',
   'TaskInfoPanel/taskUtils/propertyUtils.ts',

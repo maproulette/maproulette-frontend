@@ -18,7 +18,6 @@ export const taskFormSchema = z.object({
       { message: 'GeoJSON must be valid JSON' }
     ),
   status: z.number().int().min(0),
-  errorTags: z.string().optional().or(z.literal('')),
 })
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>

@@ -47,7 +47,6 @@ export const ManageTaskEdit = () => {
       instruction: values.instruction ?? null,
       geometries: JSON.parse(values.geometries),
       status: values.status,
-      errorTags: values.errorTags ?? task.errorTags ?? '',
     }
     await updateTaskMutation.mutateAsync({ taskId: taskIdNum, body })
     navigate({ to: '/tasks/$taskId', params: { taskId } })

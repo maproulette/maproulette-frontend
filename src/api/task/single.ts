@@ -250,7 +250,6 @@ export const taskSingle = {
         taskId: number
         status: number
         options?: {
-          tags?: string[]
           comment?: string
           /** Opaque query params contributed by plugins */
           queryParams?: Record<string, string | boolean | number | undefined | null>
@@ -258,9 +257,6 @@ export const taskSingle = {
       }) => {
         // Build query string manually
         const params = new URLSearchParams()
-        if (options?.tags && options.tags.length > 0) {
-          params.set('tags', options.tags.join(','))
-        }
         if (options?.queryParams) {
           for (const [key, value] of Object.entries(options.queryParams)) {
             if (value !== undefined && value !== null) {

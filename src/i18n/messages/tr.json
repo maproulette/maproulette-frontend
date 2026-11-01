@@ -58,7 +58,6 @@
   "common.manage": "Yönet",
   "common.member": "Üye",
   "common.modified": "Değiştirildi",
-  "common.mrTags": "MapRoulette Etiketleri",
   "common.name": "Ad",
   "common.newest": "En Yeni",
   "common.noProjectsFound": "Proje bulunamadı",
@@ -133,7 +132,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "Görev Detayları",
   "manageTaskNew.title": "Yeni Görev",
   "manageTasksOpen.or": "veya",
-  "managementPages.bulkActionsToolbar.tag": "Etiket",
   "managementPages.rebuildTasksDialog.introLocal": "Yeniden oluşturma, en son GeoJSON verileriyle yeni bir yerel dosya yüklemenize ve görev görevlerini yeniden oluşturmanıza olanak tanır:",
   "managementPages.rebuildTasksDialog.introOverpass": "Yeniden oluşturma, Üstgeçit sorgusunu yeniden çalıştıracak ve en son verilerle meydan okuma görevlerini yeniden oluşturacaktır:",
   "managementPages.rebuildTasksDialog.learnMore": "Daha Fazla Bilgi Edin",
@@ -188,7 +186,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Grup",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "Numara",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "değer",
-  "taskTags.taskTags.editTags": "Etiketleri düzenle",
   "teamImages.status.approved": "Onaylandı",
   "teams.form.descriptionDescription": "Takımın kısa bir tanımı",
   "teams.form.nameDescription": "Takımın özel adı"

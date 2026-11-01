@@ -56,7 +56,6 @@
   "common.manage": "Gerenciar",
   "common.member": "Membro",
   "common.modified": "Modificado",
-  "common.mrTags": "Etiquetas MR",
   "common.name": "Nome",
   "common.newest": "Mais recente",
   "common.noProjectsFound": "Nenhum projeto encontrado",
@@ -131,7 +130,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "Detalhes da tarefa",
   "manageTaskNew.title": "Nova tarefa",
   "manageTasksOpen.or": "ou",
-  "managementPages.bulkActionsToolbar.tag": "Etiqueta",
   "managementPages.rebuildTasksDialog.introLocal": "A reconstrução permitirá que você envie um novo arquivo local com os dados mais recentes do GeoJSON e reconstrua as tarefas de desafio:",
   "managementPages.rebuildTasksDialog.introOverpass": "A reconstrução executará novamente a consulta Overpass e reconstruirá as tarefas de desafio com os dados mais recentes:",
   "managementPages.rebuildTasksDialog.learnMore": "Saiba mais",
@@ -185,7 +183,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Grupo",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "número",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "valor",
-  "taskTags.taskTags.editTags": "Editar etiquetas",
   "teamImages.status.approved": "Aprovado",
   "teams.form.descriptionDescription": "Uma breve descrição da equipe",
   "teams.form.nameDescription": "O nome único da equipe"

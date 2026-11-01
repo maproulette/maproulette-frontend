@@ -56,7 +56,6 @@
   "common.manage": "Zarządzaj",
   "common.member": "Członek",
   "common.modified": "Zmodyfikowane",
-  "common.mrTags": "Tagi MR",
   "common.name": "Nazwa",
   "common.newest": "Najnowszy",
   "common.noProjectsFound": "Nie znaleziono projektów",
@@ -131,7 +130,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "Szczegóły zadania",
   "manageTaskNew.title": "Nowe zadanie",
   "manageTasksOpen.or": "lub",
-  "managementPages.bulkActionsToolbar.tag": "Znacznik",
   "managementPages.rebuildTasksDialog.introLocal": "Dzięki przebudowie będziesz mógł wgrać nowy plik lokalny z najnowszymi danymi GeoJSON i odtworzyć zadania wyzwania:",
   "managementPages.rebuildTasksDialog.introOverpass": "Przebudowa spowoduje ponowne uruchomienie zapytania Overpass i przebuduje zadania z najnowszymi danymi:",
   "managementPages.rebuildTasksDialog.learnMore": "Dowiedz się więcej",
@@ -185,7 +183,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Grupa",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "numer",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "wartość",
-  "taskTags.taskTags.editTags": "Edytuj tagi",
   "teamImages.status.approved": "Zatwierdzone",
   "teams.form.descriptionDescription": "Krótki opis zespołu",
   "teams.form.nameDescription": "Unikalna nazwa zespołu"

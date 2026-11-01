@@ -12,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup'
 import {
@@ -87,7 +86,6 @@ export const TaskActionModal = ({
   const navigateToTask = useNavigateToTask()
   const commentId = useId()
   const commentRef = useRef<HTMLTextAreaElement>(null)
-  const tagsId = useId()
   const randomId = useId()
   const nearbyId = useId()
   const { user } = useAuthContext()
@@ -109,7 +107,6 @@ export const TaskActionModal = ({
   ]
   const [newStatus, setNewStatus] = useState(initialStatus)
   const [comment, setComment] = useState('')
-  const [tags, setTags] = useState('')
   const [nextTaskType, setNextTaskType] = useState<'nearby' | 'random'>(() =>
     readNextTaskType(user?.properties)
   )
@@ -157,14 +154,6 @@ export const TaskActionModal = ({
     try {
       setIsSubmitting(true)
 
-      const tagList = tags
-        ? tags
-            .trim()
-            .split(',')
-            .map((tag) => tag.trim())
-            .filter(Boolean)
-        : undefined
-
       let resolvedBundleId: number | null = null
 
       if (activeBundle && activeBundle.taskIds.length > 1) {
@@ -204,7 +193,6 @@ export const TaskActionModal = ({
           bundleId: resolvedBundleId,
           primaryId: task.id,
           status: newStatus,
-          tags: tagList,
           queryParams: pluginQueryParams,
         })
       } else {
@@ -212,7 +200,6 @@ export const TaskActionModal = ({
           taskId: task.id,
           status: newStatus,
           options: {
-            tags: tagList,
             queryParams: pluginQueryParams,
           },
         })
@@ -323,7 +310,7 @@ export const TaskActionModal = ({
     }
   }
 
-  // handleSubmit closes over the comment, status and tags as they stand this
+  // handleSubmit closes over the comment and status as they stand this
   // render. The registered shortcut has to stay referentially stable, so it
   // goes through a ref rather than capturing one render's version and
   // submitting whatever the mapper had typed at the time.
@@ -355,7 +342,6 @@ export const TaskActionModal = ({
 
   const handleCancel = () => {
     setComment('')
-    setTags('')
     setNewStatus(initialStatus)
     setSelectedNearbyTaskId(null)
     setFormState({})
@@ -454,30 +440,6 @@ export const TaskActionModal = ({
                 onChange={(e) => setComment(e.target.value)}
                 rows={3}
               />
-            </div>
-
-            {/* Tags */}
-            <div className="space-y-2">
-              <Label htmlFor={tagsId}>
-                {t('taskEditPage.taskActionModal.tagsLabel', undefined, 'Tags (Optional)')}
-              </Label>
-              <Input
-                id={tagsId}
-                placeholder={t(
-                  'taskEditPage.taskActionModal.tagsPlaceholder',
-                  undefined,
-                  'Enter tags separated by commas (e.g., needs-review, complex)'
-                )}
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-              />
-              <p className="text-xs text-zinc-500">
-                {t(
-                  'taskEditPage.taskActionModal.tagsHint',
-                  undefined,
-                  'Separate multiple tags with commas'
-                )}
-              </p>
             </div>
 
             {extensions.map((extension) => {

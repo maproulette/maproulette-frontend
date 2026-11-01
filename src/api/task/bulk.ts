@@ -29,26 +29,6 @@ export const taskBulk = {
     })
   },
 
-  useBulkAddTags: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: async ({ taskIds, tags }: { taskIds: number[]; tags: string[] }) => {
-        const joined = tags.join(',')
-        await Promise.all(
-          taskIds.map((taskId) =>
-            apiRequest.get(`api/v2/task/${taskId}/tags/update`, {
-              searchParams: { tags: joined },
-            })
-          )
-        )
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['task'] })
-        queryClient.invalidateQueries({ queryKey: ['challenge'] })
-      },
-    })
-  },
-
   useBulkDelete: () => {
     const queryClient = useQueryClient()
     return useMutation({

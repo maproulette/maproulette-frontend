@@ -56,8 +56,6 @@ export const buildChallengeSubmission = async (values: ChallengeFormValues, isCr
       : checkinComment
   challengeData.checkinSource = values.checkinSource.trim()
   challengeData.osmIdProperty = values.osmIdProperty || null
-  challengeData.preferredTags = values.preferredTags || null
-  challengeData.limitTags = values.limitTags
   Object.assign(challengeData, basemapSubmission(values.basemap, values.basemapUrl ?? ''))
 
   const bundleIdProperty = values.taskBundleIdProperty?.trim() ?? ''

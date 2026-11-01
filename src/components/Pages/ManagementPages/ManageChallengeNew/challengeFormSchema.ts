@@ -84,8 +84,6 @@ const makeBaseChallengeFormSchema = (t: T) =>
     taskBundleIdProperty: z.string().optional().or(z.literal('')),
     // Comma-separated MapRoulette tags suggested to mappers, and whether they
     // are the only tags accepted.
-    preferredTags: z.string().optional().or(z.literal('')),
-    limitTags: z.boolean(),
     basemap: z.string(),
     basemapUrl: z.string().optional().or(z.literal('')),
     ownerTeamId: z.number().nullable(),
@@ -186,8 +184,6 @@ export const buildFormValues = (
   dataOriginDate: '',
   osmIdProperty: challenge?.osmIdProperty ?? '',
   taskBundleIdProperty: challenge?.taskBundleIdProperty ?? '',
-  preferredTags: challenge?.preferredTags ?? '',
-  limitTags: challenge?.limitTags ?? false,
   basemap: basemapSelection(challenge),
   basemapUrl: challenge?.customBasemap ?? '',
   ownerTeamId: challenge?.ownerTeamId ?? null,

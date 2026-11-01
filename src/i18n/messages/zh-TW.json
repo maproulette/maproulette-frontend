@@ -53,7 +53,6 @@
   "common.manage": "管理",
   "common.member": "成員",
   "common.modified": "已變動",
-  "common.mrTags": "MR 標籤",
   "common.name": "名稱",
   "common.newest": "最新",
   "common.noProjectsFound": "找不到專案",
@@ -123,7 +122,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "任務詳情",
   "manageTaskNew.title": "新任務",
   "manageTasksOpen.or": "或",
-  "managementPages.bulkActionsToolbar.tag": "標籤",
   "managementPages.rebuildTasksDialog.introLocal": "重新建構允許你用新的本地最新 GeoJSON 檔案的資料，重新建構挑戰任務：",
   "managementPages.rebuildTasksDialog.introOverpass": "重新建構會重新執行 Overpass 檢索，採用最新資料重新建構挑戰：",
   "managementPages.rebuildTasksDialog.learnMore": "瞭解更多",
@@ -172,7 +170,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "群組",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "數字",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "值",
-  "taskTags.taskTags.editTags": "編輯標籤",
   "teamImages.status.approved": "已核准",
   "teams.form.descriptionDescription": "團隊的簡要說明",
   "teams.form.nameDescription": "團隊的獨特名稱"

@@ -55,7 +55,6 @@
   "common.manage": "管理",
   "common.member": "メンバー",
   "common.modified": "更新日",
-  "common.mrTags": "MRタグ",
   "common.name": "名前",
   "common.newest": "最新",
   "common.noProjectsFound": "プロジェクトがありません",
@@ -130,7 +129,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "タスクの詳細",
   "manageTaskNew.title": "新しいタスク",
   "manageTasksOpen.or": "or",
-  "managementPages.bulkActionsToolbar.tag": "タグ",
   "managementPages.rebuildTasksDialog.introLocal": "再構築では最新GeoJsonデータで新しいローカルファイルをアップロードしてチャレンジのタスクを再構築できます:",
   "managementPages.rebuildTasksDialog.introOverpass": "再構築ではOverpassクエリーを再実行し、チャレンジのタスクを最新データで再構築します:",
   "managementPages.rebuildTasksDialog.learnMore": "さらに詳しく",
@@ -184,7 +182,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "グループ",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "number",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "value",
-  "taskTags.taskTags.editTags": "Edit tags",
   "teamImages.status.approved": "承認",
   "teams.form.descriptionDescription": "チームの簡単な説明",
   "teams.form.nameDescription": "チームの固有名"

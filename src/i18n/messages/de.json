@@ -61,7 +61,6 @@
   "common.manage": "Verwalten",
   "common.member": "Mitglied",
   "common.modified": "Bearbeitet",
-  "common.mrTags": "MR Tags",
   "common.name": "Name",
   "common.newest": "Neu",
   "common.noProjectsFound": "Keine Projekte gefunden",
@@ -136,7 +135,6 @@
   "manageTaskEdit.index.taskDetailsTitle": "Aufgabendetails",
   "manageTaskNew.title": "Neue Aufgabe",
   "manageTasksOpen.or": "oder",
-  "managementPages.bulkActionsToolbar.tag": "Tag",
   "managementPages.rebuildTasksDialog.introLocal": "Beim Neuaufbau kann eine neue lokale Datei mit den neuesten GeoJSON-Daten hochgeladen und die Aufgaben der Kampagne aktualisiert werden:",
   "managementPages.rebuildTasksDialog.introOverpass": "Beim Neuaufbau werden die Overpass-Abfrage wiederholt und die Aufgaben der Kampagne mit den neuesten Daten aktualisiert:",
   "managementPages.rebuildTasksDialog.learnMore": "Mehr erfahren",
@@ -192,7 +190,6 @@
   "taskPropertyQueryBuilder.ruleGroup.addGroup": "Gruppe",
   "taskPropertyQueryBuilder.ruleLeaf.typeNumber": "Zahl",
   "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": "Wert",
-  "taskTags.taskTags.editTags": "Tags bearbeiten",
   "teamImages.status.approved": "Bestätigt",
   "teams.form.descriptionDescription": "Eine Kurzbeschreibung des Teams",
   "teams.form.nameDescription": "Der eindeutige Name des Teams"

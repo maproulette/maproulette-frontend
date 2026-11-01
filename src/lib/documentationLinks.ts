@@ -49,7 +49,6 @@ export const DOCS_PAGES = {
   challengeInstructionsTemplating: 'documentation/challenge-instructions-templating',
   // Tasks
   taskPriorityRules: 'documentation/task-priority-rules',
-  maprouletteTags: 'documentation/using-maproulette-tags',
   externalTaskIdentifiers: 'documentation/setting-external-task-identifiers',
   taskSourcedDate: 'documentation/defining-task-sourced-date',
   mustacheTagReplacement: 'documentation/mustache-tag-replacement',
