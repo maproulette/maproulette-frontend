@@ -31,9 +31,6 @@ export const allMapStyles = (): StyleSpecification[] => [
   ...customBaseLayerStyles(),
 ]
 
-/** @deprecated Prefer `allMapStyles()`, which includes the user's own layers. */
-export const mapStyles = bundledMapStyles
-
 const STORAGE_KEY = 'mapstyle'
 
 export const getCurrentMapStyleIndex = (): number => {

@@ -46,7 +46,7 @@ const getDeploymentPluginUrls = (): string[] => {
     .map(resolvePluginUrl)
 }
 
-export interface PluginPageMatch {
+interface PluginPageMatch {
   page: PluginPage
   params: RouteParams
 }

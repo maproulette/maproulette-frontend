@@ -37,7 +37,7 @@ import { useDescriptionRecommendation } from './useDescriptionRecommendation'
 
 export type TaskRelation = 'primary' | 'bundle' | 'selection'
 
-export const HEADER_GRADIENTS: Record<TaskRelation, string> = {
+const HEADER_GRADIENTS: Record<TaskRelation, string> = {
   primary:
     'bg-gradient-to-r from-amber-200 via-amber-100/50 to-white dark:from-amber-800/50 dark:via-amber-900/25 dark:to-slate-800',
   bundle:

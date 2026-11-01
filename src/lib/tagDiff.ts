@@ -1,6 +1,6 @@
 import type { TagFix } from './cooperativeWork'
 
-export type TagChangeStatus = 'added' | 'changed' | 'removed'
+type TagChangeStatus = 'added' | 'changed' | 'removed'
 
 export interface TagChange {
   key: string

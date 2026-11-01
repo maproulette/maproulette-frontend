@@ -15,9 +15,7 @@
 export type ChallengeReportStatusName = 'open' | 'actioned' | 'dismissed'
 
 /** Matches the backend's org.maproulette.framework.model.ChallengeReport status constants. */
-export const CHALLENGE_REPORT_STATUS_OPEN = 0
-export const CHALLENGE_REPORT_STATUS_ACTIONED = 1
-export const CHALLENGE_REPORT_STATUS_DISMISSED = 2
+const CHALLENGE_REPORT_STATUS_OPEN = 0
 
 /** Bounds the backend enforces on the report text; mirrored here for the form. */
 export const CHALLENGE_REPORT_MIN_LENGTH = 100

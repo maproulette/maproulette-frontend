@@ -5,12 +5,12 @@
  * mirror only the methods we actually call.
  */
 
-export interface IdSelection {
+interface IdSelection {
   selectAll: (selector: string) => IdSelection
   classed: (cls: string, on: boolean) => IdSelection
 }
 
-export interface IdMap {
+interface IdMap {
   extent: (padded: [[number, number], [number, number]]) => void
   centerZoom: (center: [number, number], zoom: number) => void
   center: () => [number, number]

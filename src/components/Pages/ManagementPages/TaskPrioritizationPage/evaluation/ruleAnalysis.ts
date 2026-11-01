@@ -9,11 +9,9 @@ export interface PrioritizationWarnings {
   global: GlobalWarning[]
 }
 
-export type TierWarning =
-  | { kind: 'dead-rule'; message: string }
-  | { kind: 'all-match'; message: string }
+type TierWarning = { kind: 'dead-rule'; message: string } | { kind: 'all-match'; message: string }
 
-export type GlobalWarning =
+type GlobalWarning =
   | { kind: 'swallowed-default'; message: string }
   | { kind: 'no-rules'; message: string }
 

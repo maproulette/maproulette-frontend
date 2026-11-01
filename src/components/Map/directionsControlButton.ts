@@ -31,7 +31,7 @@ export const directionsControlButton = ({
   binding: DIRECTIONS_BINDING,
 })
 
-export const useDirectionsShortcut = (
+const useDirectionsShortcut = (
   show: boolean,
   onToggle: (show: boolean) => void,
   enabled: boolean

@@ -21,7 +21,7 @@ export type ActionCounts = {
 }
 
 /** Canonical status key used by `statusColors` and the breakdown UI. */
-export type StatusKey =
+type StatusKey =
   | 'created'
   | 'fixed'
   | 'alreadyFixed'
@@ -35,7 +35,7 @@ export type StatusKey =
  * Canonical render order. Matches the "consistent status order" requirement in
  * the Progress Status Blocks feature plan.
  */
-export const STATUS_ORDER: readonly StatusKey[] = [
+const STATUS_ORDER: readonly StatusKey[] = [
   'created',
   'fixed',
   'alreadyFixed',
@@ -46,7 +46,7 @@ export const STATUS_ORDER: readonly StatusKey[] = [
   'disabled',
 ]
 
-export interface ActionSummarySegment {
+interface ActionSummarySegment {
   key: StatusKey
   label: string
   color: string
@@ -55,11 +55,7 @@ export interface ActionSummarySegment {
 }
 
 /** Statuses that count as "done" for completion percentages. */
-export const COMPLETED_STATUS_KEYS: readonly StatusKey[] = [
-  'fixed',
-  'alreadyFixed',
-  'falsePositive',
-]
+const COMPLETED_STATUS_KEYS: readonly StatusKey[] = ['fixed', 'alreadyFixed', 'falsePositive']
 
 export interface ActionSummary {
   total: number

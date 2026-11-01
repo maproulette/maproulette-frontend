@@ -10,7 +10,7 @@ import type { components } from './openApiTypes'
  * inheriting the challenges the old image was on. Rejected images stay behind
  * as history, which is why a team's list can still hold several.
  */
-export type TeamImageStatus = 'pending' | 'approved' | 'rejected'
+type TeamImageStatus = 'pending' | 'approved' | 'rejected'
 
 /** Matches the backend's org.maproulette.framework.model.TeamImage status constants. */
 export const TEAM_IMAGE_STATUS_PENDING = 0

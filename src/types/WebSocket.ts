@@ -26,27 +26,27 @@ export interface AchievementAwardedMessage extends WebSocketMessage {
   }
 }
 
-export interface UserSummary {
+interface UserSummary {
   userId: number
   osmId: number
   displayName: string
   avatarURL: string
 }
 
-export interface ChallengeSummary {
+interface ChallengeSummary {
   id: number
   parentId: number
   name: string
   enabled: boolean
 }
 
-export interface ProjectSummary {
+interface ProjectSummary {
   id: number
   name: string
   enabled: boolean
 }
 
-export interface TaskAction {
+interface TaskAction {
   task: {
     id: number
     parent: number
@@ -63,7 +63,7 @@ export interface TaskEventMessage extends WebSocketMessage {
   data: TaskAction
 }
 
-export interface BundleTaskInfo {
+interface BundleTaskInfo {
   id: number
   parent: number
   status?: number | null
@@ -72,7 +72,7 @@ export interface BundleTaskInfo {
   isBundlePrimary?: boolean | null
 }
 
-export interface TasksAction {
+interface TasksAction {
   tasks: BundleTaskInfo[]
   challenge: ChallengeSummary | null
   project: ProjectSummary | null
@@ -84,7 +84,7 @@ export interface TasksEventMessage extends WebSocketMessage {
   data: TasksAction
 }
 
-export interface ReviewData {
+interface ReviewData {
   taskWithReview: {
     task: { id: number; parent: number; status?: number | null }
     review?: { reviewStatus?: number }
@@ -101,7 +101,7 @@ export interface TeamUpdateMessage extends WebSocketMessage {
   data: { teamId: number; userId: number | null }
 }
 
-export interface PongMessage extends WebSocketMessage {
+interface PongMessage extends WebSocketMessage {
   messageType: 'pong'
   data: null
 }

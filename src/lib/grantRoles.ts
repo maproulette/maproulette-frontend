@@ -3,8 +3,7 @@ import type { User } from '@/types/User'
 
 // Grant role constants (mirrors backend org.maproulette.framework.model.Grant).
 // Lower is more powerful, so every check reads `role <= REQUIRED`.
-export const ROLE_SUPER_USER = -1
-export const ROLE_ADMIN = 1
+const ROLE_SUPER_USER = -1
 export const ROLE_WRITE_ACCESS = 2
 
 // Item type constants (mirrors org.maproulette.data.Actions).

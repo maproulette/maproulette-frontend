@@ -19,7 +19,7 @@ export const localeOptions = [
 
 export type Locale = (typeof localeOptions)[number]['value']
 
-export const supportedLocales: readonly Locale[] = localeOptions.map((option) => option.value)
+const supportedLocales: readonly Locale[] = localeOptions.map((option) => option.value)
 
 export const defaultLocale: Locale = 'en-US'
 

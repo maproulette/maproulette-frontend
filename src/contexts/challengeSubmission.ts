@@ -4,7 +4,7 @@ import { detectLocalGeoJSONSubmission } from '@/lib/localGeoJSON'
 import { bundledGeoJSONFile } from '@/lib/taskBundling'
 import type { Challenge } from '@/types/Challenge'
 
-export type LocalGeoJSONUpload = {
+type LocalGeoJSONUpload = {
   file: File
   lineByLine: boolean
   dataOriginDate?: string

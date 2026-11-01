@@ -115,7 +115,7 @@ export const formatBinding = (binding: ShortcutBinding, isMac = isMacPlatform())
 }
 
 /** A binding rendered inline, for a native `title` attribute: `"Ctrl + K"`. */
-export const formatBindingText = (binding: ShortcutBinding, isMac = isMacPlatform()) =>
+const formatBindingText = (binding: ShortcutBinding, isMac = isMacPlatform()) =>
   formatBinding(binding, isMac).join(' + ')
 
 /**

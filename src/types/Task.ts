@@ -35,8 +35,6 @@ export type TasksInBoundsParams =
 
 /* Types From API */
 export type TaskMarker = components['schemas']['org.maproulette.framework.model.TaskMarker']
-export type TaskCluster =
-  components['schemas']['org.maproulette.framework.model.TaskClusterSummary']
 /**
  * The OpenAPI spec types `geometries` and `location` as opaque records. In
  * practice the backend guarantees `geometries` is a non-empty GeoJSON
@@ -79,7 +77,7 @@ export type TasksBoundingBoxQuery = {
 }
 
 /* Custom Types */
-export type TaskHistoryUserRef = {
+type TaskHistoryUserRef = {
   id: number
   username: string
 }

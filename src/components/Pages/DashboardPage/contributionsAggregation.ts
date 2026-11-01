@@ -1,7 +1,7 @@
 import type { TranslateFn } from '@/i18n'
 import type { UserContribution } from '@/types/User'
 
-export interface GroupedActivity {
+interface GroupedActivity {
   date: string
   challenges: {
     name: string

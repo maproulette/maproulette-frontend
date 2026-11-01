@@ -15,9 +15,9 @@ export const DIRECTION_ICONS = {
   end: 'direction-end',
 } as const
 
-export type EndpointRole = 'start' | 'end'
+type EndpointRole = 'start' | 'end'
 
-export interface DirectionEndpointProperties {
+interface DirectionEndpointProperties {
   role: EndpointRole
   /** Identity of the feature this endpoint belongs to, see `taskFeatureKey`. */
   featureKey: string | null
