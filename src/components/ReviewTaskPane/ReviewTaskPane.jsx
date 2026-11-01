@@ -42,9 +42,9 @@ export const defaultWorkspaceSetup = function () {
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9 },
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 8 },
       { i: generateWidgetId(), x: 0, y: 9, w: 4, h: 8 },
-      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 10 },
       { i: generateWidgetId(), x: 4, y: 0, w: 8, h: 18 },
-      { i: generateWidgetId(), x: 0, y: 21, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 27, w: 4, h: 8 },
     ],
     excludeWidgets: ["TagDiffWidget"],
   };
@@ -67,9 +67,9 @@ export const defaultWorkspaceSetupAlt = function () {
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 9 },
       { i: generateWidgetId(), x: 0, y: 0, w: 4, h: 8 },
       { i: generateWidgetId(), x: 0, y: 9, w: 4, h: 8 },
-      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 4 },
+      { i: generateWidgetId(), x: 0, y: 17, w: 4, h: 10 },
       { i: generateWidgetId(), x: 4, y: 0, w: 4, h: 18 },
-      { i: generateWidgetId(), x: 0, y: 21, w: 4, h: 8 },
+      { i: generateWidgetId(), x: 0, y: 27, w: 4, h: 8 },
     ],
     excludeWidgets: ["TagDiffWidget", "TaskMapWidget"],
   };
