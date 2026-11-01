@@ -12,13 +12,6 @@ import { useIntl } from '@/i18n'
 import { initials as getInitials } from '@/lib/utils'
 import type { User } from '@/types/User'
 import { LevelModal } from './LevelModal'
-import { TaskRoulette } from './TaskRoulette'
-
-/**
- * The random-task roulette is finished but not ready to ship - flip this to true
- * to put it back on the profile card.
- */
-const SHOW_TASK_ROULETTE = false
 
 interface UserProfileSectionProps {
   user: User
@@ -112,9 +105,6 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
             />
           </span>
         </button>
-
-        {/* Random-task roulette - hidden until we're ready to launch it */}
-        {SHOW_TASK_ROULETTE && <TaskRoulette />}
       </div>
 
       <LevelModal
