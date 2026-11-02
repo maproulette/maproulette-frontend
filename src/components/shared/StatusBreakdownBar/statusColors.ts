@@ -1,3 +1,4 @@
+import { defineMessages } from 'react-intl'
 import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 
 const hexForKey = (key: string): string => STATUS_HEX[STATUS_KEY_TO_ID[key] ?? -1] ?? '#71717a'
@@ -15,13 +16,13 @@ export const statusHexByKey: Record<string, string> = {
 
 // Labels here intentionally diverge from STATUS_LABELS: in the action-breakdown context, "created"
 // means "available to work on" rather than the historical "Created" status name.
-export const statusLabelByKey: Record<string, string> = {
-  created: 'Available',
-  fixed: 'Fixed',
-  falsePositive: 'False positive',
-  skipped: 'Skipped',
-  deleted: 'Deleted',
-  alreadyFixed: 'Already fixed',
-  tooHard: "Can't Complete",
-  disabled: 'Disabled',
-}
+export const statusMessageByKey = defineMessages({
+  created: { id: 'statusBreakdownBar.status.created', defaultMessage: 'Available' },
+  fixed: { id: 'statusBreakdownBar.status.fixed', defaultMessage: 'Fixed' },
+  falsePositive: { id: 'statusBreakdownBar.status.falsePositive', defaultMessage: 'False positive' },
+  skipped: { id: 'statusBreakdownBar.status.skipped', defaultMessage: 'Skipped' },
+  deleted: { id: 'statusBreakdownBar.status.deleted', defaultMessage: 'Deleted' },
+  alreadyFixed: { id: 'statusBreakdownBar.status.alreadyFixed', defaultMessage: 'Already fixed' },
+  tooHard: { id: 'statusBreakdownBar.status.tooHard', defaultMessage: "Can't Complete" },
+  disabled: { id: 'statusBreakdownBar.status.disabled', defaultMessage: 'Disabled' },
+})

@@ -1,4 +1,5 @@
 import { Flag } from 'lucide-react'
+import { defineMessages } from 'react-intl'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
@@ -15,7 +16,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { formatDateTime } from '@/lib/date'
 import { markdownRemarkPlugins } from '@/lib/markdown'
-import type { ChallengeReport } from '@/types/ChallengeReport'
+import type { ChallengeReport, ChallengeReportStatusName } from '@/types/ChallengeReport'
 import { useChallengeModals } from './ChallengeModalsContext'
 
 const statusBadgeVariant = (statusName: string) => {
@@ -29,6 +30,12 @@ const statusBadgeVariant = (statusName: string) => {
   }
 }
 
+const REPORT_STATUS_MESSAGES = defineMessages({
+  open: { id: 'browsedChallengePage.challengeModals.reportHistory.status.open', defaultMessage: 'Open' },
+  actioned: { id: 'browsedChallengePage.challengeModals.reportHistory.status.actioned', defaultMessage: 'Actioned' },
+  dismissed: { id: 'browsedChallengePage.challengeModals.reportHistory.status.dismissed', defaultMessage: 'Dismissed' },
+})
+
 /**
  * One report. Resolved ones arrive without the reviewer's name or triage note
  * -- those belong to the admin queue -- so the outcome and its date are all
@@ -39,8 +46,8 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
   const { user } = useAuthContext()
   const isOwnReport = !!user && report.reporterId === user.id
 
-  const statusLabel = t({ id: `browsedChallengePage.challengeModals.reportHistory.status.${report.statusName}`, defaultMessage: report.statusName }
-  )
+  const statusMessage = REPORT_STATUS_MESSAGES[report.statusName as ChallengeReportStatusName]
+  const statusLabel = statusMessage ? t(statusMessage) : report.statusName
 
   return (
     <li className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">

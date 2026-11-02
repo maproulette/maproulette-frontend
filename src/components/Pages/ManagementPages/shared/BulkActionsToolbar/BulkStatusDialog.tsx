@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
-import { getStatusLabel, STATUS_LABEL_KEYS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_MESSAGES } from '@/lib/taskConstants'
 
 interface Props {
   open: boolean
@@ -46,7 +46,7 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {Object.keys(STATUS_LABEL_KEYS).map((key) => (
+            {Object.keys(STATUS_MESSAGES).map((key) => (
               <SelectItem key={key} value={key}>
                 {getStatusLabel(t, Number(key))}
               </SelectItem>

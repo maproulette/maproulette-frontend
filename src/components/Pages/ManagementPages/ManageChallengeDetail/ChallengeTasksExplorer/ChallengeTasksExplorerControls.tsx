@@ -21,11 +21,10 @@ import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/chall
 import { cn } from '@/lib/utils'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
 import {
-  SORT_FIELD_LABEL_IDS,
+  SORT_FIELD_MESSAGES,
   SORT_FIELDS,
   type SortField,
-  TASK_PRIORITY_LABEL_IDS,
-  TASK_PRIORITY_LABELS,
+  TASK_PRIORITY_MESSAGES,
 } from './constants'
 import { ExportTasksButton } from './ExportTasksButton'
 import { PropertyFilterButton } from './PropertyFilterButton'
@@ -125,7 +124,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
                 onCheckedChange={(c) => setPriorityChecked(p, c === true)}
                 onSelect={(e) => e.preventDefault()}
               >
-                {t({ id: TASK_PRIORITY_LABEL_IDS[p], defaultMessage: TASK_PRIORITY_LABELS[p] })}
+                {t(TASK_PRIORITY_MESSAGES[p])}
               </DropdownMenuCheckboxItem>
             ))}
           </DropdownMenuContent>
@@ -163,7 +162,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           <SelectContent>
             {SORT_FIELDS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {t({ id: SORT_FIELD_LABEL_IDS[opt.value], defaultMessage: opt.label })}
+                {t(SORT_FIELD_MESSAGES[opt.value])}
               </SelectItem>
             ))}
           </SelectContent>

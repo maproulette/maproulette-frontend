@@ -16,7 +16,7 @@ import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { TaskMarker } from '@/types/Task'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
-import { TASK_PRIORITY_LABEL_IDS, TASK_PRIORITY_LABELS } from './constants'
+import { TASK_PRIORITY_MESSAGES } from './constants'
 
 /** Scrollable, infinitely-loading table of the currently filtered/sorted tasks. */
 export const ChallengeTasksExplorerTaskTable = ({
@@ -45,9 +45,7 @@ export const ChallengeTasksExplorerTaskTable = ({
   const statusLabel = (s: number) =>
     TASK_STATUS_LABELS[s] ?? t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status: s })
   const priorityLabel = (p: number) =>
-    TASK_PRIORITY_LABEL_IDS[p]
-      ? t({ id: TASK_PRIORITY_LABEL_IDS[p], defaultMessage: TASK_PRIORITY_LABELS[p] })
-      : String(p)
+    TASK_PRIORITY_MESSAGES[p] ? t(TASK_PRIORITY_MESSAGES[p]) : String(p)
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 dark:border-slate-700">

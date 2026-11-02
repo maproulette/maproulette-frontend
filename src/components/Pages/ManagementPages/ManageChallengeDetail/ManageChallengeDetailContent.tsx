@@ -87,40 +87,40 @@ const StatisticsDialogContent = ({
     challengeData?.completionPercentage ??
     (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
-  const statusCounts: Array<{ id: string; defaultLabel: string; value: number | undefined }> = [
+  const statusCounts: Array<{ id: string; label: string; value: number | undefined }> = [
     {
       id: 'manageChallengeDetail.detail.statistics.available',
-      defaultLabel: 'Available',
+      label: t({ id: 'manageChallengeDetail.detail.statistics.available', defaultMessage: 'Available' }),
       value: stats?.available,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.fixed',
-      defaultLabel: 'Fixed',
+      label: t({ id: 'manageChallengeDetail.detail.statistics.fixed', defaultMessage: 'Fixed' }),
       value: stats?.fixed,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.falsePositive',
-      defaultLabel: 'False Positive',
+      label: t({ id: 'manageChallengeDetail.detail.statistics.falsePositive', defaultMessage: 'False Positive' }),
       value: stats?.falsePositive,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.skipped',
-      defaultLabel: 'Skipped',
+      label: t({ id: 'manageChallengeDetail.detail.statistics.skipped', defaultMessage: 'Skipped' }),
       value: stats?.skipped,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.alreadyFixed',
-      defaultLabel: 'Already Fixed',
+      label: t({ id: 'manageChallengeDetail.detail.statistics.alreadyFixed', defaultMessage: 'Already Fixed' }),
       value: stats?.alreadyFixed,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.tooHard',
-      defaultLabel: "Can't Complete",
+      label: t({ id: 'manageChallengeDetail.detail.statistics.tooHard', defaultMessage: "Can't Complete" }),
       value: stats?.tooHard,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.disabled',
-      defaultLabel: 'Disabled',
+      label: t({ id: 'manageChallengeDetail.detail.statistics.disabled', defaultMessage: 'Disabled' }),
       value: stats?.disabled,
     },
   ]
@@ -182,10 +182,10 @@ const StatisticsDialogContent = ({
               {t({ id: 'manageChallengeDetail.detail.statistics.taskCountsByStatus', defaultMessage: 'Task counts by status' }
               )}
             </h3>
-            {statusCounts.map(({ id, defaultLabel, value }) => (
+            {statusCounts.map(({ id, label, value }) => (
               <div key={id} className="flex items-center justify-between">
                 <span className="text-zinc-600 dark:text-zinc-400">
-                  {t({ id: id, defaultMessage: defaultLabel })}
+                  {label}
                 </span>
                 <span className="font-semibold">{value || 0}</span>
               </div>
