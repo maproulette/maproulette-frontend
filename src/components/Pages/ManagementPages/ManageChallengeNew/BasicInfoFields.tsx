@@ -94,17 +94,24 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
               />
             </FormControl>
             <FormDescription>
-              {t({ id: 'manageChallengeNew.challengeForm.instructionsDescriptionBefore', defaultMessage: 'Shown to mappers with every task. Instructions support' }
-              )}{' '}
-              <DocsLink page="markdown" icon={null}>
-                {t({ id: 'manageChallengeNew.challengeForm.markdownLinkText', defaultMessage: 'Markdown' })}
-              </DocsLink>{' '}
-              {t({ id: 'manageChallengeNew.challengeForm.instructionsDescriptionAnd', defaultMessage: 'and' })}{' '}
-              <DocsLink page="mustacheTagReplacement" icon={null}>
-                {t({ id: 'manageChallengeNew.challengeForm.mustacheTagsLinkText', defaultMessage: 'mustache tag replacement' }
-                )}
-              </DocsLink>{' '}
-              {t({ id: 'manageChallengeNew.challengeForm.instructionsDescriptionAfter', defaultMessage: 'so each task can show details from its own feature properties.' }
+              {t(
+                {
+                  id: 'manageChallengeNew.challengeForm.instructionsDescription',
+                  defaultMessage:
+                    'Shown to mappers with every task. Instructions support <markdown>Markdown</markdown> and <mustache>mustache tag replacement</mustache> so each task can show details from its own feature properties.',
+                },
+                {
+                  markdown: (chunks) => (
+                    <DocsLink page="markdown" icon={null}>
+                      {chunks}
+                    </DocsLink>
+                  ),
+                  mustache: (chunks) => (
+                    <DocsLink page="mustacheTagReplacement" icon={null}>
+                      {chunks}
+                    </DocsLink>
+                  ),
+                }
               )}
             </FormDescription>
             <FormMessage />

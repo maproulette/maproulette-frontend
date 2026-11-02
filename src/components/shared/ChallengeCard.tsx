@@ -128,11 +128,20 @@ export const ChallengeCard = ({
 
         <div>
           <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
-            <span className="font-semibold text-zinc-900 dark:text-white">{totalTasks}</span>{' '}
-            {t({ id: 'common.tasks2', defaultMessage: 'tasks' })}
-            {' · '}
-            <span className="font-semibold text-zinc-900 dark:text-white">{pct}%</span>{' '}
-            {t({ id: 'common.complete', defaultMessage: 'complete' })}
+            {t(
+              {
+                id: 'challengeCard.progress',
+                defaultMessage:
+                  '<b>{count, number}</b> {count, plural, one {task} other {tasks}} · <b>{percent, number, percent}</b> complete',
+              },
+              {
+                count: totalTasks,
+                percent: pct / 100,
+                b: (chunks) => (
+                  <span className="font-semibold text-zinc-900 dark:text-white">{chunks}</span>
+                ),
+              }
+            )}
           </div>
 
           <ProgressBar

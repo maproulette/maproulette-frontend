@@ -387,26 +387,32 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                   {bylineName && (
                     <>
                       <span className="whitespace-nowrap">
-                        {t({ id: 'browsedChallengePage.header.byPrefix', defaultMessage: 'by' })}{' '}
-                        {ownerTeamId !== undefined ? (
-                          <Link
-                            to="/teams/$teamId"
-                            params={{ teamId: String(ownerTeamId) }}
-                            className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {bylineName}
-                          </Link>
-                        ) : (
-                          <a
-                            href={`https://www.openstreetmap.org/user/${encodeURIComponent(bylineName)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {bylineName}
-                          </a>
+                        {t(
+                          { id: 'browsedChallengePage.header.byline', defaultMessage: 'by <owner>{name}</owner>' },
+                          {
+                            name: bylineName,
+                            owner: (chunks) =>
+                              ownerTeamId !== undefined ? (
+                                <Link
+                                  to="/teams/$teamId"
+                                  params={{ teamId: String(ownerTeamId) }}
+                                  className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {chunks}
+                                </Link>
+                              ) : (
+                                <a
+                                  href={`https://www.openstreetmap.org/user/${encodeURIComponent(bylineName)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {chunks}
+                                </a>
+                              ),
+                          }
                         )}
                       </span>
                       {(formattedDate || likeCount > 0) && (

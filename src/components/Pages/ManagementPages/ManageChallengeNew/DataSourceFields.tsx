@@ -132,12 +132,19 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                 />
               </FormControl>
               <FormDescription>
-                {t({ id: 'manageChallengeNew.challengeForm.overpassQLDescriptionBefore', defaultMessage: 'Overpass query language to automatically generate tasks for this challenge. Please see the' }
-                )}{' '}
-                <DocsLink page="overpassChallenges" icon={null}>
-                  {t({ id: 'manageChallengeNew.challengeForm.docsLinkText', defaultMessage: 'docs' })}
-                </DocsLink>{' '}
-                {t({ id: 'manageChallengeNew.challengeForm.overpassQLDescriptionAfter', defaultMessage: 'for important details and common pitfalls when creating challenges using Overpass queries.' }
+                {t(
+                  {
+                    id: 'manageChallengeNew.challengeForm.overpassQLDescription',
+                    defaultMessage:
+                      'Overpass query language to automatically generate tasks for this challenge. Please see the <docs>docs</docs> for important details and common pitfalls when creating challenges using Overpass queries.',
+                  },
+                  {
+                    docs: (chunks) => (
+                      <DocsLink page="overpassChallenges" icon={null}>
+                        {chunks}
+                      </DocsLink>
+                    ),
+                  }
                 )}
               </FormDescription>
               <FormMessage />
@@ -175,13 +182,19 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                 </div>
               </FormControl>
               <FormDescription>
-                {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileDescriptionBefore', defaultMessage: 'Upload a GeoJSON file from your computer. Standard GeoJSON and' }
-                )}{' '}
-                <DocsLink page="lineByLineGeoJSON" icon={null}>
-                  {t({ id: 'manageChallengeNew.challengeForm.lineByLineGeoJSONLinkText', defaultMessage: 'line-by-line GeoJSON format' }
-                  )}
-                </DocsLink>{' '}
-                {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileDescriptionAfter', defaultMessage: 'are supported.' }
+                {t(
+                  {
+                    id: 'manageChallengeNew.challengeForm.geoJSONFileDescription',
+                    defaultMessage:
+                      'Upload a GeoJSON file from your computer. Standard GeoJSON and <docs>line-by-line GeoJSON format</docs> are supported.',
+                  },
+                  {
+                    docs: (chunks) => (
+                      <DocsLink page="lineByLineGeoJSON" icon={null}>
+                        {chunks}
+                      </DocsLink>
+                    ),
+                  }
                 )}
               </FormDescription>
               <FormMessage />
@@ -204,11 +217,18 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
               <FormDescription>
                 {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONDescription', defaultMessage: 'Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file.' }
                 )}{' '}
-                <DocsLink page="gistsForRemoteGeoJSON" icon={null}>
-                  {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONDocsLinkText', defaultMessage: 'Hosting your GeoJSON in a GitHub gist' }
-                  )}
-                </DocsLink>{' '}
-                {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONDocsSuffix', defaultMessage: 'is one way to do that.' }
+                {t(
+                  {
+                    id: 'manageChallengeNew.challengeForm.remoteGeoJSONDocs',
+                    defaultMessage: '<docs>Hosting your GeoJSON in a GitHub gist</docs> is one way to do that.',
+                  },
+                  {
+                    docs: (chunks) => (
+                      <DocsLink page="gistsForRemoteGeoJSON" icon={null}>
+                        {chunks}
+                      </DocsLink>
+                    ),
+                  }
                 )}
               </FormDescription>
               <FormMessage />

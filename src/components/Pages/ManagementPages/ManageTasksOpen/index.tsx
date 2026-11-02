@@ -86,18 +86,24 @@ export const ManageTasksOpen = () => {
         </Card>
 
         <p className="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
-          {t({ id: 'manageTasksOpen.orGoTo', defaultMessage: 'Or go to' })}{' '}
-          <Link to="/manage/projects" className="text-blue-600 hover:underline dark:text-blue-400">
-            {t({ id: 'common.projects', defaultMessage: 'Projects' })}
-          </Link>{' '}
-          {t({ id: 'manageTasksOpen.or', defaultMessage: 'or' })}{' '}
-          <Link
-            to="/manage/challenges"
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          >
-            {t({ id: 'common.challenges', defaultMessage: 'Challenges' })}
-          </Link>{' '}
-          {t({ id: 'manageTasksOpen.findChallengeHint', defaultMessage: 'to find a challenge, then browse it to open a task and get its ID from the URL.' }
+          {t(
+            {
+              id: 'manageTasksOpen.findChallenge',
+              defaultMessage:
+                'Or go to <projects>Projects</projects> or <challenges>Challenges</challenges> to find a challenge, then browse it to open a task and get its ID from the URL.',
+            },
+            {
+              projects: (chunks) => (
+                <Link to="/manage/projects" className="text-blue-600 hover:underline dark:text-blue-400">
+                  {chunks}
+                </Link>
+              ),
+              challenges: (chunks) => (
+                <Link to="/manage/challenges" className="text-blue-600 hover:underline dark:text-blue-400">
+                  {chunks}
+                </Link>
+              ),
+            }
           )}
         </p>
       </div>

@@ -156,12 +156,13 @@ export const RebuildTasksDialog = ({
               )}
             </li>
             <li>
-              {t({ id: 'managementPages.rebuildTasksDialog.listRemoveIncompletePre', defaultMessage: 'If you choose to first remove incomplete tasks (below), existing ' }
-              )}
-              <strong>
-                {t({ id: 'managementPages.rebuildTasksDialog.incomplete', defaultMessage: 'incomplete' })}
-              </strong>{' '}
-              {t({ id: 'managementPages.rebuildTasksDialog.listRemoveIncompletePost', defaultMessage: 'tasks will first be removed' }
+              {t(
+                {
+                  id: 'managementPages.rebuildTasksDialog.listRemoveIncomplete',
+                  defaultMessage:
+                    'If you choose to first remove incomplete tasks (below), existing <strong>incomplete</strong> tasks will first be removed',
+                },
+                { strong: (chunks) => <strong>{chunks}</strong> }
               )}
             </li>
             <li>
