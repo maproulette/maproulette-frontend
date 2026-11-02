@@ -39,6 +39,11 @@ export const EDITOR = {
 // JOSM fetches attachment data itself, so it needs an absolute backend URL.
 const apiBaseUrl = window.env.VITE_API_BASE_URL || window.location.origin
 
+const idEditorUrl = window.env.VITE_ID_EDITOR_SERVER_URL || 'https://www.openstreetmap.org/edit'
+const rapidEditorUrl = window.env.VITE_RAPID_EDITOR_SERVER_URL || 'https://rapideditor.org/edit'
+const level0EditorUrl =
+  window.env.VITE_LEVEL0_EDITOR_SERVER_URL || 'https://level0.osmz.ru/index.php'
+
 /**
  * Build a [west, south, east, north] bbox covering all the given tasks' geometries.
  */
@@ -116,7 +121,7 @@ export const useEditorLaunch = (task: Task) => {
             if (imagery) hashParts.push(editorBackgroundParam(imagery))
             if (presets) hashParts.push(presets)
             const query = selectionParts.length ? `&${selectionParts.join('&')}` : ''
-            editorUrl = `https://www.openstreetmap.org/edit?editor=id${query}#${hashParts.join('&')}`
+            editorUrl = `${idEditorUrl}?editor=id${query}#${hashParts.join('&')}`
             break
           }
 
@@ -192,7 +197,7 @@ export const useEditorLaunch = (task: Task) => {
             const parts = [`center=${lat},${lng}`]
             if (checkinComment) parts.push(`comment=${encodeURIComponent(checkinComment)}`)
             if (selection) parts.push(`url=${selection}`)
-            editorUrl = `https://level0.osmz.ru/?${parts.join('&')}`
+            editorUrl = `${level0EditorUrl}?${parts.join('&')}`
             break
           }
 
@@ -210,14 +215,14 @@ export const useEditorLaunch = (task: Task) => {
             parts.push(`map=${zoom}/${lat}/${lng}`)
             if (challenge?.datasetUrl)
               parts.push(`data=${encodeURIComponent(challenge.datasetUrl)}`)
-            editorUrl = `https://rapideditor.org/edit#${parts.join('&')}`
+            editorUrl = `${rapidEditorUrl}#${parts.join('&')}`
             break
           }
 
           default: {
             const selection = formatOsmEntities(tasks, { abbreviated: true })
             const query = selection ? `&id=${selection}` : ''
-            editorUrl = `https://www.openstreetmap.org/edit?editor=id${query}#map=${zoom}/${lat}/${lng}`
+            editorUrl = `${idEditorUrl}?editor=id${query}#map=${zoom}/${lat}/${lng}`
           }
         }
 

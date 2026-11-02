@@ -17,6 +17,9 @@ interface AppEnv {
   readonly VITE_OSM_API_SERVER: string | undefined
   readonly VITE_NOMINATIM_BASE_URL: string | undefined
   readonly VITE_SHORT_URL: string | undefined
+  readonly VITE_ID_EDITOR_SERVER_URL: string | undefined
+  readonly VITE_RAPID_EDITOR_SERVER_URL: string | undefined
+  readonly VITE_LEVEL0_EDITOR_SERVER_URL: string | undefined
   /** Root URL of the documentation site linked to from the app */
   readonly VITE_DOCS_BASE_URL: string | undefined
   /** Comma-separated URLs of deployment plugin bundles to auto-load at login */
