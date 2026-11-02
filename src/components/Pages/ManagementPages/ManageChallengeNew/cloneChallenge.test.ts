@@ -20,6 +20,10 @@ const source = {
   ownerTeamId: 8,
   tags: ['building', 'roofs'],
   status: 3,
+  enabled: false,
+  featured: true,
+  paused: true,
+  isArchived: true,
   highPriorityRule: '{"condition":"AND","rules":[]}',
   defaultPriority: 1,
   overpassTargetType: '',
@@ -43,7 +47,7 @@ describe('buildCloneFormValues', () => {
       overpassQL: commentOutClonedOverpassQuery('way[highway];'),
       localGeoJSON: null,
       remoteGeoJSON: '',
-      ownerTeamId: null,
+      ownerTeamId: 8,
       automatedEditsCodeAgreement: false,
     })
     expect(values.overpassQL).toContain('THIS IS THE QUERY OF THE CHALLENGE YOU CLONED')
@@ -57,6 +61,9 @@ describe('buildCloneFormValues', () => {
 describe('clonedChallengeSettings', () => {
   it('copies settings the form does not edit and defaults the Overpass target type to none', () => {
     expect(clonedChallengeSettings(source)).toEqual({
+      enabled: false,
+      featured: true,
+      paused: true,
       highPriorityRule: '{"condition":"AND","rules":[]}',
       defaultPriority: 1,
       overpassTargetType: 'none',
@@ -70,5 +77,6 @@ describe('clonedChallengeSettings', () => {
     expect(settings).not.toHaveProperty('id')
     expect(settings).not.toHaveProperty('status')
     expect(settings).not.toHaveProperty('name')
+    expect(settings).not.toHaveProperty('isArchived')
   })
 })

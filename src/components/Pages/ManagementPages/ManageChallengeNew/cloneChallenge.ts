@@ -7,7 +7,9 @@ const CLONED_SETTINGS = [
   'datasetUrl',
   'defaultPriority',
   'defaultZoom',
+  'enabled',
   'exportableProperties',
+  'featured',
   'highPriorityBounds',
   'highPriorityRule',
   'limitReviewTags',
@@ -18,6 +20,7 @@ const CLONED_SETTINGS = [
   'mediumPriorityRule',
   'minZoom',
   'overpassTargetType',
+  'paused',
   'preferredReviewTags',
   'presets',
   'requireConfirmation',
@@ -45,7 +48,6 @@ export const buildCloneFormValues = (
     remoteGeoJSON: '',
     dataOriginDate: '',
     localGeoJSON: null,
-    ownerTeamId: null,
     automatedEditsCodeAgreement: false,
   }
 }
