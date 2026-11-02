@@ -58,7 +58,12 @@ export const CreateChallengeFormProvider = ({
         )
       }
 
-      const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(values, true)
+      const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(
+        values,
+        true,
+        true,
+        cloneSource
+      )
 
       const newChallenge = await createChallengeMutation.mutateAsync({
         projectId: selectedProjectId,
@@ -144,7 +149,8 @@ export const EditChallengeFormProvider = ({
       const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(
         values,
         false,
-        isChallengeSourceEditable(challenge)
+        isChallengeSourceEditable(challenge),
+        challenge
       )
 
       const removedKeywords = ((challenge as Challenge | undefined)?.tags ?? []).filter(

@@ -4,7 +4,10 @@ import { buildFormValues, type ChallengeFormValues } from './challengeFormSchema
 const CLONED_SETTINGS = [
   'blurb',
   'cooperativeType',
+  'customBasemap',
   'datasetUrl',
+  'defaultBasemap',
+  'defaultBasemapId',
   'defaultPriority',
   'defaultZoom',
   'enabled',

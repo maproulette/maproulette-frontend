@@ -539,6 +539,19 @@ describe('buildChallengeSubmission team image handling', () => {
     expect(result.challengeData.ownerTeamId).toBe(3)
   })
 
+  it('leaves an edited challenge basemap alone when the basemap field was not changed', async () => {
+    const { challengeData } = await buildChallengeSubmission(
+      { ...baseValues, basemap: 'Esri World Imagery' },
+      false,
+      false,
+      { defaultBasemap: 4, defaultBasemapId: 'EsriWorldImagery' }
+    )
+
+    expect(challengeData).not.toHaveProperty('defaultBasemap')
+    expect(challengeData).not.toHaveProperty('defaultBasemapId')
+    expect(challengeData).not.toHaveProperty('customBasemap')
+  })
+
   it('treats a missing custom basemap url as no custom basemap', async () => {
     const { challengeData } = await buildChallengeSubmission(
       { ...baseValues, basemap: 'custom', basemapUrl: undefined },

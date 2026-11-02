@@ -1,4 +1,4 @@
-import { basemapSubmission } from '@/components/Map/basemap'
+import { type BasemapSettings, basemapSubmission } from '@/components/Map/basemap'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { buildChallengeTags } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeKeywords'
 import { detectLocalGeoJSONSubmission } from '@/lib/localGeoJSON'
@@ -37,7 +37,8 @@ const fetchRemoteGeoJSON = async (url: string) => {
 export const buildChallengeSubmission = async (
   values: ChallengeFormValues,
   isCreate: boolean,
-  includeSource = isCreate
+  includeSource = isCreate,
+  storedBasemap?: BasemapSettings | null
 ) => {
   const challengeData: Partial<Challenge> & Record<string, unknown> = {
     name: values.name,
@@ -62,7 +63,10 @@ export const buildChallengeSubmission = async (
       : checkinComment
   challengeData.checkinSource = values.checkinSource.trim()
   challengeData.osmIdProperty = values.osmIdProperty || null
-  Object.assign(challengeData, basemapSubmission(values.basemap, values.basemapUrl ?? ''))
+  Object.assign(
+    challengeData,
+    basemapSubmission(values.basemap, values.basemapUrl ?? '', storedBasemap)
+  )
 
   const bundleIdProperty = values.taskBundleIdProperty?.trim() ?? ''
   challengeData.taskBundleIdProperty = bundleIdProperty || null
