@@ -96,7 +96,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
       <div className="flex h-full flex-col">
         <header className="flex flex-wrap items-start justify-between pb-2">
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t({ id: 'common.challengeWithChallengeId', defaultMessage: '{name} — rules run top-down; the first tier to match wins.' }, {
+            {t({ id: 'taskPrioritizationPage.content.rulesHint', defaultMessage: '{name} — rules run top-down; the first tier to match wins.' }, {
                 name:
                   challengeName ??
                   t({ id: 'taskPrioritizationPage.content.challengeNumber', defaultMessage: 'Challenge #{challengeId}' }, { challengeId }

@@ -38,10 +38,10 @@ export const ChallengesTableView = ({ challenges, renderActions }: ChallengesTab
               {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
             </TableHead>
             <TableHead className="hidden w-24 text-center md:table-cell">
-              {t({ id: 'common.tasks2', defaultMessage: 'Tasks' })}
+              {t({ id: 'browsedProjectPage.challengesTable.tasks', defaultMessage: 'Tasks' })}
             </TableHead>
             <TableHead className="w-28 text-center">
-              {t({ id: 'common.complete', defaultMessage: 'Complete' })}
+              {t({ id: 'browsedProjectPage.challengesTable.complete', defaultMessage: 'Complete' })}
             </TableHead>
             <TableHead className="w-[100px] text-right">
               {t({ id: 'common.actions', defaultMessage: 'Actions' })}

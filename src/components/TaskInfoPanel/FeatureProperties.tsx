@@ -166,7 +166,7 @@ export const FeatureProperties = ({
   } = useQuery({ ...api.osm.elementOptions(osmRef), enabled: open && !!osmRef })
   const osmTags = useMemo(() => (osmElement ? tagsFromOsmElement(osmElement) : {}), [osmElement])
   const osmStatus = osmLoading
-    ? t({ id: 'common.loading', defaultMessage: 'Loading...' })
+    ? t({ id: 'common.loading', defaultMessage: 'Loading…' })
     : osmFailed
       ? t({ id: 'taskInfoPanel.properties.osmTagsFailed', defaultMessage: 'Could not load this element from OpenStreetMap.' }
         )

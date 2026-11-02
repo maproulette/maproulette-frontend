@@ -104,7 +104,7 @@ export const ProjectChallengesPanel = () => {
                 title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
                 description: t({ id: 'manageProjectDetail.content.emptyDescription', defaultMessage: 'Get started by creating your first challenge' }
                 ),
-                actionLabel: t({ id: 'manageProjectDetail.content.createChallenge', defaultMessage: 'Create Challenge' }
+                actionLabel: t({ id: 'manageProjectDetail.content.createChallenge', defaultMessage: 'Create challenge' }
                 ),
                 actionTo: '/manage/challenge/new',
                 actionSearch: { projectId: Number(projectId) },
@@ -152,7 +152,7 @@ export const ProjectChallengesPanel = () => {
                 title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
                 description: t({ id: 'manageProjectDetail.content.emptyDescription', defaultMessage: 'Get started by creating your first challenge' }
                 ),
-                actionLabel: t({ id: 'manageProjectDetail.content.createChallenge', defaultMessage: 'Create Challenge' }
+                actionLabel: t({ id: 'manageProjectDetail.content.createChallenge', defaultMessage: 'Create challenge' }
                 ),
                 actionTo: '/manage/challenge/new',
                 actionSearch: { projectId: Number(projectId) },

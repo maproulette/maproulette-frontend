@@ -99,7 +99,7 @@ const TaskFeatures = ({
             {task
               ? t({ id: 'taskInfoPanel.features.featureCount', defaultMessage: '{count} features' }, { count: featureCount }
                 )
-              : t({ id: 'common.loading', defaultMessage: 'Loading...' })}
+              : t({ id: 'common.loading', defaultMessage: 'Loading…' })}
           </span>
           <ChevronDown
             className={cn(
@@ -144,7 +144,7 @@ const TaskFeatures = ({
               {task
                 ? t({ id: 'taskInfoPanel.features.noFeatures', defaultMessage: 'This task carries no features.' }
                   )
-                : t({ id: 'common.loading', defaultMessage: 'Loading...' })}
+                : t({ id: 'common.loading', defaultMessage: 'Loading…' })}
             </p>
           ) : (
             groups.map((group) => (
