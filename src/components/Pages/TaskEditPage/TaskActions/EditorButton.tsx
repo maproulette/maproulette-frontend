@@ -35,7 +35,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   const { openEditor, openDefaultEditor, defaultEditor, isTagFix } = useEditorLaunch(task)
 
   const currentEditorOption =
-    editorOptions.find((opt) => opt.value === defaultEditor) || editorOptions[1] // Default to iD
+    selectableEditors.find((opt) => opt.value === defaultEditor) || selectableEditors[0] // Default to iD
 
   // The primary button opens embedded iD for a tag fix, so it must say so
   // rather than advertising the mapper's usual editor.
