@@ -53,7 +53,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
       const result = await bulkDelete.mutateAsync(selectedIds)
       if (result.deleted < result.requested) {
         toast.warning(
-          t({ id: 'managementPages.bulkActionsToolbar.deleteWarning', defaultMessage: 'Deleted {deleted} tasks; {denied} could not be deleted' }, { deleted: result.deleted, denied: result.requested - result.deleted }
+          t({ id: 'managementPages.bulkActionsToolbar.deleteWarning', defaultMessage: 'Deleted {deleted, plural, one {# task} other {# tasks}}; {denied, number} could not be deleted' }, { deleted: result.deleted, denied: result.requested - result.deleted }
           )
         )
       } else {
@@ -95,7 +95,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
     try {
       const result = await bulkReassign.mutateAsync({ taskIds: selectedIds, userId })
       toast.success(
-        t({ id: 'managementPages.bulkActionsToolbar.reassignSuccess', defaultMessage: 'Reassigned {updated} of {requested} tasks' }, { updated: result.updated, requested: result.requested }
+        t({ id: 'managementPages.bulkActionsToolbar.reassignSuccess', defaultMessage: 'Reassigned {updated, number} of {requested, plural, one {# task} other {# tasks}}' }, { updated: result.updated, requested: result.requested }
         )
       )
       setReassignOpen(false)

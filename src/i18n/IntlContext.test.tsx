@@ -20,6 +20,11 @@ const RichSentence = () => {
   )
 }
 
+const Amount = ({ value }: { value: number }) => {
+  const { formatNumber } = useIntl()
+  return <>{formatNumber(value)}</>
+}
+
 describe('IntlProvider', () => {
   it('renders a rich-text message as one sentence with its elements in place', () => {
     expect(
@@ -29,5 +34,16 @@ describe('IntlProvider', () => {
         </IntlProvider>
       )
     ).toBe('<p>Or go to <a href="/projects">Projects</a> to find 2 challenges</p>')
+  })
+
+  it('formats numbers for the chosen language', () => {
+    const render = (locale: 'en-US' | 'de') =>
+      renderToStaticMarkup(
+        <IntlProvider initialLocale={locale}>
+          <Amount value={1234.5} />
+        </IntlProvider>
+      )
+    expect(render('en-US')).toBe('1,234.5')
+    expect(render('de')).toBe('1.234,5')
   })
 })

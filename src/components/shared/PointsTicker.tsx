@@ -34,7 +34,12 @@ export const PointsTicker = ({
     return (
       <Link
         to="/profile"
-        aria-label={t({ id: 'shared.pointsTicker.viewProfile', defaultMessage: '{score} points — view profile' }, { score }
+        aria-label={t(
+          {
+            id: 'shared.pointsTicker.viewProfile',
+            defaultMessage: '{score, plural, one {# point} other {# points}} — view profile',
+          },
+          { score }
         )}
         className="inline-flex items-center rounded-sm hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300"
       >

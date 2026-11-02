@@ -59,7 +59,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                 {t({ id: 'common.level', defaultMessage: 'Level {level}' }, { level: currentLevel })}
               </span>
               <span className="text-sm text-zinc-500 dark:text-slate-400">
-                {t({ id: 'dashboard.levelModal.totalPoints', defaultMessage: '{points} total points' }, { points: currentScore.toLocaleString() }
+                {t({ id: 'dashboard.levelModal.totalPoints', defaultMessage: '{points, plural, one {# total point} other {# total points}}' }, { points: currentScore }
                 )}
               </span>
             </div>
@@ -74,7 +74,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
             </div>
             <Progress value={progressToNext} className="h-3" />
             <p className="mt-2 text-center text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'dashboard.levelModal.pointsToNextLevel', defaultMessage: '{points} more points to next level' }, { points: (pointsNeededForLevel - pointsIntoLevel).toLocaleString() }
+              {t({ id: 'dashboard.levelModal.pointsToNextLevel', defaultMessage: '{points, plural, one {# more point} other {# more points}} to next level' }, { points: pointsNeededForLevel - pointsIntoLevel }
               )}
             </p>
           </div>
@@ -102,7 +102,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                         <Lock className="size-5 text-zinc-500 dark:text-slate-400" />
                       </div>
                       <span className="font-semibold text-sm text-zinc-600 dark:text-slate-300">
-                        {t({ id: 'dashboard.levelModal.pointsToUnlock', defaultMessage: '{points} points to unlock' }, { points: (milestone.requiredScore - currentScore).toLocaleString() }
+                        {t({ id: 'dashboard.levelModal.pointsToUnlock', defaultMessage: '{points, plural, one {# point} other {# points}} to unlock' }, { points: milestone.requiredScore - currentScore }
                         )}
                       </span>
                     </div>
@@ -153,12 +153,12 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                       )}
                     </div>
                     <p className="mt-0.5 text-sm text-zinc-500 dark:text-slate-400">
-                      {t({ id: 'dashboard.levelModal.pointsRequired', defaultMessage: '{points} points required' }, { points: milestone.requiredScore.toLocaleString() }
+                      {t({ id: 'dashboard.levelModal.pointsRequired', defaultMessage: '{points, plural, one {# point} other {# points}} required' }, { points: milestone.requiredScore }
                       )}
                     </p>
                     {isCurrent && (
                       <p className="mt-1 font-semibold text-blue-600 text-sm dark:text-blue-400">
-                        {t({ id: 'dashboard.levelModal.yourScore', defaultMessage: 'Your score: {points} points' }, { points: currentScore.toLocaleString() }
+                        {t({ id: 'dashboard.levelModal.yourScore', defaultMessage: 'Your score: {points, plural, one {# point} other {# points}}' }, { points: currentScore }
                         )}
                       </p>
                     )}

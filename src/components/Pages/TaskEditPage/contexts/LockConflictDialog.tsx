@@ -48,9 +48,18 @@ export const LockConflictDialog = ({ conflict, onOpenChange, onConfirm, busy }: 
                 )
               : t({ id: 'taskEditPage.lockConflictDialog.description', defaultMessage: 'You still hold the lock on task #{taskId}. Release it to lock this task instead.' }, { taskId: conflict?.lockedTaskId ?? 0 }
                 )}
-            {conflict?.startedAt &&
-              ` (${t({ id: 'taskEditPage.lockConflictDialog.lockedSince', defaultMessage: 'locked {time}' }, { time: formatTimeAgo(new Date(conflict.startedAt), locale) }
-              )})`}
+            {conflict?.startedAt && (
+              <>
+                {' '}
+                {t(
+                  {
+                    id: 'taskEditPage.lockConflictDialog.lockedSince',
+                    defaultMessage: '(locked {time})',
+                  },
+                  { time: formatTimeAgo(new Date(conflict.startedAt), locale) }
+                )}
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:flex-wrap sm:gap-2 sm:space-x-0">

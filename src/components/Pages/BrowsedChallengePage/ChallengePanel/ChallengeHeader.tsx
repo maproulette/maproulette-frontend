@@ -428,10 +428,13 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                   )}
                   {likeCount > 0 && (
                     <span className="whitespace-nowrap">
-                      {likeCount === 1
-                        ? t({ id: 'browsedChallengePage.header.likeCountSingular', defaultMessage: '1 like' })
-                        : t({ id: 'browsedChallengePage.header.likeCountPlural', defaultMessage: '{count} likes' }, { count: likeCount }
-                          )}
+                      {t(
+                        {
+                          id: 'browsedChallengePage.header.likeCount',
+                          defaultMessage: '{count, plural, one {# like} other {# likes}}',
+                        },
+                        { count: likeCount }
+                      )}
                     </span>
                   )}
                 </div>

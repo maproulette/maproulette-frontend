@@ -117,14 +117,6 @@ interface FeaturePropertiesProps {
   containerWidth: number | null
 }
 
-const describeChildren = (group: TaskFeatureGroup) => {
-  const types = new Set(group.children.map((child) => child.geometryType))
-  if (types.size !== 1) return null
-  const type = [...types][0]?.toLowerCase()
-  if (!type) return null
-  return group.children.length === 1 ? type : `${type}s`
-}
-
 /**
  * The color the map draws this feature in, where its data asked for one, so a
  * row in the list can be matched to a line on the map at a glance.
@@ -168,21 +160,28 @@ export const FeatureProperties = ({
   const osmStatus = osmLoading
     ? t({ id: 'common.loading', defaultMessage: 'Loading…' })
     : osmFailed
-      ? t({ id: 'taskInfoPanel.properties.osmTagsFailed', defaultMessage: 'Could not load this element from OpenStreetMap.' }
-        )
+      ? t({
+          id: 'taskInfoPanel.properties.osmTagsFailed',
+          defaultMessage: 'Could not load this element from OpenStreetMap.',
+        })
       : Object.keys(osmTags).length === 0
-        ? t({ id: 'taskInfoPanel.properties.osmTagsEmpty', defaultMessage: 'No tags on this element.' })
+        ? t({
+            id: 'taskInfoPanel.properties.osmTagsEmpty',
+            defaultMessage: 'No tags on this element.',
+          })
         : null
   const isFocused = featureContext?.focusedFeature?.nodeKey === group.nodeKey
   const propertyCount = Object.keys(group.properties).length
   const childCount = group.children.length
-  const childType = describeChildren(group)
   const canFocus = showFocusToggle && group.keys.length > 0
 
   const namedLabel =
     group.name ??
     (propertyCount > 0
-      ? t({ id: 'taskInfoPanel.properties.featureLabel', defaultMessage: 'Feature {number}' }, { number: group.index + 1 })
+      ? t(
+          { id: 'taskInfoPanel.properties.featureLabel', defaultMessage: 'Feature {number}' },
+          { number: group.index + 1 }
+        )
       : null)
   const label = namedLabel ?? group.geometryType ?? ''
 
@@ -191,10 +190,18 @@ export const FeatureProperties = ({
     featureContext?.setHighlightedFeature(highlighted ? selection : null)
 
   const focusLabel = isFocused
-    ? t({ id: 'taskInfoPanel.properties.showAllFeatures', defaultMessage: "Show the task's other features again" }
-      )
-    : t({ id: 'taskInfoPanel.properties.focusFeature', defaultMessage: 'Show only this feature on the map' })
-  const zoomLabel = t({ id: 'taskInfoPanel.properties.zoomToFeature', defaultMessage: 'Zoom to this feature' })
+    ? t({
+        id: 'taskInfoPanel.properties.showAllFeatures',
+        defaultMessage: "Show the task's other features again",
+      })
+    : t({
+        id: 'taskInfoPanel.properties.focusFeature',
+        defaultMessage: 'Show only this feature on the map',
+      })
+  const zoomLabel = t({
+    id: 'taskInfoPanel.properties.zoomToFeature',
+    defaultMessage: 'Zoom to this feature',
+  })
 
   return (
     <Collapsible
@@ -230,16 +237,23 @@ export const FeatureProperties = ({
           )}
           {childCount > 0 && (
             <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
-              {childType
-                ? t({ id: 'taskInfoPanel.properties.childCountTyped', defaultMessage: '{count} {type}' }, { count: childCount, type: childType }
-                  )
-                : t({ id: 'taskInfoPanel.properties.childCount', defaultMessage: '{count} geometries' }, { count: childCount }
-                  )}
+              {t(
+                {
+                  id: 'taskInfoPanel.properties.childCount',
+                  defaultMessage: '{count, plural, one {# geometry} other {# geometries}}',
+                },
+                { count: childCount }
+              )}
             </span>
           )}
           {propertyCount > 0 && (
             <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
-              {t({ id: 'taskInfoPanel.properties.propertyCount', defaultMessage: '{count} properties' }, { count: propertyCount }
+              {t(
+                {
+                  id: 'taskInfoPanel.properties.propertyCount',
+                  defaultMessage: '{count, plural, one {# property} other {# properties}}',
+                },
+                { count: propertyCount }
               )}
             </span>
           )}
@@ -303,7 +317,10 @@ export const FeatureProperties = ({
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
                 <span className="font-medium text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                  {t({ id: 'taskInfoPanel.properties.osmTags', defaultMessage: 'Current OSM tags' })}
+                  {t({
+                    id: 'taskInfoPanel.properties.osmTags',
+                    defaultMessage: 'Current OSM tags',
+                  })}
                 </span>
                 <a
                   href={`${api.osm.getOSMServerUrl()}/${osmRef}`}
@@ -323,8 +340,10 @@ export const FeatureProperties = ({
           )}
           {propertyCount === 0 && childCount === 0 && (
             <p className="text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'taskInfoPanel.properties.featureEmpty', defaultMessage: 'No properties on this feature.' }
-              )}
+              {t({
+                id: 'taskInfoPanel.properties.featureEmpty',
+                defaultMessage: 'No properties on this feature.',
+              })}
             </p>
           )}
         </div>

@@ -256,7 +256,12 @@ export const ReportModal = () => {
 
           {errors.input && (
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
-              {t({ id: 'browsedChallengePage.challengeModals.reportModal.minLengthError', defaultMessage: 'Report must be at least {min} characters' }, { min: MIN_CHARACTERS }
+              {t(
+                {
+                  id: 'browsedChallengePage.challengeModals.reportModal.minLengthError',
+                  defaultMessage: 'Report must be at least {min, plural, one {# character} other {# characters}}',
+                },
+                { min: MIN_CHARACTERS }
               )}
             </div>
           )}

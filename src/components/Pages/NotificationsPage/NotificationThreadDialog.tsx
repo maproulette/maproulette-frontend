@@ -88,7 +88,7 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
             <div className="min-w-0 flex-1">
               <DialogTitle>
                 {isThread
-                  ? t({ id: 'notificationsPage.thread.title.count', defaultMessage: '{count} notifications' }, { count: thread?.length ?? 0 }
+                  ? t({ id: 'notificationsPage.thread.title.count', defaultMessage: '{count, plural, one {# notification} other {# notifications}}' }, { count: thread?.length ?? 0 }
                     )
                   : taskId
                     ? t({ id: 'notificationsPage.thread.title.task', defaultMessage: 'Notification for Task #{taskId}' }, { taskId }

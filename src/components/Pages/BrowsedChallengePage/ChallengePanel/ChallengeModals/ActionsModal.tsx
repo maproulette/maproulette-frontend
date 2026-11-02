@@ -74,7 +74,7 @@ export const ActionsModal = () => {
                   </p>
                 </div>
                 <p className="text-sm text-zinc-600 tabular-nums dark:text-slate-400">
-                  {t({ id: 'browsedChallengePage.challengeModals.actions.completedOf', defaultMessage: '{completed} of {total} tasks' }, { completed: formatNumber(completed), total: formatNumber(total) }
+                  {t({ id: 'browsedChallengePage.challengeModals.actions.completedOf', defaultMessage: '{completed, number} of {total, plural, one {# task} other {# tasks}}' }, { completed, total }
                   )}
                 </p>
               </div>

@@ -25,7 +25,7 @@ export const ClearBundleDialog = () => {
             {t({ id: 'taskMap.clearBundleDialog.title', defaultMessage: 'Clear Task Bundle?' })}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {t({ id: 'taskMap.clearBundleDialog.description', defaultMessage: 'This will unbundle all {taskCount} tasks. The tasks themselves will not be deleted, only separated. This action cannot be undone.' }, { taskCount }
+            {t({ id: 'taskMap.clearBundleDialog.description', defaultMessage: 'This will unbundle all {taskCount, plural, one {# task} other {# tasks}}. The tasks themselves will not be deleted, only separated. This action cannot be undone.' }, { taskCount }
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>

@@ -175,7 +175,7 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                   />
                   {value && (
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileSelected', defaultMessage: 'Selected: {name} ({size} KB)' }, { name: value.name, size: (value.size / 1024).toFixed(2) }
+                      {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileSelected', defaultMessage: 'Selected: {name} ({size, number, ::.00} KB)' }, { name: value.name, size: value.size / 1024 }
                       )}
                     </p>
                   )}

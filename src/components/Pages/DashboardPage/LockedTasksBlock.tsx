@@ -52,7 +52,7 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
               {(lockedTask.bundledTasks?.length ?? 0) > 1 && (
                 <span className="flex items-center gap-1">
                   <Package className="h-3 w-3" />
-                  {t({ id: 'dashboard.contributions.lockedTasks.bundleCount', defaultMessage: '{count} tasks' }, { count: lockedTask.bundledTasks?.length ?? 0 }
+                  {t({ id: 'dashboard.contributions.lockedTasks.bundleCount', defaultMessage: '{count, plural, one {# task} other {# tasks}}' }, { count: lockedTask.bundledTasks?.length ?? 0 }
                   )}
                 </span>
               )}

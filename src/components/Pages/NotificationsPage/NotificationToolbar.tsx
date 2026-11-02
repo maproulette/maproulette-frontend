@@ -42,7 +42,7 @@ export const NotificationToolbar = () => {
             {isMarkingSelected
               ? t({ id: 'notificationsPage.toolbar.marking', defaultMessage: 'Marking...' })
               : selectedNotificationIds.size > 0
-                ? t({ id: 'notificationsPage.toolbar.markSelectedUnread', defaultMessage: 'Mark {count} as unread' }, { count: selectedNotificationIds.size }
+                ? t({ id: 'notificationsPage.toolbar.markSelectedUnread', defaultMessage: 'Mark {count, number} as unread' }, { count: selectedNotificationIds.size }
                   )
                 : t({ id: 'notificationsPage.toolbar.markAllUnread', defaultMessage: 'Mark all as unread' })}
           </Button>
@@ -56,7 +56,7 @@ export const NotificationToolbar = () => {
             {isMarkingSelected
               ? t({ id: 'notificationsPage.toolbar.marking', defaultMessage: 'Marking...' })
               : selectedNotificationIds.size > 0
-                ? t({ id: 'notificationsPage.toolbar.markSelectedRead', defaultMessage: 'Mark {count} as read' }, { count: selectedNotificationIds.size }
+                ? t({ id: 'notificationsPage.toolbar.markSelectedRead', defaultMessage: 'Mark {count, number} as read' }, { count: selectedNotificationIds.size }
                   )
                 : t({ id: 'common.markAllAsRead', defaultMessage: 'Mark all as read' })}
           </Button>

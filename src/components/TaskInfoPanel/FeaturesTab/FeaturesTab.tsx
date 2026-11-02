@@ -97,7 +97,7 @@ const TaskFeatures = ({
           )}
           <span className="text-xs text-zinc-500 dark:text-slate-400">
             {task
-              ? t({ id: 'taskInfoPanel.features.featureCount', defaultMessage: '{count} features' }, { count: featureCount }
+              ? t({ id: 'taskInfoPanel.features.featureCount', defaultMessage: '{count, plural, one {# feature} other {# features}}' }, { count: featureCount }
                 )
               : t({ id: 'common.loading', defaultMessage: 'Loading…' })}
           </span>

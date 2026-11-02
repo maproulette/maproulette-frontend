@@ -246,7 +246,12 @@ export const ChallengeComments = () => {
             </Button>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-slate-400">
-            {t({ id: 'browsedChallengePage.challengeModals.comments.characterCount', defaultMessage: '{count}/{max} characters' }, { count: commentText.length, max: 5000 }
+            {t(
+              {
+                id: 'browsedChallengePage.challengeModals.comments.characterCount',
+                defaultMessage: '{count, number}/{max, plural, one {# character} other {# characters}}',
+              },
+              { count: commentText.length, max: 5000 }
             )}
           </p>
         </form>

@@ -180,7 +180,7 @@ export const ChallengeForm = () => {
                   className="mr-auto flex items-center gap-1.5 text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400"
                 >
                   <CircleAlert className="h-3.5 w-3.5 shrink-0" />
-                  {t({ id: 'manageChallengeNew.challengeForm.fieldErrorsTitle', defaultMessage: '{count} fields need attention' }, { count: fieldErrors.length }
+                  {t({ id: 'manageChallengeNew.challengeForm.fieldErrorsTitle', defaultMessage: '{count, plural, one {# field needs} other {# fields need}} attention' }, { count: fieldErrors.length }
                   )}
                 </button>
               </PopoverTrigger>

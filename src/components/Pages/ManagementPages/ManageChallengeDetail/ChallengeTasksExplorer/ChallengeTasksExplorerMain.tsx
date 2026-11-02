@@ -41,7 +41,7 @@ export const ChallengeTasksExplorerMain = () => {
                   isLoading
                     ? t({ id: 'manageChallengeDetail.tasksExplorer.loadingTasks', defaultMessage: 'Loading tasks…' }
                       )
-                    : t({ id: 'manageChallengeDetail.tasksExplorer.showingCount', defaultMessage: 'Showing {shown} of {total} tasks' }, { shown: visibleMarkers.length, total: filteredMarkers.length }
+                    : t({ id: 'manageChallengeDetail.tasksExplorer.showingCount', defaultMessage: 'Showing {shown, number} of {total, plural, one {# task} other {# tasks}}' }, { shown: visibleMarkers.length, total: filteredMarkers.length }
                       )
                 }
               />
