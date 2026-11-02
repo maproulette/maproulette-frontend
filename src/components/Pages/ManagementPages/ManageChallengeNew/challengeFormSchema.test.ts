@@ -10,6 +10,7 @@ import {
   buildFormValues,
   type ChallengeFormValues,
   getDefaultDataSource,
+  isChallengeSourceEditable,
   makeChallengeFormSchema,
 } from './challengeFormSchema'
 
@@ -27,6 +28,8 @@ const validValues: ChallengeFormValues = {
   description: 'A description',
   instruction: 'Some instructions',
   difficulty: 1,
+  category: 'other',
+  additionalKeywords: '',
   checkinComment: 'Fixed roads',
   checkinSource: 'Bing',
   dataSource: 'overpass',
@@ -81,14 +84,41 @@ describe('getDefaultDataSource', () => {
   })
 })
 
+describe('isChallengeSourceEditable', () => {
+  it('allows editing the source of a new challenge or one with no tasks', () => {
+    expect(isChallengeSourceEditable(undefined)).toBe(true)
+    expect(
+      isChallengeSourceEditable({ completionMetrics: { total: 0 } } as unknown as Challenge)
+    ).toBe(true)
+  })
+
+  it('keeps the source read-only once the challenge has tasks', () => {
+    expect(
+      isChallengeSourceEditable({ completionMetrics: { total: 4 } } as unknown as Challenge)
+    ).toBe(false)
+  })
+})
+
 describe('buildFormValues', () => {
+  it('splits the challenge keywords into a category and additional keywords', () => {
+    const challenge = {
+      name: 'Keywords',
+      tags: ['', 'highway', 'sidewalks', 'building', 'crossings'],
+    } as unknown as Challenge
+    const values = buildFormValues(challenge, 1)
+    expect(values.category).toBe('navigation')
+    expect(values.additionalKeywords).toBe('sidewalks,crossings')
+  })
+
   it('builds defaults for a brand new challenge (no challenge provided)', () => {
     expect(buildFormValues(undefined, 42)).toEqual({
       projectId: 42,
       name: '',
       description: '',
       instruction: '',
-      difficulty: 1,
+      difficulty: 2,
+      category: 'other',
+      additionalKeywords: '',
       checkinComment: '',
       checkinSource: '',
       dataSource: 'overpass',
@@ -124,6 +154,8 @@ describe('buildFormValues', () => {
       description: 'Existing description',
       instruction: 'Existing instructions',
       difficulty: 3,
+      category: 'other',
+      additionalKeywords: '',
       checkinComment: 'Existing comment #maproulette',
       checkinSource: 'Bing',
       dataSource: 'overpass',
@@ -150,9 +182,9 @@ describe('buildFormValues', () => {
     expect(buildFormValues(challenge, 55).projectId).toBe(55)
   })
 
-  it('defaults difficulty to 1 when the challenge has no difficulty set', () => {
+  it('defaults difficulty to 2 (normal) when the challenge has no difficulty set', () => {
     const challenge = { name: 'No difficulty' } as unknown as Challenge
-    expect(buildFormValues(challenge, 1).difficulty).toBe(1)
+    expect(buildFormValues(challenge, 1).difficulty).toBe(2)
   })
 
   it('always resets localGeoJSON to null and dataOriginDate to empty string, even for an existing challenge', () => {

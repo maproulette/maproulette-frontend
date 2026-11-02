@@ -5,6 +5,7 @@ import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
+import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
@@ -112,6 +113,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
   const pauseChallengeMutation = api.challenge.usePauseChallenge()
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const actionErrors = useManageActionErrors()
 
   // All useCallback hooks below are stored in the context value — stable references
   // prevent all context consumers from re-rendering on every provider render.
@@ -135,40 +137,50 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
     if (deleteChallengeId == null) return
     deleteChallengeMutation.mutate(deleteChallengeId, {
       onSettled: () => setDeleteChallengeId(null),
+      onError: actionErrors.challengeDelete,
     })
-  }, [deleteChallengeId, deleteChallengeMutation])
+  }, [deleteChallengeId, deleteChallengeMutation, actionErrors])
 
   const toggleChallengeEnabled = useCallback(
     (challenge: ChallengeListing) => {
       if (challenge.id == null) return
-      updateChallengeMutation.mutate({
-        challengeId: challenge.id,
-        updates: { enabled: !(challenge.enabled ?? false) },
-      })
+      updateChallengeMutation.mutate(
+        {
+          challengeId: challenge.id,
+          updates: { enabled: !(challenge.enabled ?? false) },
+        },
+        { onError: actionErrors.challengeSave }
+      )
     },
-    [updateChallengeMutation]
+    [updateChallengeMutation, actionErrors]
   )
 
   const archiveChallenge = useCallback(
     (challenge: ChallengeListing) => {
       if (challenge.id == null) return
-      archiveChallengeMutation.mutate({
-        challengeId: challenge.id,
-        isArchived: !(challenge.isArchived ?? false),
-      })
+      archiveChallengeMutation.mutate(
+        {
+          challengeId: challenge.id,
+          isArchived: !(challenge.isArchived ?? false),
+        },
+        { onError: actionErrors.challengeArchive }
+      )
     },
-    [archiveChallengeMutation]
+    [archiveChallengeMutation, actionErrors]
   )
 
   const togglePaused = useCallback(
     (challenge: ChallengeListing) => {
       if (challenge.id == null) return
-      pauseChallengeMutation.mutate({
-        challengeId: challenge.id,
-        paused: !(challenge.paused ?? false),
-      })
+      pauseChallengeMutation.mutate(
+        {
+          challengeId: challenge.id,
+          paused: !(challenge.paused ?? false),
+        },
+        { onError: actionErrors.challengeSave }
+      )
     },
-    [pauseChallengeMutation]
+    [pauseChallengeMutation, actionErrors]
   )
 
   // Reason: context value must be stable to prevent all consumers from re-rendering

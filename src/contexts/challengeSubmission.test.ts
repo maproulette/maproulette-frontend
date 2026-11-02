@@ -19,6 +19,8 @@ const baseValues: ChallengeFormValues = {
   description: 'A description',
   instruction: 'Some instructions',
   difficulty: 2,
+  category: 'other',
+  additionalKeywords: '',
   checkinComment: 'Fixed roads #maproulette',
   checkinSource: 'Bing',
   dataSource: 'overpass',
@@ -52,6 +54,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -92,6 +95,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -130,6 +134,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -440,6 +445,7 @@ describe('buildChallengeSubmission', () => {
           description: 'A description',
           instruction: 'Some instructions',
           difficulty: 2,
+          tags: [],
           checkinComment: 'Fixed roads #maproulette',
           checkinSource: 'Bing',
           ownerTeamId: null,
@@ -466,6 +472,31 @@ describe('buildChallengeSubmission', () => {
 
       expect(result.localGeoJSONUpload).toBeUndefined()
       expect(result.challengeData).not.toHaveProperty('localGeoJSON')
+    })
+
+    it('sends the new source when the challenge has no tasks yet', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'overpass', overpassQL: 'way[building];' },
+        false,
+        true
+      )
+
+      expect(result.challengeData.overpassQL).toBe('way[building];')
+      expect(result.challengeData.checkinComment).toBe('Fixed roads #maproulette')
+    })
+
+    it('uploads a line-by-line file for a challenge with no tasks yet', async () => {
+      const file = new File([`${RECORD_SEPARATOR}{"type":"Feature"}\n`], 'sequence.geojsonl', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'localGeoJSON', localGeoJSON: file },
+        false,
+        true
+      )
+
+      expect(result.localGeoJSONUpload?.lineByLine).toBe(true)
     })
 
     it('sets description and instruction to undefined (not empty string) when blank', async () => {
@@ -508,6 +539,19 @@ describe('buildChallengeSubmission team image handling', () => {
     expect(result.challengeData.ownerTeamId).toBe(3)
   })
 
+  it('leaves an edited challenge basemap alone when the basemap field was not changed', async () => {
+    const { challengeData } = await buildChallengeSubmission(
+      { ...baseValues, basemap: 'Esri World Imagery' },
+      false,
+      false,
+      { defaultBasemap: 4, defaultBasemapId: 'EsriWorldImagery' }
+    )
+
+    expect(challengeData).not.toHaveProperty('defaultBasemap')
+    expect(challengeData).not.toHaveProperty('defaultBasemapId')
+    expect(challengeData).not.toHaveProperty('customBasemap')
+  })
+
   it('treats a missing custom basemap url as no custom basemap', async () => {
     const { challengeData } = await buildChallengeSubmission(
       { ...baseValues, basemap: 'custom', basemapUrl: undefined },
@@ -519,5 +563,23 @@ describe('buildChallengeSubmission team image handling', () => {
       defaultBasemapId: null,
       customBasemap: null,
     })
+  })
+})
+
+describe('buildChallengeSubmission keywords', () => {
+  it.each([true, false])(
+    'sends the category keywords plus the additional keywords as tags (isCreate=%s)',
+    async (isCreate) => {
+      const { challengeData } = await buildChallengeSubmission(
+        { ...baseValues, category: 'water', additionalKeywords: 'lakes,,rivers' },
+        isCreate
+      )
+      expect(challengeData.tags).toEqual(['natural', 'water', 'lakes', 'rivers'])
+    }
+  )
+
+  it('sends no keywords for the Other category without additional keywords', async () => {
+    const { challengeData } = await buildChallengeSubmission(baseValues, true)
+    expect(challengeData.tags).toEqual([])
   })
 })

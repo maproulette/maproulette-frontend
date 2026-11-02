@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import type { Project } from '@/types/Project'
@@ -96,6 +97,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
   const updateSettingsMutation = api.user.useUpdateUserSettings()
   const updateProjectMutation = api.project.useUpdateProject()
   const deleteProjectMutation = api.project.useDeleteProject()
+  const actionErrors = useManageActionErrors()
 
   const projectsToShow = useMemo(() => {
     const set = new Set(pinnedProjectIds)
@@ -126,19 +128,22 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
 
   const handleArchiveProject = useCallback(
     (projectId: number, isArchived: boolean) => {
-      updateProjectMutation.mutate({
-        projectId,
-        updates: { isArchived: !isArchived } as Partial<Project>,
-      })
+      updateProjectMutation.mutate(
+        {
+          projectId,
+          updates: { isArchived: !isArchived } as Partial<Project>,
+        },
+        { onError: actionErrors.projectSave }
+      )
     },
-    [updateProjectMutation]
+    [updateProjectMutation, actionErrors]
   )
 
   const updateProject = useCallback(
     (projectId: number, updates: Partial<Project>) => {
-      updateProjectMutation.mutate({ projectId, updates })
+      updateProjectMutation.mutate({ projectId, updates }, { onError: actionErrors.projectSave })
     },
-    [updateProjectMutation]
+    [updateProjectMutation, actionErrors]
   )
 
   const handleDeleteProject = useCallback((projectId: number, projectName: string) => {
@@ -149,9 +154,9 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
     if (!deleteProjectConfirm) return
     deleteProjectMutation.mutate(
       { projectId: deleteProjectConfirm.projectId },
-      { onSettled: () => setDeleteProjectConfirm(null) }
+      { onSettled: () => setDeleteProjectConfirm(null), onError: actionErrors.projectDelete }
     )
-  }, [deleteProjectConfirm, deleteProjectMutation])
+  }, [deleteProjectConfirm, deleteProjectMutation, actionErrors])
 
   const toggleProjectPin = useCallback(
     (projectId: number) => {

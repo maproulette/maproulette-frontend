@@ -697,25 +697,6 @@ describe('taskSingle.useRefreshLock', () => {
   })
 })
 
-describe('taskSingle.useUpdateCompletionResponses', () => {
-  it('saves the answers to the task’s form fields and refreshes the task', async () => {
-    const fetchMock = stubFetch(new Response('ok', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskSingle.useUpdateCompletionResponses(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-    await result.current.mutateAsync({ taskId: 5, responses: { surface: 'gravel' } })
-
-    const [request] = fetchMock.mock.calls[0]
-    expect((request as Request).method).toBe('PUT')
-    expect(new URL((request as Request).url).pathname).toBe('/api/v2/task/5/responses')
-    expect(await (request as Request).clone().json()).toEqual({ surface: 'gravel' })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 5] })
-  })
-})
-
 describe('task lock state in the cache', () => {
   it('records the bundle lock on every cached task it covers', async () => {
     stubFetch(

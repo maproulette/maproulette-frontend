@@ -4,6 +4,7 @@ import type { IdContext, IdEntity, IdGlobal, IdHistory } from '@/types/iDEditor'
 import {
   applyTagFixesInId,
   createTagFixQueue,
+  discardAllEdits,
   markSuggestionCheckpoint,
   restoreSuggestionCheckpoint,
   revertTagFixesInId,
@@ -138,6 +139,18 @@ describe('markSuggestionCheckpoint', () => {
     expect(markSuggestionCheckpoint(before.context)).not.toBe(
       markSuggestionCheckpoint(after.context)
     )
+  })
+})
+
+describe('discardAllEdits', () => {
+  it('resets iD to its base graph after leaving select mode', () => {
+    const browse = { mode: 'browse' }
+    const { context, enter, reset } = makeHistoryContext()
+    expect(
+      discardAllEdits(context, { ...iDGlobal, modeBrowse: () => browse } as unknown as IdGlobal)
+    ).toBe(true)
+    expect(reset).toHaveBeenCalledWith()
+    expect(enter.mock.invocationCallOrder[0]).toBeLessThan(reset.mock.invocationCallOrder[0])
   })
 })
 

@@ -12,9 +12,9 @@ import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 
 export const ChallengeActionButtons = () => {
-  const { challenge, hasOverpass, canClone, canManage, user, openReport } =
+  const { challenge, hasOverpass, canClone, canManage, user, openReport, projectId } =
     useBrowsedChallengeContext()
-  const { openReport: openReportModal, openOverpass, openClone } = useChallengeModals()
+  const { openReport: openReportModal, openOverpass } = useChallengeModals()
   const { t } = useIntl()
 
   // A report the user has already filed is still awaiting review; there is
@@ -73,10 +73,16 @@ export const ChallengeActionButtons = () => {
             </Link>
           </DropdownMenuItem>
         )}
-        {canClone && (
-          <DropdownMenuItem onClick={openClone}>
-            <Copy className="size-4" />
-            {t('common.cloneChallenge', undefined, 'Clone Challenge')}
+        {canClone && challenge.id != null && (
+          <DropdownMenuItem asChild>
+            <Link
+              to="/manage/challenge/new"
+              search={{ projectId: projectId ?? undefined, cloneFrom: challenge.id }}
+              className="flex cursor-pointer items-center gap-2"
+            >
+              <Copy className="size-4" />
+              {t('common.cloneChallenge', undefined, 'Clone Challenge')}
+            </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type { z } from 'zod'
+import { BASEMAP_CURRENT } from '@/components/Map/basemap'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
@@ -116,6 +117,9 @@ export const GeneralSettings = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    {form.formState.defaultValues?.defaultBasemap === BASEMAP_CURRENT && (
+                      <SelectItem value={BASEMAP_CURRENT}>Keep current basemap</SelectItem>
+                    )}
                     {baseMapOptions.map((option) => (
                       <SelectItem key={option.value} value={String(option.value)}>
                         {option.label}

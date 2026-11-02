@@ -8,8 +8,8 @@ import { TaskDataReadOnly } from './TaskDataReadOnly'
 interface TaskDataSectionProps {
   dataSource: ChallengeFormValues['dataSource']
   challenge?: Challenge
-  // The data source can only be set while creating. Once a challenge exists,
-  // its tasks are already built from that source, so it's shown read-only
+  // The data source can be set while creating, or while an existing challenge
+  // still has no tasks. Once tasks are built from it, it's shown read-only
   // here (matching MR3) — regenerating tasks is done via Rebuild Tasks
   // instead.
   sourceReadOnly: boolean

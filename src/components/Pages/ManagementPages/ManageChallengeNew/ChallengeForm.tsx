@@ -22,6 +22,7 @@ import { ChangesetFieldsSection } from './ChangesetFieldsSection'
 import {
   buildFormValues,
   type ChallengeFormValues,
+  isChallengeSourceEditable,
   makeChallengeFormSchema,
 } from './challengeFormSchema'
 import { ProjectPickerField } from './ProjectPickerField'
@@ -41,7 +42,7 @@ const isNameConflict = (message: string) => {
 
 export const ChallengeForm = () => {
   const { t } = useIntl()
-  const { challenge, projectId, onSubmit, onCancel } = useChallengeFormContext()
+  const { challenge, initialValues, projectId, onSubmit, onCancel } = useChallengeFormContext()
   const { user } = useAuthContext()
   const isEdit = !!challenge
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -52,8 +53,8 @@ export const ChallengeForm = () => {
   // `defaultValues` alone is read only on mount. `keepDirtyValues` keeps any
   // edits in progress from being clobbered by a background refetch.
   const values = useMemo(
-    () => (challenge ? buildFormValues(challenge, projectId ?? 0) : undefined),
-    [challenge, projectId]
+    () => (challenge ? buildFormValues(challenge, projectId ?? 0) : initialValues),
+    [challenge, projectId, initialValues]
   )
 
   const form = useForm<ChallengeFormValues>({
@@ -64,10 +65,10 @@ export const ChallengeForm = () => {
   })
 
   const dataSource = form.watch('dataSource')
-  // The data source can only be set while creating. Once a challenge exists,
-  // its tasks are already built from that source, so it's shown read-only here
-  // (matching MR3) — regenerating tasks is done via Rebuild Tasks instead.
-  const sourceReadOnly = isEdit
+  // The data source can be set while creating, or while an existing challenge
+  // still has no tasks (matching MR3). Once tasks are built from it, it's shown
+  // read-only — regenerating tasks is done via Rebuild Tasks instead.
+  const sourceReadOnly = isEdit && !isChallengeSourceEditable(challenge)
 
   const serverError = form.formState.errors.root?.serverError?.message
   // The form is taller than its scroll box, so a field marked invalid can sit

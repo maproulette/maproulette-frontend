@@ -372,7 +372,7 @@ export const challengeSingle = {
 
   getRandomTask: (challengeId: number) =>
     apiRequest
-      .get(`api/v2/challenge/${challengeId}/tasks/random`, { searchParams: { limit: 1 } })
+      .get(`api/v2/challenge/${challengeId}/tasks/prioritizedTasks`, { searchParams: { limit: 1 } })
       .json<Task[]>(),
 
   // Any task in the challenge, regardless of status - used to drop into read-only
@@ -406,33 +406,6 @@ export const challengeSingle = {
     ),
 
   // Mutation hook
-  useCloneChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      // `projectId` is optional; the backend clones into the original challenge's
-      // project when it is omitted.
-      mutationFn: ({
-        challengeId,
-        newName,
-        projectId,
-      }: {
-        challengeId: number
-        newName: string
-        projectId?: number
-      }) =>
-        apiRequest
-          .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`, {
-            ...(projectId != null && { searchParams: { projectId } }),
-          })
-          .json<ChallengeGetResponse>(),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['challenge'] })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'managed'] })
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
-      },
-    })
-  },
-
   useCreateChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -471,6 +444,16 @@ export const challengeSingle = {
       },
     })
   },
+
+  useRemoveChallengeKeywords: () =>
+    useMutation({
+      mutationFn: ({ challengeId, keywords }: { challengeId: number; keywords: string[] }) =>
+        apiRequest
+          .delete(`api/v2/challenge/${challengeId}/tags`, {
+            searchParams: { tags: keywords.join(',') },
+          })
+          .text(),
+    }),
 
   useUpdateChallenge: () => {
     const queryClient = useQueryClient()

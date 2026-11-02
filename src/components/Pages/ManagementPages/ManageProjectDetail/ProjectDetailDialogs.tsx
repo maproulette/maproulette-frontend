@@ -1,4 +1,3 @@
-import { CloneChallengeModal } from '@/components/Pages/BrowsedChallengePage/ChallengePanel/ChallengeModals/CloneChallengeModal'
 import {
   getChallengeSourceType,
   RebuildTasksDialog,
@@ -25,13 +24,10 @@ import { MoveChallengeModal } from '../MoveChallengeModal'
 import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 import { ProjectManagersPanel } from './ProjectManagersPanel'
 
-/** Modals and confirmation dialogs used by the project detail page (move/clone/rebuild/delete). */
+/** Modals and confirmation dialogs used by the project detail page (move/rebuild/delete). */
 export const ProjectDetailDialogs = () => {
   const { t } = useIntl()
   const {
-    projectId,
-    cloneModalChallenge,
-    setCloneModalChallenge,
     rebuildModalChallenge,
     setRebuildModalChallenge,
     deleteChallengeId,
@@ -67,16 +63,6 @@ export const ProjectDetailDialogs = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      {cloneModalChallenge && (
-        <CloneChallengeModal
-          open={!!cloneModalChallenge}
-          onOpenChange={(open) => !open && setCloneModalChallenge(null)}
-          challengeId={cloneModalChallenge.id}
-          challengeName={cloneModalChallenge.name}
-          currentProjectId={Number(projectId)}
-        />
-      )}
 
       {rebuildModalChallenge?.id != null && (
         <RebuildTasksDialog

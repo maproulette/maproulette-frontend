@@ -204,6 +204,26 @@ describe('taskBundleQueries.useUpdateTaskBundleStatus', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
   })
 
+  it('sends completion responses as the request body', async () => {
+    const fetchMock = stubFetch(new Response('', { status: 200 }))
+
+    const { result } = renderHook(() => taskBundleQueries.useUpdateTaskBundleStatus(), {
+      wrapper: queryClientWrapper(),
+    })
+
+    result.current.mutate({
+      bundleId: 8,
+      primaryId: 1,
+      status: 1,
+      completionResponses: { surface: 'paved' },
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    const [request] = fetchMock.mock.calls[0]
+    expect(await (request as Request).clone().json()).toEqual({ surface: 'paved' })
+  })
+
   it('forwards opaque plugin query params, dropping the ones with no value', async () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
 

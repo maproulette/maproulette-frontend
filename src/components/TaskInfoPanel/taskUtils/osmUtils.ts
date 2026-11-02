@@ -8,11 +8,6 @@ export interface OsmFeature {
   id: number
 }
 
-/**
- * Infer OSM element type from a GeoJSON geometry type.
- * Point → node, LineString → way, Polygon → way (or relation for multipolygon,
- * but we can't distinguish here so default to way).
- */
 const inferOsmTypeFromGeometry = (
   geomType: string | undefined
 ): 'node' | 'way' | 'relation' | null => {
@@ -24,51 +19,62 @@ const inferOsmTypeFromGeometry = (
     case 'Polygon':
       return 'way'
     case 'MultiPolygon':
+    case 'GeometryCollection':
       return 'relation'
     default:
       return null
   }
 }
 
+const OSM_ID_FIELDS = ['@id', 'osmid', 'osmIdentifier', 'id', 'osm_id', '@osmId']
+const OSM_TYPE_FIELDS = ['type', '@type', '@osm_type', 'osm_type']
+const OSM_ID_PATTERN = /^(node|way|relation|n|w|r)?\/?(\d+)$/i
+const OSM_TYPE_NAMES: Record<string, OsmFeature['type']> = {
+  node: 'node',
+  n: 'node',
+  way: 'way',
+  w: 'way',
+  relation: 'relation',
+  r: 'relation',
+}
+
+const findOsmId = (source: Record<string, unknown>): RegExpExecArray | null => {
+  for (const field of OSM_ID_FIELDS) {
+    const value = source[field]
+    if (!value) continue
+    const match = OSM_ID_PATTERN.exec(String(value))
+    if (match) return match
+  }
+  return null
+}
+
 /**
- * Try to extract an OSM feature (type + id) from a GeoJSON feature's properties.
- * Handles multiple property naming conventions used by different challenge creators.
+ * Try to extract an OSM feature (type + id) from a GeoJSON feature, looking at
+ * the feature's own id fields first and then its properties. Ids may be bare
+ * numbers or carry their type, as `node/123`, `way123` or `w123`; otherwise the
+ * type comes from a type property, and failing that from the geometry.
  */
 export const parseOsmFeatureFromProperties = (
   properties: Record<string, unknown>,
-  geomType?: string
+  geomType?: string,
+  featureFields: Record<string, unknown> = {}
 ): OsmFeature | null => {
-  // 1. Look for typed string IDs like "node/123", "way/456"
-  const typedId = properties['@id'] || properties.id || properties.osm_id
-  if (typedId && typeof typedId === 'string') {
-    const match = typedId.match(/^(node|way|relation)\/(\d+)$/)
-    if (match) {
-      return { type: match[1] as 'node' | 'way' | 'relation', id: parseInt(match[2], 10) }
-    }
-  }
+  const match = findOsmId(featureFields) ?? findOsmId(properties)
+  if (!match) return null
 
-  // 2. Look for a numeric ID (osmid, osm_id, @osmId) with an optional explicit type
-  const numericId =
-    properties.osmid || properties.osm_id || properties['@osmId'] || properties.osmIdentifier
-  if (numericId != null) {
-    const numId = Number(numericId)
-    if (Number.isSafeInteger(numId) && numId > 0) {
-      // Use explicit type if available, otherwise infer from geometry
-      const osmType = properties['@type'] || properties.osm_type
-      if (osmType) {
-        const type = String(osmType).toLowerCase()
-        if (type === 'node' || type === 'way' || type === 'relation') {
-          return { type, id: numId }
-        }
-      }
-      const inferredType = inferOsmTypeFromGeometry(geomType)
-      if (inferredType) {
-        return { type: inferredType, id: numId }
-      }
-    }
-  }
+  const id = Number(match[2])
+  if (!Number.isSafeInteger(id) || id <= 0) return null
 
-  return null
+  const typeFromId = match[1] ? OSM_TYPE_NAMES[match[1].toLowerCase()] : undefined
+  const typeProperty = OSM_TYPE_FIELDS.map((field) => properties[field]).find(
+    (value) => typeof value === 'string' && OSM_TYPE_NAMES[value.toLowerCase()]
+  )
+  const type =
+    typeFromId ??
+    (typeof typeProperty === 'string' ? OSM_TYPE_NAMES[typeProperty.toLowerCase()] : undefined) ??
+    inferOsmTypeFromGeometry(geomType)
+
+  return type ? { type, id } : null
 }
 
 export const parseOsmFeatureFromTask = (task: Task): OsmFeature | null => {
@@ -80,7 +86,11 @@ export const parseOsmFeaturesFromTask = (task: Task): OsmFeature[] => {
   const out: OsmFeature[] = []
   for (const feature of task.geometries.features) {
     if (!feature.properties) continue
-    const parsed = parseOsmFeatureFromProperties(feature.properties, feature.geometry?.type)
+    const parsed = parseOsmFeatureFromProperties(
+      feature.properties,
+      feature.geometry?.type,
+      feature as unknown as Record<string, unknown>
+    )
     if (parsed) out.push(parsed)
   }
   return out

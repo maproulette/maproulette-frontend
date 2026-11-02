@@ -31,6 +31,7 @@ import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import {
   createTagFixQueue,
+  discardAllEdits,
   markSuggestionCheckpoint,
   restoreSuggestionCheckpoint,
 } from './applyTagFixes'
@@ -86,6 +87,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     setPendingEdits,
     pendingEdits: currentEdits,
     resetToSuggestionRef,
+    discardIdEditsRef,
   } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(true)
@@ -465,6 +467,18 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
       resetToSuggestionRef.current = null
     }
   }, [resetToSuggestionRef])
+
+  useEffect(() => {
+    discardIdEditsRef.current = () => {
+      const context = idContextRef.current
+      if (!context) return
+      discardAllEdits(context, getIdGlobal(iframeRef.current?.contentWindow))
+      suggestionSignatureRef.current = null
+    }
+    return () => {
+      discardIdEditsRef.current = null
+    }
+  }, [discardIdEditsRef])
 
   // iD re-renders the map surface constantly, and any class we add to an
   // element is lost when it does — a full redraw, as happens when the map

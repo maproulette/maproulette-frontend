@@ -79,11 +79,30 @@ describe('parseOsmFeatureFromTask / parseOsmFeaturesFromTask', () => {
       expect(parseOsmFeatureFromTask(task)).toBeNull()
     })
 
-    it('ignores a typed id that is not a string (falls through to numeric handling)', () => {
-      // A non-string "id" falls through the typed-id branch; with no numeric
-      // id fields present either, nothing is parsed.
+    it('reads a bare numeric id, typing it from the geometry', () => {
       const task = makeTask([feature({ id: 123 })])
-      expect(parseOsmFeatureFromTask(task)).toBeNull()
+      expect(parseOsmFeatureFromTask(task)).toEqual({ type: 'node', id: 123 })
+    })
+
+    it.each([
+      ['w123', 'way'],
+      ['n7', 'node'],
+      ['r9', 'relation'],
+      ['way123', 'way'],
+      ['w/123', 'way'],
+    ])('parses the short form "%s"', (value, type) => {
+      const task = makeTask([feature({ '@id': value })])
+      expect(parseOsmFeatureFromTask(task)?.type).toBe(type)
+    })
+
+    it('reads the id from the feature itself before its properties', () => {
+      const task = makeTask([{ ...feature({ '@id': 'node/2' }), id: 'way/1' } as GeoJSON.Feature])
+      expect(parseOsmFeatureFromTask(task)).toEqual({ type: 'way', id: 1 })
+    })
+
+    it('takes the type from a "type" property when the id has none', () => {
+      const task = makeTask([feature({ '@id': 42, type: 'way' })])
+      expect(parseOsmFeatureFromTask(task)).toEqual({ type: 'way', id: 42 })
     })
 
     it('prefers "@id" over "id" and "osm_id" when multiple are present', () => {
@@ -216,11 +235,11 @@ describe('parseOsmFeatureFromTask / parseOsmFeaturesFromTask', () => {
       expect(parseOsmFeatureFromTask(task)).toEqual({ type: 'relation', id: 5 })
     })
 
-    it('returns null when geometry type is unrecognized and there is no explicit type', () => {
+    it('treats a geometry collection as a relation when there is no explicit type', () => {
       const task = makeTask([
         feature({ osmid: 6 }, { type: 'GeometryCollection', geometries: [] } as GeoJSON.Geometry),
       ])
-      expect(parseOsmFeatureFromTask(task)).toBeNull()
+      expect(parseOsmFeatureFromTask(task)).toEqual({ type: 'relation', id: 6 })
     })
 
     it('returns null when geometry is missing entirely and there is no explicit type', () => {

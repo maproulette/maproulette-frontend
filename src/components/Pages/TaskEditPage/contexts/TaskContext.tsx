@@ -7,10 +7,11 @@ import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
-import { getLockConflictInfo, type LockConflictInfo } from '@/lib/apiError'
+import { getApiErrorMessage, getLockConflictInfo, type LockConflictInfo } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
 import { LockConflictDialog } from './LockConflictDialog'
+import { LockFailedDialog, type LockFailure } from './LockFailedDialog'
 
 // Statuses that allow editing: Created (0), Skipped (3), Too Hard/Can't Complete (6)
 export const EDITABLE_STATUSES = [0, 3, 6]
@@ -49,6 +50,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const refreshLockMutation = api.task.useRefreshLock()
   const hasAttemptedLock = useRef(false)
   const [lockConflict, setLockConflict] = useState<LockConflictInfo | null>(null)
+  const [lockFailure, setLockFailure] = useState<LockFailure | null>(null)
 
   const isEditable = isBaseEditableStatus(task.status) || isTaskEditableByPlugins(task)
   const isLocked = user != null && task.lockedBy === user.id
@@ -75,22 +77,17 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
           return false
         }
         logger.error('Failed to lock task', { taskId, error })
-        toast.error(
-          t(
-            'taskEditPage.taskActions.lockButton.lockConflict',
-            undefined,
-            'This task is currently locked by another mapper. Try again later or pick a different task.'
-          )
-        )
+        setLockFailure({ message: await getApiErrorMessage(error) })
         return false
       }
     },
-    [lockTaskMutation.mutateAsync, navigate, t]
+    [lockTaskMutation.mutateAsync, navigate]
   )
 
   useEffect(() => {
     hasAttemptedLock.current = false
     setLockConflict(null)
+    setLockFailure(null)
   }, [task?.id])
 
   useEffect(() => {
@@ -114,11 +111,12 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!isLocked) return
 
-    // Silent keep-alive only - just extends locked_time so an actively-open task doesn't hit
+    // Keep-alive - extends locked_time so an actively-open task doesn't hit
     // the backend's 1-hour lock expiry.
     const interval = setInterval(() => {
       refreshLockMutation.mutate(taskId, {
-        onError: () => {
+        onError: async (error) => {
+          setLockFailure({ message: await getApiErrorMessage(error) })
           void queryClient.invalidateQueries({ queryKey: ['task', taskId], exact: true })
         },
       })
@@ -162,6 +160,17 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     })
   }, [task, lockConflict, unlockTaskMutation, attemptLock])
 
+  const handleRetryLock = useCallback(async () => {
+    if (!task) return
+    setLockFailure(null)
+    await attemptLock(task.id)
+  }, [task, attemptLock])
+
+  const handleBrowseChallenge = useCallback(() => {
+    setLockFailure(null)
+    navigate({ to: '/challenge/$challengeId', params: { challengeId: String(task.parent) } })
+  }, [navigate, task.parent])
+
   const value: TaskContextType = useMemo(
     () => ({
       task,
@@ -185,6 +194,16 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         }}
         onConfirm={handleConfirmSwitchLock}
         busy={unlockTaskMutation.isPending}
+      />
+      <LockFailedDialog
+        taskId={task.id}
+        failure={lockFailure}
+        onOpenChange={(open) => {
+          if (!open) setLockFailure(null)
+        }}
+        onRetry={handleRetryLock}
+        onBrowseChallenge={handleBrowseChallenge}
+        busy={lockTaskMutation.isPending}
       />
     </TaskContext.Provider>
   )

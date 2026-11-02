@@ -6,6 +6,7 @@ import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
+import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetPageTitle } from '@/contexts/ChromeContext'
 import type { Challenge } from '@/types/Challenge'
@@ -36,8 +37,7 @@ export interface ManageProjectDetailContextType {
   setViewMode: (mode: 'grid' | 'list') => void
 
   // Modal state
-  cloneModalChallenge: { id: number; name: string } | null
-  setCloneModalChallenge: (challenge: { id: number; name: string } | null) => void
+  cloneChallenge: (challenge: { id: number; name: string } | null) => void
   rebuildModalChallenge: Challenge | null
   setRebuildModalChallenge: (challenge: Challenge | null) => void
   deleteChallengeId: number | null
@@ -80,10 +80,6 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const [searchQuery, setSearchQuery] = useState('')
   const [deleteProjectConfirm, setDeleteProjectConfirm] = useState(false)
   const [managersModalOpen, setManagersModalOpen] = useState(false)
-  const [cloneModalChallenge, setCloneModalChallenge] = useState<{
-    id: number
-    name: string
-  } | null>(null)
   const [rebuildModalChallenge, setRebuildModalChallenge] = useState<Challenge | null>(null)
   const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
   const [onlyDiscoverable, setOnlyDiscoverable] = useState(false)
@@ -108,6 +104,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
   const pauseChallengeMutation = api.challenge.usePauseChallenge()
+  const actionErrors = useManageActionErrors()
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
 
   // Derived values
@@ -149,19 +146,25 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   // prevent all context consumers from re-rendering on every provider render.
   const handleArchiveProject = useCallback(() => {
     if (projectData?.id == null) return
-    updateProjectMutation.mutate({
-      projectId: projectData.id,
-      updates: { isArchived: !(project?.isArchived ?? false) },
-    })
-  }, [projectData?.id, project?.isArchived, updateProjectMutation])
+    updateProjectMutation.mutate(
+      {
+        projectId: projectData.id,
+        updates: { isArchived: !(project?.isArchived ?? false) },
+      },
+      { onError: actionErrors.projectSave }
+    )
+  }, [projectData?.id, project?.isArchived, updateProjectMutation, actionErrors])
 
   const handleToggleEnabled = useCallback(() => {
     if (projectData?.id == null) return
-    updateProjectMutation.mutate({
-      projectId: projectData.id,
-      updates: { enabled: !(project?.enabled ?? false) },
-    })
-  }, [projectData?.id, project?.enabled, updateProjectMutation])
+    updateProjectMutation.mutate(
+      {
+        projectId: projectData.id,
+        updates: { enabled: !(project?.enabled ?? false) },
+      },
+      { onError: actionErrors.projectSave }
+    )
+  }, [projectData?.id, project?.enabled, updateProjectMutation, actionErrors])
 
   const confirmDeleteProject = useCallback(() => {
     if (projectData?.id == null) return
@@ -170,16 +173,18 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       {
         onSettled: () => setDeleteProjectConfirm(false),
         onSuccess: () => navigate({ to: '/manage/projects' }),
+        onError: actionErrors.projectDelete,
       }
     )
-  }, [projectData?.id, deleteProjectMutation, navigate])
+  }, [projectData?.id, deleteProjectMutation, navigate, actionErrors])
 
   const confirmDeleteChallenge = useCallback(() => {
     if (deleteChallengeId == null) return
     deleteChallengeMutation.mutate(deleteChallengeId, {
       onSettled: () => setDeleteChallengeId(null),
+      onError: actionErrors.challengeDelete,
     })
-  }, [deleteChallengeId, deleteChallengeMutation])
+  }, [deleteChallengeId, deleteChallengeMutation, actionErrors])
 
   const toggleChallengePin = useCallback(
     (challengeId: number) => {
@@ -200,26 +205,46 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const toggleChallengeEnabled = useCallback(
     (challenge: Challenge) => {
       if (challenge.id == null) return
-      updateChallengeMutation.mutate({
-        challengeId: challenge.id,
-        updates: { enabled: !(challenge.enabled ?? false) },
-      })
+      updateChallengeMutation.mutate(
+        {
+          challengeId: challenge.id,
+          updates: { enabled: !(challenge.enabled ?? false) },
+        },
+        { onError: actionErrors.challengeSave }
+      )
     },
-    [updateChallengeMutation]
+    [updateChallengeMutation, actionErrors]
   )
 
   const archiveChallenge = useCallback(
     (challengeId: number, isArchived: boolean) => {
-      archiveChallengeMutation.mutate({ challengeId, isArchived: !isArchived })
+      archiveChallengeMutation.mutate(
+        { challengeId, isArchived: !isArchived },
+        { onError: actionErrors.challengeArchive }
+      )
     },
-    [archiveChallengeMutation]
+    [archiveChallengeMutation, actionErrors]
   )
 
   const togglePaused = useCallback(
     (challengeId: number, paused: boolean) => {
-      pauseChallengeMutation.mutate({ challengeId, paused: !paused })
+      pauseChallengeMutation.mutate(
+        { challengeId, paused: !paused },
+        { onError: actionErrors.challengeSave }
+      )
     },
-    [pauseChallengeMutation]
+    [pauseChallengeMutation, actionErrors]
+  )
+
+  const cloneChallenge = useCallback(
+    (challenge: { id: number; name: string } | null) => {
+      if (!challenge) return
+      navigate({
+        to: '/manage/challenge/new',
+        search: { projectId: Number(projectId), cloneFrom: challenge.id },
+      })
+    },
+    [navigate, projectId]
   )
 
   const rebuildChallenge = useCallback(
@@ -252,8 +277,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       setOnlyPinned,
       viewMode,
       setViewMode,
-      cloneModalChallenge,
-      setCloneModalChallenge,
+      cloneChallenge,
       rebuildModalChallenge,
       setRebuildModalChallenge,
       deleteChallengeId,
@@ -287,7 +311,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       onlyArchived,
       onlyPinned,
       viewMode,
-      cloneModalChallenge,
+      cloneChallenge,
       rebuildModalChallenge,
       deleteChallengeId,
       deleteProjectConfirm,

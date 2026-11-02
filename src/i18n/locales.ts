@@ -26,6 +26,13 @@ export const defaultLocale: Locale = 'en-US'
 export const isSupportedLocale = (value: string | undefined | null): value is Locale =>
   !!value && (supportedLocales as readonly string[]).includes(value)
 
+const legacyLocaleAliases: Record<string, Locale> = { en: 'en-US' }
+
+export const normalizeLocale = (value: string | undefined | null): Locale | undefined => {
+  if (isSupportedLocale(value)) return value
+  return value ? legacyLocaleAliases[value] : undefined
+}
+
 export const resolveInitialLocale = (preferred?: string | null): Locale => {
   if (isSupportedLocale(preferred)) return preferred
   if (typeof navigator !== 'undefined') {

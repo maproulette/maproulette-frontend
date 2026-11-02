@@ -93,6 +93,19 @@ export const restoreSuggestionCheckpoint = (
   }
 }
 
+export const discardAllEdits = (context: IdContext, iDGlobal: IdGlobal | undefined): boolean => {
+  try {
+    const history = context.history?.()
+    if (!history?.reset) return false
+    if (iDGlobal?.modeBrowse) context.enter(iDGlobal.modeBrowse(context))
+    history.reset()
+    return true
+  } catch (error) {
+    logger.error("Could not discard the editor's unsaved edits", { error })
+    return false
+  }
+}
+
 const sameTags = (a: Record<string, string>, b: Record<string, string>): boolean => {
   const keys = Object.keys(a)
   return keys.length === Object.keys(b).length && keys.every((key) => a[key] === b[key])

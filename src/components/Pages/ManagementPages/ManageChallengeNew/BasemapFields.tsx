@@ -1,5 +1,10 @@
 import { useFormContext } from 'react-hook-form'
-import { BASEMAP_CUSTOM, BASEMAP_NONE, bundledStyleNames } from '@/components/Map/basemap'
+import {
+  BASEMAP_CURRENT,
+  BASEMAP_CUSTOM,
+  BASEMAP_NONE,
+  bundledStyleNames,
+} from '@/components/Map/basemap'
 import { DocsLink } from '@/components/shared/DocsLink'
 import {
   FormControl,
@@ -30,6 +35,7 @@ export const BasemapFields = () => {
   const form = useFormContext<ChallengeFormValues>()
   const { t } = useIntl()
   const basemap = form.watch('basemap')
+  const hasUnsupportedBasemap = form.formState.defaultValues?.basemap === BASEMAP_CURRENT
 
   return (
     <FormSection
@@ -55,6 +61,15 @@ export const BasemapFields = () => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
+                {hasUnsupportedBasemap && (
+                  <SelectItem value={BASEMAP_CURRENT}>
+                    {t(
+                      'manageChallengeNew.challengeForm.basemapCurrent',
+                      undefined,
+                      'Keep the current basemap'
+                    )}
+                  </SelectItem>
+                )}
                 <SelectItem value={BASEMAP_NONE}>
                   {t(
                     'manageChallengeNew.challengeForm.basemapNone',

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { basemapSelection } from '@/components/Map/basemap'
 import type { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
+import { CHALLENGE_CATEGORIES, splitChallengeKeywords } from './challengeKeywords'
 
 type T = ReturnType<typeof useIntl>['t']
 
@@ -45,6 +46,8 @@ const makeBaseChallengeFormSchema = (t: T) =>
         )
       ),
     difficulty: z.number().min(1).max(3),
+    category: z.enum(CHALLENGE_CATEGORIES),
+    additionalKeywords: z.string().optional().or(z.literal('')),
     checkinComment: z
       .string()
       .trim()
@@ -153,6 +156,9 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
     }
   })
 
+export const isChallengeSourceEditable = (challenge: Challenge | undefined) =>
+  !challenge || (challenge.completionMetrics?.total ?? 0) === 0
+
 export const getDefaultDataSource = (
   challenge?: Challenge
 ): 'overpass' | 'localGeoJSON' | 'remoteGeoJSON' => {
@@ -174,7 +180,8 @@ export const buildFormValues = (
   name: challenge?.name ?? '',
   description: challenge?.description ?? '',
   instruction: challenge?.instruction ?? '',
-  difficulty: challenge?.difficulty ?? 1,
+  difficulty: challenge?.difficulty ?? 2,
+  ...splitChallengeKeywords(challenge?.tags),
   checkinComment: challenge?.checkinComment ?? '',
   checkinSource: challenge?.checkinSource ?? '',
   dataSource: getDefaultDataSource(challenge),

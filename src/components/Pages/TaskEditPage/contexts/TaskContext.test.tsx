@@ -16,6 +16,7 @@ const state = vi.hoisted(() => ({
   claimTask: undefined as boolean | undefined,
   lock: vi.fn(),
   refresh: vi.fn(),
+  lockFailure: undefined as unknown,
 }))
 
 vi.mock('@tanstack/react-router', () => ({
@@ -42,6 +43,12 @@ vi.mock('@/contexts/PluginContext', () => ({
 vi.mock('@/i18n', () => ({ useIntl: () => ({ t: (_k: string, _v: unknown, d: string) => d }) }))
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }))
 vi.mock('./LockConflictDialog', () => ({ LockConflictDialog: () => null }))
+vi.mock('./LockFailedDialog', () => ({
+  LockFailedDialog: ({ failure }: { failure: unknown }) => {
+    state.lockFailure = failure
+    return null
+  },
+}))
 
 const { TaskProvider, useTaskContext } = await import('./TaskContext')
 
@@ -63,6 +70,7 @@ describe('TaskContext locks', () => {
     state.lock.mockReset()
     state.lock.mockResolvedValue({})
     state.refresh.mockReset()
+    state.lockFailure = undefined
   })
 
   afterEach(() => {
@@ -94,6 +102,32 @@ describe('TaskContext locks', () => {
     })
 
     expect(state.refresh).toHaveBeenCalledWith(TASK_ID, expect.anything())
+  })
+
+  it('reports a lock that could not be refreshed', async () => {
+    state.task = task({ lockedBy: USER_ID })
+    state.refresh.mockImplementation(
+      (_taskId: number, { onError }: { onError: (error: unknown) => Promise<void> }) =>
+        onError(new Error('lock lost'))
+    )
+    renderHook(() => useTaskContext(), { wrapper })
+
+    await act(async () => {
+      vi.advanceTimersByTime(15 * 60 * 1000)
+    })
+
+    expect(state.lockFailure).toEqual({ message: undefined })
+  })
+
+  it('reports a task it could not claim', async () => {
+    state.claimTask = true
+    state.task = task()
+    state.lock.mockRejectedValue(new Error('locked by someone else'))
+    renderHook(() => useTaskContext(), { wrapper })
+
+    await act(async () => {})
+
+    expect(state.lockFailure).toEqual({ message: undefined })
   })
 
   it('does not refresh a lock it does not hold', () => {

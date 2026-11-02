@@ -8,7 +8,7 @@ export const getApiErrorMessage = async (error: unknown): Promise<string | undef
   if (!(error instanceof HTTPError)) return undefined
 
   try {
-    const body = await error.response.json()
+    const body = await error.response.clone().json()
     return typeof body?.message === 'string' ? body.message : undefined
   } catch {
     return undefined
@@ -49,7 +49,7 @@ export const getLockConflictInfo = async (
   if (!(error instanceof HTTPError) || error.response.status !== 409) return undefined
 
   try {
-    const body = await error.response.json()
+    const body = await error.response.clone().json()
     if (typeof body?.lockedTaskId !== 'number') return undefined
     return {
       lockedTaskId: body.lockedTaskId,
