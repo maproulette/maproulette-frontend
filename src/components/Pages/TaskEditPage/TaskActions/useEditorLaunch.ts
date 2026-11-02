@@ -89,7 +89,8 @@ export const useEditorLaunch = (task: Task) => {
           mapView && tasks.length === 1 ? mapView.mapBounds : computeBboxForTasks(tasks)
         const [lng, lat] =
           mapView || tasks.length > 1 ? bboxCenter(taskBounds) : task.location.coordinates
-        const zoom = mapView ? Math.round(mapView.mapZoom * 100) / 100 : DEFAULT_EDITOR_ZOOM
+        const zoom = mapView ? mapView.mapZoom + 1 : DEFAULT_EDITOR_ZOOM
+        const mapHash = `map=${zoom.toFixed(2)}/${lat.toFixed(5)}/${lng.toFixed(5)}`
         const presets = challenge?.presets?.length
           ? `presets=${encodeURIComponent(challenge.presets.join(','))}`
           : null
@@ -116,7 +117,7 @@ export const useEditorLaunch = (task: Task) => {
                 selectionParts.push(`${f.type}=${f.id}`)
               }
             }
-            const hashParts = [`map=${zoom}/${lat}/${lng}`]
+            const hashParts = [mapHash]
             if (checkinComment) hashParts.push(`comment=${encodeURIComponent(checkinComment)}`)
             if (checkinSource) hashParts.push(`source=${encodeURIComponent(checkinSource)}`)
             if (imagery) hashParts.push(editorBackgroundParam(imagery))
@@ -213,7 +214,7 @@ export const useEditorLaunch = (task: Task) => {
             if (checkinSource) parts.push(`source=${encodeURIComponent(checkinSource)}`)
             if (imagery) parts.push(editorBackgroundParam(imagery))
             if (presets) parts.push(presets)
-            parts.push(`map=${zoom}/${lat}/${lng}`)
+            parts.push(mapHash)
             if (challenge?.datasetUrl)
               parts.push(`data=${encodeURIComponent(challenge.datasetUrl)}`)
             editorUrl = `${rapidEditorUrl}#${parts.join('&')}`
@@ -223,7 +224,7 @@ export const useEditorLaunch = (task: Task) => {
           default: {
             const selection = formatOsmEntities(tasks, { abbreviated: true })
             const query = selection ? `&id=${selection}` : ''
-            editorUrl = `${idEditorUrl}?editor=id${query}#map=${zoom}/${lat}/${lng}`
+            editorUrl = `${idEditorUrl}?editor=id${query}#${mapHash}`
           }
         }
 
