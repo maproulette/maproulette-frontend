@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { UserSettings } from '@/types/User'
-import { formSchema, getDefaultValues } from './formSchema.ts'
+import { basemapSettings, formSchema, getDefaultValues } from './formSchema.ts'
 
 const validInput = {
   defaultEditor: 1,
@@ -166,6 +166,62 @@ describe('getDefaultValues', () => {
       defaultBasemapId: '',
       email: '',
       locale: 'en-US',
+    })
+  })
+})
+
+describe('user basemap settings', () => {
+  const settings = (overrides: Partial<UserSettings>) => overrides as UserSettings
+
+  it('loads an MR3 imagery-index basemap as its option', () => {
+    const values = getDefaultValues(
+      settings({ defaultBasemap: 4, defaultBasemapId: 'Bing' }),
+      'en-US'
+    )
+    expect(values.defaultBasemap).toBe('Bing')
+    expect(values.defaultBasemapId).toBe('')
+    expect(formSchema.safeParse(values).success).toBe(true)
+  })
+
+  it('loads the MR3 numeric constants as their imagery-index options', () => {
+    expect(getDefaultValues(settings({ defaultBasemap: 0 }), 'en-US').defaultBasemap).toBe('MAPNIK')
+    expect(getDefaultValues(settings({ defaultBasemap: 2 }), 'en-US').defaultBasemap).toBe('Bing')
+  })
+
+  it('keeps a stored basemap that has no option without blocking the save', () => {
+    const stored = settings({ defaultBasemap: 4, defaultBasemapId: 'My Custom Layer' })
+    const values = getDefaultValues(stored, 'en-US')
+    expect(values.defaultBasemap).toBe('current')
+    expect(formSchema.safeParse(values).success).toBe(true)
+    expect(basemapSettings(values, stored)).toEqual({
+      defaultBasemap: 4,
+      defaultBasemapId: 'My Custom Layer',
+    })
+  })
+
+  it('writes the stored values back when the basemap was not changed', () => {
+    const stored = settings({ defaultBasemap: 2 })
+    expect(basemapSettings(getDefaultValues(stored, 'en-US'), stored)).toEqual({
+      defaultBasemap: 2,
+      defaultBasemapId: undefined,
+    })
+  })
+
+  it('stores a picked layer the way MR3 did', () => {
+    const stored = settings({ defaultBasemap: -1 })
+    const values = { ...getDefaultValues(stored, 'en-US'), defaultBasemap: 'EsriWorldImagery' }
+    expect(basemapSettings(values, stored)).toEqual({
+      defaultBasemap: 4,
+      defaultBasemapId: 'EsriWorldImagery',
+    })
+    expect(
+      basemapSettings(
+        { ...values, defaultBasemap: -1 },
+        settings({ defaultBasemap: 4, defaultBasemapId: 'Bing' })
+      )
+    ).toEqual({
+      defaultBasemap: -1,
+      defaultBasemapId: '',
     })
   })
 })

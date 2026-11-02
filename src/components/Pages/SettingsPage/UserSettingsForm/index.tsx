@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useIntl } from '@/i18n'
 import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
-import { formSchema, getDefaultValues } from './formSchema'
+import { basemapSettings, formSchema, getDefaultValues } from './formSchema'
 import { GeneralSettings } from './GeneralSettings'
 import { useNotificationSubscriptionsDraft } from './NotificationSubscriptionFields'
 import { NotificationsSettings } from './NotificationsSettings'
@@ -31,7 +31,11 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
       await Promise.all([
         updateSettingsMutation.mutateAsync({
           userId: user.id,
-          settings: { ...user.settings, ...values } as unknown as UserSettings,
+          settings: {
+            ...user.settings,
+            ...values,
+            ...basemapSettings(values, user.settings),
+          } as unknown as UserSettings,
         }),
         subscriptions.isDirty ? subscriptions.save() : null,
       ])
