@@ -18,6 +18,7 @@ import {
   editorImageryForStyle,
   josmImageryCommand,
 } from '@/lib/editorImagery'
+import { openEditorWindow } from '@/lib/editorWindow'
 import { JOSM_HOST, sendJosmCommands } from '@/lib/josmRemoteControl'
 import { logger } from '@/lib/logger'
 import { josmImportUrl, referenceLayers } from '@/lib/taskAttachments'
@@ -254,7 +255,7 @@ export const useEditorLaunch = (task: Task) => {
             }
           })
         } else if (editorUrl) {
-          window.open(editorUrl, '_blank', 'noopener,noreferrer')
+          openEditorWindow(editorUrl)
           notifyOpened()
         }
       } catch (error) {
