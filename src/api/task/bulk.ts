@@ -7,11 +7,6 @@ export interface BulkDeleteResult {
   deleted: number
 }
 
-export interface BulkReassignResult {
-  requested: number
-  updated: number
-}
-
 export const taskBulk = {
   useBulkUpdateStatus: () => {
     const queryClient = useQueryClient()
@@ -58,20 +53,6 @@ export const taskBulk = {
     return useMutation({
       mutationFn: ({ taskIds, archived }: { taskIds: number[]; archived: boolean }) =>
         apiRequest.put('api/v2/tasks/archive', { json: { taskIds, archived } }).text(),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['task'] })
-        queryClient.invalidateQueries({ queryKey: ['challenge'] })
-      },
-    })
-  },
-
-  useBulkReassign: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ taskIds, userId }: { taskIds: number[]; userId: number }) =>
-        apiRequest
-          .put('api/v2/tasks/reassign', { json: { taskIds, userId } })
-          .json<BulkReassignResult>(),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['task'] })
         queryClient.invalidateQueries({ queryKey: ['challenge'] })
