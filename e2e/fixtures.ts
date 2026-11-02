@@ -95,7 +95,7 @@ export function newSessionRequest(api: APIRequest, user: SessionUser) {
 const uniqueName = (prefix: string) =>
   `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`
 
-const storedProjectId = (project: Project): number => {
+export const storedProjectId = (project: Project): number => {
   if (project.id === undefined) {
     throw new Error(`The backend returned project ${project.name} without an id`)
   }
