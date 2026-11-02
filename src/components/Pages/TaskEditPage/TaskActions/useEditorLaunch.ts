@@ -12,6 +12,7 @@ import { editorOptions } from '@/data/account.json'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { isTagFixTask } from '@/lib/cooperativeWork'
+import { JOSM_HOST, sendJosmCommands } from '@/lib/josmRemoteControl'
 import { logger } from '@/lib/logger'
 import { josmImportUrl, referenceLayers } from '@/lib/taskAttachments'
 import type { Bbox2D } from '@/types/Map'
@@ -28,8 +29,6 @@ export const EDITOR = {
   josmFeatures: 4,
   rapid: 5,
 } as const
-
-const JOSM_HOST = 'http://127.0.0.1:8111/'
 
 // JOSM fetches attachment data itself, so it needs an absolute backend URL.
 const apiBaseUrl = window.env.VITE_API_BASE_URL || window.location.origin
@@ -73,6 +72,7 @@ export const useEditorLaunch = (task: Task) => {
           : `MR Task ${task.id}`
 
         let editorUrl = ''
+        let josmCommands: string[] = []
 
         switch (editorValue) {
           case EDITOR.id: {
@@ -120,14 +120,14 @@ export const useEditorLaunch = (task: Task) => {
               `changeset_source=${encodeURIComponent(checkinSource)}`,
             ]
             if (selection) parts.push(`select=${selection}`)
-            editorUrl = `${JOSM_HOST}load_and_zoom?${parts.join('&')}`
-            toast.info(
-              t(
-                'taskEditPage.taskActions.editorButton.josmRemoteControlHint',
-                undefined,
-                'Make sure JOSM is running with remote control enabled'
-              )
-            )
+            josmCommands = [
+              `${JOSM_HOST}load_and_zoom?${parts.join('&')}`,
+              ...tasks.flatMap((t) =>
+                referenceLayers(t).map((attachment) =>
+                  josmImportUrl(JOSM_HOST, apiBaseUrl, t.id, attachment)
+                )
+              ),
+            ]
             break
           }
 
@@ -144,26 +144,20 @@ export const useEditorLaunch = (task: Task) => {
               )
               return
             }
-            const bounds = computeBboxForTasks(tasks)
+            const [west, south, east, north] = computeBboxForTasks(tasks)
+            const boundsParams = `left=${west}&right=${east}&top=${north}&bottom=${south}`
             const parts = [
+              boundsParams,
               'new_layer=true',
               `layer_name=${encodeURIComponent(layerName)}`,
               `changeset_comment=${encodeURIComponent(checkinComment)}`,
               `changeset_source=${encodeURIComponent(checkinSource)}`,
               `objects=${selection}`,
             ]
-            if (bounds) {
-              const [west, south, east, north] = bounds
-              parts.unshift(`left=${west}`, `right=${east}`, `top=${north}`, `bottom=${south}`)
-            }
-            editorUrl = `${JOSM_HOST}load_object?${parts.join('&')}`
-            toast.info(
-              t(
-                'taskEditPage.taskActions.editorButton.josmRemoteControlHint',
-                undefined,
-                'Make sure JOSM is running with remote control enabled'
-              )
-            )
+            josmCommands = [
+              `${JOSM_HOST}load_object?${parts.join('&')}`,
+              `${JOSM_HOST}zoom?${boundsParams}`,
+            ]
             break
           }
 
@@ -197,39 +191,35 @@ export const useEditorLaunch = (task: Task) => {
           }
         }
 
-        if (editorUrl) {
-          window.open(editorUrl, '_blank', 'noopener,noreferrer')
-
-          // Reference layers attached to the task are sent to JOSM as extra
-          // layers once the task itself has been loaded. They are supplementary,
-          // so a failure here is logged rather than surfaced — the mapper still
-          // has the task open.
-          if (editorValue === EDITOR.josm || editorValue === EDITOR.josmLayer) {
-            const layers = tasks.flatMap((t) =>
-              referenceLayers(t).map((attachment) => ({ taskId: t.id, attachment }))
-            )
-            for (const { taskId, attachment } of layers) {
-              const importUrl = josmImportUrl(JOSM_HOST, apiBaseUrl, taskId, attachment)
-              fetch(importUrl, { mode: 'no-cors' }).catch((error) => {
-                logger.warn('Failed to send reference layer to JOSM', {
-                  taskId,
-                  attachmentId: attachment.id,
-                  error,
-                })
-              })
-            }
-          }
+        const editorLabel =
+          editorOptions.find((opt) => opt.value === editorValue)?.label ||
+          t('taskEditPage.taskActions.editorButton.editorFallback', undefined, 'editor')
+        const notifyOpened = () =>
           toast.success(
             t(
               'taskEditPage.taskActions.editorButton.openingTaskIn',
-              {
-                editor:
-                  editorOptions.find((opt) => opt.value === editorValue)?.label ||
-                  t('taskEditPage.taskActions.editorButton.editorFallback', undefined, 'editor'),
-              },
+              { editor: editorLabel },
               'Opening task in {editor}'
             )
           )
+
+        if (josmCommands.length > 0) {
+          void sendJosmCommands(josmCommands).then((opened) => {
+            if (opened) {
+              notifyOpened()
+            } else {
+              toast.error(
+                t(
+                  'taskEditPage.taskActions.editorButton.josmNoResponse',
+                  undefined,
+                  'OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?'
+                )
+              )
+            }
+          })
+        } else if (editorUrl) {
+          window.open(editorUrl, '_blank', 'noopener,noreferrer')
+          notifyOpened()
         }
       } catch (error) {
         logger.error('Error opening editor', { error })
