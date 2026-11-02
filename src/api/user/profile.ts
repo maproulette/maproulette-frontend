@@ -58,7 +58,17 @@ export const userProfile = {
         queryFn: () =>
           apiRequest
             .get(`api/v2/data/user/${userId}/metrics`, {
-              searchParams: { monthDuration },
+              searchParams: {
+                monthDuration,
+                reviewDuration: monthDuration,
+                reviewerDuration: monthDuration,
+                start: '',
+                end: '',
+                reviewStart: '',
+                reviewEnd: '',
+                reviewerStart: '',
+                reviewerEnd: '',
+              },
             })
             .json<UserMetricsResponse>(),
         enabled: !!userId,

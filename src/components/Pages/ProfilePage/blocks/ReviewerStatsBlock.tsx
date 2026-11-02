@@ -3,6 +3,7 @@ import { api } from '@/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useIntl } from '@/i18n'
+import type { UserReviewMetrics } from '@/types/User'
 import { useProfilePageContext } from '../contexts/ProfilePageContext'
 
 export const ReviewerStatsBlock = () => {
@@ -10,16 +11,16 @@ export const ReviewerStatsBlock = () => {
   const { userId, timeRange } = useProfilePageContext()
   const { data, isLoading, isError } = api.user.metrics(userId, timeRange.monthDuration)
 
-  const reviewStatusLabels: Record<string, string> = {
-    '0': t({ id: 'common.needed', defaultMessage: 'Needed' }),
-    '1': t({ id: 'common.approved', defaultMessage: 'Approved' }),
-    '2': t({ id: 'common.rejected', defaultMessage: 'Rejected' }),
-    '3': t({ id: 'common.assisted', defaultMessage: 'Assisted' }),
-    '4': t({ id: 'common.disputed', defaultMessage: 'Disputed' }),
-    '5': t({ id: 'common.unnecessary', defaultMessage: 'Unnecessary' }),
-  }
+  const reviewStatusLabels: [keyof UserReviewMetrics, string][] = [
+    ['requested', t({ id: 'common.needed', defaultMessage: 'Needed' })],
+    ['approved', t({ id: 'common.approved', defaultMessage: 'Approved' })],
+    ['rejected', t({ id: 'common.rejected', defaultMessage: 'Rejected' })],
+    ['assisted', t({ id: 'common.assisted', defaultMessage: 'Assisted' })],
+    ['disputed', t({ id: 'common.disputed', defaultMessage: 'Disputed' })],
+  ]
+  const reviews = data?.asReviewerTasks
 
-  const reviewerTotal = Object.values(data?.reviewTasks ?? {}).reduce((a, b) => a + b, 0)
+  const reviewerTotal = reviews?.total ?? 0
 
   if (!isLoading && !isError && reviewerTotal === 0) {
     return null
@@ -45,16 +46,12 @@ export const ReviewerStatsBlock = () => {
           </p>
         ) : (
           <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-            {Object.entries(data?.reviewTasks ?? {}).map(([status, count]) => (
+            {reviewStatusLabels.map(([status, label]) => (
               <div key={status} className="flex justify-between">
-                <dt className="text-zinc-600 dark:text-slate-400">
-                  {reviewStatusLabels[status] ??
-                    t(
-                      { id: 'common.statusWithStatus', defaultMessage: 'Status {status}' },
-                      { status }
-                    )}
-                </dt>
-                <dd className="font-medium font-mono tabular-nums">{formatNumber(count)}</dd>
+                <dt className="text-zinc-600 dark:text-slate-400">{label}</dt>
+                <dd className="font-medium font-mono tabular-nums">
+                  {formatNumber(reviews?.[status] ?? 0)}
+                </dd>
               </div>
             ))}
           </dl>

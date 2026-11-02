@@ -6,17 +6,30 @@ export type UserWhoamiResponse =
 export type UserNotificationsResponse =
   paths['/user/{userId}/notifications']['get']['responses']['200']['content']['application/json']
 
+interface UserTaskMetrics {
+  total: number
+  fixed: number
+  falsePositive: number
+  alreadyFixed: number
+  tooHard: number
+  skipped: number
+  avgTimeSpent: number
+}
+
+export interface UserReviewMetrics {
+  total: number
+  requested: number
+  approved: number
+  rejected: number
+  assisted: number
+  disputed: number
+  avgReviewTime: number
+}
+
 export interface UserMetricsResponse {
-  total?: number
-  tasks?: {
-    [key: string]: number
-  }
-  reviewTasks?: {
-    [key: string]: number
-  }
-  reviewedTasks?: {
-    [key: string]: number
-  }
+  tasks?: UserTaskMetrics
+  reviewTasks?: UserReviewMetrics
+  asReviewerTasks?: UserReviewMetrics
 }
 
 export type UserSettings = components['schemas']['org.maproulette.framework.model.UserSettings']
