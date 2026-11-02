@@ -857,6 +857,7 @@
   "settings.general.basemapLabel": "Standaard basiskaart",
   "settings.general.title": "Algemeen",
   "settings.plugins.addButton": "Toevoegen",
+  "settings.submit.saveChanges": "Wijzigingen opslaan",
   "shareLink.popover.hideQr": "QR verbergen",
   "shareLink.popover.qrCanvas": "QR-code voor delen van URL",
   "shareLink.popover.qrCode": "QR-code",

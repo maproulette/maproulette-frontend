@@ -164,6 +164,7 @@
   "settings.general.basemapLabel": "Mapa de base padrão",
   "settings.general.title": "Geral",
   "settings.plugins.addButton": "Adicionar",
+  "settings.submit.saveChanges": "Guardar alterações",
   "statusBreakdownBar.status.alreadyFixed": "Já foi corrigido",
   "superAdminChallengeReports.archivedBadge": "Arquivado",
   "superAdminProjects.title": "Todos os projetos",

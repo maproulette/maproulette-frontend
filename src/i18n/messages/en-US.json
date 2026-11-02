@@ -1017,6 +1017,7 @@
   "settings.remotePlugins.urlDescription": "Enter the full URL to a plugin module (ESM format). The plugin will be searched and added to your plugins.",
   "settings.remotePlugins.urlLabel": "Plugin Module URL",
   "settings.submit.noChanges": "No changes to save",
+  "settings.submit.saveChanges": "Save Changes",
   "shareLink.popover.hideQr": "Hide QR",
   "shareLink.popover.qrCanvas": "QR code for share URL",
   "shareLink.popover.qrCode": "QR code",

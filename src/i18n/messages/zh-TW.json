@@ -204,6 +204,7 @@
   "settings.general.basemapLabel": "預設底圖",
   "settings.general.title": "一般",
   "settings.plugins.addButton": "新增",
+  "settings.submit.saveChanges": "儲存更動",
   "statusBreakdownBar.status.alreadyFixed": "已修正",
   "superAdminChallengeReports.archivedBadge": "已封存",
   "superAdminProjects.title": "所有專案",

@@ -164,6 +164,7 @@
   "settings.general.basemapLabel": "기본 배경 지도",
   "settings.general.title": "기본 설정",
   "settings.plugins.addButton": "추가",
+  "settings.submit.saveChanges": "변경사항 저장",
   "statusBreakdownBar.status.alreadyFixed": "이미 고쳐짐",
   "superAdminChallengeReports.archivedBadge": "보관됨",
   "superAdminProjects.title": "모든 프로젝트",

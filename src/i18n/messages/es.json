@@ -857,6 +857,7 @@
   "projectRoles.write": "Escribir",
   "settings.general.basemapLabel": "Mapa base predeterminado",
   "settings.plugins.addButton": "Añadir",
+  "settings.submit.saveChanges": "Guardar cambios",
   "shareLink.popover.hideQr": "Ocultar QR ",
   "shareLink.popover.qrCanvas": "Código QR para la URL de compartir ",
   "shareLink.popover.qrCode": "Código QR ",

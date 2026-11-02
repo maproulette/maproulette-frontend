@@ -164,6 +164,7 @@
   "settings.general.basemapLabel": "Varsayılan temel harita",
   "settings.general.title": "Genel",
   "settings.plugins.addButton": "Ekle",
+  "settings.submit.saveChanges": "Değişiklikleri Kaydet",
   "statusBreakdownBar.status.alreadyFixed": "Önceden düzenlenmiş",
   "superAdminChallengeReports.archivedBadge": "Arşivlendi",
   "superAdminProjects.title": "Bütün Projeler",

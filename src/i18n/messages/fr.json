@@ -169,6 +169,7 @@
   "settings.general.basemapLabel": "Fond de carte par défaut",
   "settings.general.title": "Général",
   "settings.plugins.addButton": "Ajouter",
+  "settings.submit.saveChanges": "Sauvegarder les changements",
   "statusBreakdownBar.status.alreadyFixed": "Déjà corrigé",
   "superAdminChallengeReports.archivedBadge": "Archivé",
   "superAdminProjects.title": "Tous les projets",

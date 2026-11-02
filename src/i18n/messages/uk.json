@@ -164,6 +164,7 @@
   "settings.general.basemapLabel": "Типова фонова мапа",
   "settings.general.title": "Загальне",
   "settings.plugins.addButton": "Додати",
+  "settings.submit.saveChanges": "Зберегти зміни",
   "statusBreakdownBar.status.alreadyFixed": "Вже виправлено",
   "superAdminChallengeReports.archivedBadge": "Заархівовані",
   "superAdminProjects.title": "Всі проєкти",

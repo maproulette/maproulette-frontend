@@ -141,6 +141,7 @@
   "settings.general.basemapLabel": "Основа по умолчанию",
   "settings.general.title": "Основные",
   "settings.plugins.addButton": "Добавить",
+  "settings.submit.saveChanges": "Сохранить изменения",
   "statusBreakdownBar.status.alreadyFixed": "Уже исправлено",
   "superAdminProjects.title": "Все Проекты",
   "superAdminTeamImages.approve": "Одобрить",

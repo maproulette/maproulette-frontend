@@ -182,6 +182,7 @@
   "settings.general.basemapLabel": "Standard Kartenhintergrund",
   "settings.general.title": "Allgemein",
   "settings.plugins.addButton": "Hinzufügen",
+  "settings.submit.saveChanges": "Änderungen speichern",
   "statusBreakdownBar.status.alreadyFixed": "Bereits behoben",
   "superAdminChallengeReports.archivedBadge": "Archiviert",
   "superAdminProjects.title": "Alle Projekte",

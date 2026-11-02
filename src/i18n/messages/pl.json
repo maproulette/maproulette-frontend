@@ -159,6 +159,7 @@
   "settings.general.basemapLabel": "Domyślny podkład mapy",
   "settings.general.title": "Ogólny",
   "settings.plugins.addButton": "Dodaj",
+  "settings.submit.saveChanges": "Zapisz zmiany",
   "statusBreakdownBar.status.alreadyFixed": "Już naprawione",
   "superAdminChallengeReports.archivedBadge": "Archiwalne",
   "superAdminProjects.title": "Wszystkie projekty",
