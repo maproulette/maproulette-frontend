@@ -1,4 +1,4 @@
-export const CHALLENGE_CATEGORY_KEYWORDS = {
+const CHALLENGE_CATEGORY_KEYWORDS = {
   navigation: ['highway'],
   water: ['natural', 'water'],
   pointsOfInterest: ['amenity', 'leisure'],
