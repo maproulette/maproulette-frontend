@@ -27,7 +27,6 @@ describe('Achievement', () => {
       points500: 8,
       points1m: 15,
       fixedTask: 16,
-      reviewedTask: 17,
       createdChallenge: 18,
       fixedFinalTask: 19,
       fixedCoopTask: 20,
@@ -41,7 +40,6 @@ describe('achievementCategoryLabel', () => {
     expect(achievementCategoryLabel).toEqual({
       taskCompletion: 'Task Completion',
       mapping: 'Mapping',
-      review: 'Review',
       creation: 'Creation',
       pointsMilestone: 'Points Milestones',
     })
@@ -54,6 +52,10 @@ describe('getAchievement', () => {
 
     expect(result).toBeDefined()
     expect(result?.title).toBe('First Fix')
+  })
+
+  it('has no badge for reviewing a task', () => {
+    expect(getAchievement(17)).toBeUndefined()
   })
 
   it('returns undefined for an unknown id', () => {

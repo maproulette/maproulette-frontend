@@ -3,7 +3,6 @@ import {
   Award,
   Building2,
   CheckCircle2,
-  ClipboardCheck,
   Crown,
   Flag,
   Landmark,
@@ -35,7 +34,6 @@ export const Achievement = {
   points500k: 14,
   points1m: 15,
   fixedTask: 16,
-  reviewedTask: 17,
   createdChallenge: 18,
   fixedFinalTask: 19,
   fixedCoopTask: 20,
@@ -44,12 +42,7 @@ export const Achievement = {
 
 type AchievementId = (typeof Achievement)[keyof typeof Achievement]
 
-export type AchievementCategory =
-  | 'taskCompletion'
-  | 'mapping'
-  | 'review'
-  | 'creation'
-  | 'pointsMilestone'
+export type AchievementCategory = 'taskCompletion' | 'mapping' | 'creation' | 'pointsMilestone'
 
 export interface AchievementDefinition {
   id: AchievementId
@@ -130,13 +123,6 @@ export const achievementDefinitions: AchievementDefinition[] = [
     title: 'Landmark Spotter',
     description: 'Contributed to mapping points of interest.',
     icon: Landmark,
-  },
-  {
-    id: Achievement.reviewedTask,
-    category: 'review',
-    title: 'Reviewer',
-    description: 'Reviewed a task submitted by another mapper.',
-    icon: ClipboardCheck,
   },
   {
     id: Achievement.createdChallenge,
@@ -222,7 +208,6 @@ export const achievementDefinitions: AchievementDefinition[] = [
 export const achievementCategoryLabel: Record<AchievementCategory, string> = {
   taskCompletion: 'Task Completion',
   mapping: 'Mapping',
-  review: 'Review',
   creation: 'Creation',
   pointsMilestone: 'Points Milestones',
 }
