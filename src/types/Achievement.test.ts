@@ -18,6 +18,24 @@ describe('achievementDefinitions', () => {
   })
 })
 
+describe('Achievement', () => {
+  it('uses the ids the backend awards', () => {
+    expect(Achievement).toMatchObject({
+      mappedRoads: 1,
+      mappedPoi: 6,
+      points100: 7,
+      points500: 8,
+      points1m: 15,
+      fixedTask: 16,
+      reviewedTask: 17,
+      createdChallenge: 18,
+      fixedFinalTask: 19,
+      fixedCoopTask: 20,
+      challengeCompleted: 21,
+    })
+  })
+})
+
 describe('achievementCategoryLabel', () => {
   it('provides a human-readable label for every category', () => {
     expect(achievementCategoryLabel).toEqual({
