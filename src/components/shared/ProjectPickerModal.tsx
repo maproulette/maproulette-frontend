@@ -51,14 +51,14 @@ export const ProjectPickerModal = ({
   children,
 }: ProjectPickerModalProps) => {
   const { t } = useIntl()
-  const resolvedTitle = title ?? t('common.selectAProject', undefined, 'Select a project')
+  const resolvedTitle =
+    title ?? t({ id: 'common.selectAProject', defaultMessage: 'Select a project' })
   const resolvedDescription =
     description ??
-    t(
-      'shared.projectPickerModal.description',
-      undefined,
-      'Choose the project this challenge belongs to.'
-    )
+    t({
+      id: 'shared.projectPickerModal.description',
+      defaultMessage: 'Choose the project this challenge belongs to.',
+    })
   const [searchQuery, setSearchQuery] = useState('')
   const [onlyEnabled, setOnlyEnabled] = useState(false)
   const [onlyOwned, setOnlyOwned] = useState(false)
@@ -117,28 +117,28 @@ export const ProjectPickerModal = ({
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder={t('common.searchProjects', undefined, 'Search projects...')}
+            placeholder={t({ id: 'common.searchProjects', defaultMessage: 'Search projects...' })}
           />
           <FilterToggle
-            label={t('common.discoverable', undefined, 'Discoverable')}
+            label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
             icon={Eye}
             checked={onlyEnabled}
             onCheckedChange={setOnlyEnabled}
           />
           <FilterToggle
-            label={t('common.owned', undefined, 'Owned')}
+            label={t({ id: 'common.owned', defaultMessage: 'Owned' })}
             icon={User}
             checked={onlyOwned}
             onCheckedChange={setOnlyOwned}
           />
           <FilterToggle
-            label={t('common.pinned', undefined, 'Pinned')}
+            label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
             icon={Pin}
             checked={onlyShowPinned}
             onCheckedChange={setOnlyShowPinned}
           />
           <FilterToggle
-            label={t('common.archived', undefined, 'Archived')}
+            label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
             icon={Archive}
             checked={onlyShowArchived}
             onCheckedChange={setOnlyShowArchived}
@@ -167,7 +167,10 @@ export const ProjectPickerModal = ({
             </div>
           ) : projectsToShow.length === 0 ? (
             <div className="rounded-lg border border-zinc-200 p-6 text-center text-sm text-zinc-500 dark:border-slate-700 dark:text-zinc-400">
-              {t('shared.projectPickerModal.noProjectsFound', undefined, 'No projects found.')}
+              {t({
+                id: 'shared.projectPickerModal.noProjectsFound',
+                defaultMessage: 'No projects found.',
+              })}
             </div>
           ) : viewMode === 'list' ? (
             <ProjectsTableView

@@ -24,7 +24,7 @@ interface LevelModalProps {
 }
 
 export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: LevelModalProps) => {
-  const { t } = useIntl()
+  const { t, formatNumber } = useIntl()
   const milestones = getAllLevelMilestones()
 
   // Calculate progress to next level using actual level thresholds
@@ -44,14 +44,13 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
               <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50">
                 <Trophy className="size-5 text-amber-600 dark:text-amber-400" />
               </div>
-              {t('dashboard.levelModal.title', undefined, 'Mapper Level System')}
+              {t({ id: 'dashboard.levelModal.title', defaultMessage: 'Mapper Level System' })}
             </DialogTitle>
             <DialogDescription>
-              {t(
-                'dashboard.levelModal.description',
-                undefined,
-                'Complete challenges to earn points and level up your mapper rank.'
-              )}
+              {t({
+                id: 'dashboard.levelModal.description',
+                defaultMessage: 'Complete challenges to earn points and level up your mapper rank.',
+              })}
             </DialogDescription>
           </DialogHeader>
 
@@ -59,34 +58,44 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
           <div className="mt-4 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800 dark:shadow-none">
             <div className="mb-3 flex items-center justify-between">
               <span className="font-medium text-zinc-900 dark:text-white">
-                {t('common.level', { level: currentLevel }, 'Level {level}')}
+                {t(
+                  { id: 'common.level', defaultMessage: 'Level {level}' },
+                  { level: currentLevel }
+                )}
               </span>
               <span className="text-sm text-zinc-500 dark:text-slate-400">
                 {t(
-                  'dashboard.levelModal.totalPoints',
-                  { points: currentScore.toLocaleString() },
-                  '{points} total points'
+                  {
+                    id: 'dashboard.levelModal.totalPoints',
+                    defaultMessage: '{points, plural, one {# total point} other {# total points}}',
+                  },
+                  { points: currentScore }
                 )}
               </span>
             </div>
             <div className="mb-2 flex items-center justify-between text-sm">
               <span className="text-zinc-500 dark:text-slate-400">
                 {t(
-                  'dashboard.levelModal.progressToLevel',
-                  { level: currentLevel + 1 },
-                  'Progress to Level {level}'
+                  {
+                    id: 'dashboard.levelModal.progressToLevel',
+                    defaultMessage: 'Progress to Level {level}',
+                  },
+                  { level: currentLevel + 1 }
                 )}
               </span>
               <span className="font-semibold text-zinc-900 dark:text-white">
-                {pointsIntoLevel.toLocaleString()} / {pointsNeededForLevel.toLocaleString()}
+                {formatNumber(pointsIntoLevel)} / {formatNumber(pointsNeededForLevel)}
               </span>
             </div>
             <Progress value={progressToNext} className="h-3" />
             <p className="mt-2 text-center text-xs text-zinc-500 dark:text-slate-400">
               {t(
-                'dashboard.levelModal.pointsToNextLevel',
-                { points: (pointsNeededForLevel - pointsIntoLevel).toLocaleString() },
-                '{points} more points to next level'
+                {
+                  id: 'dashboard.levelModal.pointsToNextLevel',
+                  defaultMessage:
+                    '{points, plural, one {# more point} other {# more points}} to next level',
+                },
+                { points: pointsNeededForLevel - pointsIntoLevel }
               )}
             </p>
           </div>
@@ -115,9 +124,12 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                       </div>
                       <span className="font-semibold text-sm text-zinc-600 dark:text-slate-300">
                         {t(
-                          'dashboard.levelModal.pointsToUnlock',
-                          { points: (milestone.requiredScore - currentScore).toLocaleString() },
-                          '{points} points to unlock'
+                          {
+                            id: 'dashboard.levelModal.pointsToUnlock',
+                            defaultMessage:
+                              '{points, plural, one {# point} other {# points}} to unlock',
+                          },
+                          { points: milestone.requiredScore - currentScore }
                         )}
                       </span>
                     </div>
@@ -160,7 +172,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                       </h3>
                       {isCurrent && (
                         <Badge className="bg-blue-500 text-white hover:bg-blue-500">
-                          {t('common.current', undefined, 'Current')}
+                          {t({ id: 'common.current', defaultMessage: 'Current' })}
                         </Badge>
                       )}
                       {isUnlocked && !isCurrent && (
@@ -169,17 +181,23 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                     </div>
                     <p className="mt-0.5 text-sm text-zinc-500 dark:text-slate-400">
                       {t(
-                        'dashboard.levelModal.pointsRequired',
-                        { points: milestone.requiredScore.toLocaleString() },
-                        '{points} points required'
+                        {
+                          id: 'dashboard.levelModal.pointsRequired',
+                          defaultMessage:
+                            '{points, plural, one {# point} other {# points}} required',
+                        },
+                        { points: milestone.requiredScore }
                       )}
                     </p>
                     {isCurrent && (
                       <p className="mt-1 font-semibold text-blue-600 text-sm dark:text-blue-400">
                         {t(
-                          'dashboard.levelModal.yourScore',
-                          { points: currentScore.toLocaleString() },
-                          'Your score: {points} points'
+                          {
+                            id: 'dashboard.levelModal.yourScore',
+                            defaultMessage:
+                              'Your score: {points, plural, one {# point} other {# points}}',
+                          },
+                          { points: currentScore }
                         )}
                       </p>
                     )}
@@ -194,24 +212,26 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
         <div className="mx-6 mb-6 rounded-xl bg-zinc-50 p-4 dark:bg-slate-900/50">
           <h4 className="mb-2 flex items-center gap-2 font-semibold text-zinc-900 dark:text-white">
             <Trophy className="size-4 text-amber-600 dark:text-amber-400" />
-            {t('dashboard.levelModal.howItWorksTitle', undefined, 'How leveling works')}
+            {t({
+              id: 'dashboard.levelModal.howItWorksTitle',
+              defaultMessage: 'How leveling works',
+            })}
           </h4>
           <p className="text-sm text-zinc-600 dark:text-slate-300">
-            {t(
-              'dashboard.levelModal.calculatedUsing',
-              undefined,
-              'Your level is calculated using:'
-            )}{' '}
+            {t({
+              id: 'dashboard.levelModal.calculatedUsing',
+              defaultMessage: 'Your level is calculated using:',
+            })}{' '}
             <code className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-xs dark:bg-slate-800">
               Level = √(Points / 10)
             </code>
           </p>
           <p className="mt-2 text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'dashboard.levelModal.howItWorksFooter',
-              undefined,
-              'Each level requires exponentially more points. Keep mapping to climb the ranks.'
-            )}
+            {t({
+              id: 'dashboard.levelModal.howItWorksFooter',
+              defaultMessage:
+                'Each level requires exponentially more points. Keep mapping to climb the ranks.',
+            })}
           </p>
         </div>
       </DialogContent>

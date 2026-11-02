@@ -1,7 +1,7 @@
 import { History } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
-import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
+import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useIntl } from '@/i18n'
@@ -17,16 +17,16 @@ export const dateSortKey = (raw: string | number): string => {
   return s.slice(0, 10)
 }
 
-const formatDayHeading = (isoDay: string): string =>
-  new Intl.DateTimeFormat(undefined, { month: 'long', day: 'numeric' }).format(
+const formatDayHeading = (isoDay: string, locale: string): string =>
+  new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric' }).format(
     new Date(`${isoDay}T12:00:00`)
   )
 
 const statusLabel = (status: number, statusName: string, t: ReturnType<typeof useIntl>['t']) => {
   return (
-    TASK_STATUS_LABELS[status] ??
+    (TASK_STATUS_MESSAGES[status] ? t(TASK_STATUS_MESSAGES[status]) : undefined) ??
     statusName ??
-    t('common.statusWithStatus', { status }, 'Status {status}')
+    t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })
   )
 }
 
@@ -60,7 +60,7 @@ interface ChallengeRecentActivityProps {
 }
 
 export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivityProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { data, isError } = api.challenge.getChallengeActivity(challengeId)
 
   // Reason: groups activity data by day - avoids expensive regrouping and sorting on every render
@@ -71,28 +71,30 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <History className="h-5 w-5" />
-          {t('common.recentActivity', undefined, 'Recent Activity')}
+          {t({ id: 'common.recentActivity', defaultMessage: 'Recent Activity' })}
         </CardTitle>
         <CardDescription>
-          {t(
-            'manageChallengeDetail.recentActivity.description',
-            undefined,
-            'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).'
-          )}
+          {t({
+            id: 'manageChallengeDetail.recentActivity.description',
+            defaultMessage:
+              'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).',
+          })}
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
         {isError ? (
           <p className="text-red-600 text-sm dark:text-red-400">
-            {t(
-              'manageChallengeDetail.recentActivity.loadError',
-              undefined,
-              'Could not load activity.'
-            )}
+            {t({
+              id: 'manageChallengeDetail.recentActivity.loadError',
+              defaultMessage: 'Could not load activity.',
+            })}
           </p>
         ) : dayGroups.length === 0 ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t('manageChallengeDetail.recentActivity.empty', undefined, 'No recent activity.')}
+            {t({
+              id: 'manageChallengeDetail.recentActivity.empty',
+              defaultMessage: 'No recent activity.',
+            })}
           </p>
         ) : (
           <ol className="relative ms-2 space-y-6 border-zinc-200 border-l ps-6 dark:border-slate-600">
@@ -103,7 +105,7 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
                   aria-hidden
                 />
                 <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-50">
-                  {formatDayHeading(day)}
+                  {formatDayHeading(day, locale)}
                 </h3>
                 <ul className="mt-2 space-y-2">
                   {rows.map((row) => (

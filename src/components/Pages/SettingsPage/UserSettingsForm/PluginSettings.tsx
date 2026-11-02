@@ -18,6 +18,7 @@ import { Separator } from '@/components/ui/Separator'
 import { Switch } from '@/components/ui/Switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { RemotePluginManager } from './RemotePluginManager'
 
@@ -34,6 +35,7 @@ const WORKSHOP_PLUGINS = [
 ]
 
 export const PluginSettings = () => {
+  const { t } = useIntl()
   const {
     getAvailablePlugins,
     isPluginEnabled,
@@ -63,7 +65,7 @@ export const PluginSettings = () => {
         toast.error(`Failed to add plugin: ${result.error}`)
       }
     } catch (error) {
-      toast.error('Failed to add plugin')
+      toast.error(t({ id: 'settings.plugins.addError', defaultMessage: 'Failed to add plugin' }))
       logger.error('Failed to add plugin', { error })
     }
   }
@@ -77,7 +79,12 @@ export const PluginSettings = () => {
       await removeRemotePlugin(pluginId)
       toast.success(`"${pluginName}" removed from your plugins`)
     } catch (error) {
-      toast.error('Failed to remove plugin')
+      toast.error(
+        t({
+          id: 'plugins.errors.removeFailed',
+          defaultMessage: 'Failed to remove plugin',
+        })
+      )
       logger.error('Failed to remove plugin', { error })
     }
   }
@@ -85,24 +92,33 @@ export const PluginSettings = () => {
   if (loading) {
     return (
       <FieldSet>
-        <FieldLegend>Plugins</FieldLegend>
-        <FieldDescription>Loading plugins...</FieldDescription>
+        <FieldLegend>{t({ id: 'common.plugins', defaultMessage: 'Plugins' })}</FieldLegend>
+        <FieldDescription>
+          {t({ id: 'settings.plugins.loading', defaultMessage: 'Loading plugins...' })}
+        </FieldDescription>
       </FieldSet>
     )
   }
 
   return (
     <FieldSet className="min-h-0 flex-auto">
-      <FieldLegend>Plugins</FieldLegend>
+      <FieldLegend>{t({ id: 'common.plugins', defaultMessage: 'Plugins' })}</FieldLegend>
       <FieldDescription>
-        Enable or disable plugins to customize your MapRoulette experience. Plugin navigation items
-        will appear in the main navigation menu.
+        {t({
+          id: 'settings.plugins.description',
+          defaultMessage:
+            'Enable or disable plugins to customize your MapRoulette experience. Plugin navigation items will appear in the main navigation menu.',
+        })}
       </FieldDescription>
 
       <Tabs defaultValue="my-plugins" className="mt-6 flex min-h-0 flex-auto flex-col">
         <TabsList>
-          <TabsTrigger value="my-plugins">My Plugins</TabsTrigger>
-          <TabsTrigger value="workshop">Plugins Workshop</TabsTrigger>
+          <TabsTrigger value="my-plugins">
+            {t({ id: 'settings.plugins.myPluginsTitle', defaultMessage: 'My Plugins' })}
+          </TabsTrigger>
+          <TabsTrigger value="workshop">
+            {t({ id: 'settings.plugins.workshopTitle', defaultMessage: 'Plugins Workshop' })}
+          </TabsTrigger>
         </TabsList>
 
         {/* My Plugins Tab */}
@@ -111,10 +127,13 @@ export const PluginSettings = () => {
             <div className="rounded-lg border border-zinc-300 border-dashed p-6 text-center dark:border-slate-700">
               <Puzzle className="mx-auto mb-3 size-12 text-zinc-400" />
               <h3 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">
-                No plugins yet
+                {t({ id: 'settings.plugins.emptyTitle', defaultMessage: 'No plugins yet' })}
               </h3>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Visit the Plugins Workshop to discover and add plugins
+                {t({
+                  id: 'settings.plugins.emptyDescription',
+                  defaultMessage: 'Visit the Plugins Workshop to discover and add plugins',
+                })}
               </p>
             </div>
           ) : (
@@ -143,7 +162,16 @@ export const PluginSettings = () => {
                         <ItemDescription>
                           {plugin.metadata.description}
                           {plugin.metadata.author && (
-                            <span className="text-xs"> • by {plugin.metadata.author}</span>
+                            <span className="text-xs">
+                              {' '}
+                              {t(
+                                {
+                                  id: 'settings.plugins.byAuthor',
+                                  defaultMessage: '• by {author}',
+                                },
+                                { author: plugin.metadata.author }
+                              )}
+                            </span>
                           )}
                         </ItemDescription>
                       </ItemContent>
@@ -187,9 +215,14 @@ export const PluginSettings = () => {
           {/* Workshop Plugins List */}
           <div className="space-y-4">
             <div>
-              <h3 className="mb-2 font-semibold text-base">Discover Plugins</h3>
+              <h3 className="mb-2 font-semibold text-base">
+                {t({ id: 'settings.plugins.discoverTitle', defaultMessage: 'Discover Plugins' })}
+              </h3>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Browse and add curated plugins from the community
+                {t({
+                  id: 'settings.plugins.discoverDescription',
+                  defaultMessage: 'Browse and add curated plugins from the community',
+                })}
               </p>
             </div>
 
@@ -197,10 +230,16 @@ export const PluginSettings = () => {
               <div className="rounded-lg border border-zinc-300 border-dashed p-6 text-center dark:border-slate-700">
                 <Puzzle className="mx-auto mb-3 size-12 text-zinc-400" />
                 <h3 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">
-                  All plugins added
+                  {t({
+                    id: 'settings.plugins.allAddedTitle',
+                    defaultMessage: 'All plugins added',
+                  })}
                 </h3>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  You've added all available workshop plugins!
+                  {t({
+                    id: 'settings.plugins.allAddedDescription',
+                    defaultMessage: "You've added all available workshop plugins!",
+                  })}
                 </p>
               </div>
             ) : (
@@ -221,7 +260,18 @@ export const PluginSettings = () => {
                         </ItemTitle>
                         <ItemDescription>
                           {plugin.description}
-                          {plugin.author && <span className="text-xs"> • by {plugin.author}</span>}
+                          {plugin.author && (
+                            <span className="text-xs">
+                              {' '}
+                              {t(
+                                {
+                                  id: 'settings.plugins.byAuthor',
+                                  defaultMessage: '• by {author}',
+                                },
+                                { author: plugin.author }
+                              )}
+                            </span>
+                          )}
                         </ItemDescription>
                       </ItemContent>
                       <ItemActions>
@@ -232,7 +282,8 @@ export const PluginSettings = () => {
                           onClick={() => handleAddFromWorkshop(plugin)}
                         >
                           <Plus className="mr-1 size-4" />
-                          Add
+
+                          {t({ id: 'settings.plugins.addButton', defaultMessage: 'Add' })}
                         </Button>
                       </ItemActions>
                     </Item>

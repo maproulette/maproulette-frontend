@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { type RefObject, useMemo } from 'react'
-import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
+import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
@@ -14,9 +14,9 @@ import {
 import type { UseRowSelectionReturn } from '@/hooks/useRowSelection'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
+import { isTaskPriority, PRIORITY_MESSAGES } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
-import { TASK_PRIORITY_LABEL_IDS, TASK_PRIORITY_LABELS } from './constants'
 
 /** Scrollable, infinitely-loading table of the currently filtered/sorted tasks. */
 export const ChallengeTasksExplorerTaskTable = ({
@@ -43,11 +43,9 @@ export const ChallengeTasksExplorerTaskTable = ({
   }, [visibleIds, rowSelection])
 
   const statusLabel = (s: number) =>
-    TASK_STATUS_LABELS[s] ?? t('common.statusWithStatus', { status: s }, 'Status {status}')
-  const priorityLabel = (p: number) =>
-    TASK_PRIORITY_LABEL_IDS[p]
-      ? t(TASK_PRIORITY_LABEL_IDS[p], undefined, TASK_PRIORITY_LABELS[p])
-      : String(p)
+    (TASK_STATUS_MESSAGES[s] ? t(TASK_STATUS_MESSAGES[s]) : undefined) ??
+    t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status: s })
+  const priorityLabel = (p: number) => (isTaskPriority(p) ? t(PRIORITY_MESSAGES[p]) : String(p))
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 dark:border-slate-700">
@@ -70,24 +68,30 @@ export const ChallengeTasksExplorerTaskTable = ({
                   }
                   rowSelection.selectAll(Array.from(next))
                 }}
-                aria-label={t(
-                  'manageChallengeDetail.tasksExplorer.selectAllVisibleLabel',
-                  undefined,
-                  'Select all visible tasks'
-                )}
+                aria-label={t({
+                  id: 'manageChallengeDetail.tasksExplorer.selectAllVisibleLabel',
+                  defaultMessage: 'Select all visible tasks',
+                })}
               />
             </TableHead>
             <TableHead className="w-[44px]" />
-            <TableHead className="w-[88px]">{t('common.id', undefined, 'ID')}</TableHead>
-            <TableHead className="w-[120px]">{t('common.status', undefined, 'Status')}</TableHead>
+            <TableHead className="w-[88px]">
+              {t({ id: 'common.id', defaultMessage: 'ID' })}
+            </TableHead>
+            <TableHead className="w-[120px]">
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
+            </TableHead>
             <TableHead className="w-[100px]">
-              {t('common.priority', undefined, 'Priority')}
+              {t({ id: 'common.priority', defaultMessage: 'Priority' })}
             </TableHead>
             <TableHead className="w-[88px]">
-              {t('manageChallengeDetail.tasksExplorer.columnBundle', undefined, 'Bundle')}
+              {t({
+                id: 'manageChallengeDetail.tasksExplorer.columnBundle',
+                defaultMessage: 'Bundle',
+              })}
             </TableHead>
             <TableHead className="w-[140px] text-right">
-              {t('common.actions', undefined, 'Actions')}
+              {t({ id: 'common.actions', defaultMessage: 'Actions' })}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -95,11 +99,10 @@ export const ChallengeTasksExplorerTaskTable = ({
           {visibleMarkers.length === 0 ? (
             <TableRow>
               <TableCell colSpan={7} className="h-24 text-center text-zinc-500">
-                {t(
-                  'manageChallengeDetail.tasksExplorer.noTasksMatch',
-                  undefined,
-                  'No tasks match the current filters.'
-                )}
+                {t({
+                  id: 'manageChallengeDetail.tasksExplorer.noTasksMatch',
+                  defaultMessage: 'No tasks match the current filters.',
+                })}
               </TableCell>
             </TableRow>
           ) : (
@@ -117,16 +120,14 @@ export const ChallengeTasksExplorerTaskTable = ({
                       onCheckedChange={(checked) => rowSelection.set(marker.id, checked === true)}
                       aria-label={
                         isRowSelected
-                          ? t(
-                              'manageChallengeDetail.tasksExplorer.deselectRowLabel',
-                              undefined,
-                              'Deselect row for bulk actions'
-                            )
-                          : t(
-                              'manageChallengeDetail.tasksExplorer.selectRowLabel',
-                              undefined,
-                              'Select row for bulk actions'
-                            )
+                          ? t({
+                              id: 'manageChallengeDetail.tasksExplorer.deselectRowLabel',
+                              defaultMessage: 'Deselect row for bulk actions',
+                            })
+                          : t({
+                              id: 'manageChallengeDetail.tasksExplorer.selectRowLabel',
+                              defaultMessage: 'Select row for bulk actions',
+                            })
                       }
                     />
                   </TableCell>
@@ -137,16 +138,14 @@ export const ChallengeTasksExplorerTaskTable = ({
                       className="flex h-5 w-5 items-center justify-center"
                       aria-label={
                         isSelected
-                          ? t(
-                              'manageChallengeDetail.tasksExplorer.deselectTaskLabel',
-                              undefined,
-                              'Deselect task'
-                            )
-                          : t(
-                              'manageChallengeDetail.tasksExplorer.selectTaskLabel',
-                              undefined,
-                              'Select task'
-                            )
+                          ? t({
+                              id: 'manageChallengeDetail.tasksExplorer.deselectTaskLabel',
+                              defaultMessage: 'Deselect task',
+                            })
+                          : t({
+                              id: 'manageChallengeDetail.tasksExplorer.selectTaskLabel',
+                              defaultMessage: 'Select task',
+                            })
                       }
                     >
                       <span
@@ -173,12 +172,12 @@ export const ChallengeTasksExplorerTaskTable = ({
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" size="sm" className="h-8 px-2" asChild>
                         <Link to="/tasks/$taskId" params={{ taskId: String(marker.id) }}>
-                          {t('common.view', undefined, 'View')}
+                          {t({ id: 'common.view', defaultMessage: 'View' })}
                         </Link>
                       </Button>
                       <Button variant="outline" size="sm" className="h-8 px-2" asChild>
                         <Link to="/manage/task/$taskId/edit" params={{ taskId: String(marker.id) }}>
-                          {t('common.edit', undefined, 'Edit')}
+                          {t({ id: 'common.edit', defaultMessage: 'Edit' })}
                         </Link>
                       </Button>
                     </div>

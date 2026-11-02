@@ -105,11 +105,10 @@ export const CommentMentionInput = ({
       {match && users.length > 0 && (
         <div
           role="listbox"
-          aria-label={t(
-            'shared.commentComposer.mention.userSuggestions',
-            undefined,
-            'User suggestions'
-          )}
+          aria-label={t({
+            id: 'shared.commentComposer.mention.userSuggestions',
+            defaultMessage: 'User suggestions',
+          })}
           className="absolute z-20 mt-1 max-h-60 w-full min-w-56 overflow-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-900"
         >
           {users.map((u, i) => (

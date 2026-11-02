@@ -33,20 +33,20 @@ export const PendingEditsModal = ({
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            {t('taskEditPage.pendingEdits.title', undefined, 'Unsaved changes')}
+            {t({ id: 'taskEditPage.pendingEdits.title', defaultMessage: 'Unsaved changes' })}
           </DialogTitle>
           <DialogDescription>
-            {t(
-              'taskEditPage.pendingEdits.description',
-              undefined,
-              'What is currently pending in the editor. Save from the editor to send it to OpenStreetMap.'
-            )}
+            {t({
+              id: 'taskEditPage.pendingEdits.description',
+              defaultMessage:
+                'What is currently pending in the editor. Save from the editor to send it to OpenStreetMap.',
+            })}
           </DialogDescription>
         </DialogHeader>
 
         {edits.length === 0 ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t('taskEditPage.pendingEdits.none', undefined, 'Nothing is pending.')}
+            {t({ id: 'taskEditPage.pendingEdits.none', defaultMessage: 'Nothing is pending.' })}
           </p>
         ) : (
           <div className="max-h-[60vh] overflow-y-auto">

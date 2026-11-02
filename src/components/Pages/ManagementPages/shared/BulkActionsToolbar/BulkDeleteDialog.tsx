@@ -27,31 +27,32 @@ export const BulkDeleteDialog = ({ open, onOpenChange, onConfirm, count, busy }:
           <DialogTitle className="flex items-center gap-2">
             <TriangleAlert className="size-5 text-red-500" aria-hidden="true" />
             {t(
-              'managementPages.bulkActionsToolbar.deleteDialog.title',
-              { count },
-              '{count, plural, one {Delete # task?} other {Delete # tasks?}}'
+              {
+                id: 'managementPages.bulkActionsToolbar.deleteDialog.title',
+                defaultMessage: '{count, plural, one {Delete # task?} other {Delete # tasks?}}',
+              },
+              { count }
             )}
           </DialogTitle>
           <DialogDescription>
-            {t(
-              'managementPages.bulkActionsToolbar.deleteDialog.description',
-              undefined,
-              'This cannot be undone. Tasks and their comments, reviews, and tags are permanently removed.'
-            )}
+            {t({
+              id: 'managementPages.bulkActionsToolbar.deleteDialog.description',
+              defaultMessage:
+                'This cannot be undone. Tasks and their comments, reviews, and tags are permanently removed.',
+            })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button variant="destructive" onClick={onConfirm} disabled={busy}>
             {busy
-              ? t(
-                  'managementPages.bulkActionsToolbar.deleteDialog.deleting',
-                  undefined,
-                  'Deleting…'
-                )
-              : t('common.delete', undefined, 'Delete')}
+              ? t({
+                  id: 'managementPages.bulkActionsToolbar.deleteDialog.deleting',
+                  defaultMessage: 'Deleting…',
+                })
+              : t({ id: 'common.delete', defaultMessage: 'Delete' })}
           </Button>
         </DialogFooter>
       </DialogContent>

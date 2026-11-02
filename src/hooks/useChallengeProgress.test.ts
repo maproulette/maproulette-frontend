@@ -1,8 +1,14 @@
 // @vitest-environment happy-dom
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderHook } from '@/test/renderHook'
 import type { CompletionMetrics } from '@/types/Challenge'
-import { useChallengeProgress } from './useChallengeProgress'
+
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  return { useIntl: () => ({ t: testT }) }
+})
+
+const { useChallengeProgress } = await import('./useChallengeProgress')
 
 const makeMetrics = (overrides: Partial<CompletionMetrics> = {}): CompletionMetrics => ({
   total: 0,

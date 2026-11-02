@@ -61,7 +61,10 @@ export const ExportTasksButton = () => {
     } catch (error) {
       logger.error('Challenge export failed', { challengeId, format, error })
       toast.error(
-        t('manageChallengeDetail.export.failed', undefined, 'Could not export this challenge')
+        t({
+          id: 'manageChallengeDetail.export.failed',
+          defaultMessage: 'Could not export this challenge',
+        })
       )
     }
   }
@@ -70,23 +73,26 @@ export const ExportTasksButton = () => {
     <>
       <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={() => setOpen(true)}>
         <Download className="h-4 w-4" />
-        {t('manageChallengeDetail.export.button', undefined, 'Export')}
+        {t({ id: 'manageChallengeDetail.export.button', defaultMessage: 'Export' })}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent size="md">
           <DialogHeader>
             <DialogTitle>
-              {t('manageChallengeDetail.export.title', undefined, 'Export tasks')}
+              {t({ id: 'manageChallengeDetail.export.title', defaultMessage: 'Export tasks' })}
             </DialogTitle>
             <DialogDescription>
-              {t(
-                'manageChallengeDetail.export.description',
-                undefined,
-                'The filters currently applied to the task table are applied to the export as well.'
-              )}{' '}
+              {t({
+                id: 'manageChallengeDetail.export.description',
+                defaultMessage:
+                  'The filters currently applied to the task table are applied to the export as well.',
+              })}{' '}
               <DocsLink page="exportingChallengeData" icon={null}>
-                {t('manageChallengeDetail.export.docsLink', undefined, 'About challenge exports')}
+                {t({
+                  id: 'manageChallengeDetail.export.docsLink',
+                  defaultMessage: 'About challenge exports',
+                })}
               </DocsLink>
             </DialogDescription>
           </DialogHeader>
@@ -94,7 +100,7 @@ export const ExportTasksButton = () => {
           <div className="space-y-4">
             <fieldset className="space-y-2">
               <legend className="font-medium text-sm">
-                {t('manageChallengeDetail.export.formatLabel', undefined, 'Format')}
+                {t({ id: 'manageChallengeDetail.export.formatLabel', defaultMessage: 'Format' })}
               </legend>
               <RadioGroup
                 value={format}
@@ -104,21 +110,19 @@ export const ExportTasksButton = () => {
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="csv" id={`${fieldId}-csv`} />
                   <Label htmlFor={`${fieldId}-csv`} className="font-normal">
-                    {t(
-                      'manageChallengeDetail.export.formatCsv',
-                      undefined,
-                      'CSV — one row per task'
-                    )}
+                    {t({
+                      id: 'manageChallengeDetail.export.formatCsv',
+                      defaultMessage: 'CSV — one row per task',
+                    })}
                   </Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="geojson" id={`${fieldId}-geojson`} />
                   <Label htmlFor={`${fieldId}-geojson`} className="font-normal">
-                    {t(
-                      'manageChallengeDetail.export.formatGeoJSON',
-                      undefined,
-                      'GeoJSON — task geometries and properties'
-                    )}
+                    {t({
+                      id: 'manageChallengeDetail.export.formatGeoJSON',
+                      defaultMessage: 'GeoJSON — task geometries and properties',
+                    })}
                   </Label>
                 </div>
               </RadioGroup>
@@ -126,7 +130,10 @@ export const ExportTasksButton = () => {
 
             <div className="space-y-2">
               <Label htmlFor={`${fieldId}-timezone`}>
-                {t('manageChallengeDetail.export.timezoneLabel', undefined, 'Timestamp timezone')}
+                {t({
+                  id: 'manageChallengeDetail.export.timezoneLabel',
+                  defaultMessage: 'Timestamp timezone',
+                })}
               </Label>
               <Select value={timezone} onValueChange={setTimezone}>
                 <SelectTrigger id={`${fieldId}-timezone`} className="w-full">
@@ -145,12 +152,15 @@ export const ExportTasksButton = () => {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              {t('common.cancel', undefined, 'Cancel')}
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
             </Button>
             <Button onClick={handleExport} disabled={exportMutation.isPending}>
               {exportMutation.isPending
-                ? t('manageChallengeDetail.export.preparing', undefined, 'Preparing...')
-                : t('manageChallengeDetail.export.confirm', undefined, 'Download')}
+                ? t({
+                    id: 'manageChallengeDetail.export.preparing',
+                    defaultMessage: 'Preparing...',
+                  })
+                : t({ id: 'manageChallengeDetail.export.confirm', defaultMessage: 'Download' })}
             </Button>
           </DialogFooter>
         </DialogContent>

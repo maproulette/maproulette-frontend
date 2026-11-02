@@ -37,16 +37,21 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
       await bulkStatus.mutateAsync({ taskIds: selectedIds, status })
       toast.success(
         t(
-          'managementPages.bulkActionsToolbar.updatedToast',
-          { count: selectedIds.length },
-          '{count, plural, one {Updated # task} other {Updated # tasks}}'
+          {
+            id: 'managementPages.bulkActionsToolbar.updatedToast',
+            defaultMessage: '{count, plural, one {Updated # task} other {Updated # tasks}}',
+          },
+          { count: selectedIds.length }
         )
       )
       onClearSelection()
     } catch (error) {
       logger.error('Bulk status failed', { error })
       toast.error(
-        t('managementPages.bulkActionsToolbar.updateError', undefined, 'Could not update tasks')
+        t({
+          id: 'managementPages.bulkActionsToolbar.updateError',
+          defaultMessage: 'Could not update tasks',
+        })
       )
     }
   }
@@ -57,17 +62,22 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
       if (result.deleted < result.requested) {
         toast.warning(
           t(
-            'managementPages.bulkActionsToolbar.deleteWarning',
-            { deleted: result.deleted, denied: result.requested - result.deleted },
-            'Deleted {deleted} tasks; {denied} could not be deleted'
+            {
+              id: 'managementPages.bulkActionsToolbar.deleteWarning',
+              defaultMessage:
+                'Deleted {deleted, plural, one {# task} other {# tasks}}; {denied, number} could not be deleted',
+            },
+            { deleted: result.deleted, denied: result.requested - result.deleted }
           )
         )
       } else {
         toast.success(
           t(
-            'managementPages.bulkActionsToolbar.deleteSuccess',
-            { count: result.deleted },
-            '{count, plural, one {Deleted # task} other {Deleted # tasks}}'
+            {
+              id: 'managementPages.bulkActionsToolbar.deleteSuccess',
+              defaultMessage: '{count, plural, one {Deleted # task} other {Deleted # tasks}}',
+            },
+            { count: result.deleted }
           )
         )
       }
@@ -76,7 +86,10 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
     } catch (error) {
       logger.error('Bulk delete failed', { error })
       toast.error(
-        t('managementPages.bulkActionsToolbar.deleteError', undefined, 'Could not delete tasks')
+        t({
+          id: 'managementPages.bulkActionsToolbar.deleteError',
+          defaultMessage: 'Could not delete tasks',
+        })
       )
     }
   }
@@ -87,21 +100,29 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
       toast.success(
         archived
           ? t(
-              'managementPages.bulkActionsToolbar.archivedToast',
-              { count: selectedIds.length },
-              '{count, plural, one {Archived # task} other {Archived # tasks}}'
+              {
+                id: 'managementPages.bulkActionsToolbar.archivedToast',
+                defaultMessage: '{count, plural, one {Archived # task} other {Archived # tasks}}',
+              },
+              { count: selectedIds.length }
             )
           : t(
-              'managementPages.bulkActionsToolbar.unarchivedToast',
-              { count: selectedIds.length },
-              '{count, plural, one {Unarchived # task} other {Unarchived # tasks}}'
+              {
+                id: 'managementPages.bulkActionsToolbar.unarchivedToast',
+                defaultMessage:
+                  '{count, plural, one {Unarchived # task} other {Unarchived # tasks}}',
+              },
+              { count: selectedIds.length }
             )
       )
       onClearSelection()
     } catch (error) {
       logger.error('Bulk archive failed', { error })
       toast.error(
-        t('managementPages.bulkActionsToolbar.archiveError', undefined, 'Could not archive tasks')
+        t({
+          id: 'managementPages.bulkActionsToolbar.archiveError',
+          defaultMessage: 'Could not archive tasks',
+        })
       )
     }
   }
@@ -111,9 +132,12 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
       const result = await bulkReassign.mutateAsync({ taskIds: selectedIds, userId })
       toast.success(
         t(
-          'managementPages.bulkActionsToolbar.reassignSuccess',
-          { updated: result.updated, requested: result.requested },
-          'Reassigned {updated} of {requested} tasks'
+          {
+            id: 'managementPages.bulkActionsToolbar.reassignSuccess',
+            defaultMessage:
+              'Reassigned {updated, number} of {requested, plural, one {# task} other {# tasks}}',
+          },
+          { updated: result.updated, requested: result.requested }
         )
       )
       setReassignOpen(false)
@@ -121,7 +145,10 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
     } catch (error) {
       logger.error('Bulk reassign failed', { error })
       toast.error(
-        t('managementPages.bulkActionsToolbar.reassignError', undefined, 'Could not reassign tasks')
+        t({
+          id: 'managementPages.bulkActionsToolbar.reassignError',
+          defaultMessage: 'Could not reassign tasks',
+        })
       )
     }
   }
@@ -130,22 +157,30 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
     <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white p-3 shadow-lg dark:border-slate-700 dark:bg-slate-900">
       <span className="font-medium text-sm">
         {t(
-          'managementPages.bulkActionsToolbar.selectedCount',
-          { count: selectedIds.length },
-          '{count} selected'
+          {
+            id: 'managementPages.bulkActionsToolbar.selectedCount',
+            defaultMessage: '{count} selected',
+          },
+          { count: selectedIds.length }
         )}
       </span>
       <div className="flex flex-wrap gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
-              {t('managementPages.bulkActionsToolbar.changeStatus', undefined, 'Change status')}{' '}
+              {t({
+                id: 'managementPages.bulkActionsToolbar.changeStatus',
+                defaultMessage: 'Change status',
+              })}{' '}
               <ChevronDown className="size-3.5" aria-hidden="true" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onClick={() => setStatusOpen(true)}>
-              {t('managementPages.bulkActionsToolbar.pickStatus', undefined, 'Pick a status…')}
+              {t({
+                id: 'managementPages.bulkActionsToolbar.pickStatus',
+                defaultMessage: 'Pick a status…',
+              })}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -153,31 +188,35 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
               <Archive className="size-3.5" aria-hidden="true" />{' '}
-              {t('managementPages.bulkActionsToolbar.archive', undefined, 'Archive')}{' '}
+              {t({ id: 'managementPages.bulkActionsToolbar.archive', defaultMessage: 'Archive' })}{' '}
               <ChevronDown className="size-3.5" aria-hidden="true" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onClick={() => handleArchive(true)}>
               <Archive className="size-3.5" aria-hidden="true" />{' '}
-              {t('managementPages.bulkActionsToolbar.archive', undefined, 'Archive')}
+              {t({ id: 'managementPages.bulkActionsToolbar.archive', defaultMessage: 'Archive' })}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleArchive(false)}>
               <ArchiveRestore className="size-3.5" aria-hidden="true" />{' '}
-              {t('managementPages.bulkActionsToolbar.unarchive', undefined, 'Unarchive')}
+              {t({
+                id: 'managementPages.bulkActionsToolbar.unarchive',
+                defaultMessage: 'Unarchive',
+              })}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <Button variant="outline" size="sm" onClick={() => setReassignOpen(true)}>
           <UserCog className="size-3.5" aria-hidden="true" />{' '}
-          {t('managementPages.bulkActionsToolbar.reassign', undefined, 'Reassign')}
+          {t({ id: 'managementPages.bulkActionsToolbar.reassign', defaultMessage: 'Reassign' })}
         </Button>
         <Button variant="outline" size="sm" onClick={() => setDeleteOpen(true)}>
           <Trash2 className="size-3.5" aria-hidden="true" />{' '}
-          {t('common.delete', undefined, 'Delete')}
+          {t({ id: 'common.delete', defaultMessage: 'Delete' })}
         </Button>
         <Button variant="ghost" size="sm" onClick={onClearSelection}>
-          <X className="size-3.5" aria-hidden="true" /> {t('common.clear', undefined, 'Clear')}
+          <X className="size-3.5" aria-hidden="true" />{' '}
+          {t({ id: 'common.clear', defaultMessage: 'Clear' })}
         </Button>
       </div>
       <BulkStatusDialog

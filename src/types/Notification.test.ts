@@ -4,8 +4,8 @@ import {
   getNotificationCategory,
   getNotificationThreadKey,
   NOTIFICATION_CATEGORIES,
-  NOTIFICATION_CATEGORY_LABELS,
-  NOTIFICATION_STATUS_LABELS,
+  NOTIFICATION_CATEGORY_MESSAGES,
+  NOTIFICATION_STATUS_MESSAGES,
   NOTIFICATION_STATUSES,
   NOTIFICATION_TYPE_CATEGORY,
   NOTIFICATION_TYPE_NAMES,
@@ -23,7 +23,7 @@ describe('NOTIFICATION_TYPE_NAMES', () => {
 describe('NOTIFICATION_CATEGORIES', () => {
   it('lists every category label with a matching entry', () => {
     for (const category of NOTIFICATION_CATEGORIES) {
-      expect(NOTIFICATION_CATEGORY_LABELS[category]).toBeTruthy()
+      expect(NOTIFICATION_CATEGORY_MESSAGES[category]).toBeTruthy()
     }
   })
 })
@@ -31,7 +31,7 @@ describe('NOTIFICATION_CATEGORIES', () => {
 describe('NOTIFICATION_STATUSES', () => {
   it('lists every status label with a matching entry', () => {
     for (const status of NOTIFICATION_STATUSES) {
-      expect(NOTIFICATION_STATUS_LABELS[status]).toBeTruthy()
+      expect(NOTIFICATION_STATUS_MESSAGES[status]).toBeTruthy()
     }
   })
 })

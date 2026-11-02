@@ -22,18 +22,19 @@ export const ChallengeActionButtons = () => {
   // disabled and explains itself.
   const isReportDisabled = !user || !!openReport
   const reportTitle = !user
-    ? t(
-        'browsedChallengePage.actionButtons.mustLoginToReport',
-        undefined,
-        'You must be logged in to report a challenge'
-      )
+    ? t({
+        id: 'browsedChallengePage.actionButtons.mustLoginToReport',
+        defaultMessage: 'You must be logged in to report a challenge',
+      })
     : openReport
-      ? t(
-          'browsedChallengePage.actionButtons.alreadyReported',
-          undefined,
-          'You have already reported this challenge; it is awaiting review'
-        )
-      : t('browsedChallengePage.actionButtons.reportChallengeTitle', undefined, 'Report challenge')
+      ? t({
+          id: 'browsedChallengePage.actionButtons.alreadyReported',
+          defaultMessage: 'You have already reported this challenge; it is awaiting review',
+        })
+      : t({
+          id: 'browsedChallengePage.actionButtons.reportChallengeTitle',
+          defaultMessage: 'Report challenge',
+        })
 
   return (
     <DropdownMenu>
@@ -41,11 +42,10 @@ export const ChallengeActionButtons = () => {
         <button
           type="button"
           className="flex items-center justify-center rounded-lg p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-slate-400 dark:focus:ring-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
-          aria-label={t(
-            'browsedChallengePage.actionButtons.challengeActions',
-            undefined,
-            'Challenge actions'
-          )}
+          aria-label={t({
+            id: 'browsedChallengePage.actionButtons.challengeActions',
+            defaultMessage: 'Challenge actions',
+          })}
         >
           <MoreVertical className="size-4" />
         </button>
@@ -54,7 +54,7 @@ export const ChallengeActionButtons = () => {
         {hasOverpass && (
           <DropdownMenuItem onClick={openOverpass}>
             <Code className="size-4" />
-            {t('common.overpassQuery', undefined, 'Overpass Query')}
+            {t({ id: 'common.overpassQuery', defaultMessage: 'Overpass Query' })}
           </DropdownMenuItem>
         )}
         {canManage && challenge.id != null && (
@@ -65,11 +65,10 @@ export const ChallengeActionButtons = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Settings className="size-4" />
-              {t(
-                'browsedChallengePage.actionButtons.manageChallenge',
-                undefined,
-                'Manage Challenge'
-              )}
+              {t({
+                id: 'browsedChallengePage.actionButtons.manageChallenge',
+                defaultMessage: 'Manage Challenge',
+              })}
             </Link>
           </DropdownMenuItem>
         )}
@@ -81,7 +80,7 @@ export const ChallengeActionButtons = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="size-4" />
-              {t('common.cloneChallenge', undefined, 'Clone Challenge')}
+              {t({ id: 'common.cloneChallenge', defaultMessage: 'Clone Challenge' })}
             </Link>
           </DropdownMenuItem>
         )}
@@ -99,12 +98,11 @@ export const ChallengeActionButtons = () => {
             )}
           />
           {openReport
-            ? t(
-                'browsedChallengePage.actionButtons.challengeReported',
-                undefined,
-                'Challenge Reported'
-              )
-            : t('common.reportChallenge', undefined, 'Report Challenge')}
+            ? t({
+                id: 'browsedChallengePage.actionButtons.challengeReported',
+                defaultMessage: 'Challenge Reported',
+              })
+            : t({ id: 'common.reportChallenge', defaultMessage: 'Report Challenge' })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

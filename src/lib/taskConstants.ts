@@ -1,38 +1,23 @@
+import { defineMessages, type MessageDescriptor } from 'react-intl'
 import type { TranslateFn } from '@/i18n'
 
-/** English fallback text per status, used as the ICU defaultMessage when a catalog entry is
- *  missing and by non-visible consumers (e.g. STATUS_CONFIG) that don't have access to t(). */
-export const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'Not an Issue',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Already Fixed',
-  6: "Can't Complete",
-  7: 'Answered',
-  8: 'Validated',
-  9: 'Disabled',
-}
-
-/** Catalog key per status, paired with STATUS_LABELS for translation. */
-export const STATUS_LABEL_KEYS: Record<number, string> = {
-  0: 'common.created',
-  1: 'common.fixed',
-  2: 'common.notAnIssue',
-  3: 'common.skipped',
-  4: 'common.deleted',
-  5: 'common.alreadyFixed',
-  6: 'common.cantComplete',
-  7: 'common.answered',
-  8: 'common.validated',
-  9: 'common.disabled',
-}
+export const STATUS_MESSAGES: Record<number, MessageDescriptor> = defineMessages({
+  0: { id: 'common.created', defaultMessage: 'Created' },
+  1: { id: 'common.fixed', defaultMessage: 'Fixed' },
+  2: { id: 'common.notAnIssue', defaultMessage: 'Not an Issue' },
+  3: { id: 'common.skipped', defaultMessage: 'Skipped' },
+  4: { id: 'common.deleted', defaultMessage: 'Deleted' },
+  5: { id: 'common.alreadyFixed', defaultMessage: 'Already Fixed' },
+  6: { id: 'common.cantComplete', defaultMessage: "Can't Complete" },
+  7: { id: 'common.answered', defaultMessage: 'Answered' },
+  8: { id: 'common.validated', defaultMessage: 'Validated' },
+  9: { id: 'common.disabled', defaultMessage: 'Disabled' },
+})
 
 /** Translated status label, or undefined for an unrecognized status id. */
 export const getStatusLabel = (t: TranslateFn, status: number): string | undefined => {
-  const key = STATUS_LABEL_KEYS[status]
-  return key ? t(key, undefined, STATUS_LABELS[status]) : undefined
+  const message = STATUS_MESSAGES[status]
+  return message ? t(message) : undefined
 }
 
 /** Maps string-keyed status names (used by MR3 action counts) to canonical numeric IDs. */

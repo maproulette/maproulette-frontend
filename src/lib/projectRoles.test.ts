@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  PROJECT_ROLE,
-  projectRoleLabel,
-  projectRoleOptions,
-  strongestRole,
-} from './projectRoles.ts'
+import { PROJECT_ROLE, projectRoleOptions, strongestRole } from './projectRoles.ts'
 
 describe('projectRoleOptions', () => {
   it('covers every role the server defines', () => {
@@ -13,17 +8,6 @@ describe('projectRoleOptions', () => {
       PROJECT_ROLE.write,
       PROJECT_ROLE.read,
     ])
-  })
-})
-
-describe('projectRoleLabel', () => {
-  it('names the known roles', () => {
-    expect(projectRoleLabel(PROJECT_ROLE.admin)).toBe('Admin')
-    expect(projectRoleLabel(PROJECT_ROLE.read)).toBe('Read')
-  })
-
-  it('falls back for a role it does not know, rather than showing nothing', () => {
-    expect(projectRoleLabel(99)).toBe('Role 99')
   })
 })
 

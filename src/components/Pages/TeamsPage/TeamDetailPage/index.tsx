@@ -34,7 +34,7 @@ const TeamDetailLayout = () => {
   if (!team) {
     return (
       <div className="py-12 text-center text-zinc-500">
-        {t('common.teamNotFound', undefined, 'Team not found.')}
+        {t({ id: 'common.teamNotFound', defaultMessage: 'Team not found.' })}
       </div>
     )
   }
@@ -65,20 +65,21 @@ const TeamDetailLayout = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t('teams.detail.deleteConfirmTitle', undefined, 'Delete this team?')}
+              {t({ id: 'teams.detail.deleteConfirmTitle', defaultMessage: 'Delete this team?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t(
-                'teams.detail.deleteConfirmDescription',
-                undefined,
-                'This cannot be undone. All members will lose access.'
-              )}
+              {t({
+                id: 'teams.detail.deleteConfirmDescription',
+                defaultMessage: 'This cannot be undone. All members will lose access.',
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete}>
-              {t('teams.detail.deleteConfirmAction', undefined, 'Delete team')}
+              {t({ id: 'teams.detail.deleteConfirmAction', defaultMessage: 'Delete team' })}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

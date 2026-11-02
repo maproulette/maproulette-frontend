@@ -42,17 +42,19 @@ export const ChallengeFooter = () => {
         await navigateToTask(task[0].id)
       } else {
         toast.error(
-          t(
-            'browsedChallengePage.footer.noTasksAvailable',
-            undefined,
-            'No tasks available for this challenge'
-          )
+          t({
+            id: 'browsedChallengePage.footer.noTasksAvailable',
+            defaultMessage: 'No tasks available for this challenge',
+          })
         )
       }
     } catch (error) {
       logger.error('Error starting task', { error })
       toast.error(
-        t('browsedChallengePage.footer.failedToLoadTask', undefined, 'Failed to load task')
+        t({
+          id: 'browsedChallengePage.footer.failedToLoadTask',
+          defaultMessage: 'Failed to load task',
+        })
       )
     } finally {
       setIsLoadingTask(false)
@@ -71,13 +73,19 @@ export const ChallengeFooter = () => {
         await navigateToTask(tasks[0].id, { claim: false })
       } else {
         toast.error(
-          t('browsedChallengePage.footer.noTasksToBrowse', undefined, 'This challenge has no tasks')
+          t({
+            id: 'browsedChallengePage.footer.noTasksToBrowse',
+            defaultMessage: 'This challenge has no tasks',
+          })
         )
       }
     } catch (error) {
       logger.error('Error browsing challenge', { error })
       toast.error(
-        t('browsedChallengePage.footer.failedToLoadTask', undefined, 'Failed to load task')
+        t({
+          id: 'browsedChallengePage.footer.failedToLoadTask',
+          defaultMessage: 'Failed to load task',
+        })
       )
     } finally {
       setIsLoadingTask(false)
@@ -93,20 +101,18 @@ export const ChallengeFooter = () => {
             <button
               type="button"
               onClick={openReportHistory}
-              title={t(
-                'browsedChallengePage.footer.reportedIssueTooltip',
-                undefined,
-                'View the reports on this challenge'
-              )}
+              title={t({
+                id: 'browsedChallengePage.footer.reportedIssueTooltip',
+                defaultMessage: 'View the reports on this challenge',
+              })}
               className="flex w-full items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50/50 px-3 py-2 text-center transition-colors hover:bg-red-50 dark:border-red-800 dark:bg-red-900/10 dark:hover:bg-red-900/20"
             >
               <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)]" />
               <span className="text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400">
-                {t(
-                  'browsedChallengePage.footer.reportedIssueMessage',
-                  undefined,
-                  'This challenge has been reported. Click to view the reports.'
-                )}
+                {t({
+                  id: 'browsedChallengePage.footer.reportedIssueMessage',
+                  defaultMessage: 'This challenge has been reported. Click to view the reports.',
+                })}
               </span>
             </button>
           </div>
@@ -114,11 +120,11 @@ export const ChallengeFooter = () => {
         <div className="mt-3 flex flex-col gap-4">
           {challenge.paused && !isBrowseOnly ? (
             <ChallengePausedNotice
-              message={t(
-                'browsedChallengePage.footer.challengePausedMessage',
-                undefined,
-                'This challenge is currently paused. New tasks cannot be started until it is resumed.'
-              )}
+              message={t({
+                id: 'browsedChallengePage.footer.challengePausedMessage',
+                defaultMessage:
+                  'This challenge is currently paused. New tasks cannot be started until it is resumed.',
+              })}
             />
           ) : (
             <Button
@@ -129,10 +135,16 @@ export const ChallengeFooter = () => {
             >
               {isBrowseOnly ? <Eye className="size-5" /> : <Play className="size-5" />}
               {isLoadingTask
-                ? t('common.loading2', undefined, 'Loading...')
+                ? t({ id: 'common.loading2', defaultMessage: 'Loading...' })
                 : isBrowseOnly
-                  ? t('browsedChallengePage.footer.browseChallenge', undefined, 'Browse Challenge')
-                  : t('browsedChallengePage.footer.startChallenge', undefined, 'Start Challenge')}
+                  ? t({
+                      id: 'common.browseChallengeButton',
+                      defaultMessage: 'Browse Challenge',
+                    })
+                  : t({
+                      id: 'browsedChallengePage.footer.startChallenge',
+                      defaultMessage: 'Start Challenge',
+                    })}
             </Button>
           )}
         </div>{' '}
@@ -157,8 +169,8 @@ export const ChallengeFooter = () => {
         >
           <MapIcon className="size-5" />
           {showMap
-            ? t('browsedChallengePage.footer.hideMap', undefined, 'Hide Map')
-            : t('browsedChallengePage.footer.showMap', undefined, 'Show Map')}
+            ? t({ id: 'browsedChallengePage.footer.hideMap', defaultMessage: 'Hide Map' })
+            : t({ id: 'browsedChallengePage.footer.showMap', defaultMessage: 'Show Map' })}
         </Button>
       </div>
     </div>

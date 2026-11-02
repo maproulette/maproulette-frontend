@@ -30,21 +30,21 @@ export const ChallengesTableView = ({ challenges, renderActions }: ChallengesTab
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
+            <TableHead>{t({ id: 'common.name', defaultMessage: 'Name' })}</TableHead>
             <TableHead className="hidden max-w-[240px] lg:table-cell">
-              {t('common.description', undefined, 'Description')}
+              {t({ id: 'common.description', defaultMessage: 'Description' })}
             </TableHead>
             <TableHead className="hidden w-28 text-center md:table-cell">
-              {t('common.difficulty', undefined, 'Difficulty')}
+              {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
             </TableHead>
             <TableHead className="hidden w-24 text-center md:table-cell">
-              {t('common.tasks2', undefined, 'Tasks')}
+              {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
             </TableHead>
             <TableHead className="w-28 text-center">
-              {t('common.complete', undefined, 'Complete')}
+              {t({ id: 'browsedProjectPage.challengesTable.complete', defaultMessage: 'Complete' })}
             </TableHead>
             <TableHead className="w-[100px] text-right">
-              {t('common.actions', undefined, 'Actions')}
+              {t({ id: 'common.actions', defaultMessage: 'Actions' })}
             </TableHead>
           </TableRow>
         </TableHeader>

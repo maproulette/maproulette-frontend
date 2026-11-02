@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest'
-import { PRIORITY_COLOR, PRIORITY_LABEL, PRIORITY_TIERS, TaskPriority } from './Priority.ts'
+import {
+  isTaskPriority,
+  PRIORITY_COLOR,
+  PRIORITY_MESSAGES,
+  PRIORITY_TIERS,
+  TaskPriority,
+} from './Priority.ts'
 
-describe('PRIORITY_LABEL', () => {
+describe('PRIORITY_MESSAGES', () => {
   it('labels every priority value', () => {
-    expect(PRIORITY_LABEL[TaskPriority.HIGH]).toBe('High')
-    expect(PRIORITY_LABEL[TaskPriority.MEDIUM]).toBe('Medium')
-    expect(PRIORITY_LABEL[TaskPriority.LOW]).toBe('Low')
+    expect(PRIORITY_MESSAGES[TaskPriority.HIGH].defaultMessage).toBe('High')
+    expect(PRIORITY_MESSAGES[TaskPriority.MEDIUM].defaultMessage).toBe('Medium')
+    expect(PRIORITY_MESSAGES[TaskPriority.LOW].defaultMessage).toBe('Low')
   })
 })
 
@@ -25,5 +31,13 @@ describe('PRIORITY_COLOR', () => {
 describe('PRIORITY_TIERS', () => {
   it('orders tiers from high to low priority', () => {
     expect(PRIORITY_TIERS).toEqual([TaskPriority.HIGH, TaskPriority.MEDIUM, TaskPriority.LOW])
+  })
+})
+
+describe('isTaskPriority', () => {
+  it('accepts only the three priority tiers', () => {
+    expect([0, 1, 2].every(isTaskPriority)).toBe(true)
+    expect(isTaskPriority(3)).toBe(false)
+    expect(isTaskPriority(-1)).toBe(false)
   })
 })

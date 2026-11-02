@@ -1,11 +1,13 @@
+import { defineMessages, type MessageDescriptor } from 'react-intl'
+
 export const TaskPriority = { HIGH: 0, MEDIUM: 1, LOW: 2 } as const
 export type TaskPriorityValue = (typeof TaskPriority)[keyof typeof TaskPriority]
 
-export const PRIORITY_LABEL: Record<TaskPriorityValue, string> = {
-  0: 'High',
-  1: 'Medium',
-  2: 'Low',
-}
+export const PRIORITY_MESSAGES: Record<TaskPriorityValue, MessageDescriptor> = defineMessages({
+  0: { id: 'manageChallengeDetail.tasksExplorer.priorityHigh', defaultMessage: 'High' },
+  1: { id: 'manageChallengeDetail.tasksExplorer.priorityMedium', defaultMessage: 'Medium' },
+  2: { id: 'manageChallengeDetail.tasksExplorer.priorityLow', defaultMessage: 'Low' },
+})
 
 /**
  * Colors mirror MR3 `TaskPriorityColors`: red (high), amber (medium), emerald/teal (low).
@@ -40,3 +42,6 @@ export const PRIORITY_TIERS: readonly TaskPriorityValue[] = [
   TaskPriority.MEDIUM,
   TaskPriority.LOW,
 ]
+
+export const isTaskPriority = (value: number): value is TaskPriorityValue =>
+  (PRIORITY_TIERS as readonly number[]).includes(value)

@@ -13,13 +13,16 @@ export const LevelUpContent = ({ level, score }: Props) => {
       <Crown className="size-14 text-amber-500" aria-hidden="true" />
       <div>
         <h2 className="font-bold text-xl">
-          {t('congratulateModal.levelUp.title', undefined, 'You leveled up!')}
+          {t({ id: 'congratulateModal.levelUp.title', defaultMessage: 'You leveled up!' })}
         </h2>
         <p className="text-zinc-600 dark:text-slate-400">
           {t(
-            'congratulateModal.levelUp.description',
-            { level, score: score.toLocaleString() },
-            "Welcome to level {level}. You've reached {score} points."
+            {
+              id: 'congratulateModal.levelUp.description',
+              defaultMessage:
+                "Welcome to level {level}. You've reached {score, plural, one {# point} other {# points}}.",
+            },
+            { level, score }
           )}
         </p>
       </div>

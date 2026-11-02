@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import { getDifficultyColor, getDifficultyLabel } from './difficultyLevelData.ts'
 
-const t = (_id: string, _values: unknown, defaultMessage?: string) => defaultMessage ?? _id
+const t = testT
 
 describe('getDifficultyLabel', () => {
   it.each([

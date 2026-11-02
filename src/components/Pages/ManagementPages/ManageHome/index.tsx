@@ -21,20 +21,19 @@ export const ManageHome = () => {
             </div>
             <CardTitle>
               <Link to="/manage/projects" className="stretched-link">
-                {t('common.projects', undefined, 'Projects')}
+                {t({ id: 'common.projects', defaultMessage: 'Projects' })}
               </Link>
             </CardTitle>
             <CardDescription>
-              {t(
-                'manageHome.projectsDescription',
-                undefined,
-                'Create and manage your MapRoulette projects'
-              )}
+              {t({
+                id: 'manageHome.projectsDescription',
+                defaultMessage: 'Create and manage your MapRoulette projects',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
-              <span>{t('common.viewProjects', undefined, 'View Projects')}</span>
+              <span>{t({ id: 'common.viewProjects', defaultMessage: 'View Projects' })}</span>
             </Button>
           </CardContent>
         </Card>
@@ -46,20 +45,19 @@ export const ManageHome = () => {
             </div>
             <CardTitle>
               <Link to="/manage/challenges" className="stretched-link">
-                {t('common.challenges', undefined, 'Challenges')}
+                {t({ id: 'common.challenges', defaultMessage: 'Challenges' })}
               </Link>
             </CardTitle>
             <CardDescription>
-              {t(
-                'manageHome.challengesDescription',
-                undefined,
-                'Browse and manage all your challenges'
-              )}
+              {t({
+                id: 'manageHome.challengesDescription',
+                defaultMessage: 'Browse and manage all your challenges',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
-              <span>{t('common.viewChallenges', undefined, 'View Challenges')}</span>
+              <span>{t({ id: 'common.viewChallenges', defaultMessage: 'View Challenges' })}</span>
             </Button>
           </CardContent>
         </Card>
@@ -72,20 +70,19 @@ export const ManageHome = () => {
               </div>
               <CardTitle>
                 <Link to="/manage/tasks" className="stretched-link">
-                  {t('common.tasks', undefined, 'Tasks')}
+                  {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
                 </Link>
               </CardTitle>
               <CardDescription>
-                {t(
-                  'manageHome.tasksDescription',
-                  undefined,
-                  'Open a task by ID to view or edit it'
-                )}
+                {t({
+                  id: 'manageHome.tasksDescription',
+                  defaultMessage: 'Open a task by ID to view or edit it',
+                })}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button asChild variant="outline" className="w-full">
-                <span>{t('common.openTaskById', undefined, 'Open task by ID')}</span>
+                <span>{t({ id: 'common.openTaskById', defaultMessage: 'Open task by ID' })}</span>
               </Button>
             </CardContent>
           </Card>

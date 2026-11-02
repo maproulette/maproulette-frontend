@@ -24,7 +24,8 @@ export const TeamCard = ({ membership }: Props) => {
   const { t } = useIntl()
   const { data: team } = api.team.get(membership.teamId)
   const name =
-    membership.teamName || t('common.team', { teamId: membership.teamId }, 'Team #{teamId}')
+    membership.teamName ||
+    t({ id: 'common.team', defaultMessage: 'Team #{teamId}' }, { teamId: membership.teamId })
   const role = teamDisplayRole(membership)
   return (
     <div className="group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110">

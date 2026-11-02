@@ -15,15 +15,15 @@ interface ContributionsSectionProps {
 }
 
 export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
-  const { t } = useIntl()
+  const { t, formatNumber, locale } = useIntl()
   const { data: activityData, isLoading, error } = api.user.activity()
   const { data: lockedTasks } = api.user.lockedTasks(userId)
   const hasLockedTasks = (lockedTasks?.length ?? 0) > 0
 
   // Reason: groups and sorts activity data by date/challenge/status - expensive aggregation should not run on every render
   const { groupedActivities, totalTasks } = useMemo(
-    () => aggregateContributions(activityData, t),
-    [activityData, t]
+    () => aggregateContributions(activityData, t, locale),
+    [activityData, t, locale]
   )
 
   const hasContributions = totalTasks > 0
@@ -33,11 +33,11 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Activity className="h-4 w-4 text-indigo-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('dashboard.contributions.title', undefined, 'Contributions')}
+          {t({ id: 'dashboard.contributions.title', defaultMessage: 'Contributions' })}
         </h3>
         {hasContributions && (
           <span className="ml-auto font-bold text-indigo-400 text-sm">
-            {totalTasks.toLocaleString()}
+            {formatNumber(totalTasks)}
           </span>
         )}
       </div>
@@ -52,7 +52,7 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
 
         {error && (
           <div className="py-2 text-center text-red-400 text-sm">
-            {t('dashboard.common.failedToLoad', undefined, 'Failed to load')}
+            {t({ id: 'dashboard.common.failedToLoad', defaultMessage: 'Failed to load' })}
           </div>
         )}
 
@@ -62,14 +62,13 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
               <Activity className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
             <p className="text-sm text-zinc-600 dark:text-slate-400">
-              {t('dashboard.contributions.empty.title', undefined, 'No contributions')}
+              {t({ id: 'dashboard.contributions.empty.title', defaultMessage: 'No contributions' })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              {t(
-                'dashboard.contributions.empty.description',
-                undefined,
-                'Start mapping to track progress'
-              )}
+              {t({
+                id: 'dashboard.contributions.empty.description',
+                defaultMessage: 'Start mapping to track progress',
+              })}
             </p>
           </div>
         )}
@@ -111,17 +110,21 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
                             <span className="text-zinc-400 dark:text-slate-500">
                               {DISPLAYED_STATUS_IDS.has(action.status)
                                 ? t(
-                                    'dashboard.contributions.statusSetLabel',
+                                    {
+                                      id: 'dashboard.contributions.statusSetLabel',
+                                      defaultMessage: 'Set Status on Task as {statusLabel}',
+                                    },
                                     {
                                       statusLabel:
                                         getStatusLabel(t, action.status) ?? String(action.status),
-                                    },
-                                    'Set Status on Task as {statusLabel}'
+                                    }
                                   )
                                 : t(
-                                    'common.statusWithStatus',
-                                    { status: action.status },
-                                    'Status {status}'
+                                    {
+                                      id: 'common.statusWithStatus',
+                                      defaultMessage: 'Status {status}',
+                                    },
+                                    { status: action.status }
                                   )}
                             </span>
                           </div>

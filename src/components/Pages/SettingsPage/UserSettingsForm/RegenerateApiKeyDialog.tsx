@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/Dialog'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
 type Phase = 'confirm' | 'regenerating' | 'reveal'
 
 export const RegenerateApiKeyDialog = ({ userId, open, onOpenChange }: Props) => {
+  const { t } = useIntl()
   const [phase, setPhase] = useState<Phase>('confirm')
   const [revealedKey, setRevealedKey] = useState<string | null>(null)
   const regenerate = api.user.useRegenerateApiKey()
@@ -46,7 +48,12 @@ export const RegenerateApiKeyDialog = ({ userId, open, onOpenChange }: Props) =>
       setPhase('reveal')
     } catch (error) {
       logger.error('Failed to regenerate API key', { error })
-      toast.error('Failed to regenerate API key')
+      toast.error(
+        t({
+          id: 'settings.regenerateApiKey.error',
+          defaultMessage: 'Failed to regenerate API key',
+        })
+      )
       onOpenChange(false)
     }
   }
@@ -57,10 +64,18 @@ export const RegenerateApiKeyDialog = ({ userId, open, onOpenChange }: Props) =>
         {phase === 'reveal' && revealedKey ? (
           <>
             <DialogHeader>
-              <DialogTitle>Your new API key</DialogTitle>
+              <DialogTitle>
+                {t({
+                  id: 'settings.regenerateApiKey.newKeyTitle',
+                  defaultMessage: 'Your new API key',
+                })}
+              </DialogTitle>
               <DialogDescription>
-                Copy it now — once you close this dialog, you won't be able to see it again. If you
-                lose it, you'll need to regenerate another.
+                {t({
+                  id: 'settings.regenerateApiKey.newKeyDescription',
+                  defaultMessage:
+                    "Copy it now — once you close this dialog, you won't be able to see it again. If you lose it, you'll need to regenerate another.",
+                })}
               </DialogDescription>
             </DialogHeader>
             <div className="break-all rounded-md border border-zinc-200 bg-zinc-50 p-3 font-mono text-xs dark:border-slate-700 dark:bg-slate-900">
@@ -72,21 +87,31 @@ export const RegenerateApiKeyDialog = ({ userId, open, onOpenChange }: Props) =>
                 variant="outline"
                 onClick={() => {
                   copy(revealedKey)
-                  toast.success('Copied to clipboard')
+                  toast.success(
+                    t({
+                      id: 'common.copiedToClipboard',
+                      defaultMessage: 'Copied to clipboard',
+                    })
+                  )
                 }}
               >
                 {isCopied ? (
                   <>
-                    <Check aria-hidden="true" /> Copied
+                    <Check aria-hidden="true" />{' '}
+                    {t({ id: 'common.copied', defaultMessage: 'Copied' })}
                   </>
                 ) : (
                   <>
-                    <Copy aria-hidden="true" /> Copy key
+                    <Copy aria-hidden="true" />{' '}
+                    {t({ id: 'settings.regenerateApiKey.copyKey', defaultMessage: 'Copy key' })}
                   </>
                 )}
               </Button>
               <Button type="button" onClick={() => onOpenChange(false)}>
-                I have saved this key
+                {t({
+                  id: 'settings.regenerateApiKey.confirmSaved',
+                  defaultMessage: 'I have saved this key',
+                })}
               </Button>
             </DialogFooter>
           </>
@@ -95,11 +120,18 @@ export const RegenerateApiKeyDialog = ({ userId, open, onOpenChange }: Props) =>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <TriangleAlert className="size-5 text-amber-500" aria-hidden="true" />
-                Regenerate API key?
+
+                {t({
+                  id: 'settings.regenerateApiKey.confirmTitle',
+                  defaultMessage: 'Regenerate API key?',
+                })}
               </DialogTitle>
               <DialogDescription>
-                Your existing API key will stop working immediately. Any scripts or integrations
-                using the old key will need to be updated.
+                {t({
+                  id: 'settings.regenerateApiKey.confirmDescription',
+                  defaultMessage:
+                    'Your existing API key will stop working immediately. Any scripts or integrations using the old key will need to be updated.',
+                })}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -109,7 +141,7 @@ export const RegenerateApiKeyDialog = ({ userId, open, onOpenChange }: Props) =>
                 onClick={() => onOpenChange(false)}
                 disabled={phase === 'regenerating'}
               >
-                Cancel
+                {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
               </Button>
               <Button type="button" onClick={handleRegenerate} disabled={phase === 'regenerating'}>
                 {phase === 'regenerating' ? 'Regenerating…' : 'Regenerate'}

@@ -36,20 +36,23 @@ const RoleSelect = ({
   value: number
   disabled?: boolean
   onChange: (role: number) => void
-}) => (
-  <Select value={String(value)} disabled={disabled} onValueChange={(v) => onChange(Number(v))}>
-    <SelectTrigger size="sm" className="w-28">
-      <SelectValue />
-    </SelectTrigger>
-    <SelectContent>
-      {projectRoleOptions.map((option) => (
-        <SelectItem key={option.value} value={String(option.value)}>
-          {option.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-)
+}) => {
+  const { t } = useIntl()
+  return (
+    <Select value={String(value)} disabled={disabled} onValueChange={(v) => onChange(Number(v))}>
+      <SelectTrigger size="sm" className="w-28">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {projectRoleOptions.map((option) => (
+          <SelectItem key={option.value} value={String(option.value)}>
+            {t(option.label)}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
 
 /**
  * Who can manage this project: individual users and whole teams, each with a
@@ -96,15 +99,20 @@ export const ProjectManagersPanel = () => {
       setUserQuery('')
       toast.success(
         t(
-          'manageProjectDetail.managers.added',
-          { name: displayName },
-          '{name} can now manage this project'
+          {
+            id: 'manageProjectDetail.managers.added',
+            defaultMessage: '{name} can now manage this project',
+          },
+          { name: displayName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant project role', { userId, projectId: id, error })
       toast.error(
-        t('manageProjectDetail.managers.addFailed', undefined, 'Could not add that manager')
+        t({
+          id: 'managers.addFailed',
+          defaultMessage: 'Could not add that manager',
+        })
       )
     }
   }
@@ -115,15 +123,20 @@ export const ProjectManagersPanel = () => {
       setTeamQuery('')
       toast.success(
         t(
-          'manageProjectDetail.managers.teamAdded',
-          { name: teamName },
-          '{name} can now manage this project'
+          {
+            id: 'manageProjectDetail.managers.added',
+            defaultMessage: '{name} can now manage this project',
+          },
+          { name: teamName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant team project role', { teamId, projectId: id, error })
       toast.error(
-        t('manageProjectDetail.managers.addTeamFailed', undefined, 'Could not add that team')
+        t({
+          id: 'managers.addTeamFailed',
+          defaultMessage: 'Could not add that team',
+        })
       )
     }
   }
@@ -133,18 +146,24 @@ export const ProjectManagersPanel = () => {
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4 text-zinc-500" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('manageProjectDetail.managers.title', undefined, 'Project managers')}
+          {t({ id: 'manageProjectDetail.managers.title', defaultMessage: 'Project managers' })}
         </h3>
         <DocsLink
           page="projectsAndProjectManagers"
-          label={t('manageProjectDetail.managers.docsLink', undefined, 'About project roles')}
+          label={t({
+            id: 'manageProjectDetail.managers.docsLink',
+            defaultMessage: 'About project roles',
+          })}
           className="ml-auto text-zinc-400 no-underline hover:text-zinc-600"
         />
       </div>
 
       {isLoading ? (
         <Loader
-          message={t('manageProjectDetail.managers.loading', undefined, 'Loading managers...')}
+          message={t({
+            id: 'managers.loading',
+            defaultMessage: 'Loading managers...',
+          })}
         />
       ) : (
         <ul className="space-y-2">
@@ -169,9 +188,8 @@ export const ProjectManagersPanel = () => {
                   className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                   onClick={() => removeUser.mutate({ userId: manager.userId, projectId: id, role })}
                   aria-label={t(
-                    'manageProjectDetail.managers.remove',
-                    { name: manager.displayName },
-                    'Remove {name}'
+                    { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
+                    { name: manager.displayName }
                   )}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -181,7 +199,7 @@ export const ProjectManagersPanel = () => {
           })}
           {managers?.length === 0 && (
             <li className="text-sm text-zinc-500 dark:text-zinc-400">
-              {t('manageProjectDetail.managers.none', undefined, 'No managers yet.')}
+              {t({ id: 'managers.none', defaultMessage: 'No managers yet.' })}
             </li>
           )}
         </ul>
@@ -189,18 +207,17 @@ export const ProjectManagersPanel = () => {
 
       <div className="space-y-2">
         <Label htmlFor={addManagerId}>
-          {t('manageProjectDetail.managers.addLabel', undefined, 'Add a manager')}
+          {t({ id: 'managers.addLabel', defaultMessage: 'Add a manager' })}
         </Label>
         <div className="flex gap-2">
           <Input
             id={addManagerId}
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
-            placeholder={t(
-              'manageProjectDetail.managers.searchPlaceholder',
-              undefined,
-              'OpenStreetMap username'
-            )}
+            placeholder={t({
+              id: 'managers.searchPlaceholder',
+              defaultMessage: 'OpenStreetMap username',
+            })}
           />
           <RoleSelect value={newRole} onChange={setNewRole} />
         </div>
@@ -220,7 +237,10 @@ export const ProjectManagersPanel = () => {
             ))}
             {userMatches?.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t('manageProjectDetail.managers.noMatches', undefined, 'No matching users')}
+                {t({
+                  id: 'managers.noMatches',
+                  defaultMessage: 'No matching users',
+                })}
               </li>
             )}
           </ul>
@@ -229,14 +249,14 @@ export const ProjectManagersPanel = () => {
 
       <Separator />
       <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-        {t('manageProjectDetail.managers.teamsTitle', undefined, 'Teams')}
+        {t({ id: 'common.teams', defaultMessage: 'Teams' })}
       </h4>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
-        {t(
-          'manageProjectDetail.managers.teamsDescription',
-          undefined,
-          'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.'
-        )}
+        {t({
+          id: 'managers.teamsDescription',
+          defaultMessage:
+            'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.',
+        })}
       </p>
       <ul className="space-y-2">
         {(teamManagers ?? []).map(({ team }) => {
@@ -249,9 +269,11 @@ export const ProjectManagersPanel = () => {
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 onClick={() => removeTeam.mutate({ teamId: team.id, projectId: id })}
                 aria-label={t(
-                  'manageProjectDetail.managers.removeTeam',
-                  { name: team.name },
-                  'Remove {name}'
+                  {
+                    id: 'common.removeWithName',
+                    defaultMessage: 'Remove {name}',
+                  },
+                  { name: team.name }
                 )}
               >
                 <Trash2 className="h-4 w-4" />
@@ -261,25 +283,24 @@ export const ProjectManagersPanel = () => {
         })}
         {teamManagers?.length === 0 && (
           <li className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t('manageProjectDetail.managers.noTeams', undefined, 'No teams yet.')}
+            {t({ id: 'managers.noTeams', defaultMessage: 'No teams yet.' })}
           </li>
         )}
       </ul>
 
       <div className="space-y-2">
         <Label htmlFor={addTeamId}>
-          {t('manageProjectDetail.managers.addTeamLabel', undefined, 'Add a team')}
+          {t({ id: 'managers.addTeamLabel', defaultMessage: 'Add a team' })}
         </Label>
         <div className="flex gap-2">
           <Input
             id={addTeamId}
             value={teamQuery}
             onChange={(e) => setTeamQuery(e.target.value)}
-            placeholder={t(
-              'manageProjectDetail.managers.teamSearchPlaceholder',
-              undefined,
-              'Team name'
-            )}
+            placeholder={t({
+              id: 'managers.teamSearchPlaceholder',
+              defaultMessage: 'Team name',
+            })}
           />
         </div>
         {teamQuery.length > 2 && (
@@ -300,7 +321,10 @@ export const ProjectManagersPanel = () => {
               ))}
             {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t('manageProjectDetail.managers.noTeamMatches', undefined, 'No matching teams')}
+                {t({
+                  id: 'managers.noTeamMatches',
+                  defaultMessage: 'No matching teams',
+                })}
               </li>
             )}
           </ul>

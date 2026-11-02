@@ -38,14 +38,14 @@ export const ManageTasksOpen = () => {
       <div className="mx-auto h-full max-w-xl overflow-auto px-4">
         <div className="mb-6">
           <h1 className="mb-2 font-bold text-base text-zinc-900 dark:text-zinc-50">
-            {t('common.tasks', undefined, 'Tasks')}
+            {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
           </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
-            {t(
-              'manageTasksOpen.description',
-              undefined,
-              'Open a task by ID to view details or edit it (name, instructions, status, etc.).'
-            )}
+            {t({
+              id: 'manageTasksOpen.description',
+              defaultMessage:
+                'Open a task by ID to view details or edit it (name, instructions, status, etc.).',
+            })}
           </p>
         </div>
 
@@ -53,27 +53,30 @@ export const ManageTasksOpen = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="h-5 w-5" />
-              {t('common.openTaskById', undefined, 'Open task by ID')}
+              {t({ id: 'common.openTaskById', defaultMessage: 'Open task by ID' })}
             </CardTitle>
             <CardDescription>
-              {t(
-                'manageTasksOpen.cardDescription',
-                undefined,
-                'Enter a task ID below. You can find task IDs when working on a task (URL or header) or from your saved/locked tasks on the dashboard.'
-              )}
+              {t({
+                id: 'manageTasksOpen.cardDescription',
+                defaultMessage:
+                  'Enter a task ID below. You can find task IDs when working on a task (URL or header) or from your saved/locked tasks on the dashboard.',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleView}>
               <div className="space-y-2">
                 <Label htmlFor={taskIdInputId}>
-                  {t('manageTasksOpen.taskIdLabel', undefined, 'Task ID')}
+                  {t({ id: 'manageTasksOpen.taskIdLabel', defaultMessage: 'Task ID' })}
                 </Label>
                 <Input
                   id={taskIdInputId}
                   type="number"
                   min={1}
-                  placeholder={t('manageTasksOpen.taskIdPlaceholder', undefined, 'e.g. 12345')}
+                  placeholder={t({
+                    id: 'manageTasksOpen.taskIdPlaceholder',
+                    defaultMessage: 'e.g. 12345',
+                  })}
                   value={taskIdInput}
                   onChange={(e) => setTaskIdInput(e.target.value)}
                   className="font-mono"
@@ -81,10 +84,10 @@ export const ManageTasksOpen = () => {
               </div>
               <div className="flex flex-wrap gap-3">
                 <Button type="submit" disabled={!isValidId}>
-                  {t('manageTasksOpen.viewTask', undefined, 'View task')}
+                  {t({ id: 'manageTasksOpen.viewTask', defaultMessage: 'View task' })}
                 </Button>
                 <Button type="button" variant="outline" disabled={!isValidId} onClick={handleEdit}>
-                  {t('common.editTask', undefined, 'Edit task')}
+                  {t({ id: 'common.editTask', defaultMessage: 'Edit task' })}
                 </Button>
               </div>
             </form>
@@ -92,21 +95,30 @@ export const ManageTasksOpen = () => {
         </Card>
 
         <p className="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
-          {t('manageTasksOpen.orGoTo', undefined, 'Or go to')}{' '}
-          <Link to="/manage/projects" className="text-blue-600 hover:underline dark:text-blue-400">
-            {t('common.projects', undefined, 'Projects')}
-          </Link>{' '}
-          {t('manageTasksOpen.or', undefined, 'or')}{' '}
-          <Link
-            to="/manage/challenges"
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          >
-            {t('common.challenges', undefined, 'Challenges')}
-          </Link>{' '}
           {t(
-            'manageTasksOpen.findChallengeHint',
-            undefined,
-            'to find a challenge, then browse it to open a task and get its ID from the URL.'
+            {
+              id: 'manageTasksOpen.findChallenge',
+              defaultMessage:
+                'Or go to <projects>Projects</projects> or <challenges>Challenges</challenges> to find a challenge, then browse it to open a task and get its ID from the URL.',
+            },
+            {
+              projects: (chunks) => (
+                <Link
+                  to="/manage/projects"
+                  className="text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  {chunks}
+                </Link>
+              ),
+              challenges: (chunks) => (
+                <Link
+                  to="/manage/challenges"
+                  className="text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  {chunks}
+                </Link>
+              ),
+            }
           )}
         </p>
       </div>

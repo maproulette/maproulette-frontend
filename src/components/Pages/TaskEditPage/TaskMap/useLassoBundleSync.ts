@@ -62,11 +62,10 @@ export const useLassoBundleSync = () => {
         .then(() => setActiveBundle(bundle))
         .catch(() => {
           toast.error(
-            t(
-              'taskEditPage.taskBundle.addFailed',
-              undefined,
-              'Could not lock that task, so it was not added to the bundle.'
-            )
+            t({
+              id: 'taskEditPage.taskBundle.addFailed',
+              defaultMessage: 'Could not lock that task, so it was not added to the bundle.',
+            })
           )
         })
     }

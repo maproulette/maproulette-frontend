@@ -60,7 +60,7 @@ export const FindFeatureByName = () => {
         <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-slate-950/90">
           <Spinner className="text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t('common.updatingResults', undefined, 'Updating results...')}
+            {t({ id: 'common.updatingResults', defaultMessage: 'Updating results...' })}
           </p>
         </div>
       )}
@@ -69,20 +69,22 @@ export const FindFeatureByName = () => {
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner size="lg" className="text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t('common.loading2', undefined, 'Loading...')}
+            {t({ id: 'common.loading2', defaultMessage: 'Loading...' })}
           </p>
         </div>
       ) : totalResults === 0 && hasSearchQuery ? (
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
-              {t('common.noResultsFound', undefined, 'No results found')}
+              {t({ id: 'common.noResultsFound', defaultMessage: 'No results found' })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
-                'appLayout.header.globalSearch.findFeatureByName.nothingMatches',
-                { query: debouncedQuery },
-                'Nothing matches "{query}"'
+                {
+                  id: 'appLayout.header.globalSearch.findFeatureByName.nothingMatches',
+                  defaultMessage: 'Nothing matches "{query}"',
+                },
+                { query: debouncedQuery }
               )}
             </p>
           </div>
@@ -94,18 +96,19 @@ export const FindFeatureByName = () => {
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery
-                    ? t('common.projects', undefined, 'Projects')
-                    : t(
-                        'appLayout.header.globalSearch.findFeatureByName.featuredProjects',
-                        undefined,
-                        'Featured Projects'
-                      )}
+                    ? t({ id: 'common.projects', defaultMessage: 'Projects' })
+                    : t({
+                        id: 'appLayout.header.globalSearch.findFeatureByName.featuredProjects',
+                        defaultMessage: 'Featured Projects',
+                      })}
                 </h3>
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {t(
-                    'appLayout.header.globalSearch.findFeatureByName.resultCount',
-                    { count: projects.length },
-                    '{count, plural, one {# result} other {# results}}'
+                    {
+                      id: 'appLayout.header.globalSearch.findFeatureByName.resultCount',
+                      defaultMessage: '{count, plural, one {# result} other {# results}}',
+                    },
+                    { count: projects.length }
                   )}
                 </span>
               </div>
@@ -144,18 +147,19 @@ export const FindFeatureByName = () => {
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery
-                    ? t('common.challenges', undefined, 'Challenges')
-                    : t(
-                        'appLayout.header.globalSearch.findFeatureByName.exploreChallenges',
-                        undefined,
-                        'Explore Challenges'
-                      )}
+                    ? t({ id: 'common.challenges', defaultMessage: 'Challenges' })
+                    : t({
+                        id: 'appLayout.header.nav.exploreChallenges',
+                        defaultMessage: 'Explore Challenges',
+                      })}
                 </h3>
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {t(
-                    'appLayout.header.globalSearch.findFeatureByName.resultCount',
-                    { count: challenges.length },
-                    '{count, plural, one {# result} other {# results}}'
+                    {
+                      id: 'appLayout.header.globalSearch.findFeatureByName.resultCount',
+                      defaultMessage: '{count, plural, one {# result} other {# results}}',
+                    },
+                    { count: challenges.length }
                   )}
                 </span>
               </div>
@@ -193,13 +197,15 @@ export const FindFeatureByName = () => {
             <div>
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-                  {t('common.tasks', undefined, 'Tasks')}
+                  {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
                 </h3>
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
                   {t(
-                    'appLayout.header.globalSearch.findFeatureByName.resultCount',
-                    { count: tasks.length },
-                    '{count, plural, one {# result} other {# results}}'
+                    {
+                      id: 'appLayout.header.globalSearch.findFeatureByName.resultCount',
+                      defaultMessage: '{count, plural, one {# result} other {# results}}',
+                    },
+                    { count: tasks.length }
                   )}
                 </span>
               </div>
@@ -207,7 +213,7 @@ export const FindFeatureByName = () => {
                 {tasks.map((task) => {
                   const statusLabel =
                     getStatusLabel(t, task.status ?? -1) ||
-                    t('common.unknown', undefined, 'Unknown')
+                    t({ id: 'common.unknown', defaultMessage: 'Unknown' })
                   return (
                     <div key={`t-${task.id}`} className={cardClassName}>
                       <div className="flex min-w-0 flex-1 items-center gap-3">

@@ -12,7 +12,7 @@ export const ManagementLayout = () => {
         <SectionHeader
           accentClass="border-l-emerald-500"
           basePath="/manage"
-          breadcrumbRoot={t('common.createManage', undefined, 'create & manage')}
+          breadcrumbRoot={t({ id: 'common.createManage', defaultMessage: 'create & manage' })}
         />
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-4">
           <Outlet />

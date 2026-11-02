@@ -9,7 +9,7 @@ export const DesktopNav = () => {
 
   return (
     <nav
-      aria-label={t('common.primary', undefined, 'Primary')}
+      aria-label={t({ id: 'common.primary', defaultMessage: 'Primary' })}
       className="hidden text-sm lg:flex lg:gap-6"
     >
       {allNavigationItems.map((item) => (
@@ -25,9 +25,11 @@ export const DesktopNav = () => {
             <ExternalLink
               className="size-3.5 text-current"
               aria-label={t(
-                'appLayout.header.nav.openInNewTab',
-                { label: item.label },
-                'Open {label} in a new tab'
+                {
+                  id: 'appLayout.header.nav.openInNewTab',
+                  defaultMessage: 'Open {label} in a new tab',
+                },
+                { label: item.label }
               )}
             />
           )}

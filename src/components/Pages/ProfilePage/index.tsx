@@ -29,8 +29,14 @@ export const ProfilePage = ({ userId }: Props = {}) => {
       <div className="flex items-center justify-center py-12">
         <p className="text-zinc-500 dark:text-slate-400">
           {isViewingOther
-            ? t('profilePage.index.loadError', undefined, "Couldn't load that user's profile.")
-            : t('profilePage.index.loginRequired', undefined, 'Please log in to view your profile')}
+            ? t({
+                id: 'profilePage.index.loadError',
+                defaultMessage: "Couldn't load that user's profile.",
+              })
+            : t({
+                id: 'profilePage.index.loginRequired',
+                defaultMessage: 'Please log in to view your profile',
+              })}
         </p>
       </div>
     )

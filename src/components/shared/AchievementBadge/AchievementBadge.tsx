@@ -42,7 +42,12 @@ export const AchievementBadge = ({
       onClick={onClick}
       disabled={!onClick}
       aria-label={
-        locked ? t('shared.achievementBadge.lockedLabel', { title }, '{title} (locked)') : title
+        locked
+          ? t(
+              { id: 'shared.achievementBadge.lockedLabel', defaultMessage: '{title} (locked)' },
+              { title }
+            )
+          : title
       }
       className={cn(
         'relative inline-flex items-center justify-center rounded-full border-2 transition-all',
@@ -82,7 +87,7 @@ export const AchievementBadge = ({
           <div className="font-semibold">{title}</div>
           <div className="text-xs opacity-80">
             {locked
-              ? t('shared.achievementBadge.notYetEarned', undefined, 'Not yet earned')
+              ? t({ id: 'shared.achievementBadge.notYetEarned', defaultMessage: 'Not yet earned' })
               : description}
           </div>
         </div>

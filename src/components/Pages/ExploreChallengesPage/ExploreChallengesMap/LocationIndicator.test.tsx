@@ -20,12 +20,10 @@ const contextValue: {
 vi.mock('../contexts/ExploreChallengesSearchContext', () => ({
   useExploreChallengesSearchContext: () => contextValue,
 }))
-vi.mock('@/i18n', () => ({
-  useIntl: () => ({
-    t: (_id: string, values?: Record<string, unknown>, defaultMessage?: string) =>
-      (defaultMessage ?? '').replace('{name}', String(values?.name ?? '')),
-  }),
-}))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  return { useIntl: () => ({ t: testT }) }
+})
 
 const { LocationIndicator } = await import('./LocationIndicator')
 

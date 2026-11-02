@@ -77,11 +77,10 @@ export const ReportModal = () => {
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       toast.error(
-        t(
-          'browsedChallengePage.challengeModals.reportModal.invalidEmailError',
-          undefined,
-          'Please enter a valid email address'
-        )
+        t({
+          id: 'browsedChallengePage.challengeModals.reportModal.invalidEmailError',
+          defaultMessage: 'Please enter a valid email address',
+        })
       )
       return
     }
@@ -102,22 +101,20 @@ export const ReportModal = () => {
       resetForm()
       setReportOpen(false)
       toast.success(
-        t(
-          'browsedChallengePage.challengeModals.reportModal.submitSuccess',
-          undefined,
-          'Report submitted successfully'
-        )
+        t({
+          id: 'browsedChallengePage.challengeModals.reportModal.submitSuccess',
+          defaultMessage: 'Report submitted successfully',
+        })
       )
     } catch (error) {
       logger.error('Error submitting report', { error })
       toast.error(
         await getErrorMessage(
           error,
-          t(
-            'browsedChallengePage.challengeModals.reportModal.submitError',
-            undefined,
-            'Failed to submit report. Please try again.'
-          )
+          t({
+            id: 'browsedChallengePage.challengeModals.reportModal.submitError',
+            defaultMessage: 'Failed to submit report. Please try again.',
+          })
         )
       )
     } finally {
@@ -136,32 +133,32 @@ export const ReportModal = () => {
     <Dialog open={isReportModalOpen} onOpenChange={handleClose}>
       <DialogContent size="xl">
         <DialogHeader>
-          <DialogTitle>{t('common.reportChallenge', undefined, 'Report Challenge')}</DialogTitle>
+          <DialogTitle>
+            {t({ id: 'common.reportChallenge', defaultMessage: 'Report Challenge' })}
+          </DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
-            {t(
-              'browsedChallengePage.challengeModals.reportModal.description',
-              undefined,
-              'You are about to report a Challenge. Your report goes to the MapRoulette administrators for review, and a comment naming you is posted on the Challenge so its creator knows it was raised. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.'
-            )}
+            {t({
+              id: 'browsedChallengePage.challengeModals.reportModal.description',
+              defaultMessage:
+                'You are about to report a Challenge. Your report goes to the MapRoulette administrators for review, and a comment naming you is posted on the Challenge so its creator knows it was raised. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets.',
+            })}
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-2">
           <label htmlFor={emailId} className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t(
-              'browsedChallengePage.challengeModals.reportModal.emailLabel',
-              undefined,
-              'Email (optional)'
-            )}
+            {t({
+              id: 'browsedChallengePage.challengeModals.reportModal.emailLabel',
+              defaultMessage: 'Email (optional)',
+            })}
           </label>
           <Input
             id={emailId}
             type="email"
-            placeholder={t(
-              'browsedChallengePage.challengeModals.reportModal.emailPlaceholder',
-              undefined,
-              'Enter your email'
-            )}
+            placeholder={t({
+              id: 'browsedChallengePage.challengeModals.reportModal.emailPlaceholder',
+              defaultMessage: 'Enter your email',
+            })}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isSubmitting}
@@ -183,7 +180,7 @@ export const ReportModal = () => {
                     : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
-                {t('common.write', undefined, 'Write')}
+                {t({ id: 'common.write', defaultMessage: 'Write' })}
               </button>
               <button
                 type="button"
@@ -195,7 +192,7 @@ export const ReportModal = () => {
                     : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
                 )}
               >
-                {t('common.preview', undefined, 'Preview')}
+                {t({ id: 'common.preview', defaultMessage: 'Preview' })}
               </button>
             </div>
             <span className={cn('font-medium', getCharacterCountColor(characterCount))}>
@@ -225,7 +222,7 @@ export const ReportModal = () => {
                 </div>
               ) : (
                 <p className="text-zinc-500 dark:text-slate-400">
-                  {t('common.nothingToPreview', undefined, 'Nothing to preview')}
+                  {t({ id: 'common.nothingToPreview', defaultMessage: 'Nothing to preview' })}
                 </p>
               )}
             </div>
@@ -234,11 +231,10 @@ export const ReportModal = () => {
               <Textarea
                 id={textId}
                 rows={4}
-                placeholder={t(
-                  'browsedChallengePage.challengeModals.reportModal.textPlaceholder',
-                  undefined,
-                  'Enter text here'
-                )}
+                placeholder={t({
+                  id: 'browsedChallengePage.challengeModals.reportModal.textPlaceholder',
+                  defaultMessage: 'Enter text here',
+                })}
                 value={reportText}
                 onChange={(e) => {
                   const value = e.target.value
@@ -270,30 +266,31 @@ export const ReportModal = () => {
               htmlFor={confirmId}
               className="cursor-pointer text-sm text-zinc-700 dark:text-slate-300"
             >
-              {t(
-                'browsedChallengePage.challengeModals.reportModal.confirmLabel',
-                undefined,
-                'I have attempted to contact the Challenge creator'
-              )}
+              {t({
+                id: 'browsedChallengePage.challengeModals.reportModal.confirmLabel',
+                defaultMessage: 'I have attempted to contact the Challenge creator',
+              })}
             </label>
           </div>
 
           {errors.input && (
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
               {t(
-                'browsedChallengePage.challengeModals.reportModal.minLengthError',
-                { min: MIN_CHARACTERS },
-                'Report must be at least {min} characters'
+                {
+                  id: 'browsedChallengePage.challengeModals.reportModal.minLengthError',
+                  defaultMessage:
+                    'Report must be at least {min, plural, one {# character} other {# characters}}',
+                },
+                { min: MIN_CHARACTERS }
               )}
             </div>
           )}
           {errors.checkbox && (
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
-              {t(
-                'browsedChallengePage.challengeModals.reportModal.checkboxError',
-                undefined,
-                'Please ensure that checkbox is checked before continue'
-              )}
+              {t({
+                id: 'browsedChallengePage.challengeModals.reportModal.checkboxError',
+                defaultMessage: 'Please ensure that checkbox is checked before continue',
+              })}
             </div>
           )}
         </div>
@@ -301,12 +298,11 @@ export const ReportModal = () => {
         <DialogFooter className="mt-6">
           <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting} className="px-8">
             {isSubmitting
-              ? t('common.submitting', undefined, 'Submitting...')
-              : t(
-                  'browsedChallengePage.challengeModals.reportModal.submitButton',
-                  undefined,
-                  'Submit Report'
-                )}
+              ? t({ id: 'common.submitting', defaultMessage: 'Submitting...' })
+              : t({
+                  id: 'browsedChallengePage.challengeModals.reportModal.submitButton',
+                  defaultMessage: 'Submit Report',
+                })}
           </Button>
         </DialogFooter>
       </DialogContent>

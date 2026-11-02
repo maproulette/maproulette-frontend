@@ -37,7 +37,7 @@ export const getChallengeTaxonomy = (
   if (challenge.featured) {
     entries.push({
       key: 'featured',
-      label: t('common.featured', undefined, 'Featured'),
+      label: t({ id: 'common.featured', defaultMessage: 'Featured' }),
       className:
         'border-transparent bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-200',
     })
@@ -46,14 +46,14 @@ export const getChallengeTaxonomy = (
   if (challenge.cooperativeType === COOPERATIVE_TYPE_TAGS) {
     entries.push({
       key: 'tagFix',
-      label: t('common.tagFix', undefined, 'Tag Fix'),
+      label: t({ id: 'common.tagFix', defaultMessage: 'Tag Fix' }),
       className:
         'border-transparent bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-200',
     })
   } else if (challenge.cooperativeType === COOPERATIVE_TYPE_CHANGEFILE) {
     entries.push({
       key: 'cooperative',
-      label: t('common.cooperative', undefined, 'Cooperative'),
+      label: t({ id: 'common.cooperative', defaultMessage: 'Cooperative' }),
       className:
         'border-transparent bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-200',
     })
@@ -62,7 +62,7 @@ export const getChallengeTaxonomy = (
   if (challenge.isGlobal) {
     entries.push({
       key: 'global',
-      label: t('common.global', undefined, 'Global'),
+      label: t({ id: 'common.global', defaultMessage: 'Global' }),
       className:
         'border-transparent bg-violet-100 text-violet-800 dark:bg-violet-900/50 dark:text-violet-200',
     })

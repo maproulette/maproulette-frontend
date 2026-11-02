@@ -22,23 +22,28 @@ export const ClearBundleDialog = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('taskMap.clearBundleDialog.title', undefined, 'Clear Task Bundle?')}
+            {t({ id: 'taskMap.clearBundleDialog.title', defaultMessage: 'Clear Task Bundle?' })}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {t(
-              'taskMap.clearBundleDialog.description',
-              { taskCount },
-              'This will unbundle all {taskCount} tasks. The tasks themselves will not be deleted, only separated. This action cannot be undone.'
+              {
+                id: 'taskMap.clearBundleDialog.description',
+                defaultMessage:
+                  'This will unbundle all {taskCount, plural, one {# task} other {# tasks}}. The tasks themselves will not be deleted, only separated. This action cannot be undone.',
+              },
+              { taskCount }
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+          <AlertDialogCancel>
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleClearBundle}
             className="bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-800"
           >
-            {t('taskMap.clearBundleDialog.confirm', undefined, 'Clear Bundle')}
+            {t({ id: 'taskMap.clearBundleDialog.confirm', defaultMessage: 'Clear Bundle' })}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

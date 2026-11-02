@@ -18,7 +18,7 @@ export const DifficultyFilter = () => {
   return (
     <div className="flex items-center gap-2">
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
-        {t('common.difficulty', undefined, 'Difficulty')}
+        {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
       </Label>
       <Select value={difficulty} onValueChange={(value) => setDifficulty(value as DifficultyLevel)}>
         <SelectTrigger className="h-9 w-24">
@@ -26,7 +26,7 @@ export const DifficultyFilter = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="Any">
-            {t('exploreChallenges.filterBar.difficulty.any', undefined, 'Any')}
+            {t({ id: 'exploreChallenges.filterBar.difficulty.any', defaultMessage: 'Any' })}
           </SelectItem>
           <SelectItem value="Easy">
             {getDifficultyLabel(t, difficultyMap.Easy as number)}

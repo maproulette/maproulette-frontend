@@ -29,12 +29,14 @@ export const TaskFieldsSection = ({ dataSource }: TaskFieldsSectionProps) => {
 
   return (
     <FormSection
-      title={t('manageChallengeNew.challengeForm.taskSettingsTitle', undefined, 'Task settings')}
-      description={t(
-        'manageChallengeNew.challengeForm.taskSettingsDescription',
-        undefined,
-        'How tasks in this challenge are identified and grouped.'
-      )}
+      title={t({
+        id: 'manageChallengeNew.challengeForm.taskSettingsTitle',
+        defaultMessage: 'Task settings',
+      })}
+      description={t({
+        id: 'manageChallengeNew.challengeForm.taskSettingsDescription',
+        defaultMessage: 'How tasks in this challenge are identified and grouped.',
+      })}
     >
       <FormField
         control={form.control}
@@ -42,27 +44,25 @@ export const TaskFieldsSection = ({ dataSource }: TaskFieldsSectionProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              {t(
-                'manageChallengeNew.challengeForm.osmIdPropertyLabel',
-                undefined,
-                'OSM/External Id Property'
-              )}
+              {t({
+                id: 'manageChallengeNew.challengeForm.osmIdPropertyLabel',
+                defaultMessage: 'OSM/External Id Property',
+              })}
             </FormLabel>
             <FormControl>
               <Input placeholder="@id" {...field} />
             </FormControl>
             <FormDescription>
-              {t(
-                'manageChallengeNew.challengeForm.osmIdPropertyDescription',
-                undefined,
-                "The feature property holding each task's identifier. Leave blank to let MapRoulette detect it."
-              )}{' '}
+              {t({
+                id: 'manageChallengeNew.challengeForm.osmIdPropertyDescription',
+                defaultMessage:
+                  "The feature property holding each task's identifier. Leave blank to let MapRoulette detect it.",
+              })}{' '}
               <DocsLink page="externalTaskIdentifiers" icon={null}>
-                {t(
-                  'manageChallengeNew.challengeForm.osmIdPropertyDocsLink',
-                  undefined,
-                  'About task identifiers'
-                )}
+                {t({
+                  id: 'manageChallengeNew.challengeForm.osmIdPropertyDocsLink',
+                  defaultMessage: 'About task identifiers',
+                })}
               </DocsLink>
             </FormDescription>
             <FormMessage />
@@ -76,11 +76,10 @@ export const TaskFieldsSection = ({ dataSource }: TaskFieldsSectionProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              {t(
-                'manageChallengeNew.challengeForm.taskBundleIdPropertyLabel',
-                undefined,
-                'Task Bundle Id Property'
-              )}
+              {t({
+                id: 'manageChallengeNew.challengeForm.taskBundleIdPropertyLabel',
+                defaultMessage: 'Task Bundle Id Property',
+              })}
             </FormLabel>
             <FormControl>
               <Input
@@ -88,11 +87,11 @@ export const TaskFieldsSection = ({ dataSource }: TaskFieldsSectionProps) => {
                 disabled={bundlingUnavailable}
                 title={
                   bundlingUnavailable
-                    ? t(
-                        'manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning',
-                        undefined,
-                        'Grouping features into one task is not available for Overpass queries. Choose a GeoJSON source to use it.'
-                      )
+                    ? t({
+                        id: 'manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning',
+                        defaultMessage:
+                          'Grouping features into one task is not available for Overpass queries. Choose a GeoJSON source to use it.',
+                      })
                     : undefined
                 }
                 {...field}
@@ -100,16 +99,16 @@ export const TaskFieldsSection = ({ dataSource }: TaskFieldsSectionProps) => {
             </FormControl>
             <FormDescription>
               {bundlingUnavailable
-                ? t(
-                    'manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning',
-                    undefined,
-                    'Grouping features into one task is not available for Overpass queries. Choose a GeoJSON source to use it.'
-                  )
-                : t(
-                    'manageChallengeNew.challengeForm.taskBundleIdPropertyDescription',
-                    undefined,
-                    'The feature property to treat as a bundle id. Features sharing a value become a single task with multiple features; features without the property stay as separate tasks. Leave blank for one task per feature.'
-                  )}
+                ? t({
+                    id: 'manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning',
+                    defaultMessage:
+                      'Grouping features into one task is not available for Overpass queries. Choose a GeoJSON source to use it.',
+                  })
+                : t({
+                    id: 'manageChallengeNew.challengeForm.taskBundleIdPropertyDescription',
+                    defaultMessage:
+                      'The feature property to treat as a bundle id. Features sharing a value become a single task with multiple features; features without the property stay as separate tasks. Leave blank for one task per feature.',
+                  })}
             </FormDescription>
             <FormMessage />
           </FormItem>

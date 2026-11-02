@@ -20,50 +20,67 @@ import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
 export const ChallengesTableView = () => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { challenges } = useChallengeResultsContext()
   return (
     <ScrollArea className="min-h-0 w-full flex-1">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
+            <TableHead>{t({ id: 'common.name', defaultMessage: 'Name' })}</TableHead>
             <TableHead>
-              {t('exploreChallenges.challengeList.table.author', undefined, 'Author')}
+              {t({ id: 'exploreChallenges.challengeList.table.author', defaultMessage: 'Author' })}
             </TableHead>
             <TableHead>
-              {t('exploreChallenges.challengeList.table.organisation', undefined, 'Organisation')}
+              {t({
+                id: 'exploreChallenges.challengeList.table.organisation',
+                defaultMessage: 'Organisation',
+              })}
             </TableHead>
             <TableHead className="text-center">
-              {t(
-                'exploreChallenges.challengeList.table.percentMapped',
-                undefined,
-                'Percent mapped'
-              )}
+              {t({
+                id: 'exploreChallenges.challengeList.table.percentMapped',
+                defaultMessage: 'Percent mapped',
+              })}
             </TableHead>
             <TableHead className="text-center">
-              {t(
-                'exploreChallenges.challengeList.table.percentValidated',
-                undefined,
-                'Percent validated'
-              )}
+              {t({
+                id: 'exploreChallenges.challengeList.table.percentValidated',
+                defaultMessage: 'Percent validated',
+              })}
             </TableHead>
             <TableHead className="text-center">
-              {t('exploreChallenges.challengeList.table.contributors', undefined, 'Contributors')}
+              {t({
+                id: 'exploreChallenges.challengeList.table.contributors',
+                defaultMessage: 'Contributors',
+              })}
             </TableHead>
-            <TableHead className="text-center">{t('common.type', undefined, 'Type')}</TableHead>
             <TableHead className="text-center">
-              {t('common.difficulty', undefined, 'Difficulty')}
+              {t({ id: 'common.type', defaultMessage: 'Type' })}
             </TableHead>
-            <TableHead className="text-center">{t('common.status', undefined, 'Status')}</TableHead>
-            <TableHead>
-              {t('exploreChallenges.challengeList.table.location', undefined, 'Location')}
+            <TableHead className="text-center">
+              {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
+            </TableHead>
+            <TableHead className="text-center">
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
             </TableHead>
             <TableHead>
-              {t('exploreChallenges.challengeList.table.lastUpdated', undefined, 'Last updated')}
+              {t({
+                id: 'exploreChallenges.challengeList.table.location',
+                defaultMessage: 'Location',
+              })}
             </TableHead>
             <TableHead>
-              {t('exploreChallenges.challengeList.table.dueDate', undefined, 'Due date')}
+              {t({
+                id: 'exploreChallenges.challengeList.table.lastUpdated',
+                defaultMessage: 'Last updated',
+              })}
+            </TableHead>
+            <TableHead>
+              {t({
+                id: 'exploreChallenges.challengeList.table.dueDate',
+                defaultMessage: 'Due date',
+              })}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -85,18 +102,22 @@ export const ChallengesTableView = () => {
                 <TableCell className="text-zinc-600 dark:text-slate-400">
                   {challenge.owner
                     ? t(
-                        'exploreChallenges.challengeList.table.userLabel',
-                        { owner: challenge.owner },
-                        'User {owner}'
+                        {
+                          id: 'exploreChallenges.challengeList.table.userLabel',
+                          defaultMessage: 'User {owner}',
+                        },
+                        { owner: challenge.owner }
                       )
                     : '--'}
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
                   {challenge.parent
                     ? t(
-                        'exploreChallenges.challengeList.table.projectLabel',
-                        { name: parentName },
-                        'Project {name}'
+                        {
+                          id: 'exploreChallenges.challengeList.table.projectLabel',
+                          defaultMessage: 'Project {name}',
+                        },
+                        { name: parentName }
                       )
                     : '--'}
                 </TableCell>
@@ -126,21 +147,23 @@ export const ChallengesTableView = () => {
                     className="text-xs"
                   >
                     {!challenge.enabled
-                      ? t('exploreChallenges.challengeList.table.disabled', undefined, 'Disabled')
+                      ? t({
+                          id: 'exploreChallenges.challengeList.table.disabled',
+                          defaultMessage: 'Disabled',
+                        })
                       : isChallengeComplete(challenge)
-                        ? t('common.completed', undefined, 'Completed')
-                        : t(
-                            'exploreChallenges.challengeList.table.published',
-                            undefined,
-                            'Published'
-                          )}
+                        ? t({ id: 'common.completed', defaultMessage: 'Completed' })
+                        : t({
+                            id: 'exploreChallenges.challengeList.table.published',
+                            defaultMessage: 'Published',
+                          })}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
                   {typeof challenge.location === 'string' ? challenge.location : '--'}
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
-                  {challenge.modified ? formatDate(new Date(challenge.modified)) : '--'}
+                  {challenge.modified ? formatDate(new Date(challenge.modified), locale) : '--'}
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">--</TableCell>
               </TableRow>

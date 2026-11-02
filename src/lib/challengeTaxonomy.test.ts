@@ -1,5 +1,6 @@
+import { createIntl } from 'react-intl'
 import { describe, expect, it } from 'vitest'
-import type { TranslateFn } from '@/i18n'
+import { testT } from '@/test/translate'
 import {
   COOPERATIVE_TYPE_CHANGEFILE,
   COOPERATIVE_TYPE_NONE,
@@ -8,7 +9,7 @@ import {
   isCooperative,
 } from './challengeTaxonomy'
 
-const t: TranslateFn = (id, _values, defaultMessage) => defaultMessage ?? id
+const t = testT
 
 type TaxonomyInput = Parameters<typeof getChallengeTaxonomy>[0]
 
@@ -88,7 +89,13 @@ describe('getChallengeTaxonomy', () => {
   })
 
   it('uses translated labels when the catalog has them', () => {
-    const translated: TranslateFn = (id) => `translated:${id}`
+    const translated = createIntl({
+      locale: 'en-US',
+      messages: {
+        'common.featured': 'translated:common.featured',
+        'common.global': 'translated:common.global',
+      },
+    }).formatMessage
     expect(
       getChallengeTaxonomy(challenge({ featured: true, isGlobal: true }), translated).map(
         (e) => e.label

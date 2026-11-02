@@ -26,12 +26,11 @@ export const TeamProjectsView = () => {
         renderItem={(project) => <ProjectCard project={project} />}
         emptyState={{
           icon: FolderOpen,
-          title: t('teams.detail.noProjectsTitle', undefined, 'No projects'),
-          description: t(
-            'teams.detail.noProjectsDescription',
-            undefined,
-            'This team has not been given a role on any project.'
-          ),
+          title: t({ id: 'teams.detail.noProjectsTitle', defaultMessage: 'No projects' }),
+          description: t({
+            id: 'teams.detail.noProjectsDescription',
+            defaultMessage: 'This team has not been given a role on any project.',
+          }),
         }}
       />
     </div>

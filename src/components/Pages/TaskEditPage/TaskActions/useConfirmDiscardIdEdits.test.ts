@@ -12,7 +12,10 @@ const editor = vi.hoisted(() => ({
 vi.mock('@/components/Pages/TaskEditPage/contexts/EditorContext', () => ({
   useOptionalEditorContext: () => editor,
 }))
-vi.mock('@/i18n', () => ({ useIntl: () => ({ t: (_k: string, _v: unknown, d: string) => d }) }))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  return { useIntl: () => ({ t: testT }) }
+})
 
 const { useConfirmDiscardIdEdits } = await import('./useConfirmDiscardIdEdits')
 

@@ -79,11 +79,10 @@ export const UnifiedSearchList = () => {
             icon: FolderOpen,
             badge: {
               variant: 'default',
-              label: t(
-                'appLayout.header.globalSearch.unifiedList.goToProject',
-                undefined,
-                'Go to project'
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToProject',
+                defaultMessage: 'Go to project',
+              }),
             },
             href: '/project/$projectId',
             params: { projectId: String(project.id) },
@@ -101,11 +100,10 @@ export const UnifiedSearchList = () => {
             icon: Target,
             badge: {
               variant: 'default',
-              label: t(
-                'appLayout.header.globalSearch.unifiedList.goToChallenge',
-                undefined,
-                'Go to challenge'
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToChallenge',
+                defaultMessage: 'Go to challenge',
+              }),
             },
             href: '/challenge/$challengeId',
             params: { challengeId: String(challenge.id) },
@@ -123,11 +121,10 @@ export const UnifiedSearchList = () => {
             icon: FolderOpen,
             badge: {
               variant: 'default',
-              label: t(
-                'appLayout.header.globalSearch.unifiedList.goToProject',
-                undefined,
-                'Go to project'
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToProject',
+                defaultMessage: 'Go to project',
+              }),
             },
             href: '/project/$projectId',
             params: { projectId: String(project.id) },
@@ -145,11 +142,10 @@ export const UnifiedSearchList = () => {
             icon: Target,
             badge: {
               variant: 'default',
-              label: t(
-                'appLayout.header.globalSearch.unifiedList.goToChallenge',
-                undefined,
-                'Go to challenge'
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToChallenge',
+                defaultMessage: 'Go to challenge',
+              }),
             },
             href: '/challenge/$challengeId',
             params: { challengeId: String(challenge.id) },
@@ -260,7 +256,7 @@ export const UnifiedSearchList = () => {
     return (
       <span className="py-6 text-center">
         <p className="text-xs text-zinc-500 dark:text-slate-400">
-          {t('common.noResultsFound', undefined, 'No results found')}
+          {t({ id: 'common.noResultsFound', defaultMessage: 'No results found' })}
         </p>
       </span>
     )

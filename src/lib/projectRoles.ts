@@ -1,3 +1,5 @@
+import { defineMessage, type MessageDescriptor } from 'react-intl'
+
 /** Project roles, as defined by the server. */
 export const PROJECT_ROLE = {
   admin: 1,
@@ -5,14 +7,35 @@ export const PROJECT_ROLE = {
   read: 3,
 } as const
 
-export const projectRoleOptions = [
+export const projectRoleOptions: {
+  value: number
+  label: MessageDescriptor
+  description: MessageDescriptor
+}[] = [
   {
     value: PROJECT_ROLE.admin,
-    label: 'Admin',
-    description: 'Full control, including managing other managers',
+    label: defineMessage({ id: 'projectRoles.admin', defaultMessage: 'Admin' }),
+    description: defineMessage({
+      id: 'projectRoles.adminDescription',
+      defaultMessage: 'Full control, including managing other managers',
+    }),
   },
-  { value: PROJECT_ROLE.write, label: 'Write', description: 'Create and edit challenges' },
-  { value: PROJECT_ROLE.read, label: 'Read', description: 'View the project and its challenges' },
+  {
+    value: PROJECT_ROLE.write,
+    label: defineMessage({ id: 'projectRoles.write', defaultMessage: 'Write' }),
+    description: defineMessage({
+      id: 'projectRoles.writeDescription',
+      defaultMessage: 'Create and edit challenges',
+    }),
+  },
+  {
+    value: PROJECT_ROLE.read,
+    label: defineMessage({ id: 'projectRoles.read', defaultMessage: 'Read' }),
+    description: defineMessage({
+      id: 'projectRoles.readDescription',
+      defaultMessage: 'View the project and its challenges',
+    }),
+  },
 ]
 
 /**
@@ -21,9 +44,6 @@ export const projectRoleOptions = [
  * is sent so the stored value is at least consistent.
  */
 export const TEAM_ATTACHMENT_ROLE = PROJECT_ROLE.write
-
-export const projectRoleLabel = (role: number): string =>
-  projectRoleOptions.find((option) => option.value === role)?.label ?? `Role ${role}`
 
 /**
  * The strongest role in a set of grants. The server numbers roles so that a

@@ -32,12 +32,11 @@ export const TeamChallengesView = () => {
         )}
         emptyState={{
           icon: Target,
-          title: t('teams.detail.noChallengesTitle', undefined, 'No challenges'),
-          description: t(
-            'teams.detail.noChallengesDescription',
-            undefined,
-            'No challenge has been given to this team yet.'
-          ),
+          title: t({ id: 'teams.detail.noChallengesTitle', defaultMessage: 'No challenges' }),
+          description: t({
+            id: 'teams.detail.noChallengesDescription',
+            defaultMessage: 'No challenge has been given to this team yet.',
+          }),
         }}
       />
     </div>

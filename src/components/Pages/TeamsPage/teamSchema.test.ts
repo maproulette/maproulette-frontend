@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { teamFormSchema } from './teamSchema.ts'
+import { testT } from '@/test/translate'
+import { makeTeamFormSchema } from './teamSchema.ts'
+
+const teamFormSchema = makeTeamFormSchema(testT)
 
 const validInput = {
   name: 'Road Warriors',
@@ -46,7 +49,7 @@ describe('teamFormSchema', () => {
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(
-        result.error.issues.some((issue) => issue.message === 'Keep it under 1000 characters')
+        result.error.issues.some((issue) => issue.message === 'Keep it under 1,000 characters')
       ).toBe(true)
     }
   })

@@ -92,9 +92,8 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
                 onClick={() => handleRemove(custom.id)}
                 className="rounded p-2 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 aria-label={t(
-                  'map.styleSwitcher.removeLayer',
-                  { name: custom.name },
-                  'Remove {name}'
+                  { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
+                  { name: custom.name }
                 )}
               >
                 <Trash2 className="size-4" />
@@ -108,25 +107,30 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
         <div className="mt-2 space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
           <div className="space-y-1">
             <Label htmlFor={`${fieldId}-name`}>
-              {t('map.styleSwitcher.nameLabel', undefined, 'Name')}
+              {t({ id: 'common.name', defaultMessage: 'Name' })}
             </Label>
             <Input
               id={`${fieldId}-name`}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="My imagery"
+              placeholder={t({
+                id: 'map.styleSwitcher.namePlaceholder',
+                defaultMessage: 'My imagery',
+              })}
             />
           </div>
           <div className="space-y-1">
             <Label htmlFor={`${fieldId}-type`}>
-              {t('map.styleSwitcher.typeLabel', undefined, 'Type')}
+              {t({ id: 'common.type', defaultMessage: 'Type' })}
             </Label>
             <Select value={type} onValueChange={(v) => setType(v as CustomLayerType)}>
               <SelectTrigger id={`${fieldId}-type`} className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="xyz">XYZ tiles</SelectItem>
+                <SelectItem value="xyz">
+                  {t({ id: 'map.styleSwitcher.typeXyz', defaultMessage: 'XYZ tiles' })}
+                </SelectItem>
                 <SelectItem value="wms">WMS</SelectItem>
               </SelectContent>
             </Select>
@@ -134,8 +138,8 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
           <div className="space-y-1">
             <Label htmlFor={`${fieldId}-url`}>
               {type === 'xyz'
-                ? t('map.styleSwitcher.xyzUrlLabel', undefined, 'Tile URL')
-                : t('map.styleSwitcher.wmsUrlLabel', undefined, 'WMS endpoint')}
+                ? t({ id: 'map.styleSwitcher.xyzUrlLabel', defaultMessage: 'Tile URL' })
+                : t({ id: 'map.styleSwitcher.wmsUrlLabel', defaultMessage: 'WMS endpoint' })}
             </Label>
             <Input
               id={`${fieldId}-url`}
@@ -151,7 +155,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
           {type === 'wms' && (
             <div className="space-y-1">
               <Label htmlFor={`${fieldId}-layers`}>
-                {t('map.styleSwitcher.wmsLayersLabel', undefined, 'WMS layers')}
+                {t({ id: 'map.styleSwitcher.wmsLayersLabel', defaultMessage: 'WMS layers' })}
               </Label>
               <Input
                 id={`${fieldId}-layers`}
@@ -163,10 +167,10 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
           )}
           <div className="flex justify-end gap-2 pt-1">
             <Button variant="outline" size="sm" onClick={() => setAdding(false)}>
-              {t('common.cancel', undefined, 'Cancel')}
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
             </Button>
             <Button size="sm" disabled={!canSave} onClick={handleAdd}>
-              {t('map.styleSwitcher.addLayer', undefined, 'Add layer')}
+              {t({ id: 'map.styleSwitcher.addLayer', defaultMessage: 'Add layer' })}
             </Button>
           </div>
         </div>
@@ -178,7 +182,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
           onClick={() => setAdding(true)}
         >
           <Plus className="size-4" />
-          {t('map.styleSwitcher.addCustom', undefined, 'Add your own layer')}
+          {t({ id: 'map.styleSwitcher.addCustom', defaultMessage: 'Add your own layer' })}
         </Button>
       )}
     </div>

@@ -14,12 +14,18 @@ export const AchievementEarnedContent = ({ achievementId }: Props) => {
       <AchievementBadge achievement={achievementId} size="lg" showTooltip={false} />
       <div>
         <h2 className="font-bold text-xl">
-          {t('congratulateModal.achievement.title', undefined, 'Achievement unlocked!')}
+          {t({
+            id: 'congratulateModal.achievement.title',
+            defaultMessage: 'Achievement unlocked!',
+          })}
         </h2>
         <p className="text-zinc-600 dark:text-slate-400">
           {def
             ? `${def.title} — ${def.description}`
-            : t('congratulateModal.achievement.fallback', undefined, 'You earned a new badge.')}
+            : t({
+                id: 'congratulateModal.achievement.fallback',
+                defaultMessage: 'You earned a new badge.',
+              })}
         </p>
       </div>
     </div>

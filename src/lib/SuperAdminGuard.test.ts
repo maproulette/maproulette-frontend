@@ -21,11 +21,10 @@ vi.mock('@/contexts/AuthContext', () => ({
   useAuthContext: () => mockUseAuthContext(),
 }))
 
-vi.mock('@/i18n', () => ({
-  useIntl: () => ({
-    t: (id: string, _values?: unknown, defaultMessage?: string) => defaultMessage ?? id,
-  }),
-}))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  return { useIntl: () => ({ t: testT }) }
+})
 
 function renderComponent(element: ReturnType<typeof createElement>) {
   const container = document.createElement('div')

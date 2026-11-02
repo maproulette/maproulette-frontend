@@ -8,7 +8,7 @@ import { getStatusLabel } from '@/lib/taskConstants'
 import { useProfilePageContext } from '../contexts/ProfilePageContext'
 
 export const TaskStatsBlock = () => {
-  const { t } = useIntl()
+  const { t, formatNumber } = useIntl()
   const { userId, timeRange } = useProfilePageContext()
   const { data, isLoading, isError } = api.user.metrics(userId, timeRange.monthDuration)
 
@@ -17,7 +17,7 @@ export const TaskStatsBlock = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <CheckCircle2 className="size-4 text-teal-600" aria-hidden="true" />
-          {t('common.tasks', undefined, 'Tasks')}
+          {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -25,13 +25,19 @@ export const TaskStatsBlock = () => {
           <Skeleton className="h-12 w-32" />
         ) : isError || !data ? (
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t('profilePage.taskStats.loadError', undefined, "Couldn't load task stats.")}
+            {t({
+              id: 'profilePage.taskStats.loadError',
+              defaultMessage: "Couldn't load task stats.",
+            })}
           </p>
         ) : (
           <>
             <div>
               <div className="mb-1 text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                {t('profilePage.taskStats.totalCompleted', undefined, 'Total completed')}
+                {t({
+                  id: 'profilePage.taskStats.totalCompleted',
+                  defaultMessage: 'Total completed',
+                })}
               </div>
               <DigitDisplay value={data.total ?? 0} size="lg" />
             </div>
@@ -41,9 +47,12 @@ export const TaskStatsBlock = () => {
                   <div key={status} className="flex justify-between">
                     <dt className="text-zinc-600 dark:text-slate-400">
                       {getStatusLabel(t, Number(status)) ??
-                        t('common.statusWithStatus', { status }, 'Status {status}')}
+                        t(
+                          { id: 'common.statusWithStatus', defaultMessage: 'Status {status}' },
+                          { status }
+                        )}
                     </dt>
-                    <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>
+                    <dd className="font-medium font-mono tabular-nums">{formatNumber(count)}</dd>
                   </div>
                 ))}
               </dl>

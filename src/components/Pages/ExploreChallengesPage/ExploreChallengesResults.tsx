@@ -27,11 +27,13 @@ export const ExploreChallengesResults = () => {
               <TabsList className="w-full">
                 <TabsTrigger value="list">
                   <List />
-                  <span>{t('exploreChallenges.results.tabList', undefined, 'List')}</span>
+                  <span>
+                    {t({ id: 'exploreChallenges.results.tabList', defaultMessage: 'List' })}
+                  </span>
                 </TabsTrigger>
                 <TabsTrigger value="map">
                   <MapIcon />
-                  <span>{t('common.map', undefined, 'Map')}</span>
+                  <span>{t({ id: 'common.map', defaultMessage: 'Map' })}</span>
                 </TabsTrigger>
               </TabsList>
             </div>

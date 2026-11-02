@@ -12,7 +12,7 @@ export const Loader = ({
   isFullScreen?: boolean
 }) => {
   const { t } = useIntl()
-  const displayMessage = message ?? t('common.loading2', undefined, 'Loading...')
+  const displayMessage = message ?? t({ id: 'common.loading2', defaultMessage: 'Loading...' })
 
   return (
     <div

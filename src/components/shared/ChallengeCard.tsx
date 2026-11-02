@@ -55,7 +55,7 @@ export const ChallengeCard = ({
   linkSearch,
   onLinkClick,
 }: ChallengeCardProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   // The image url is addressed by owning team, so a challenge can carry one
   // and still have nothing to show when that team has no approved image. Space
   // for it is only reserved while it is actually rendering.
@@ -103,7 +103,10 @@ export const ChallengeCard = ({
         <div
           className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
         >
-          {t('shared.challengeCard.project', { name: displayParentName }, '{name}')}
+          {t(
+            { id: 'shared.challengeCard.project', defaultMessage: '{name}' },
+            { name: displayParentName }
+          )}
         </div>
 
         <h3
@@ -128,11 +131,20 @@ export const ChallengeCard = ({
 
         <div>
           <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
-            <span className="font-semibold text-zinc-900 dark:text-white">{totalTasks}</span>{' '}
-            {t('common.tasks2', undefined, 'tasks')}
-            {' · '}
-            <span className="font-semibold text-zinc-900 dark:text-white">{pct}%</span>{' '}
-            {t('common.complete', undefined, 'complete')}
+            {t(
+              {
+                id: 'challengeCard.progress',
+                defaultMessage:
+                  '<b>{count, number}</b> {count, plural, one {task} other {tasks}} · <b>{percent, number, percent}</b> complete',
+              },
+              {
+                count: totalTasks,
+                percent: pct / 100,
+                b: (chunks) => (
+                  <span className="font-semibold text-zinc-900 dark:text-white">{chunks}</span>
+                ),
+              }
+            )}
           </div>
 
           <ProgressBar
@@ -146,7 +158,7 @@ export const ChallengeCard = ({
               {challenge.difficulty != null && getDifficultyLabel(t, challenge.difficulty)}
               {isComplete && (
                 <Badge variant="success" className="text-xs">
-                  {t('common.completed', undefined, 'Completed')}
+                  {t({ id: 'common.completed', defaultMessage: 'Completed' })}
                 </Badge>
               )}
               <ChallengeTaxonomy challenge={challenge} />
@@ -154,9 +166,8 @@ export const ChallengeCard = ({
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
                 {t(
-                  'common.lastUpdated',
-                  { date: formatDate(new Date(lastUpdated)) },
-                  'Last updated {date}'
+                  { id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' },
+                  { date: formatDate(new Date(lastUpdated), locale) }
                 )}
               </span>
             ) : null}

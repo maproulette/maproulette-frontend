@@ -1,4 +1,6 @@
+import { defineMessage, defineMessages, type MessageDescriptor } from 'react-intl'
 import type { ProgressSegment } from '@/components/shared/ProgressBar'
+import { useIntl } from '@/i18n'
 import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import type { CompletionMetrics } from '@/types/Challenge'
 
@@ -20,18 +22,18 @@ const STATUS_COLORS: Record<string, string> = {
   disabled: colorForKey('disabled'),
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  fixed: 'Fixed',
-  falsePositive: 'Not an Issue',
-  alreadyFixed: 'Already Fixed',
-  validated: 'Validated',
-  answered: 'Answered',
-  deleted: 'Deleted',
-  disabled: 'Disabled',
-  tooHard: "Can't Complete",
-  skipped: 'Skipped',
-  available: 'Created',
-}
+const SEGMENT_MESSAGES: Record<string, MessageDescriptor> = defineMessages({
+  fixed: { id: 'common.fixed', defaultMessage: 'Fixed' },
+  falsePositive: { id: 'common.notAnIssue', defaultMessage: 'Not an Issue' },
+  alreadyFixed: { id: 'common.alreadyFixed', defaultMessage: 'Already Fixed' },
+  tooHard: { id: 'common.cantComplete', defaultMessage: "Can't Complete" },
+  remaining: { id: 'challengeProgress.remaining', defaultMessage: 'Remaining' },
+})
+
+const SEGMENT_TITLE: MessageDescriptor = defineMessage({
+  id: 'challengeProgress.segmentTitle',
+  defaultMessage: '{status}: {count, number}',
+})
 
 // Left side: completed statuses (count toward completion %)
 const COMPLETED_STATUSES = ['fixed', 'falsePositive', 'alreadyFixed'] as const
@@ -76,6 +78,7 @@ const getCompletionPercentage = (metrics?: CompletionMetrics) => {
 }
 
 export const useChallengeProgress = (metrics?: CompletionMetrics) => {
+  const { t } = useIntl()
   const total = getTotal(metrics)
   const completionPercentage = getCompletionPercentage(metrics)
 
@@ -94,7 +97,7 @@ export const useChallengeProgress = (metrics?: CompletionMetrics) => {
           // COMPLETED_STATUSES are all backed by a STATUS_COLORS entry; fallback is unreachable.
           /* v8 ignore next -- @preserve */
           color: STATUS_COLORS[status] || '#9ca3af',
-          title: `${STATUS_LABELS[status]}: ${count}`,
+          title: t(SEGMENT_TITLE, { status: t(SEGMENT_MESSAGES[status]), count }),
         })
       }
     }
@@ -105,7 +108,10 @@ export const useChallengeProgress = (metrics?: CompletionMetrics) => {
         key: PROBLEM_STATUS,
         percentage: (tooHardCount / total) * 100,
         color: PROBLEM_STYLE.color,
-        title: `${STATUS_LABELS[PROBLEM_STATUS]}: ${tooHardCount}`,
+        title: t(SEGMENT_TITLE, {
+          status: t(SEGMENT_MESSAGES[PROBLEM_STATUS]),
+          count: tooHardCount,
+        }),
         opacity: PROBLEM_STYLE.opacity,
       })
     }
@@ -120,7 +126,10 @@ export const useChallengeProgress = (metrics?: CompletionMetrics) => {
         key: 'remaining',
         percentage: fillPercent,
         color: REMAINING_FILL_STYLE.color,
-        title: `Remaining: ${total - Math.round(((completedSum + tooHardPercent) / 100) * total)}`,
+        title: t(SEGMENT_TITLE, {
+          status: t(SEGMENT_MESSAGES.remaining),
+          count: total - Math.round(((completedSum + tooHardPercent) / 100) * total),
+        }),
         opacity: REMAINING_FILL_STYLE.opacity,
       })
     }

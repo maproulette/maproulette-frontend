@@ -60,7 +60,7 @@ export const ManageTaskEdit = () => {
     return (
       <ManageFormLayout>
         <FormCard
-          title={t('manageTaskEdit.index.taskDetailsTitle', undefined, 'Task Details')}
+          title={t({ id: 'manageTaskEdit.index.taskDetailsTitle', defaultMessage: 'Task Details' })}
           description=""
           isLoading
         >
@@ -74,19 +74,17 @@ export const ManageTaskEdit = () => {
     return (
       <ManageFormLayout>
         <FormCard
-          title={t('common.accessDenied', undefined, 'Access denied')}
-          description={t(
-            'manageTaskEdit.index.accessDeniedDescription',
-            undefined,
-            'Only challenge owners and admins can edit tasks.'
-          )}
+          title={t({ id: 'common.accessDenied', defaultMessage: 'Access denied' })}
+          description={t({
+            id: 'manageTaskEdit.index.accessDeniedDescription',
+            defaultMessage: 'Only challenge owners and admins can edit tasks.',
+          })}
         >
           <p className="text-zinc-600 dark:text-zinc-400">
-            {t(
-              'manageTaskEdit.index.noPermission',
-              undefined,
-              'You do not have permission to edit this task.'
-            )}
+            {t({
+              id: 'manageTaskEdit.index.noPermission',
+              defaultMessage: 'You do not have permission to edit this task.',
+            })}
           </p>
         </FormCard>
       </ManageFormLayout>
@@ -96,12 +94,11 @@ export const ManageTaskEdit = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title={t('manageTaskEdit.index.taskDetailsTitle', undefined, 'Task Details')}
-        description={t(
-          'manageTaskEdit.index.taskDetailsDescription',
-          undefined,
-          'Modify the fields below and save to update the task'
-        )}
+        title={t({ id: 'manageTaskEdit.index.taskDetailsTitle', defaultMessage: 'Task Details' })}
+        description={t({
+          id: 'manageTaskEdit.index.taskDetailsDescription',
+          defaultMessage: 'Modify the fields below and save to update the task',
+        })}
       >
         <TaskForm task={task} onSubmit={handleSubmit} onCancel={handleCancel} />
       </FormCard>

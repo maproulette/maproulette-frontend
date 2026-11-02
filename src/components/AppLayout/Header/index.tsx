@@ -19,7 +19,8 @@ export const Header = () => {
       <Link to="/" rel="home" className="flex items-center gap-2">
         <Logomark className="size-8 md:size-9" />
         <span className="whitespace-nowrap font-medium text-xl/5">
-          {window.env.VITE_APP_NAME || t('appLayout.header.appName', undefined, 'MapRoulette')}
+          {window.env.VITE_APP_NAME ||
+            t({ id: 'appLayout.header.appName', defaultMessage: 'MapRoulette' })}
         </span>
       </Link>
       {/* Too many items to share one row below md — the search bar wraps to
@@ -34,10 +35,12 @@ export const Header = () => {
             <DropdownMenuUser user={user} />
           </>
         ) : authLoading ? (
-          <Loader message={t('appLayout.header.signingIn', undefined, 'signing in...')} />
+          <Loader
+            message={t({ id: 'appLayout.header.signingIn', defaultMessage: 'signing in...' })}
+          />
         ) : (
           <Button size="lg" onClick={login} className="rounded-full">
-            {t('common.signIn', undefined, 'Sign in')}
+            {t({ id: 'common.signIn', defaultMessage: 'Sign in' })}
           </Button>
         )}
       </div>

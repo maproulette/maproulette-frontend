@@ -26,11 +26,14 @@ export const MoveChallengeModal = () => {
     <ProjectPickerModal
       open={isOpen}
       onOpenChange={(open) => !open && closeMoveModal()}
-      title={t('moveChallengeModal.title', undefined, 'Move Challenge')}
+      title={t({ id: 'moveChallengeModal.title', defaultMessage: 'Move Challenge' })}
       description={t(
-        'moveChallengeModal.description',
-        { challengeName: challenge?.name ?? '' },
-        'Choose a project to move "{challengeName}" to. The challenge will be removed from the current project.'
+        {
+          id: 'moveChallengeModal.description',
+          defaultMessage:
+            'Choose a project to move "{challengeName}" to. The challenge will be removed from the current project.',
+        },
+        { challengeName: challenge?.name ?? '' }
       )}
       excludeProjectIds={excludeProjectIds}
       onSelectProject={handleSelectProject}
@@ -39,11 +42,11 @@ export const MoveChallengeModal = () => {
     >
       {isError && (
         <p className="text-red-600 text-sm dark:text-red-400">
-          {t(
-            'moveChallengeModal.moveError',
-            undefined,
-            'Failed to move challenge. You may not have permission to move to that project.'
-          )}
+          {t({
+            id: 'moveChallengeModal.moveError',
+            defaultMessage:
+              'Failed to move challenge. You may not have permission to move to that project.',
+          })}
         </p>
       )}
     </ProjectPickerModal>

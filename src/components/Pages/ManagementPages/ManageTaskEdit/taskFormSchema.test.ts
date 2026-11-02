@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { type TaskFormValues, taskFormSchema } from './taskFormSchema'
+import { testT } from '@/test/translate'
+import { makeTaskFormSchema, type TaskFormValues } from './taskFormSchema'
+
+const taskFormSchema = makeTaskFormSchema(testT)
 
 const validValues: TaskFormValues = {
   name: 'A valid name',

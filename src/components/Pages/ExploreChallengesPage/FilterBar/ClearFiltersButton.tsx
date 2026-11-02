@@ -27,7 +27,7 @@ export const ClearFiltersButton = () => {
   return (
     <Button variant="outline" size="sm" onClick={handleClearFilters} disabled={!hasActiveFilters}>
       <X className="size-3.5" />
-      {t('exploreChallenges.filterBar.clearFilters', undefined, 'Clear filters')}
+      {t({ id: 'exploreChallenges.filterBar.clearFilters', defaultMessage: 'Clear filters' })}
     </Button>
   )
 }

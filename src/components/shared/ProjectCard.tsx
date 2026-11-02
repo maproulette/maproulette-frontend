@@ -34,7 +34,7 @@ export const ProjectCard = ({
   onSelect,
   selected = false,
 }: ProjectCardProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   // The image belongs to the team managing the project and is addressed by that
   // team, so a project can carry a url and still have nothing to show when the
   // team has no approved image. Space for it is only reserved while it renders.
@@ -98,7 +98,10 @@ export const ProjectCard = ({
             <span className="font-semibold text-zinc-900 dark:text-white">
               {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
             </span>{' '}
-            {t('shared.projectCard.challengesRemaining', undefined, 'challenges remaining')}
+            {t({
+              id: 'shared.projectCard.challengesRemaining',
+              defaultMessage: 'challenges remaining',
+            })}
           </div>
 
           <ProgressBar percentage={completionPercentage} className="mb-3" />
@@ -107,26 +110,33 @@ export const ProjectCard = ({
             <span className="flex items-center gap-3">
               <span>
                 {t(
-                  'shared.projectCard.totalChallenges',
-                  { count: meta.totalChallenges },
-                  'Total Challenges: {count}'
+                  {
+                    id: 'shared.projectCard.totalChallenges',
+                    defaultMessage: 'Total Challenges: {count}',
+                  },
+                  { count: meta.totalChallenges }
                 )}
               </span>
               <span className="text-emerald-500">
-                {t('shared.projectCard.completed', { count: meta.completed }, 'Completed: {count}')}
+                {t(
+                  { id: 'shared.projectCard.completed', defaultMessage: 'Completed: {count}' },
+                  { count: meta.completed }
+                )}
               </span>
               {meta.pinned > 0 && (
                 <span className="text-yellow-500">
-                  {t('shared.projectCard.pinned', { count: meta.pinned }, 'Pinned: {count}')}
+                  {t(
+                    { id: 'shared.projectCard.pinned', defaultMessage: 'Pinned: {count}' },
+                    { count: meta.pinned }
+                  )}
                 </span>
               )}
             </span>
             {lastUpdated ? (
               <span>
                 {t(
-                  'common.lastUpdated',
-                  { date: formatDate(new Date(lastUpdated)) },
-                  'Last updated {date}'
+                  { id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' },
+                  { date: formatDate(new Date(lastUpdated), locale) }
                 )}
               </span>
             ) : null}

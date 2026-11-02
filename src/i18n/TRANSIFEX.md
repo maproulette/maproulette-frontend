@@ -13,17 +13,24 @@ MR4's source of truth for UI copy is `src/i18n/messages/en-US.json`. Translated 
    ```
    export TX_TOKEN=...   # or add to your shell rc
    ```
-3. Confirm the project config: `./.tx/config` points at the `maproulette / maproulette4` Transifex project. Change the slug if the project lives elsewhere.
+3. Confirm the project config: `./.tx/config` points at the `v4` resource of the `osmlab / maproulette3` Transifex project.
 
 ## Day-to-day workflow
 
-Every UI string uses `t('some.id', { placeholder }, 'fallback copy')` — see `IntlContext.tsx`.
+Translation goes through [react-intl](https://formatjs.github.io/docs/react-intl). `useIntl()` from `@/i18n` returns `t`, which is react-intl's `formatMessage`:
+
+```ts
+t({ id: 'profile.section.newThing', defaultMessage: 'Shiny new thing' })
+t({ id: 'tasks.count', defaultMessage: '{count, plural, one {# task} other {# tasks}}' }, { count })
+```
+
+Message ids and default messages must be string literals so they can be extracted. For a message chosen at runtime, declare the candidates with `defineMessages` and pass the chosen descriptor to `t`.
 
 ### Add a string
 
-1. Reference a new id in code: `t('profile.section.newThing', {}, 'Shiny new thing')`
-2. Run `npm run i18n:extract -- --write` — this walks the repo, diffs used ids against `en-US.json`, and seeds missing ids with their default English from the third argument. Commit the updated `en-US.json`.
-3. Push the new ids to Transifex: `npm run i18n:push`
+1. Reference a new id in code with its English default, as above.
+2. Run `npm run i18n:extract` — this rewrites `en-US.json` from the messages in the source. Commit the updated `en-US.json`.
+3. Once merged to `main`, the i18n Push workflow sends the new strings to Transifex (or run `npm run i18n:push` yourself).
 
 ### Pull translated locales
 
@@ -39,7 +46,7 @@ This downloads every locale with at least 50% coverage and writes to `src/i18n/m
 
 ## CI integration
 
-The GitHub Actions workflow should run `npm run i18n:extract` in "check" mode (no `--write`) — it will exit non-zero if any new code uses a message id that isn't in the catalog, forcing PR authors to add the string before merging.
+`npm run check` includes `npm run i18n:check`, which regenerates `en-US.json` and fails if it differs from the committed file (missing, unused or changed strings) or if a message id isn't a string literal. Commit the regenerated file to fix it.
 
 ## Adding a new locale
 
@@ -49,14 +56,14 @@ The GitHub Actions workflow should run `npm run i18n:extract` in "check" mode (n
 
 ### Pluralization and other ICU syntax
 
-`t()` renders every message through `intl-messageformat`, so full ICU MessageFormat syntax
-(`plural`, `select`, number/date formatting) is supported, not just `{name}` interpolation.
+Messages are ICU MessageFormat, so `plural`, `select` and number/date formatting are
+supported, not just `{name}` interpolation.
 
 For a string that varies with a count, write one id with a `plural` argument instead of
 branching in code or defining separate `...Singular`/`...Plural` ids:
 
 ```ts
-t('tasks.count', { count }, '{count, plural, one {# task} other {# tasks}}')
+t({ id: 'tasks.count', defaultMessage: '{count, plural, one {# task} other {# tasks}}' }, { count })
 ```
 
 `#` inside a plural branch is replaced with the count, formatted for the active locale
@@ -70,5 +77,5 @@ grammar into code and can't be corrected by a translator.
 
 ## Notes
 
-- Placeholders use `{name}` syntax; IntlContext interpolates at render time via `intl-messageformat`.
+- Placeholders use `{name}` syntax and are filled in by react-intl at render time.
 - The `lang_map` entry in `.tx/config` maps Transifex's underscore locale tags (`pt_BR`) to our IETF dash tags (`pt-BR`).

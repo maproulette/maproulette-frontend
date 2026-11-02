@@ -31,7 +31,8 @@ interface DateBucket {
  */
 export const aggregateContributions = (
   activityData: UserContribution[] | undefined,
-  t: TranslateFn
+  t: TranslateFn,
+  locale: string
 ): AggregatedContributions => {
   if (!activityData || activityData.length === 0) {
     return { groupedActivities: [], totalTasks: 0 }
@@ -58,12 +59,12 @@ export const aggregateContributions = (
     if (!dateMap.has(dateKey)) {
       const label = date
         .toLocaleDateString(
-          'en-US',
+          locale,
           year === currentYear
             ? { month: 'long', day: 'numeric' }
             : { month: 'long', day: 'numeric', year: 'numeric' }
         )
-        .toUpperCase()
+        .toLocaleUpperCase(locale)
       dateMap.set(dateKey, {
         timestamp: new Date(year, date.getMonth(), date.getDate()).getTime(),
         label,
@@ -99,7 +100,13 @@ export const aggregateContributions = (
       challenges.push({
         name:
           challengeNames.get(parentId) ||
-          t('dashboard.contributions.unknownChallenge', { parentId }, 'Challenge {parentId}'),
+          t(
+            {
+              id: 'dashboard.contributions.unknownChallenge',
+              defaultMessage: 'Challenge {parentId}',
+            },
+            { parentId }
+          ),
         parentId,
         actions,
       })

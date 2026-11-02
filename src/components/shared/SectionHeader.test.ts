@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import type { TranslateFn } from '@/i18n'
+import { testT } from '@/test/translate'
 import { buildBreadcrumbSegments, buildTitle } from './SectionHeader.tsx'
 
-const t: TranslateFn = (_id, _values, defaultMessage) => defaultMessage ?? _id
+const t = testT
 
 describe('buildBreadcrumbSegments', () => {
   it('returns an empty array when the pathname is exactly the base path', () => {

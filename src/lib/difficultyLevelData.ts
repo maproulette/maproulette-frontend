@@ -3,13 +3,13 @@ import type { TranslateFn } from '@/i18n'
 export const getDifficultyLabel = (t: TranslateFn, difficulty: number) => {
   switch (difficulty) {
     case 1:
-      return t('common.easy', undefined, 'Easy')
+      return t({ id: 'common.easy', defaultMessage: 'Easy' })
     case 2:
-      return t('common.normal', undefined, 'Normal')
+      return t({ id: 'common.normal', defaultMessage: 'Normal' })
     case 3:
-      return t('common.expert', undefined, 'Expert')
+      return t({ id: 'common.expert', defaultMessage: 'Expert' })
     default:
-      return t('common.normal', undefined, 'Normal')
+      return t({ id: 'common.normal', defaultMessage: 'Normal' })
   }
 }
 

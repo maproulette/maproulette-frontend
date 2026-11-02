@@ -7,12 +7,11 @@ export const NewTeamPage = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title={t('teams.newTeam.title', undefined, 'Create a team')}
-        description={t(
-          'teams.newTeam.description',
-          undefined,
-          'Fill in the information below to create your new team'
-        )}
+        title={t({ id: 'teams.newTeam.title', defaultMessage: 'Create a team' })}
+        description={t({
+          id: 'teams.newTeam.description',
+          defaultMessage: 'Fill in the information below to create your new team',
+        })}
       >
         <TeamForm />
       </FormCard>

@@ -21,7 +21,8 @@ const STATUS_ICONS: Record<number, LucideIcon> = {
 export const getStatusLegendEntries = (t: TranslateFn): StatusLegendEntry[] =>
   Object.keys(STATUS_ICONS).map((status) => ({
     status: Number(status),
-    label: getStatusLabel(t, Number(status)) ?? t('common.unknown', undefined, 'Unknown'),
+    label:
+      getStatusLabel(t, Number(status)) ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
     color: resolveHex(STATUS_HEX_COLORS[Number(status)] ?? 'zinc-400'),
     icon: STATUS_ICONS[Number(status)] ?? Plus,
   }))
@@ -32,8 +33,20 @@ export interface PriorityLegendEntry {
   color: string
 }
 
-export const priorityEntries: PriorityLegendEntry[] = [
-  { priority: 0, label: 'High priority', color: PRIORITY_COLOR[0].hex },
-  { priority: 1, label: 'Medium priority', color: PRIORITY_COLOR[1].hex },
-  { priority: 2, label: 'Low priority', color: PRIORITY_COLOR[2].hex },
+export const getPriorityLegendEntries = (t: TranslateFn): PriorityLegendEntry[] => [
+  {
+    priority: 0,
+    label: t({ id: 'statusLegend.priorityHigh', defaultMessage: 'High priority' }),
+    color: PRIORITY_COLOR[0].hex,
+  },
+  {
+    priority: 1,
+    label: t({ id: 'statusLegend.priorityMedium', defaultMessage: 'Medium priority' }),
+    color: PRIORITY_COLOR[1].hex,
+  },
+  {
+    priority: 2,
+    label: t({ id: 'statusLegend.priorityLow', defaultMessage: 'Low priority' }),
+    color: PRIORITY_COLOR[2].hex,
+  },
 ]

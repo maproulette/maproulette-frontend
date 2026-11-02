@@ -1,5 +1,6 @@
 import { Link, useMatches, useRouterState } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
+import { defineMessage, type MessageDescriptor } from 'react-intl'
 import { useChrome } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
@@ -16,20 +17,20 @@ interface SectionHeaderProps {
 }
 
 /** Maps singular entity path segments to their plural list page path and label catalog id */
-const ENTITY_LIST_ROUTES: Record<string, { id: string; defaultMessage: string; path: string }> = {
+const ENTITY_LIST_ROUTES: Record<string, { label: MessageDescriptor; path: string }> = {
   project: {
-    id: 'shared.sectionHeader.entityProjects',
-    defaultMessage: 'projects',
+    label: defineMessage({ id: 'common.projects2', defaultMessage: 'projects' }),
     path: '/manage/projects',
   },
   challenge: {
-    id: 'shared.sectionHeader.entityChallenges',
-    defaultMessage: 'challenges',
+    label: defineMessage({
+      id: 'common.challenges2',
+      defaultMessage: 'challenges',
+    }),
     path: '/manage/challenges',
   },
   task: {
-    id: 'shared.sectionHeader.entityTasks',
-    defaultMessage: 'tasks',
+    label: defineMessage({ id: 'shared.sectionHeader.entityTasks', defaultMessage: 'tasks' }),
     path: '/manage/tasks',
   },
 }
@@ -55,11 +56,12 @@ export const buildBreadcrumbSegments = (
     const entityRoute = ENTITY_LIST_ROUTES[part]
     if (entityRoute) {
       segments.push({
-        label: t(entityRoute.id, undefined, entityRoute.defaultMessage),
+        label: t(entityRoute.label),
         href: entityRoute.path,
       })
     } else {
-      const label = part === 'new' ? t('shared.sectionHeader.create', undefined, 'create') : part
+      const label =
+        part === 'new' ? t({ id: 'shared.sectionHeader.create', defaultMessage: 'create' }) : part
       segments.push({ label, href: currentPath })
     }
   }
@@ -93,7 +95,7 @@ export const buildTitle = (
   return parts
     .map((p) =>
       p === 'new'
-        ? t('shared.sectionHeader.createCapitalized', undefined, 'Create')
+        ? t({ id: 'shared.sectionHeader.createCapitalized', defaultMessage: 'Create' })
         : p.charAt(0).toUpperCase() + p.slice(1)
     )
     .join(' ')

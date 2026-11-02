@@ -33,7 +33,7 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
           <AvatarFallback>{initials(user.osmProfile.displayName)}</AvatarFallback>
         </Avatar>
         <span className="sr-only">
-          {t('appLayout.header.userMenu.triggerSrOnly', undefined, 'User menu')}
+          {t({ id: 'appLayout.header.userMenu.triggerSrOnly', defaultMessage: 'User menu' })}
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent className={'w-56'} sideOffset={10} alignOffset={-10} align="end">
@@ -48,11 +48,10 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
               <br />
               <Link to="/profile">
                 <span className="text-xs text-zinc-500 hover:text-zinc-400 dark:text-slate-500 dark:hover:text-slate-400">
-                  {t(
-                    'appLayout.header.userMenu.viewPublicProfile',
-                    undefined,
-                    'View public profile'
-                  )}
+                  {t({
+                    id: 'appLayout.header.userMenu.viewPublicProfile',
+                    defaultMessage: 'View public profile',
+                  })}
                 </span>
               </Link>
             </div>
@@ -62,32 +61,35 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
         <DropdownMenuItem asChild>
           <Link to="/settings">
             <CircleUser className="size-4" aria-hidden="true" />{' '}
-            {t('appLayout.header.userMenu.accountSettings', undefined, 'Account Settings')}
+            {t({
+              id: 'appLayout.header.userMenu.accountSettings',
+              defaultMessage: 'Account Settings',
+            })}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/manage">
             <LayoutDashboard className="size-4" aria-hidden="true" />{' '}
-            {t('common.manage', undefined, 'Manage')}
+            {t({ id: 'common.manage', defaultMessage: 'Manage' })}
           </Link>
         </DropdownMenuItem>
         {isSuperUser(user) && (
           <DropdownMenuItem asChild>
             <Link to="/super-admin">
               <Shield className="size-4" aria-hidden="true" />{' '}
-              {t('appLayout.header.userMenu.superAdmin', undefined, 'Super Admin')}
+              {t({ id: 'appLayout.header.userMenu.superAdmin', defaultMessage: 'Super Admin' })}
             </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem asChild>
           <a href={docsUrl()} target="_blank" rel="noreferrer">
             <BookOpen className="size-4" aria-hidden="true" />{' '}
-            {t('appLayout.header.userMenu.documentation', undefined, 'Documentation')}
+            {t({ id: 'appLayout.header.userMenu.documentation', defaultMessage: 'Documentation' })}
           </a>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={logout}>
           <LogOut className="size-4" aria-hidden="true" />{' '}
-          {t('appLayout.header.userMenu.signOut', undefined, 'Sign out')}
+          {t({ id: 'appLayout.header.userMenu.signOut', defaultMessage: 'Sign out' })}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -99,14 +101,14 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
           <div className="flex items-center justify-between gap-2">
             <span className="flex gap-2">
               <SwatchBook className="size-4" aria-hidden="true" />{' '}
-              {t('appLayout.header.userMenu.theme', undefined, 'Theme')}
+              {t({ id: 'appLayout.header.userMenu.theme', defaultMessage: 'Theme' })}
             </span>
             <ThemeSwitcher />
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 px-2 py-1.5 text-[10px] text-zinc-400 leading-tight dark:text-slate-500">
-          <dt>{t('appLayout.header.userMenu.frontend', undefined, 'Frontend')}</dt>
+          <dt>{t({ id: 'appLayout.header.userMenu.frontend', defaultMessage: 'Frontend' })}</dt>
           <dd>
             <a
               href={`https://github.com/maproulette/maproulette3/releases/tag/v${frontendVersion}`}
@@ -117,7 +119,7 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
               v{frontendVersion}
             </a>
           </dd>
-          <dt>{t('appLayout.header.userMenu.backend', undefined, 'Backend')}</dt>
+          <dt>{t({ id: 'appLayout.header.userMenu.backend', defaultMessage: 'Backend' })}</dt>
           <dd>
             {backendVersion && backendVersion !== 'unknown' ? (
               <a

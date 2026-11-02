@@ -32,25 +32,28 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
   const { t } = useIntl()
 
   const categoryLabels: Record<ChallengeCategory, string> = {
-    navigation: t(
-      'manageChallengeNew.challengeForm.category.navigation',
-      undefined,
-      'Roads / Pedestrian / Cycleways'
-    ),
-    water: t('manageChallengeNew.challengeForm.category.water', undefined, 'Water'),
-    pointsOfInterest: t(
-      'manageChallengeNew.challengeForm.category.pointsOfInterest',
-      undefined,
-      'Points / Areas of Interest'
-    ),
-    buildings: t('manageChallengeNew.challengeForm.category.buildings', undefined, 'Buildings'),
-    landUse: t(
-      'manageChallengeNew.challengeForm.category.landUse',
-      undefined,
-      'Land Use / Administrative Boundaries'
-    ),
-    transit: t('manageChallengeNew.challengeForm.category.transit', undefined, 'Transit'),
-    other: t('manageChallengeNew.challengeForm.category.other', undefined, 'Other'),
+    navigation: t({
+      id: 'common.category.navigation',
+      defaultMessage: 'Roads / Pedestrian / Cycleways',
+    }),
+    water: t({ id: 'common.category.water', defaultMessage: 'Water' }),
+    pointsOfInterest: t({
+      id: 'common.category.pointsOfInterest',
+      defaultMessage: 'Points / Areas of Interest',
+    }),
+    buildings: t({
+      id: 'common.category.buildings',
+      defaultMessage: 'Buildings',
+    }),
+    landUse: t({
+      id: 'common.category.landUse',
+      defaultMessage: 'Land Use / Administrative Boundaries',
+    }),
+    transit: t({
+      id: 'common.category.transit',
+      defaultMessage: 'Transit',
+    }),
+    other: t({ id: 'manageChallengeNew.challengeForm.category.other', defaultMessage: 'Other' }),
   }
 
   return (
@@ -60,7 +63,7 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
+            <FormLabel>{t({ id: 'common.name', defaultMessage: 'Name' })}</FormLabel>
             <FormControl>
               <Input placeholder={namePlaceholder} {...field} />
             </FormControl>
@@ -74,14 +77,13 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
         name="description"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
+            <FormLabel>{t({ id: 'common.description', defaultMessage: 'Description' })}</FormLabel>
             <FormControl>
               <Textarea
-                placeholder={t(
-                  'manageChallengeNew.challengeForm.descriptionPlaceholder',
-                  undefined,
-                  'Describe what this challenge is about...'
-                )}
+                placeholder={t({
+                  id: 'manageChallengeNew.challengeForm.descriptionPlaceholder',
+                  defaultMessage: 'Describe what this challenge is about...',
+                })}
                 className="min-h-32 resize-none"
                 {...field}
               />
@@ -96,39 +98,38 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
         name="instruction"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>{t('common.instructions', undefined, 'Instructions')}</FormLabel>
+            <FormLabel>
+              {t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
+            </FormLabel>
             <FormControl>
               <Textarea
-                placeholder={t(
-                  'manageChallengeNew.challengeForm.instructionsPlaceholder',
-                  undefined,
-                  'Instructions for completing tasks...'
-                )}
+                placeholder={t({
+                  id: 'manageChallengeNew.challengeForm.instructionsPlaceholder',
+                  defaultMessage: 'Instructions for completing tasks...',
+                })}
                 className="min-h-32 resize-none"
                 {...field}
               />
             </FormControl>
             <FormDescription>
               {t(
-                'manageChallengeNew.challengeForm.instructionsDescriptionBefore',
-                undefined,
-                'Shown to mappers with every task. Instructions support'
-              )}{' '}
-              <DocsLink page="markdown" icon={null}>
-                {t('manageChallengeNew.challengeForm.markdownLinkText', undefined, 'Markdown')}
-              </DocsLink>{' '}
-              {t('manageChallengeNew.challengeForm.instructionsDescriptionAnd', undefined, 'and')}{' '}
-              <DocsLink page="mustacheTagReplacement" icon={null}>
-                {t(
-                  'manageChallengeNew.challengeForm.mustacheTagsLinkText',
-                  undefined,
-                  'mustache tag replacement'
-                )}
-              </DocsLink>{' '}
-              {t(
-                'manageChallengeNew.challengeForm.instructionsDescriptionAfter',
-                undefined,
-                'so each task can show details from its own feature properties.'
+                {
+                  id: 'manageChallengeNew.challengeForm.instructionsDescription',
+                  defaultMessage:
+                    'Shown to mappers with every task. Instructions support <markdown>Markdown</markdown> and <mustache>mustache tag replacement</mustache> so each task can show details from its own feature properties.',
+                },
+                {
+                  markdown: (chunks) => (
+                    <DocsLink page="markdown" icon={null}>
+                      {chunks}
+                    </DocsLink>
+                  ),
+                  mustache: (chunks) => (
+                    <DocsLink page="mustacheTagReplacement" icon={null}>
+                      {chunks}
+                    </DocsLink>
+                  ),
+                }
               )}
             </FormDescription>
             <FormMessage />
@@ -141,7 +142,7 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
         name="difficulty"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>{t('common.difficulty', undefined, 'Difficulty')}</FormLabel>
+            <FormLabel>{t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}</FormLabel>
             <Select
               onValueChange={(value) => field.onChange(Number(value))}
               defaultValue={field.value?.toString()}
@@ -149,18 +150,23 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
               <FormControl>
                 <SelectTrigger>
                   <SelectValue
-                    placeholder={t(
-                      'manageChallengeNew.challengeForm.difficultyPlaceholder',
-                      undefined,
-                      'Select difficulty'
-                    )}
+                    placeholder={t({
+                      id: 'manageChallengeNew.challengeForm.difficultyPlaceholder',
+                      defaultMessage: 'Select difficulty',
+                    })}
                   />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="1">{t('common.easy', undefined, 'Easy')}</SelectItem>
-                <SelectItem value="2">{t('common.normal', undefined, 'Normal')}</SelectItem>
-                <SelectItem value="3">{t('common.expert', undefined, 'Expert')}</SelectItem>
+                <SelectItem value="1">
+                  {t({ id: 'common.easy', defaultMessage: 'Easy' })}
+                </SelectItem>
+                <SelectItem value="2">
+                  {t({ id: 'common.normal', defaultMessage: 'Normal' })}
+                </SelectItem>
+                <SelectItem value="3">
+                  {t({ id: 'common.expert', defaultMessage: 'Expert' })}
+                </SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />
@@ -174,11 +180,10 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              {t(
-                'manageChallengeNew.challengeForm.categoryLabel',
-                undefined,
-                'How should your Challenge be Categorized?'
-              )}
+              {t({
+                id: 'manageChallengeNew.challengeForm.categoryLabel',
+                defaultMessage: 'How should your Challenge be Categorized?',
+              })}
             </FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
@@ -195,11 +200,11 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
               </SelectContent>
             </Select>
             <FormDescription>
-              {t(
-                'manageChallengeNew.challengeForm.categoryDescription',
-                undefined,
-                'Selecting an appropriate category for your challenge can help users discover challenges that match their interests. Choose the Other category if nothing seems appropriate.'
-              )}
+              {t({
+                id: 'manageChallengeNew.challengeForm.categoryDescription',
+                defaultMessage:
+                  'Selecting an appropriate category for your challenge can help users discover challenges that match their interests. Choose the Other category if nothing seems appropriate.',
+              })}
             </FormDescription>
             <FormMessage />
           </FormItem>
@@ -212,21 +217,20 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              {t(
-                'manageChallengeNew.challengeForm.additionalKeywordsLabel',
-                undefined,
-                'Additional Categorization Keywords'
-              )}
+              {t({
+                id: 'manageChallengeNew.challengeForm.additionalKeywordsLabel',
+                defaultMessage: 'Additional Categorization Keywords',
+              })}
             </FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
             <FormDescription>
-              {t(
-                'manageChallengeNew.challengeForm.additionalKeywordsDescription',
-                undefined,
-                'You can optionally provide additional keywords that can be used to aid discovery of your challenge.'
-              )}
+              {t({
+                id: 'manageChallengeNew.challengeForm.additionalKeywordsDescription',
+                defaultMessage:
+                  'You can optionally provide additional keywords that can be used to aid discovery of your challenge.',
+              })}
             </FormDescription>
             <FormMessage />
           </FormItem>

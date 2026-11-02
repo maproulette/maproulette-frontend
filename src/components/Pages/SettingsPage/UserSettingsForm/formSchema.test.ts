@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import type { UserSettings } from '@/types/User'
-import { basemapSettings, formSchema, getDefaultValues } from './formSchema.ts'
+import { basemapSettings, getDefaultValues, makeFormSchema } from './formSchema.ts'
+
+const formSchema = makeFormSchema(testT)
 
 const validInput = {
   defaultEditor: 1,
