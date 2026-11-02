@@ -13,7 +13,7 @@ import { formatDate } from '@/lib/date'
 import { logger } from '@/lib/logger'
 
 export const ProjectDetail = () => {
-  const { t } = useIntl()
+  const { t, locale, formatNumber } = useIntl()
   const { project } = useBrowsedProjectContext()
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
@@ -137,7 +137,7 @@ export const ProjectDetail = () => {
                       )}
                     </span>
                     <span className="text-zinc-500 dark:text-zinc-400">
-                      {completedTasks.toLocaleString()} / {totalTasks.toLocaleString()}
+                      {formatNumber(completedTasks)} / {formatNumber(totalTasks)}
                     </span>
                   </div>
                   <Progress value={completionPercentage} className="h-2" />
@@ -157,7 +157,7 @@ export const ProjectDetail = () => {
                   {t({ id: 'common.tasksRemaining', defaultMessage: 'Tasks remaining' })}
                 </span>
                 <span className="font-semibold tabular-nums">
-                  {remainingTasks.toLocaleString()}
+                  {formatNumber(remainingTasks)}
                 </span>
               </div>
 
@@ -169,7 +169,7 @@ export const ProjectDetail = () => {
                       <span className="text-zinc-600 dark:text-zinc-400">
                         {t({ id: 'common.created', defaultMessage: 'Created' })}
                       </span>
-                      <span className="font-medium">{formatDate(new Date(project.created))}</span>
+                      <span className="font-medium">{formatDate(new Date(project.created), locale)}</span>
                     </div>
                   )}
                   {project.modified && (
@@ -177,7 +177,7 @@ export const ProjectDetail = () => {
                       <span className="text-zinc-600 dark:text-zinc-400">
                         {t({ id: 'common.modified', defaultMessage: 'Modified' })}
                       </span>
-                      <span className="font-medium">{formatDate(new Date(project.modified))}</span>
+                      <span className="font-medium">{formatDate(new Date(project.modified), locale)}</span>
                     </div>
                   )}
                 </>

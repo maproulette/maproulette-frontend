@@ -29,7 +29,7 @@ interface ChallengeComment {
 }
 
 export const ChallengeComments = () => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { challenge } = useBrowsedChallengeContext()
   const challengeId = challenge.id ?? 0
   const ownerId = challenge.owner
@@ -206,7 +206,7 @@ export const ChallengeComments = () => {
                     </div>
 
                     <div className="text-xs text-zinc-500 dark:text-slate-400">
-                      {formatDateTime(new Date(comment.created))}
+                      {formatDateTime(new Date(comment.created), locale)}
                     </div>
                   </div>
                 </div>

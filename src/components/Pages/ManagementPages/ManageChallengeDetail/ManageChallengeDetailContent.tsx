@@ -76,7 +76,7 @@ const StatisticsDialogContent = ({
   challengeId: number
   challengeData: ChallengeGetResponse | undefined
 }) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { data: statsData, isLoading } = api.challenge.getChallengeStats(challengeId)
   const challengeStats = statsData?.[0]
   const stats = challengeStats?.actions
@@ -161,7 +161,7 @@ const StatisticsDialogContent = ({
           {t({ id: 'common.created', defaultMessage: 'Created' })}
         </span>
         <span className="font-medium">
-          {challengeData?.created ? formatDate(new Date(challengeData.created)) : '—'}
+          {challengeData?.created ? formatDate(new Date(challengeData.created), locale) : '—'}
         </span>
       </div>
       <div className="flex items-center justify-between">
@@ -170,7 +170,7 @@ const StatisticsDialogContent = ({
           {t({ id: 'manageChallengeDetail.detail.statistics.lastModified', defaultMessage: 'Last modified' })}
         </span>
         <span className="font-medium">
-          {challengeData?.modified ? formatDate(new Date(challengeData.modified)) : '—'}
+          {challengeData?.modified ? formatDate(new Date(challengeData.modified), locale) : '—'}
         </span>
       </div>
 

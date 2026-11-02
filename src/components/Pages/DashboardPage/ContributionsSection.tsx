@@ -15,15 +15,15 @@ interface ContributionsSectionProps {
 }
 
 export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
-  const { t } = useIntl()
+  const { t, formatNumber, locale } = useIntl()
   const { data: activityData, isLoading, error } = api.user.activity()
   const { data: lockedTasks } = api.user.lockedTasks(userId)
   const hasLockedTasks = (lockedTasks?.length ?? 0) > 0
 
   // Reason: groups and sorts activity data by date/challenge/status - expensive aggregation should not run on every render
   const { groupedActivities, totalTasks } = useMemo(
-    () => aggregateContributions(activityData, t),
-    [activityData, t]
+    () => aggregateContributions(activityData, t, locale),
+    [activityData, t, locale]
   )
 
   const hasContributions = totalTasks > 0
@@ -37,7 +37,7 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
         </h3>
         {hasContributions && (
           <span className="ml-auto font-bold text-indigo-400 text-sm">
-            {totalTasks.toLocaleString()}
+            {formatNumber(totalTasks)}
           </span>
         )}
       </div>

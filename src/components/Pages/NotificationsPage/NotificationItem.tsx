@@ -36,7 +36,7 @@ export const NotificationItem = ({
   onSelectChange,
   onLinkClick,
 }: NotificationItemProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const {
     markAsRead,
     markAsUnread,
@@ -61,7 +61,7 @@ export const NotificationItem = ({
     NOTIFICATION_TYPE_NAMES[notification.notificationType] ||
     t({ id: 'common.notification', defaultMessage: 'Notification' })
   const createdDate = new Date(notification.created)
-  const timeAgo = formatTimeAgo(createdDate)
+  const timeAgo = formatTimeAgo(createdDate, locale)
 
   const handleMarkAsUnread = (e: React.MouseEvent) => {
     e.stopPropagation()

@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
-  const { t } = useIntl()
+  const { t, formatNumber } = useIntl()
   const { total, completed, segments } = useActionSummary(actions)
 
   if (total === 0 || segments.length === 0) {
@@ -44,7 +44,7 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
           </TooltipTrigger>
           <TooltipContent>
             <span className="text-xs">
-              {segment.label}: {segment.count.toLocaleString()} ({segment.percent.toFixed(1)}%)
+              {segment.label}: {formatNumber(segment.count)} ({formatNumber(segment.percent / 100, { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 })})
             </span>
           </TooltipContent>
         </Tooltip>

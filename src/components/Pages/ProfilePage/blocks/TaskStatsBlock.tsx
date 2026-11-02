@@ -8,7 +8,7 @@ import { getStatusLabel } from '@/lib/taskConstants'
 import { useProfilePageContext } from '../contexts/ProfilePageContext'
 
 export const TaskStatsBlock = () => {
-  const { t } = useIntl()
+  const { t, formatNumber } = useIntl()
   const { userId, timeRange } = useProfilePageContext()
   const { data, isLoading, isError } = api.user.metrics(userId, timeRange.monthDuration)
 
@@ -43,7 +43,7 @@ export const TaskStatsBlock = () => {
                       {getStatusLabel(t, Number(status)) ??
                         t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })}
                     </dt>
-                    <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>
+                    <dd className="font-medium font-mono tabular-nums">{formatNumber(count)}</dd>
                   </div>
                 ))}
               </dl>

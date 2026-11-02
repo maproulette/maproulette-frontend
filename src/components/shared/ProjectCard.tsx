@@ -34,7 +34,7 @@ export const ProjectCard = ({
   onSelect,
   selected = false,
 }: ProjectCardProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   // The image belongs to the team managing the project and is addressed by that
   // team, so a project can carry a url and still have nothing to show when the
   // team has no approved image. Space for it is only reserved while it renders.
@@ -120,7 +120,7 @@ export const ProjectCard = ({
             </span>
             {lastUpdated ? (
               <span>
-                {t({ id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' }, { date: formatDate(new Date(lastUpdated)) }
+                {t({ id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' }, { date: formatDate(new Date(lastUpdated), locale) }
                 )}
               </span>
             ) : null}

@@ -11,11 +11,11 @@ interface Props {
 }
 
 export const ProfileHeader = ({ user, showLivePoints }: Props) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const displayName = user.osmProfile?.displayName ?? ''
   const avatarURL = user.osmProfile?.avatarURL
   const createdDate = user.created
-    ? new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'long' }).format(
+    ? new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long' }).format(
         new Date(user.created)
       )
     : null

@@ -24,7 +24,7 @@ interface LevelModalProps {
 }
 
 export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: LevelModalProps) => {
-  const { t } = useIntl()
+  const { t, formatNumber } = useIntl()
   const milestones = getAllLevelMilestones()
 
   // Calculate progress to next level using actual level thresholds
@@ -69,7 +69,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                 )}
               </span>
               <span className="font-semibold text-zinc-900 dark:text-white">
-                {pointsIntoLevel.toLocaleString()} / {pointsNeededForLevel.toLocaleString()}
+                {formatNumber(pointsIntoLevel)} / {formatNumber(pointsNeededForLevel)}
               </span>
             </div>
             <Progress value={progressToNext} className="h-3" />

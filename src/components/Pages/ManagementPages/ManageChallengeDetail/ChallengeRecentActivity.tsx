@@ -17,8 +17,8 @@ export const dateSortKey = (raw: string | number): string => {
   return s.slice(0, 10)
 }
 
-const formatDayHeading = (isoDay: string): string =>
-  new Intl.DateTimeFormat(undefined, { month: 'long', day: 'numeric' }).format(
+const formatDayHeading = (isoDay: string, locale: string): string =>
+  new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric' }).format(
     new Date(`${isoDay}T12:00:00`)
   )
 
@@ -60,7 +60,7 @@ interface ChallengeRecentActivityProps {
 }
 
 export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivityProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { data, isError } = api.challenge.getChallengeActivity(challengeId)
 
   // Reason: groups activity data by day - avoids expensive regrouping and sorting on every render
@@ -97,7 +97,7 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
                   aria-hidden
                 />
                 <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-50">
-                  {formatDayHeading(day)}
+                  {formatDayHeading(day, locale)}
                 </h3>
                 <ul className="mt-2 space-y-2">
                   {rows.map((row) => (

@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
 export const ChallengesTableView = () => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { challenges } = useChallengeResultsContext()
   return (
     <ScrollArea className="min-h-0 w-full flex-1">
@@ -125,7 +125,7 @@ export const ChallengesTableView = () => {
                   {typeof challenge.location === 'string' ? challenge.location : '--'}
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
-                  {challenge.modified ? formatDate(new Date(challenge.modified)) : '--'}
+                  {challenge.modified ? formatDate(new Date(challenge.modified), locale) : '--'}
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">--</TableCell>
               </TableRow>

@@ -24,7 +24,7 @@ import type { TeamImage } from '@/types/TeamImage'
  * from the public url.
  */
 const PendingRow = ({ image }: { image: TeamImage }) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const [comment, setComment] = useState('')
   const approve = api.teamImage.useApproveImage()
   const reject = api.teamImage.useRejectImage()
@@ -68,7 +68,7 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
           {t({ id: 'superAdminTeamImages.requestMeta', defaultMessage: '{team} · requested by {user} on {date}' }, {
               team: image.teamName ?? String(image.teamId),
               user: image.requestedByName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
-              date: formatDate(new Date(image.created)),
+              date: formatDate(new Date(image.created), locale),
             }
           )}
         </p>

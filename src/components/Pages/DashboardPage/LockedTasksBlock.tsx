@@ -13,7 +13,7 @@ interface LockedTasksBlockProps {
  * linking back to the task so they can pick up where they left off.
  */
 export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { data: lockedTasks } = api.user.lockedTasks(userId)
 
   if (!lockedTasks || lockedTasks.length === 0) return null
@@ -57,7 +57,7 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
                 </span>
               )}
               {lockedTask.startedAt ? (
-                <span className="ml-auto">{formatTimeAgo(new Date(lockedTask.startedAt))}</span>
+                <span className="ml-auto">{formatTimeAgo(new Date(lockedTask.startedAt), locale)}</span>
               ) : null}
             </div>
           </div>

@@ -109,7 +109,7 @@ export const CommentsHistoryTab = ({
   taskId?: number
   readOnly?: boolean
 } = {}) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const taskContext = useContext(TaskContext)
   const taskId = taskIdProp ?? taskContext?.task.id
   const resolvedTaskId = taskId ?? 0
@@ -227,7 +227,7 @@ export const CommentsHistoryTab = ({
             </div>
 
             <div className="text-xs text-zinc-500 dark:text-slate-400">
-              {formatDateTime(timestamp)}
+              {formatDateTime(timestamp, locale)}
             </div>
           </div>
         </div>
@@ -247,7 +247,7 @@ export const CommentsHistoryTab = ({
       return (
         <div
           key={`status-${item.timestamp}-${index}`}
-          title={formatDateTime(timestamp)}
+          title={formatDateTime(timestamp, locale)}
           className={cn(
             'relative flex flex-wrap items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r to-transparent py-2 pr-3 pl-4 text-xs',
             newVisual.tint
@@ -280,7 +280,7 @@ export const CommentsHistoryTab = ({
               {t({ id: 'taskInfoPanel.comments.changedStatus', defaultMessage: 'changed status' })}
             </span>
           )}
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
+          <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp, locale)}</span>
         </div>
       )
     }

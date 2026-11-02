@@ -55,7 +55,7 @@ export const ChallengeCard = ({
   linkSearch,
   onLinkClick,
 }: ChallengeCardProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   // The image url is addressed by owning team, so a challenge can carry one
   // and still have nothing to show when that team has no approved image. Space
   // for it is only reserved while it is actually rendering.
@@ -162,7 +162,7 @@ export const ChallengeCard = ({
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
-                {t({ id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' }, { date: formatDate(new Date(lastUpdated)) }
+                {t({ id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' }, { date: formatDate(new Date(lastUpdated), locale) }
                 )}
               </span>
             ) : null}

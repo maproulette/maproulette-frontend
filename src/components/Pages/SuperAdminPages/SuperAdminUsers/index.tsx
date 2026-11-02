@@ -21,7 +21,7 @@ import { getRoleBadgeColor, getUserRole } from '@/lib/SuperAdminGuard'
 import { cn, initials } from '@/lib/utils'
 
 export const SuperAdminUsers = () => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(0)
   const limit = 50
@@ -231,7 +231,7 @@ export const SuperAdminUsers = () => {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-zinc-400" />
-                            {user.created ? formatDate(new Date(user.created)) : '—'}
+                            {user.created ? formatDate(new Date(user.created), locale) : '—'}
                           </div>
                         </TableCell>
                         <TableCell>

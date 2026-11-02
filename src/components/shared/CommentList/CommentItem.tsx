@@ -23,7 +23,7 @@ export const CommentItem = ({
   onReply,
   highlighted = false,
 }: Props) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const avatarSize = variant === 'compact' ? 'size-7' : 'size-9'
 
   return (
@@ -43,7 +43,7 @@ export const CommentItem = ({
         <div className="flex flex-wrap items-baseline gap-2 text-sm">
           <span className="font-semibold">{comment.osm_username}</span>
           <span className="text-xs text-zinc-500 dark:text-slate-400">
-            {comment.created ? formatTimeAgo(new Date(comment.created)) : ''}
+            {comment.created ? formatTimeAgo(new Date(comment.created), locale) : ''}
           </span>
           {showContext?.challengeName && comment.challengeId && (
             <Link

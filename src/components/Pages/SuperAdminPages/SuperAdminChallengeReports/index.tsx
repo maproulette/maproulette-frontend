@@ -50,7 +50,7 @@ const statusBadgeVariant = (statusName: string) => {
  * was decided, and the two ways a report can be closed out.
  */
 const ReportRow = ({ report }: { report: ChallengeReport }) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const [reviewComment, setReviewComment] = useState('')
   const updateStatus = api.challenge.useUpdateReportStatus()
   const busy = updateStatus.isPending
@@ -97,7 +97,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
             {t({ id: 'superAdminChallengeReports.reportMeta', defaultMessage: '{project} · reported by {user} on {date}' }, {
                 project: report.projectName ?? String(report.projectId ?? ''),
                 user: report.reporterName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
-                date: formatDate(new Date(report.reportedAt)),
+                date: formatDate(new Date(report.reportedAt), locale),
               }
             )}
           </p>
@@ -151,7 +151,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
           {t({ id: 'superAdminChallengeReports.resolvedMeta', defaultMessage: '{status} by {user} on {date}' }, {
               status: report.statusName,
               user: report.reviewedByName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
-              date: report.reviewedAt ? formatDate(new Date(report.reviewedAt)) : '',
+              date: report.reviewedAt ? formatDate(new Date(report.reviewedAt), locale) : '',
             }
           )}
           {report.reviewComment ? ` — ${report.reviewComment}` : ''}

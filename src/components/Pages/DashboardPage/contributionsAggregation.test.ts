@@ -24,14 +24,14 @@ const makeEntry = (overrides: Partial<UserContribution>): UserContribution => ({
 
 describe('aggregateContributions', () => {
   it('returns an empty result for undefined input', () => {
-    expect(aggregateContributions(undefined, t)).toEqual({
+    expect(aggregateContributions(undefined, t, 'en-US')).toEqual({
       groupedActivities: [],
       totalTasks: 0,
     })
   })
 
   it('returns an empty result for an empty array', () => {
-    expect(aggregateContributions([], t)).toEqual({
+    expect(aggregateContributions([], t, 'en-US')).toEqual({
       groupedActivities: [],
       totalTasks: 0,
     })
@@ -71,7 +71,7 @@ describe('aggregateContributions', () => {
       }),
     ]
 
-    const { groupedActivities, totalTasks } = aggregateContributions(activities, t)
+    const { groupedActivities, totalTasks } = aggregateContributions(activities, t, 'en-US')
 
     expect(totalTasks).toBe(5)
     expect(groupedActivities).toHaveLength(2)
@@ -114,7 +114,7 @@ describe('aggregateContributions', () => {
       makeEntry({ created: '2025-03-15T12:00:00.000Z', parentId: 1, status: 1 }),
     ]
 
-    const { groupedActivities, totalTasks } = aggregateContributions(activities, t)
+    const { groupedActivities, totalTasks } = aggregateContributions(activities, t, 'en-US')
 
     expect(totalTasks).toBe(2)
     // Each year's March 15th must land in its own bucket, not merge into one.
@@ -124,13 +124,23 @@ describe('aggregateContributions', () => {
     )
   })
 
+  it('labels each day in the chosen language', () => {
+    const activities: UserContribution[] = [
+      makeEntry({ created: '2025-06-02T12:00:00.000Z', parentId: 1, status: 1 }),
+    ]
+
+    const { groupedActivities } = aggregateContributions(activities, t, 'de')
+
+    expect(groupedActivities[0].date).toContain('JUNI')
+  })
+
   it('omits the year from the date label for entries dated in the current year', () => {
     const currentYear = new Date().getFullYear()
     const activities: UserContribution[] = [
       makeEntry({ created: `${currentYear}-03-15T12:00:00.000Z`, parentId: 1, status: 1 }),
     ]
 
-    const { groupedActivities } = aggregateContributions(activities, t)
+    const { groupedActivities } = aggregateContributions(activities, t, 'en-US')
 
     expect(groupedActivities).toHaveLength(1)
     expect(groupedActivities[0].date).not.toContain(String(currentYear))
@@ -143,7 +153,7 @@ describe('aggregateContributions', () => {
       makeEntry({ created: '2025-02-10T12:00:00.000Z', parentId: 1 }),
     ]
 
-    const { groupedActivities } = aggregateContributions(activities, t)
+    const { groupedActivities } = aggregateContributions(activities, t, 'en-US')
 
     expect(groupedActivities.map((g) => g.date)).toEqual([
       groupedActivities[0].date,
@@ -162,7 +172,7 @@ describe('aggregateContributions', () => {
       makeEntry({ created: '2025-06-02T12:02:00.000Z', parentId: 1, status: 3 }),
     ]
 
-    const { groupedActivities } = aggregateContributions(activities, t)
+    const { groupedActivities } = aggregateContributions(activities, t, 'en-US')
 
     expect(groupedActivities[0].challenges[0].actions.map((a) => a.status)).toEqual([1, 3, 5])
   })
@@ -172,7 +182,7 @@ describe('aggregateContributions', () => {
       makeEntry({ created: '2025-06-02T12:00:00.000Z', parentId: 99, parentName: '', status: 1 }),
     ]
 
-    const { groupedActivities } = aggregateContributions(activities, t)
+    const { groupedActivities } = aggregateContributions(activities, t, 'en-US')
 
     expect(groupedActivities[0].challenges[0].name).toBe('Challenge 99')
   })
@@ -184,7 +194,7 @@ describe('aggregateContributions', () => {
       makeEntry({ created: '2025-06-02T12:00:00.000Z', parentId: 7 }),
     ]
 
-    const { groupedActivities, totalTasks } = aggregateContributions(activities, t)
+    const { groupedActivities, totalTasks } = aggregateContributions(activities, t, 'en-US')
 
     expect(totalTasks).toBe(1)
     expect(groupedActivities[0].challenges.map((c) => c.parentId)).toEqual([7])
