@@ -1,8 +1,9 @@
 import bbox from '@turf/bbox'
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
+import { useOptionalTaskEditMapContext } from '@/components/Pages/TaskEditPage/TaskMap/TaskEditMapContext'
 import {
   formatOsmEntities,
   parseOsmFeaturesFromTask,
@@ -41,6 +42,13 @@ const computeBboxForTasks = (tasks: Task[]): Bbox2D => {
   return bbox({ type: 'FeatureCollection', features }) as Bbox2D
 }
 
+const bboxCenter = ([west, south, east, north]: Bbox2D): [number, number] => [
+  (west + east) / 2,
+  (south + north) / 2,
+]
+
+const DEFAULT_EDITOR_ZOOM = 18
+
 /**
  * Opening a task in an external editor, shared by the editor button and the
  * editor keyboard shortcuts so a key and a click do exactly the same thing.
@@ -53,6 +61,9 @@ export const useEditorLaunch = (task: Task) => {
   const bundledTaskIds = (activeBundle?.taskIds ?? []).filter((id) => id !== task.id)
   const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
   const { openIdEditor } = useEditorContext()
+  const taskMap = useOptionalTaskEditMapContext()
+  const taskMapRef = useRef(taskMap)
+  taskMapRef.current = taskMap
   const isTagFix = isTagFixTask(task)
 
   // Get current default editor (default to iD if not set)
@@ -62,8 +73,12 @@ export const useEditorLaunch = (task: Task) => {
     (editorValue: number) => {
       try {
         const tasks: Task[] = [task, ...(bundledTasks ?? [])]
-        const [lng, lat] = task.location.coordinates
-        const zoom = 18
+        const mapView = taskMapRef.current?.mapLoaded ? taskMapRef.current : null
+        const taskBounds =
+          mapView && tasks.length === 1 ? mapView.mapBounds : computeBboxForTasks(tasks)
+        const [lng, lat] =
+          mapView || tasks.length > 1 ? bboxCenter(taskBounds) : task.location.coordinates
+        const zoom = mapView ? Math.round(mapView.mapZoom * 100) / 100 : DEFAULT_EDITOR_ZOOM
 
         const checkinComment = buildChangesetComment(challenge, task)
         const checkinSource = challenge?.checkinSource ?? ''
@@ -96,7 +111,7 @@ export const useEditorLaunch = (task: Task) => {
 
           case EDITOR.josm:
           case EDITOR.josmLayer: {
-            const bounds = computeBboxForTasks(tasks)
+            const bounds = taskBounds
             if (!bounds) {
               toast.error(
                 t(
@@ -144,7 +159,7 @@ export const useEditorLaunch = (task: Task) => {
               )
               return
             }
-            const [west, south, east, north] = computeBboxForTasks(tasks)
+            const [west, south, east, north] = taskBounds
             const boundsParams = `left=${west}&right=${east}&top=${north}&bottom=${south}`
             const parts = [
               boundsParams,
