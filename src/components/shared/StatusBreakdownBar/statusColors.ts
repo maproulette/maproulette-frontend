@@ -14,7 +14,7 @@ export const statusHexByKey: Record<string, string> = {
   disabled: hexForKey('disabled'),
 }
 
-// Labels here intentionally diverge from STATUS_LABELS: in the action-breakdown context, "created"
+// Labels here intentionally diverge from STATUS_MESSAGES: in the action-breakdown context, "created"
 // means "available to work on" rather than the historical "Created" status name.
 export const statusMessageByKey = defineMessages({
   created: { id: 'statusBreakdownBar.status.created', defaultMessage: 'Available' },

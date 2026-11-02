@@ -4,7 +4,7 @@ import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import {
   PRIORITY_COLOR,
-  PRIORITY_LABEL,
+  PRIORITY_MESSAGES,
   PRIORITY_TIERS,
   type TaskPriorityValue,
 } from '@/types/Priority'
@@ -30,7 +30,7 @@ export const DefaultPrioritySelect = () => {
               <RadioGroupItem id={id} value={String(p)} />
               <Label htmlFor={id} className="gap-1.5 font-normal">
                 <span className={cn('size-2 rounded-full', PRIORITY_COLOR[p].bg)} />
-                {PRIORITY_LABEL[p]}
+                {t(PRIORITY_MESSAGES[p])}
               </Label>
             </div>
           )

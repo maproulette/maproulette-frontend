@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import type { z } from 'zod'
 import { api } from '@/api'
 import { FieldGroup } from '@/components/ui/Field'
 import { Form } from '@/components/ui/Form'
@@ -9,7 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useIntl } from '@/i18n'
 import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
-import { basemapSettings, formSchema, getDefaultValues } from './formSchema'
+import {
+  basemapSettings,
+  getDefaultValues,
+  makeFormSchema,
+  type SettingsFormValues,
+} from './formSchema'
 import { GeneralSettings } from './GeneralSettings'
 import { useNotificationSubscriptionsDraft } from './NotificationSubscriptionFields'
 import { NotificationsSettings } from './NotificationsSettings'
@@ -19,14 +23,14 @@ import { PluginUserSettingsFields } from './PluginUserSettingsFields'
 export const UserSettingsForm = ({ user }: { user: User }) => {
   const updateSettingsMutation = api.user.useUpdateUserSettings()
   const subscriptions = useNotificationSubscriptionsDraft(user.id)
-  const { locale } = useIntl()
+  const { locale, t } = useIntl()
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SettingsFormValues>({
+    resolver: zodResolver(makeFormSchema(t)),
     defaultValues: getDefaultValues(user.settings, locale),
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: SettingsFormValues) => {
     try {
       await Promise.all([
         updateSettingsMutation.mutateAsync({
@@ -40,9 +44,16 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
         subscriptions.isDirty ? subscriptions.save() : null,
       ])
 
-      toast.success('User settings updated')
+      toast.success(
+        t({ id: 'settings.account.saveSuccess', defaultMessage: 'User settings updated' })
+      )
     } catch {
-      toast.error('Failed to update user settings')
+      toast.error(
+        t({
+          id: 'settings.account.saveError',
+          defaultMessage: 'Failed to update user settings',
+        })
+      )
     }
   }
 
@@ -52,12 +63,20 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto flex h-full min-h-0 w-full max-w-3xl flex-col gap-4 py-4"
       >
-        <h1 className="font-bold text-base">Account</h1>
+        <h1 className="font-bold text-base">
+          {t({ id: 'settings.account.title', defaultMessage: 'Account' })}
+        </h1>
         <Tabs defaultValue="general" className="flex min-h-0 flex-1 flex-col">
           <TabsList>
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            <TabsTrigger value="plugins">Plugins</TabsTrigger>
+            <TabsTrigger value="general">
+              {t({ id: 'settings.general.title', defaultMessage: 'General' })}
+            </TabsTrigger>
+            <TabsTrigger value="notifications">
+              {t({ id: 'settings.notifications.title', defaultMessage: 'Notifications' })}
+            </TabsTrigger>
+            <TabsTrigger value="plugins">
+              {t({ id: 'settings.plugins.title', defaultMessage: 'Plugins' })}
+            </TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>
           <div className="flex max-h-full min-h-0 flex-initial flex-col overflow-hidden rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">

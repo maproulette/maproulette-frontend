@@ -1,11 +1,5 @@
 import { defineMessages, type MessageDescriptor } from 'react-intl'
 
-export const TASK_PRIORITY_MESSAGES: Record<number, MessageDescriptor> = defineMessages({
-  0: { id: 'manageChallengeDetail.tasksExplorer.priorityHigh', defaultMessage: 'High' },
-  1: { id: 'manageChallengeDetail.tasksExplorer.priorityMedium', defaultMessage: 'Medium' },
-  2: { id: 'manageChallengeDetail.tasksExplorer.priorityLow', defaultMessage: 'Low' },
-})
-
 export const SORT_FIELDS = [{ value: 'id' }, { value: 'status' }, { value: 'priority' }] as const
 
 export type SortField = (typeof SORT_FIELDS)[number]['value']

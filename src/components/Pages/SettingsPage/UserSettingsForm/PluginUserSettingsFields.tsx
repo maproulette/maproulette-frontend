@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import type { FieldPath, UseFormReturn } from 'react-hook-form'
-import type { z } from 'zod'
 import { FormField, FormItem, FormMessage } from '@/components/ui/Form'
 import { usePluginContext } from '@/contexts/PluginContext'
 import type { UserSettings } from '@/types/User'
-import type { formSchema } from './formSchema'
+import type { SettingsFormValues } from './formSchema'
 
-type SettingsFormValues = z.infer<typeof formSchema>
 
 /** Renders plugin-owned settings inputs bound to the shared Account form. */
 export const PluginUserSettingsFields = ({

@@ -1,7 +1,7 @@
 import { History } from 'lucide-react'
 import { useMemo } from 'react'
 import { api } from '@/api'
-import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
+import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useIntl } from '@/i18n'
@@ -24,7 +24,7 @@ const formatDayHeading = (isoDay: string, locale: string): string =>
 
 const statusLabel = (status: number, statusName: string, t: ReturnType<typeof useIntl>['t']) => {
   return (
-    TASK_STATUS_LABELS[status] ??
+    (TASK_STATUS_MESSAGES[status] ? t(TASK_STATUS_MESSAGES[status]) : undefined) ??
     statusName ??
     t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })
   )

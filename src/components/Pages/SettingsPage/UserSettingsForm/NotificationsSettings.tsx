@@ -1,5 +1,4 @@
 import type { UseFormReturn } from 'react-hook-form'
-import type { z } from 'zod'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
@@ -11,8 +10,9 @@ import {
   FormMessage,
 } from '@/components/ui/Form'
 import { Input } from '@/components/ui/Input'
+import { useIntl } from '@/i18n'
 import { FieldSubmit } from './FieldSubmit'
-import type { formSchema } from './formSchema'
+import type { SettingsFormValues } from './formSchema'
 import {
   NotificationSubscriptionFields,
   type SubscriptionsDraft,
@@ -22,18 +22,26 @@ export const NotificationsSettings = ({
   form,
   subscriptions,
 }: {
-  form: UseFormReturn<z.infer<typeof formSchema>>
+  form: UseFormReturn<SettingsFormValues>
   subscriptions: SubscriptionsDraft
 }) => {
+  const { t } = useIntl()
   return (
     <FieldSet className="min-h-0 flex-auto">
-      <FieldLegend>Notifications</FieldLegend>
+      <FieldLegend>
+        {t({ id: 'settings.notifications.title', defaultMessage: 'Notifications' })}
+      </FieldLegend>
       <FieldDescription>
-        Decide which MapRoulette notifications you would like to receive, along with whether you
-        would like to be sent an email informing you of the notification (either immediately or as a
-        daily digest).{' '}
+        {t({
+          id: 'settings.notifications.description',
+          defaultMessage:
+            'Decide which MapRoulette notifications you would like to receive, along with whether you would like to be sent an email informing you of the notification (either immediately or as a daily digest).',
+        })}{' '}
         <DocsLink page="notificationsAndEmail" icon={null}>
-          Learn about notifications and email
+          {t({
+            id: 'settings.notifications.docsLink',
+            defaultMessage: 'Learn about notifications and email',
+          })}
         </DocsLink>
       </FieldDescription>
       <FieldGroup className="min-h-0 flex-auto overflow-y-auto px-1">
@@ -42,12 +50,17 @@ export const NotificationsSettings = ({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>
+                {t({ id: 'settings.notifications.emailLabel', defaultMessage: 'Email' })}
+              </FormLabel>
               <FormControl>
                 <Input type="email" {...field} />
               </FormControl>
               <FormDescription>
-                If you request emails below, they will be sent here.
+                {t({
+                  id: 'settings.notifications.emailDescription',
+                  defaultMessage: 'If you request emails below, they will be sent here.',
+                })}
               </FormDescription>
               <FormMessage />
             </FormItem>

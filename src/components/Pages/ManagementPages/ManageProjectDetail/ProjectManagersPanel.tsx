@@ -36,7 +36,9 @@ const RoleSelect = ({
   value: number
   disabled?: boolean
   onChange: (role: number) => void
-}) => (
+}) => {
+  const { t } = useIntl()
+  return (
   <Select value={String(value)} disabled={disabled} onValueChange={(v) => onChange(Number(v))}>
     <SelectTrigger size="sm" className="w-28">
       <SelectValue />
@@ -44,12 +46,13 @@ const RoleSelect = ({
     <SelectContent>
       {projectRoleOptions.map((option) => (
         <SelectItem key={option.value} value={String(option.value)}>
-          {option.label}
+          {t(option.label)}
         </SelectItem>
       ))}
     </SelectContent>
   </Select>
-)
+  )
+}
 
 /**
  * Who can manage this project: individual users and whole teams, each with a

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
 import { LegendRow } from './LegendRow'
-import { getStatusLegendEntries, priorityEntries } from './taskStatusCatalog'
+import { getPriorityLegendEntries, getStatusLegendEntries } from './taskStatusCatalog'
 
 interface Props {
   defaultOpen?: boolean
@@ -62,7 +62,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
               {t({ id: 'common.priority', defaultMessage: 'Priority' })}
             </div>
             <ul className="space-y-1">
-              {priorityEntries.map((entry) => (
+              {getPriorityLegendEntries(t).map((entry) => (
                 <LegendRow
                   key={entry.priority}
                   variant="priority"

@@ -1,5 +1,5 @@
 import { ArrowDownAZ, ArrowUpAZ, ChevronDown, X } from 'lucide-react'
-import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
+import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -24,10 +24,10 @@ import {
   SORT_FIELD_MESSAGES,
   SORT_FIELDS,
   type SortField,
-  TASK_PRIORITY_MESSAGES,
 } from './constants'
 import { ExportTasksButton } from './ExportTasksButton'
 import { PropertyFilterButton } from './PropertyFilterButton'
+import { PRIORITY_MESSAGES } from '@/types/Priority'
 
 /** Horizontal filter & sort controls rendered above the task table. */
 export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) => {
@@ -90,7 +90,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
                 onCheckedChange={(c) => setStatusChecked(s, c === true)}
                 onSelect={(e) => e.preventDefault()}
               >
-                {TASK_STATUS_LABELS[s]}
+                {t(TASK_STATUS_MESSAGES[s])}
               </DropdownMenuCheckboxItem>
             ))}
           </DropdownMenuContent>
@@ -124,7 +124,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
                 onCheckedChange={(c) => setPriorityChecked(p, c === true)}
                 onSelect={(e) => e.preventDefault()}
               >
-                {t(TASK_PRIORITY_MESSAGES[p])}
+                {t(PRIORITY_MESSAGES[p])}
               </DropdownMenuCheckboxItem>
             ))}
           </DropdownMenuContent>

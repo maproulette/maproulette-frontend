@@ -23,7 +23,7 @@ export const TierWarningBadges = ({
           key={w.kind}
           variant="outline"
           className="gap-1 text-amber-700 dark:text-amber-400"
-          title={w.message}
+          title={t(w.message)}
         >
           <AlertTriangle className="size-3" />
           {w.kind === 'dead-rule'

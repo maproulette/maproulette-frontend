@@ -33,7 +33,7 @@ describe('analyzeWarnings', () => {
       const second = analyzeWarnings(baseInput())
       expect(second.tier[0]).toEqual([])
       // Mutating the second result must not affect anything cached from the first call.
-      second.tier[0].push({ kind: 'dead-rule', message: 'x' })
+      second.tier[0].push({ kind: 'dead-rule', message: { id: 'test.deadRule' } })
       expect(first.tier[0]).toHaveLength(1)
     })
   })
@@ -43,10 +43,7 @@ describe('analyzeWarnings', () => {
       const result = analyzeWarnings(baseInput({ totalTasks: 10 }))
 
       expect(result.global).toEqual([
-        {
-          kind: 'no-rules',
-          message: 'No rules configured — every task will use the default priority.',
-        },
+        expect.objectContaining({ kind: 'no-rules' }),
       ])
     })
 
@@ -73,9 +70,7 @@ describe('analyzeWarnings', () => {
         })
       )
 
-      expect(result.tier[0]).toEqual([
-        { kind: 'dead-rule', message: 'No tasks match these rules — the tier is unreachable.' },
-      ])
+      expect(result.tier[0]).toEqual([expect.objectContaining({ kind: 'dead-rule' })])
     })
 
     it('warns even when there are zero total tasks (still unreachable)', () => {
@@ -124,9 +119,7 @@ describe('analyzeWarnings', () => {
         })
       )
 
-      expect(result.tier[1]).toEqual([
-        { kind: 'dead-rule', message: 'No tasks match these rules — the tier is unreachable.' },
-      ])
+      expect(result.tier[1]).toEqual([expect.objectContaining({ kind: 'dead-rule' })])
     })
   })
 
@@ -140,9 +133,7 @@ describe('analyzeWarnings', () => {
         })
       )
 
-      expect(result.tier[0]).toEqual([
-        { kind: 'all-match', message: 'Every task matches — lower tiers become unreachable.' },
-      ])
+      expect(result.tier[0]).toEqual([expect.objectContaining({ kind: 'all-match' })])
     })
 
     it('does not warn when totalTasks is zero, even if count equals totalTasks (0 === 0)', () => {
@@ -195,10 +186,7 @@ describe('analyzeWarnings', () => {
         })
       )
 
-      expect(result.global).toContainEqual({
-        kind: 'swallowed-default',
-        message: 'Default is High with no High rules — medium/low rules may never apply.',
-      })
+      expect(result.global).toContainEqual(expect.objectContaining({ kind: 'swallowed-default' }))
     })
 
     it('does not warn when High itself has rules configured', () => {
@@ -250,10 +238,7 @@ describe('analyzeWarnings', () => {
       )
 
       expect(result.global).toEqual([
-        {
-          kind: 'no-rules',
-          message: 'No rules configured — every task will use the default priority.',
-        },
+        expect.objectContaining({ kind: 'no-rules' }),
       ])
     })
   })
@@ -286,17 +271,10 @@ describe('analyzeWarnings', () => {
       )
 
       expect(result.tier[0]).toEqual([])
-      expect(result.tier[1]).toEqual([
-        { kind: 'all-match', message: 'Every task matches — lower tiers become unreachable.' },
-      ])
-      expect(result.tier[2]).toEqual([
-        { kind: 'dead-rule', message: 'No tasks match these rules — the tier is unreachable.' },
-      ])
+      expect(result.tier[1]).toEqual([expect.objectContaining({ kind: 'all-match' })])
+      expect(result.tier[2]).toEqual([expect.objectContaining({ kind: 'dead-rule' })])
       expect(result.global).toEqual([
-        {
-          kind: 'swallowed-default',
-          message: 'Default is High with no High rules — medium/low rules may never apply.',
-        },
+        expect.objectContaining({ kind: 'swallowed-default' }),
       ])
     })
   })

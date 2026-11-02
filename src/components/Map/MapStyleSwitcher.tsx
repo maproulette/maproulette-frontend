@@ -91,7 +91,9 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
                 type="button"
                 onClick={() => handleRemove(custom.id)}
                 className="rounded p-2 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
-                aria-label={t({ id: 'map.styleSwitcher.removeLayer', defaultMessage: 'Remove {name}' }, { name: custom.name }
+                aria-label={t(
+                  { id: 'map.styleSwitcher.removeLayer', defaultMessage: 'Remove {name}' },
+                  { name: custom.name }
                 )}
               >
                 <Trash2 className="size-4" />
@@ -111,7 +113,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
               id={`${fieldId}-name`}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="My imagery"
+              placeholder={t({ id: 'map.styleSwitcher.namePlaceholder', defaultMessage: 'My imagery' })}
             />
           </div>
           <div className="space-y-1">
@@ -123,7 +125,9 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="xyz">XYZ tiles</SelectItem>
+                <SelectItem value="xyz">
+                  {t({ id: 'map.styleSwitcher.typeXyz', defaultMessage: 'XYZ tiles' })}
+                </SelectItem>
                 <SelectItem value="wms">WMS</SelectItem>
               </SelectContent>
             </Select>

@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { type RefObject, useMemo } from 'react'
-import { TASK_STATUS_LABELS } from '@/components/Pages/ManagementPages/taskStatusLabels'
+import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
@@ -16,7 +16,7 @@ import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { TaskMarker } from '@/types/Task'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
-import { TASK_PRIORITY_MESSAGES } from './constants'
+import { isTaskPriority, PRIORITY_MESSAGES } from '@/types/Priority'
 
 /** Scrollable, infinitely-loading table of the currently filtered/sorted tasks. */
 export const ChallengeTasksExplorerTaskTable = ({
@@ -43,9 +43,10 @@ export const ChallengeTasksExplorerTaskTable = ({
   }, [visibleIds, rowSelection])
 
   const statusLabel = (s: number) =>
-    TASK_STATUS_LABELS[s] ?? t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status: s })
+    (TASK_STATUS_MESSAGES[s] ? t(TASK_STATUS_MESSAGES[s]) : undefined) ??
+    t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status: s })
   const priorityLabel = (p: number) =>
-    TASK_PRIORITY_MESSAGES[p] ? t(TASK_PRIORITY_MESSAGES[p]) : String(p)
+    isTaskPriority(p) ? t(PRIORITY_MESSAGES[p]) : String(p)
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 dark:border-slate-700">

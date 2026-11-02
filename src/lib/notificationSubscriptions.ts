@@ -1,3 +1,4 @@
+import { defineMessage, type MessageDescriptor } from 'react-intl'
 import type { components } from '@/types/openApiTypes'
 
 export type NotificationSubscriptions =
@@ -21,71 +22,83 @@ export const SUBSCRIPTION_FREQUENCY = {
   weekly: 6,
 } as const
 
-export const subscriptionLevelOptions = [
-  { value: SUBSCRIPTION_LEVEL.ignore, label: 'Ignore' },
-  { value: SUBSCRIPTION_LEVEL.noEmail, label: 'Notify in app' },
-  { value: SUBSCRIPTION_LEVEL.immediateEmail, label: 'Notify and email immediately' },
-  { value: SUBSCRIPTION_LEVEL.digestEmail, label: 'Notify and include in daily digest' },
+export const subscriptionLevelOptions: { value: number; label: MessageDescriptor }[] = [
+  { value: SUBSCRIPTION_LEVEL.ignore, label: defineMessage({ id: 'notificationSubscriptions.level.ignore', defaultMessage: 'Ignore' }) },
+  { value: SUBSCRIPTION_LEVEL.noEmail, label: defineMessage({ id: 'notificationSubscriptions.level.noEmail', defaultMessage: 'Notify in app' }) },
+  { value: SUBSCRIPTION_LEVEL.immediateEmail, label: defineMessage({ id: 'notificationSubscriptions.level.immediateEmail', defaultMessage: 'Notify and email immediately' }) },
+  { value: SUBSCRIPTION_LEVEL.digestEmail, label: defineMessage({ id: 'notificationSubscriptions.level.digestEmail', defaultMessage: 'Notify and include in daily digest' }) },
 ]
 
-export const subscriptionFrequencyOptions = [
-  { value: SUBSCRIPTION_FREQUENCY.ignore, label: "Don't send" },
-  { value: SUBSCRIPTION_FREQUENCY.daily, label: 'Daily email' },
-  { value: SUBSCRIPTION_FREQUENCY.weekly, label: 'Weekly email' },
+export const subscriptionFrequencyOptions: { value: number; label: MessageDescriptor }[] = [
+  { value: SUBSCRIPTION_FREQUENCY.ignore, label: defineMessage({ id: 'notificationSubscriptions.frequency.ignore', defaultMessage: 'Don\'t send' }) },
+  { value: SUBSCRIPTION_FREQUENCY.daily, label: defineMessage({ id: 'notificationSubscriptions.frequency.daily', defaultMessage: 'Daily email' }) },
+  { value: SUBSCRIPTION_FREQUENCY.weekly, label: defineMessage({ id: 'notificationSubscriptions.frequency.weekly', defaultMessage: 'Weekly email' }) },
 ]
 
 /** The notification kinds a user can subscribe to, in the order they're shown. */
 export const SUBSCRIPTION_FIELDS = [
-  { key: 'system', label: 'System messages', description: 'Announcements from MapRoulette itself' },
-  { key: 'mention', label: 'Mentions', description: 'When someone @mentions you in a comment' },
+  {
+    key: 'system',
+    label: defineMessage({ id: 'notificationSubscriptions.field.system.label', defaultMessage: 'System messages' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.system.description', defaultMessage: 'Announcements from MapRoulette itself' }),
+  },
+  {
+    key: 'mention',
+    label: defineMessage({ id: 'notificationSubscriptions.field.mention.label', defaultMessage: 'Mentions' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.mention.description', defaultMessage: 'When someone @mentions you in a comment' }),
+  },
   {
     key: 'reviewApproved',
-    label: 'Review approved',
-    description: 'When a task you completed passes review',
+    label: defineMessage({ id: 'notificationSubscriptions.field.reviewApproved.label', defaultMessage: 'Review approved' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.reviewApproved.description', defaultMessage: 'When a task you completed passes review' }),
   },
   {
     key: 'reviewRejected',
-    label: 'Review rejected',
-    description: 'When a task you completed is rejected',
+    label: defineMessage({ id: 'notificationSubscriptions.field.reviewRejected.label', defaultMessage: 'Review rejected' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.reviewRejected.description', defaultMessage: 'When a task you completed is rejected' }),
   },
   {
     key: 'reviewAgain',
-    label: 'Review requested again',
-    description: 'When a task needs another look from you',
+    label: defineMessage({ id: 'notificationSubscriptions.field.reviewAgain.label', defaultMessage: 'Review requested again' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.reviewAgain.description', defaultMessage: 'When a task needs another look from you' }),
   },
   {
     key: 'metaReview',
-    label: 'Meta review',
-    description: 'When one of your reviews is itself reviewed',
+    label: defineMessage({ id: 'notificationSubscriptions.field.metaReview.label', defaultMessage: 'Meta review' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.metaReview.description', defaultMessage: 'When one of your reviews is itself reviewed' }),
   },
   {
     key: 'challengeCompleted',
-    label: 'Challenge completed',
-    description: 'When a challenge you manage finishes',
+    label: defineMessage({ id: 'notificationSubscriptions.field.challengeCompleted.label', defaultMessage: 'Challenge completed' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.challengeCompleted.description', defaultMessage: 'When a challenge you manage finishes' }),
   },
-  { key: 'team', label: 'Teams', description: 'Team invitations and membership changes' },
+  {
+    key: 'team',
+    label: defineMessage({ id: 'notificationSubscriptions.field.team.label', defaultMessage: 'Teams' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.team.description', defaultMessage: 'Team invitations and membership changes' }),
+  },
 ] as const satisfies ReadonlyArray<{
   key: keyof NotificationSubscriptions
-  label: string
-  description: string
+  label: MessageDescriptor
+  description: MessageDescriptor
 }>
 
 /** Count-based notifications, which take a frequency rather than a level. */
 export const COUNT_FIELDS = [
   {
     key: 'reviewCount',
-    label: 'Tasks awaiting your review',
-    description: 'A periodic summary of your review queue',
+    label: defineMessage({ id: 'notificationSubscriptions.field.reviewCount.label', defaultMessage: 'Tasks awaiting your review' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.reviewCount.description', defaultMessage: 'A periodic summary of your review queue' }),
   },
   {
     key: 'revisionCount',
-    label: 'Tasks awaiting your revision',
-    description: 'A periodic summary of tasks sent back to you',
+    label: defineMessage({ id: 'notificationSubscriptions.field.revisionCount.label', defaultMessage: 'Tasks awaiting your revision' }),
+    description: defineMessage({ id: 'notificationSubscriptions.field.revisionCount.description', defaultMessage: 'A periodic summary of tasks sent back to you' }),
   },
 ] as const satisfies ReadonlyArray<{
   key: keyof NotificationSubscriptions
-  label: string
-  description: string
+  label: MessageDescriptor
+  description: MessageDescriptor
 }>
 
 /**

@@ -1,21 +1,6 @@
 import { defineMessages, type MessageDescriptor } from 'react-intl'
 import type { TranslateFn } from '@/i18n'
 
-/** English fallback text per status, used as the ICU defaultMessage when a catalog entry is
- *  missing and by non-visible consumers (e.g. STATUS_CONFIG) that don't have access to t(). */
-export const STATUS_LABELS: Record<number, string> = {
-  0: 'Created',
-  1: 'Fixed',
-  2: 'Not an Issue',
-  3: 'Skipped',
-  4: 'Deleted',
-  5: 'Already Fixed',
-  6: "Can't Complete",
-  7: 'Answered',
-  8: 'Validated',
-  9: 'Disabled',
-}
-
 export const STATUS_MESSAGES: Record<number, MessageDescriptor> = defineMessages({
   0: { id: 'common.created', defaultMessage: 'Created' },
   1: { id: 'common.fixed', defaultMessage: 'Fixed' },

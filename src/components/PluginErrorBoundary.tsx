@@ -2,6 +2,7 @@ import { AlertCircle, RefreshCw } from 'lucide-react'
 import { Component, type ComponentType, type ErrorInfo, type ReactNode } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
 import { pluginLogger } from '@/lib/logger'
 
 export type PluginErrorBoundaryProps = {
@@ -65,47 +66,78 @@ export class PluginErrorBoundary extends Component<
     if (!error) {
       return this.props.children
     }
-
     const { contributionId, source, compact, className } = this.props
-    const title = source ? `Plugin ${source} failed` : 'Plugin failed to render'
-
-    if (compact) {
-      return (
-        <div className={className ?? 'space-y-2 py-1'}>
-          <p className="text-red-600 text-xs dark:text-red-400">
-            {title}
-            {contributionId ? ` (${contributionId})` : ''}: {error.message}
-          </p>
-          <Button type="button" size="sm" variant="outline" onClick={this.handleRetry}>
-            <RefreshCw className="mr-1 size-3.5" />
-            Retry
-          </Button>
-        </div>
-      )
-    }
-
     return (
-      <div className={className ?? 'mx-auto max-w-2xl px-4 py-6'}>
-        <Alert variant="destructive">
-          <AlertCircle className="size-4" />
-          <AlertTitle>{title}</AlertTitle>
-          <AlertDescription className="mt-2 space-y-3">
-            <p>{error.message}</p>
-            {contributionId && (
-              <p className="font-mono text-xs opacity-80">contribution: {contributionId}</p>
-            )}
-            <p className="text-xs opacity-80">
-              Details were written to the browser console (message, stack, component stack).
-            </p>
-            <Button type="button" size="sm" variant="outline" onClick={this.handleRetry}>
-              <RefreshCw className="mr-1.5 size-3.5" />
-              Retry
-            </Button>
-          </AlertDescription>
-        </Alert>
+      <PluginErrorFallback
+        error={error}
+        contributionId={contributionId}
+        source={source}
+        compact={compact}
+        className={className}
+        onRetry={this.handleRetry}
+      />
+    )
+  }
+}
+
+const PluginErrorFallback = ({
+  error,
+  contributionId,
+  source,
+  compact,
+  className,
+  onRetry,
+}: Omit<PluginErrorBoundaryProps, 'children'> & { error: Error; onRetry: () => void }) => {
+  const { t } = useIntl()
+  const title = source
+    ? t({ id: 'pluginErrorBoundary.titleWithSource', defaultMessage: 'Plugin {source} failed' }, { source })
+    : t({ id: 'pluginErrorBoundary.title', defaultMessage: 'Plugin failed to render' })
+  const retry = t({ id: 'pluginErrorBoundary.retry', defaultMessage: 'Retry' })
+
+  if (compact) {
+    return (
+      <div className={className ?? 'space-y-2 py-1'}>
+        <p className="text-red-600 text-xs dark:text-red-400">
+          {title}
+          {contributionId ? ` (${contributionId})` : ''}: {error.message}
+        </p>
+        <Button type="button" size="sm" variant="outline" onClick={onRetry}>
+          <RefreshCw className="mr-1 size-3.5" />
+          {retry}
+        </Button>
       </div>
     )
   }
+
+  return (
+    <div className={className ?? 'mx-auto max-w-2xl px-4 py-6'}>
+      <Alert variant="destructive">
+        <AlertCircle className="size-4" />
+        <AlertTitle>{title}</AlertTitle>
+        <AlertDescription className="mt-2 space-y-3">
+          <p>{error.message}</p>
+          {contributionId && (
+            <p className="font-mono text-xs opacity-80">
+              {t(
+                { id: 'pluginErrorBoundary.contribution', defaultMessage: 'contribution: {contributionId}' },
+                { contributionId }
+              )}
+            </p>
+          )}
+          <p className="text-xs opacity-80">
+            {t({
+              id: 'pluginErrorBoundary.consoleDetails',
+              defaultMessage: 'Details were written to the browser console (message, stack, component stack).',
+            })}
+          </p>
+          <Button type="button" size="sm" variant="outline" onClick={onRetry}>
+            <RefreshCw className="mr-1.5 size-3.5" />
+            {retry}
+          </Button>
+        </AlertDescription>
+      </Alert>
+    </div>
+  )
 }
 
 type WrapOptions = {

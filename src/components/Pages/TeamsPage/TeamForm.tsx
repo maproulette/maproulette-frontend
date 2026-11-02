@@ -29,7 +29,7 @@ import {
   teamImageFileProblem,
 } from '@/lib/teamImage'
 import type { Team } from '@/types/Team'
-import { type TeamFormValues, teamFormSchema } from './teamSchema'
+import { makeTeamFormSchema, type TeamFormValues } from './teamSchema'
 
 interface Props {
   team?: Team
@@ -54,7 +54,7 @@ export const TeamForm = ({ team }: Props) => {
   const [pendingPreview, setPendingPreview] = useState<string>()
 
   const form = useForm<TeamFormValues>({
-    resolver: zodResolver(teamFormSchema),
+    resolver: zodResolver(makeTeamFormSchema(t)),
     defaultValues: {
       name: team?.name ?? '',
       description: team?.description ?? '',

@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/Item'
 import { Label } from '@/components/ui/Label'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 
 interface PluginPreview {
@@ -25,6 +26,7 @@ interface PluginPreview {
 }
 
 export const RemotePluginManager = () => {
+  const { t } = useIntl()
   const { registerPluginFromUrl, removeRemotePlugin, getAvailablePlugins, getRemotePluginUrls } =
     usePluginContext()
   const [moduleUrl, setModuleUrl] = useState('')
@@ -104,7 +106,12 @@ export const RemotePluginManager = () => {
       await removeRemotePlugin(pluginId)
       toast.success(`Plugin "${pluginName}" removed successfully`)
     } catch (error) {
-      toast.error('Failed to remove plugin')
+      toast.error(
+        t({
+          id: 'plugins.errors.removeFailed',
+          defaultMessage: 'Failed to remove plugin',
+        })
+      )
       logger.error('Failed to remove plugin', { error })
     }
   }
@@ -112,24 +119,36 @@ export const RemotePluginManager = () => {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="mb-2 font-semibold text-base">Remote Plugins</h3>
+        <h3 className="mb-2 font-semibold text-base">
+          {t({ id: 'settings.remotePlugins.title', defaultMessage: 'Remote Plugins' })}
+        </h3>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Load plugins dynamically from external URLs. Make sure you trust the source before adding
-          any plugin.
+          {t({
+            id: 'settings.remotePlugins.description',
+            defaultMessage:
+              'Load plugins dynamically from external URLs. Make sure you trust the source before adding any plugin.',
+          })}
         </p>
       </div>
 
       <Alert variant="warning">
         <AlertCircle className="size-4" />
-        <AlertTitle>Security Warning</AlertTitle>
+        <AlertTitle>
+          {t({ id: 'settings.remotePlugins.securityWarningTitle', defaultMessage: 'Security Warning' })}
+        </AlertTitle>
         <AlertDescription>
-          Only load plugins from trusted sources. Remote plugins have access to your application and
-          data. Always verify the source before adding a plugin.
+          {t({
+            id: 'settings.remotePlugins.securityWarningDescription',
+            defaultMessage:
+              'Only load plugins from trusted sources. Remote plugins have access to your application and data. Always verify the source before adding a plugin.',
+          })}
         </AlertDescription>
       </Alert>
 
       <div className="space-y-2">
-        <Label htmlFor={inputId}>Plugin Module URL</Label>
+        <Label htmlFor={inputId}>
+          {t({ id: 'settings.remotePlugins.urlLabel', defaultMessage: 'Plugin Module URL' })}
+        </Label>
         <div className="flex gap-2">
           <Input
             id={inputId}
@@ -157,12 +176,14 @@ export const RemotePluginManager = () => {
             {isLoading ? (
               <>
                 <Download className="mr-2 size-4 animate-pulse" />
-                Loading...
+
+                {t({ id: 'common.loading2', defaultMessage: 'Loading...' })}
               </>
             ) : (
               <>
                 <Plus className="mr-2 size-4" />
-                Add Plugin
+
+                {t({ id: 'settings.remotePlugins.addButton', defaultMessage: 'Add Plugin' })}
               </>
             )}
           </Button>
@@ -174,8 +195,11 @@ export const RemotePluginManager = () => {
           </p>
         )}
         <p className="text-xs text-zinc-500">
-          Enter the full URL to a plugin module (ESM format). The plugin will be searched and added
-          to your plugins.
+          {t({
+            id: 'settings.remotePlugins.urlDescription',
+            defaultMessage:
+              'Enter the full URL to a plugin module (ESM format). The plugin will be searched and added to your plugins.',
+          })}
         </p>
       </div>
 
@@ -184,7 +208,7 @@ export const RemotePluginManager = () => {
           <div className="mb-2 flex items-center gap-2">
             <AlertCircle className="size-4 text-lime-600 dark:text-lime-400" />
             <span className="font-semibold text-lime-900 text-sm dark:text-lime-100">
-              Plugin Found!
+              {t({ id: 'settings.remotePlugins.pluginFound', defaultMessage: 'Plugin Found!' })}
             </span>
           </div>
           <div className="space-y-1 text-sm">
@@ -206,7 +230,12 @@ export const RemotePluginManager = () => {
 
       {remotePlugins.length > 0 && (
         <div className="space-y-2">
-          <h4 className="font-medium text-sm">Loaded Remote Plugins</h4>
+          <h4 className="font-medium text-sm">
+            {t({
+              id: 'settings.remotePlugins.loadedTitle',
+              defaultMessage: 'Loaded Remote Plugins',
+            })}
+          </h4>
           <ItemGroup>
             {remotePlugins.map((plugin, index) => {
               const moduleUrl = remotePluginUrls.get(plugin.metadata.id)

@@ -11,8 +11,8 @@ import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import {
   NOTIFICATION_CATEGORIES,
-  NOTIFICATION_CATEGORY_LABELS,
-  NOTIFICATION_STATUS_LABELS,
+  NOTIFICATION_CATEGORY_MESSAGES,
+  NOTIFICATION_STATUS_MESSAGES,
   NOTIFICATION_STATUSES,
   NOTIFICATION_TYPE_NAMES,
   type NotificationCategory,
@@ -91,7 +91,7 @@ export const NotificationFilters = () => {
           {NOTIFICATION_STATUSES.map((s: NotificationStatus) => (
             <Pill
               key={`status-${s}`}
-              label={NOTIFICATION_STATUS_LABELS[s]}
+              label={t(NOTIFICATION_STATUS_MESSAGES[s])}
               count={statusCounts[s]}
               active={status === s}
               onClick={() => setStatus(s)}
@@ -104,7 +104,7 @@ export const NotificationFilters = () => {
           {NOTIFICATION_CATEGORIES.map((c: NotificationCategory) => (
             <Pill
               key={`category-${c}`}
-              label={NOTIFICATION_CATEGORY_LABELS[c]}
+              label={t(NOTIFICATION_CATEGORY_MESSAGES[c])}
               count={categoryCounts[c]}
               active={category === c}
               onClick={() => setCategory(c)}

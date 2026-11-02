@@ -25,7 +25,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
-import { type TaskFormValues, taskFormSchema } from './taskFormSchema'
+import { makeTaskFormSchema, type TaskFormValues } from './taskFormSchema'
 
 export type { TaskFormValues } from './taskFormSchema'
 
@@ -40,7 +40,7 @@ const geometriesToString = (geometries: unknown): string => JSON.stringify(geome
 export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
   const { t } = useIntl()
   const form = useForm<TaskFormValues>({
-    resolver: zodResolver(taskFormSchema),
+    resolver: zodResolver(makeTaskFormSchema(t)),
     defaultValues: {
       name: task.name ?? '',
       instruction: task.instruction ?? '',
@@ -157,7 +157,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                   <SelectContent>
                     {TASK_STATUS_OPTIONS.map((opt) => (
                       <SelectItem key={opt.value} value={String(opt.value)}>
-                        {opt.label}
+                        {t(opt.label)}
                       </SelectItem>
                     ))}
                   </SelectContent>

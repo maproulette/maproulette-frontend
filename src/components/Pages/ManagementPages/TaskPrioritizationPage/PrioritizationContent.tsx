@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import { PRIORITY_LABEL } from '@/types/Priority'
+import { PRIORITY_MESSAGES } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { BoundsDrawControl } from './Editor/BoundsDrawControl'
 import { DefaultPrioritySelect } from './Editor/DefaultPrioritySelect'
@@ -141,7 +141,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
               <TabsList className="w-full">
                 {TIER_ORDER.map((tier) => (
                   <TabsTrigger key={tier} value={tier} className="flex-1">
-                    {PRIORITY_LABEL[TIER_TO_PRIORITY[tier]]}
+                    {t(PRIORITY_MESSAGES[TIER_TO_PRIORITY[tier]])}
                   </TabsTrigger>
                 ))}
               </TabsList>
