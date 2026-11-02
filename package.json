@@ -17,7 +17,7 @@
     "lint": "biome lint",
     "lint:fix": "biome lint --unsafe --write",
     "format": "biome check --formatter-enabled=true --linter-enabled=false --assist-enabled=true --write",
-    "check": "tsc && biome check && knip",
+    "check": "tsc && biome check && knip && npm run i18n:check",
     "check:fix": "tsc && biome check --write",
     "check:force": "tsc && biome check --write --unsafe",
     "generate:api-types": "openapi-typescript http://localhost:9000/assets/swagger.json -o src/types/openApiTypes.ts && npm run format -- src/types/openApiTypes.ts",
@@ -28,7 +28,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
-    "i18n:extract": "node scripts/extractMessages.mjs",
+    "i18n:extract": "formatjs extract 'src/**/*.{ts,tsx}' --ignore 'src/**/*.test.{ts,tsx}' --ignore 'src/**/*.d.ts' --additional-function-names t --format simple --preserve-whitespace --throws --out-file src/i18n/messages/en-US.json",
+    "i18n:check": "npm run i18n:extract && git diff --exit-code -- src/i18n/messages/en-US.json",
     "i18n:push": "tx push -s",
     "i18n:pull": "tx pull -a --minimum-perc=50 && npm run format -- src/i18n/messages",
     "i18n:status": "tx status"
