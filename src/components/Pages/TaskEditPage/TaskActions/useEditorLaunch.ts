@@ -168,7 +168,7 @@ export const useEditorLaunch = (task: Task) => {
           }
 
           case EDITOR.level0: {
-            const selection = formatOsmEntities(tasks, { abbreviated: false })
+            const selection = formatOsmEntities(tasks, { abbreviated: true })
             const parts = [`center=${lat},${lng}`]
             if (checkinComment) parts.push(`comment=${encodeURIComponent(checkinComment)}`)
             if (selection) parts.push(`url=${selection}`)
