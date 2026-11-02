@@ -93,7 +93,7 @@ export const TaskActionModal = ({
     { value: 1, label: t({ id: 'common.fixed', defaultMessage: 'Fixed' }) },
     {
       value: 2,
-      label: t({ id: 'common.falsePositive', defaultMessage: 'False Positive' }),
+      label: t({ id: 'common.notAnIssue', defaultMessage: 'Not an Issue' }),
     },
     { value: 3, label: t({ id: 'common.skipped', defaultMessage: 'Skipped' }) },
     {
