@@ -96,13 +96,13 @@ export const ChallengesList = () => {
             }}
             title={
               isPinned
-                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-                : t('common.pinChallenge', undefined, 'Pin challenge')
+                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
             }
             aria-label={
               isPinned
-                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-                : t('common.pinChallenge', undefined, 'Pin challenge')
+                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
             }
           >
             <Pin
@@ -119,7 +119,7 @@ export const ChallengesList = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+              <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -131,7 +131,7 @@ export const ChallengesList = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  {t('common.startChallenge', undefined, 'Start challenge')}
+                  {t({ id: 'common.startChallenge', defaultMessage: 'Start challenge' })}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -142,7 +142,7 @@ export const ChallengesList = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Eye className="h-4 w-4" />
-                {t('common.viewChallenge', undefined, 'View challenge')}
+                {t({ id: 'common.viewChallenge', defaultMessage: 'View challenge' })}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -153,7 +153,7 @@ export const ChallengesList = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('common.copyUrl', undefined, 'Copy URL')}
+              {t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -170,22 +170,19 @@ export const ChallengesList = () => {
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder={t('common.searchChallenges', undefined, 'Search challenges…')}
+            placeholder={t({ id: 'common.searchChallenges', defaultMessage: 'Search challenges…' })}
             className="w-full sm:max-w-xs"
           />
           {user && (
             <FilterToggle
-              label={t('common.pinned', undefined, 'Pinned')}
+              label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
               icon={Pin}
               checked={onlyPinned}
               onCheckedChange={setOnlyPinned}
             />
           )}
           <FilterToggle
-            label={t(
-              'browsedProjectPage.challengesList.showCompletedFilter',
-              undefined,
-              'Show completed'
+            label={t({ id: 'browsedProjectPage.challengesList.showCompletedFilter', defaultMessage: 'Show completed' }
             )}
             icon={ListChecks}
             checked={showCompleted}
@@ -234,17 +231,11 @@ export const ChallengesList = () => {
               getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
               emptyState={{
                 icon: ListChecks,
-                title: t('common.noChallengesFound', undefined, 'No challenges found'),
+                title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
                 description: hasActiveFilters
-                  ? t(
-                      'browsedProjectPage.challengesList.emptyDescriptionFiltered',
-                      undefined,
-                      'Try clearing the filters to see more results.'
+                  ? t({ id: 'browsedProjectPage.challengesList.emptyDescriptionFiltered', defaultMessage: 'Try clearing the filters to see more results.' }
                     )
-                  : t(
-                      'browsedProjectPage.challengesList.emptyDescription',
-                      undefined,
-                      'This project has no challenges yet.'
+                  : t({ id: 'browsedProjectPage.challengesList.emptyDescription', defaultMessage: 'This project has no challenges yet.' }
                     ),
               }}
             />

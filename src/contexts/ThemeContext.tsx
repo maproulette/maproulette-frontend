@@ -48,9 +48,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const themeLabels: Record<Theme, string> = useMemo(
     () => ({
-      system: t('theme.options.system', undefined, 'System theme'),
-      light: t('theme.options.light', undefined, 'Light theme'),
-      dark: t('theme.options.dark', undefined, 'Dark theme'),
+      system: t({ id: 'theme.options.system', defaultMessage: 'System theme' }),
+      light: t({ id: 'theme.options.light', defaultMessage: 'Light theme' }),
+      dark: t({ id: 'theme.options.dark', defaultMessage: 'Dark theme' }),
     }),
     [t]
   )

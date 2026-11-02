@@ -20,18 +20,15 @@ export const NotFound = ({ className, ...props }: React.ComponentProps<typeof Em
         <EmptyMedia variant="icon">
           <TriangleAlert />
         </EmptyMedia>
-        <EmptyTitle>{t('common.pageNotFound', undefined, 'Page Not Found')}</EmptyTitle>
+        <EmptyTitle>{t({ id: 'common.pageNotFound', defaultMessage: 'Page Not Found' })}</EmptyTitle>
         <EmptyDescription>
-          {t(
-            'shared.notFound.description',
-            undefined,
-            'The page you are looking for does not exist.'
+          {t({ id: 'shared.notFound.description', defaultMessage: 'The page you are looking for does not exist.' }
           )}
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <Button size="lg" asChild>
-          <Link to="/">{t('shared.notFound.backHome', undefined, 'Head back home')}</Link>
+          <Link to="/">{t({ id: 'shared.notFound.backHome', defaultMessage: 'Head back home' })}</Link>
         </Button>
       </EmptyContent>
     </Empty>

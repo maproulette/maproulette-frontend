@@ -11,12 +11,12 @@ export const ReviewerStatsBlock = () => {
   const { data, isLoading, isError } = api.user.metrics(userId, timeRange.monthDuration)
 
   const reviewStatusLabels: Record<string, string> = {
-    '0': t('common.needed', undefined, 'Needed'),
-    '1': t('common.approved', undefined, 'Approved'),
-    '2': t('common.rejected', undefined, 'Rejected'),
-    '3': t('common.assisted', undefined, 'Assisted'),
-    '4': t('common.disputed', undefined, 'Disputed'),
-    '5': t('common.unnecessary', undefined, 'Unnecessary'),
+    '0': t({ id: 'common.needed', defaultMessage: 'Needed' }),
+    '1': t({ id: 'common.approved', defaultMessage: 'Approved' }),
+    '2': t({ id: 'common.rejected', defaultMessage: 'Rejected' }),
+    '3': t({ id: 'common.assisted', defaultMessage: 'Assisted' }),
+    '4': t({ id: 'common.disputed', defaultMessage: 'Disputed' }),
+    '5': t({ id: 'common.unnecessary', defaultMessage: 'Unnecessary' }),
   }
 
   const reviewerTotal = Object.values(data?.reviewTasks ?? {}).reduce((a, b) => a + b, 0)
@@ -30,7 +30,7 @@ export const ReviewerStatsBlock = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <ShieldCheck className="size-4 text-green-600" aria-hidden="true" />
-          {t('profilePage.reviewerStats.title', undefined, 'Reviews Performed')}
+          {t({ id: 'profilePage.reviewerStats.title', defaultMessage: 'Reviews Performed' })}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -38,7 +38,7 @@ export const ReviewerStatsBlock = () => {
           <Skeleton className="h-24 w-full" />
         ) : isError || !data ? (
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t('profilePage.reviewerStats.loadError', undefined, "Couldn't load reviewer stats.")}
+            {t({ id: 'profilePage.reviewerStats.loadError', defaultMessage: "Couldn't load reviewer stats." })}
           </p>
         ) : (
           <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
@@ -46,7 +46,7 @@ export const ReviewerStatsBlock = () => {
               <div key={status} className="flex justify-between">
                 <dt className="text-zinc-600 dark:text-slate-400">
                   {reviewStatusLabels[status] ??
-                    t('common.statusWithStatus', { status }, 'Status {status}')}
+                    t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })}
                 </dt>
                 <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>
               </div>

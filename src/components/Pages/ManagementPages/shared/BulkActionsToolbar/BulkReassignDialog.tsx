@@ -36,17 +36,11 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            {t(
-              'managementPages.bulkActionsToolbar.reassignDialog.title',
-              { count },
-              '{count, plural, one {Reassign # task} other {Reassign # tasks}}'
+            {t({ id: 'managementPages.bulkActionsToolbar.reassignDialog.title', defaultMessage: '{count, plural, one {Reassign # task} other {Reassign # tasks}}' }, { count }
             )}
           </DialogTitle>
           <DialogDescription>
-            {t(
-              'managementPages.bulkActionsToolbar.reassignDialog.description',
-              undefined,
-              'Search for the reviewer to assign these task reviews to. Only tasks whose reviews are still open will be updated.'
+            {t({ id: 'managementPages.bulkActionsToolbar.reassignDialog.description', defaultMessage: 'Search for the reviewer to assign these task reviews to. Only tasks whose reviews are still open will be updated.' }
             )}
           </DialogDescription>
         </DialogHeader>
@@ -56,7 +50,7 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t('common.searchOsmUsername', undefined, 'Search OSM username')}
+              placeholder={t({ id: 'common.searchOsmUsername', defaultMessage: 'Search OSM username' })}
               className="pl-8"
             />
           </div>
@@ -86,19 +80,16 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button
             onClick={() => selectedUserId && onConfirm(selectedUserId)}
             disabled={!selectedUserId || busy}
           >
             {busy
-              ? t(
-                  'managementPages.bulkActionsToolbar.reassignDialog.reassigning',
-                  undefined,
-                  'Reassigning…'
+              ? t({ id: 'managementPages.bulkActionsToolbar.reassignDialog.reassigning', defaultMessage: 'Reassigning…' }
                 )
-              : t('managementPages.bulkActionsToolbar.reassign', undefined, 'Reassign')}
+              : t({ id: 'managementPages.bulkActionsToolbar.reassign', defaultMessage: 'Reassign' })}
           </Button>
         </DialogFooter>
       </DialogContent>

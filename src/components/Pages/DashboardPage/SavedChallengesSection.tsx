@@ -18,7 +18,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Bookmark className="h-4 w-4 text-blue-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('dashboard.savedChallenges.title', undefined, 'Saved Challenges')}
+          {t({ id: 'dashboard.savedChallenges.title', defaultMessage: 'Saved Challenges' })}
         </h3>
         {challenges && challenges.length > 0 && (
           <span className="ml-auto rounded-full bg-blue-500/20 px-2 py-0.5 font-medium text-blue-400 text-xs">
@@ -35,7 +35,7 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
 
         {error && (
           <div className="py-2 text-center text-red-400 text-sm">
-            {t('dashboard.common.failedToLoad', undefined, 'Failed to load')}
+            {t({ id: 'dashboard.common.failedToLoad', defaultMessage: 'Failed to load' })}
           </div>
         )}
 
@@ -45,13 +45,10 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
               <Bookmark className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
             <p className="text-sm text-zinc-600 dark:text-slate-400">
-              {t('dashboard.savedChallenges.empty.title', undefined, 'No saved challenges')}
+              {t({ id: 'dashboard.savedChallenges.empty.title', defaultMessage: 'No saved challenges' })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              {t(
-                'dashboard.savedChallenges.empty.description',
-                undefined,
-                'Save challenges to work on later'
+              {t({ id: 'dashboard.savedChallenges.empty.description', defaultMessage: 'Save challenges to work on later' }
               )}
             </p>
           </div>

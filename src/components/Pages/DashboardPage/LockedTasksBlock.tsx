@@ -23,7 +23,7 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
       <div className="mb-2 flex items-center gap-2">
         <Lock className="h-3.5 w-3.5 text-amber-500" />
         <span className="font-semibold text-xs text-zinc-600 dark:text-slate-300">
-          {t('dashboard.contributions.lockedTasks.title', undefined, 'Locked tasks')}
+          {t({ id: 'dashboard.contributions.lockedTasks.title', defaultMessage: 'Locked tasks' })}
         </span>
         <span className="ml-auto rounded-full bg-amber-500/20 px-2 py-0.5 font-medium text-amber-500 text-xs">
           {lockedTasks.length}
@@ -46,19 +46,13 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
             </div>
             <div className="mt-0.5 flex items-center gap-2 text-xs text-zinc-500 dark:text-slate-400">
               <span>
-                {t(
-                  'dashboard.contributions.lockedTasks.taskId',
-                  { id: lockedTask.id },
-                  'Task #{id}'
+                {t({ id: 'dashboard.contributions.lockedTasks.taskId', defaultMessage: 'Task #{id}' }, { id: lockedTask.id }
                 )}
               </span>
               {(lockedTask.bundledTasks?.length ?? 0) > 1 && (
                 <span className="flex items-center gap-1">
                   <Package className="h-3 w-3" />
-                  {t(
-                    'dashboard.contributions.lockedTasks.bundleCount',
-                    { count: lockedTask.bundledTasks?.length ?? 0 },
-                    '{count} tasks'
+                  {t({ id: 'dashboard.contributions.lockedTasks.bundleCount', defaultMessage: '{count} tasks' }, { count: lockedTask.bundledTasks?.length ?? 0 }
                   )}
                 </span>
               )}

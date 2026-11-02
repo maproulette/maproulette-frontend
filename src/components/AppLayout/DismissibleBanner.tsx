@@ -35,7 +35,7 @@ export const DismissibleBanner = ({ storageKey, onDismiss, children }: Props) =>
         type="button"
         onClick={handleDismiss}
         className="-translate-y-1/2 absolute top-1/2 right-3 rounded p-1 hover:bg-slate-800 dark:hover:bg-slate-200"
-        aria-label={t('appLayout.dismissibleBanner.dismiss', undefined, 'Dismiss banner')}
+        aria-label={t({ id: 'appLayout.dismissibleBanner.dismiss', defaultMessage: 'Dismiss banner' })}
       >
         <X className="h-4 w-4" />
       </button>

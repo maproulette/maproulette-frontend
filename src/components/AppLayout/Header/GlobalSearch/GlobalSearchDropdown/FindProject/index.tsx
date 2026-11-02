@@ -70,14 +70,11 @@ export const FindProject = () => {
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-            {t('common.results', undefined, 'Results')}
+            {t({ id: 'common.results', defaultMessage: 'Results' })}
           </h3>
           {!isLoading && data && data.length > 0 && (
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t(
-                'appLayout.header.globalSearch.findProject.resultCount',
-                { count: data.length },
-                '{count, plural, one {# project} other {# projects}}'
+              {t({ id: 'appLayout.header.globalSearch.findProject.resultCount', defaultMessage: '{count, plural, one {# project} other {# projects}}' }, { count: data.length }
               )}
             </span>
           )}
@@ -89,10 +86,7 @@ export const FindProject = () => {
               <div className="flex flex-col items-center gap-3">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-600 dark:text-slate-400">
-                  {t(
-                    'appLayout.header.globalSearch.findProject.loadingMore',
-                    undefined,
-                    'Loading more projects...'
+                  {t({ id: 'appLayout.header.globalSearch.findProject.loadingMore', defaultMessage: 'Loading more projects...' }
                   )}
                 </p>
               </div>
@@ -104,10 +98,7 @@ export const FindProject = () => {
               <div className="flex flex-col items-center justify-center gap-3 py-12">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-500 dark:text-slate-400">
-                  {t(
-                    'appLayout.header.globalSearch.findProject.loading',
-                    undefined,
-                    'Loading projects...'
+                  {t({ id: 'appLayout.header.globalSearch.findProject.loading', defaultMessage: 'Loading projects...' }
                   )}
                 </p>
               </div>
@@ -118,13 +109,10 @@ export const FindProject = () => {
                 </div>
                 <div className="space-y-1 text-center">
                   <p className="font-medium text-sm text-zinc-900 dark:text-white">
-                    {t('common.noProjectsFound', undefined, 'No projects found')}
+                    {t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' })}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-slate-400">
-                    {t(
-                      'appLayout.header.globalSearch.findProject.noResultsHint',
-                      undefined,
-                      'Try a different search term'
+                    {t({ id: 'appLayout.header.globalSearch.findProject.noResultsHint', defaultMessage: 'Try a different search term' }
                     )}
                   </p>
                 </div>
@@ -169,13 +157,10 @@ export const FindProject = () => {
                       <div className="h-1.5 w-16 rounded-full bg-zinc-400 dark:bg-slate-600" />
                       <div className="space-y-1 text-center">
                         <p className="font-semibold text-base text-zinc-800 dark:text-slate-200">
-                          {t('common.thatsAll', undefined, "That's all!")}
+                          {t({ id: 'common.thatsAll', defaultMessage: "That's all!" })}
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-slate-400">
-                          {t(
-                            'appLayout.header.globalSearch.findProject.noMoreToLoad',
-                            undefined,
-                            'No more projects to load'
+                          {t({ id: 'appLayout.header.globalSearch.findProject.noMoreToLoad', defaultMessage: 'No more projects to load' }
                           )}
                         </p>
                       </div>

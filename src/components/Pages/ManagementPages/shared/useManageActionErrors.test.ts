@@ -6,7 +6,10 @@ import { renderHook } from '@/test/renderHook'
 import { useManageActionErrors } from './useManageActionErrors'
 
 vi.mock('@/lib/logger', () => ({ logger: { error: vi.fn() } }))
-vi.mock('@/i18n', () => ({ useIntl: () => ({ t: (_k: string, _v: unknown, d: string) => d }) }))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  return { useIntl: () => ({ t: testT }) }
+})
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }))
 
 describe('useManageActionErrors', () => {

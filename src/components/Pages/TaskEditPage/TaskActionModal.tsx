@@ -90,19 +90,19 @@ export const TaskActionModal = ({
   const nearbyId = useId()
   const { user } = useAuthContext()
   const STATUS_OPTIONS = [
-    { value: 1, label: t('common.fixed', undefined, 'Fixed') },
+    { value: 1, label: t({ id: 'common.fixed', defaultMessage: 'Fixed' }) },
     {
       value: 2,
-      label: t('common.falsePositive', undefined, 'False Positive'),
+      label: t({ id: 'common.falsePositive', defaultMessage: 'False Positive' }),
     },
-    { value: 3, label: t('common.skipped', undefined, 'Skipped') },
+    { value: 3, label: t({ id: 'common.skipped', defaultMessage: 'Skipped' }) },
     {
       value: 5,
-      label: t('common.alreadyFixed', undefined, 'Already Fixed'),
+      label: t({ id: 'common.alreadyFixed', defaultMessage: 'Already Fixed' }),
     },
     {
       value: 6,
-      label: t('common.cantComplete', undefined, "Can't Complete"),
+      label: t({ id: 'common.cantComplete', defaultMessage: "Can't Complete" }),
     },
   ]
   const [newStatus, setNewStatus] = useState(initialStatus)
@@ -231,10 +231,7 @@ export const TaskActionModal = ({
         } catch (error) {
           logger.error('Failed to add task comment', { taskId: task.id, error })
           toast.error(
-            t(
-              'taskEditPage.taskActionModal.toast.commentFailed',
-              undefined,
-              'The task status was saved, but your comment could not be.'
+            t({ id: 'taskEditPage.taskActionModal.toast.commentFailed', defaultMessage: 'The task status was saved, but your comment could not be.' }
             )
           )
         }
@@ -243,10 +240,7 @@ export const TaskActionModal = ({
       if (nextTaskType !== readNextTaskType(user?.properties)) saveNextTaskType(nextTaskType)
 
       toast.success(
-        t(
-          'taskEditPage.taskActionModal.toast.markedAs',
-          { status: getStatusLabel(t, newStatus) ?? String(newStatus) },
-          'Task marked as {status}'
+        t({ id: 'taskEditPage.taskActionModal.toast.markedAs', defaultMessage: 'Task marked as {status}' }, { status: getStatusLabel(t, newStatus) ?? String(newStatus) }
         )
       )
 
@@ -254,7 +248,7 @@ export const TaskActionModal = ({
         await navigateToTask(selectedNearbyTaskId)
       } else {
         toast.info(
-          t('taskEditPage.taskActionModal.toast.loadingNext', undefined, 'Loading next task...')
+          t({ id: 'taskEditPage.taskActionModal.toast.loadingNext', defaultMessage: 'Loading next task...' })
         )
         try {
           const taskCandidates =
@@ -265,10 +259,7 @@ export const TaskActionModal = ({
             await navigateToTask(taskCandidates[0].id)
           } else {
             toast.info(
-              t(
-                'common.noMoreTasksInChallenge',
-                undefined,
-                'No more tasks available in this challenge'
+              t({ id: 'common.noMoreTasksInChallenge', defaultMessage: 'No more tasks available in this challenge' }
               )
             )
             await navigate({
@@ -277,7 +268,7 @@ export const TaskActionModal = ({
             })
           }
         } catch {
-          toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
+          toast.error(t({ id: 'common.failedToLoadNextTask', defaultMessage: 'Failed to load next task' }))
           await navigate({
             to: '/challenge/$challengeId',
             params: { challengeId: String(task.parent) },
@@ -295,10 +286,7 @@ export const TaskActionModal = ({
       logger.error('Error updating task', { error })
       toast.error(
         (await getApiErrorMessage(error)) ??
-          t(
-            'taskEditPage.taskActionModal.toast.updateFailed',
-            undefined,
-            'Failed to update task. Please try again.'
+          t({ id: 'taskEditPage.taskActionModal.toast.updateFailed', defaultMessage: 'Failed to update task. Please try again.' }
           )
       )
     } finally {
@@ -318,10 +306,7 @@ export const TaskActionModal = ({
     () =>
       SUBMIT_BINDINGS.map((binding) => ({
         ...binding,
-        description: t(
-          'taskEditPage.taskActionModal.submitShortcut',
-          undefined,
-          'Submit this confirmation'
+        description: t({ id: 'taskEditPage.taskActionModal.submitShortcut', defaultMessage: 'Submit this confirmation' }
         ),
         category: 'taskActions' as const,
         handler: () => {
@@ -377,13 +362,10 @@ export const TaskActionModal = ({
         >
           <DialogHeader>
             <DialogTitle>
-              {t('taskEditPage.taskActionModal.title', undefined, 'Complete Task Action')}
+              {t({ id: 'taskEditPage.taskActionModal.title', defaultMessage: 'Complete Task Action' })}
             </DialogTitle>
             <DialogDescription>
-              {t(
-                'taskEditPage.taskActionModal.description',
-                undefined,
-                'Update the task status and optionally add a comment or tags'
+              {t({ id: 'taskEditPage.taskActionModal.description', defaultMessage: 'Update the task status and optionally add a comment or tags' }
               )}
             </DialogDescription>
           </DialogHeader>
@@ -392,12 +374,12 @@ export const TaskActionModal = ({
             {/* Status Transition */}
             <div className="space-y-2">
               <Label>
-                {t('taskEditPage.taskActionModal.statusChange', undefined, 'Status Change')}
+                {t({ id: 'taskEditPage.taskActionModal.statusChange', defaultMessage: 'Status Change' })}
               </Label>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
                   <span className="font-medium text-sm">
-                    {getStatusLabel(t, currentStatus) || t('common.unknown', undefined, 'Unknown')}
+                    {getStatusLabel(t, currentStatus) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })}
                   </span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-zinc-500" />
@@ -422,15 +404,12 @@ export const TaskActionModal = ({
             {/* Comment */}
             <div className="space-y-2">
               <Label htmlFor={commentId}>
-                {t('taskEditPage.taskActionModal.commentLabel', undefined, 'Comment (Optional)')}
+                {t({ id: 'taskEditPage.taskActionModal.commentLabel', defaultMessage: 'Comment (Optional)' })}
               </Label>
               <Textarea
                 id={commentId}
                 ref={commentRef}
-                placeholder={t(
-                  'taskEditPage.taskActionModal.commentPlaceholder',
-                  undefined,
-                  'Add any notes or comments about this task...'
+                placeholder={t({ id: 'taskEditPage.taskActionModal.commentPlaceholder', defaultMessage: 'Add any notes or comments about this task...' }
                 )}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
@@ -459,7 +438,7 @@ export const TaskActionModal = ({
 
             {/* Next Task Selection */}
             <div className="space-y-3">
-              <Label>{t('taskEditPage.taskActionModal.nextTask', undefined, 'Next Task')}</Label>
+              <Label>{t({ id: 'taskEditPage.taskActionModal.nextTask', defaultMessage: 'Next Task' })}</Label>
               <RadioGroup
                 value={nextTaskType}
                 onValueChange={(value) => setNextTaskType(value as NextTaskType)}
@@ -473,17 +452,11 @@ export const TaskActionModal = ({
                         className="flex cursor-pointer items-center gap-2 font-medium"
                       >
                         <Shuffle className="h-4 w-4" />
-                        {t(
-                          'taskEditPage.taskActionModal.randomTask.label',
-                          undefined,
-                          'Random High Priority Task'
+                        {t({ id: 'taskEditPage.taskActionModal.randomTask.label', defaultMessage: 'Random High Priority Task' }
                         )}
                       </Label>
                       <p className="mt-1 text-xs text-zinc-500">
-                        {t(
-                          'taskEditPage.taskActionModal.randomTask.description',
-                          undefined,
-                          'Load the next highest priority task from this challenge'
+                        {t({ id: 'taskEditPage.taskActionModal.randomTask.description', defaultMessage: 'Load the next highest priority task from this challenge' }
                         )}
                       </p>
                     </div>
@@ -497,17 +470,11 @@ export const TaskActionModal = ({
                         className="flex cursor-pointer items-center gap-2 font-medium"
                       >
                         <MapPin className="h-4 w-4" />
-                        {t(
-                          'taskEditPage.taskActionModal.nearbyTask.label',
-                          undefined,
-                          'Nearby Task'
+                        {t({ id: 'taskEditPage.taskActionModal.nearbyTask.label', defaultMessage: 'Nearby Task' }
                         )}
                       </Label>
                       <p className="mt-1 text-xs text-zinc-500">
-                        {t(
-                          'taskEditPage.taskActionModal.nearbyTask.description',
-                          undefined,
-                          'Select a task near the current one, or auto-select the nearest'
+                        {t({ id: 'taskEditPage.taskActionModal.nearbyTask.description', defaultMessage: 'Select a task near the current one, or auto-select the nearest' }
                         )}
                       </p>
                     </div>
@@ -534,15 +501,12 @@ export const TaskActionModal = ({
 
           <DialogFooter>
             <Button onClick={handleCancel} disabled={isSubmitting}>
-              {t('common.cancel', undefined, 'Cancel')}
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
             </Button>
             <Button variant="outline" onClick={handleSubmit} disabled={isSubmitting}>
               {isSubmitting
-                ? t('common.submitting', undefined, 'Submitting...')
-                : t(
-                    'taskEditPage.taskActionModal.completeAndContinue',
-                    undefined,
-                    'Complete & Continue'
+                ? t({ id: 'common.submitting', defaultMessage: 'Submitting...' })
+                : t({ id: 'taskEditPage.taskActionModal.completeAndContinue', defaultMessage: 'Complete & Continue' }
                   )}
             </Button>
           </DialogFooter>

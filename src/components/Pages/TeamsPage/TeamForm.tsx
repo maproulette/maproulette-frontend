@@ -116,7 +116,7 @@ export const TeamForm = ({ team }: Props) => {
         : await create.mutateAsync(payload)
     } catch (error) {
       logger.error('Team save failed', { error })
-      toast.error(t('teams.form.saveError', undefined, 'Could not save team'))
+      toast.error(t({ id: 'teams.form.saveError', defaultMessage: 'Could not save team' }))
       return
     }
 
@@ -133,15 +133,15 @@ export const TeamForm = ({ team }: Props) => {
       // The team itself saved, so this stays on the form for a retry rather
       // than navigating away as though everything worked.
       toast.error(
-        t('teams.form.avatarError', undefined, 'Team saved, but its avatar could not be updated')
+        t({ id: 'teams.form.avatarError', defaultMessage: 'Team saved, but its avatar could not be updated' })
       )
       return
     }
 
     toast.success(
       team
-        ? t('teams.form.updateSuccess', undefined, 'Team updated')
-        : t('teams.form.createSuccess', undefined, 'Team created')
+        ? t({ id: 'teams.form.updateSuccess', defaultMessage: 'Team updated' })
+        : t({ id: 'teams.form.createSuccess', defaultMessage: 'Team created' })
     )
     navigate({ to: '/teams/$teamId', params: { teamId: String(saved.id) } })
   }
@@ -154,11 +154,8 @@ export const TeamForm = ({ team }: Props) => {
       >
         <div className="min-h-0 flex-1 overflow-y-auto pr-1">
           <FormSection
-            title={t('teams.form.detailsSectionTitle', undefined, 'Team details')}
-            description={t(
-              'teams.form.detailsSectionDescription',
-              undefined,
-              'Basic identifying information for this team.'
+            title={t({ id: 'teams.form.detailsSectionTitle', defaultMessage: 'Team details' })}
+            description={t({ id: 'teams.form.detailsSectionDescription', defaultMessage: 'Basic identifying information for this team.' }
             )}
           >
             <FormField
@@ -166,12 +163,12 @@ export const TeamForm = ({ team }: Props) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('common.name', undefined, 'Name')}</FormLabel>
+                  <FormLabel>{t({ id: 'common.name', defaultMessage: 'Name' })}</FormLabel>
                   <FormControl>
                     <Input autoFocus maxLength={100} {...field} />
                   </FormControl>
                   <FormDescription>
-                    {t('teams.form.nameDescription', undefined, 'The unique name of the team')}
+                    {t({ id: 'teams.form.nameDescription', defaultMessage: 'The unique name of the team' })}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -182,15 +179,12 @@ export const TeamForm = ({ team }: Props) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
+                  <FormLabel>{t({ id: 'common.description', defaultMessage: 'Description' })}</FormLabel>
                   <FormControl>
                     <Textarea rows={4} maxLength={1000} {...field} />
                   </FormControl>
                   <FormDescription>
-                    {t(
-                      'teams.form.descriptionDescription',
-                      undefined,
-                      'A brief description of the team'
+                    {t({ id: 'teams.form.descriptionDescription', defaultMessage: 'A brief description of the team' }
                     )}
                   </FormDescription>
                   <FormMessage />
@@ -198,7 +192,7 @@ export const TeamForm = ({ team }: Props) => {
               )}
             />
             <FormItem>
-              <FormLabel>{t('teams.form.avatarLabel', undefined, 'Avatar (optional)')}</FormLabel>
+              <FormLabel>{t({ id: 'teams.form.avatarLabel', defaultMessage: 'Avatar (optional)' })}</FormLabel>
               <div className="flex items-start gap-4">
                 <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-100 dark:bg-slate-800">
                   {previewSrc ? (
@@ -217,7 +211,7 @@ export const TeamForm = ({ team }: Props) => {
                     accept={TEAM_IMAGE_ACCEPT}
                     className="sr-only"
                     onChange={(e) => handleFileChosen(e.target.files?.[0] ?? null)}
-                    aria-label={t('teams.form.avatarFileLabel', undefined, 'Avatar image file')}
+                    aria-label={t({ id: 'teams.form.avatarFileLabel', defaultMessage: 'Avatar image file' })}
                   />
                   <div className="flex flex-wrap gap-2">
                     <Button
@@ -228,8 +222,8 @@ export const TeamForm = ({ team }: Props) => {
                     >
                       <Upload className="size-4" aria-hidden="true" />
                       {previewSrc
-                        ? t('teams.form.avatarReplace', undefined, 'Replace image')
-                        : t('teams.form.avatarUpload', undefined, 'Upload image')}
+                        ? t({ id: 'teams.form.avatarReplace', defaultMessage: 'Replace image' })
+                        : t({ id: 'teams.form.avatarUpload', defaultMessage: 'Upload image' })}
                     </Button>
                     {previewSrc ? (
                       <Button
@@ -239,7 +233,7 @@ export const TeamForm = ({ team }: Props) => {
                         disabled={form.formState.isSubmitting}
                       >
                         <Trash2 className="size-4" aria-hidden="true" />
-                        {t('common.remove', undefined, 'Remove')}
+                        {t({ id: 'common.remove', defaultMessage: 'Remove' })}
                       </Button>
                     ) : null}
                   </div>
@@ -252,15 +246,9 @@ export const TeamForm = ({ team }: Props) => {
                   >
                     {fileProblem ??
                       (pendingFile
-                        ? t(
-                            'teams.form.avatarPending',
-                            { name: pendingFile.name },
-                            '{name} will be uploaded when you save'
+                        ? t({ id: 'teams.form.avatarPending', defaultMessage: '{name} will be uploaded when you save' }, { name: pendingFile.name }
                           )
-                        : t(
-                            'teams.form.avatarHint',
-                            { max: TEAM_IMAGE_MAX_BYTES / (1024 * 1024) },
-                            'PNG, JPEG, WebP or GIF, up to {max}MB. Square images look best.'
+                        : t({ id: 'teams.form.avatarHint', defaultMessage: 'PNG, JPEG, WebP or GIF, up to {max}MB. Square images look best.' }, { max: TEAM_IMAGE_MAX_BYTES / (1024 * 1024) }
                           ))}
                   </p>
                 </div>
@@ -272,7 +260,7 @@ export const TeamForm = ({ team }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('teams.form.avatarUrlLabel', undefined, 'Or link to an image')}
+                    {t({ id: 'teams.form.avatarUrlLabel', defaultMessage: 'Or link to an image' })}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -286,10 +274,7 @@ export const TeamForm = ({ team }: Props) => {
                     />
                   </FormControl>
                   <FormDescription>
-                    {t(
-                      'teams.form.avatarUrlDescription',
-                      undefined,
-                      'An image URL to represent the team, if you would rather link one than upload it'
+                    {t({ id: 'teams.form.avatarUrlDescription', defaultMessage: 'An image URL to represent the team, if you would rather link one than upload it' }
                     )}
                   </FormDescription>
                   <FormMessage />
@@ -305,7 +290,7 @@ export const TeamForm = ({ team }: Props) => {
             onClick={() => navigate({ to: '/dashboard' })}
             disabled={form.formState.isSubmitting}
           >
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button
             type="submit"
@@ -319,8 +304,8 @@ export const TeamForm = ({ team }: Props) => {
             }
           >
             {team
-              ? t('common.save', undefined, 'Save')
-              : t('common.createTeam', undefined, 'Create team')}
+              ? t({ id: 'common.save', defaultMessage: 'Save' })
+              : t({ id: 'common.createTeam', defaultMessage: 'Create team' })}
           </Button>
         </div>
       </form>

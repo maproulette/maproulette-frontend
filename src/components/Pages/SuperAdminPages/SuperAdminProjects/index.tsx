@@ -13,17 +13,14 @@ export const SuperAdminProjects = () => {
         <div className="mb-2 flex items-center gap-2">
           <FolderKanban className="h-8 w-8 text-green-600 dark:text-green-400" />
           <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-            {t('superAdminProjects.title', undefined, 'All Projects')}
+            {t({ id: 'superAdminProjects.title', defaultMessage: 'All Projects' })}
           </h1>
           <Badge variant="secondary">
-            {t('superAdminProjects.comingSoonBadge', undefined, 'Coming Soon')}
+            {t({ id: 'superAdminProjects.comingSoonBadge', defaultMessage: 'Coming Soon' })}
           </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          {t(
-            'common.viewManageProjectsSubtitle',
-            undefined,
-            'View and manage all projects across the platform'
+          {t({ id: 'common.viewManageProjectsSubtitle', defaultMessage: 'View and manage all projects across the platform' }
           )}
         </p>
       </div>
@@ -34,13 +31,10 @@ export const SuperAdminProjects = () => {
             <FolderKanban />
           </EmptyMedia>
           <EmptyTitle>
-            {t('superAdminProjects.comingSoon.title', undefined, 'Project management coming soon')}
+            {t({ id: 'superAdminProjects.comingSoon.title', defaultMessage: 'Project management coming soon' })}
           </EmptyTitle>
           <EmptyDescription>
-            {t(
-              'superAdminProjects.comingSoon.description',
-              undefined,
-              "We're building out project management tools for super admins. Check back soon."
+            {t({ id: 'superAdminProjects.comingSoon.description', defaultMessage: "We're building out project management tools for super admins. Check back soon." }
             )}
           </EmptyDescription>
         </EmptyHeader>

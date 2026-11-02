@@ -50,30 +50,24 @@ export const SuperAdminUsers = () => {
             <div className="mb-2 flex items-center gap-2">
               <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-                {t('superAdminUsers.title', undefined, 'User Management')}
+                {t({ id: 'superAdminUsers.title', defaultMessage: 'User Management' })}
               </h1>
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
-              {t(
-                'superAdminUsers.subtitle',
-                undefined,
-                'Manage all users and their permissions across the platform'
+              {t({ id: 'superAdminUsers.subtitle', defaultMessage: 'Manage all users and their permissions across the platform' }
               )}
             </p>
           </div>
           <Button size="lg">
             <Users className="mr-2 h-5 w-5" />
-            {t('superAdminUsers.addButton', undefined, 'Add New User')}
+            {t({ id: 'superAdminUsers.addButton', defaultMessage: 'Add New User' })}
           </Button>
         </div>
 
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder={t(
-            'superAdminUsers.searchPlaceholder',
-            undefined,
-            'Search this page by name or email...'
+          placeholder={t({ id: 'superAdminUsers.searchPlaceholder', defaultMessage: 'Search this page by name or email...' }
           )}
         />
       </div>
@@ -83,39 +77,39 @@ export const SuperAdminUsers = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminUsers.stats.usersOnPage', undefined, 'Users on Page')}
+              {t({ id: 'superAdminUsers.stats.usersOnPage', defaultMessage: 'Users on Page' })}
             </CardDescription>
             <CardTitle className="font-semibold text-base">{totalUsers}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminUsers.stats.perPage', { limit }, 'Showing {limit} per page')}
+              {t({ id: 'superAdminUsers.stats.perPage', defaultMessage: 'Showing {limit} per page' }, { limit })}
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminUsers.stats.filteredResults', undefined, 'Filtered Results')}
+              {t({ id: 'superAdminUsers.stats.filteredResults', defaultMessage: 'Filtered Results' })}
             </CardDescription>
             <CardTitle className="font-semibold text-base">{filteredUsers.length}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminUsers.stats.basedOnSearch', undefined, 'Based on current search')}
+              {t({ id: 'superAdminUsers.stats.basedOnSearch', defaultMessage: 'Based on current search' })}
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t('superAdminUsers.stats.superAdmins', undefined, 'Super Admins')}
+              {t({ id: 'superAdminUsers.stats.superAdmins', defaultMessage: 'Super Admins' })}
             </CardDescription>
             <CardTitle className="font-semibold text-base">{superUserIds?.length ?? 0}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t('superAdminUsers.stats.platformWide', undefined, 'Platform-wide')}
+              {t({ id: 'superAdminUsers.stats.platformWide', defaultMessage: 'Platform-wide' })}
             </div>
           </CardContent>
         </Card>
@@ -126,12 +120,9 @@ export const SuperAdminUsers = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>{t('superAdminUsers.table.title', undefined, 'All Users')}</CardTitle>
+              <CardTitle>{t({ id: 'superAdminUsers.table.title', defaultMessage: 'All Users' })}</CardTitle>
               <CardDescription>
-                {t(
-                  'superAdminUsers.table.subtitle',
-                  { page: page + 1 },
-                  'A list of all users in the system (page {page})'
+                {t({ id: 'superAdminUsers.table.subtitle', defaultMessage: 'A list of all users in the system (page {page})' }, { page: page + 1 }
                 )}
               </CardDescription>
             </div>
@@ -143,7 +134,7 @@ export const SuperAdminUsers = () => {
                 disabled={!hasPreviousPage || isLoading}
               >
                 <ChevronLeft className="h-4 w-4" />
-                {t('superAdminUsers.table.previous', undefined, 'Previous')}
+                {t({ id: 'superAdminUsers.table.previous', defaultMessage: 'Previous' })}
               </Button>
               <Button
                 variant="outline"
@@ -151,7 +142,7 @@ export const SuperAdminUsers = () => {
                 onClick={() => setPage((p) => p + 1)}
                 disabled={!hasNextPage || isLoading}
               >
-                {t('superAdminUsers.table.next', undefined, 'Next')}
+                {t({ id: 'superAdminUsers.table.next', defaultMessage: 'Next' })}
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
@@ -161,7 +152,7 @@ export const SuperAdminUsers = () => {
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <div className="text-zinc-600 dark:text-zinc-400">
-                {t('superAdminUsers.table.loading', undefined, 'Loading users...')}
+                {t({ id: 'superAdminUsers.table.loading', defaultMessage: 'Loading users...' })}
               </div>
             </div>
           ) : (
@@ -170,22 +161,22 @@ export const SuperAdminUsers = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>
-                      {t('superAdminUsers.table.columns.user', undefined, 'User')}
+                      {t({ id: 'superAdminUsers.table.columns.user', defaultMessage: 'User' })}
                     </TableHead>
                     <TableHead>
-                      {t('superAdminUsers.table.columns.osmId', undefined, 'OSM ID')}
+                      {t({ id: 'superAdminUsers.table.columns.osmId', defaultMessage: 'OSM ID' })}
                     </TableHead>
                     <TableHead>
-                      {t('superAdminUsers.table.columns.email', undefined, 'Email')}
+                      {t({ id: 'superAdminUsers.table.columns.email', defaultMessage: 'Email' })}
                     </TableHead>
                     <TableHead>
-                      {t('superAdminUsers.table.columns.role', undefined, 'Role')}
+                      {t({ id: 'superAdminUsers.table.columns.role', defaultMessage: 'Role' })}
                     </TableHead>
                     <TableHead>
-                      {t('superAdminUsers.table.columns.score', undefined, 'Score')}
+                      {t({ id: 'superAdminUsers.table.columns.score', defaultMessage: 'Score' })}
                     </TableHead>
-                    <TableHead>{t('common.joined', undefined, 'Joined')}</TableHead>
-                    <TableHead>{t('common.actions', undefined, 'Actions')}</TableHead>
+                    <TableHead>{t({ id: 'common.joined', defaultMessage: 'Joined' })}</TableHead>
+                    <TableHead>{t({ id: 'common.actions', defaultMessage: 'Actions' })}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -226,7 +217,7 @@ export const SuperAdminUsers = () => {
                           <div className="flex items-center gap-2">
                             <Mail className="h-4 w-4 text-zinc-400" />
                             {user.settings?.email ||
-                              t('superAdminUsers.table.notAvailable', undefined, 'N/A')}
+                              t({ id: 'superAdminUsers.table.notAvailable', defaultMessage: 'N/A' })}
                           </div>
                         </TableCell>
                         <TableCell>
@@ -246,7 +237,7 @@ export const SuperAdminUsers = () => {
                         <TableCell>
                           <div className="flex gap-2">
                             <Button variant="outline" size="sm">
-                              {t('common.view', undefined, 'View')}
+                              {t({ id: 'common.view', defaultMessage: 'View' })}
                             </Button>
                           </div>
                         </TableCell>
@@ -262,17 +253,11 @@ export const SuperAdminUsers = () => {
                       <Search />
                     </EmptyMedia>
                     <EmptyTitle>
-                      {t(
-                        'superAdminUsers.empty.title',
-                        undefined,
-                        'No matching users on this page'
+                      {t({ id: 'superAdminUsers.empty.title', defaultMessage: 'No matching users on this page' }
                       )}
                     </EmptyTitle>
                     <EmptyDescription>
-                      {t(
-                        'superAdminUsers.empty.description',
-                        undefined,
-                        'This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term.'
+                      {t({ id: 'superAdminUsers.empty.description', defaultMessage: 'This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term.' }
                       )}
                     </EmptyDescription>
                   </EmptyHeader>

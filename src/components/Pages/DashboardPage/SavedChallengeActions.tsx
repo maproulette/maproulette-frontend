@@ -40,7 +40,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
           }}
         >
           <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+          <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -51,7 +51,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
             className="flex cursor-pointer items-center gap-2"
           >
             <Play className="h-4 w-4" />
-            {t('dashboard.savedChallenges.actions.browse', undefined, 'Browse challenge')}
+            {t({ id: 'dashboard.savedChallenges.actions.browse', defaultMessage: 'Browse challenge' })}
           </Link>
         </DropdownMenuItem>
         {canManage && (
@@ -62,7 +62,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
               className="flex cursor-pointer items-center gap-2"
             >
               <Settings className="h-4 w-4" />
-              {t('dashboard.savedChallenges.actions.manage', undefined, 'Manage challenge')}
+              {t({ id: 'dashboard.savedChallenges.actions.manage', defaultMessage: 'Manage challenge' })}
             </Link>
           </DropdownMenuItem>
         )}
@@ -76,7 +76,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
           className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
         >
           <BookmarkX className="h-4 w-4" />
-          {t('dashboard.savedChallenges.actions.unsave', undefined, 'Unsave challenge')}
+          {t({ id: 'dashboard.savedChallenges.actions.unsave', defaultMessage: 'Unsave challenge' })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

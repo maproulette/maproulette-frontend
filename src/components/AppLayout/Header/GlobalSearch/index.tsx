@@ -90,10 +90,7 @@ export const GlobalSearch = ({
   const { t } = useIntl()
   const resolvedPlaceholder =
     placeholder ??
-    t(
-      'appLayout.header.globalSearch.placeholder',
-      undefined,
-      'Search for challenges, tasks or projects...'
+    t({ id: 'appLayout.header.globalSearch.placeholder', defaultMessage: 'Search for challenges, tasks or projects...' }
     )
   const id = useId()
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -109,7 +106,7 @@ export const GlobalSearch = ({
       {
         key: 'k',
         ctrlOrCmd: true,
-        description: t('header.globalSearch.shortcut', undefined, 'Search MapRoulette'),
+        description: t({ id: 'header.globalSearch.shortcut', defaultMessage: 'Search MapRoulette' }),
         category: 'general',
         // The Ctrl/Cmd tier is the one that keeps working while the mapper is
         // typing, which is the point of it: search is always one key away.
@@ -281,10 +278,7 @@ export const GlobalSearch = ({
             </GlobalSearchProvider>
             <div className="mt-2 border-zinc-200 border-t pt-2 dark:border-slate-800">
               <DocsLink page="searchboxShortCommands" className="text-xs">
-                {t(
-                  'appLayout.header.globalSearch.docsLink',
-                  undefined,
-                  'Search shortcuts and short commands'
+                {t({ id: 'appLayout.header.globalSearch.docsLink', defaultMessage: 'Search shortcuts and short commands' }
                 )}
               </DocsLink>
             </div>

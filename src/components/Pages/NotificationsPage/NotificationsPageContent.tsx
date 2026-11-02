@@ -93,11 +93,8 @@ export const NotificationsPageContent = () => {
     <div className="h-full overflow-auto">
       <div className="container mx-auto max-w-4xl px-4 py-6">
         <PageHeader
-          title={t('notificationsPage.content.title', undefined, 'Notifications')}
-          description={t(
-            'notificationsPage.content.description',
-            undefined,
-            'View and manage your notifications'
+          title={t({ id: 'notificationsPage.content.title', defaultMessage: 'Notifications' })}
+          description={t({ id: 'notificationsPage.content.description', defaultMessage: 'View and manage your notifications' }
           )}
         />
         <div className="mb-4 flex flex-wrap items-center gap-4">
@@ -110,14 +107,11 @@ export const NotificationsPageContent = () => {
             htmlFor={groupByTaskCheckboxId}
             className="cursor-pointer text-sm text-zinc-600 dark:text-slate-400"
           >
-            {t('notificationsPage.content.groupByTask', undefined, 'Group by Task')}
+            {t({ id: 'notificationsPage.content.groupByTask', defaultMessage: 'Group by Task' })}
           </label>
           {groupByTask && (
             <span className="text-xs text-zinc-500 dark:text-slate-500">
-              {t(
-                'notificationsPage.content.groupByTaskHint',
-                undefined,
-                'Notifications for the same task are grouped together'
+              {t({ id: 'notificationsPage.content.groupByTaskHint', defaultMessage: 'Notifications for the same task are grouped together' }
               )}
             </span>
           )}
@@ -128,7 +122,7 @@ export const NotificationsPageContent = () => {
         {isLoading ? (
           <Card className="p-6">
             <div className="text-center text-zinc-500 dark:text-slate-500">
-              {t('common.loadingNotifications', undefined, 'Loading notifications...')}
+              {t({ id: 'common.loadingNotifications', defaultMessage: 'Loading notifications...' })}
             </div>
           </Card>
         ) : displayNotifications.length > 0 ? (
@@ -185,16 +179,13 @@ export const NotificationsPageContent = () => {
           <Card className="p-6">
             <div className="space-y-2 text-center">
               <p className="font-semibold text-base">
-                {t('common.youreAllUpToDate', undefined, "You're all up to date")}
+                {t({ id: 'common.youreAllUpToDate', defaultMessage: "You're all up to date" })}
               </p>
               <p className="text-sm text-zinc-500 dark:text-slate-500">
                 {activeTab === 'unread'
-                  ? t(
-                      'common.noUnreadNotificationsYet',
-                      undefined,
-                      'You have no unread notifications at the moment.'
+                  ? t({ id: 'common.noUnreadNotificationsYet', defaultMessage: 'You have no unread notifications at the moment.' }
                     )
-                  : t('common.noNotificationsYet', undefined, 'You have no notifications.')}
+                  : t({ id: 'common.noNotificationsYet', defaultMessage: 'You have no notifications.' })}
               </p>
             </div>
           </Card>

@@ -13,14 +13,11 @@ export const SuperAdminAnalytics = () => {
         <div className="mb-2 flex items-center gap-3">
           <BarChart3 className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
           <h1 className="font-bold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
-            {t('superAdmin.analytics.title', undefined, 'Platform Analytics')}
+            {t({ id: 'superAdmin.analytics.title', defaultMessage: 'Platform Analytics' })}
           </h1>
         </div>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t(
-            'superAdmin.analytics.description',
-            undefined,
-            'View comprehensive analytics and metrics across the platform.'
+          {t({ id: 'superAdmin.analytics.description', defaultMessage: 'View comprehensive analytics and metrics across the platform.' }
           )}
         </p>
       </div>
@@ -34,17 +31,11 @@ export const SuperAdminAnalytics = () => {
                 <BarChart3 />
               </EmptyMedia>
               <EmptyTitle>
-                {t(
-                  'superAdmin.analytics.comingSoonTitle',
-                  undefined,
-                  'Analytics dashboard coming soon'
+                {t({ id: 'superAdmin.analytics.comingSoonTitle', defaultMessage: 'Analytics dashboard coming soon' }
                 )}
               </EmptyTitle>
               <EmptyDescription>
-                {t(
-                  'superAdmin.analytics.comingSoonDescription',
-                  undefined,
-                  "We're working on bringing you comprehensive platform analytics. Check back soon."
+                {t({ id: 'superAdmin.analytics.comingSoonDescription', defaultMessage: "We're working on bringing you comprehensive platform analytics. Check back soon." }
                 )}
               </EmptyDescription>
             </EmptyHeader>

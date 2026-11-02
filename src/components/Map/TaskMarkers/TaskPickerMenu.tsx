@@ -86,16 +86,13 @@ export const TaskPickerMenu = ({ picker, onSelect, onClose }: TaskPickerMenuProp
         <div className="flex items-center gap-1.5 border-zinc-100 border-b px-3 py-2 dark:border-slate-800">
           <MapPin aria-hidden="true" className="size-3.5 text-zinc-400 dark:text-slate-500" />
           <p className="font-semibold text-xs text-zinc-600 dark:text-slate-300">
-            {t(
-              'map.taskPicker.heading',
-              { count: picker.total },
-              '{count, plural, one {# task here} other {# tasks here}}'
+            {t({ id: 'map.taskPicker.heading', defaultMessage: '{count, plural, one {# task here} other {# tasks here}}' }, { count: picker.total }
             )}
           </p>
         </div>
         <ul
           className="max-h-[9.5rem] overflow-y-auto overscroll-contain p-1"
-          aria-label={t('map.taskPicker.label', undefined, 'Tasks at this spot')}
+          aria-label={t({ id: 'map.taskPicker.label', defaultMessage: 'Tasks at this spot' })}
         >
           {picker.markers.map((marker) => (
             <li key={marker.id}>
@@ -105,7 +102,7 @@ export const TaskPickerMenu = ({ picker, onSelect, onClose }: TaskPickerMenuProp
                 className="group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-zinc-900 transition-colors hover:bg-zinc-100 focus-visible:bg-zinc-100 focus-visible:outline-none dark:text-slate-100 dark:focus-visible:bg-slate-800 dark:hover:bg-slate-800"
               >
                 <span className="font-medium tabular-nums">
-                  {t('map.taskPicker.task', { taskId: marker.id }, 'Task #{taskId}')}
+                  {t({ id: 'map.taskPicker.task', defaultMessage: 'Task #{taskId}' }, { taskId: marker.id })}
                 </span>
                 <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 group-hover:bg-white group-focus-visible:bg-white dark:bg-slate-800 dark:text-slate-300 dark:group-focus-visible:bg-slate-900 dark:group-hover:bg-slate-900">
                   <span
@@ -115,7 +112,7 @@ export const TaskPickerMenu = ({ picker, onSelect, onClose }: TaskPickerMenuProp
                       backgroundColor: (STATUS_CONFIG[marker.status] ?? STATUS_CONFIG[0]).color,
                     }}
                   />
-                  {getStatusLabel(t, marker.status) ?? t('common.unknown', undefined, 'Unknown')}
+                  {getStatusLabel(t, marker.status) ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' })}
                 </span>
                 <ChevronRight
                   aria-hidden="true"
@@ -127,10 +124,7 @@ export const TaskPickerMenu = ({ picker, onSelect, onClose }: TaskPickerMenuProp
         </ul>
         {picker.total > picker.markers.length && (
           <p className="border-zinc-100 border-t px-3 py-2 text-xs text-zinc-500 dark:border-slate-800 dark:text-slate-400">
-            {t(
-              'map.taskPicker.more',
-              { count: picker.total - picker.markers.length },
-              '{count, plural, one {# more task not listed} other {# more tasks not listed}}'
+            {t({ id: 'map.taskPicker.more', defaultMessage: '{count, plural, one {# more task not listed} other {# more tasks not listed}}' }, { count: picker.total - picker.markers.length }
             )}
           </p>
         )}

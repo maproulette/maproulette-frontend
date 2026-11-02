@@ -47,20 +47,20 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
   const handleRole = async (role: TeamRole) => {
     try {
       await changeRole.mutateAsync({ teamId, userId: member.userId, role })
-      toast.success(t('teams.detail.roleUpdateSuccess', undefined, 'Role updated'))
+      toast.success(t({ id: 'teams.detail.roleUpdateSuccess', defaultMessage: 'Role updated' }))
     } catch (error) {
       logger.error('Role change failed', { error })
-      toast.error(t('teams.detail.roleUpdateError', undefined, 'Could not update role'))
+      toast.error(t({ id: 'teams.detail.roleUpdateError', defaultMessage: 'Could not update role' }))
     }
   }
 
   const handleRemove = async () => {
     try {
       await removeMember.mutateAsync({ teamId, userId: member.userId })
-      toast.success(t('teams.detail.memberRemoveSuccess', undefined, 'Member removed'))
+      toast.success(t({ id: 'teams.detail.memberRemoveSuccess', defaultMessage: 'Member removed' }))
     } catch (error) {
       logger.error('Remove failed', { error })
-      toast.error(t('teams.detail.memberRemoveError', undefined, 'Could not remove member'))
+      toast.error(t({ id: 'teams.detail.memberRemoveError', defaultMessage: 'Could not remove member' }))
     }
   }
 
@@ -77,9 +77,9 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
       <TableCell>{TeamDisplayRoleLabel[teamDisplayRole(member)]}</TableCell>
       <TableCell>
         {pending ? (
-          <Badge variant="secondary">{t('common.invited', undefined, 'Invited')}</Badge>
+          <Badge variant="secondary">{t({ id: 'common.invited', defaultMessage: 'Invited' })}</Badge>
         ) : (
-          <Badge variant="success">{t('teams.detail.statusJoined', undefined, 'Joined')}</Badge>
+          <Badge variant="success">{t({ id: 'teams.detail.statusJoined', defaultMessage: 'Joined' })}</Badge>
         )}
       </TableCell>
       <TableCell className="text-right">
@@ -87,10 +87,7 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
           <div className="flex items-center justify-end gap-1">
             <DisabledTooltip
               show={isLastOwner}
-              message={t(
-                'teams.detail.lastOwnerReason',
-                undefined,
-                'A team needs an owner. Make someone else an owner before changing this one.'
+              message={t({ id: 'teams.detail.lastOwnerReason', defaultMessage: 'A team needs an owner. Make someone else an owner before changing this one.' }
               )}
             >
               <Select
@@ -101,7 +98,7 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
                 <SelectTrigger
                   size="sm"
                   className="w-32"
-                  aria-label={t('teams.detail.roleLabel', undefined, 'Role')}
+                  aria-label={t({ id: 'teams.detail.roleLabel', defaultMessage: 'Role' })}
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -118,10 +115,7 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
             </DisabledTooltip>
             <DisabledTooltip
               show={isLastOwner}
-              message={t(
-                'teams.detail.lastOwnerRemoveReason',
-                undefined,
-                'A team needs an owner. Make someone else an owner before removing this one.'
+              message={t({ id: 'teams.detail.lastOwnerRemoveReason', defaultMessage: 'A team needs an owner. Make someone else an owner before removing this one.' }
               )}
             >
               <Button
@@ -130,7 +124,7 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
                 size="icon"
                 onClick={handleRemove}
                 disabled={removeMember.isPending || isLastOwner}
-                aria-label={t('teams.detail.removeMemberAriaLabel', undefined, 'Remove member')}
+                aria-label={t({ id: 'teams.detail.removeMemberAriaLabel', defaultMessage: 'Remove member' })}
               >
                 <Trash2 className="size-4" aria-hidden="true" />
               </Button>
@@ -157,7 +151,7 @@ export const TeamMembersTable = () => {
   if (rows.length === 0) {
     return (
       <p className="py-12 text-center text-sm text-zinc-500 dark:text-slate-400">
-        {t('teams.detail.noMembers', undefined, 'This team has no members yet.')}
+        {t({ id: 'teams.detail.noMembers', defaultMessage: 'This team has no members yet.' })}
       </p>
     )
   }
@@ -167,11 +161,11 @@ export const TeamMembersTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t('teams.detail.columnName', undefined, 'Name')}</TableHead>
-            <TableHead>{t('teams.detail.roleLabel', undefined, 'Role')}</TableHead>
-            <TableHead>{t('common.status', undefined, 'Status')}</TableHead>
+            <TableHead>{t({ id: 'teams.detail.columnName', defaultMessage: 'Name' })}</TableHead>
+            <TableHead>{t({ id: 'teams.detail.roleLabel', defaultMessage: 'Role' })}</TableHead>
+            <TableHead>{t({ id: 'common.status', defaultMessage: 'Status' })}</TableHead>
             <TableHead className="text-right">
-              {t('common.actions', undefined, 'Actions')}
+              {t({ id: 'common.actions', defaultMessage: 'Actions' })}
             </TableHead>
           </TableRow>
         </TableHeader>

@@ -27,20 +27,14 @@ export const NotificationSelectAll = () => {
         checked={allSelected}
         indeterminate={someSelected && !allSelected}
         onCheckedChange={(checked) => handleSelectAll(checked === true)}
-        aria-label={t(
-          'notificationsPage.selectAll.ariaLabel',
-          undefined,
-          'Select all notifications'
+        aria-label={t({ id: 'notificationsPage.selectAll.ariaLabel', defaultMessage: 'Select all notifications' }
         )}
       />
       <label htmlFor={selectAllCheckboxId} className="text-sm text-zinc-600 dark:text-slate-400">
         {selectedNotificationIds.size > 0
-          ? t(
-              'notificationsPage.selectAll.selectedCount',
-              { selected: selectedNotificationIds.size, total: totalNotificationCount },
-              '{selected} of {total} selected'
+          ? t({ id: 'notificationsPage.selectAll.selectedCount', defaultMessage: '{selected} of {total} selected' }, { selected: selectedNotificationIds.size, total: totalNotificationCount }
             )
-          : t('notificationsPage.selectAll.selectAll', undefined, 'Select all')}
+          : t({ id: 'notificationsPage.selectAll.selectAll', defaultMessage: 'Select all' })}
       </label>
     </div>
   )

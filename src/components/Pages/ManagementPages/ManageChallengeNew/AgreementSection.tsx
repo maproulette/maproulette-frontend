@@ -13,17 +13,11 @@ export const AgreementSection = () => {
 
   return (
     <FormSection
-      title={t(
-        'manageChallengeNew.challengeForm.agreementSectionTitle',
-        undefined,
-        'Automated Edits Code of Conduct Agreement'
+      title={t({ id: 'manageChallengeNew.challengeForm.agreementSectionTitle', defaultMessage: 'Automated Edits Code of Conduct Agreement' }
       )}
       description={
         <>
-          {t(
-            'manageChallengeNew.challengeForm.agreementDescriptionBefore',
-            undefined,
-            "You are about to create a MapRoulette challenge. With this power comes responsibility. Make sure that your Challenge is designed to encourage careful human attention to each task, in the spirit of OpenStreetMap's"
+          {t({ id: 'manageChallengeNew.challengeForm.agreementDescriptionBefore', defaultMessage: "You are about to create a MapRoulette challenge. With this power comes responsibility. Make sure that your Challenge is designed to encourage careful human attention to each task, in the spirit of OpenStreetMap's" }
           )}{' '}
           <a
             href="https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct"
@@ -31,16 +25,10 @@ export const AgreementSection = () => {
             rel="noopener noreferrer"
             className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            {t(
-              'manageChallengeNew.challengeForm.agreementLinkText',
-              undefined,
-              'Automated Edits code of conduct'
+            {t({ id: 'manageChallengeNew.challengeForm.agreementLinkText', defaultMessage: 'Automated Edits code of conduct' }
             )}
           </a>
-          {t(
-            'manageChallengeNew.challengeForm.agreementDescriptionAfter',
-            undefined,
-            '. Please read this document carefully. By checking the box below, you acknowledge that you understand and accept this responsibility.'
+          {t({ id: 'manageChallengeNew.challengeForm.agreementDescriptionAfter', defaultMessage: '. Please read this document carefully. By checking the box below, you acknowledge that you understand and accept this responsibility.' }
           )}
         </>
       }
@@ -55,10 +43,7 @@ export const AgreementSection = () => {
             </FormControl>
             <div className="space-y-1">
               <FormLabel>
-                {t(
-                  'manageChallengeNew.challengeForm.agreementCheckboxLabel',
-                  undefined,
-                  'I have read and understand the OSM Automated Edits code of conduct'
+                {t({ id: 'manageChallengeNew.challengeForm.agreementCheckboxLabel', defaultMessage: 'I have read and understand the OSM Automated Edits code of conduct' }
                 )}
               </FormLabel>
               <FormMessage />

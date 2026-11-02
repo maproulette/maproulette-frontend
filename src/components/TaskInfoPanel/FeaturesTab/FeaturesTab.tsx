@@ -88,21 +88,18 @@ const TaskFeatures = ({
             <Package className="h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-slate-400" />
           )}
           <span className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t('common.taskWithId', { id: taskId }, 'Task #{id}')}
+            {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: taskId })}
           </span>
           {isPrimary && (
             <span className="font-medium text-[10px] text-yellow-600 dark:text-yellow-400">
-              {t('common.primary', undefined, 'Primary')}
+              {t({ id: 'common.primary', defaultMessage: 'Primary' })}
             </span>
           )}
           <span className="text-xs text-zinc-500 dark:text-slate-400">
             {task
-              ? t(
-                  'taskInfoPanel.features.featureCount',
-                  { count: featureCount },
-                  '{count} features'
+              ? t({ id: 'taskInfoPanel.features.featureCount', defaultMessage: '{count} features' }, { count: featureCount }
                 )
-              : t('common.loading', undefined, 'Loading...')}
+              : t({ id: 'common.loading', defaultMessage: 'Loading...' })}
           </span>
           <ChevronDown
             className={cn(
@@ -119,10 +116,7 @@ const TaskFeatures = ({
               onClick={() => selectInEditor([taskId])}
               {...handlers(taskId)}
               className="rounded p-1 text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-950/30 dark:hover:text-blue-300"
-              title={t(
-                'taskInfoPanel.taskTab.bundleList.selectTaskTitle',
-                { id: taskId },
-                'Select Task #{id} in iD editor'
+              title={t({ id: 'taskInfoPanel.taskTab.bundleList.selectTaskTitle', defaultMessage: 'Select Task #{id} in iD editor' }, { id: taskId }
               )}
             >
               <MousePointerClick className="h-3.5 w-3.5" />
@@ -134,8 +128,8 @@ const TaskFeatures = ({
               onClick={() => onOpenTask(taskId)}
               {...handlers(taskId)}
               className="rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-              title={t('taskInfoPanel.features.openTask', { id: taskId }, 'Open Task #{id}')}
-              aria-label={t('taskInfoPanel.features.openTask', { id: taskId }, 'Open Task #{id}')}
+              title={t({ id: 'taskInfoPanel.features.openTask', defaultMessage: 'Open Task #{id}' }, { id: taskId })}
+              aria-label={t({ id: 'taskInfoPanel.features.openTask', defaultMessage: 'Open Task #{id}' }, { id: taskId })}
             >
               <PanelRight className="h-3.5 w-3.5" />
             </button>
@@ -148,12 +142,9 @@ const TaskFeatures = ({
           {groups.length === 0 ? (
             <p className="text-xs text-zinc-500 dark:text-slate-400">
               {task
-                ? t(
-                    'taskInfoPanel.features.noFeatures',
-                    undefined,
-                    'This task carries no features.'
+                ? t({ id: 'taskInfoPanel.features.noFeatures', defaultMessage: 'This task carries no features.' }
                   )
-                : t('common.loading', undefined, 'Loading...')}
+                : t({ id: 'common.loading', defaultMessage: 'Loading...' })}
             </p>
           ) : (
             groups.map((group) => (
@@ -194,21 +185,18 @@ export const FeaturesTab = ({ task }: FeaturesTabProps) => {
         <div className="flex items-center gap-2 pb-1">
           <Package className="h-3.5 w-3.5 text-zinc-400 dark:text-slate-500" />
           <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-            {t('common.bundledTasks', { count: taskIds.length }, 'Bundled Tasks ({count})')}
+            {t({ id: 'common.bundledTasks', defaultMessage: 'Bundled Tasks ({count})' }, { count: taskIds.length })}
           </span>
           {inIdEditor && (
             <button
               type="button"
               onClick={() => selectInEditor(taskIds)}
               className="ml-auto flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-[10px] text-blue-600 transition-colors hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/30"
-              title={t(
-                'taskInfoPanel.taskTab.bundleList.selectAllTitle',
-                undefined,
-                'Select all bundled tasks in iD editor'
+              title={t({ id: 'taskInfoPanel.taskTab.bundleList.selectAllTitle', defaultMessage: 'Select all bundled tasks in iD editor' }
               )}
             >
               <MousePointerClick className="h-3 w-3" />
-              {t('taskInfoPanel.taskTab.bundleList.selectAll', undefined, 'Select All')}
+              {t({ id: 'taskInfoPanel.taskTab.bundleList.selectAll', defaultMessage: 'Select All' })}
             </button>
           )}
         </div>

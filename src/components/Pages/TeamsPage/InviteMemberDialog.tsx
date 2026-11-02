@@ -61,11 +61,11 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
     if (!selectedUserId) return
     try {
       await invite.mutateAsync({ teamId, userId: selectedUserId, role })
-      toast.success(t('teams.inviteMember.sentSuccess', undefined, 'Invitation sent'))
+      toast.success(t({ id: 'teams.inviteMember.sentSuccess', defaultMessage: 'Invitation sent' }))
       onOpenChange(false)
     } catch (error) {
       logger.error('Invite failed', { error })
-      toast.error(t('teams.inviteMember.sendError', undefined, 'Could not send invitation'))
+      toast.error(t({ id: 'teams.inviteMember.sendError', defaultMessage: 'Could not send invitation' }))
     }
   }
 
@@ -74,13 +74,10 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {t('teams.inviteMember.title', undefined, 'Invite a team member')}
+            {t({ id: 'teams.inviteMember.title', defaultMessage: 'Invite a team member' })}
           </DialogTitle>
           <DialogDescription>
-            {t(
-              'teams.inviteMember.description',
-              undefined,
-              'Search for an OSM user and pick a role for them.'
+            {t({ id: 'teams.inviteMember.description', defaultMessage: 'Search for an OSM user and pick a role for them.' }
             )}
           </DialogDescription>
         </DialogHeader>
@@ -90,7 +87,7 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t('common.searchOsmUsername', undefined, 'Search OSM username')}
+              placeholder={t({ id: 'common.searchOsmUsername', defaultMessage: 'Search OSM username' })}
               className="pl-8"
             />
           </div>
@@ -134,10 +131,10 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button onClick={handleInvite} disabled={!selectedUserId || invite.isPending}>
-            {t('teams.inviteMember.sendButton', undefined, 'Send invitation')}
+            {t({ id: 'teams.inviteMember.sendButton', defaultMessage: 'Send invitation' })}
           </Button>
         </DialogFooter>
       </DialogContent>

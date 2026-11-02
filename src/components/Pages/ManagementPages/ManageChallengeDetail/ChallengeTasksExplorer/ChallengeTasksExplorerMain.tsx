@@ -39,15 +39,9 @@ export const ChallengeTasksExplorerMain = () => {
               <ChallengeTasksExplorerControls
                 countLabel={
                   isLoading
-                    ? t(
-                        'manageChallengeDetail.tasksExplorer.loadingTasks',
-                        undefined,
-                        'Loading tasks…'
+                    ? t({ id: 'manageChallengeDetail.tasksExplorer.loadingTasks', defaultMessage: 'Loading tasks…' }
                       )
-                    : t(
-                        'manageChallengeDetail.tasksExplorer.showingCount',
-                        { shown: visibleMarkers.length, total: filteredMarkers.length },
-                        'Showing {shown} of {total} tasks'
+                    : t({ id: 'manageChallengeDetail.tasksExplorer.showingCount', defaultMessage: 'Showing {shown} of {total} tasks' }, { shown: visibleMarkers.length, total: filteredMarkers.length }
                       )
                 }
               />
@@ -78,7 +72,7 @@ export const ChallengeTasksExplorerMain = () => {
           type="button"
           onClick={scrollToTop}
           className="fixed right-6 bottom-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-white shadow-xl transition-opacity hover:bg-zinc-700 dark:bg-slate-200 dark:text-zinc-900 dark:hover:bg-slate-300"
-          aria-label={t('common.scrollToTop', undefined, 'Scroll to top')}
+          aria-label={t({ id: 'common.scrollToTop', defaultMessage: 'Scroll to top' })}
         >
           <ArrowUp className="h-5 w-5" />
         </button>

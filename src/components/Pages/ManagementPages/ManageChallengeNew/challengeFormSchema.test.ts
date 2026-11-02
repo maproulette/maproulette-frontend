@@ -13,14 +13,14 @@ import {
   isChallengeSourceEditable,
   makeChallengeFormSchema,
 } from './challengeFormSchema'
+import { testT } from '@/test/translate'
 
 globalThis.File ??= NodeFile as unknown as typeof File
 
 // A fake `t` matching the real IntlContext signature: returns the default
 // message when provided (like the real implementation does when a
 // translation key is missing from the catalog).
-const t = (_id: string, _values?: Record<string, string | number>, defaultMessage?: string) =>
-  defaultMessage ?? _id
+const t = testT
 
 const validValues: ChallengeFormValues = {
   projectId: 1,

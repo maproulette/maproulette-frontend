@@ -19,9 +19,9 @@ export const TeamContentPanel = () => {
   const { section = 'users' } = useSearch({ from: '/_app/teams/$teamId/' })
 
   const labels: Record<TeamSection, string> = {
-    users: t('teams.detail.tabUsers', undefined, 'Users'),
-    projects: t('teams.detail.tabProjects', undefined, 'Projects'),
-    challenges: t('teams.detail.tabChallenges', undefined, 'Challenges'),
+    users: t({ id: 'teams.detail.tabUsers', defaultMessage: 'Users' }),
+    projects: t({ id: 'teams.detail.tabProjects', defaultMessage: 'Projects' }),
+    challenges: t({ id: 'teams.detail.tabChallenges', defaultMessage: 'Challenges' }),
   }
 
   return (

@@ -29,9 +29,9 @@ export const CommentComposer = ({
 }: Props) => {
   const { t } = useIntl()
   const resolvedPlaceholder =
-    placeholder ?? t('shared.commentComposer.placeholder', undefined, 'Write a comment…')
+    placeholder ?? t({ id: 'shared.commentComposer.placeholder', defaultMessage: 'Write a comment…' })
   const resolvedSubmitLabel =
-    submitLabel ?? t('shared.commentComposer.submitLabel', undefined, 'Post')
+    submitLabel ?? t({ id: 'shared.commentComposer.submitLabel', defaultMessage: 'Post' })
   const [busy, setBusy] = useState(false)
   const count = value.length
   const warnThreshold = maxLength * 0.8
@@ -56,8 +56,8 @@ export const CommentComposer = ({
     <div className="space-y-2">
       <Tabs defaultValue="write">
         <TabsList>
-          <TabsTrigger value="write">{t('common.write', undefined, 'Write')}</TabsTrigger>
-          <TabsTrigger value="preview">{t('common.preview', undefined, 'Preview')}</TabsTrigger>
+          <TabsTrigger value="write">{t({ id: 'common.write', defaultMessage: 'Write' })}</TabsTrigger>
+          <TabsTrigger value="preview">{t({ id: 'common.preview', defaultMessage: 'Preview' })}</TabsTrigger>
         </TabsList>
         <TabsContent value="write" className="mt-2">
           <CommentMentionInput
@@ -75,7 +75,7 @@ export const CommentComposer = ({
               <CommentMarkdown>{value}</CommentMarkdown>
             ) : (
               <span className="text-sm text-zinc-400 dark:text-slate-500">
-                {t('common.nothingToPreview', undefined, 'Nothing to preview')}
+                {t({ id: 'common.nothingToPreview', defaultMessage: 'Nothing to preview' })}
               </span>
             )}
           </div>
@@ -88,7 +88,7 @@ export const CommentComposer = ({
         <div className="flex gap-2">
           {onCancel && (
             <Button type="button" variant="ghost" size="sm" onClick={onCancel} disabled={busy}>
-              {t('common.cancel', undefined, 'Cancel')}
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
             </Button>
           )}
           <Button
@@ -98,7 +98,7 @@ export const CommentComposer = ({
             disabled={!value.trim() || busy || disabled || count > maxLength}
           >
             {busy
-              ? t('shared.commentComposer.posting', undefined, 'Posting…')
+              ? t({ id: 'shared.commentComposer.posting', defaultMessage: 'Posting…' })
               : resolvedSubmitLabel}
           </Button>
         </div>

@@ -51,10 +51,7 @@ export const CommentItem = ({
               params={{ challengeId: String(comment.challengeId) }}
               className="text-teal-600 text-xs hover:underline dark:text-teal-400"
             >
-              {t(
-                'common.challengeWithChallengeId',
-                { challengeId: comment.challengeId },
-                'Challenge #{challengeId}'
+              {t({ id: 'common.challengeWithChallengeId', defaultMessage: 'Challenge #{challengeId}' }, { challengeId: comment.challengeId }
               )}
             </Link>
           )}
@@ -64,7 +61,7 @@ export const CommentItem = ({
               params={{ taskId: String(comment.taskId) }}
               className="text-teal-600 text-xs hover:underline dark:text-teal-400"
             >
-              {t('common.taskWithTaskId', { taskId: comment.taskId }, 'Task #{taskId}')}
+              {t({ id: 'common.taskWithTaskId', defaultMessage: 'Task #{taskId}' }, { taskId: comment.taskId })}
             </Link>
           )}
         </div>
@@ -77,7 +74,7 @@ export const CommentItem = ({
             className="mt-1 h-7 px-2 text-xs"
             onClick={() => onReply(comment)}
           >
-            <Reply className="size-3" aria-hidden="true" /> {t('common.reply', undefined, 'Reply')}
+            <Reply className="size-3" aria-hidden="true" /> {t({ id: 'common.reply', defaultMessage: 'Reply' })}
           </Button>
         )}
       </div>

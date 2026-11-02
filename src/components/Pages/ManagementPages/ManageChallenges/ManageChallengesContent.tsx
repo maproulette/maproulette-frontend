@@ -95,7 +95,7 @@ export const ManageChallengesContent = () => {
     <Button asChild size="sm" className="gap-1.5 rounded-full">
       <Link to="/manage/challenge/new">
         <Plus className="h-4 w-4" />
-        {t('common.createChallenge', undefined, 'Create Challenge')}
+        {t({ id: 'common.createChallenge', defaultMessage: 'Create Challenge' })}
       </Link>
     </Button>
   )
@@ -115,13 +115,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               challenge.paused
-                ? t('common.resumeChallenge', undefined, 'Resume challenge')
-                : t('common.pauseChallenge', undefined, 'Pause challenge')
+                ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+                : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
             }
             aria-label={
               challenge.paused
-                ? t('common.resumeChallenge', undefined, 'Resume challenge')
-                : t('common.pauseChallenge', undefined, 'Pause challenge')
+                ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+                : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
             }
           >
             <Pause
@@ -145,13 +145,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               challenge.isArchived
-                ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-                : t('common.archiveChallenge', undefined, 'Archive challenge')
+                ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+                : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
             }
             aria-label={
               challenge.isArchived
-                ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-                : t('common.archiveChallenge', undefined, 'Archive challenge')
+                ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+                : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
             }
           >
             <Archive
@@ -175,13 +175,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               isPinned
-                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-                : t('common.pinChallenge', undefined, 'Pin challenge')
+                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
             }
             aria-label={
               isPinned
-                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-                : t('common.pinChallenge', undefined, 'Pin challenge')
+                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
             }
           >
             <Pin
@@ -205,13 +205,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               challenge.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+                ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+                : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
             }
             aria-label={
               challenge.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+                ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+                : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
             }
           >
             {challenge.enabled ? (
@@ -225,7 +225,7 @@ export const ManageChallengesContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+              <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -237,7 +237,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  {t('common.startChallenge', undefined, 'Start challenge')}
+                  {t({ id: 'common.startChallenge', defaultMessage: 'Start challenge' })}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -248,7 +248,7 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                {t('common.editChallenge', undefined, 'Edit challenge')}
+                {t({ id: 'common.editChallenge', defaultMessage: 'Edit challenge' })}
               </Link>
             </DropdownMenuItem>
             {challenge.id != null && (
@@ -258,8 +258,8 @@ export const ManageChallengesContent = () => {
               >
                 <Archive className="h-4 w-4" />
                 {challenge.isArchived
-                  ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-                  : t('common.archiveChallenge', undefined, 'Archive challenge')}
+                  ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+                  : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
@@ -268,7 +268,7 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Hammer className="h-4 w-4" />
-                {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
+                {t({ id: 'common.rebuildTasks', defaultMessage: 'Rebuild tasks' })}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -279,7 +279,7 @@ export const ManageChallengesContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('common.copyUrl', undefined, 'Copy URL')}
+              {t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
             </DropdownMenuItem>
             {challenge.id != null && (
               <>
@@ -289,7 +289,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                 >
                   <Trash2 className="h-4 w-4" />
-                  {t('common.deleteChallenge', undefined, 'Delete challenge')}
+                  {t({ id: 'common.deleteChallenge', defaultMessage: 'Delete challenge' })}
                 </DropdownMenuItem>
               </>
             )}
@@ -308,17 +308,11 @@ export const ManageChallengesContent = () => {
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
                   <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    {t(
-                      'manageChallenges.content.aboutChallengesTitle',
-                      undefined,
-                      'About Challenges'
+                    {t({ id: 'manageChallenges.content.aboutChallengesTitle', defaultMessage: 'About Challenges' }
                     )}
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    {t(
-                      'manageChallenges.content.aboutChallengesBody',
-                      undefined,
-                      'Challenges contain tasks that mappers work through to improve OpenStreetMap data.'
+                    {t({ id: 'manageChallenges.content.aboutChallengesBody', defaultMessage: 'Challenges contain tasks that mappers work through to improve OpenStreetMap data.' }
                     )}
                   </p>
                 </div>
@@ -327,7 +321,7 @@ export const ManageChallengesContent = () => {
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => setShowPanel(false)}
-                  title={t('common.hidePanel', undefined, 'Hide panel')}
+                  title={t({ id: 'common.hidePanel', defaultMessage: 'Hide panel' })}
                 >
                   <PanelLeftClose className="h-4 w-4" />
                 </Button>
@@ -337,49 +331,31 @@ export const ManageChallengesContent = () => {
                 <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageChallenges.content.tipWriteClearInstructionsTitle',
-                        undefined,
-                        'Write clear instructions'
+                      {t({ id: 'manageChallenges.content.tipWriteClearInstructionsTitle', defaultMessage: 'Write clear instructions' }
                       )}
                     </p>
                     <p>
-                      {t(
-                        'manageChallenges.content.tipWriteClearInstructionsBody',
-                        undefined,
-                        'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.'
+                      {t({ id: 'manageChallenges.content.tipWriteClearInstructionsBody', defaultMessage: 'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.' }
                       )}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageChallenges.content.tipSetDifficultyTitle',
-                        undefined,
-                        'Set appropriate difficulty'
+                      {t({ id: 'manageChallenges.content.tipSetDifficultyTitle', defaultMessage: 'Set appropriate difficulty' }
                       )}
                     </p>
                     <p>
-                      {t(
-                        'manageChallenges.content.tipSetDifficultyBody',
-                        undefined,
-                        'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.'
+                      {t({ id: 'manageChallenges.content.tipSetDifficultyBody', defaultMessage: 'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.' }
                       )}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageChallenges.content.tipMonitorProgressTitle',
-                        undefined,
-                        'Monitor progress'
+                      {t({ id: 'manageChallenges.content.tipMonitorProgressTitle', defaultMessage: 'Monitor progress' }
                       )}
                     </p>
                     <p>
-                      {t(
-                        'manageChallenges.content.tipMonitorProgressBody',
-                        undefined,
-                        'Check completion rates and review feedback. Archive challenges once all tasks are resolved.'
+                      {t({ id: 'manageChallenges.content.tipMonitorProgressBody', defaultMessage: 'Check completion rates and review feedback. Archive challenges once all tasks are resolved.' }
                       )}
                     </p>
                   </div>
@@ -388,7 +364,7 @@ export const ManageChallengesContent = () => {
 
               <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
                 <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-                  {t('manageChallenges.content.quickLinks', undefined, 'Quick Links')}
+                  {t({ id: 'manageChallenges.content.quickLinks', defaultMessage: 'Quick Links' })}
                 </p>
                 <div className="space-y-2">
                   <Link
@@ -396,17 +372,14 @@ export const ManageChallengesContent = () => {
                     className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                   >
                     <FolderKanban className="h-3.5 w-3.5 text-zinc-500" />
-                    {t('manageChallenges.content.manageProjectsLink', undefined, 'Manage Projects')}
+                    {t({ id: 'manageChallenges.content.manageProjectsLink', defaultMessage: 'Manage Projects' })}
                   </Link>
                   <DocsLink
                     page="creatingAChallenge"
                     icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
                     className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
                   >
-                    {t(
-                      'manageChallenges.content.challengeCreationGuideLink',
-                      undefined,
-                      'Challenge Creation Guide'
+                    {t({ id: 'manageChallenges.content.challengeCreationGuideLink', defaultMessage: 'Challenge Creation Guide' }
                     )}
                   </DocsLink>
                   <DocsLink
@@ -414,10 +387,7 @@ export const ManageChallengesContent = () => {
                     icon={<ListOrdered className="h-3.5 w-3.5 text-zinc-500" />}
                     className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
                   >
-                    {t(
-                      'manageChallenges.content.taskPriorityRulesLink',
-                      undefined,
-                      'Task Priority Rules'
+                    {t({ id: 'manageChallenges.content.taskPriorityRulesLink', defaultMessage: 'Task Priority Rules' }
                     )}
                   </DocsLink>
                   <DocsLink
@@ -425,10 +395,7 @@ export const ManageChallengesContent = () => {
                     icon={<PencilLine className="h-3.5 w-3.5 text-zinc-500" />}
                     className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
                   >
-                    {t(
-                      'manageChallenges.content.bulkEditingLink',
-                      undefined,
-                      'Bulk Editing Challenges'
+                    {t({ id: 'manageChallenges.content.bulkEditingLink', defaultMessage: 'Bulk Editing Challenges' }
                     )}
                   </DocsLink>
                 </div>
@@ -448,7 +415,7 @@ export const ManageChallengesContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title={t('common.showPanel', undefined, 'Show panel')}
+                  title={t({ id: 'common.showPanel', defaultMessage: 'Show panel' })}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -456,29 +423,29 @@ export const ManageChallengesContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t('common.searchChallenges2', undefined, 'Search challenges...')}
+                placeholder={t({ id: 'common.searchChallenges2', defaultMessage: 'Search challenges...' })}
                 className="w-full sm:max-w-xs"
               />
               <FilterToggle
-                label={t('common.discoverable', undefined, 'Discoverable')}
+                label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
                 icon={Eye}
                 checked={onlyDiscoverable}
                 onCheckedChange={setOnlyDiscoverable}
               />
               <FilterToggle
-                label={t('common.archived', undefined, 'Archived')}
+                label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
                 icon={Archive}
                 checked={onlyArchived}
                 onCheckedChange={setOnlyArchived}
               />
               <FilterToggle
-                label={t('common.owned', undefined, 'Owned')}
+                label={t({ id: 'common.owned', defaultMessage: 'Owned' })}
                 icon={User}
                 checked={onlyOwned}
                 onCheckedChange={setOnlyOwned}
               />
               <FilterToggle
-                label={t('common.pinned', undefined, 'Pinned')}
+                label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                 icon={Pin}
                 checked={onlyPinned}
                 onCheckedChange={setOnlyPinned}
@@ -519,13 +486,10 @@ export const ManageChallengesContent = () => {
                   getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: ListChecks,
-                    title: t('common.noChallengesFound', undefined, 'No challenges found'),
-                    description: t(
-                      'manageChallenges.content.emptyDescription',
-                      undefined,
-                      "You haven't created any challenges yet"
+                    title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
+                    description: t({ id: 'manageChallenges.content.emptyDescription', defaultMessage: "You haven't created any challenges yet" }
                     ),
-                    actionLabel: t('common.createChallenge', undefined, 'Create Challenge'),
+                    actionLabel: t({ id: 'common.createChallenge', defaultMessage: 'Create Challenge' }),
                     actionTo: '/manage/challenge/new',
                   }}
                 />
@@ -549,23 +513,20 @@ export const ManageChallengesContent = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t('common.deleteChallenge2', undefined, 'Delete challenge?')}
+              {t({ id: 'common.deleteChallenge2', defaultMessage: 'Delete challenge?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t(
-                'common.deleteChallengeWarning',
-                undefined,
-                'This will delete this challenge and all its tasks. This action cannot be undone.'
+              {t({ id: 'common.deleteChallengeWarning', defaultMessage: 'This will delete this challenge and all its tasks. This action cannot be undone.' }
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+            <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteChallenge}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
             >
-              {t('common.delete', undefined, 'Delete')}
+              {t({ id: 'common.delete', defaultMessage: 'Delete' })}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

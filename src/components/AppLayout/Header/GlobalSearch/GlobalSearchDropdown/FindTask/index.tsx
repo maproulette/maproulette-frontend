@@ -28,13 +28,10 @@ export const FindTask = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t('common.findATask', undefined, 'Find a Task')}
+            {t({ id: 'common.findATask', defaultMessage: 'Find a Task' })}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findTask.hint',
-              undefined,
-              'Enter a task ID to look it up'
+            {t({ id: 'appLayout.header.globalSearch.findTask.hint', defaultMessage: 'Enter a task ID to look it up' }
             )}
           </p>
         </div>
@@ -47,10 +44,7 @@ export const FindTask = () => {
       <div className="flex flex-col items-center justify-center gap-3 py-12">
         <Spinner size="lg" className="text-blue-500" />
         <p className="text-sm text-zinc-500 dark:text-slate-400">
-          {t(
-            'appLayout.header.globalSearch.findTask.lookingUp',
-            { id: numericId },
-            'Looking up task {id}...'
+          {t({ id: 'appLayout.header.globalSearch.findTask.lookingUp', defaultMessage: 'Looking up task {id}...' }, { id: numericId }
           )}
         </p>
       </div>
@@ -65,17 +59,11 @@ export const FindTask = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t(
-              'appLayout.header.globalSearch.findTask.noResults',
-              { id: debouncedId },
-              'No task found with ID {id}'
+            {t({ id: 'appLayout.header.globalSearch.findTask.noResults', defaultMessage: 'No task found with ID {id}' }, { id: debouncedId }
             )}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findTask.noResultsHint',
-              undefined,
-              'Try a different task ID'
+            {t({ id: 'appLayout.header.globalSearch.findTask.noResultsHint', defaultMessage: 'Try a different task ID' }
             )}
           </p>
         </div>
@@ -85,13 +73,13 @@ export const FindTask = () => {
 
   const task = taskQuery.data
   const statusLabel =
-    getStatusLabel(t, task.status ?? -1) || t('common.unknown', undefined, 'Unknown')
+    getStatusLabel(t, task.status ?? -1) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
 
   return (
     <div className="space-y-4">
       <div className="mb-4">
         <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-          {t('appLayout.header.globalSearch.findTask.found', undefined, 'Task Found')}
+          {t({ id: 'appLayout.header.globalSearch.findTask.found', defaultMessage: 'Task Found' })}
         </h3>
       </div>
       <div
@@ -111,19 +99,16 @@ export const FindTask = () => {
               onClick={onResultSelect}
               className="stretched-link"
             >
-              {task.name || t('common.taskWithId', { id: task.id }, 'Task #{id}')}
+              {task.name || t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })}
             </Link>
           </h3>
           <div className="flex items-center gap-2">
             <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
-              {t(
-                'appLayout.header.globalSearch.findTask.status.label',
-                { status: statusLabel },
-                'Status: {status}'
+              {t({ id: 'appLayout.header.globalSearch.findTask.status.label', defaultMessage: 'Status: {status}' }, { status: statusLabel }
               )}
             </span>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t('common.challengeWithId', { id: task.parent }, 'Challenge #{id}')}
+              {t({ id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' }, { id: task.parent })}
             </span>
           </div>
         </div>

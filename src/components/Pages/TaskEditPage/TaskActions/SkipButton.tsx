@@ -19,10 +19,7 @@ export const SkipButton = ({ task }: { task: Task }) => {
       disabled={isSkipping}
       className="gap-1.5 rounded-full border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
       title={withBindingHint(
-        t(
-          'taskEditPage.taskActions.skipButton.title',
-          undefined,
-          'Skip this task (preserves status)'
+        t({ id: 'taskEditPage.taskActions.skipButton.title', defaultMessage: 'Skip this task (preserves status)' }
         ),
         SKIP_TASK_BINDING
       )}
@@ -32,7 +29,7 @@ export const SkipButton = ({ task }: { task: Task }) => {
       ) : (
         <SkipForward className="h-3.5 w-3.5" aria-hidden="true" />
       )}
-      {t('taskEditPage.taskActions.skipButton.label', undefined, 'Skip this task')}
+      {t({ id: 'taskEditPage.taskActions.skipButton.label', defaultMessage: 'Skip this task' })}
     </Button>
   )
 }

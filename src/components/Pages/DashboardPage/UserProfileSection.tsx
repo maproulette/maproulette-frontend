@@ -57,13 +57,13 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
               {!user.guest && (
                 <Badge className="bg-emerald-500/20 text-emerald-400 text-xs hover:bg-emerald-500/30">
                   <Shield className="mr-1 h-3 w-3" />
-                  {t('dashboard.profile.verified', undefined, 'Verified')}
+                  {t({ id: 'dashboard.profile.verified', defaultMessage: 'Verified' })}
                 </Badge>
               )}
               {user.guest && (
                 <Badge className="bg-yellow-500/20 text-xs text-yellow-400 hover:bg-yellow-500/30">
                   <Sparkles className="mr-1 h-3 w-3" />
-                  {t('dashboard.profile.guest', undefined, 'Guest')}
+                  {t({ id: 'dashboard.profile.guest', defaultMessage: 'Guest' })}
                 </Badge>
               )}
             </div>
@@ -85,16 +85,13 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
         >
           <span className="mb-2 flex items-center justify-between text-sm">
             <span className="font-medium text-zinc-700 dark:text-slate-300">
-              {t('common.level', { level: userLevel }, 'Level {level}')}
+              {t({ id: 'common.level', defaultMessage: 'Level {level}' }, { level: userLevel })}
             </span>
             <span className="font-semibold text-zinc-900 dark:text-white">
-              {t(
-                'dashboard.profile.progressToNext',
-                {
+              {t({ id: 'dashboard.profile.progressToNext', defaultMessage: '{current} / {total} to next level' }, {
                   current: pointsIntoLevel.toLocaleString(),
                   total: pointsNeededForLevel.toLocaleString(),
-                },
-                '{current} / {total} to next level'
+                }
               )}
             </span>
           </span>

@@ -35,18 +35,15 @@ const TaskCommentCard = ({ comment }: { comment: Comment }) => {
         </p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findComments.byUser',
-              {
+            {t({ id: 'appLayout.header.globalSearch.findComments.byUser', defaultMessage: 'by {username}' }, {
                 username:
                   comment.osm_username ??
-                  t('appLayout.header.globalSearch.findComments.unknownUser', undefined, 'Unknown'),
-              },
-              'by {username}'
+                  t({ id: 'appLayout.header.globalSearch.findComments.unknownUser', defaultMessage: 'Unknown' }),
+              }
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-slate-500">
-            {t('common.taskWithId', { id: comment.taskId }, 'Task #{id}')}
+            {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: comment.taskId })}
           </span>
         </div>
       </div>
@@ -73,18 +70,15 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
         </p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findComments.byUser',
-              {
+            {t({ id: 'appLayout.header.globalSearch.findComments.byUser', defaultMessage: 'by {username}' }, {
                 username:
                   comment.osm_username ??
-                  t('appLayout.header.globalSearch.findComments.unknownUser', undefined, 'Unknown'),
-              },
-              'by {username}'
+                  t({ id: 'appLayout.header.globalSearch.findComments.unknownUser', defaultMessage: 'Unknown' }),
+              }
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-slate-500">
-            {t('common.challengeWithId', { id: comment.challengeId }, 'Challenge #{id}')}
+            {t({ id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' }, { id: comment.challengeId })}
           </span>
         </div>
       </div>
@@ -100,8 +94,8 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
   const hasSearchQuery = trimmed.length > 0
   const label =
     commentType === 'task'
-      ? t('common.task', undefined, 'Task')
-      : t('common.challenge', undefined, 'Challenge')
+      ? t({ id: 'common.task', defaultMessage: 'Task' })
+      : t({ id: 'common.challenge', defaultMessage: 'Challenge' })
   const labelLower = label.toLowerCase()
 
   const debouncedQuery = useDebouncedValue(trimmed)
@@ -139,7 +133,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
         >
           <Spinner className="text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t('common.updatingResults', undefined, 'Updating results...')}
+            {t({ id: 'common.updatingResults', defaultMessage: 'Updating results...' })}
           </p>
         </div>
       )}
@@ -148,10 +142,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner size="lg" className="text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findComments.loading',
-              undefined,
-              'Loading comments...'
+            {t({ id: 'appLayout.header.globalSearch.findComments.loading', defaultMessage: 'Loading comments...' }
             )}
           </p>
         </div>
@@ -163,19 +154,13 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
               {hasSearchQuery
-                ? t('common.noResultsFound', undefined, 'No results found')
-                : t(
-                    'appLayout.header.globalSearch.findComments.noCommentsYet',
-                    { label: labelLower },
-                    'No {label} comments yet'
+                ? t({ id: 'common.noResultsFound', defaultMessage: 'No results found' })
+                : t({ id: 'appLayout.header.globalSearch.findComments.noCommentsYet', defaultMessage: 'No {label} comments yet' }, { label: labelLower }
                   )}
             </p>
             {hasSearchQuery && (
               <p className="text-xs text-zinc-500 dark:text-slate-400">
-                {t(
-                  'appLayout.header.globalSearch.findComments.noCommentsMatch',
-                  { label: labelLower, query: debouncedQuery },
-                  'No {label} comments match "{query}"'
+                {t({ id: 'appLayout.header.globalSearch.findComments.noCommentsMatch', defaultMessage: 'No {label} comments match "{query}"' }, { label: labelLower, query: debouncedQuery }
                 )}
               </p>
             )}
@@ -186,18 +171,12 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
               {hasSearchQuery
-                ? t('common.results', undefined, 'Results')
-                : t(
-                    'appLayout.header.globalSearch.findComments.recentComments',
-                    { label },
-                    'Recent {label} Comments'
+                ? t({ id: 'common.results', defaultMessage: 'Results' })
+                : t({ id: 'appLayout.header.globalSearch.findComments.recentComments', defaultMessage: 'Recent {label} Comments' }, { label }
                   )}
             </h3>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t(
-                'appLayout.header.globalSearch.findComments.commentCount',
-                { count: results.length },
-                '{count, plural, one {# comment} other {# comments}}'
+              {t({ id: 'appLayout.header.globalSearch.findComments.commentCount', defaultMessage: '{count, plural, one {# comment} other {# comments}}' }, { count: results.length }
               )}
             </span>
           </div>

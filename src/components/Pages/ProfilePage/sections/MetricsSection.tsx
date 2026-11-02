@@ -12,7 +12,7 @@ export const MetricsSection = () => {
     <section aria-labelledby={headingId} className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id={headingId} className="font-semibold text-lg text-zinc-900 dark:text-slate-100">
-          {t('profilePage.metrics.title', undefined, 'Metrics')}
+          {t({ id: 'profilePage.metrics.title', defaultMessage: 'Metrics' })}
         </h2>
         <TimeRangeSelector />
       </div>

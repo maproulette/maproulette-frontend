@@ -38,19 +38,16 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
           onClick={() => showView('task')}
         >
           <ArrowLeft className="size-4" />
-          {t('taskEditPage.descriptionPanel.backToTask', undefined, 'Back to task')}
+          {t({ id: 'taskEditPage.descriptionPanel.backToTask', defaultMessage: 'Back to task' })}
         </Button>
         <div className="flex items-center gap-2">
           <Icon className="size-4 shrink-0 text-blue-500 dark:text-blue-400" aria-hidden="true" />
           <div className="min-w-0">
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
               {isChallenge
-                ? t(
-                    'taskEditPage.descriptionPanel.challengeTitle',
-                    undefined,
-                    'About this challenge'
+                ? t({ id: 'taskEditPage.descriptionPanel.challengeTitle', defaultMessage: 'About this challenge' }
                   )
-                : t('taskEditPage.descriptionPanel.projectTitle', undefined, 'About this project')}
+                : t({ id: 'taskEditPage.descriptionPanel.projectTitle', defaultMessage: 'About this project' })}
             </p>
             <h2 className="truncate font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
               {name}
@@ -66,15 +63,9 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
           ) : (
             <p className="text-sm text-zinc-500 dark:text-slate-400">
               {isChallenge
-                ? t(
-                    'taskEditPage.descriptionPanel.noChallengeDescription',
-                    undefined,
-                    'This challenge has no description.'
+                ? t({ id: 'taskEditPage.descriptionPanel.noChallengeDescription', defaultMessage: 'This challenge has no description.' }
                   )
-                : t(
-                    'taskEditPage.descriptionPanel.noProjectDescription',
-                    undefined,
-                    'This project has no description.'
+                : t({ id: 'taskEditPage.descriptionPanel.noProjectDescription', defaultMessage: 'This project has no description.' }
                   )}
             </p>
           )}

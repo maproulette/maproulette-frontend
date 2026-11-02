@@ -65,12 +65,12 @@ export const ChallengeComments = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!commentText.trim()) {
-      toast.error(t('common.pleaseEnterAComment', undefined, 'Please enter a comment'))
+      toast.error(t({ id: 'common.pleaseEnterAComment', defaultMessage: 'Please enter a comment' }))
       return
     }
     if (!user) {
       toast.error(
-        t('common.youMustBeLoggedInToComment', undefined, 'You must be logged in to comment')
+        t({ id: 'common.youMustBeLoggedInToComment', defaultMessage: 'You must be logged in to comment' })
       )
       return
     }
@@ -80,10 +80,7 @@ export const ChallengeComments = () => {
         onSuccess: () => {
           setCommentText('')
           toast.success(
-            t(
-              'browsedChallengePage.challengeModals.comments.addSuccess',
-              undefined,
-              'Comment added successfully'
+            t({ id: 'browsedChallengePage.challengeModals.comments.addSuccess', defaultMessage: 'Comment added successfully' }
             )
           )
           setTimeout(() => {
@@ -92,7 +89,7 @@ export const ChallengeComments = () => {
         },
         onError: (error) => {
           logger.error('Error adding comment', { error })
-          toast.error(t('common.failedToAddComment', undefined, 'Failed to add comment'))
+          toast.error(t({ id: 'common.failedToAddComment', defaultMessage: 'Failed to add comment' }))
         },
       }
     )
@@ -120,10 +117,7 @@ export const ChallengeComments = () => {
               className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-slate-600"
             />
             <span>
-              {t(
-                'browsedChallengePage.challengeModals.comments.showTaskComments',
-                undefined,
-                'Show task comments'
+              {t({ id: 'browsedChallengePage.challengeModals.comments.showTaskComments', defaultMessage: 'Show task comments' }
               )}
             </span>
           </label>
@@ -136,10 +130,7 @@ export const ChallengeComments = () => {
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
               <p className="text-sm text-zinc-500 dark:text-slate-400">
-                {t(
-                  'browsedChallengePage.challengeModals.comments.empty',
-                  undefined,
-                  'No comments yet. Be the first to comment!'
+                {t({ id: 'browsedChallengePage.challengeModals.comments.empty', defaultMessage: 'No comments yet. Be the first to comment!' }
                 )}
               </p>
             </div>
@@ -180,10 +171,7 @@ export const ChallengeComments = () => {
                       </a>
                       {isOwner && (
                         <span className="rounded bg-yellow-100 px-2 py-0.5 font-medium text-xs text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
-                          {t(
-                            'browsedChallengePage.challengeModals.comments.owner',
-                            undefined,
-                            'Owner'
+                          {t({ id: 'browsedChallengePage.challengeModals.comments.owner', defaultMessage: 'Owner' }
                           )}
                         </span>
                       )}
@@ -193,10 +181,7 @@ export const ChallengeComments = () => {
                           params={{ taskId: String(comment.taskId) }}
                           className="text-xs text-zinc-500 hover:underline dark:text-slate-400"
                         >
-                          {t(
-                            'browsedChallengePage.challengeModals.comments.reTask',
-                            { taskId: comment.taskId },
-                            'Re: Task {taskId}'
+                          {t({ id: 'browsedChallengePage.challengeModals.comments.reTask', defaultMessage: 'Re: Task {taskId}' }, { taskId: comment.taskId }
                           )}
                         </Link>
                       )}
@@ -242,7 +227,7 @@ export const ChallengeComments = () => {
               ref={textareaRef}
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder={t('common.addAComment', undefined, 'Add a comment...')}
+              placeholder={t({ id: 'common.addAComment', defaultMessage: 'Add a comment...' })}
               rows={3}
               className="flex-1 resize-none whitespace-pre-wrap break-words"
               style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
@@ -255,28 +240,19 @@ export const ChallengeComments = () => {
             >
               <Send className="size-4" />
               {addCommentMutation.isPending
-                ? t(
-                    'browsedChallengePage.challengeModals.comments.sending',
-                    undefined,
-                    'Sending...'
+                ? t({ id: 'browsedChallengePage.challengeModals.comments.sending', defaultMessage: 'Sending...' }
                   )
-                : t('browsedChallengePage.challengeModals.comments.send', undefined, 'Send')}
+                : t({ id: 'browsedChallengePage.challengeModals.comments.send', defaultMessage: 'Send' })}
             </Button>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'browsedChallengePage.challengeModals.comments.characterCount',
-              { count: commentText.length, max: 5000 },
-              '{count}/{max} characters'
+            {t({ id: 'browsedChallengePage.challengeModals.comments.characterCount', defaultMessage: '{count}/{max} characters' }, { count: commentText.length, max: 5000 }
             )}
           </p>
         </form>
       ) : (
         <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-          {t(
-            'browsedChallengePage.challengeModals.comments.signInRequired',
-            undefined,
-            'Please sign in to add comments'
+          {t({ id: 'browsedChallengePage.challengeModals.comments.signInRequired', defaultMessage: 'Please sign in to add comments' }
           )}
         </div>
       )}

@@ -101,11 +101,8 @@ export const ChallengeTeamSection = () => {
 
   return (
     <FormSection
-      title={t('manageChallengeNew.challengeForm.teamTitle', undefined, 'Team')}
-      description={t(
-        'manageChallengeNew.challengeForm.teamDescription',
-        undefined,
-        "An optional team to own this challenge. Everyone who manages that team can edit it, and the team's image becomes the picture on its card."
+      title={t({ id: 'manageChallengeNew.challengeForm.teamTitle', defaultMessage: 'Team' })}
+      description={t({ id: 'manageChallengeNew.challengeForm.teamDescription', defaultMessage: "An optional team to own this challenge. Everyone who manages that team can edit it, and the team's image becomes the picture on its card." }
       )}
     >
       <FormField
@@ -121,20 +118,14 @@ export const ChallengeTeamSection = () => {
               </div>
             ) : isError ? (
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                {t(
-                  'manageChallengeNew.challengeForm.teamLoadError',
-                  undefined,
-                  'Could not load your teams.'
+                {t({ id: 'manageChallengeNew.challengeForm.teamLoadError', defaultMessage: 'Could not load your teams.' }
                 )}
               </p>
             ) : (
               <div className="space-y-3">
                 <ul className={TILE_GRID}>
                   <TeamTile
-                    label={t(
-                      'manageChallengeNew.challengeForm.teamNoneOption',
-                      undefined,
-                      'No team'
+                    label={t({ id: 'manageChallengeNew.challengeForm.teamNoneOption', defaultMessage: 'No team' }
                     )}
                     selected={field.value == null}
                     onSelect={() => field.onChange(null)}
@@ -160,16 +151,13 @@ export const ChallengeTeamSection = () => {
 
                 {options.length === 0 && (
                   <p className="rounded-lg border border-zinc-200 border-dashed p-3 text-sm text-zinc-600 dark:border-slate-700 dark:text-zinc-400">
-                    {t(
-                      'manageChallengeNew.challengeForm.teamNoneAvailable',
-                      undefined,
-                      "You don't manage any teams yet. Only a team's owners, admins and managers can give it a challenge."
+                    {t({ id: 'manageChallengeNew.challengeForm.teamNoneAvailable', defaultMessage: "You don't manage any teams yet. Only a team's owners, admins and managers can give it a challenge." }
                     )}{' '}
                     <Link
                       to="/dashboard"
                       className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
-                      {t('manageChallengeNew.challengeForm.teamGoToTeams', undefined, 'Your teams')}
+                      {t({ id: 'manageChallengeNew.challengeForm.teamGoToTeams', defaultMessage: 'Your teams' })}
                     </Link>
                   </p>
                 )}

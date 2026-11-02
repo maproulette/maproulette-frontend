@@ -16,7 +16,7 @@ export const SortByFilter = () => {
   return (
     <div className="flex items-center gap-2">
       <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
-        {t('exploreChallenges.filterBar.sortBy.label', undefined, 'Sort by')}
+        {t({ id: 'exploreChallenges.filterBar.sortBy.label', defaultMessage: 'Sort by' })}
       </Label>
       <Select
         value={sortBy || 'name'}
@@ -26,19 +26,19 @@ export const SortByFilter = () => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="name">{t('common.name', undefined, 'Name')}</SelectItem>
-          <SelectItem value="created">{t('common.newest', undefined, 'Newest')}</SelectItem>
+          <SelectItem value="name">{t({ id: 'common.name', defaultMessage: 'Name' })}</SelectItem>
+          <SelectItem value="created">{t({ id: 'common.newest', defaultMessage: 'Newest' })}</SelectItem>
           <SelectItem value="modified">
-            {t('exploreChallenges.filterBar.sortBy.oldest', undefined, 'Oldest')}
+            {t({ id: 'exploreChallenges.filterBar.sortBy.oldest', defaultMessage: 'Oldest' })}
           </SelectItem>
-          <SelectItem value="popularity">{t('common.popular', undefined, 'Popular')}</SelectItem>
+          <SelectItem value="popularity">{t({ id: 'common.popular', defaultMessage: 'Popular' })}</SelectItem>
           <SelectItem value="difficulty">
-            {t('common.difficulty', undefined, 'Difficulty')}
+            {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
           </SelectItem>
-          <SelectItem value="featured">{t('common.featured', undefined, 'Featured')}</SelectItem>
-          <SelectItem value="tag_fix">{t('common.tagFix', undefined, 'Tag Fix')}</SelectItem>
+          <SelectItem value="featured">{t({ id: 'common.featured', defaultMessage: 'Featured' })}</SelectItem>
+          <SelectItem value="tag_fix">{t({ id: 'common.tagFix', defaultMessage: 'Tag Fix' })}</SelectItem>
           <SelectItem value="cooperative">
-            {t('common.cooperative', undefined, 'Cooperative')}
+            {t({ id: 'common.cooperative', defaultMessage: 'Cooperative' })}
           </SelectItem>
         </SelectContent>
       </Select>

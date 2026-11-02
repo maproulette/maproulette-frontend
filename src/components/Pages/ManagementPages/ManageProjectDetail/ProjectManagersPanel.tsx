@@ -95,16 +95,13 @@ export const ProjectManagersPanel = () => {
       await setUserRole.mutateAsync({ userId, projectId: id, role: newRole })
       setUserQuery('')
       toast.success(
-        t(
-          'manageProjectDetail.managers.added',
-          { name: displayName },
-          '{name} can now manage this project'
+        t({ id: 'manageProjectDetail.managers.added', defaultMessage: '{name} can now manage this project' }, { name: displayName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant project role', { userId, projectId: id, error })
       toast.error(
-        t('manageProjectDetail.managers.addFailed', undefined, 'Could not add that manager')
+        t({ id: 'manageProjectDetail.managers.addFailed', defaultMessage: 'Could not add that manager' })
       )
     }
   }
@@ -114,16 +111,13 @@ export const ProjectManagersPanel = () => {
       await setTeamRole.mutateAsync({ teamId, projectId: id, role: TEAM_ATTACHMENT_ROLE })
       setTeamQuery('')
       toast.success(
-        t(
-          'manageProjectDetail.managers.teamAdded',
-          { name: teamName },
-          '{name} can now manage this project'
+        t({ id: 'manageProjectDetail.managers.teamAdded', defaultMessage: '{name} can now manage this project' }, { name: teamName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant team project role', { teamId, projectId: id, error })
       toast.error(
-        t('manageProjectDetail.managers.addTeamFailed', undefined, 'Could not add that team')
+        t({ id: 'manageProjectDetail.managers.addTeamFailed', defaultMessage: 'Could not add that team' })
       )
     }
   }
@@ -133,18 +127,18 @@ export const ProjectManagersPanel = () => {
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4 text-zinc-500" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('manageProjectDetail.managers.title', undefined, 'Project managers')}
+          {t({ id: 'manageProjectDetail.managers.title', defaultMessage: 'Project managers' })}
         </h3>
         <DocsLink
           page="projectsAndProjectManagers"
-          label={t('manageProjectDetail.managers.docsLink', undefined, 'About project roles')}
+          label={t({ id: 'manageProjectDetail.managers.docsLink', defaultMessage: 'About project roles' })}
           className="ml-auto text-zinc-400 no-underline hover:text-zinc-600"
         />
       </div>
 
       {isLoading ? (
         <Loader
-          message={t('manageProjectDetail.managers.loading', undefined, 'Loading managers...')}
+          message={t({ id: 'manageProjectDetail.managers.loading', defaultMessage: 'Loading managers...' })}
         />
       ) : (
         <ul className="space-y-2">
@@ -168,10 +162,7 @@ export const ProjectManagersPanel = () => {
                   type="button"
                   className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                   onClick={() => removeUser.mutate({ userId: manager.userId, projectId: id, role })}
-                  aria-label={t(
-                    'manageProjectDetail.managers.remove',
-                    { name: manager.displayName },
-                    'Remove {name}'
+                  aria-label={t({ id: 'manageProjectDetail.managers.remove', defaultMessage: 'Remove {name}' }, { name: manager.displayName }
                   )}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -181,7 +172,7 @@ export const ProjectManagersPanel = () => {
           })}
           {managers?.length === 0 && (
             <li className="text-sm text-zinc-500 dark:text-zinc-400">
-              {t('manageProjectDetail.managers.none', undefined, 'No managers yet.')}
+              {t({ id: 'manageProjectDetail.managers.none', defaultMessage: 'No managers yet.' })}
             </li>
           )}
         </ul>
@@ -189,17 +180,14 @@ export const ProjectManagersPanel = () => {
 
       <div className="space-y-2">
         <Label htmlFor={addManagerId}>
-          {t('manageProjectDetail.managers.addLabel', undefined, 'Add a manager')}
+          {t({ id: 'manageProjectDetail.managers.addLabel', defaultMessage: 'Add a manager' })}
         </Label>
         <div className="flex gap-2">
           <Input
             id={addManagerId}
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
-            placeholder={t(
-              'manageProjectDetail.managers.searchPlaceholder',
-              undefined,
-              'OpenStreetMap username'
+            placeholder={t({ id: 'manageProjectDetail.managers.searchPlaceholder', defaultMessage: 'OpenStreetMap username' }
             )}
           />
           <RoleSelect value={newRole} onChange={setNewRole} />
@@ -220,7 +208,7 @@ export const ProjectManagersPanel = () => {
             ))}
             {userMatches?.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t('manageProjectDetail.managers.noMatches', undefined, 'No matching users')}
+                {t({ id: 'manageProjectDetail.managers.noMatches', defaultMessage: 'No matching users' })}
               </li>
             )}
           </ul>
@@ -229,13 +217,10 @@ export const ProjectManagersPanel = () => {
 
       <Separator />
       <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-        {t('manageProjectDetail.managers.teamsTitle', undefined, 'Teams')}
+        {t({ id: 'manageProjectDetail.managers.teamsTitle', defaultMessage: 'Teams' })}
       </h4>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
-        {t(
-          'manageProjectDetail.managers.teamsDescription',
-          undefined,
-          'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.'
+        {t({ id: 'manageProjectDetail.managers.teamsDescription', defaultMessage: 'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.' }
         )}
       </p>
       <ul className="space-y-2">
@@ -248,10 +233,7 @@ export const ProjectManagersPanel = () => {
                 type="button"
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 onClick={() => removeTeam.mutate({ teamId: team.id, projectId: id })}
-                aria-label={t(
-                  'manageProjectDetail.managers.removeTeam',
-                  { name: team.name },
-                  'Remove {name}'
+                aria-label={t({ id: 'manageProjectDetail.managers.removeTeam', defaultMessage: 'Remove {name}' }, { name: team.name }
                 )}
               >
                 <Trash2 className="h-4 w-4" />
@@ -261,24 +243,21 @@ export const ProjectManagersPanel = () => {
         })}
         {teamManagers?.length === 0 && (
           <li className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t('manageProjectDetail.managers.noTeams', undefined, 'No teams yet.')}
+            {t({ id: 'manageProjectDetail.managers.noTeams', defaultMessage: 'No teams yet.' })}
           </li>
         )}
       </ul>
 
       <div className="space-y-2">
         <Label htmlFor={addTeamId}>
-          {t('manageProjectDetail.managers.addTeamLabel', undefined, 'Add a team')}
+          {t({ id: 'manageProjectDetail.managers.addTeamLabel', defaultMessage: 'Add a team' })}
         </Label>
         <div className="flex gap-2">
           <Input
             id={addTeamId}
             value={teamQuery}
             onChange={(e) => setTeamQuery(e.target.value)}
-            placeholder={t(
-              'manageProjectDetail.managers.teamSearchPlaceholder',
-              undefined,
-              'Team name'
+            placeholder={t({ id: 'manageProjectDetail.managers.teamSearchPlaceholder', defaultMessage: 'Team name' }
             )}
           />
         </div>
@@ -300,7 +279,7 @@ export const ProjectManagersPanel = () => {
               ))}
             {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t('manageProjectDetail.managers.noTeamMatches', undefined, 'No matching teams')}
+                {t({ id: 'manageProjectDetail.managers.noTeamMatches', defaultMessage: 'No matching teams' })}
               </li>
             )}
           </ul>

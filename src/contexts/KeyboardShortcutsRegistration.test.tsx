@@ -15,9 +15,12 @@ import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 const navigateSpy = vi.fn(() => Promise.resolve())
 vi.mock('@tanstack/react-router', () => ({ useNavigate: () => navigateSpy }))
 // Stable t and context value, as the real IntlContext provides (t is a useCallback).
-const t = (_k: string, _v: unknown, d: string) => d
-const intl = { t }
-vi.mock('@/i18n', () => ({ useIntl: () => intl }))
+const intl = vi.hoisted(() => ({ t: undefined as unknown }))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  intl.t = testT
+  return { useIntl: () => intl }
+})
 
 let container: HTMLDivElement
 let root: Root

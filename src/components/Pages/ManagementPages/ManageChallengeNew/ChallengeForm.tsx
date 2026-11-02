@@ -91,24 +91,15 @@ export const ChallengeForm = () => {
       await onSubmit(values)
       toast.success(
         challenge
-          ? t(
-              'manageChallengeNew.challengeForm.updateSuccessToast',
-              undefined,
-              'Challenge updated successfully'
+          ? t({ id: 'manageChallengeNew.challengeForm.updateSuccessToast', defaultMessage: 'Challenge updated successfully' }
             )
-          : t(
-              'manageChallengeNew.challengeForm.createSuccessToast',
-              undefined,
-              'Challenge created successfully'
+          : t({ id: 'manageChallengeNew.challengeForm.createSuccessToast', defaultMessage: 'Challenge created successfully' }
             )
       )
     } catch (error) {
       const errorMessage = await getErrorMessage(
         error,
-        t(
-          'manageChallengeNew.challengeForm.saveErrorToast',
-          undefined,
-          'Failed to save challenge. Please try again.'
+        t({ id: 'manageChallengeNew.challengeForm.saveErrorToast', defaultMessage: 'Failed to save challenge. Please try again.' }
         )
       )
       if (isNameConflict(errorMessage)) {
@@ -146,10 +137,7 @@ export const ChallengeForm = () => {
           )}
 
           <BasicInfoFields
-            namePlaceholder={t(
-              'manageChallengeNew.challengeForm.namePlaceholder',
-              { user: user?.osmProfile.displayName ?? '' },
-              "{user}'s Challenge"
+            namePlaceholder={t({ id: 'manageChallengeNew.challengeForm.namePlaceholder', defaultMessage: "{user}'s Challenge" }, { user: user?.osmProfile.displayName ?? '' }
             )}
           />
 
@@ -173,15 +161,9 @@ export const ChallengeForm = () => {
           <Alert variant="destructive" className="mt-4 shrink-0">
             <AlertTitle>
               {challenge
-                ? t(
-                    'manageChallengeNew.challengeForm.updateErrorTitle',
-                    undefined,
-                    'Challenge could not be updated'
+                ? t({ id: 'manageChallengeNew.challengeForm.updateErrorTitle', defaultMessage: 'Challenge could not be updated' }
                   )
-                : t(
-                    'manageChallengeNew.challengeForm.createErrorTitle',
-                    undefined,
-                    'Challenge could not be created'
+                : t({ id: 'manageChallengeNew.challengeForm.createErrorTitle', defaultMessage: 'Challenge could not be created' }
                   )}
             </AlertTitle>
             <AlertDescription>{serverError}</AlertDescription>
@@ -198,10 +180,7 @@ export const ChallengeForm = () => {
                   className="mr-auto flex items-center gap-1.5 text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400"
                 >
                   <CircleAlert className="h-3.5 w-3.5 shrink-0" />
-                  {t(
-                    'manageChallengeNew.challengeForm.fieldErrorsTitle',
-                    { count: fieldErrors.length },
-                    '{count} fields need attention'
+                  {t({ id: 'manageChallengeNew.challengeForm.fieldErrorsTitle', defaultMessage: '{count} fields need attention' }, { count: fieldErrors.length }
                   )}
                 </button>
               </PopoverTrigger>
@@ -209,10 +188,7 @@ export const ChallengeForm = () => {
                 align="start"
                 side="top"
                 className="w-80 p-2"
-                aria-label={t(
-                  'manageChallengeNew.challengeForm.fieldErrorsAriaLabel',
-                  undefined,
-                  'Fields that need attention'
+                aria-label={t({ id: 'manageChallengeNew.challengeForm.fieldErrorsAriaLabel', defaultMessage: 'Fields that need attention' }
                 )}
               >
                 <ul className="space-y-0.5">
@@ -233,14 +209,14 @@ export const ChallengeForm = () => {
             </Popover>
           )}
           <Button type="button" variant="outline" onClick={onCancel}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {form.formState.isSubmitting
-              ? t('common.saving2', undefined, 'Saving...')
+              ? t({ id: 'common.saving2', defaultMessage: 'Saving...' })
               : challenge
-                ? t('manageChallengeNew.challengeForm.updateButton', undefined, 'Update Challenge')
-                : t('common.createChallenge', undefined, 'Create Challenge')}
+                ? t({ id: 'manageChallengeNew.challengeForm.updateButton', defaultMessage: 'Update Challenge' })
+                : t({ id: 'common.createChallenge', defaultMessage: 'Create Challenge' })}
           </Button>
         </div>
       </form>

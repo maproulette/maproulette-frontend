@@ -39,11 +39,8 @@ export const BasemapFields = () => {
 
   return (
     <FormSection
-      title={t('manageChallengeNew.challengeForm.basemapTitle', undefined, 'Basemap')}
-      description={t(
-        'manageChallengeNew.challengeForm.basemapDescription',
-        undefined,
-        "Force a base layer for this challenge's maps, overriding the mapper's own choice."
+      title={t({ id: 'manageChallengeNew.challengeForm.basemapTitle', defaultMessage: 'Basemap' })}
+      description={t({ id: 'manageChallengeNew.challengeForm.basemapDescription', defaultMessage: "Force a base layer for this challenge's maps, overriding the mapper's own choice." }
       )}
     >
       <FormField
@@ -52,7 +49,7 @@ export const BasemapFields = () => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              {t('manageChallengeNew.challengeForm.basemapLabel', undefined, 'Challenge basemap')}
+              {t({ id: 'manageChallengeNew.challengeForm.basemapLabel', defaultMessage: 'Challenge basemap' })}
             </FormLabel>
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
@@ -63,18 +60,12 @@ export const BasemapFields = () => {
               <SelectContent>
                 {hasUnsupportedBasemap && (
                   <SelectItem value={BASEMAP_CURRENT}>
-                    {t(
-                      'manageChallengeNew.challengeForm.basemapCurrent',
-                      undefined,
-                      'Keep the current basemap'
+                    {t({ id: 'manageChallengeNew.challengeForm.basemapCurrent', defaultMessage: 'Keep the current basemap' }
                     )}
                   </SelectItem>
                 )}
                 <SelectItem value={BASEMAP_NONE}>
-                  {t(
-                    'manageChallengeNew.challengeForm.basemapNone',
-                    undefined,
-                    "Don't override — mappers use their own"
+                  {t({ id: 'manageChallengeNew.challengeForm.basemapNone', defaultMessage: "Don't override — mappers use their own" }
                   )}
                 </SelectItem>
                 {bundledStyleNames().map((name) => (
@@ -83,20 +74,14 @@ export const BasemapFields = () => {
                   </SelectItem>
                 ))}
                 <SelectItem value={BASEMAP_CUSTOM}>
-                  {t(
-                    'manageChallengeNew.challengeForm.basemapCustom',
-                    undefined,
-                    'Custom tile layer…'
+                  {t({ id: 'manageChallengeNew.challengeForm.basemapCustom', defaultMessage: 'Custom tile layer…' }
                   )}
                 </SelectItem>
               </SelectContent>
             </Select>
             <FormDescription>
               <DocsLink page="settingBasemapForChallenge" icon={null}>
-                {t(
-                  'manageChallengeNew.challengeForm.basemapDocsLink',
-                  undefined,
-                  'About challenge basemaps'
+                {t({ id: 'manageChallengeNew.challengeForm.basemapDocsLink', defaultMessage: 'About challenge basemaps' }
                 )}
               </DocsLink>
             </FormDescription>
@@ -112,20 +97,14 @@ export const BasemapFields = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                {t(
-                  'manageChallengeNew.challengeForm.basemapUrlLabel',
-                  undefined,
-                  'Custom basemap URL'
+                {t({ id: 'manageChallengeNew.challengeForm.basemapUrlLabel', defaultMessage: 'Custom basemap URL' }
                 )}
               </FormLabel>
               <FormControl>
                 <Input placeholder="https://some.imagerylayer.com/tile/{z}/{x}/{y}" {...field} />
               </FormControl>
               <FormDescription>
-                {t(
-                  'manageChallengeNew.challengeForm.basemapUrlDescription',
-                  undefined,
-                  'An XYZ tile template. Leave it blank and the challenge falls back to no override.'
+                {t({ id: 'manageChallengeNew.challengeForm.basemapUrlDescription', defaultMessage: 'An XYZ tile template. Leave it blank and the challenge falls back to no override.' }
                 )}
               </FormDescription>
               <FormMessage />

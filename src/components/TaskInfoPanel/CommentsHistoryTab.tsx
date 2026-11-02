@@ -87,7 +87,7 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
   const Icon = STATUS_ICONS[status] ?? HelpCircle
   const pill = STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS
   const label =
-    getStatusLabel(t, status) ?? t('common.statusWithStatus', { status }, 'Status {status}')
+    getStatusLabel(t, status) ?? t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })
   return (
     <span
       className={cn(
@@ -132,12 +132,12 @@ export const CommentsHistoryTab = ({
     e.preventDefault()
     if (readOnly || !resolvedTaskId) return
     if (!commentText.trim()) {
-      toast.error(t('common.pleaseEnterAComment', undefined, 'Please enter a comment'))
+      toast.error(t({ id: 'common.pleaseEnterAComment', defaultMessage: 'Please enter a comment' }))
       return
     }
     if (!user) {
       toast.error(
-        t('common.youMustBeLoggedInToComment', undefined, 'You must be logged in to comment')
+        t({ id: 'common.youMustBeLoggedInToComment', defaultMessage: 'You must be logged in to comment' })
       )
       return
     }
@@ -146,11 +146,11 @@ export const CommentsHistoryTab = ({
       {
         onSuccess: () => {
           setCommentText('')
-          toast.success(t('taskInfoPanel.comments.addSuccess', undefined, 'Comment added'))
+          toast.success(t({ id: 'taskInfoPanel.comments.addSuccess', defaultMessage: 'Comment added' }))
         },
         onError: (error) => {
           logger.error('Error adding comment', { error })
-          toast.error(t('common.failedToAddComment', undefined, 'Failed to add comment'))
+          toast.error(t({ id: 'common.failedToAddComment', defaultMessage: 'Failed to add comment' }))
         },
       }
     )
@@ -163,7 +163,7 @@ export const CommentsHistoryTab = ({
   const renderHistoryItem = (item: TaskHistoryAction, index: number) => {
     const timestamp = new Date(item.timestamp)
     const userName =
-      item.user?.username ?? t('taskInfoPanel.comments.systemUser', undefined, 'System')
+      item.user?.username ?? t({ id: 'taskInfoPanel.comments.systemUser', defaultMessage: 'System' })
 
     if (item.actionType === ACTION_TYPE.UPDATE) {
       return null
@@ -264,20 +264,20 @@ export const CommentsHistoryTab = ({
           ) : item.status !== undefined ? (
             <>
               <span className="text-zinc-500 dark:text-slate-400">
-                {t('taskInfoPanel.comments.markedAs', undefined, 'marked as')}
+                {t({ id: 'taskInfoPanel.comments.markedAs', defaultMessage: 'marked as' })}
               </span>
               <StatusPill status={item.status} />
             </>
           ) : item.oldStatus !== undefined ? (
             <>
               <span className="text-zinc-500 dark:text-slate-400">
-                {t('taskInfoPanel.comments.cleared', undefined, 'cleared')}
+                {t({ id: 'taskInfoPanel.comments.cleared', defaultMessage: 'cleared' })}
               </span>
               <StatusPill status={item.oldStatus} muted />
             </>
           ) : (
             <span className="text-zinc-500 dark:text-slate-400">
-              {t('taskInfoPanel.comments.changedStatus', undefined, 'changed status')}
+              {t({ id: 'taskInfoPanel.comments.changedStatus', defaultMessage: 'changed status' })}
             </span>
           )}
           <span className="ml-auto text-zinc-400 dark:text-slate-500">{formatDate(timestamp)}</span>
@@ -310,11 +310,8 @@ export const CommentsHistoryTab = ({
               <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
               <p className="text-sm text-zinc-500 dark:text-slate-400">
                 {readOnly
-                  ? t('taskInfoPanel.comments.emptyStateReadOnly', undefined, 'No activity yet.')
-                  : t(
-                      'taskInfoPanel.comments.emptyState',
-                      undefined,
-                      'No activity yet. Be the first to comment!'
+                  ? t({ id: 'taskInfoPanel.comments.emptyStateReadOnly', defaultMessage: 'No activity yet.' })
+                  : t({ id: 'taskInfoPanel.comments.emptyState', defaultMessage: 'No activity yet. Be the first to comment!' }
                     )}
               </p>
             </div>
@@ -333,7 +330,7 @@ export const CommentsHistoryTab = ({
               <Textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                placeholder={t('common.addAComment', undefined, 'Add a comment...')}
+                placeholder={t({ id: 'common.addAComment', defaultMessage: 'Add a comment...' })}
                 rows={2}
                 className="flex-1 resize-none border-transparent bg-white text-sm shadow-sm dark:border-transparent dark:bg-slate-800"
                 maxLength={5000}
@@ -350,7 +347,7 @@ export const CommentsHistoryTab = ({
           </form>
         ) : (
           <div className="mt-3 rounded-lg bg-white p-3 text-center text-xs text-zinc-600 shadow-sm dark:bg-slate-800 dark:text-slate-400">
-            {t('taskInfoPanel.comments.signInPrompt', undefined, 'Sign in to add comments')}
+            {t({ id: 'taskInfoPanel.comments.signInPrompt', defaultMessage: 'Sign in to add comments' })}
           </div>
         ))}
     </div>

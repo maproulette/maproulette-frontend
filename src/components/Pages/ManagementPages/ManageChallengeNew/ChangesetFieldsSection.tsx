@@ -22,15 +22,9 @@ export const ChangesetFieldsSection = ({ isEdit }: ChangesetFieldsSectionProps) 
 
   return (
     <FormSection
-      title={t(
-        'manageChallengeNew.challengeForm.changesetSectionTitle',
-        undefined,
-        'OpenStreetMap changeset'
+      title={t({ id: 'manageChallengeNew.challengeForm.changesetSectionTitle', defaultMessage: 'OpenStreetMap changeset' }
       )}
-      description={t(
-        'manageChallengeNew.challengeForm.changesetSectionDescription',
-        undefined,
-        'Pre-filled in the editor when a mapper saves their changes to OpenStreetMap.'
+      description={t({ id: 'manageChallengeNew.challengeForm.changesetSectionDescription', defaultMessage: 'Pre-filled in the editor when a mapper saves their changes to OpenStreetMap.' }
       )}
     >
       <FormField
@@ -39,33 +33,21 @@ export const ChangesetFieldsSection = ({ isEdit }: ChangesetFieldsSectionProps) 
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              {t(
-                'manageChallengeNew.challengeForm.checkinCommentLabel',
-                undefined,
-                'Changeset comment'
+              {t({ id: 'manageChallengeNew.challengeForm.checkinCommentLabel', defaultMessage: 'Changeset comment' }
               )}
             </FormLabel>
             <FormControl>
               <Input
-                placeholder={t(
-                  'manageChallengeNew.challengeForm.checkinCommentPlaceholder',
-                  undefined,
-                  'Fixed disconnected highways'
+                placeholder={t({ id: 'manageChallengeNew.challengeForm.checkinCommentPlaceholder', defaultMessage: 'Fixed disconnected highways' }
                 )}
                 {...field}
               />
             </FormControl>
             <FormDescription>
               {isEdit
-                ? t(
-                    'manageChallengeNew.challengeForm.checkinCommentEditDescription',
-                    undefined,
-                    'Describes the changes mappers make. A link back to the task is added automatically.'
+                ? t({ id: 'manageChallengeNew.challengeForm.checkinCommentEditDescription', defaultMessage: 'Describes the changes mappers make. A link back to the task is added automatically.' }
                   )
-                : t(
-                    'manageChallengeNew.challengeForm.checkinCommentCreateDescription',
-                    undefined,
-                    'Describes the changes mappers make. The #maproulette hashtag is appended if missing, and a link back to the task is added automatically.'
+                : t({ id: 'manageChallengeNew.challengeForm.checkinCommentCreateDescription', defaultMessage: 'Describes the changes mappers make. The #maproulette hashtag is appended if missing, and a link back to the task is added automatically.' }
                   )}
             </FormDescription>
             <FormMessage />
@@ -79,27 +61,18 @@ export const ChangesetFieldsSection = ({ isEdit }: ChangesetFieldsSectionProps) 
         render={({ field }) => (
           <FormItem>
             <FormLabel>
-              {t(
-                'manageChallengeNew.challengeForm.checkinSourceLabel',
-                undefined,
-                'Changeset source'
+              {t({ id: 'manageChallengeNew.challengeForm.checkinSourceLabel', defaultMessage: 'Changeset source' }
               )}
             </FormLabel>
             <FormControl>
               <Input
-                placeholder={t(
-                  'manageChallengeNew.challengeForm.checkinSourcePlaceholder',
-                  undefined,
-                  'Bing; survey'
+                placeholder={t({ id: 'manageChallengeNew.challengeForm.checkinSourcePlaceholder', defaultMessage: 'Bing; survey' }
                 )}
                 {...field}
               />
             </FormControl>
             <FormDescription>
-              {t(
-                'manageChallengeNew.challengeForm.checkinSourceDescription',
-                undefined,
-                'The imagery or data mappers are expected to use, separated by semicolons.'
+              {t({ id: 'manageChallengeNew.challengeForm.checkinSourceDescription', defaultMessage: 'The imagery or data mappers are expected to use, separated by semicolons.' }
               )}
             </FormDescription>
             <FormMessage />

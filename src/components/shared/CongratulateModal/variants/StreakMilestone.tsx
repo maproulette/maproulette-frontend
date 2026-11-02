@@ -12,13 +12,10 @@ export const StreakMilestoneContent = ({ count }: Props) => {
       <Flame className="size-14 text-orange-500" aria-hidden="true" />
       <div>
         <h2 className="font-bold text-xl">
-          {t('congratulateModal.streak.title', undefined, 'Hot streak!')}
+          {t({ id: 'congratulateModal.streak.title', defaultMessage: 'Hot streak!' })}
         </h2>
         <p className="text-zinc-600 dark:text-slate-400">
-          {t(
-            'congratulateModal.streak.description',
-            { count },
-            '{count} tasks in a row — keep it going.'
+          {t({ id: 'congratulateModal.streak.description', defaultMessage: '{count} tasks in a row — keep it going.' }, { count }
           )}
         </p>
       </div>

@@ -35,23 +35,20 @@ const NotFoundError = () => {
   const { t } = useIntl()
   return (
     <ErrorLayout
-      title={t('errorBoundary.notFound.title', undefined, '404 - Not Found')}
-      description={t(
-        'errorBoundary.notFound.description',
-        undefined,
-        "The page or resource you're looking for doesn't exist."
+      title={t({ id: 'errorBoundary.notFound.title', defaultMessage: '404 - Not Found' })}
+      description={t({ id: 'errorBoundary.notFound.description', defaultMessage: "The page or resource you're looking for doesn't exist." }
       )}
       icon={<AlertCircle className="h-16 w-16 text-yellow-500" />}
       actions={
         <>
           <Button onClick={() => window.history.back()} variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            {t('errorBoundary.actions.goBack', undefined, 'Go Back')}
+            {t({ id: 'errorBoundary.actions.goBack', defaultMessage: 'Go Back' })}
           </Button>
           <Button asChild>
             <Link to="/">
               <Home className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+              {t({ id: 'errorBoundary.actions.goHome', defaultMessage: 'Go Home' })}
             </Link>
           </Button>
         </>
@@ -64,23 +61,20 @@ const ForbiddenError = () => {
   const { t } = useIntl()
   return (
     <ErrorLayout
-      title={t('errorBoundary.forbidden.title', undefined, '403 - Forbidden')}
-      description={t(
-        'errorBoundary.forbidden.description',
-        undefined,
-        "You don't have permission to access this resource."
+      title={t({ id: 'errorBoundary.forbidden.title', defaultMessage: '403 - Forbidden' })}
+      description={t({ id: 'errorBoundary.forbidden.description', defaultMessage: "You don't have permission to access this resource." }
       )}
       icon={<AlertCircle className="h-16 w-16 text-orange-500" />}
       actions={
         <>
           <Button onClick={() => window.history.back()} variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            {t('errorBoundary.actions.goBack', undefined, 'Go Back')}
+            {t({ id: 'errorBoundary.actions.goBack', defaultMessage: 'Go Back' })}
           </Button>
           <Button asChild>
             <Link to="/">
               <Home className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+              {t({ id: 'errorBoundary.actions.goHome', defaultMessage: 'Go Home' })}
             </Link>
           </Button>
         </>
@@ -93,18 +87,15 @@ const UnauthorizedError = () => {
   const { t } = useIntl()
   return (
     <ErrorLayout
-      title={t('errorBoundary.unauthorized.title', undefined, '401 - Unauthorized')}
-      description={t(
-        'errorBoundary.unauthorized.description',
-        undefined,
-        'You need to be logged in to access this resource.'
+      title={t({ id: 'errorBoundary.unauthorized.title', defaultMessage: '401 - Unauthorized' })}
+      description={t({ id: 'errorBoundary.unauthorized.description', defaultMessage: 'You need to be logged in to access this resource.' }
       )}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       actions={
         <Button asChild>
           <Link to="/">
             <Home className="mr-2 h-4 w-4" />
-            {t('errorBoundary.actions.goToLogin', undefined, 'Go to Login')}
+            {t({ id: 'errorBoundary.actions.goToLogin', defaultMessage: 'Go to Login' })}
           </Link>
         </Button>
       }
@@ -116,11 +107,8 @@ const ServerError = ({ error, reset }: { error: HTTPError; reset?: () => void })
   const { t } = useIntl()
   return (
     <ErrorLayout
-      title={t('errorBoundary.serverError.title', undefined, 'Server Error')}
-      description={t(
-        'errorBoundary.serverError.description',
-        undefined,
-        'The server encountered an error. Please try again later.'
+      title={t({ id: 'errorBoundary.serverError.title', defaultMessage: 'Server Error' })}
+      description={t({ id: 'errorBoundary.serverError.description', defaultMessage: 'The server encountered an error. Please try again later.' }
       )}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       details={
@@ -135,13 +123,13 @@ const ServerError = ({ error, reset }: { error: HTTPError; reset?: () => void })
           {reset && (
             <Button onClick={reset} variant="outline">
               <RefreshCw className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
+              {t({ id: 'errorBoundary.actions.tryAgain', defaultMessage: 'Try Again' })}
             </Button>
           )}
           <Button asChild>
             <Link to="/">
               <Home className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+              {t({ id: 'errorBoundary.actions.goHome', defaultMessage: 'Go Home' })}
             </Link>
           </Button>
         </>
@@ -154,15 +142,9 @@ const GenericHttpError = ({ error, reset }: { error: HTTPError; reset?: () => vo
   const { t } = useIntl()
   return (
     <ErrorLayout
-      title={t(
-        'errorBoundary.genericHttp.title',
-        { status: error.response.status },
-        'Error {status}'
+      title={t({ id: 'errorBoundary.genericHttp.title', defaultMessage: 'Error {status}' }, { status: error.response.status }
       )}
-      description={t(
-        'errorBoundary.genericHttp.description',
-        undefined,
-        'An unexpected error occurred while loading this page.'
+      description={t({ id: 'errorBoundary.genericHttp.description', defaultMessage: 'An unexpected error occurred while loading this page.' }
       )}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       details={
@@ -177,13 +159,13 @@ const GenericHttpError = ({ error, reset }: { error: HTTPError; reset?: () => vo
           {reset && (
             <Button onClick={reset} variant="outline">
               <RefreshCw className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
+              {t({ id: 'errorBoundary.actions.tryAgain', defaultMessage: 'Try Again' })}
             </Button>
           )}
           <Button asChild>
             <Link to="/">
               <Home className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+              {t({ id: 'errorBoundary.actions.goHome', defaultMessage: 'Go Home' })}
             </Link>
           </Button>
         </>
@@ -196,11 +178,8 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
   const { t } = useIntl()
   return (
     <ErrorLayout
-      title={t('common.error', undefined, 'Something went wrong')}
-      description={t(
-        'common.unexpectedErrorTryAgain',
-        undefined,
-        'An unexpected error occurred. Please try again.'
+      title={t({ id: 'common.error', defaultMessage: 'Something went wrong' })}
+      description={t({ id: 'common.unexpectedErrorTryAgain', defaultMessage: 'An unexpected error occurred. Please try again.' }
       )}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       details={
@@ -217,13 +196,13 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
           {reset && (
             <Button onClick={reset} variant="outline">
               <RefreshCw className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.tryAgain', undefined, 'Try Again')}
+              {t({ id: 'errorBoundary.actions.tryAgain', defaultMessage: 'Try Again' })}
             </Button>
           )}
           <Button asChild>
             <Link to="/">
               <Home className="mr-2 h-4 w-4" />
-              {t('errorBoundary.actions.goHome', undefined, 'Go Home')}
+              {t({ id: 'errorBoundary.actions.goHome', defaultMessage: 'Go Home' })}
             </Link>
           </Button>
         </>

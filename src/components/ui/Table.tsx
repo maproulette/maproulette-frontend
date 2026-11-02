@@ -68,7 +68,7 @@ export const TableHead = ({ className, children, ref, ...props }: React.Componen
       <div className="overflow-hidden text-ellipsis whitespace-nowrap">{children}</div>
       <button
         type="button"
-        aria-label={t('ui.table.resizeColumn', undefined, 'Resize column')}
+        aria-label={t({ id: 'ui.table.resizeColumn', defaultMessage: 'Resize column' })}
         onMouseDown={handleResizeMouseDown}
         className="absolute top-0 right-0 z-20 h-full w-1 cursor-col-resize select-none border-0 bg-transparent p-0 hover:bg-blue-500"
       />

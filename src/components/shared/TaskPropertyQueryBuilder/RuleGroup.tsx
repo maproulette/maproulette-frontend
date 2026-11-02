@@ -50,10 +50,10 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
           onValueChange={(v) => v && onChange({ ...group, condition: v as 'and' | 'or' })}
         >
           <ToggleGroupItem value="and">
-            {t('taskPropertyQueryBuilder.ruleGroup.and', undefined, 'AND')}
+            {t({ id: 'taskPropertyQueryBuilder.ruleGroup.and', defaultMessage: 'AND' })}
           </ToggleGroupItem>
           <ToggleGroupItem value="or">
-            {t('taskPropertyQueryBuilder.ruleGroup.or', undefined, 'OR')}
+            {t({ id: 'taskPropertyQueryBuilder.ruleGroup.or', defaultMessage: 'OR' })}
           </ToggleGroupItem>
         </ToggleGroup>
         {onRemove && (
@@ -62,10 +62,7 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
             variant="ghost"
             size="icon"
             onClick={onRemove}
-            aria-label={t(
-              'taskPropertyQueryBuilder.ruleGroup.removeGroup',
-              undefined,
-              'Remove group'
+            aria-label={t({ id: 'taskPropertyQueryBuilder.ruleGroup.removeGroup', defaultMessage: 'Remove group' }
             )}
           >
             <X className="size-4" aria-hidden="true" />
@@ -96,11 +93,11 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
       <div className="flex gap-2">
         <Button type="button" variant="outline" size="sm" onClick={addRule}>
           <Plus className="size-3" aria-hidden="true" />{' '}
-          {t('taskPropertyQueryBuilder.ruleGroup.addRule', undefined, 'Rule')}
+          {t({ id: 'taskPropertyQueryBuilder.ruleGroup.addRule', defaultMessage: 'Rule' })}
         </Button>
         <Button type="button" variant="outline" size="sm" onClick={addGroup}>
           <Plus className="size-3" aria-hidden="true" />{' '}
-          {t('taskPropertyQueryBuilder.ruleGroup.addGroup', undefined, 'Group')}
+          {t({ id: 'taskPropertyQueryBuilder.ruleGroup.addGroup', defaultMessage: 'Group' })}
         </Button>
       </div>
     </div>

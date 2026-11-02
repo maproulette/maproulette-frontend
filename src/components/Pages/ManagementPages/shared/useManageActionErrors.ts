@@ -15,27 +15,24 @@ export const useManageActionErrors = () => {
     return {
       challengeDelete: report(
         'Failed to delete challenge',
-        t('managementPages.actionErrors.challengeDelete', undefined, 'Unable to delete challenge.')
+        t({ id: 'managementPages.actionErrors.challengeDelete', defaultMessage: 'Unable to delete challenge.' })
       ),
       challengeArchive: report(
         'Failed to update challenge archive status',
-        t(
-          'managementPages.actionErrors.challengeArchive',
-          undefined,
-          'Unable to update archive status'
+        t({ id: 'managementPages.actionErrors.challengeArchive', defaultMessage: 'Unable to update archive status' }
         )
       ),
       challengeSave: report(
         'Failed to update challenge',
-        t('managementPages.actionErrors.challengeSave', undefined, 'Unable to save your changes.')
+        t({ id: 'managementPages.actionErrors.challengeSave', defaultMessage: 'Unable to save your changes.' })
       ),
       projectSave: report(
         'Failed to update project',
-        t('managementPages.actionErrors.projectSave', undefined, 'Unable to save your changes')
+        t({ id: 'managementPages.actionErrors.projectSave', defaultMessage: 'Unable to save your changes' })
       ),
       projectDelete: report(
         'Failed to delete project',
-        t('managementPages.actionErrors.projectDelete', undefined, 'Unable to delete project.')
+        t({ id: 'managementPages.actionErrors.projectDelete', defaultMessage: 'Unable to delete project.' })
       ),
     }
   }, [t])

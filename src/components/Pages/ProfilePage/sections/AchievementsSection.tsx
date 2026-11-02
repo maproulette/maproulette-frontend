@@ -31,13 +31,10 @@ export const AchievementsSection = ({ earnedIds }: Props) => {
     <section aria-labelledby={headingId} className="space-y-4">
       <div className="flex items-baseline justify-between gap-3">
         <h2 id={headingId} className="font-semibold text-lg text-zinc-900 dark:text-slate-100">
-          {t('profilePage.achievements.title', undefined, 'Achievements')}
+          {t({ id: 'profilePage.achievements.title', defaultMessage: 'Achievements' })}
         </h2>
         <span className="text-sm text-zinc-500 dark:text-slate-400">
-          {t(
-            'profilePage.achievements.earnedCount',
-            { earned: earnedCount, total: totalCount },
-            '{earned} of {total} earned'
+          {t({ id: 'profilePage.achievements.earnedCount', defaultMessage: '{earned} of {total} earned' }, { earned: earnedCount, total: totalCount }
           )}
         </span>
       </div>

@@ -76,20 +76,14 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
             refetch()
             const count = notificationIds.length
             toast.success(
-              t(
-                'notifications.toast.actionSuccess',
-                { count, action },
-                '{count, plural, one {# notification {action}} other {# notifications {action}}}'
+              t({ id: 'notifications.toast.actionSuccess', defaultMessage: '{count, plural, one {# notification {action}} other {# notifications {action}}}' }, { count, action }
               )
             )
             setLoadingId?.(null)
           },
           onError: (error: Error) => {
             toast.error(
-              t(
-                'notifications.toast.actionError',
-                { verb: action.replace(/ed$/, '').replace(/d$/, ''), message: error.message },
-                'Failed to {verb} notification: {message}'
+              t({ id: 'notifications.toast.actionError', defaultMessage: 'Failed to {verb} notification: {message}' }, { verb: action.replace(/ed$/, '').replace(/d$/, ''), message: error.message }
               )
             )
             setLoadingId?.(null)
@@ -106,7 +100,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       executeMutation(
         markAsReadMutation,
         ids,
-        t('notifications.actions.markedAsRead', undefined, 'marked as read'),
+        t({ id: 'notifications.actions.markedAsRead', defaultMessage: 'marked as read' }),
         setMarkingReadId,
         notificationId
       )
@@ -120,7 +114,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       executeMutation(
         markAsUnreadMutation,
         ids,
-        t('notifications.actions.markedAsUnread', undefined, 'marked as unread'),
+        t({ id: 'notifications.actions.markedAsUnread', defaultMessage: 'marked as unread' }),
         setMarkingUnreadId,
         notificationId
       )
@@ -134,7 +128,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       executeMutation(
         deleteNotificationMutation,
         ids,
-        t('common.deleted2', undefined, 'deleted'),
+        t({ id: 'common.deleted2', defaultMessage: 'deleted' }),
         setDeletingId,
         notificationId
       )
@@ -147,7 +141,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       executeMutation(
         markAsReadMutation,
         notificationIds,
-        t('notifications.actions.markedAsRead', undefined, 'marked as read')
+        t({ id: 'notifications.actions.markedAsRead', defaultMessage: 'marked as read' })
       )
     },
     [executeMutation, markAsReadMutation, t]
@@ -158,7 +152,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
       executeMutation(
         markAsUnreadMutation,
         notificationIds,
-        t('notifications.actions.markedAsUnread', undefined, 'marked as unread')
+        t({ id: 'notifications.actions.markedAsUnread', defaultMessage: 'marked as unread' })
       )
     },
     [executeMutation, markAsUnreadMutation, t]

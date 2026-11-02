@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import type { TranslateFn } from '@/i18n'
 import {
   isUploadedTeamAvatarUrl,
   resolveTeamImageUrl,
@@ -8,9 +7,9 @@ import {
   TEAM_IMAGE_MIME_TYPES,
   teamImageFileProblem,
 } from './teamImage'
+import { testT } from '@/test/translate'
 
-const t: TranslateFn = (id, values, defaultMessage) =>
-  (defaultMessage ?? id).replace(/\{(\w+)\}/g, (_match, key: string) => String(values?.[key]))
+const t = testT
 
 type MutableEnv = { VITE_API_BASE_URL?: string }
 const env = window.env as MutableEnv

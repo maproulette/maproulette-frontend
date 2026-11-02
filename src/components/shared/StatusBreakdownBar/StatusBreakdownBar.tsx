@@ -16,7 +16,7 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
     return (
       <div
         role="img"
-        aria-label={t('statusBreakdownBar.bar.noTasks', undefined, 'No tasks yet')}
+        aria-label={t({ id: 'statusBreakdownBar.bar.noTasks', defaultMessage: 'No tasks yet' })}
         className="w-full rounded-full bg-zinc-200 dark:bg-slate-700"
         style={{ height }}
       />
@@ -31,7 +31,7 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
       aria-valuenow={completed}
       aria-valuemin={0}
       aria-valuemax={total}
-      aria-label={t('statusBreakdownBar.bar.label', undefined, 'Status breakdown')}
+      aria-label={t({ id: 'statusBreakdownBar.bar.label', defaultMessage: 'Status breakdown' })}
     >
       {segments.map((segment) => (
         <Tooltip key={segment.key}>

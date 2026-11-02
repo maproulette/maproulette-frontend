@@ -33,17 +33,11 @@ export const FindById = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t(
-              'appLayout.header.globalSearch.findById.enterNumericId',
-              undefined,
-              'Enter a numeric ID'
+            {t({ id: 'appLayout.header.globalSearch.findById.enterNumericId', defaultMessage: 'Enter a numeric ID' }
             )}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findById.typeIdHint',
-              undefined,
-              'Type a project, challenge, or task ID number'
+            {t({ id: 'appLayout.header.globalSearch.findById.typeIdHint', defaultMessage: 'Type a project, challenge, or task ID number' }
             )}
           </p>
         </div>
@@ -59,13 +53,10 @@ export const FindById = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t('common.findByMaprouletteId', undefined, 'Find by MapRoulette ID')}
+            {t({ id: 'common.findByMaprouletteId', defaultMessage: 'Find by MapRoulette ID' })}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findById.hint',
-              undefined,
-              'Enter a numeric ID to find a project, challenge, or task'
+            {t({ id: 'appLayout.header.globalSearch.findById.hint', defaultMessage: 'Enter a numeric ID to find a project, challenge, or task' }
             )}
           </p>
         </div>
@@ -85,11 +76,11 @@ export const FindById = () => {
   if (data?.project) {
     results.push({
       type: 'project',
-      label: t('common.project', undefined, 'Project'),
+      label: t({ id: 'common.project', defaultMessage: 'Project' }),
       name:
         data.project.displayName ||
         data.project.name ||
-        t('common.projectWithId', { id: debouncedId }, 'Project #{id}'),
+        t({ id: 'common.projectWithId', defaultMessage: 'Project #{id}' }, { id: debouncedId }),
       href: '/project/$projectId',
       params: { projectId: String(debouncedId) },
       icon: FolderOpen,
@@ -99,9 +90,9 @@ export const FindById = () => {
   if (data?.challenge) {
     results.push({
       type: 'challenge',
-      label: t('common.challenge', undefined, 'Challenge'),
+      label: t({ id: 'common.challenge', defaultMessage: 'Challenge' }),
       name:
-        data.challenge.name || t('common.challengeWithId', { id: debouncedId }, 'Challenge #{id}'),
+        data.challenge.name || t({ id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' }, { id: debouncedId }),
       href: '/challenge/$challengeId',
       params: { challengeId: String(debouncedId) },
       icon: Target,
@@ -111,8 +102,8 @@ export const FindById = () => {
   if (data?.task) {
     results.push({
       type: 'task',
-      label: t('common.task', undefined, 'Task'),
-      name: data.task.name || t('common.taskWithId', { id: debouncedId }, 'Task #{id}'),
+      label: t({ id: 'common.task', defaultMessage: 'Task' }),
+      name: data.task.name || t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: debouncedId }),
       href: '/tasks/$taskId',
       params: {
         taskId: String(debouncedId),
@@ -128,7 +119,7 @@ export const FindById = () => {
         <div className="-mx-3 -mt-3 sticky top-0 z-10 flex items-center justify-center gap-2 bg-white/90 py-2 backdrop-blur-sm dark:bg-slate-950/90">
           <Spinner className="text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t('common.updatingResults', undefined, 'Updating results...')}
+            {t({ id: 'common.updatingResults', defaultMessage: 'Updating results...' })}
           </p>
         </div>
       )}
@@ -137,10 +128,7 @@ export const FindById = () => {
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner size="lg" className="text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findById.lookingUpId',
-              { id: numericId },
-              'Looking up ID {id}...'
+            {t({ id: 'appLayout.header.globalSearch.findById.lookingUpId', defaultMessage: 'Looking up ID {id}...' }, { id: numericId }
             )}
           </p>
         </div>
@@ -151,17 +139,11 @@ export const FindById = () => {
           </div>
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
-              {t(
-                'appLayout.header.globalSearch.findById.noResults',
-                { id: debouncedId },
-                'No results for ID {id}'
+              {t({ id: 'appLayout.header.globalSearch.findById.noResults', defaultMessage: 'No results for ID {id}' }, { id: debouncedId }
               )}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-400">
-              {t(
-                'appLayout.header.globalSearch.findById.noResultsHint',
-                undefined,
-                'No project, challenge, or task found with this ID'
+              {t({ id: 'appLayout.header.globalSearch.findById.noResultsHint', defaultMessage: 'No project, challenge, or task found with this ID' }
               )}
             </p>
           </div>
@@ -170,17 +152,11 @@ export const FindById = () => {
         <>
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-              {t(
-                'appLayout.header.globalSearch.findById.resultsForId',
-                { id: debouncedId },
-                'Results for ID {id}'
+              {t({ id: 'appLayout.header.globalSearch.findById.resultsForId', defaultMessage: 'Results for ID {id}' }, { id: debouncedId }
               )}
             </h3>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t(
-                'appLayout.header.globalSearch.findById.matchCount',
-                { count: results.length },
-                '{count, plural, one {# match} other {# matches}}'
+              {t({ id: 'appLayout.header.globalSearch.findById.matchCount', defaultMessage: '{count, plural, one {# match} other {# matches}}' }, { count: results.length }
               )}
             </span>
           </div>

@@ -45,23 +45,23 @@ export const ProjectChallengesPanel = () => {
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder={t('common.searchChallenges', undefined, 'Search challenges…')}
+            placeholder={t({ id: 'common.searchChallenges', defaultMessage: 'Search challenges…' })}
             className="w-full sm:max-w-xs"
           />
           <FilterToggle
-            label={t('common.discoverable', undefined, 'Discoverable')}
+            label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
             icon={Eye}
             checked={onlyDiscoverable}
             onCheckedChange={setOnlyDiscoverable}
           />
           <FilterToggle
-            label={t('common.archived', undefined, 'Archived')}
+            label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
             icon={Archive}
             checked={onlyArchived}
             onCheckedChange={setOnlyArchived}
           />
           <FilterToggle
-            label={t('common.pinned', undefined, 'Pinned')}
+            label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
             icon={Pin}
             checked={onlyPinned}
             onCheckedChange={setOnlyPinned}
@@ -101,16 +101,10 @@ export const ProjectChallengesPanel = () => {
               getItemKey={() => ''}
               emptyState={{
                 icon: ListChecks,
-                title: t('common.noChallengesFound', undefined, 'No challenges found'),
-                description: t(
-                  'manageProjectDetail.content.emptyDescription',
-                  undefined,
-                  'Get started by creating your first challenge'
+                title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
+                description: t({ id: 'manageProjectDetail.content.emptyDescription', defaultMessage: 'Get started by creating your first challenge' }
                 ),
-                actionLabel: t(
-                  'manageProjectDetail.content.createChallenge',
-                  undefined,
-                  'Create Challenge'
+                actionLabel: t({ id: 'manageProjectDetail.content.createChallenge', defaultMessage: 'Create Challenge' }
                 ),
                 actionTo: '/manage/challenge/new',
                 actionSearch: { projectId: Number(projectId) },
@@ -155,16 +149,10 @@ export const ProjectChallengesPanel = () => {
               getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
               emptyState={{
                 icon: ListChecks,
-                title: t('common.noChallengesFound', undefined, 'No challenges found'),
-                description: t(
-                  'manageProjectDetail.content.emptyDescription',
-                  undefined,
-                  'Get started by creating your first challenge'
+                title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
+                description: t({ id: 'manageProjectDetail.content.emptyDescription', defaultMessage: 'Get started by creating your first challenge' }
                 ),
-                actionLabel: t(
-                  'manageProjectDetail.content.createChallenge',
-                  undefined,
-                  'Create Challenge'
+                actionLabel: t({ id: 'manageProjectDetail.content.createChallenge', defaultMessage: 'Create Challenge' }
                 ),
                 actionTo: '/manage/challenge/new',
                 actionSearch: { projectId: Number(projectId) },

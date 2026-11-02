@@ -24,7 +24,7 @@ export const ClearManageFiltersButton = ({
       disabled={!hasActiveFilters}
     >
       <X className="h-3 w-3" />
-      {t('shared.clearManageFiltersButton.label', undefined, 'CLEAR FILTERS')}
+      {t({ id: 'shared.clearManageFiltersButton.label', defaultMessage: 'CLEAR FILTERS' })}
     </Button>
   )
 }

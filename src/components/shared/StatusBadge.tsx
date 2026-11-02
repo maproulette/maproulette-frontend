@@ -22,8 +22,8 @@ export const StatusBadge = ({ enabled, className }: StatusBadgeProps) => {
       variant={enabled ? 'default' : 'secondary'}
       title={
         enabled
-          ? t('common.discoverable', undefined, 'Discoverable')
-          : t('shared.statusBadge.notDiscoverable', undefined, 'Not discoverable')
+          ? t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })
+          : t({ id: 'shared.statusBadge.notDiscoverable', defaultMessage: 'Not discoverable' })
       }
     >
       {enabled ? (

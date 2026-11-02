@@ -11,10 +11,7 @@ export const useConfirmDiscardIdEdits = () => {
 
   return useCallback(() => {
     if (unsavedCountRef.current === 0) return true
-    const message = t(
-      'taskEditPage.taskStatusModal.discardUnsavedChanges',
-      undefined,
-      'You have unsaved changes in iD which will be discarded. Are you sure you want to proceed?'
+    const message = t({ id: 'taskEditPage.taskStatusModal.discardUnsavedChanges', defaultMessage: 'You have unsaved changes in iD which will be discarded. Are you sure you want to proceed?' }
     )
     if (!window.confirm(message)) return false
     discardIdEditsRef?.current?.()

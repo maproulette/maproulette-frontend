@@ -15,32 +15,23 @@ export const ChallengeCompletedContent = ({ challengeName, onDismiss }: Props) =
       <Flag className="size-14 text-emerald-500" aria-hidden="true" />
       <div>
         <h2 className="font-bold text-xl">
-          {t(
-            'congratulateModal.challengeCompleted.title',
-            { challengeName },
-            'You finished {challengeName}!'
+          {t({ id: 'congratulateModal.challengeCompleted.title', defaultMessage: 'You finished {challengeName}!' }, { challengeName }
           )}
         </h2>
         <p className="text-zinc-600 dark:text-slate-400">
-          {t(
-            'congratulateModal.challengeCompleted.description',
-            undefined,
-            'There are no more open tasks in this challenge.'
+          {t({ id: 'congratulateModal.challengeCompleted.description', defaultMessage: 'There are no more open tasks in this challenge.' }
           )}
         </p>
       </div>
       <div className="flex gap-2">
         <Button variant="outline" asChild onClick={onDismiss}>
           <Link to="/profile">
-            {t('congratulateModal.challengeCompleted.reviewStats', undefined, 'Review your stats')}
+            {t({ id: 'congratulateModal.challengeCompleted.reviewStats', defaultMessage: 'Review your stats' })}
           </Link>
         </Button>
         <Button asChild onClick={onDismiss}>
           <Link to="/">
-            {t(
-              'congratulateModal.challengeCompleted.findAnother',
-              undefined,
-              'Find another challenge'
+            {t({ id: 'congratulateModal.challengeCompleted.findAnother', defaultMessage: 'Find another challenge' }
             )}
           </Link>
         </Button>

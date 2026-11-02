@@ -29,15 +29,12 @@ export const ProjectPickerField = ({
 
   return (
     <FormItem>
-      <FormLabel>{t('common.project', undefined, 'Project')}</FormLabel>
+      <FormLabel>{t({ id: 'common.project', defaultMessage: 'Project' })}</FormLabel>
       <FormControl>
         <ProjectPickerButton projectId={value} onClick={() => onOpenChange(true)} />
       </FormControl>
       <FormDescription>
-        {t(
-          'manageChallengeNew.challengeForm.projectPicker.description',
-          undefined,
-          'Select the project this challenge belongs to'
+        {t({ id: 'manageChallengeNew.challengeForm.projectPicker.description', defaultMessage: 'Select the project this challenge belongs to' }
         )}
       </FormDescription>
       <FormMessage />

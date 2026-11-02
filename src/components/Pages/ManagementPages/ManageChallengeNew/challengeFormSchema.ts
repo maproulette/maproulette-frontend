@@ -13,15 +13,12 @@ const makeBaseChallengeFormSchema = (t: T) =>
   z.object({
     projectId: z
       .number()
-      .min(1, t('common.pleaseSelectAProject', undefined, 'Please select a project')),
+      .min(1, t({ id: 'common.pleaseSelectAProject', defaultMessage: 'Please select a project' })),
     name: z
       .string()
       .min(
         3,
-        t(
-          'manageChallengeNew.challengeForm.validation.nameMinLength',
-          undefined,
-          'Challenge name must be at least 3 characters'
+        t({ id: 'manageChallengeNew.challengeForm.validation.nameMinLength', defaultMessage: 'Challenge name must be at least 3 characters' }
         )
       )
       .max(255),
@@ -29,20 +26,14 @@ const makeBaseChallengeFormSchema = (t: T) =>
       .string()
       .min(
         1,
-        t(
-          'manageChallengeNew.challengeForm.validation.descriptionRequired',
-          undefined,
-          'Description is required'
+        t({ id: 'manageChallengeNew.challengeForm.validation.descriptionRequired', defaultMessage: 'Description is required' }
         )
       ),
     instruction: z
       .string()
       .min(
         1,
-        t(
-          'manageChallengeNew.challengeForm.validation.instructionRequired',
-          undefined,
-          'Instructions are required'
+        t({ id: 'manageChallengeNew.challengeForm.validation.instructionRequired', defaultMessage: 'Instructions are required' }
         )
       ),
     difficulty: z.number().min(1).max(3),
@@ -53,10 +44,7 @@ const makeBaseChallengeFormSchema = (t: T) =>
       .trim()
       .min(
         1,
-        t(
-          'manageChallengeNew.challengeForm.validation.checkinCommentRequired',
-          undefined,
-          'A changeset comment is required'
+        t({ id: 'manageChallengeNew.challengeForm.validation.checkinCommentRequired', defaultMessage: 'A changeset comment is required' }
         )
       ),
     checkinSource: z
@@ -64,10 +52,7 @@ const makeBaseChallengeFormSchema = (t: T) =>
       .trim()
       .min(
         1,
-        t(
-          'manageChallengeNew.challengeForm.validation.checkinSourceRequired',
-          undefined,
-          'A changeset source is required'
+        t({ id: 'manageChallengeNew.challengeForm.validation.checkinSourceRequired', defaultMessage: 'A changeset source is required' }
         )
       ),
     dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
@@ -108,10 +93,7 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['overpassQL'],
-          message: t(
-            'manageChallengeNew.challengeForm.validation.overpassRequired',
-            undefined,
-            'An Overpass query is required'
+          message: t({ id: 'manageChallengeNew.challengeForm.validation.overpassRequired', defaultMessage: 'An Overpass query is required' }
           ),
         })
       }
@@ -121,10 +103,7 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['localGeoJSON'],
-          message: t(
-            'manageChallengeNew.challengeForm.validation.localGeoJSONRequired',
-            undefined,
-            'Please upload a GeoJSON file'
+          message: t({ id: 'manageChallengeNew.challengeForm.validation.localGeoJSONRequired', defaultMessage: 'Please upload a GeoJSON file' }
           ),
         })
       }
@@ -134,10 +113,7 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['remoteGeoJSON'],
-          message: t(
-            'manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired',
-            undefined,
-            'A GeoJSON URL is required'
+          message: t({ id: 'manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired', defaultMessage: 'A GeoJSON URL is required' }
           ),
         })
       }
@@ -147,10 +123,7 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
       ctx.addIssue({
         code: 'custom',
         path: ['automatedEditsCodeAgreement'],
-        message: t(
-          'manageChallengeNew.challengeForm.validation.agreementRequired',
-          undefined,
-          'You must read and accept the Automated Edits code of conduct'
+        message: t({ id: 'manageChallengeNew.challengeForm.validation.agreementRequired', defaultMessage: 'You must read and accept the Automated Edits code of conduct' }
         ),
       })
     }

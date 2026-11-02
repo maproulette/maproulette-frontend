@@ -166,15 +166,12 @@ export const FeatureProperties = ({
   } = useQuery({ ...api.osm.elementOptions(osmRef), enabled: open && !!osmRef })
   const osmTags = useMemo(() => (osmElement ? tagsFromOsmElement(osmElement) : {}), [osmElement])
   const osmStatus = osmLoading
-    ? t('common.loading', undefined, 'Loading...')
+    ? t({ id: 'common.loading', defaultMessage: 'Loading...' })
     : osmFailed
-      ? t(
-          'taskInfoPanel.properties.osmTagsFailed',
-          undefined,
-          'Could not load this element from OpenStreetMap.'
+      ? t({ id: 'taskInfoPanel.properties.osmTagsFailed', defaultMessage: 'Could not load this element from OpenStreetMap.' }
         )
       : Object.keys(osmTags).length === 0
-        ? t('taskInfoPanel.properties.osmTagsEmpty', undefined, 'No tags on this element.')
+        ? t({ id: 'taskInfoPanel.properties.osmTagsEmpty', defaultMessage: 'No tags on this element.' })
         : null
   const isFocused = featureContext?.focusedFeature?.nodeKey === group.nodeKey
   const propertyCount = Object.keys(group.properties).length
@@ -185,7 +182,7 @@ export const FeatureProperties = ({
   const namedLabel =
     group.name ??
     (propertyCount > 0
-      ? t('taskInfoPanel.properties.featureLabel', { number: group.index + 1 }, 'Feature {number}')
+      ? t({ id: 'taskInfoPanel.properties.featureLabel', defaultMessage: 'Feature {number}' }, { number: group.index + 1 })
       : null)
   const label = namedLabel ?? group.geometryType ?? ''
 
@@ -194,13 +191,10 @@ export const FeatureProperties = ({
     featureContext?.setHighlightedFeature(highlighted ? selection : null)
 
   const focusLabel = isFocused
-    ? t(
-        'taskInfoPanel.properties.showAllFeatures',
-        undefined,
-        "Show the task's other features again"
+    ? t({ id: 'taskInfoPanel.properties.showAllFeatures', defaultMessage: "Show the task's other features again" }
       )
-    : t('taskInfoPanel.properties.focusFeature', undefined, 'Show only this feature on the map')
-  const zoomLabel = t('taskInfoPanel.properties.zoomToFeature', undefined, 'Zoom to this feature')
+    : t({ id: 'taskInfoPanel.properties.focusFeature', defaultMessage: 'Show only this feature on the map' })
+  const zoomLabel = t({ id: 'taskInfoPanel.properties.zoomToFeature', defaultMessage: 'Zoom to this feature' })
 
   return (
     <Collapsible
@@ -237,24 +231,15 @@ export const FeatureProperties = ({
           {childCount > 0 && (
             <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
               {childType
-                ? t(
-                    'taskInfoPanel.properties.childCountTyped',
-                    { count: childCount, type: childType },
-                    '{count} {type}'
+                ? t({ id: 'taskInfoPanel.properties.childCountTyped', defaultMessage: '{count} {type}' }, { count: childCount, type: childType }
                   )
-                : t(
-                    'taskInfoPanel.properties.childCount',
-                    { count: childCount },
-                    '{count} geometries'
+                : t({ id: 'taskInfoPanel.properties.childCount', defaultMessage: '{count} geometries' }, { count: childCount }
                   )}
             </span>
           )}
           {propertyCount > 0 && (
             <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
-              {t(
-                'taskInfoPanel.properties.propertyCount',
-                { count: propertyCount },
-                '{count} properties'
+              {t({ id: 'taskInfoPanel.properties.propertyCount', defaultMessage: '{count} properties' }, { count: propertyCount }
               )}
             </span>
           )}
@@ -318,7 +303,7 @@ export const FeatureProperties = ({
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
                 <span className="font-medium text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                  {t('taskInfoPanel.properties.osmTags', undefined, 'Current OSM tags')}
+                  {t({ id: 'taskInfoPanel.properties.osmTags', defaultMessage: 'Current OSM tags' })}
                 </span>
                 <a
                   href={`${api.osm.getOSMServerUrl()}/${osmRef}`}
@@ -338,10 +323,7 @@ export const FeatureProperties = ({
           )}
           {propertyCount === 0 && childCount === 0 && (
             <p className="text-xs text-zinc-500 dark:text-slate-400">
-              {t(
-                'taskInfoPanel.properties.featureEmpty',
-                undefined,
-                'No properties on this feature.'
+              {t({ id: 'taskInfoPanel.properties.featureEmpty', defaultMessage: 'No properties on this feature.' }
               )}
             </p>
           )}

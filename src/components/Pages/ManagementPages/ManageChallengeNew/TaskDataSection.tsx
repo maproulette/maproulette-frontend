@@ -24,18 +24,12 @@ export const TaskDataSection = ({
 
   return (
     <FormSection
-      title={t('manageChallengeNew.challengeForm.taskDataTitle', undefined, 'Task data')}
+      title={t({ id: 'manageChallengeNew.challengeForm.taskDataTitle', defaultMessage: 'Task data' })}
       description={
         sourceReadOnly
-          ? t(
-              'manageChallengeNew.challengeForm.taskDataReadOnlyDescription',
-              undefined,
-              'The data source is set when the challenge is created. To regenerate tasks from updated data, use Rebuild Tasks when managing the challenge.'
+          ? t({ id: 'manageChallengeNew.challengeForm.taskDataReadOnlyDescription', defaultMessage: 'The data source is set when the challenge is created. To regenerate tasks from updated data, use Rebuild Tasks when managing the challenge.' }
             )
-          : t(
-              'manageChallengeNew.challengeForm.taskDataDescription',
-              undefined,
-              'Choose how you want to provide task data for this challenge.'
+          : t({ id: 'manageChallengeNew.challengeForm.taskDataDescription', defaultMessage: 'Choose how you want to provide task data for this challenge.' }
             )
       }
     >

@@ -55,11 +55,11 @@ export const buildBreadcrumbSegments = (
     const entityRoute = ENTITY_LIST_ROUTES[part]
     if (entityRoute) {
       segments.push({
-        label: t(entityRoute.id, undefined, entityRoute.defaultMessage),
+        label: t({ id: entityRoute.id, defaultMessage: entityRoute.defaultMessage }),
         href: entityRoute.path,
       })
     } else {
-      const label = part === 'new' ? t('shared.sectionHeader.create', undefined, 'create') : part
+      const label = part === 'new' ? t({ id: 'shared.sectionHeader.create', defaultMessage: 'create' }) : part
       segments.push({ label, href: currentPath })
     }
   }
@@ -93,7 +93,7 @@ export const buildTitle = (
   return parts
     .map((p) =>
       p === 'new'
-        ? t('shared.sectionHeader.createCapitalized', undefined, 'Create')
+        ? t({ id: 'shared.sectionHeader.createCapitalized', defaultMessage: 'Create' })
         : p.charAt(0).toUpperCase() + p.slice(1)
     )
     .join(' ')

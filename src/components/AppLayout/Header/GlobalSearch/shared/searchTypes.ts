@@ -56,15 +56,9 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
     () => [
       {
         id: SearchType.FIND_A_CHALLENGE,
-        label: t(
-          'appLayout.header.globalSearch.types.challenge.label',
-          undefined,
-          'Find a Challenge'
+        label: t({ id: 'appLayout.header.globalSearch.types.challenge.label', defaultMessage: 'Find a Challenge' }
         ),
-        description: t(
-          'appLayout.header.globalSearch.types.challenge.description',
-          undefined,
-          'Search for mapping challenges with filters for difficulty, location, and tags'
+        description: t({ id: 'appLayout.header.globalSearch.types.challenge.description', defaultMessage: 'Search for mapping challenges with filters for difficulty, location, and tags' }
         ),
         icon: Target,
         keywords: ['challenge', 'mapping', 'task set', 'quest'],
@@ -72,11 +66,8 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_TASK,
-        label: t('common.findATask', undefined, 'Find a Task'),
-        description: t(
-          'appLayout.header.globalSearch.types.task.description',
-          undefined,
-          'Search for individual mapping tasks by ID, status, priority, or location'
+        label: t({ id: 'common.findATask', defaultMessage: 'Find a Task' }),
+        description: t({ id: 'appLayout.header.globalSearch.types.task.description', defaultMessage: 'Search for individual mapping tasks by ID, status, priority, or location' }
         ),
         icon: ListTodo,
         keywords: ['task', 'item', 'work', 'todo'],
@@ -84,11 +75,8 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_PROJECT,
-        label: t('appLayout.header.globalSearch.types.project.label', undefined, 'Find a Project'),
-        description: t(
-          'appLayout.header.globalSearch.types.project.description',
-          undefined,
-          'Browse projects containing multiple challenges organized by theme or area'
+        label: t({ id: 'appLayout.header.globalSearch.types.project.label', defaultMessage: 'Find a Project' }),
+        description: t({ id: 'appLayout.header.globalSearch.types.project.description', defaultMessage: 'Browse projects containing multiple challenges organized by theme or area' }
         ),
         icon: FolderOpen,
         keywords: ['project', 'collection', 'group', 'organization'],
@@ -96,11 +84,8 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_MAPROULETTE_ID,
-        label: t('common.findByMaprouletteId', undefined, 'Find by MapRoulette ID'),
-        description: t(
-          'appLayout.header.globalSearch.types.id.description',
-          undefined,
-          'Quickly navigate to any resource (project, challenge, or task) using its ID'
+        label: t({ id: 'common.findByMaprouletteId', defaultMessage: 'Find by MapRoulette ID' }),
+        description: t({ id: 'appLayout.header.globalSearch.types.id.description', defaultMessage: 'Quickly navigate to any resource (project, challenge, or task) using its ID' }
         ),
         icon: Hash,
         keywords: ['id', 'identifier', 'number', 'direct'],
@@ -108,15 +93,9 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_MAPROULETTE_FEATURE_BY_NAME,
-        label: t(
-          'appLayout.header.globalSearch.types.featureByName.label',
-          undefined,
-          'Find a Feature by Name'
+        label: t({ id: 'appLayout.header.globalSearch.types.featureByName.label', defaultMessage: 'Find a Feature by Name' }
         ),
-        description: t(
-          'appLayout.header.globalSearch.types.featureByName.description',
-          undefined,
-          'Search for geographic features like roads, buildings, or landmarks by name'
+        description: t({ id: 'appLayout.header.globalSearch.types.featureByName.description', defaultMessage: 'Search for geographic features like roads, buildings, or landmarks by name' }
         ),
         icon: FileText,
         keywords: ['feature', 'place', 'location', 'geography', 'name'],
@@ -124,15 +103,9 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_TASK_COMMENT,
-        label: t(
-          'appLayout.header.globalSearch.types.taskComment.label',
-          undefined,
-          'Find Task Comments'
+        label: t({ id: 'appLayout.header.globalSearch.types.taskComment.label', defaultMessage: 'Find Task Comments' }
         ),
-        description: t(
-          'appLayout.header.globalSearch.types.taskComment.description',
-          undefined,
-          'Search through comments left on tasks for discussions and notes'
+        description: t({ id: 'appLayout.header.globalSearch.types.taskComment.description', defaultMessage: 'Search through comments left on tasks for discussions and notes' }
         ),
         icon: MessageCircle,
         keywords: ['comment', 'task', 'discussion', 'note', 'feedback'],
@@ -140,15 +113,9 @@ export const useAllSearchTypes = (): SearchTypeOption[] => {
       },
       {
         id: SearchType.FIND_A_CHALLENGE_COMMENT,
-        label: t(
-          'appLayout.header.globalSearch.types.challengeComment.label',
-          undefined,
-          'Find Challenge Comments'
+        label: t({ id: 'appLayout.header.globalSearch.types.challengeComment.label', defaultMessage: 'Find Challenge Comments' }
         ),
-        description: t(
-          'appLayout.header.globalSearch.types.challengeComment.description',
-          undefined,
-          'Search through comments on challenges for questions and suggestions'
+        description: t({ id: 'appLayout.header.globalSearch.types.challengeComment.description', defaultMessage: 'Search through comments on challenges for questions and suggestions' }
         ),
         icon: MessageSquare,
         keywords: ['comment', 'challenge', 'discussion', 'question', 'feedback'],

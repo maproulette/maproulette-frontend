@@ -7,31 +7,34 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { type Locale, resolveInitialLocale } from './locales'
 import {
-  baseCatalog,
-  type FormatValues,
-  formatMessage,
-  loadCatalog,
-  type MessageCatalog,
-} from './messageFormatting'
+  type IntlShape,
+  IntlProvider as ReactIntlProvider,
+  ReactIntlErrorCode,
+  useIntl as useReactIntl,
+} from 'react-intl'
+import { defaultLocale, type Locale, resolveInitialLocale } from './locales'
+import { baseCatalog, loadCatalog, type MessageCatalog } from './messageFormatting'
 
-export type { TranslateFn } from './messageFormatting'
+export type TranslateFn = IntlShape['formatMessage']
 
 const LOCALE_STORAGE_KEY = 'mr4:locale'
 
-interface IntlContextValue {
+interface LocaleContextValue {
   locale: Locale
   setLocale: (next: Locale) => void
-  t: (id: string, values?: FormatValues, defaultMessage?: string) => string
-  formatNumber: (value: number, options?: Intl.NumberFormatOptions) => string
 }
 
-const IntlContext = createContext<IntlContextValue | null>(null)
+const LocaleContext = createContext<LocaleContextValue | null>(null)
 
 interface ProviderProps {
   initialLocale?: Locale
   children: ReactNode
+}
+
+const ignoreMissingTranslations = (error: { code: string }) => {
+  if (error.code === ReactIntlErrorCode.MISSING_TRANSLATION) return
+  console.error(error)
 }
 
 export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
@@ -58,30 +61,33 @@ export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
 
   const setLocale = useCallback((next: Locale) => setLocaleState(next), [])
 
-  const t = useCallback(
-    (id: string, values?: FormatValues, defaultMessage?: string) => {
-      const template = catalog[id] ?? defaultMessage ?? id
-      return formatMessage(locale, template, values)
-    },
-    [catalog, locale]
-  )
+  const value = useMemo<LocaleContextValue>(() => ({ locale, setLocale }), [locale, setLocale])
 
-  const formatNumber = useCallback(
-    (value: number, options?: Intl.NumberFormatOptions) =>
-      new Intl.NumberFormat(locale, options).format(value),
-    [locale]
+  return (
+    <LocaleContext.Provider value={value}>
+      <ReactIntlProvider
+        locale={locale}
+        defaultLocale={defaultLocale}
+        messages={catalog}
+        onError={ignoreMissingTranslations}
+      >
+        {children}
+      </ReactIntlProvider>
+    </LocaleContext.Provider>
   )
-
-  const value = useMemo<IntlContextValue>(
-    () => ({ locale, setLocale, t, formatNumber }),
-    [locale, setLocale, t, formatNumber]
-  )
-
-  return <IntlContext.Provider value={value}>{children}</IntlContext.Provider>
 }
 
 export const useIntl = () => {
-  const ctx = useContext(IntlContext)
+  const ctx = useContext(LocaleContext)
   if (!ctx) throw new Error('useIntl must be used within IntlProvider')
-  return ctx
+  const intl = useReactIntl()
+  return useMemo(
+    () => ({
+      t: intl.formatMessage,
+      formatNumber: intl.formatNumber,
+      locale: ctx.locale,
+      setLocale: ctx.setLocale,
+    }),
+    [intl, ctx.locale, ctx.setLocale]
+  )
 }

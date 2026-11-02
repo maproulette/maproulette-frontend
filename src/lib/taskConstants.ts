@@ -32,7 +32,7 @@ export const STATUS_LABEL_KEYS: Record<number, string> = {
 /** Translated status label, or undefined for an unrecognized status id. */
 export const getStatusLabel = (t: TranslateFn, status: number): string | undefined => {
   const key = STATUS_LABEL_KEYS[status]
-  return key ? t(key, undefined, STATUS_LABELS[status]) : undefined
+  return key ? t({ id: key, defaultMessage: STATUS_LABELS[status] }) : undefined
 }
 
 /** Maps string-keyed status names (used by MR3 action counts) to canonical numeric IDs. */

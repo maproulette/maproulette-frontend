@@ -67,11 +67,11 @@ export const TeamDetailProvider = ({
     const handleDelete = async () => {
       try {
         await deleteTeam.mutateAsync(teamId)
-        toast.success(t('teams.detail.deleteSuccess', undefined, 'Team deleted'))
+        toast.success(t({ id: 'teams.detail.deleteSuccess', defaultMessage: 'Team deleted' }))
         navigate({ to: '/dashboard' })
       } catch (error) {
         logger.error('Team delete failed', { error })
-        toast.error(t('teams.detail.deleteError', undefined, 'Could not delete team'))
+        toast.error(t({ id: 'teams.detail.deleteError', defaultMessage: 'Could not delete team' }))
       }
     }
 

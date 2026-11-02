@@ -11,13 +11,13 @@ export const DataTab = () => {
     <div className="space-y-2">
       <DataSection
         icon={Box}
-        title={t('taskInfoPanel.data.osmFeature', undefined, 'OSM feature')}
+        title={t({ id: 'taskInfoPanel.data.osmFeature', defaultMessage: 'OSM feature' })}
         defaultOpen
       >
         <OsmFeatureSection />
       </DataSection>
 
-      <DataSection icon={MapPin} title={t('common.geojson', undefined, 'GeoJSON')}>
+      <DataSection icon={MapPin} title={t({ id: 'common.geojson', defaultMessage: 'GeoJSON' })}>
         <GeoJsonSection />
       </DataSection>
     </div>

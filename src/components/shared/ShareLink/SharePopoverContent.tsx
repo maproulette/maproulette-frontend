@@ -61,14 +61,14 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
   return (
     <div className="space-y-3 p-4">
       <div className="font-medium text-sm">
-        {t('shareLink.popover.title', undefined, 'Share this link')}
+        {t({ id: 'shareLink.popover.title', defaultMessage: 'Share this link' })}
       </div>
       <div className="flex gap-2">
         <Input
           readOnly
           value={url}
           className="font-mono text-xs"
-          aria-label={t('shareLink.popover.shareUrl', undefined, 'Share URL')}
+          aria-label={t({ id: 'shareLink.popover.shareUrl', defaultMessage: 'Share URL' })}
         />
         <Button
           type="button"
@@ -76,9 +76,9 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
           size="icon"
           onClick={() => {
             copy(url)
-            toast.success(t('shareLink.popover.copied', undefined, 'Copied to clipboard'))
+            toast.success(t({ id: 'shareLink.popover.copied', defaultMessage: 'Copied to clipboard' }))
           }}
-          aria-label={t('common.copyUrl', undefined, 'Copy URL')}
+          aria-label={t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
         >
           {isCopied ? (
             <Check className="size-4" aria-hidden="true" />
@@ -99,8 +99,8 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
         >
           <QrCode className="size-4" aria-hidden="true" />{' '}
           {showQr
-            ? t('shareLink.popover.hideQr', undefined, 'Hide QR')
-            : t('shareLink.popover.qrCode', undefined, 'QR code')}
+            ? t({ id: 'shareLink.popover.hideQr', defaultMessage: 'Hide QR' })
+            : t({ id: 'shareLink.popover.qrCode', defaultMessage: 'QR code' })}
         </Button>
         {shareSupported && (
           <Button
@@ -111,7 +111,7 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
             className="flex-1"
           >
             <Share2 className="size-4" aria-hidden="true" />{' '}
-            {t('shareLink.popover.shareVia', undefined, 'Share via…')}
+            {t({ id: 'shareLink.popover.shareVia', defaultMessage: 'Share via…' })}
           </Button>
         )}
       </div>
@@ -124,7 +124,7 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
             ref={canvasRef}
             width={QR_SIZE}
             height={QR_SIZE}
-            aria-label={t('shareLink.popover.qrCanvas', undefined, 'QR code for share URL')}
+            aria-label={t({ id: 'shareLink.popover.qrCanvas', defaultMessage: 'QR code for share URL' })}
             role="img"
           />
         </div>

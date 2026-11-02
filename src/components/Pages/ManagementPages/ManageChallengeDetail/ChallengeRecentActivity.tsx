@@ -26,7 +26,7 @@ const statusLabel = (status: number, statusName: string, t: ReturnType<typeof us
   return (
     TASK_STATUS_LABELS[status] ??
     statusName ??
-    t('common.statusWithStatus', { status }, 'Status {status}')
+    t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })
   )
 }
 
@@ -71,28 +71,22 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <History className="h-5 w-5" />
-          {t('common.recentActivity', undefined, 'Recent Activity')}
+          {t({ id: 'common.recentActivity', defaultMessage: 'Recent Activity' })}
         </CardTitle>
         <CardDescription>
-          {t(
-            'manageChallengeDetail.recentActivity.description',
-            undefined,
-            'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).'
+          {t({ id: 'manageChallengeDetail.recentActivity.description', defaultMessage: 'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).' }
           )}
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
         {isError ? (
           <p className="text-red-600 text-sm dark:text-red-400">
-            {t(
-              'manageChallengeDetail.recentActivity.loadError',
-              undefined,
-              'Could not load activity.'
+            {t({ id: 'manageChallengeDetail.recentActivity.loadError', defaultMessage: 'Could not load activity.' }
             )}
           </p>
         ) : dayGroups.length === 0 ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t('manageChallengeDetail.recentActivity.empty', undefined, 'No recent activity.')}
+            {t({ id: 'manageChallengeDetail.recentActivity.empty', defaultMessage: 'No recent activity.' })}
           </p>
         ) : (
           <ol className="relative ms-2 space-y-6 border-zinc-200 border-l ps-6 dark:border-slate-600">

@@ -132,10 +132,7 @@ export const useEditorLaunch = (task: Task) => {
             const bounds = taskBounds
             if (!bounds) {
               toast.error(
-                t(
-                  'taskEditPage.taskActions.editorButton.noBounds',
-                  undefined,
-                  'Task bounds not available'
+                t({ id: 'taskEditPage.taskActions.editorButton.noBounds', defaultMessage: 'Task bounds not available' }
                 )
               )
               return
@@ -169,10 +166,7 @@ export const useEditorLaunch = (task: Task) => {
             const selection = formatOsmEntities(tasks, { abbreviated: false })
             if (!selection) {
               toast.error(
-                t(
-                  'taskEditPage.taskActions.editorButton.noOsmFeatures',
-                  undefined,
-                  'Task has no OSM feature IDs to load'
+                t({ id: 'taskEditPage.taskActions.editorButton.noOsmFeatures', defaultMessage: 'Task has no OSM feature IDs to load' }
                 )
               )
               return
@@ -230,13 +224,10 @@ export const useEditorLaunch = (task: Task) => {
 
         const editorLabel =
           editorOptions.find((opt) => opt.value === editorValue)?.label ||
-          t('taskEditPage.taskActions.editorButton.editorFallback', undefined, 'editor')
+          t({ id: 'taskEditPage.taskActions.editorButton.editorFallback', defaultMessage: 'editor' })
         const notifyOpened = () =>
           toast.success(
-            t(
-              'taskEditPage.taskActions.editorButton.openingTaskIn',
-              { editor: editorLabel },
-              'Opening task in {editor}'
+            t({ id: 'taskEditPage.taskActions.editorButton.openingTaskIn', defaultMessage: 'Opening task in {editor}' }, { editor: editorLabel }
             )
           )
 
@@ -247,10 +238,7 @@ export const useEditorLaunch = (task: Task) => {
               notifyOpened()
             } else {
               toast.error(
-                t(
-                  'taskEditPage.taskActions.editorButton.josmNoResponse',
-                  undefined,
-                  'OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?'
+                t({ id: 'taskEditPage.taskActions.editorButton.josmNoResponse', defaultMessage: 'OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?' }
                 )
               )
             }
@@ -262,7 +250,7 @@ export const useEditorLaunch = (task: Task) => {
       } catch (error) {
         logger.error('Error opening editor', { error })
         toast.error(
-          t('taskEditPage.taskActions.editorButton.openFailed', undefined, 'Failed to open editor')
+          t({ id: 'taskEditPage.taskActions.editorButton.openFailed', defaultMessage: 'Failed to open editor' })
         )
       }
     },

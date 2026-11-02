@@ -111,14 +111,14 @@ export const MapControls = ({
                     </PopoverTrigger>
                   </TooltipTrigger>
                   <TooltipContent side="left">
-                    {t('map.controls.mapStyle', undefined, 'Map style')}
+                    {t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
                   </TooltipContent>
                 </Tooltip>
                 <PopoverContent
                   side="left"
                   align="start"
                   sideOffset={8}
-                  aria-label={t('map.controls.mapStyle', undefined, 'Map style')}
+                  aria-label={t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
                   className="w-72"
                 >
                   <MapStyleSwitcher map={map} mapLoaded={mapLoaded} />
@@ -140,7 +140,7 @@ export const MapControls = ({
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  {t('map.controls.resetView', undefined, 'Reset view')}
+                  {t({ id: 'map.controls.resetView', defaultMessage: 'Reset view' })}
                 </TooltipContent>
               </Tooltip>
             )}
@@ -161,7 +161,7 @@ export const MapControls = ({
                   </TooltipTrigger>
                   <TooltipContent side="left">
                     <TooltipLabel
-                      text={t('map.controls.zoomIn', undefined, 'Zoom in')}
+                      text={t({ id: 'map.controls.zoomIn', defaultMessage: 'Zoom in' })}
                       binding={zoomBindings?.zoomIn}
                     />
                   </TooltipContent>
@@ -181,7 +181,7 @@ export const MapControls = ({
                   </TooltipTrigger>
                   <TooltipContent side="left">
                     <TooltipLabel
-                      text={t('map.controls.zoomOut', undefined, 'Zoom out')}
+                      text={t({ id: 'map.controls.zoomOut', defaultMessage: 'Zoom out' })}
                       binding={zoomBindings?.zoomOut}
                     />
                   </TooltipContent>
@@ -241,8 +241,8 @@ export const MapControls = ({
                 </TooltipTrigger>
                 <TooltipContent side="left">
                   {isOpen
-                    ? t('map.controls.hideControls', undefined, 'Hide controls')
-                    : t('map.controls.showControls', undefined, 'Show controls')}
+                    ? t({ id: 'map.controls.hideControls', defaultMessage: 'Hide controls' })
+                    : t({ id: 'map.controls.showControls', defaultMessage: 'Show controls' })}
                 </TooltipContent>
               </Tooltip>
             </>

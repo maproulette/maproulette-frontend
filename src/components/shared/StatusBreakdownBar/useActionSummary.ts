@@ -114,7 +114,7 @@ export const useActionSummary = (actions: ActionCounts | undefined): ActionSumma
     counts[key] = count
     segments.push({
       key,
-      label: t(`statusBreakdownBar.status.${key}`, undefined, statusLabelByKey[key] ?? key),
+      label: t({ id: `statusBreakdownBar.status.${key}`, defaultMessage: statusLabelByKey[key] ?? key }),
       color: statusHexByKey[key] ?? '#71717a',
       count,
       percent: total > 0 ? (count / total) * 100 : 0,

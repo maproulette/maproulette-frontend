@@ -16,10 +16,7 @@ export const CommentsModal = () => {
       <DialogContent size="xl" className="flex h-[80vh] flex-col">
         <DialogHeader>
           <DialogTitle>
-            {t(
-              'browsedChallengePage.challengeModals.commentsModal.title',
-              undefined,
-              'Challenge Comments'
+            {t({ id: 'browsedChallengePage.challengeModals.commentsModal.title', defaultMessage: 'Challenge Comments' }
             )}
           </DialogTitle>
         </DialogHeader>

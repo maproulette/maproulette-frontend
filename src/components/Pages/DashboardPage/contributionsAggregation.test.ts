@@ -1,20 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import type { TranslateFn } from '@/i18n'
 import type { UserContribution } from '@/types/User'
 import { aggregateContributions } from './contributionsAggregation'
+import { testT } from '@/test/translate'
 
 // Minimal stand-in for the real t() - returns the default message with any
 // {placeholder} values substituted, which is enough to exercise the
 // unknown-challenge-name fallback path used by aggregateContributions.
-const t: TranslateFn = (_id, values, defaultMessage) => {
-  let message = defaultMessage ?? ''
-  if (values) {
-    for (const [key, value] of Object.entries(values)) {
-      message = message.replace(`{${key}}`, String(value))
-    }
-  }
-  return message
-}
+const t = testT
 
 const makeEntry = (overrides: Partial<UserContribution>): UserContribution => ({
   id: 1,

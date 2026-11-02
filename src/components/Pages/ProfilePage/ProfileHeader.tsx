@@ -29,7 +29,7 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
       <h1 className="mb-2 font-bold text-base">{displayName}</h1>
       {createdDate && (
         <p className="mb-4 text-zinc-500 dark:text-slate-400">
-          {t('profilePage.header.userSince', { date: createdDate }, 'User since: {date}')}
+          {t({ id: 'profilePage.header.userSince', defaultMessage: 'User since: {date}' }, { date: createdDate })}
         </p>
       )}
       {showLivePoints && (
@@ -44,7 +44,7 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
         >
-          {t('profilePage.header.osmProfileLink', undefined, 'OSM Profile')}
+          {t({ id: 'profilePage.header.osmProfileLink', defaultMessage: 'OSM Profile' })}
           <ExternalLink className="size-4" />
         </a>
         <a
@@ -53,7 +53,7 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
         >
-          {t('profilePage.header.osmChaLink', undefined, 'OSMCha')}
+          {t({ id: 'profilePage.header.osmChaLink', defaultMessage: 'OSMCha' })}
           <ExternalLink className="size-4" />
         </a>
       </div>

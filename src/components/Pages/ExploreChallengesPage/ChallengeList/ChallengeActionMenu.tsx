@@ -23,7 +23,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-8 w-8">
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+            <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -35,7 +35,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Play className="h-4 w-4" />
-                {t('common.startChallenge', undefined, 'Start challenge')}
+                {t({ id: 'common.startChallenge', defaultMessage: 'Start challenge' })}
               </Link>
             </DropdownMenuItem>
           )}
@@ -46,7 +46,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
               className="flex cursor-pointer items-center gap-2"
             >
               <Eye className="h-4 w-4" />
-              {t('common.viewChallenge', undefined, 'View challenge')}
+              {t({ id: 'common.viewChallenge', defaultMessage: 'View challenge' })}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -54,7 +54,7 @@ export const ChallengeActionMenu = memo(({ challenge }: { challenge: Challenge }
             className="flex cursor-pointer items-center gap-2"
           >
             <Copy className="h-4 w-4" />
-            {t('common.copyUrl', undefined, 'Copy URL')}
+            {t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

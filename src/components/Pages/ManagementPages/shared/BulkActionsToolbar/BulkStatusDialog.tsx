@@ -33,17 +33,11 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            {t(
-              'managementPages.bulkActionsToolbar.statusDialog.title',
-              undefined,
-              'Change task status'
+            {t({ id: 'managementPages.bulkActionsToolbar.statusDialog.title', defaultMessage: 'Change task status' }
             )}
           </DialogTitle>
           <DialogDescription>
-            {t(
-              'managementPages.bulkActionsToolbar.statusDialog.description',
-              undefined,
-              'Updates every selected task to the chosen status.'
+            {t({ id: 'managementPages.bulkActionsToolbar.statusDialog.description', defaultMessage: 'Updates every selected task to the chosen status.' }
             )}
           </DialogDescription>
         </DialogHeader>
@@ -61,10 +55,10 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
         </Select>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button onClick={() => onConfirm(Number(status))}>
-            {t('managementPages.bulkActionsToolbar.apply', undefined, 'Apply')}
+            {t({ id: 'managementPages.bulkActionsToolbar.apply', defaultMessage: 'Apply' })}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -99,7 +99,7 @@ export const aggregateContributions = (
       challenges.push({
         name:
           challengeNames.get(parentId) ||
-          t('dashboard.contributions.unknownChallenge', { parentId }, 'Challenge {parentId}'),
+          t({ id: 'dashboard.contributions.unknownChallenge', defaultMessage: 'Challenge {parentId}' }, { parentId }),
         parentId,
         actions,
       })

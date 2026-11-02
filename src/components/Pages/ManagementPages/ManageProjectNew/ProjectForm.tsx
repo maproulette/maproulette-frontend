@@ -57,25 +57,16 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
       await onSubmit(values)
       toast.success(
         project
-          ? t(
-              'manageProjectNew.projectForm.updateSuccessToast',
-              undefined,
-              'Project updated successfully'
+          ? t({ id: 'manageProjectNew.projectForm.updateSuccessToast', defaultMessage: 'Project updated successfully' }
             )
-          : t(
-              'manageProjectNew.projectForm.createSuccessToast',
-              undefined,
-              'Project created successfully'
+          : t({ id: 'manageProjectNew.projectForm.createSuccessToast', defaultMessage: 'Project created successfully' }
             )
       )
     } catch (error) {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : t(
-              'manageProjectNew.projectForm.saveErrorToast',
-              undefined,
-              'Failed to save project. Please try again.'
+          : t({ id: 'manageProjectNew.projectForm.saveErrorToast', defaultMessage: 'Failed to save project. Please try again.' }
             )
       toast.error(errorMessage)
       logger.error('Failed to save project', { error })
@@ -90,15 +81,9 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
       >
         <FormSectionGroup className="min-h-0 flex-1 overflow-y-auto pr-1">
           <FormSection
-            title={t(
-              'manageProjectNew.projectForm.detailsSectionTitle',
-              undefined,
-              'Project details'
+            title={t({ id: 'manageProjectNew.projectForm.detailsSectionTitle', defaultMessage: 'Project details' }
             )}
-            description={t(
-              'manageProjectNew.projectForm.detailsSectionDescription',
-              undefined,
-              'Basic identifying information for this project.'
+            description={t({ id: 'manageProjectNew.projectForm.detailsSectionDescription', defaultMessage: 'Basic identifying information for this project.' }
             )}
           >
             <FormField
@@ -107,23 +92,17 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('manageProjectNew.projectForm.nameLabel', undefined, 'Project Name')}
+                    {t({ id: 'manageProjectNew.projectForm.nameLabel', defaultMessage: 'Project Name' })}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t(
-                        'manageProjectNew.projectForm.namePlaceholder',
-                        undefined,
-                        'my-project'
+                      placeholder={t({ id: 'manageProjectNew.projectForm.namePlaceholder', defaultMessage: 'my-project' }
                       )}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    {t(
-                      'manageProjectNew.projectForm.nameDescription',
-                      undefined,
-                      'A unique identifier for the project (lowercase, no spaces)'
+                    {t({ id: 'manageProjectNew.projectForm.nameDescription', defaultMessage: 'A unique identifier for the project (lowercase, no spaces)' }
                     )}
                   </FormDescription>
                   <FormMessage />
@@ -137,23 +116,17 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('manageProjectNew.projectForm.displayNameLabel', undefined, 'Display Name')}
+                    {t({ id: 'manageProjectNew.projectForm.displayNameLabel', defaultMessage: 'Display Name' })}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t(
-                        'manageProjectNew.projectForm.displayNamePlaceholder',
-                        undefined,
-                        'My Project'
+                      placeholder={t({ id: 'manageProjectNew.projectForm.displayNamePlaceholder', defaultMessage: 'My Project' }
                       )}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    {t(
-                      'manageProjectNew.projectForm.displayNameDescription',
-                      undefined,
-                      'The display name shown to users'
+                    {t({ id: 'manageProjectNew.projectForm.displayNameDescription', defaultMessage: 'The display name shown to users' }
                     )}
                   </FormDescription>
                   <FormMessage />
@@ -166,23 +139,17 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('common.description', undefined, 'Description')}</FormLabel>
+                  <FormLabel>{t({ id: 'common.description', defaultMessage: 'Description' })}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder={t(
-                        'manageProjectNew.projectForm.descriptionPlaceholder',
-                        undefined,
-                        'Describe what this project is about...'
+                      placeholder={t({ id: 'manageProjectNew.projectForm.descriptionPlaceholder', defaultMessage: 'Describe what this project is about...' }
                       )}
                       className="min-h-32 resize-none"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    {t(
-                      'manageProjectNew.projectForm.descriptionDescription',
-                      undefined,
-                      'A brief description of the project'
+                    {t({ id: 'manageProjectNew.projectForm.descriptionDescription', defaultMessage: 'A brief description of the project' }
                     )}
                   </FormDescription>
                   <FormMessage />
@@ -192,15 +159,9 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
           </FormSection>
 
           <FormSection
-            title={t(
-              'manageProjectNew.projectForm.visibilitySectionTitle',
-              undefined,
-              'Visibility'
+            title={t({ id: 'manageProjectNew.projectForm.visibilitySectionTitle', defaultMessage: 'Visibility' }
             )}
-            description={t(
-              'manageProjectNew.projectForm.visibilitySectionDescription',
-              undefined,
-              'Control how this project appears across MapRoulette.'
+            description={t({ id: 'manageProjectNew.projectForm.visibilitySectionDescription', defaultMessage: 'Control how this project appears across MapRoulette.' }
             )}
           >
             <FormField
@@ -210,13 +171,10 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">
-                      {t('common.enabled', undefined, 'Enabled')}
+                      {t({ id: 'common.enabled', defaultMessage: 'Enabled' })}
                     </FormLabel>
                     <FormDescription>
-                      {t(
-                        'manageProjectNew.projectForm.enabledDescription',
-                        undefined,
-                        'Make this project visible and accessible to users'
+                      {t({ id: 'manageProjectNew.projectForm.enabledDescription', defaultMessage: 'Make this project visible and accessible to users' }
                       )}
                     </FormDescription>
                   </div>
@@ -235,13 +193,10 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
-                        {t('common.featured', undefined, 'Featured')}
+                        {t({ id: 'common.featured', defaultMessage: 'Featured' })}
                       </FormLabel>
                       <FormDescription>
-                        {t(
-                          'manageProjectNew.projectForm.featuredDescription',
-                          undefined,
-                          'Feature this project on the homepage'
+                        {t({ id: 'manageProjectNew.projectForm.featuredDescription', defaultMessage: 'Feature this project on the homepage' }
                         )}
                       </FormDescription>
                     </div>
@@ -258,14 +213,14 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
         </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button type="submit" disabled={formSubmitDisabled(form.formState)}>
             {form.formState.isSubmitting
-              ? t('common.saving2', undefined, 'Saving...')
+              ? t({ id: 'common.saving2', defaultMessage: 'Saving...' })
               : project
-                ? t('manageProjectNew.projectForm.updateButton', undefined, 'Update Project')
-                : t('common.createProject', undefined, 'Create Project')}
+                ? t({ id: 'manageProjectNew.projectForm.updateButton', defaultMessage: 'Update Project' })
+                : t({ id: 'common.createProject', defaultMessage: 'Create Project' })}
           </Button>
         </div>
       </form>

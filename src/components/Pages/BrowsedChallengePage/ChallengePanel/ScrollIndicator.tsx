@@ -15,7 +15,7 @@ export const ScrollIndicator = ({ hasMoreToScroll }: ScrollIndicatorProps) => {
       <div className="flex flex-col items-center gap-1">
         <ChevronDown className="size-3.5 animate-bounce text-zinc-400 dark:text-slate-500" />
         <span className="text-xs text-zinc-500 dark:text-slate-400">
-          {t('browsedChallengePage.scrollIndicator.scrollForMore', undefined, 'Scroll for more')}
+          {t({ id: 'browsedChallengePage.scrollIndicator.scrollForMore', defaultMessage: 'Scroll for more' })}
         </span>
       </div>
     </div>

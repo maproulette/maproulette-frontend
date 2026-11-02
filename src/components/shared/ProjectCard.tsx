@@ -98,7 +98,7 @@ export const ProjectCard = ({
             <span className="font-semibold text-zinc-900 dark:text-white">
               {meta.totalChallenges - meta.completed} / {meta.totalChallenges}
             </span>{' '}
-            {t('shared.projectCard.challengesRemaining', undefined, 'challenges remaining')}
+            {t({ id: 'shared.projectCard.challengesRemaining', defaultMessage: 'challenges remaining' })}
           </div>
 
           <ProgressBar percentage={completionPercentage} className="mb-3" />
@@ -106,27 +106,21 @@ export const ProjectCard = ({
           <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-slate-300">
             <span className="flex items-center gap-3">
               <span>
-                {t(
-                  'shared.projectCard.totalChallenges',
-                  { count: meta.totalChallenges },
-                  'Total Challenges: {count}'
+                {t({ id: 'shared.projectCard.totalChallenges', defaultMessage: 'Total Challenges: {count}' }, { count: meta.totalChallenges }
                 )}
               </span>
               <span className="text-emerald-500">
-                {t('shared.projectCard.completed', { count: meta.completed }, 'Completed: {count}')}
+                {t({ id: 'shared.projectCard.completed', defaultMessage: 'Completed: {count}' }, { count: meta.completed })}
               </span>
               {meta.pinned > 0 && (
                 <span className="text-yellow-500">
-                  {t('shared.projectCard.pinned', { count: meta.pinned }, 'Pinned: {count}')}
+                  {t({ id: 'shared.projectCard.pinned', defaultMessage: 'Pinned: {count}' }, { count: meta.pinned })}
                 </span>
               )}
             </span>
             {lastUpdated ? (
               <span>
-                {t(
-                  'common.lastUpdated',
-                  { date: formatDate(new Date(lastUpdated)) },
-                  'Last updated {date}'
+                {t({ id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' }, { date: formatDate(new Date(lastUpdated)) }
                 )}
               </span>
             ) : null}

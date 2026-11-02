@@ -23,11 +23,11 @@ export const TimeRangeSelector = () => {
         if (!value) return
         setMonthDuration(Number(value))
       }}
-      aria-label={t('profilePage.timeRange.ariaLabel', undefined, 'Time range')}
+      aria-label={t({ id: 'profilePage.timeRange.ariaLabel', defaultMessage: 'Time range' })}
     >
       {presets.map((preset) => (
         <ToggleGroupItem key={preset.monthDuration} value={String(preset.monthDuration)}>
-          {t(preset.labelId, undefined, preset.defaultLabel)}
+          {t({ id: preset.labelId, defaultMessage: preset.defaultLabel })}
         </ToggleGroupItem>
       ))}
     </ToggleGroup>

@@ -64,15 +64,15 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
       })
       toast.success(
         status === 'actioned'
-          ? t('superAdminChallengeReports.actionedSuccess', undefined, 'Report marked actioned')
-          : t('superAdminChallengeReports.dismissedSuccess', undefined, 'Report dismissed')
+          ? t({ id: 'superAdminChallengeReports.actionedSuccess', defaultMessage: 'Report marked actioned' })
+          : t({ id: 'superAdminChallengeReports.dismissedSuccess', defaultMessage: 'Report dismissed' })
       )
     } catch (error) {
       logger.error('Challenge report triage failed', { status, error })
       toast.error(
         await getErrorMessage(
           error,
-          t('superAdminChallengeReports.reviewError', undefined, 'Could not record that decision')
+          t({ id: 'superAdminChallengeReports.reviewError', defaultMessage: 'Could not record that decision' })
         )
       )
     }
@@ -94,14 +94,11 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
             <p className="font-medium text-sm">#{report.challengeId}</p>
           )}
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t(
-              'superAdminChallengeReports.reportMeta',
-              {
+            {t({ id: 'superAdminChallengeReports.reportMeta', defaultMessage: '{project} · reported by {user} on {date}' }, {
                 project: report.projectName ?? String(report.projectId ?? ''),
-                user: report.reporterName ?? t('common.unknown', undefined, 'Unknown'),
+                user: report.reporterName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
                 date: formatDate(new Date(report.reportedAt)),
-              },
-              '{project} · reported by {user} on {date}'
+              }
             )}
           </p>
           {report.reporterEmail && (
@@ -111,7 +108,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
         <div className="flex items-center gap-2">
           {report.challengeIsArchived && (
             <Badge variant="secondary">
-              {t('superAdminChallengeReports.archivedBadge', undefined, 'Archived')}
+              {t({ id: 'superAdminChallengeReports.archivedBadge', defaultMessage: 'Archived' })}
             </Badge>
           )}
           <Badge variant={statusBadgeVariant(report.statusName)}>{report.statusName}</Badge>
@@ -127,41 +124,35 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
           <Input
             value={reviewComment}
             onChange={(e) => setReviewComment(e.target.value)}
-            placeholder={t(
-              'superAdminChallengeReports.commentPlaceholder',
-              undefined,
-              'Note (optional)'
+            placeholder={t({ id: 'superAdminChallengeReports.commentPlaceholder', defaultMessage: 'Note (optional)' }
             )}
             className="w-56"
-            aria-label={t('superAdminChallengeReports.commentLabel', undefined, 'Review note')}
+            aria-label={t({ id: 'superAdminChallengeReports.commentLabel', defaultMessage: 'Review note' })}
           />
           <Button size="sm" onClick={() => decide('actioned')} disabled={busy}>
             <Check className="size-4" aria-hidden="true" />{' '}
-            {t('superAdminChallengeReports.markActioned', undefined, 'Mark actioned')}
+            {t({ id: 'superAdminChallengeReports.markActioned', defaultMessage: 'Mark actioned' })}
           </Button>
           <Button size="sm" variant="outline" onClick={() => decide('dismissed')} disabled={busy}>
             <Ban className="size-4" aria-hidden="true" />{' '}
-            {t('superAdminChallengeReports.dismiss', undefined, 'Dismiss')}
+            {t({ id: 'superAdminChallengeReports.dismiss', defaultMessage: 'Dismiss' })}
           </Button>
           <Button size="sm" variant="outline" asChild>
             <Link
               to="/manage/challenge/$challengeId"
               params={{ challengeId: String(report.challengeId) }}
             >
-              {t('superAdminChallengeReports.manageChallenge', undefined, 'Manage challenge')}
+              {t({ id: 'superAdminChallengeReports.manageChallenge', defaultMessage: 'Manage challenge' })}
             </Link>
           </Button>
         </div>
       ) : (
         <p className="text-xs text-zinc-500 dark:text-slate-400">
-          {t(
-            'superAdminChallengeReports.resolvedMeta',
-            {
+          {t({ id: 'superAdminChallengeReports.resolvedMeta', defaultMessage: '{status} by {user} on {date}' }, {
               status: report.statusName,
-              user: report.reviewedByName ?? t('common.unknown', undefined, 'Unknown'),
+              user: report.reviewedByName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
               date: report.reviewedAt ? formatDate(new Date(report.reviewedAt)) : '',
-            },
-            '{status} by {user} on {date}'
+            }
           )}
           {report.reviewComment ? ` — ${report.reviewComment}` : ''}
         </p>
@@ -187,13 +178,10 @@ export const SuperAdminChallengeReports = () => {
     <div className="mx-auto max-w-4xl space-y-4 px-4">
       <div>
         <h1 className="font-bold text-xl text-zinc-900 dark:text-zinc-50">
-          {t('superAdminChallengeReports.title', undefined, 'Challenge reports')}
+          {t({ id: 'superAdminChallengeReports.title', defaultMessage: 'Challenge reports' })}
         </h1>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t(
-            'superAdminChallengeReports.subtitle',
-            undefined,
-            'Reports that a challenge is poorly designed and is causing incorrect edits. Mark one actioned once you have dealt with it — by archiving the challenge, say — or dismiss it.'
+          {t({ id: 'superAdminChallengeReports.subtitle', defaultMessage: 'Reports that a challenge is poorly designed and is causing incorrect edits. Mark one actioned once you have dealt with it — by archiving the challenge, say — or dismiss it.' }
           )}
         </p>
       </div>
@@ -223,10 +211,7 @@ export const SuperAdminChallengeReports = () => {
             checked={activeOnly}
             onCheckedChange={(checked) => setActiveOnly(checked === true)}
           />
-          {t(
-            'superAdminChallengeReports.activeOnlyLabel',
-            undefined,
-            'Only challenges that are still active'
+          {t({ id: 'superAdminChallengeReports.activeOnlyLabel', defaultMessage: 'Only challenges that are still active' }
           )}
         </label>
       </div>
@@ -235,7 +220,7 @@ export const SuperAdminChallengeReports = () => {
         <Loader />
       ) : isError ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t('superAdminChallengeReports.loadError', undefined, 'Could not load the reports.')}
+          {t({ id: 'superAdminChallengeReports.loadError', defaultMessage: 'Could not load the reports.' })}
         </p>
       ) : reports && reports.length > 0 ? (
         <ul className="space-y-3">
@@ -250,13 +235,10 @@ export const SuperAdminChallengeReports = () => {
           </EmptyMedia>
           <EmptyContent>
             <EmptyTitle>
-              {t('superAdminChallengeReports.emptyTitle', undefined, 'Nothing to review')}
+              {t({ id: 'superAdminChallengeReports.emptyTitle', defaultMessage: 'Nothing to review' })}
             </EmptyTitle>
             <EmptyDescription>
-              {t(
-                'superAdminChallengeReports.emptyDescription',
-                undefined,
-                'No challenge reports match these filters right now.'
+              {t({ id: 'superAdminChallengeReports.emptyDescription', defaultMessage: 'No challenge reports match these filters right now.' }
               )}
             </EmptyDescription>
           </EmptyContent>

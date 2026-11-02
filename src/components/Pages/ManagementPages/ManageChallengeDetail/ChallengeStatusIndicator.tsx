@@ -116,32 +116,20 @@ export const ChallengeStatusIndicator = ({
         <Spinner className="text-blue-600 dark:text-blue-400" />
         <AlertTitle className="flex items-center gap-2 text-blue-900 dark:text-blue-100">
           {isUpdating
-            ? t(
-                'manageChallengeDetail.statusIndicator.tasksUpdatingTitle',
-                undefined,
-                'Tasks Updating...'
+            ? t({ id: 'manageChallengeDetail.statusIndicator.tasksUpdatingTitle', defaultMessage: 'Tasks Updating...' }
               )
-            : t(
-                'manageChallengeDetail.statusIndicator.tasksBuildingTitle',
-                undefined,
-                'Tasks Building...'
+            : t({ id: 'manageChallengeDetail.statusIndicator.tasksBuildingTitle', defaultMessage: 'Tasks Building...' }
               )}
         </AlertTitle>
         <AlertDescription className="space-y-2 text-blue-800 dark:text-blue-200">
           <div className="flex items-center justify-between gap-4">
             <span className="text-sm">
-              {t(
-                'manageChallengeDetail.statusIndicator.elapsedTimeLabel',
-                undefined,
-                'Elapsed time:'
+              {t({ id: 'manageChallengeDetail.statusIndicator.elapsedTimeLabel', defaultMessage: 'Elapsed time:' }
               )}{' '}
               <strong>{formatDuration(elapsedSeconds)}</strong>
             </span>
             <span className="text-sm">
-              {t(
-                'manageChallengeDetail.statusIndicator.refreshingInLabel',
-                undefined,
-                'Refreshing in:'
+              {t({ id: 'manageChallengeDetail.statusIndicator.refreshingInLabel', defaultMessage: 'Refreshing in:' }
               )}{' '}
               <strong className="text-orange-600 dark:text-orange-400">
                 {formatDuration(nextUpdateSeconds)}
@@ -150,19 +138,13 @@ export const ChallengeStatusIndicator = ({
           </div>
           {!isUpdating && (
             <div className="text-sm">
-              {t(
-                'manageChallengeDetail.statusIndicator.buildingBody',
-                undefined,
-                'Tasks are being generated. This page will automatically refresh to show progress.'
+              {t({ id: 'manageChallengeDetail.statusIndicator.buildingBody', defaultMessage: 'Tasks are being generated. This page will automatically refresh to show progress.' }
               )}
             </div>
           )}
           {isUpdating && (
             <div className="text-sm">
-              {t(
-                'manageChallengeDetail.statusIndicator.updatingBody',
-                undefined,
-                'Task statuses are being updated. This page will automatically refresh to show progress.'
+              {t({ id: 'manageChallengeDetail.statusIndicator.updatingBody', defaultMessage: 'Task statuses are being updated. This page will automatically refresh to show progress.' }
               )}
             </div>
           )}
@@ -200,10 +182,7 @@ export const ChallengeStatusIndicator = ({
       <Alert variant="destructive" className="mb-4">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>
-          {t(
-            'manageChallengeDetail.statusIndicator.failedTitle',
-            undefined,
-            'Tasks Failed to Build'
+          {t({ id: 'manageChallengeDetail.statusIndicator.failedTitle', defaultMessage: 'Tasks Failed to Build' }
           )}
         </AlertTitle>
         <AlertDescription>
@@ -219,10 +198,7 @@ export const ChallengeStatusIndicator = ({
             </Panel>
           ) : (
             <p className="mt-2 text-sm">
-              {t(
-                'manageChallengeDetail.statusIndicator.failedBody',
-                undefined,
-                'The challenge failed to build tasks. Please check the challenge configuration and try again.'
+              {t({ id: 'manageChallengeDetail.statusIndicator.failedBody', defaultMessage: 'The challenge failed to build tasks. Please check the challenge configuration and try again.' }
               )}
             </p>
           )}
@@ -237,18 +213,12 @@ export const ChallengeStatusIndicator = ({
       <Alert className="mb-4 border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950">
         <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
         <AlertTitle className="text-yellow-900 dark:text-yellow-100">
-          {t(
-            'manageChallengeDetail.statusIndicator.partiallyLoadedTitle',
-            undefined,
-            'Challenge Partially Loaded'
+          {t({ id: 'manageChallengeDetail.statusIndicator.partiallyLoadedTitle', defaultMessage: 'Challenge Partially Loaded' }
           )}
         </AlertTitle>
         <AlertDescription className="text-yellow-800 dark:text-yellow-200">
           <p className="text-sm">
-            {t(
-              'manageChallengeDetail.statusIndicator.partiallyLoadedBody',
-              undefined,
-              'This challenge is partially loaded. Some tasks may not be available yet.'
+            {t({ id: 'manageChallengeDetail.statusIndicator.partiallyLoadedBody', defaultMessage: 'This challenge is partially loaded. Some tasks may not be available yet.' }
             )}
           </p>
         </AlertDescription>
@@ -262,14 +232,11 @@ export const ChallengeStatusIndicator = ({
       <Alert className="mb-4 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
         <Spinner className="text-orange-600 dark:text-orange-400" />
         <AlertTitle className="text-orange-900 dark:text-orange-100">
-          {t('manageChallengeDetail.statusIndicator.deletingTitle', undefined, 'Deleting Tasks...')}
+          {t({ id: 'manageChallengeDetail.statusIndicator.deletingTitle', defaultMessage: 'Deleting Tasks...' })}
         </AlertTitle>
         <AlertDescription className="text-orange-800 dark:text-orange-200">
           <p className="text-sm">
-            {t(
-              'manageChallengeDetail.statusIndicator.deletingBody',
-              undefined,
-              'Tasks are being deleted. Please wait...'
+            {t({ id: 'manageChallengeDetail.statusIndicator.deletingBody', defaultMessage: 'Tasks are being deleted. Please wait...' }
             )}
           </p>
         </AlertDescription>

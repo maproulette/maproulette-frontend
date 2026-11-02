@@ -26,7 +26,7 @@ export const CommentList = ({
   const { t } = useIntl()
   const containerRef = useRef<HTMLUListElement>(null)
   const resolvedEmptyStateText =
-    emptyStateText ?? t('commentList.list.empty', undefined, 'No comments yet')
+    emptyStateText ?? t({ id: 'commentList.list.empty', defaultMessage: 'No comments yet' })
 
   useEffect(() => {
     if (!highlightCommentId || !containerRef.current) return

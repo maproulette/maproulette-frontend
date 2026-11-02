@@ -99,7 +99,7 @@ export const ManageProjectsContent = () => {
     <Button asChild size="sm" className="gap-1.5 rounded-full">
       <Link to="/manage/project/new">
         <Plus className="h-4 w-4" />
-        {t('common.createProject', undefined, 'Create Project')}
+        {t({ id: 'common.createProject', defaultMessage: 'Create Project' })}
       </Link>
     </Button>
   )
@@ -119,13 +119,13 @@ export const ManageProjectsContent = () => {
             }}
             title={
               isPinned
-                ? t('common.unpinProject', undefined, 'Unpin project')
-                : t('common.pinProject', undefined, 'Pin project')
+                ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
+                : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
             }
             aria-label={
               isPinned
-                ? t('common.unpinProject', undefined, 'Unpin project')
-                : t('common.pinProject', undefined, 'Pin project')
+                ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
+                : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
             }
           >
             <Pin
@@ -149,13 +149,13 @@ export const ManageProjectsContent = () => {
             }}
             title={
               proj.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+                ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+                : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
             }
             aria-label={
               proj.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+                ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+                : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
             }
           >
             {proj.enabled ? (
@@ -169,7 +169,7 @@ export const ManageProjectsContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+              <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -180,7 +180,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Eye className="h-4 w-4" />
-                {t('common.viewProject', undefined, 'View project')}
+                {t({ id: 'common.viewProject', defaultMessage: 'View project' })}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -190,7 +190,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                {t('common.editProject', undefined, 'Edit project')}
+                {t({ id: 'common.editProject', defaultMessage: 'Edit project' })}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -200,7 +200,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                {t('common.addChallenge', undefined, 'Add challenge')}
+                {t({ id: 'common.addChallenge', defaultMessage: 'Add challenge' })}
               </Link>
             </DropdownMenuItem>
             {projectId != null && (
@@ -209,7 +209,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <FileDown className="h-4 w-4" />
-                {t('common.exportCsv', undefined, 'Export CSV')}
+                {t({ id: 'common.exportCsv', defaultMessage: 'Export CSV' })}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -220,7 +220,7 @@ export const ManageProjectsContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('common.copyUrl', undefined, 'Copy URL')}
+              {t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
             </DropdownMenuItem>
             {projectId != null && (
               <DropdownMenuItem
@@ -229,8 +229,8 @@ export const ManageProjectsContent = () => {
               >
                 <Archive className="h-4 w-4" />
                 {proj.isArchived
-                  ? t('common.unarchiveProject', undefined, 'Unarchive project')
-                  : t('common.archiveProject', undefined, 'Archive project')}
+                  ? t({ id: 'common.unarchiveProject', defaultMessage: 'Unarchive project' })
+                  : t({ id: 'common.archiveProject', defaultMessage: 'Archive project' })}
               </DropdownMenuItem>
             )}
             {projectId != null && (
@@ -239,7 +239,7 @@ export const ManageProjectsContent = () => {
                 className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />
-                {t('common.deleteProject', undefined, 'Delete project')}
+                {t({ id: 'common.deleteProject', defaultMessage: 'Delete project' })}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -257,13 +257,10 @@ export const ManageProjectsContent = () => {
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
                   <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    {t('manageProjects.content.aboutTitle', undefined, 'About Projects')}
+                    {t({ id: 'manageProjects.content.aboutTitle', defaultMessage: 'About Projects' })}
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    {t(
-                      'manageProjects.content.aboutDescription',
-                      undefined,
-                      'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.'
+                    {t({ id: 'manageProjects.content.aboutDescription', defaultMessage: 'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.' }
                     )}
                   </p>
                 </div>
@@ -272,7 +269,7 @@ export const ManageProjectsContent = () => {
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => setShowPanel(false)}
-                  title={t('common.hidePanel', undefined, 'Hide panel')}
+                  title={t({ id: 'common.hidePanel', defaultMessage: 'Hide panel' })}
                 >
                   <PanelLeftClose className="h-4 w-4" />
                 </Button>
@@ -282,41 +279,29 @@ export const ManageProjectsContent = () => {
                 <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t('manageProjects.content.tipScopeTitle', undefined, 'Define scope early')}
+                      {t({ id: 'manageProjects.content.tipScopeTitle', defaultMessage: 'Define scope early' })}
                     </p>
                     <p>
-                      {t(
-                        'manageProjects.content.tipScopeBody',
-                        undefined,
-                        'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.'
+                      {t({ id: 'manageProjects.content.tipScopeBody', defaultMessage: 'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.' }
                       )}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t(
-                        'manageProjects.content.tipPublishTitle',
-                        undefined,
-                        'Publish intentionally'
+                      {t({ id: 'manageProjects.content.tipPublishTitle', defaultMessage: 'Publish intentionally' }
                       )}
                     </p>
                     <p>
-                      {t(
-                        'manageProjects.content.tipPublishBody',
-                        undefined,
-                        'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.'
+                      {t({ id: 'manageProjects.content.tipPublishBody', defaultMessage: 'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.' }
                       )}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t('manageProjects.content.tipOwnershipTitle', undefined, 'Share ownership')}
+                      {t({ id: 'manageProjects.content.tipOwnershipTitle', defaultMessage: 'Share ownership' })}
                     </p>
                     <p>
-                      {t(
-                        'manageProjects.content.tipOwnershipBody',
-                        undefined,
-                        'Add co-managers before launch so triage, support, and archival responsibilities are covered.'
+                      {t({ id: 'manageProjects.content.tipOwnershipBody', defaultMessage: 'Add co-managers before launch so triage, support, and archival responsibilities are covered.' }
                       )}
                     </p>
                   </div>
@@ -325,28 +310,28 @@ export const ManageProjectsContent = () => {
 
               <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
                 <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-                  {t('manageProjects.content.helpfulDocs', undefined, 'Helpful Docs')}
+                  {t({ id: 'manageProjects.content.helpfulDocs', defaultMessage: 'Helpful Docs' })}
                 </p>
                 <div className="space-y-2">
                   <DocsLink
                     icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
                     className={DOCS_LINK_CLASS}
                   >
-                    {t('manageProjects.content.learnHub', undefined, 'Learn Hub')}
+                    {t({ id: 'manageProjects.content.learnHub', defaultMessage: 'Learn Hub' })}
                   </DocsLink>
                   <DocsLink
                     page="creatingAChallenge"
                     icon={<Users className="h-3.5 w-3.5 text-zinc-500" />}
                     className={DOCS_LINK_CLASS}
                   >
-                    {t('manageProjects.content.challengeCreation', undefined, 'Challenge Creation')}
+                    {t({ id: 'manageProjects.content.challengeCreation', defaultMessage: 'Challenge Creation' })}
                   </DocsLink>
                   <DocsLink
                     page="projectsAndProjectManagers"
                     icon={<FolderKanban className="h-3.5 w-3.5 text-zinc-500" />}
                     className={DOCS_LINK_CLASS}
                   >
-                    {t('manageProjects.content.projectManagement', undefined, 'Project Management')}
+                    {t({ id: 'manageProjects.content.projectManagement', defaultMessage: 'Project Management' })}
                   </DocsLink>
                 </div>
               </div>
@@ -365,7 +350,7 @@ export const ManageProjectsContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title={t('common.showPanel', undefined, 'Show panel')}
+                  title={t({ id: 'common.showPanel', defaultMessage: 'Show panel' })}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -373,28 +358,28 @@ export const ManageProjectsContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t('common.searchProjects', undefined, 'Search projects...')}
+                placeholder={t({ id: 'common.searchProjects', defaultMessage: 'Search projects...' })}
               />
               <FilterToggle
-                label={t('common.discoverable', undefined, 'Discoverable')}
+                label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
                 icon={Eye}
                 checked={onlyEnabled}
                 onCheckedChange={setOnlyEnabled}
               />
               <FilterToggle
-                label={t('common.owned', undefined, 'Owned')}
+                label={t({ id: 'common.owned', defaultMessage: 'Owned' })}
                 icon={User}
                 checked={onlyOwned}
                 onCheckedChange={setOnlyOwned}
               />
               <FilterToggle
-                label={t('common.pinned', undefined, 'Pinned')}
+                label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                 icon={Pin}
                 checked={onlyShowPinned}
                 onCheckedChange={setOnlyShowPinned}
               />
               <FilterToggle
-                label={t('common.archived', undefined, 'Archived')}
+                label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
                 icon={Archive}
                 checked={onlyShowArchived}
                 onCheckedChange={setOnlyShowArchived}
@@ -434,13 +419,10 @@ export const ManageProjectsContent = () => {
                       <FolderKanban />
                     </EmptyMedia>
                     <EmptyTitle>
-                      {t('common.noProjectsFound', undefined, 'No projects found')}
+                      {t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' })}
                     </EmptyTitle>
                     <EmptyDescription>
-                      {t(
-                        'manageProjects.content.noProjectsDescription',
-                        undefined,
-                        'Get started by creating your first project.'
+                      {t({ id: 'manageProjects.content.noProjectsDescription', defaultMessage: 'Get started by creating your first project.' }
                       )}
                     </EmptyDescription>
                   </EmptyHeader>
@@ -448,7 +430,7 @@ export const ManageProjectsContent = () => {
                     <Button asChild>
                       <Link to="/manage/project/new">
                         <Plus />
-                        {t('common.createProject', undefined, 'Create Project')}
+                        {t({ id: 'common.createProject', defaultMessage: 'Create Project' })}
                       </Link>
                     </Button>
                   </EmptyContent>
@@ -484,13 +466,10 @@ export const ManageProjectsContent = () => {
                   getItemKey={(proj) => proj.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: FolderKanban,
-                    title: t('common.noProjectsFound', undefined, 'No projects found'),
-                    description: t(
-                      'manageProjects.content.noProjectsDescriptionShort',
-                      undefined,
-                      'Get started by creating your first project'
+                    title: t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' }),
+                    description: t({ id: 'manageProjects.content.noProjectsDescriptionShort', defaultMessage: 'Get started by creating your first project' }
                     ),
-                    actionLabel: t('common.createProject', undefined, 'Create Project'),
+                    actionLabel: t({ id: 'common.createProject', defaultMessage: 'Create Project' }),
                     actionTo: '/manage/project/new',
                   }}
                 />
@@ -515,23 +494,20 @@ export const ManageProjectsContent = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t('common.deleteProject2', undefined, 'Delete project?')}
+              {t({ id: 'common.deleteProject2', defaultMessage: 'Delete project?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t(
-                'manageProjects.content.deleteProjectDescription',
-                { projectName: deleteProjectConfirm?.projectName ?? '' },
-                'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.'
+              {t({ id: 'manageProjects.content.deleteProjectDescription', defaultMessage: 'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.' }, { projectName: deleteProjectConfirm?.projectName ?? '' }
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+            <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteProject}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
             >
-              {t('common.delete', undefined, 'Delete')}
+              {t({ id: 'common.delete', defaultMessage: 'Delete' })}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

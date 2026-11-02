@@ -11,12 +11,12 @@ export const ReviewStatsBlock = () => {
   const { data, isLoading, isError } = api.user.metrics(userId, timeRange.monthDuration)
 
   const reviewStatusLabels: Record<string, string> = {
-    '0': t('common.needed', undefined, 'Needed'),
-    '1': t('common.approved', undefined, 'Approved'),
-    '2': t('common.rejected', undefined, 'Rejected'),
-    '3': t('common.assisted', undefined, 'Assisted'),
-    '4': t('common.disputed', undefined, 'Disputed'),
-    '5': t('common.unnecessary', undefined, 'Unnecessary'),
+    '0': t({ id: 'common.needed', defaultMessage: 'Needed' }),
+    '1': t({ id: 'common.approved', defaultMessage: 'Approved' }),
+    '2': t({ id: 'common.rejected', defaultMessage: 'Rejected' }),
+    '3': t({ id: 'common.assisted', defaultMessage: 'Assisted' }),
+    '4': t({ id: 'common.disputed', defaultMessage: 'Disputed' }),
+    '5': t({ id: 'common.unnecessary', defaultMessage: 'Unnecessary' }),
   }
 
   const reviewedTotal = Object.values(data?.reviewedTasks ?? {}).reduce((a, b) => a + b, 0)
@@ -30,7 +30,7 @@ export const ReviewStatsBlock = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <ClipboardCheck className="size-4 text-blue-600" aria-hidden="true" />
-          {t('profilePage.reviewStats.title', undefined, 'Reviews Received')}
+          {t({ id: 'profilePage.reviewStats.title', defaultMessage: 'Reviews Received' })}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -38,7 +38,7 @@ export const ReviewStatsBlock = () => {
           <Skeleton className="h-24 w-full" />
         ) : isError || !data ? (
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t('profilePage.reviewStats.loadError', undefined, "Couldn't load review stats.")}
+            {t({ id: 'profilePage.reviewStats.loadError', defaultMessage: "Couldn't load review stats." })}
           </p>
         ) : (
           <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
@@ -46,7 +46,7 @@ export const ReviewStatsBlock = () => {
               <div key={status} className="flex justify-between">
                 <dt className="text-zinc-600 dark:text-slate-400">
                   {reviewStatusLabels[status] ??
-                    t('common.statusWithStatus', { status }, 'Status {status}')}
+                    t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })}
                 </dt>
                 <dd className="font-medium font-mono tabular-nums">{count.toLocaleString()}</dd>
               </div>

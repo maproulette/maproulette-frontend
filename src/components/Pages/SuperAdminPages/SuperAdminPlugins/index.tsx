@@ -11,14 +11,11 @@ export const SuperAdminPlugins = () => {
         <div className="mb-2 flex items-center gap-2">
           <Puzzle className="h-8 w-8 text-orange-600 dark:text-orange-400" />
           <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-            {t('superAdminPlugins.title', undefined, 'Plugin Management')}
+            {t({ id: 'superAdminPlugins.title', defaultMessage: 'Plugin Management' })}
           </h1>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          {t(
-            'superAdminPlugins.subtitle',
-            undefined,
-            'Manage plugins and integrations for the platform'
+          {t({ id: 'superAdminPlugins.subtitle', defaultMessage: 'Manage plugins and integrations for the platform' }
           )}
         </p>
       </div>
@@ -29,13 +26,10 @@ export const SuperAdminPlugins = () => {
             <Puzzle />
           </EmptyMedia>
           <EmptyTitle>
-            {t('superAdminPlugins.comingSoon.title', undefined, 'Coming soon')}
+            {t({ id: 'superAdminPlugins.comingSoon.title', defaultMessage: 'Coming soon' })}
           </EmptyTitle>
           <EmptyDescription>
-            {t(
-              'superAdminPlugins.comingSoon.description',
-              undefined,
-              'Plugin management is not yet available. There is currently no plugins API to install, configure, or browse plugins against, so this page is a placeholder until that support lands.'
+            {t({ id: 'superAdminPlugins.comingSoon.description', defaultMessage: 'Plugin management is not yet available. There is currently no plugins API to install, configure, or browse plugins against, so this page is a placeholder until that support lands.' }
             )}
           </EmptyDescription>
         </EmptyHeader>

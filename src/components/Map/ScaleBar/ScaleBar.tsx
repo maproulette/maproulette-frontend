@@ -43,25 +43,19 @@ type TFunction = ReturnType<typeof useIntl>['t']
 const formatMetric = (meters: number, t: TFunction): string => {
   if (meters >= 1000) {
     const km = meters / 1000
-    return t(
-      'map.scaleBar.kilometers',
-      { value: km % 1 === 0 ? km.toFixed(0) : km.toFixed(1) },
-      '{value} km'
+    return t({ id: 'map.scaleBar.kilometers', defaultMessage: '{value} km' }, { value: km % 1 === 0 ? km.toFixed(0) : km.toFixed(1) }
     )
   }
-  return t('map.scaleBar.meters', { value: meters }, '{value} m')
+  return t({ id: 'map.scaleBar.meters', defaultMessage: '{value} m' }, { value: meters })
 }
 
 const formatImperial = (feet: number, t: TFunction): string => {
   if (feet >= FEET_PER_MILE) {
     const mi = feet / FEET_PER_MILE
-    return t(
-      'map.scaleBar.miles',
-      { value: mi % 1 === 0 ? mi.toFixed(0) : mi.toFixed(1) },
-      '{value} mi'
+    return t({ id: 'map.scaleBar.miles', defaultMessage: '{value} mi' }, { value: mi % 1 === 0 ? mi.toFixed(0) : mi.toFixed(1) }
     )
   }
-  return t('map.scaleBar.feet', { value: feet }, '{value} ft')
+  return t({ id: 'map.scaleBar.feet', defaultMessage: '{value} ft' }, { value: feet })
 }
 
 const pickStep = (steps: number[], max: number): number => {

@@ -14,8 +14,9 @@ import {
   TAILWIND_HEX,
   tabTriggerClass,
 } from './taskConstants.ts'
+import { testT } from '@/test/translate'
 
-const t = (_id: string, _values: unknown, defaultMessage?: string) => defaultMessage ?? _id
+const t = testT
 
 describe('STATUS_LABELS', () => {
   it('has a label for every canonical status id', () => {

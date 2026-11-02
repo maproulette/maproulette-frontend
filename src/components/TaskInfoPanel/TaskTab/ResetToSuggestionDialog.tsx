@@ -35,29 +35,21 @@ export const ResetToSuggestionDialog = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t(
-              'taskInfoPanel.resetToSuggestion.title',
-              undefined,
-              "Reset to the challenge's suggestion?"
+            {t({ id: 'taskInfoPanel.resetToSuggestion.title', defaultMessage: "Reset to the challenge's suggestion?" }
             )}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {t(
-              'taskInfoPanel.resetToSuggestion.description',
-              { count: editCount },
-              // The plural has to span the whole message: Transifex rejects text
-              // trailing a plural block.
-              '{count, plural, one {The # unsaved edit in the editor is discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.} other {All # unsaved edits in the editor are discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.}}'
+            {t({ id: 'taskInfoPanel.resetToSuggestion.description', defaultMessage: '{count, plural, one {The # unsaved edit in the editor is discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.} other {All # unsaved edits in the editor are discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.}}' }, { count: editCount }
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+          <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             className="bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-800"
           >
-            {t('taskInfoPanel.resetToSuggestion.confirm', undefined, 'Discard and reset')}
+            {t({ id: 'taskInfoPanel.resetToSuggestion.confirm', defaultMessage: 'Discard and reset' })}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

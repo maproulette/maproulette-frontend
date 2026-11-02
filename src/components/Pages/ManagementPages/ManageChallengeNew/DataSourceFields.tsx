@@ -56,17 +56,11 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                   <RadioGroupItem value="overpass" id={overpassId} className="mt-1" />
                   <div className="flex-1 space-y-1">
                     <div className="font-medium">
-                      {t(
-                        'manageChallengeNew.challengeForm.overpassOptionTitle',
-                        undefined,
-                        'I want to provide an Overpass query'
+                      {t({ id: 'manageChallengeNew.challengeForm.overpassOptionTitle', defaultMessage: 'I want to provide an Overpass query' }
                       )}
                     </div>
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {t(
-                        'manageChallengeNew.challengeForm.overpassOptionDescription',
-                        undefined,
-                        'Use Overpass QL to automatically generate tasks from OpenStreetMap data'
+                      {t({ id: 'manageChallengeNew.challengeForm.overpassOptionDescription', defaultMessage: 'Use Overpass QL to automatically generate tasks from OpenStreetMap data' }
                       )}
                     </p>
                   </div>
@@ -83,17 +77,11 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                   <RadioGroupItem value="localGeoJSON" id={localGeoJSONId} className="mt-1" />
                   <div className="flex-1 space-y-1">
                     <div className="font-medium">
-                      {t(
-                        'manageChallengeNew.challengeForm.localGeoJSONOptionTitle',
-                        undefined,
-                        'I want to upload a GeoJSON file'
+                      {t({ id: 'manageChallengeNew.challengeForm.localGeoJSONOptionTitle', defaultMessage: 'I want to upload a GeoJSON file' }
                       )}
                     </div>
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {t(
-                        'manageChallengeNew.challengeForm.localGeoJSONOptionDescription',
-                        undefined,
-                        'Upload a GeoJSON file from your computer'
+                      {t({ id: 'manageChallengeNew.challengeForm.localGeoJSONOptionDescription', defaultMessage: 'Upload a GeoJSON file from your computer' }
                       )}
                     </p>
                   </div>
@@ -110,17 +98,11 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                   <RadioGroupItem value="remoteGeoJSON" id={remoteGeoJSONId} className="mt-1" />
                   <div className="flex-1 space-y-1">
                     <div className="font-medium">
-                      {t(
-                        'manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle',
-                        undefined,
-                        'I have a URL to the GeoJSON data'
+                      {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle', defaultMessage: 'I have a URL to the GeoJSON data' }
                       )}
                     </div>
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {t(
-                        'manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription',
-                        undefined,
-                        'Provide a URL pointing to a GeoJSON file'
+                      {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription', defaultMessage: 'Provide a URL pointing to a GeoJSON file' }
                       )}
                     </p>
                   </div>
@@ -140,7 +122,7 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                {t('manageChallengeNew.challengeForm.overpassQLLabel', undefined, 'Overpass QL')}
+                {t({ id: 'manageChallengeNew.challengeForm.overpassQLLabel', defaultMessage: 'Overpass QL' })}
               </FormLabel>
               <FormControl>
                 <Textarea
@@ -150,18 +132,12 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                 />
               </FormControl>
               <FormDescription>
-                {t(
-                  'manageChallengeNew.challengeForm.overpassQLDescriptionBefore',
-                  undefined,
-                  'Overpass query language to automatically generate tasks for this challenge. Please see the'
+                {t({ id: 'manageChallengeNew.challengeForm.overpassQLDescriptionBefore', defaultMessage: 'Overpass query language to automatically generate tasks for this challenge. Please see the' }
                 )}{' '}
                 <DocsLink page="overpassChallenges" icon={null}>
-                  {t('manageChallengeNew.challengeForm.docsLinkText', undefined, 'docs')}
+                  {t({ id: 'manageChallengeNew.challengeForm.docsLinkText', defaultMessage: 'docs' })}
                 </DocsLink>{' '}
-                {t(
-                  'manageChallengeNew.challengeForm.overpassQLDescriptionAfter',
-                  undefined,
-                  'for important details and common pitfalls when creating challenges using Overpass queries.'
+                {t({ id: 'manageChallengeNew.challengeForm.overpassQLDescriptionAfter', defaultMessage: 'for important details and common pitfalls when creating challenges using Overpass queries.' }
                 )}
               </FormDescription>
               <FormMessage />
@@ -177,7 +153,7 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
           render={({ field: { value, onChange, ...field } }) => (
             <FormItem>
               <FormLabel>
-                {t('manageChallengeNew.challengeForm.geoJSONFileLabel', undefined, 'GeoJSON File')}
+                {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileLabel', defaultMessage: 'GeoJSON File' })}
               </FormLabel>
               <FormControl>
                 <div className="flex flex-col gap-2">
@@ -192,32 +168,20 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                   />
                   {value && (
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {t(
-                        'manageChallengeNew.challengeForm.geoJSONFileSelected',
-                        { name: value.name, size: (value.size / 1024).toFixed(2) },
-                        'Selected: {name} ({size} KB)'
+                      {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileSelected', defaultMessage: 'Selected: {name} ({size} KB)' }, { name: value.name, size: (value.size / 1024).toFixed(2) }
                       )}
                     </p>
                   )}
                 </div>
               </FormControl>
               <FormDescription>
-                {t(
-                  'manageChallengeNew.challengeForm.geoJSONFileDescriptionBefore',
-                  undefined,
-                  'Upload a GeoJSON file from your computer. Standard GeoJSON and'
+                {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileDescriptionBefore', defaultMessage: 'Upload a GeoJSON file from your computer. Standard GeoJSON and' }
                 )}{' '}
                 <DocsLink page="lineByLineGeoJSON" icon={null}>
-                  {t(
-                    'manageChallengeNew.challengeForm.lineByLineGeoJSONLinkText',
-                    undefined,
-                    'line-by-line GeoJSON format'
+                  {t({ id: 'manageChallengeNew.challengeForm.lineByLineGeoJSONLinkText', defaultMessage: 'line-by-line GeoJSON format' }
                   )}
                 </DocsLink>{' '}
-                {t(
-                  'manageChallengeNew.challengeForm.geoJSONFileDescriptionAfter',
-                  undefined,
-                  'are supported.'
+                {t({ id: 'manageChallengeNew.challengeForm.geoJSONFileDescriptionAfter', defaultMessage: 'are supported.' }
                 )}
               </FormDescription>
               <FormMessage />
@@ -233,27 +197,18 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
           name="remoteGeoJSON"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('common.geojsonUrl', undefined, 'GeoJSON URL')}</FormLabel>
+              <FormLabel>{t({ id: 'common.geojsonUrl', defaultMessage: 'GeoJSON URL' })}</FormLabel>
               <FormControl>
                 <Input placeholder="https://www.example.com/geojson.json" type="url" {...field} />
               </FormControl>
               <FormDescription>
-                {t(
-                  'manageChallengeNew.challengeForm.remoteGeoJSONDescription',
-                  undefined,
-                  'Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file.'
+                {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONDescription', defaultMessage: 'Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file.' }
                 )}{' '}
                 <DocsLink page="gistsForRemoteGeoJSON" icon={null}>
-                  {t(
-                    'manageChallengeNew.challengeForm.remoteGeoJSONDocsLinkText',
-                    undefined,
-                    'Hosting your GeoJSON in a GitHub gist'
+                  {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONDocsLinkText', defaultMessage: 'Hosting your GeoJSON in a GitHub gist' }
                   )}
                 </DocsLink>{' '}
-                {t(
-                  'manageChallengeNew.challengeForm.remoteGeoJSONDocsSuffix',
-                  undefined,
-                  'is one way to do that.'
+                {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONDocsSuffix', defaultMessage: 'is one way to do that.' }
                 )}
               </FormDescription>
               <FormMessage />

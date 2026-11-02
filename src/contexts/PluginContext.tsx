@@ -97,7 +97,7 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
       isPluginEnabled: () => false,
       registerPluginFromUrl: async () => ({
         success: false,
-        error: t('plugins.errors.notAuthenticated', undefined, 'Not authenticated'),
+        error: t({ id: 'plugins.errors.notAuthenticated', defaultMessage: 'Not authenticated' }),
       }),
       removeRemotePlugin: async () => {},
       getRemotePluginUrls: () => new Map(),
@@ -217,10 +217,7 @@ const PluginProviderInner = ({
                 error: result.error,
               })
               setError(
-                t(
-                  'plugins.errors.loadPluginFailed',
-                  { error: String(result.error) },
-                  'Failed to load plugin: {error}'
+                t({ id: 'plugins.errors.loadPluginFailed', defaultMessage: 'Failed to load plugin: {error}' }, { error: String(result.error) }
                 )
               )
             }
@@ -251,7 +248,7 @@ const PluginProviderInner = ({
       } catch (error) {
         logger.error('Failed to load plugin preferences', { error })
         setError(
-          t('plugins.errors.loadPreferencesFailed', undefined, 'Failed to load plugin preferences')
+          t({ id: 'plugins.errors.loadPreferencesFailed', defaultMessage: 'Failed to load plugin preferences' })
         )
       } finally {
         setLoading(false)
@@ -669,14 +666,14 @@ const PluginProviderInner = ({
         }
 
         setError(
-          result.error || t('plugins.errors.registerFailed', undefined, 'Failed to register plugin')
+          result.error || t({ id: 'plugins.errors.registerFailed', defaultMessage: 'Failed to register plugin' })
         )
         return result
       } catch (err) {
         const errorMessage =
           err instanceof Error
             ? err.message
-            : t('plugins.errors.registerFailed', undefined, 'Failed to register plugin')
+            : t({ id: 'plugins.errors.registerFailed', defaultMessage: 'Failed to register plugin' })
         setError(errorMessage)
         return {
           success: false,
@@ -714,7 +711,7 @@ const PluginProviderInner = ({
         const errorMessage =
           err instanceof Error
             ? err.message
-            : t('plugins.errors.removeFailed', undefined, 'Failed to remove plugin')
+            : t({ id: 'plugins.errors.removeFailed', defaultMessage: 'Failed to remove plugin' })
         setError(errorMessage)
         logger.error('Failed to remove remote plugin', { error: err })
       }

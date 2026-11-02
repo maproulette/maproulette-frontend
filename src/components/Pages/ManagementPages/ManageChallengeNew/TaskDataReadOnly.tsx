@@ -20,10 +20,7 @@ export const TaskDataReadOnly = ({ dataSource, challenge }: TaskDataReadOnlyProp
       {dataSource === 'overpass' && (
         <div className="space-y-2">
           <p className="font-medium text-sm">
-            {t(
-              'manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel',
-              undefined,
-              'Overpass query'
+            {t({ id: 'manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel', defaultMessage: 'Overpass query' }
             )}
           </p>
           <Textarea
@@ -32,27 +29,21 @@ export const TaskDataReadOnly = ({ dataSource, challenge }: TaskDataReadOnlyProp
             className="min-h-32 resize-none bg-zinc-100 font-mono text-sm dark:bg-slate-800"
           />
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            {t(
-              'manageChallengeNew.challengeForm.overpassQueryReadOnlyBody',
-              undefined,
-              'Overpass queries cannot be edited here. Use Rebuild Tasks when managing your challenge to re-run the query and refresh your tasks.'
+            {t({ id: 'manageChallengeNew.challengeForm.overpassQueryReadOnlyBody', defaultMessage: 'Overpass queries cannot be edited here. Use Rebuild Tasks when managing your challenge to re-run the query and refresh your tasks.' }
             )}
           </p>
         </div>
       )}
       {dataSource === 'remoteGeoJSON' && (
         <div className="space-y-2">
-          <p className="font-medium text-sm">{t('common.geojsonUrl', undefined, 'GeoJSON URL')}</p>
+          <p className="font-medium text-sm">{t({ id: 'common.geojsonUrl', defaultMessage: 'GeoJSON URL' })}</p>
           <Input
             readOnly
             value={challenge?.remoteGeoJson ?? ''}
             className="bg-zinc-100 dark:bg-slate-800"
           />
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            {t(
-              'manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyBody',
-              undefined,
-              'Remote URLs cannot be edited here. Use Rebuild Tasks when managing your challenge to re-download the GeoJSON and refresh your tasks.'
+            {t({ id: 'manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyBody', defaultMessage: 'Remote URLs cannot be edited here. Use Rebuild Tasks when managing your challenge to re-download the GeoJSON and refresh your tasks.' }
             )}
           </p>
         </div>
@@ -60,17 +51,11 @@ export const TaskDataReadOnly = ({ dataSource, challenge }: TaskDataReadOnlyProp
       {dataSource === 'localGeoJSON' && (
         <div className="space-y-2">
           <p className="font-medium text-sm">
-            {t(
-              'manageChallengeNew.challengeForm.localGeoJSONReadOnlyLabel',
-              undefined,
-              'Uploaded GeoJSON file'
+            {t({ id: 'manageChallengeNew.challengeForm.localGeoJSONReadOnlyLabel', defaultMessage: 'Uploaded GeoJSON file' }
             )}
           </p>
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            {t(
-              'manageChallengeNew.challengeForm.localGeoJSONReadOnlyBody',
-              undefined,
-              "This challenge was built from an uploaded GeoJSON file, which can't be shown here. To replace it with fresh GeoJSON, use Rebuild Tasks when managing your challenge."
+            {t({ id: 'manageChallengeNew.challengeForm.localGeoJSONReadOnlyBody', defaultMessage: "This challenge was built from an uploaded GeoJSON file, which can't be shown here. To replace it with fresh GeoJSON, use Rebuild Tasks when managing your challenge." }
             )}
           </p>
         </div>

@@ -62,13 +62,13 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
     try {
       await addCommentMutation.mutateAsync({ taskId, commentText: trimmed })
       setReplyValue('')
-      toast.success(t('notificationsPage.thread.replyPosted', undefined, 'Reply posted'))
+      toast.success(t({ id: 'notificationsPage.thread.replyPosted', defaultMessage: 'Reply posted' }))
     } catch (error) {
       logger.error('Failed to post reply from notification thread', {
         error,
         taskId,
       })
-      toast.error(t('notificationsPage.thread.replyFailed', undefined, 'Failed to post reply'))
+      toast.error(t({ id: 'notificationsPage.thread.replyFailed', defaultMessage: 'Failed to post reply' }))
       // Re-throw so the composer can exit its busy state via its finally block.
       throw error
     }
@@ -88,39 +88,24 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
             <div className="min-w-0 flex-1">
               <DialogTitle>
                 {isThread
-                  ? t(
-                      'notificationsPage.thread.title.count',
-                      { count: thread?.length ?? 0 },
-                      '{count} notifications'
+                  ? t({ id: 'notificationsPage.thread.title.count', defaultMessage: '{count} notifications' }, { count: thread?.length ?? 0 }
                     )
                   : taskId
-                    ? t(
-                        'notificationsPage.thread.title.task',
-                        { taskId },
-                        'Notification for Task #{taskId}'
+                    ? t({ id: 'notificationsPage.thread.title.task', defaultMessage: 'Notification for Task #{taskId}' }, { taskId }
                       )
-                    : t('common.notification', undefined, 'Notification')}
+                    : t({ id: 'common.notification', defaultMessage: 'Notification' })}
               </DialogTitle>
               <DialogDescription>
                 {isThread
-                  ? t(
-                      'notificationsPage.thread.description.groupedForTask',
-                      {
+                  ? t({ id: 'notificationsPage.thread.description.groupedForTask', defaultMessage: 'Grouped together for {ref}' }, {
                         ref: taskId
-                          ? t('common.taskWithTaskId', { taskId }, 'Task #{taskId}')
+                          ? t({ id: 'common.taskWithTaskId', defaultMessage: 'Task #{taskId}' }, { taskId })
                           : (challengeRef ??
-                            t(
-                              'notificationsPage.thread.description.thisThread',
-                              undefined,
-                              'this thread'
+                            t({ id: 'notificationsPage.thread.description.thisThread', defaultMessage: 'this thread' }
                             )),
-                      },
-                      'Grouped together for {ref}'
+                      }
                     )
-                  : t(
-                      'notificationsPage.thread.description.viewDetails',
-                      undefined,
-                      'View notification details'
+                  : t({ id: 'notificationsPage.thread.description.viewDetails', defaultMessage: 'View notification details' }
                     )}
               </DialogDescription>
             </div>
@@ -143,15 +128,12 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
 
         {taskId ? (
           <section
-            aria-label={t(
-              'notificationsPage.thread.commentsSectionLabel',
-              undefined,
-              'Task comment thread'
+            aria-label={t({ id: 'notificationsPage.thread.commentsSectionLabel', defaultMessage: 'Task comment thread' }
             )}
             className="mt-4 space-y-3 border-zinc-200 border-t pt-4 dark:border-slate-700"
           >
             <h3 className="font-medium text-sm text-zinc-900 dark:text-slate-100">
-              {t('notificationsPage.thread.commentsHeading', undefined, 'Comments on this task')}
+              {t({ id: 'notificationsPage.thread.commentsHeading', defaultMessage: 'Comments on this task' })}
             </h3>
             {commentsLoading ? (
               <div className="flex items-center justify-center py-4">
@@ -161,10 +143,7 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
               <CommentList
                 comments={taskComments}
                 variant="compact"
-                emptyStateText={t(
-                  'notificationsPage.thread.noComments',
-                  undefined,
-                  'No comments on this task yet'
+                emptyStateText={t({ id: 'notificationsPage.thread.noComments', defaultMessage: 'No comments on this task yet' }
                 )}
                 orderBy="asc"
               />
@@ -176,18 +155,15 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
                   value={replyValue}
                   onChange={setReplyValue}
                   onSubmit={handleReplySubmit}
-                  placeholder={t(
-                    'notificationsPage.thread.replyPlaceholder',
-                    { taskId },
-                    'Reply on Task #{taskId}…'
+                  placeholder={t({ id: 'notificationsPage.thread.replyPlaceholder', defaultMessage: 'Reply on Task #{taskId}…' }, { taskId }
                   )}
-                  submitLabel={t('common.reply', undefined, 'Reply')}
+                  submitLabel={t({ id: 'common.reply', defaultMessage: 'Reply' })}
                   disabled={addCommentMutation.isPending}
                 />
               </div>
             ) : (
               <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-center text-xs text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-                {t('notificationsPage.thread.signInToReply', undefined, 'Sign in to reply')}
+                {t({ id: 'notificationsPage.thread.signInToReply', defaultMessage: 'Sign in to reply' })}
               </div>
             )}
           </section>
@@ -202,12 +178,9 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
             >
               <CheckCheck className="size-4" aria-hidden="true" />
               {unreadIds.length > 0
-                ? t(
-                    'notificationsPage.thread.markThreadReadCount',
-                    { count: unreadIds.length },
-                    'Mark thread as read ({count})'
+                ? t({ id: 'notificationsPage.thread.markThreadReadCount', defaultMessage: 'Mark thread as read ({count})' }, { count: unreadIds.length }
                   )
-                : t('notificationsPage.thread.markThreadRead', undefined, 'Mark thread as read')}
+                : t({ id: 'notificationsPage.thread.markThreadRead', defaultMessage: 'Mark thread as read' })}
             </Button>
             {taskId ? (
               <Button variant="outline" asChild>
@@ -217,7 +190,7 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
                   search={{ tab: 'comments' }}
                   onClick={closeThread}
                 >
-                  {t('notificationsPage.thread.openTask', undefined, 'Open task')}
+                  {t({ id: 'notificationsPage.thread.openTask', defaultMessage: 'Open task' })}
                   <ExternalLink className="size-4" aria-hidden="true" />
                 </Link>
               </Button>
@@ -225,7 +198,7 @@ export const NotificationThreadDialog = ({ onViewAll }: NotificationThreadDialog
           </div>
           {onViewAll && (
             <Button variant="ghost" onClick={onViewAll}>
-              {t('common.viewAllNotifications', undefined, 'View all notifications')}
+              {t({ id: 'common.viewAllNotifications', defaultMessage: 'View all notifications' })}
             </Button>
           )}
         </DialogFooter>

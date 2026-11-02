@@ -70,7 +70,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
         },
       })
       markSaved()
-      toast.success(t('taskPrioritizationPage.content.saveSuccess', undefined, 'Priorities saved'))
+      toast.success(t({ id: 'taskPrioritizationPage.content.saveSuccess', defaultMessage: 'Priorities saved' }))
       navigate({
         to: '/manage/challenge/$challengeId',
         params: { challengeId: String(challengeId) },
@@ -78,7 +78,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
     } catch (error) {
       logger.error('Priority save failed', { error, challengeId })
       toast.error(
-        t('taskPrioritizationPage.content.saveError', undefined, 'Could not save priorities')
+        t({ id: 'taskPrioritizationPage.content.saveError', defaultMessage: 'Could not save priorities' })
       )
       throw error
     }
@@ -96,21 +96,15 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
       <div className="flex h-full flex-col">
         <header className="flex flex-wrap items-start justify-between pb-2">
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t(
-              'common.challengeWithChallengeId',
-              {
+            {t({ id: 'common.challengeWithChallengeId', defaultMessage: '{name} — rules run top-down; the first tier to match wins.' }, {
                 name:
                   challengeName ??
-                  t(
-                    'taskPrioritizationPage.content.challengeNumber',
-                    { challengeId },
-                    'Challenge #{challengeId}'
+                  t({ id: 'taskPrioritizationPage.content.challengeNumber', defaultMessage: 'Challenge #{challengeId}' }, { challengeId }
                   ),
-              },
-              '{name} — rules run top-down; the first tier to match wins.'
+              }
             )}{' '}
             <DocsLink page="taskPriorityRules" icon={null}>
-              {t('taskPrioritizationPage.content.docsLink', undefined, 'How priority rules work')}
+              {t({ id: 'taskPrioritizationPage.content.docsLink', defaultMessage: 'How priority rules work' })}
             </DocsLink>
           </p>
           <div className="flex items-center gap-2">
@@ -120,7 +114,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
               onClick={reset}
               disabled={!isDirty || mutation.isPending}
             >
-              {t('taskPrioritizationPage.content.discard', undefined, 'Discard')}
+              {t({ id: 'taskPrioritizationPage.content.discard', defaultMessage: 'Discard' })}
             </Button>
             <Button
               type="button"
@@ -129,8 +123,8 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
               aria-disabled={!isDirty || mutation.isPending}
             >
               {mutation.isPending
-                ? t('common.saving', undefined, 'Saving…')
-                : t('common.save', undefined, 'Save')}
+                ? t({ id: 'common.saving', defaultMessage: 'Saving…' })
+                : t({ id: 'common.save', defaultMessage: 'Save' })}
             </Button>
           </div>
         </header>

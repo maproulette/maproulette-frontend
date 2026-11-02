@@ -52,15 +52,12 @@ export const ActionsModal = () => {
       <DialogContent size="lg">
         <DialogHeader>
           <DialogTitle>
-            {t('browsedChallengePage.challengeModals.actions.title', undefined, 'Task Activity')}
+            {t({ id: 'browsedChallengePage.challengeModals.actions.title', defaultMessage: 'Task Activity' })}
           </DialogTitle>
         </DialogHeader>
         {!actions ? (
           <p className="py-6 text-center text-sm text-zinc-600 dark:text-slate-400">
-            {t(
-              'browsedChallengePage.challengeModals.actions.unavailable',
-              undefined,
-              'Task activity is not available for this challenge.'
+            {t({ id: 'browsedChallengePage.challengeModals.actions.unavailable', defaultMessage: 'Task activity is not available for this challenge.' }
             )}
           </p>
         ) : (
@@ -69,10 +66,7 @@ export const ActionsModal = () => {
               <div className="flex items-end justify-between gap-4">
                 <div>
                   <p className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    {t(
-                      'browsedChallengePage.challengeModals.actions.completed',
-                      undefined,
-                      'Completed'
+                    {t({ id: 'browsedChallengePage.challengeModals.actions.completed', defaultMessage: 'Completed' }
                     )}
                   </p>
                   <p className="mt-1.5 font-semibold text-3xl text-zinc-900 tabular-nums leading-none tracking-tight dark:text-zinc-50">
@@ -80,10 +74,7 @@ export const ActionsModal = () => {
                   </p>
                 </div>
                 <p className="text-sm text-zinc-600 tabular-nums dark:text-slate-400">
-                  {t(
-                    'browsedChallengePage.challengeModals.actions.completedOf',
-                    { completed: formatNumber(completed), total: formatNumber(total) },
-                    '{completed} of {total} tasks'
+                  {t({ id: 'browsedChallengePage.challengeModals.actions.completedOf', defaultMessage: '{completed} of {total} tasks' }, { completed: formatNumber(completed), total: formatNumber(total) }
                   )}
                 </p>
               </div>
@@ -125,20 +116,14 @@ export const ActionsModal = () => {
                 <div className="space-y-2 px-2">
                   {avgTimeSpent !== undefined && avgTimeSpent > 0 && (
                     <MetaRow
-                      label={t(
-                        'browsedChallengePage.challengeModals.actions.avgTimeSpent',
-                        undefined,
-                        'Average Time Spent'
+                      label={t({ id: 'browsedChallengePage.challengeModals.actions.avgTimeSpent', defaultMessage: 'Average Time Spent' }
                       )}
                       value={formatDurationSeconds(avgTimeSpent / 60, locale)}
                     />
                   )}
                   {validated !== undefined && validated > 0 && (
                     <MetaRow
-                      label={t(
-                        'browsedChallengePage.challengeModals.actions.validated',
-                        undefined,
-                        'Validated'
+                      label={t({ id: 'browsedChallengePage.challengeModals.actions.validated', defaultMessage: 'Validated' }
                       )}
                       value={formatNumber(validated)}
                     />

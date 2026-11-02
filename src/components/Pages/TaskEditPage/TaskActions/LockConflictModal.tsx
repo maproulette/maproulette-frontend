@@ -38,37 +38,28 @@ export const LockConflictModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Lock className="size-5 text-amber-500" aria-hidden="true" />
-            {t('taskEditPage.lockConflictModal.title', undefined, 'You already have a task locked')}
+            {t({ id: 'taskEditPage.lockConflictModal.title', defaultMessage: 'You already have a task locked' })}
           </DialogTitle>
           <DialogDescription>
             {conflict?.parentName
-              ? t(
-                  'taskEditPage.lockConflictModal.descriptionWithParent',
-                  { parentName: conflict.parentName },
-                  'You currently have a task locked in "{parentName}". Unlock it and lock this task instead?'
+              ? t({ id: 'taskEditPage.lockConflictModal.descriptionWithParent', defaultMessage: 'You currently have a task locked in "{parentName}". Unlock it and lock this task instead?' }, { parentName: conflict.parentName }
                 )
-              : t(
-                  'taskEditPage.lockConflictModal.description',
-                  undefined,
-                  'You currently have another task locked. Unlock it and lock this task instead?'
+              : t({ id: 'taskEditPage.lockConflictModal.description', defaultMessage: 'You currently have another task locked. Unlock it and lock this task instead?' }
                 )}
             {bundledCount > 0 &&
               ' ' +
-                t(
-                  'taskEditPage.lockConflictModal.bundleNote',
-                  { count: bundledCount },
-                  '{count, plural, one {This will also release # bundled task.} other {This will also release # bundled tasks.}}'
+                t({ id: 'taskEditPage.lockConflictModal.bundleNote', defaultMessage: '{count, plural, one {This will also release # bundled task.} other {This will also release # bundled tasks.}}' }, { count: bundledCount }
                 )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={onCancel} disabled={busy}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button onClick={onConfirm} disabled={busy}>
             {busy
-              ? t('taskEditPage.lockConflictModal.unlocking', undefined, 'Unlocking…')
-              : t('taskEditPage.lockConflictModal.confirm', undefined, 'Unlock and continue')}
+              ? t({ id: 'taskEditPage.lockConflictModal.unlocking', defaultMessage: 'Unlocking…' })
+              : t({ id: 'taskEditPage.lockConflictModal.confirm', defaultMessage: 'Unlock and continue' })}
           </Button>
         </DialogFooter>
       </DialogContent>

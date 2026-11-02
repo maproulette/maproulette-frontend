@@ -13,17 +13,14 @@ export const SuperAdminChallenges = () => {
         <div className="mb-2 flex items-center gap-2">
           <ListChecks className="h-8 w-8 text-purple-600 dark:text-purple-400" />
           <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-            {t('common.allChallenges', undefined, 'All Challenges')}
+            {t({ id: 'common.allChallenges', defaultMessage: 'All Challenges' })}
           </h1>
           <Badge variant="secondary">
-            {t('superAdminChallenges.comingSoonBadge', undefined, 'Coming Soon')}
+            {t({ id: 'superAdminChallenges.comingSoonBadge', defaultMessage: 'Coming Soon' })}
           </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          {t(
-            'superAdminChallenges.subtitle',
-            undefined,
-            'Browse and manage all challenges across the platform'
+          {t({ id: 'superAdminChallenges.subtitle', defaultMessage: 'Browse and manage all challenges across the platform' }
           )}
         </p>
       </div>
@@ -34,17 +31,11 @@ export const SuperAdminChallenges = () => {
             <ListChecks />
           </EmptyMedia>
           <EmptyTitle>
-            {t(
-              'superAdminChallenges.comingSoon.title',
-              undefined,
-              'Challenge management coming soon'
+            {t({ id: 'superAdminChallenges.comingSoon.title', defaultMessage: 'Challenge management coming soon' }
             )}
           </EmptyTitle>
           <EmptyDescription>
-            {t(
-              'superAdminChallenges.comingSoon.description',
-              undefined,
-              "We're building out challenge management tools for super admins. Check back soon."
+            {t({ id: 'superAdminChallenges.comingSoon.description', defaultMessage: "We're building out challenge management tools for super admins. Check back soon." }
             )}
           </EmptyDescription>
         </EmptyHeader>

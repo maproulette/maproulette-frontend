@@ -58,7 +58,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
     <div className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-white p-2 shadow-xs dark:border-slate-700 dark:bg-slate-800">
       <div className="flex items-center gap-2">
         <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
-          {t('manageChallengeDetail.tasksExplorer.filtersLabel', undefined, 'Filters')}
+          {t({ id: 'manageChallengeDetail.tasksExplorer.filtersLabel', defaultMessage: 'Filters' })}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -72,7 +72,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
               )}
             >
               <span>
-                {t('common.status', undefined, 'Status')}
+                {t({ id: 'common.status', defaultMessage: 'Status' })}
                 {statusDirty ? ' •' : ''}
               </span>
               <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
@@ -80,10 +80,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           </DropdownMenuTrigger>
           <DropdownMenuContent className="max-h-72 w-56 overflow-y-auto" align="start">
             <DropdownMenuLabel>
-              {t(
-                'manageChallengeDetail.tasksExplorer.taskStatusMenuLabel',
-                undefined,
-                'Task status'
+              {t({ id: 'manageChallengeDetail.tasksExplorer.taskStatusMenuLabel', defaultMessage: 'Task status' }
               )}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -112,14 +109,14 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
               )}
             >
               <span>
-                {t('common.priority', undefined, 'Priority')}
+                {t({ id: 'common.priority', defaultMessage: 'Priority' })}
                 {priorityDirty ? ' •' : ''}
               </span>
               <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>{t('common.priority', undefined, 'Priority')}</DropdownMenuLabel>
+            <DropdownMenuLabel>{t({ id: 'common.priority', defaultMessage: 'Priority' })}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {DEFAULT_PRIORITY_FILTER.map((p) => (
               <DropdownMenuCheckboxItem
@@ -128,7 +125,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
                 onCheckedChange={(c) => setPriorityChecked(p, c === true)}
                 onSelect={(e) => e.preventDefault()}
               >
-                {t(TASK_PRIORITY_LABEL_IDS[p], undefined, TASK_PRIORITY_LABELS[p])}
+                {t({ id: TASK_PRIORITY_LABEL_IDS[p], defaultMessage: TASK_PRIORITY_LABELS[p] })}
               </DropdownMenuCheckboxItem>
             ))}
           </DropdownMenuContent>
@@ -145,14 +142,11 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           className="h-9 gap-1 text-zinc-600 hover:text-zinc-900 disabled:opacity-40 dark:text-zinc-400 dark:hover:text-zinc-100"
           disabled={!filtersDirty}
           onClick={clearFilters}
-          title={t(
-            'manageChallengeDetail.tasksExplorer.clearFiltersTitle',
-            undefined,
-            'Clear all filters and reset sort'
+          title={t({ id: 'manageChallengeDetail.tasksExplorer.clearFiltersTitle', defaultMessage: 'Clear all filters and reset sort' }
           )}
         >
           <X className="h-4 w-4" />
-          {t('common.clear', undefined, 'Clear')}
+          {t({ id: 'common.clear', defaultMessage: 'Clear' })}
         </Button>
       </div>
 
@@ -160,7 +154,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
 
       <div className="flex items-center gap-2">
         <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
-          {t('manageChallengeDetail.tasksExplorer.sortLabel', undefined, 'Sort')}
+          {t({ id: 'manageChallengeDetail.tasksExplorer.sortLabel', defaultMessage: 'Sort' })}
         </span>
         <Select value={sortField} onValueChange={(v) => setSortField(v as SortField)}>
           <SelectTrigger size="sm" className="h-9 w-28">
@@ -169,7 +163,7 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           <SelectContent>
             {SORT_FIELDS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {t(SORT_FIELD_LABEL_IDS[opt.value], undefined, opt.label)}
+                {t({ id: SORT_FIELD_LABEL_IDS[opt.value], defaultMessage: opt.label })}
               </SelectItem>
             ))}
           </SelectContent>
@@ -182,27 +176,21 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           onClick={() => setSortDesc((d) => !d)}
           title={
             sortDesc
-              ? t(
-                  'manageChallengeDetail.tasksExplorer.sortDescTitle',
-                  undefined,
-                  'Descending — click for ascending'
+              ? t({ id: 'manageChallengeDetail.tasksExplorer.sortDescTitle', defaultMessage: 'Descending — click for ascending' }
                 )
-              : t(
-                  'manageChallengeDetail.tasksExplorer.sortAscTitle',
-                  undefined,
-                  'Ascending — click for descending'
+              : t({ id: 'manageChallengeDetail.tasksExplorer.sortAscTitle', defaultMessage: 'Ascending — click for descending' }
                 )
           }
         >
           {sortDesc ? (
             <>
               <ArrowDownAZ className="h-4 w-4" />
-              {t('manageChallengeDetail.tasksExplorer.sortDescButton', undefined, 'Desc')}
+              {t({ id: 'manageChallengeDetail.tasksExplorer.sortDescButton', defaultMessage: 'Desc' })}
             </>
           ) : (
             <>
               <ArrowUpAZ className="h-4 w-4" />
-              {t('manageChallengeDetail.tasksExplorer.sortAscButton', undefined, 'Asc')}
+              {t({ id: 'manageChallengeDetail.tasksExplorer.sortAscButton', defaultMessage: 'Asc' })}
             </>
           )}
         </Button>

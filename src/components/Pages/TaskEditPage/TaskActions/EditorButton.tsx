@@ -40,7 +40,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   // The primary button opens embedded iD for a tag fix, so it must say so
   // rather than advertising the mapper's usual editor.
   const primaryEditorLabel = isTagFix
-    ? t('taskEditPage.taskActions.editorButton.editInId', undefined, 'Edit in iD')
+    ? t({ id: 'taskEditPage.taskActions.editorButton.editInId', defaultMessage: 'Edit in iD' })
     : currentEditorOption.label
 
   const handleSetDefaultEditor = async (editorValue: number) => {
@@ -61,18 +61,12 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
         {
           onSuccess: () =>
             toast.success(
-              t(
-                'taskEditPage.taskActions.editorButton.defaultUpdated',
-                undefined,
-                'Default editor updated'
+              t({ id: 'taskEditPage.taskActions.editorButton.defaultUpdated', defaultMessage: 'Default editor updated' }
               )
             ),
           onError: () =>
             toast.error(
-              t(
-                'taskEditPage.taskActions.editorButton.defaultUpdateFailed',
-                undefined,
-                'Failed to update default editor'
+              t({ id: 'taskEditPage.taskActions.editorButton.defaultUpdateFailed', defaultMessage: 'Failed to update default editor' }
               )
             ),
         }
@@ -87,22 +81,19 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   // Get short label for mobile
   const getShortLabel = (label: string) => {
     if (label.includes('iD'))
-      return t('taskEditPage.taskActions.editorButton.short.id', undefined, 'iD')
+      return t({ id: 'taskEditPage.taskActions.editorButton.short.id', defaultMessage: 'iD' })
     if (label.includes('JOSM')) {
       if (label.includes('new layer'))
-        return t('taskEditPage.taskActions.editorButton.short.josmLayer', undefined, 'JOSM Layer')
+        return t({ id: 'taskEditPage.taskActions.editorButton.short.josmLayer', defaultMessage: 'JOSM Layer' })
       if (label.includes('features'))
-        return t(
-          'taskEditPage.taskActions.editorButton.short.josmFeatures',
-          undefined,
-          'JOSM Features'
+        return t({ id: 'taskEditPage.taskActions.editorButton.short.josmFeatures', defaultMessage: 'JOSM Features' }
         )
-      return t('taskEditPage.taskActions.editorButton.short.josm', undefined, 'JOSM')
+      return t({ id: 'taskEditPage.taskActions.editorButton.short.josm', defaultMessage: 'JOSM' })
     }
     if (label.includes('level0'))
-      return t('taskEditPage.taskActions.editorButton.short.level0', undefined, 'Level0')
+      return t({ id: 'taskEditPage.taskActions.editorButton.short.level0', defaultMessage: 'Level0' })
     if (label.includes('Rapid'))
-      return t('taskEditPage.taskActions.editorButton.short.rapid', undefined, 'Rapid')
+      return t({ id: 'taskEditPage.taskActions.editorButton.short.rapid', defaultMessage: 'Rapid' })
     return label
   }
 
@@ -116,10 +107,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
           onClick={openDefaultEditor}
           className="gap-2 rounded-r-none rounded-l-full border-r border-r-background/20"
           variant="default"
-          title={t(
-            'taskEditPage.taskActions.editorButton.openTaskIn',
-            { editor: primaryEditorLabel },
-            'Open task in {editor}'
+          title={t({ id: 'taskEditPage.taskActions.editorButton.openTaskIn', defaultMessage: 'Open task in {editor}' }, { editor: primaryEditorLabel }
           )}
           disabled={busy}
         >
@@ -132,10 +120,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
               size="sm"
               variant="default"
               className="rounded-r-full rounded-l-none px-2"
-              title={t(
-                'taskEditPage.taskActions.editorButton.chooseEditor',
-                undefined,
-                'Open in another editor, or change the default'
+              title={t({ id: 'taskEditPage.taskActions.editorButton.chooseEditor', defaultMessage: 'Open in another editor, or change the default' }
               )}
               disabled={busy}
             >
@@ -147,7 +132,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
                 that does the same thing, so the shortcuts are discoverable
                 right where a mapper goes looking for an editor. */}
             <DropdownMenuLabel>
-              {t('taskEditPage.taskActions.editorButton.openIn', undefined, 'Open this task in:')}
+              {t({ id: 'taskEditPage.taskActions.editorButton.openIn', defaultMessage: 'Open this task in:' })}
             </DropdownMenuLabel>
             {selectableEditors.map((option) => (
               <DropdownMenuItem
@@ -163,10 +148,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuLabel>
-              {t(
-                'taskEditPage.taskActions.editorButton.setDefaultEditor',
-                undefined,
-                'Set Default Editor:'
+              {t({ id: 'taskEditPage.taskActions.editorButton.setDefaultEditor', defaultMessage: 'Set Default Editor:' }
               )}
             </DropdownMenuLabel>
             {selectableEditors.map((option) => (
