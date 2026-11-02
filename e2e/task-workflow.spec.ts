@@ -9,11 +9,11 @@ test('a user can open a task, view its details, and mark it as fixed', async ({
 
   await page.goto(`/tasks/${task.id}`)
 
-  // Task details are visible: the task identity and the challenge's instructions
-  // (the task page shows the challenge's instruction text, substituted with task
-  // properties, in its "Task" instruction tab).
+  // Task details are visible: the task identity and its instructions (the task
+  // page shows the task's own instruction when it has one, as v3 did, and the
+  // challenge's otherwise).
   await expect(page.getByText(`Task #${task.id}`).first()).toBeVisible({ timeout: 15_000 })
-  await expect(page.getByText('Fix the identified issue.')).toBeVisible({ timeout: 15_000 })
+  await expect(page.getByText('Fix this point.')).toBeVisible({ timeout: 15_000 })
 
   // Opening a task URL directly no longer auto-claims it (only in-app
   // navigation with claimTask=true does); clicking "Map this task" locks it,
