@@ -50,8 +50,14 @@ export const useMapControlButtons = (
         tooltip: showBundleOnly
           ? t({ id: 'taskMap.controls.showAllTasks', defaultMessage: 'Show all tasks' })
           : activeBundle
-            ? t({ id: 'taskMap.controls.showSelectedOnly', defaultMessage: 'Show selected tasks only' })
-            : t({ id: 'taskMap.controls.showPrimaryOnly', defaultMessage: 'Show primary task only' }),
+            ? t({
+                id: 'taskMap.controls.showSelectedOnly',
+                defaultMessage: 'Show selected tasks only',
+              })
+            : t({
+                id: 'taskMap.controls.showPrimaryOnly',
+                defaultMessage: 'Show primary task only',
+              }),
         disabled: !mapLoaded,
         isActive: showBundleOnly,
         binding: MAP_BINDINGS.toggleBundleOnly,
@@ -67,9 +73,14 @@ export const useMapControlButtons = (
         icon: Globe,
         onClick: () => setShowExploreLayer(!showExploreLayer),
         tooltip: showExploreLayer
-          ? t({ id: 'taskMap.controls.hideOtherChallenges', defaultMessage: 'Hide tasks from other challenges' })
-          : t({ id: 'taskMap.controls.showOtherChallenges', defaultMessage: 'Show tasks from other challenges' }
-            ),
+          ? t({
+              id: 'taskMap.controls.hideOtherChallenges',
+              defaultMessage: 'Hide tasks from other challenges',
+            })
+          : t({
+              id: 'taskMap.controls.showOtherChallenges',
+              defaultMessage: 'Show tasks from other challenges',
+            }),
         disabled: !mapLoaded,
         isActive: showExploreLayer,
         binding: MAP_BINDINGS.toggleExploreLayer,

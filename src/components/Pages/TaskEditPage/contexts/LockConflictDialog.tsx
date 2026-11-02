@@ -36,17 +36,31 @@ export const LockConflictDialog = ({ conflict, onOpenChange, onConfirm, busy }: 
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <LockOpen className="size-5 text-amber-500" aria-hidden="true" />
-            {t({ id: 'taskEditPage.lockConflictDialog.title', defaultMessage: 'You already have a task locked' }
-            )}
+            {t({
+              id: 'taskEditPage.lockConflictDialog.title',
+              defaultMessage: 'You already have a task locked',
+            })}
           </DialogTitle>
           <DialogDescription>
             {conflict?.parentName
-              ? t({ id: 'taskEditPage.lockConflictDialog.descriptionWithChallenge', defaultMessage: 'You still hold the lock on task #{taskId} in "{challengeName}". Release it to lock this task instead.' }, {
+              ? t(
+                  {
+                    id: 'taskEditPage.lockConflictDialog.descriptionWithChallenge',
+                    defaultMessage:
+                      'You still hold the lock on task #{taskId} in "{challengeName}". Release it to lock this task instead.',
+                  },
+                  {
                     taskId: conflict.lockedTaskId,
                     challengeName: conflict.parentName,
                   }
                 )
-              : t({ id: 'taskEditPage.lockConflictDialog.description', defaultMessage: 'You still hold the lock on task #{taskId}. Release it to lock this task instead.' }, { taskId: conflict?.lockedTaskId ?? 0 }
+              : t(
+                  {
+                    id: 'taskEditPage.lockConflictDialog.description',
+                    defaultMessage:
+                      'You still hold the lock on task #{taskId}. Release it to lock this task instead.',
+                  },
+                  { taskId: conflict?.lockedTaskId ?? 0 }
                 )}
             {conflict?.startedAt && (
               <>
@@ -64,16 +78,24 @@ export const LockConflictDialog = ({ conflict, onOpenChange, onConfirm, busy }: 
         </DialogHeader>
         <DialogFooter className="sm:flex-wrap sm:gap-2 sm:space-x-0">
           <Button variant="outline" onClick={handleGoBack} disabled={busy}>
-            {t({ id: 'taskEditPage.lockConflictDialog.goBack', defaultMessage: 'Go back to previous task' })}
+            {t({
+              id: 'taskEditPage.lockConflictDialog.goBack',
+              defaultMessage: 'Go back to previous task',
+            })}
           </Button>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-            {t({ id: 'taskEditPage.lockConflictDialog.inspect', defaultMessage: 'Inspect this task' })}
+            {t({
+              id: 'taskEditPage.lockConflictDialog.inspect',
+              defaultMessage: 'Inspect this task',
+            })}
           </Button>
           <Button onClick={onConfirm} disabled={busy}>
             {busy
               ? t({ id: 'taskEditPage.lockConflictDialog.switching', defaultMessage: 'Switching…' })
-              : t({ id: 'taskEditPage.lockConflictDialog.confirm', defaultMessage: 'Release other lock & continue' }
-                )}
+              : t({
+                  id: 'taskEditPage.lockConflictDialog.confirm',
+                  defaultMessage: 'Release other lock & continue',
+                })}
           </Button>
         </DialogFooter>
       </DialogContent>

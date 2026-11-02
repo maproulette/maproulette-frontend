@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { UserSettings } from '@/types/User'
 import { testT } from '@/test/translate'
+import type { UserSettings } from '@/types/User'
 import { basemapSettings, getDefaultValues, makeFormSchema } from './formSchema.ts'
 
 const formSchema = makeFormSchema(testT)

@@ -27,22 +27,28 @@ export const WorkOnFilter = () => {
             {t({ id: 'exploreChallenges.filterBar.workOn.anything', defaultMessage: 'Anything' })}
           </SelectItem>
           <SelectItem value="Roads / Pedestrian / Cycleways">
-            {t({ id: 'exploreChallenges.filterBar.workOn.roadsPedestrianCycleways', defaultMessage: 'Roads / Pedestrian / Cycleways' }
-            )}
+            {t({
+              id: 'exploreChallenges.filterBar.workOn.roadsPedestrianCycleways',
+              defaultMessage: 'Roads / Pedestrian / Cycleways',
+            })}
           </SelectItem>
           <SelectItem value="Water">
             {t({ id: 'exploreChallenges.filterBar.workOn.water', defaultMessage: 'Water' })}
           </SelectItem>
           <SelectItem value="Points / Areas of Interest">
-            {t({ id: 'exploreChallenges.filterBar.workOn.pointsAreasOfInterest', defaultMessage: 'Points / Areas of Interest' }
-            )}
+            {t({
+              id: 'exploreChallenges.filterBar.workOn.pointsAreasOfInterest',
+              defaultMessage: 'Points / Areas of Interest',
+            })}
           </SelectItem>
           <SelectItem value="Buildings">
             {t({ id: 'exploreChallenges.filterBar.workOn.buildings', defaultMessage: 'Buildings' })}
           </SelectItem>
           <SelectItem value="Land Use / Administrative Boundaries">
-            {t({ id: 'exploreChallenges.filterBar.workOn.landUseAdministrativeBoundaries', defaultMessage: 'Land Use / Administrative Boundaries' }
-            )}
+            {t({
+              id: 'exploreChallenges.filterBar.workOn.landUseAdministrativeBoundaries',
+              defaultMessage: 'Land Use / Administrative Boundaries',
+            })}
           </SelectItem>
           <SelectItem value="Transit">
             {t({ id: 'exploreChallenges.filterBar.workOn.transit', defaultMessage: 'Transit' })}

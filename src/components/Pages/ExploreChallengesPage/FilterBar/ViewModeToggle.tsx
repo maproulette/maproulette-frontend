@@ -20,7 +20,10 @@ export const ViewModeToggle = () => {
     >
       <ToggleGroupItem
         value="grid-map"
-        title={t({ id: 'exploreChallenges.filterBar.viewMode.gridMap', defaultMessage: 'Grid with map view' })}
+        title={t({
+          id: 'exploreChallenges.filterBar.viewMode.gridMap',
+          defaultMessage: 'Grid with map view',
+        })}
         size="sm"
         className={itemClass}
       >

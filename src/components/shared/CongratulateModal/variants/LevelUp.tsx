@@ -16,7 +16,13 @@ export const LevelUpContent = ({ level, score }: Props) => {
           {t({ id: 'congratulateModal.levelUp.title', defaultMessage: 'You leveled up!' })}
         </h2>
         <p className="text-zinc-600 dark:text-slate-400">
-          {t({ id: 'congratulateModal.levelUp.description', defaultMessage: 'Welcome to level {level}. You\'ve reached {score, plural, one {# point} other {# points}}.' }, { level, score }
+          {t(
+            {
+              id: 'congratulateModal.levelUp.description',
+              defaultMessage:
+                "Welcome to level {level}. You've reached {score, plural, one {# point} other {# points}}.",
+            },
+            { level, score }
           )}
         </p>
       </div>

@@ -90,7 +90,10 @@ const StatisticsDialogContent = ({
   const statusCounts: Array<{ id: string; label: string; value: number | undefined }> = [
     {
       id: 'manageChallengeDetail.detail.statistics.available',
-      label: t({ id: 'manageChallengeDetail.detail.statistics.available', defaultMessage: 'Available' }),
+      label: t({
+        id: 'manageChallengeDetail.detail.statistics.available',
+        defaultMessage: 'Available',
+      }),
       value: stats?.available,
     },
     {
@@ -100,27 +103,42 @@ const StatisticsDialogContent = ({
     },
     {
       id: 'manageChallengeDetail.detail.statistics.falsePositive',
-      label: t({ id: 'manageChallengeDetail.detail.statistics.falsePositive', defaultMessage: 'False Positive' }),
+      label: t({
+        id: 'manageChallengeDetail.detail.statistics.falsePositive',
+        defaultMessage: 'False Positive',
+      }),
       value: stats?.falsePositive,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.skipped',
-      label: t({ id: 'manageChallengeDetail.detail.statistics.skipped', defaultMessage: 'Skipped' }),
+      label: t({
+        id: 'manageChallengeDetail.detail.statistics.skipped',
+        defaultMessage: 'Skipped',
+      }),
       value: stats?.skipped,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.alreadyFixed',
-      label: t({ id: 'manageChallengeDetail.detail.statistics.alreadyFixed', defaultMessage: 'Already Fixed' }),
+      label: t({
+        id: 'manageChallengeDetail.detail.statistics.alreadyFixed',
+        defaultMessage: 'Already Fixed',
+      }),
       value: stats?.alreadyFixed,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.tooHard',
-      label: t({ id: 'manageChallengeDetail.detail.statistics.tooHard', defaultMessage: "Can't Complete" }),
+      label: t({
+        id: 'manageChallengeDetail.detail.statistics.tooHard',
+        defaultMessage: "Can't Complete",
+      }),
       value: stats?.tooHard,
     },
     {
       id: 'manageChallengeDetail.detail.statistics.disabled',
-      label: t({ id: 'manageChallengeDetail.detail.statistics.disabled', defaultMessage: 'Disabled' }),
+      label: t({
+        id: 'manageChallengeDetail.detail.statistics.disabled',
+        defaultMessage: 'Disabled',
+      }),
       value: stats?.disabled,
     },
   ]
@@ -149,7 +167,10 @@ const StatisticsDialogContent = ({
       <div>
         <div className="mb-1 flex items-center justify-between">
           <span className="text-zinc-600 dark:text-zinc-400">
-            {t({ id: 'manageChallengeDetail.detail.statistics.completion', defaultMessage: 'Completion' })}
+            {t({
+              id: 'manageChallengeDetail.detail.statistics.completion',
+              defaultMessage: 'Completion',
+            })}
           </span>
           <span className="font-semibold">{Math.round(completionPercentage)}%</span>
         </div>
@@ -167,7 +188,10 @@ const StatisticsDialogContent = ({
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
           <Clock className="h-4 w-4 opacity-70" />
-          {t({ id: 'manageChallengeDetail.detail.statistics.lastModified', defaultMessage: 'Last modified' })}
+          {t({
+            id: 'manageChallengeDetail.detail.statistics.lastModified',
+            defaultMessage: 'Last modified',
+          })}
         </span>
         <span className="font-medium">
           {challengeData?.modified ? formatDate(new Date(challengeData.modified), locale) : '—'}
@@ -179,20 +203,22 @@ const StatisticsDialogContent = ({
           <Separator />
           <div className="space-y-2">
             <h3 className="font-semibold text-zinc-700 dark:text-zinc-300">
-              {t({ id: 'manageChallengeDetail.detail.statistics.taskCountsByStatus', defaultMessage: 'Task counts by status' }
-              )}
+              {t({
+                id: 'manageChallengeDetail.detail.statistics.taskCountsByStatus',
+                defaultMessage: 'Task counts by status',
+              })}
             </h3>
             {statusCounts.map(({ id, label, value }) => (
               <div key={id} className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  {label}
-                </span>
+                <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
                 <span className="font-semibold">{value || 0}</span>
               </div>
             ))}
             <Separator />
             <div className="flex items-center justify-between">
-              <span className="font-semibold">{t({ id: 'common.total', defaultMessage: 'Total' })}</span>
+              <span className="font-semibold">
+                {t({ id: 'common.total', defaultMessage: 'Total' })}
+              </span>
               <span className="font-bold text-base">{stats.total || 0}</span>
             </div>
           </div>
@@ -290,16 +316,20 @@ export const ManageChallengeDetailContent = () => {
                     enabled={challengeData.enabled}
                     onToggle={toggleField('enabled')}
                     label={t({ id: 'common.enabled', defaultMessage: 'Enabled' })}
-                    errorMessage={t({ id: 'common.couldNotUpdateVisibility', defaultMessage: 'Could not update visibility' }
-                    )}
+                    errorMessage={t({
+                      id: 'common.couldNotUpdateVisibility',
+                      defaultMessage: 'Could not update visibility',
+                    })}
                   />
                   <VisibilityToggle
                     id={challengeData.id}
                     enabled={challengeData.paused}
                     onToggle={toggleField('paused')}
                     label={t({ id: 'common.paused', defaultMessage: 'Paused' })}
-                    errorMessage={t({ id: 'manageChallengeDetail.detail.pausedError', defaultMessage: 'Could not update paused state' }
-                    )}
+                    errorMessage={t({
+                      id: 'manageChallengeDetail.detail.pausedError',
+                      defaultMessage: 'Could not update paused state',
+                    })}
                   />
                   {canSetFeatured && (
                     <VisibilityToggle
@@ -307,8 +337,10 @@ export const ManageChallengeDetailContent = () => {
                       enabled={challengeData.featured}
                       onToggle={toggleField('featured')}
                       label={t({ id: 'common.featured', defaultMessage: 'Featured' })}
-                      errorMessage={t({ id: 'manageChallengeDetail.detail.featuredError', defaultMessage: 'Could not update featured state' }
-                      )}
+                      errorMessage={t({
+                        id: 'manageChallengeDetail.detail.featuredError',
+                        defaultMessage: 'Could not update featured state',
+                      })}
                     />
                   )}
                 </div>
@@ -350,8 +382,10 @@ export const ManageChallengeDetailContent = () => {
                 >
                   <Link to="/manage/challenge/$challengeId/prioritization" params={{ challengeId }}>
                     <Target className="h-4 w-4" />
-                    {t({ id: 'manageChallengeDetail.detail.configurePrioritization', defaultMessage: 'Configure prioritization' }
-                    )}
+                    {t({
+                      id: 'manageChallengeDetail.detail.configurePrioritization',
+                      defaultMessage: 'Configure prioritization',
+                    })}
                   </Link>
                 </Button>
 
@@ -369,8 +403,14 @@ export const ManageChallengeDetailContent = () => {
 
                 <DialogActionButton
                   icon={<BarChart3 className="h-4 w-4" />}
-                  label={t({ id: 'manageChallengeDetail.detail.statisticsLabel', defaultMessage: 'Statistics' })}
-                  title={t({ id: 'manageChallengeDetail.detail.statisticsLabel', defaultMessage: 'Statistics' })}
+                  label={t({
+                    id: 'manageChallengeDetail.detail.statisticsLabel',
+                    defaultMessage: 'Statistics',
+                  })}
+                  title={t({
+                    id: 'manageChallengeDetail.detail.statisticsLabel',
+                    defaultMessage: 'Statistics',
+                  })}
                 >
                   <StatisticsDialogContent
                     challengeId={Number(challengeId)}
@@ -381,8 +421,14 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.id && (
                   <DialogActionButton
                     icon={<Users className="h-4 w-4" />}
-                    label={t({ id: 'manageChallengeDetail.detail.managersLabel', defaultMessage: 'Managers' })}
-                    title={t({ id: 'manageChallengeDetail.detail.managersLabel', defaultMessage: 'Managers' })}
+                    label={t({
+                      id: 'manageChallengeDetail.detail.managersLabel',
+                      defaultMessage: 'Managers',
+                    })}
+                    title={t({
+                      id: 'manageChallengeDetail.detail.managersLabel',
+                      defaultMessage: 'Managers',
+                    })}
                   >
                     <ChallengeManagersPanel challengeId={challengeData.id} />
                   </DialogActionButton>

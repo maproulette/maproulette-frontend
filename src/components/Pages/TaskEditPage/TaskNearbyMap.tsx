@@ -184,14 +184,24 @@ export const TaskSelectionMap = ({
 
       {/* Task count indicator */}
       <div className="absolute top-2 right-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
-        {t({ id: 'taskEditPage.taskNearbyMap.nearbyCount', defaultMessage: '{count, plural, one {# nearby task} other {# nearby tasks}}' }, { count: nearbyTasks.length }
+        {t(
+          {
+            id: 'taskEditPage.taskNearbyMap.nearbyCount',
+            defaultMessage: '{count, plural, one {# nearby task} other {# nearby tasks}}',
+          },
+          { count: nearbyTasks.length }
         )}
       </div>
 
       {/* Selected task info */}
       {showSelectedBadge && selectedTaskId && (
         <div className="absolute top-2 left-2 rounded bg-green-500 px-2 py-1 font-medium text-white text-xs shadow">
-          {t({ id: 'taskEditPage.taskNearbyMap.selectedTask', defaultMessage: 'Task #{id} selected' }, { id: selectedTaskId }
+          {t(
+            {
+              id: 'taskEditPage.taskNearbyMap.selectedTask',
+              defaultMessage: 'Task #{id} selected',
+            },
+            { id: selectedTaskId }
           )}
         </div>
       )}

@@ -62,8 +62,10 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
             variant="ghost"
             size="icon"
             onClick={onRemove}
-            aria-label={t({ id: 'taskPropertyQueryBuilder.ruleGroup.removeGroup', defaultMessage: 'Remove group' }
-            )}
+            aria-label={t({
+              id: 'taskPropertyQueryBuilder.ruleGroup.removeGroup',
+              defaultMessage: 'Remove group',
+            })}
           >
             <X className="size-4" aria-hidden="true" />
           </Button>

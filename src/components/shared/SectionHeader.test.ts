@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { buildBreadcrumbSegments, buildTitle } from './SectionHeader.tsx'
 import { testT } from '@/test/translate'
+import { buildBreadcrumbSegments, buildTitle } from './SectionHeader.tsx'
 
 const t = testT
 

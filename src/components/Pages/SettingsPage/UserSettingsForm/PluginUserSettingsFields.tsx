@@ -5,7 +5,6 @@ import { usePluginContext } from '@/contexts/PluginContext'
 import type { UserSettings } from '@/types/User'
 import type { SettingsFormValues } from './formSchema'
 
-
 /** Renders plugin-owned settings inputs bound to the shared Account form. */
 export const PluginUserSettingsFields = ({
   form,

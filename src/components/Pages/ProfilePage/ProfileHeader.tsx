@@ -29,7 +29,10 @@ export const ProfileHeader = ({ user, showLivePoints }: Props) => {
       <h1 className="mb-2 font-bold text-base">{displayName}</h1>
       {createdDate && (
         <p className="mb-4 text-zinc-500 dark:text-slate-400">
-          {t({ id: 'profilePage.header.userSince', defaultMessage: 'User since: {date}' }, { date: createdDate })}
+          {t(
+            { id: 'profilePage.header.userSince', defaultMessage: 'User since: {date}' },
+            { date: createdDate }
+          )}
         </p>
       )}
       {showLivePoints && (

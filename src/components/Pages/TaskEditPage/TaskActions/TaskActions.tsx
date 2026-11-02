@@ -31,8 +31,11 @@ const STATUS_BINDINGS: Record<number, ShortcutBinding> = {
 
 export const TaskActions = () => {
   const { t } = useIntl()
-  const pausedMessage = t({ id: 'taskEditPage.taskActions.main.pausedMessage', defaultMessage: 'This challenge is currently paused. Tasks cannot be completed until it is resumed.' }
-  )
+  const pausedMessage = t({
+    id: 'taskEditPage.taskActions.main.pausedMessage',
+    defaultMessage:
+      'This challenge is currently paused. Tasks cannot be completed until it is resumed.',
+  })
   const { task, isLocked, isEditable } = useTaskContext()
   const { challenge } = useChallengeContext()
   const { isAuthenticated, login } = useAuthContext()
@@ -81,7 +84,10 @@ export const TaskActions = () => {
       variant: 'success',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsFixed,
-      title: t({ id: 'taskEditPage.taskActions.main.markFixedTitle', defaultMessage: 'Mark as Fixed' }),
+      title: t({
+        id: 'taskEditPage.taskActions.main.markFixedTitle',
+        defaultMessage: 'Mark as Fixed',
+      }),
       label: t({ id: 'common.fixed', defaultMessage: 'Fixed' }),
     },
     {
@@ -89,8 +95,10 @@ export const TaskActions = () => {
       variant: 'info',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsAlreadyFixed,
-      title: t({ id: 'taskEditPage.taskActions.main.markAlreadyFixedTitle', defaultMessage: 'Mark as Already Fixed' }
-      ),
+      title: t({
+        id: 'taskEditPage.taskActions.main.markAlreadyFixedTitle',
+        defaultMessage: 'Mark as Already Fixed',
+      }),
       label: t({ id: 'common.alreadyFixed', defaultMessage: 'Already Fixed' }),
     },
     {
@@ -98,8 +106,10 @@ export const TaskActions = () => {
       variant: 'warning',
       icon: <Flag />,
       onClick: handleMarkAsFalsePositive,
-      title: t({ id: 'taskEditPage.taskActions.main.markFalsePositiveTitle', defaultMessage: 'Mark as False Positive' }
-      ),
+      title: t({
+        id: 'taskEditPage.taskActions.main.markFalsePositiveTitle',
+        defaultMessage: 'Mark as False Positive',
+      }),
       label: t({ id: 'taskEditPage.taskActions.main.notAnIssue', defaultMessage: 'Not an Issue' }),
     },
     {
@@ -107,8 +117,10 @@ export const TaskActions = () => {
       variant: 'caution',
       icon: <X />,
       onClick: handleMarkAsTooHard,
-      title: t({ id: 'taskEditPage.taskActions.main.markCantCompleteTitle', defaultMessage: "Mark as Can't Complete" }
-      ),
+      title: t({
+        id: 'taskEditPage.taskActions.main.markCantCompleteTitle',
+        defaultMessage: "Mark as Can't Complete",
+      }),
       label: t({ id: 'common.cantComplete', defaultMessage: "Can't Complete" }),
     },
   ]
@@ -147,8 +159,10 @@ export const TaskActions = () => {
           // Offered only when the task can actually progress to that status.
           enabled: canEdit && allowedProgressions.has(action.status),
           disabledReason: canEdit
-            ? t({ id: 'keyboardShortcuts.unavailable.statusNotAllowed', defaultMessage: 'Not available for this task' }
-              )
+            ? t({
+                id: 'keyboardShortcuts.unavailable.statusNotAllowed',
+                defaultMessage: 'Not available for this task',
+              })
             : disabledReason,
         })),
     [canEdit, disabledReason, allowedProgressions, t]
@@ -161,7 +175,10 @@ export const TaskActions = () => {
       <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <Button variant="success" size="lg" className="w-full" onClick={login}>
           <LogIn />
-          {t({ id: 'taskEditPage.taskActions.main.signInToMap', defaultMessage: 'Sign in to map this task' })}
+          {t({
+            id: 'taskEditPage.taskActions.main.signInToMap',
+            defaultMessage: 'Sign in to map this task',
+          })}
         </Button>
       </div>
     )
@@ -192,8 +209,10 @@ export const TaskActions = () => {
     <>
       <div className="@container rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
         <div className="mb-1.5 px-1 font-medium text-xs text-zinc-500 uppercase tracking-wider dark:text-slate-400">
-          {t({ id: 'taskEditPage.taskActions.main.completionHeading', defaultMessage: 'Completion: Set Task Status' }
-          )}
+          {t({
+            id: 'taskEditPage.taskActions.main.completionHeading',
+            defaultMessage: 'Completion: Set Task Status',
+          })}
         </div>
         <div className="grid @xs:grid-cols-2 grid-cols-1 gap-1.5">
           {availableCompletionActions.map((action) => (

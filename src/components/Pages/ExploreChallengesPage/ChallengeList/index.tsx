@@ -25,7 +25,9 @@ export const ChallengeList = () => {
           isLoadingState ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
       >
-        <Loader message={t({ id: 'common.loadingChallenges', defaultMessage: 'Loading challenges...' })} />
+        <Loader
+          message={t({ id: 'common.loadingChallenges', defaultMessage: 'Loading challenges...' })}
+        />
       </div>
 
       {showErrorState ? (
@@ -36,13 +38,17 @@ export const ChallengeList = () => {
                 <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
               </div>
               <EmptyTitle>
-                {t({ id: 'exploreChallenges.challengeList.errorTitle', defaultMessage: 'Failed to load challenges' }
-                )}
+                {t({
+                  id: 'exploreChallenges.challengeList.errorTitle',
+                  defaultMessage: 'Failed to load challenges',
+                })}
               </EmptyTitle>
               <EmptyDescription>
                 {error?.message ||
-                  t({ id: 'common.unexpectedErrorTryAgain', defaultMessage: 'An unexpected error occurred. Please try again.' }
-                  )}
+                  t({
+                    id: 'common.unexpectedErrorTryAgain',
+                    defaultMessage: 'An unexpected error occurred. Please try again.',
+                  })}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
@@ -55,8 +61,10 @@ export const ChallengeList = () => {
                 {t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' })}
               </EmptyTitle>
               <EmptyDescription>
-                {t({ id: 'exploreChallenges.challengeList.emptyDescription', defaultMessage: 'Try adjusting your search filters or map bounds.' }
-                )}
+                {t({
+                  id: 'exploreChallenges.challengeList.emptyDescription',
+                  defaultMessage: 'Try adjusting your search filters or map bounds.',
+                })}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>

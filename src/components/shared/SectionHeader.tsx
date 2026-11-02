@@ -23,7 +23,10 @@ const ENTITY_LIST_ROUTES: Record<string, { label: MessageDescriptor; path: strin
     path: '/manage/projects',
   },
   challenge: {
-    label: defineMessage({ id: 'shared.sectionHeader.entityChallenges', defaultMessage: 'challenges' }),
+    label: defineMessage({
+      id: 'shared.sectionHeader.entityChallenges',
+      defaultMessage: 'challenges',
+    }),
     path: '/manage/challenges',
   },
   task: {
@@ -57,7 +60,8 @@ export const buildBreadcrumbSegments = (
         href: entityRoute.path,
       })
     } else {
-      const label = part === 'new' ? t({ id: 'shared.sectionHeader.create', defaultMessage: 'create' }) : part
+      const label =
+        part === 'new' ? t({ id: 'shared.sectionHeader.create', defaultMessage: 'create' }) : part
       segments.push({ label, href: currentPath })
     }
   }

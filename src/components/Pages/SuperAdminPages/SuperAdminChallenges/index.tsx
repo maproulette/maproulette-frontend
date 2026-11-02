@@ -20,8 +20,10 @@ export const SuperAdminChallenges = () => {
           </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'superAdminChallenges.subtitle', defaultMessage: 'Browse and manage all challenges across the platform' }
-          )}
+          {t({
+            id: 'superAdminChallenges.subtitle',
+            defaultMessage: 'Browse and manage all challenges across the platform',
+          })}
         </p>
       </div>
 
@@ -31,12 +33,17 @@ export const SuperAdminChallenges = () => {
             <ListChecks />
           </EmptyMedia>
           <EmptyTitle>
-            {t({ id: 'superAdminChallenges.comingSoon.title', defaultMessage: 'Challenge management coming soon' }
-            )}
+            {t({
+              id: 'superAdminChallenges.comingSoon.title',
+              defaultMessage: 'Challenge management coming soon',
+            })}
           </EmptyTitle>
           <EmptyDescription>
-            {t({ id: 'superAdminChallenges.comingSoon.description', defaultMessage: "We're building out challenge management tools for super admins. Check back soon." }
-            )}
+            {t({
+              id: 'superAdminChallenges.comingSoon.description',
+              defaultMessage:
+                "We're building out challenge management tools for super admins. Check back soon.",
+            })}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>

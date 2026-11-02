@@ -36,12 +36,20 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            {t({ id: 'managementPages.bulkActionsToolbar.reassignDialog.title', defaultMessage: '{count, plural, one {Reassign # task} other {Reassign # tasks}}' }, { count }
+            {t(
+              {
+                id: 'managementPages.bulkActionsToolbar.reassignDialog.title',
+                defaultMessage: '{count, plural, one {Reassign # task} other {Reassign # tasks}}',
+              },
+              { count }
             )}
           </DialogTitle>
           <DialogDescription>
-            {t({ id: 'managementPages.bulkActionsToolbar.reassignDialog.description', defaultMessage: 'Search for the reviewer to assign these task reviews to. Only tasks whose reviews are still open will be updated.' }
-            )}
+            {t({
+              id: 'managementPages.bulkActionsToolbar.reassignDialog.description',
+              defaultMessage:
+                'Search for the reviewer to assign these task reviews to. Only tasks whose reviews are still open will be updated.',
+            })}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
@@ -50,7 +58,10 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t({ id: 'common.searchOsmUsername', defaultMessage: 'Search OSM username' })}
+              placeholder={t({
+                id: 'common.searchOsmUsername',
+                defaultMessage: 'Search OSM username',
+              })}
               className="pl-8"
             />
           </div>
@@ -87,9 +98,14 @@ export const BulkReassignDialog = ({ open, onOpenChange, onConfirm, count, busy 
             disabled={!selectedUserId || busy}
           >
             {busy
-              ? t({ id: 'managementPages.bulkActionsToolbar.reassignDialog.reassigning', defaultMessage: 'Reassigning…' }
-                )
-              : t({ id: 'managementPages.bulkActionsToolbar.reassign', defaultMessage: 'Reassign' })}
+              ? t({
+                  id: 'managementPages.bulkActionsToolbar.reassignDialog.reassigning',
+                  defaultMessage: 'Reassigning…',
+                })
+              : t({
+                  id: 'managementPages.bulkActionsToolbar.reassign',
+                  defaultMessage: 'Reassign',
+                })}
           </Button>
         </DialogFooter>
       </DialogContent>

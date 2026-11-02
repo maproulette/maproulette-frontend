@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select'
+import { useIntl } from '@/i18n'
 import {
   COUNT_FIELDS,
   type NotificationSubscriptions,
@@ -19,7 +20,6 @@ import {
   subscriptionLevelOptions,
   withSubscriptionDefaults,
 } from '@/lib/notificationSubscriptions'
-import { useIntl } from '@/i18n'
 
 const ALL_SUBSCRIPTION_FIELDS = [...SUBSCRIPTION_FIELDS, ...COUNT_FIELDS]
 
@@ -27,18 +27,28 @@ const SUBSCRIPTION_SECTIONS: {
   key: string
   legend: MessageDescriptor
   description?: MessageDescriptor
-  fields: readonly { key: keyof NotificationSubscriptions; label: MessageDescriptor; description: MessageDescriptor }[]
+  fields: readonly {
+    key: keyof NotificationSubscriptions
+    label: MessageDescriptor
+    description: MessageDescriptor
+  }[]
   options: { value: number; label: MessageDescriptor }[]
 }[] = [
   {
     key: 'events',
-    legend: defineMessage({ id: 'settings.notifications.notifyMeAbout', defaultMessage: 'Notify me about' }),
+    legend: defineMessage({
+      id: 'settings.notifications.notifyMeAbout',
+      defaultMessage: 'Notify me about',
+    }),
     fields: SUBSCRIPTION_FIELDS,
     options: subscriptionLevelOptions,
   },
   {
     key: 'summaries',
-    legend: defineMessage({ id: 'settings.notifications.periodicSummaries', defaultMessage: 'Periodic summaries' }),
+    legend: defineMessage({
+      id: 'settings.notifications.periodicSummaries',
+      defaultMessage: 'Periodic summaries',
+    }),
     description: defineMessage({
       id: 'settings.notifications.periodicSummariesDescription',
       defaultMessage: 'These are sent on a schedule rather than when something happens.',
@@ -60,24 +70,24 @@ interface RowProps {
 const SubscriptionRow = ({ id, label, description, value, options, onChange }: RowProps) => {
   const { t } = useIntl()
   return (
-  <div className="flex flex-wrap items-center justify-between gap-3 border-zinc-200 border-b py-3 last:border-b-0 dark:border-slate-700">
-    <div className="min-w-48 flex-1">
-      <Label htmlFor={id}>{label}</Label>
-      <p className="text-sm text-zinc-500 dark:text-zinc-400">{description}</p>
+    <div className="flex flex-wrap items-center justify-between gap-3 border-zinc-200 border-b py-3 last:border-b-0 dark:border-slate-700">
+      <div className="min-w-48 flex-1">
+        <Label htmlFor={id}>{label}</Label>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">{description}</p>
+      </div>
+      <Select value={String(value)} onValueChange={(next) => onChange(Number(next))}>
+        <SelectTrigger id={id} className="w-72">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={String(option.value)}>
+              {t(option.label)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
-    <Select value={String(value)} onValueChange={(next) => onChange(Number(next))}>
-      <SelectTrigger id={id} className="w-72">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={String(option.value)}>
-            {t(option.label)}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
   )
 }
 

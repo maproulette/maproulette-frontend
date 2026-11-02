@@ -169,7 +169,9 @@ export const ManageProjectsContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
+              <span className="sr-only">
+                {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -257,11 +259,17 @@ export const ManageProjectsContent = () => {
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
                   <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    {t({ id: 'manageProjects.content.aboutTitle', defaultMessage: 'About Projects' })}
+                    {t({
+                      id: 'manageProjects.content.aboutTitle',
+                      defaultMessage: 'About Projects',
+                    })}
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    {t({ id: 'manageProjects.content.aboutDescription', defaultMessage: 'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.' }
-                    )}
+                    {t({
+                      id: 'manageProjects.content.aboutDescription',
+                      defaultMessage:
+                        'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.',
+                    })}
                   </p>
                 </div>
                 <Button
@@ -279,30 +287,47 @@ export const ManageProjectsContent = () => {
                 <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t({ id: 'manageProjects.content.tipScopeTitle', defaultMessage: 'Define scope early' })}
+                      {t({
+                        id: 'manageProjects.content.tipScopeTitle',
+                        defaultMessage: 'Define scope early',
+                      })}
                     </p>
                     <p>
-                      {t({ id: 'manageProjects.content.tipScopeBody', defaultMessage: 'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.' }
-                      )}
+                      {t({
+                        id: 'manageProjects.content.tipScopeBody',
+                        defaultMessage:
+                          'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.',
+                      })}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t({ id: 'manageProjects.content.tipPublishTitle', defaultMessage: 'Publish intentionally' }
-                      )}
+                      {t({
+                        id: 'manageProjects.content.tipPublishTitle',
+                        defaultMessage: 'Publish intentionally',
+                      })}
                     </p>
                     <p>
-                      {t({ id: 'manageProjects.content.tipPublishBody', defaultMessage: 'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.' }
-                      )}
+                      {t({
+                        id: 'manageProjects.content.tipPublishBody',
+                        defaultMessage:
+                          'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.',
+                      })}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t({ id: 'manageProjects.content.tipOwnershipTitle', defaultMessage: 'Share ownership' })}
+                      {t({
+                        id: 'manageProjects.content.tipOwnershipTitle',
+                        defaultMessage: 'Share ownership',
+                      })}
                     </p>
                     <p>
-                      {t({ id: 'manageProjects.content.tipOwnershipBody', defaultMessage: 'Add co-managers before launch so triage, support, and archival responsibilities are covered.' }
-                      )}
+                      {t({
+                        id: 'manageProjects.content.tipOwnershipBody',
+                        defaultMessage:
+                          'Add co-managers before launch so triage, support, and archival responsibilities are covered.',
+                      })}
                     </p>
                   </div>
                 </div>
@@ -324,14 +349,20 @@ export const ManageProjectsContent = () => {
                     icon={<Users className="h-3.5 w-3.5 text-zinc-500" />}
                     className={DOCS_LINK_CLASS}
                   >
-                    {t({ id: 'manageProjects.content.challengeCreation', defaultMessage: 'Challenge Creation' })}
+                    {t({
+                      id: 'manageProjects.content.challengeCreation',
+                      defaultMessage: 'Challenge Creation',
+                    })}
                   </DocsLink>
                   <DocsLink
                     page="projectsAndProjectManagers"
                     icon={<FolderKanban className="h-3.5 w-3.5 text-zinc-500" />}
                     className={DOCS_LINK_CLASS}
                   >
-                    {t({ id: 'manageProjects.content.projectManagement', defaultMessage: 'Project Management' })}
+                    {t({
+                      id: 'manageProjects.content.projectManagement',
+                      defaultMessage: 'Project Management',
+                    })}
                   </DocsLink>
                 </div>
               </div>
@@ -358,7 +389,10 @@ export const ManageProjectsContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t({ id: 'common.searchProjects', defaultMessage: 'Search projects...' })}
+                placeholder={t({
+                  id: 'common.searchProjects',
+                  defaultMessage: 'Search projects...',
+                })}
               />
               <FilterToggle
                 label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
@@ -422,8 +456,10 @@ export const ManageProjectsContent = () => {
                       {t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' })}
                     </EmptyTitle>
                     <EmptyDescription>
-                      {t({ id: 'manageProjects.content.noProjectsDescription', defaultMessage: 'Get started by creating your first project.' }
-                      )}
+                      {t({
+                        id: 'manageProjects.content.noProjectsDescription',
+                        defaultMessage: 'Get started by creating your first project.',
+                      })}
                     </EmptyDescription>
                   </EmptyHeader>
                   <EmptyContent>
@@ -467,9 +503,14 @@ export const ManageProjectsContent = () => {
                   emptyState={{
                     icon: FolderKanban,
                     title: t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' }),
-                    description: t({ id: 'manageProjects.content.noProjectsDescriptionShort', defaultMessage: 'Get started by creating your first project' }
-                    ),
-                    actionLabel: t({ id: 'common.createProject', defaultMessage: 'Create Project' }),
+                    description: t({
+                      id: 'manageProjects.content.noProjectsDescriptionShort',
+                      defaultMessage: 'Get started by creating your first project',
+                    }),
+                    actionLabel: t({
+                      id: 'common.createProject',
+                      defaultMessage: 'Create Project',
+                    }),
                     actionTo: '/manage/project/new',
                   }}
                 />
@@ -497,12 +538,20 @@ export const ManageProjectsContent = () => {
               {t({ id: 'common.deleteProject2', defaultMessage: 'Delete project?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t({ id: 'manageProjects.content.deleteProjectDescription', defaultMessage: 'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.' }, { projectName: deleteProjectConfirm?.projectName ?? '' }
+              {t(
+                {
+                  id: 'manageProjects.content.deleteProjectDescription',
+                  defaultMessage:
+                    'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.',
+                },
+                { projectName: deleteProjectConfirm?.projectName ?? '' }
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteProject}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"

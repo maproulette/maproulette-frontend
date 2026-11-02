@@ -90,7 +90,10 @@ const PluginErrorFallback = ({
 }: Omit<PluginErrorBoundaryProps, 'children'> & { error: Error; onRetry: () => void }) => {
   const { t } = useIntl()
   const title = source
-    ? t({ id: 'pluginErrorBoundary.titleWithSource', defaultMessage: 'Plugin {source} failed' }, { source })
+    ? t(
+        { id: 'pluginErrorBoundary.titleWithSource', defaultMessage: 'Plugin {source} failed' },
+        { source }
+      )
     : t({ id: 'pluginErrorBoundary.title', defaultMessage: 'Plugin failed to render' })
   const retry = t({ id: 'pluginErrorBoundary.retry', defaultMessage: 'Retry' })
 
@@ -119,7 +122,10 @@ const PluginErrorFallback = ({
           {contributionId && (
             <p className="font-mono text-xs opacity-80">
               {t(
-                { id: 'pluginErrorBoundary.contribution', defaultMessage: 'contribution: {contributionId}' },
+                {
+                  id: 'pluginErrorBoundary.contribution',
+                  defaultMessage: 'contribution: {contributionId}',
+                },
                 { contributionId }
               )}
             </p>
@@ -127,7 +133,8 @@ const PluginErrorFallback = ({
           <p className="text-xs opacity-80">
             {t({
               id: 'pluginErrorBoundary.consoleDetails',
-              defaultMessage: 'Details were written to the browser console (message, stack, component stack).',
+              defaultMessage:
+                'Details were written to the browser console (message, stack, component stack).',
             })}
           </p>
           <Button type="button" size="sm" variant="outline" onClick={onRetry}>

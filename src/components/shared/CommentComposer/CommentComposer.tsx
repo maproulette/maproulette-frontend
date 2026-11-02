@@ -29,7 +29,8 @@ export const CommentComposer = ({
 }: Props) => {
   const { t } = useIntl()
   const resolvedPlaceholder =
-    placeholder ?? t({ id: 'shared.commentComposer.placeholder', defaultMessage: 'Write a comment…' })
+    placeholder ??
+    t({ id: 'shared.commentComposer.placeholder', defaultMessage: 'Write a comment…' })
   const resolvedSubmitLabel =
     submitLabel ?? t({ id: 'shared.commentComposer.submitLabel', defaultMessage: 'Post' })
   const [busy, setBusy] = useState(false)
@@ -56,8 +57,12 @@ export const CommentComposer = ({
     <div className="space-y-2">
       <Tabs defaultValue="write">
         <TabsList>
-          <TabsTrigger value="write">{t({ id: 'common.write', defaultMessage: 'Write' })}</TabsTrigger>
-          <TabsTrigger value="preview">{t({ id: 'common.preview', defaultMessage: 'Preview' })}</TabsTrigger>
+          <TabsTrigger value="write">
+            {t({ id: 'common.write', defaultMessage: 'Write' })}
+          </TabsTrigger>
+          <TabsTrigger value="preview">
+            {t({ id: 'common.preview', defaultMessage: 'Preview' })}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="write" className="mt-2">
           <CommentMentionInput

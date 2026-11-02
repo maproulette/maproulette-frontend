@@ -68,12 +68,16 @@ const TeamDetailLayout = () => {
               {t({ id: 'teams.detail.deleteConfirmTitle', defaultMessage: 'Delete this team?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t({ id: 'teams.detail.deleteConfirmDescription', defaultMessage: 'This cannot be undone. All members will lose access.' }
-              )}
+              {t({
+                id: 'teams.detail.deleteConfirmDescription',
+                defaultMessage: 'This cannot be undone. All members will lose access.',
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete}>
               {t({ id: 'teams.detail.deleteConfirmAction', defaultMessage: 'Delete team' })}
             </AlertDialogAction>

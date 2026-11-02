@@ -70,7 +70,10 @@ export const NOTIFICATION_CATEGORY_MESSAGES: Record<NotificationCategory, Messag
     task_comment: { id: 'notificationsPage.filters.category.comments', defaultMessage: 'Comments' },
     mention: { id: 'notificationsPage.filters.category.mentions', defaultMessage: 'Mentions' },
     review: { id: 'notificationsPage.filters.category.reviews', defaultMessage: 'Reviews' },
-    challenge: { id: 'notificationsPage.filters.category.challenges', defaultMessage: 'Challenges' },
+    challenge: {
+      id: 'notificationsPage.filters.category.challenges',
+      defaultMessage: 'Challenges',
+    },
     team: { id: 'notificationsPage.filters.category.teams', defaultMessage: 'Teams' },
     system: { id: 'notificationsPage.filters.category.system', defaultMessage: 'System' },
   })

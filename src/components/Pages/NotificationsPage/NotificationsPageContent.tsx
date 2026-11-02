@@ -94,8 +94,10 @@ export const NotificationsPageContent = () => {
       <div className="container mx-auto max-w-4xl px-4 py-6">
         <PageHeader
           title={t({ id: 'notificationsPage.content.title', defaultMessage: 'Notifications' })}
-          description={t({ id: 'notificationsPage.content.description', defaultMessage: 'View and manage your notifications' }
-          )}
+          description={t({
+            id: 'notificationsPage.content.description',
+            defaultMessage: 'View and manage your notifications',
+          })}
         />
         <div className="mb-4 flex flex-wrap items-center gap-4">
           <Checkbox
@@ -111,8 +113,10 @@ export const NotificationsPageContent = () => {
           </label>
           {groupByTask && (
             <span className="text-xs text-zinc-500 dark:text-slate-500">
-              {t({ id: 'notificationsPage.content.groupByTaskHint', defaultMessage: 'Notifications for the same task are grouped together' }
-              )}
+              {t({
+                id: 'notificationsPage.content.groupByTaskHint',
+                defaultMessage: 'Notifications for the same task are grouped together',
+              })}
             </span>
           )}
         </div>
@@ -183,9 +187,14 @@ export const NotificationsPageContent = () => {
               </p>
               <p className="text-sm text-zinc-500 dark:text-slate-500">
                 {activeTab === 'unread'
-                  ? t({ id: 'common.noUnreadNotificationsYet', defaultMessage: 'You have no unread notifications at the moment.' }
-                    )
-                  : t({ id: 'common.noNotificationsYet', defaultMessage: 'You have no notifications.' })}
+                  ? t({
+                      id: 'common.noUnreadNotificationsYet',
+                      defaultMessage: 'You have no unread notifications at the moment.',
+                    })
+                  : t({
+                      id: 'common.noNotificationsYet',
+                      defaultMessage: 'You have no notifications.',
+                    })}
               </p>
             </div>
           </Card>

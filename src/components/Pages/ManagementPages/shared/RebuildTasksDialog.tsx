@@ -71,12 +71,21 @@ export const RebuildTasksDialog = ({
   const [dataOriginDate, setDataOriginDate] = useState('')
 
   const sourceIntro: Record<SourceType, string> = {
-    overpass: t({ id: 'managementPages.rebuildTasksDialog.introOverpass', defaultMessage: 'Rebuilding will re-run the Overpass query and rebuild the challenge tasks with the latest data:' }
-    ),
-    remote: t({ id: 'managementPages.rebuildTasksDialog.introRemote', defaultMessage: "Rebuilding will re-download the GeoJSON data from the challenge's remote URL and rebuild the challenge tasks with the latest data:" }
-    ),
-    local: t({ id: 'managementPages.rebuildTasksDialog.introLocal', defaultMessage: 'Rebuilding will allow you to upload a new local file with the latest GeoJSON data and rebuild the challenge tasks:' }
-    ),
+    overpass: t({
+      id: 'managementPages.rebuildTasksDialog.introOverpass',
+      defaultMessage:
+        'Rebuilding will re-run the Overpass query and rebuild the challenge tasks with the latest data:',
+    }),
+    remote: t({
+      id: 'managementPages.rebuildTasksDialog.introRemote',
+      defaultMessage:
+        "Rebuilding will re-download the GeoJSON data from the challenge's remote URL and rebuild the challenge tasks with the latest data:",
+    }),
+    local: t({
+      id: 'managementPages.rebuildTasksDialog.introLocal',
+      defaultMessage:
+        'Rebuilding will allow you to upload a new local file with the latest GeoJSON data and rebuild the challenge tasks:',
+    }),
   }
 
   const rebuild = api.challenge.useRebuildChallenge()
@@ -135,25 +144,34 @@ export const RebuildTasksDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {t({ id: 'managementPages.rebuildTasksDialog.title', defaultMessage: 'Rebuild Challenge Tasks' })}
+            {t({
+              id: 'managementPages.rebuildTasksDialog.title',
+              defaultMessage: 'Rebuild Challenge Tasks',
+            })}
           </DialogTitle>
           <DialogDescription>
             {sourceType
               ? sourceIntro[sourceType]
-              : t({ id: 'managementPages.rebuildTasksDialog.descriptionDefault', defaultMessage: 'Rebuild the challenge tasks from its source data.' }
-                )}
+              : t({
+                  id: 'managementPages.rebuildTasksDialog.descriptionDefault',
+                  defaultMessage: 'Rebuild the challenge tasks from its source data.',
+                })}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-700 dark:text-zinc-300">
             <li>
-              {t({ id: 'managementPages.rebuildTasksDialog.listUpdated', defaultMessage: 'Existing tasks included in the latest data will be updated' }
-              )}
+              {t({
+                id: 'managementPages.rebuildTasksDialog.listUpdated',
+                defaultMessage: 'Existing tasks included in the latest data will be updated',
+              })}
             </li>
             <li>
-              {t({ id: 'managementPages.rebuildTasksDialog.listAdded', defaultMessage: 'New tasks will be added' }
-              )}
+              {t({
+                id: 'managementPages.rebuildTasksDialog.listAdded',
+                defaultMessage: 'New tasks will be added',
+              })}
             </li>
             <li>
               {t(
@@ -166,8 +184,11 @@ export const RebuildTasksDialog = ({
               )}
             </li>
             <li>
-              {t({ id: 'managementPages.rebuildTasksDialog.listKeepAsIs', defaultMessage: 'If you do not first remove incomplete tasks, they will be left as-is, possibly leaving tasks that have already been addressed outside of MapRoulette' }
-              )}
+              {t({
+                id: 'managementPages.rebuildTasksDialog.listKeepAsIs',
+                defaultMessage:
+                  'If you do not first remove incomplete tasks, they will be left as-is, possibly leaving tasks that have already been addressed outside of MapRoulette',
+              })}
             </li>
           </ul>
 
@@ -175,15 +196,21 @@ export const RebuildTasksDialog = ({
             <CircleAlert className="mt-0.5 h-6 w-6 shrink-0 text-red-500" />
             <div className="space-y-2 text-amber-600 text-sm dark:text-amber-500">
               <p>
-                {t({ id: 'managementPages.rebuildTasksDialog.warning', defaultMessage: 'Warning: Rebuilding can lead to task duplication if your feature ids are not setup properly or if matching up old data with new data is unsuccessful. This operation cannot be undone!' }
-                )}
+                {t({
+                  id: 'managementPages.rebuildTasksDialog.warning',
+                  defaultMessage:
+                    'Warning: Rebuilding can lead to task duplication if your feature ids are not setup properly or if matching up old data with new data is unsuccessful. This operation cannot be undone!',
+                })}
               </p>
               <DocsLink
                 page="rebuildingChallengeTasks"
                 icon={null}
                 className="text-green-600 hover:text-green-700 dark:text-green-400"
               >
-                {t({ id: 'managementPages.rebuildTasksDialog.learnMore', defaultMessage: 'Learn More' })}
+                {t({
+                  id: 'managementPages.rebuildTasksDialog.learnMore',
+                  defaultMessage: 'Learn More',
+                })}
               </DocsLink>
             </div>
           </div>
@@ -191,8 +218,10 @@ export const RebuildTasksDialog = ({
           {isLocal && (
             <div className="space-y-2">
               <Label htmlFor={fileId}>
-                {t({ id: 'managementPages.rebuildTasksDialog.newGeoJsonFile', defaultMessage: 'New GeoJSON file' }
-                )}
+                {t({
+                  id: 'managementPages.rebuildTasksDialog.newGeoJsonFile',
+                  defaultMessage: 'New GeoJSON file',
+                })}
               </Label>
               <Input
                 id={fileId}
@@ -201,8 +230,10 @@ export const RebuildTasksDialog = ({
                 onChange={(e) => setLocalFile(e.target.files?.[0] ?? null)}
               />
               <Label htmlFor={dateId}>
-                {t({ id: 'managementPages.rebuildTasksDialog.dataOriginDate', defaultMessage: 'Date data was sourced (optional)' }
-                )}
+                {t({
+                  id: 'managementPages.rebuildTasksDialog.dataOriginDate',
+                  defaultMessage: 'Date data was sourced (optional)',
+                })}
               </Label>
               <Input
                 id={dateId}
@@ -219,8 +250,10 @@ export const RebuildTasksDialog = ({
               checked={removeUnmatched}
               onCheckedChange={(c) => setRemoveUnmatched(c === true)}
             />
-            {t({ id: 'managementPages.rebuildTasksDialog.removeIncomplete', defaultMessage: 'First remove incomplete tasks' }
-            )}
+            {t({
+              id: 'managementPages.rebuildTasksDialog.removeIncomplete',
+              defaultMessage: 'First remove incomplete tasks',
+            })}
           </label>
         </div>
 
@@ -230,7 +263,10 @@ export const RebuildTasksDialog = ({
           </Button>
           <Button variant="destructive" onClick={handleSubmit} disabled={!canSubmit}>
             {isPending
-              ? t({ id: 'managementPages.rebuildTasksDialog.rebuilding', defaultMessage: 'Rebuilding…' })
+              ? t({
+                  id: 'managementPages.rebuildTasksDialog.rebuilding',
+                  defaultMessage: 'Rebuilding…',
+                })
               : t({ id: 'managementPages.rebuildTasksDialog.proceed', defaultMessage: 'Proceed' })}
           </Button>
         </DialogFooter>

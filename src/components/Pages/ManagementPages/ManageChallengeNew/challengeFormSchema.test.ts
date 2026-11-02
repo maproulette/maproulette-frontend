@@ -5,6 +5,7 @@
 // schema is built.
 import { File as NodeFile } from 'node:buffer'
 import { describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import type { Challenge } from '@/types/Challenge'
 import {
   buildFormValues,
@@ -13,7 +14,6 @@ import {
   isChallengeSourceEditable,
   makeChallengeFormSchema,
 } from './challengeFormSchema'
-import { testT } from '@/test/translate'
 
 globalThis.File ??= NodeFile as unknown as typeof File
 

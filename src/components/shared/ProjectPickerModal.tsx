@@ -51,11 +51,14 @@ export const ProjectPickerModal = ({
   children,
 }: ProjectPickerModalProps) => {
   const { t } = useIntl()
-  const resolvedTitle = title ?? t({ id: 'common.selectAProject', defaultMessage: 'Select a project' })
+  const resolvedTitle =
+    title ?? t({ id: 'common.selectAProject', defaultMessage: 'Select a project' })
   const resolvedDescription =
     description ??
-    t({ id: 'shared.projectPickerModal.description', defaultMessage: 'Choose the project this challenge belongs to.' }
-    )
+    t({
+      id: 'shared.projectPickerModal.description',
+      defaultMessage: 'Choose the project this challenge belongs to.',
+    })
   const [searchQuery, setSearchQuery] = useState('')
   const [onlyEnabled, setOnlyEnabled] = useState(false)
   const [onlyOwned, setOnlyOwned] = useState(false)
@@ -164,7 +167,10 @@ export const ProjectPickerModal = ({
             </div>
           ) : projectsToShow.length === 0 ? (
             <div className="rounded-lg border border-zinc-200 p-6 text-center text-sm text-zinc-500 dark:border-slate-700 dark:text-zinc-400">
-              {t({ id: 'shared.projectPickerModal.noProjectsFound', defaultMessage: 'No projects found.' })}
+              {t({
+                id: 'shared.projectPickerModal.noProjectsFound',
+                defaultMessage: 'No projects found.',
+              })}
             </div>
           ) : viewMode === 'list' ? (
             <ProjectsTableView

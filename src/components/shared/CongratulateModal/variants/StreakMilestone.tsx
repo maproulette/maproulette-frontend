@@ -15,7 +15,13 @@ export const StreakMilestoneContent = ({ count }: Props) => {
           {t({ id: 'congratulateModal.streak.title', defaultMessage: 'Hot streak!' })}
         </h2>
         <p className="text-zinc-600 dark:text-slate-400">
-          {t({ id: 'congratulateModal.streak.description', defaultMessage: '{count, plural, one {# task} other {# tasks}} in a row — keep it going.' }, { count }
+          {t(
+            {
+              id: 'congratulateModal.streak.description',
+              defaultMessage:
+                '{count, plural, one {# task} other {# tasks}} in a row — keep it going.',
+            },
+            { count }
           )}
         </p>
       </div>

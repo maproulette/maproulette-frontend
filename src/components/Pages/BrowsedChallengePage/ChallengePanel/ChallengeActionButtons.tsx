@@ -22,12 +22,19 @@ export const ChallengeActionButtons = () => {
   // disabled and explains itself.
   const isReportDisabled = !user || !!openReport
   const reportTitle = !user
-    ? t({ id: 'browsedChallengePage.actionButtons.mustLoginToReport', defaultMessage: 'You must be logged in to report a challenge' }
-      )
+    ? t({
+        id: 'browsedChallengePage.actionButtons.mustLoginToReport',
+        defaultMessage: 'You must be logged in to report a challenge',
+      })
     : openReport
-      ? t({ id: 'browsedChallengePage.actionButtons.alreadyReported', defaultMessage: 'You have already reported this challenge; it is awaiting review' }
-        )
-      : t({ id: 'browsedChallengePage.actionButtons.reportChallengeTitle', defaultMessage: 'Report challenge' })
+      ? t({
+          id: 'browsedChallengePage.actionButtons.alreadyReported',
+          defaultMessage: 'You have already reported this challenge; it is awaiting review',
+        })
+      : t({
+          id: 'browsedChallengePage.actionButtons.reportChallengeTitle',
+          defaultMessage: 'Report challenge',
+        })
 
   return (
     <DropdownMenu>
@@ -35,8 +42,10 @@ export const ChallengeActionButtons = () => {
         <button
           type="button"
           className="flex items-center justify-center rounded-lg p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-slate-400 dark:focus:ring-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
-          aria-label={t({ id: 'browsedChallengePage.actionButtons.challengeActions', defaultMessage: 'Challenge actions' }
-          )}
+          aria-label={t({
+            id: 'browsedChallengePage.actionButtons.challengeActions',
+            defaultMessage: 'Challenge actions',
+          })}
         >
           <MoreVertical className="size-4" />
         </button>
@@ -56,8 +65,10 @@ export const ChallengeActionButtons = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Settings className="size-4" />
-              {t({ id: 'browsedChallengePage.actionButtons.manageChallenge', defaultMessage: 'Manage Challenge' }
-              )}
+              {t({
+                id: 'browsedChallengePage.actionButtons.manageChallenge',
+                defaultMessage: 'Manage Challenge',
+              })}
             </Link>
           </DropdownMenuItem>
         )}
@@ -87,8 +98,10 @@ export const ChallengeActionButtons = () => {
             )}
           />
           {openReport
-            ? t({ id: 'browsedChallengePage.actionButtons.challengeReported', defaultMessage: 'Challenge Reported' }
-              )
+            ? t({
+                id: 'browsedChallengePage.actionButtons.challengeReported',
+                defaultMessage: 'Challenge Reported',
+              })
             : t({ id: 'common.reportChallenge', defaultMessage: 'Report Challenge' })}
         </DropdownMenuItem>
       </DropdownMenuContent>

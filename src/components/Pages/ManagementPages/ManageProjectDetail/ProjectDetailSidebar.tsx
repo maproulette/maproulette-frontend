@@ -87,7 +87,10 @@ export const ProjectDetailSidebar = () => {
           >
             <Link to="/project/$projectId" params={{ projectId }}>
               <Eye className="h-4 w-4" />
-              {t({ id: 'manageProjectDetail.content.viewProjectPage', defaultMessage: 'View project page' })}
+              {t({
+                id: 'manageProjectDetail.content.viewProjectPage',
+                defaultMessage: 'View project page',
+              })}
             </Link>
           </Button>
           <Button
@@ -104,7 +107,10 @@ export const ProjectDetailSidebar = () => {
           <Button asChild size="sm" className="w-full justify-start gap-2 rounded-full">
             <Link to="/manage/challenge/new" search={{ projectId: Number(projectId) }}>
               <Plus className="h-4 w-4" />
-              {t({ id: 'manageProjectDetail.content.createChallenge', defaultMessage: 'Create challenge' })}
+              {t({
+                id: 'manageProjectDetail.content.createChallenge',
+                defaultMessage: 'Create challenge',
+              })}
             </Link>
           </Button>
           {!isLoadingProject && projectData?.id != null && (
@@ -128,8 +134,14 @@ export const ProjectDetailSidebar = () => {
               >
                 {project?.enabled ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 {project?.enabled
-                  ? t({ id: 'manageProjectDetail.content.disableProject', defaultMessage: 'Disable project' })
-                  : t({ id: 'manageProjectDetail.content.enableProject', defaultMessage: 'Enable project' })}
+                  ? t({
+                      id: 'manageProjectDetail.content.disableProject',
+                      defaultMessage: 'Disable project',
+                    })
+                  : t({
+                      id: 'manageProjectDetail.content.enableProject',
+                      defaultMessage: 'Enable project',
+                    })}
               </Button>
               <Button
                 variant="outline"
@@ -138,7 +150,10 @@ export const ProjectDetailSidebar = () => {
                 className="w-full justify-start gap-2 rounded-full"
               >
                 <Users className="h-4 w-4" />
-                {t({ id: 'manageProjectDetail.content.manageAccess', defaultMessage: 'Managers and teams' })}
+                {t({
+                  id: 'manageProjectDetail.content.manageAccess',
+                  defaultMessage: 'Managers and teams',
+                })}
               </Button>
               <Button
                 variant="outline"
@@ -194,20 +209,32 @@ export const ProjectDetailSidebar = () => {
       {/* Playbook footer */}
       <div className="mt-auto shrink-0 border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
         <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-          {t({ id: 'manageProjectDetail.content.playbookTitle', defaultMessage: 'Project Playbook' })}
+          {t({
+            id: 'manageProjectDetail.content.playbookTitle',
+            defaultMessage: 'Project Playbook',
+          })}
         </p>
         <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
           <p>
-            {t({ id: 'manageProjectDetail.content.playbookTip1', defaultMessage: 'Confirm challenge instructions and QA expectations are specific and testable.' }
-            )}
+            {t({
+              id: 'manageProjectDetail.content.playbookTip1',
+              defaultMessage:
+                'Confirm challenge instructions and QA expectations are specific and testable.',
+            })}
           </p>
           <p>
-            {t({ id: 'manageProjectDetail.content.playbookTip2', defaultMessage: 'Review challenge ordering so mappers can move from easier to harder tasks.' }
-            )}
+            {t({
+              id: 'manageProjectDetail.content.playbookTip2',
+              defaultMessage:
+                'Review challenge ordering so mappers can move from easier to harder tasks.',
+            })}
           </p>
           <p>
-            {t({ id: 'manageProjectDetail.content.playbookTip3', defaultMessage: 'Assign at least one co-manager for triage, support, and archival continuity.' }
-            )}
+            {t({
+              id: 'manageProjectDetail.content.playbookTip3',
+              defaultMessage:
+                'Assign at least one co-manager for triage, support, and archival continuity.',
+            })}
           </p>
         </div>
         <Separator className="my-4" />
@@ -217,8 +244,10 @@ export const ProjectDetailSidebar = () => {
           icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
           className="mt-3 gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
         >
-          {t({ id: 'manageProjectDetail.content.playbookDocsLink', defaultMessage: 'Open project management docs' }
-          )}
+          {t({
+            id: 'manageProjectDetail.content.playbookDocsLink',
+            defaultMessage: 'Open project management docs',
+          })}
         </DocsLink>
       </div>
     </div>

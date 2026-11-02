@@ -108,7 +108,10 @@ export const useChallengeProgress = (metrics?: CompletionMetrics) => {
         key: PROBLEM_STATUS,
         percentage: (tooHardCount / total) * 100,
         color: PROBLEM_STYLE.color,
-        title: t(SEGMENT_TITLE, { status: t(SEGMENT_MESSAGES[PROBLEM_STATUS]), count: tooHardCount }),
+        title: t(SEGMENT_TITLE, {
+          status: t(SEGMENT_MESSAGES[PROBLEM_STATUS]),
+          count: tooHardCount,
+        }),
         opacity: PROBLEM_STYLE.opacity,
       })
     }

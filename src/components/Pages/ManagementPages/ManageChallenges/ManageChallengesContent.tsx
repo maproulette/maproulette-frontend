@@ -225,7 +225,9 @@ export const ManageChallengesContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
+              <span className="sr-only">
+                {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -308,12 +310,17 @@ export const ManageChallengesContent = () => {
               <div className="flex items-start justify-between px-6 pt-6 pb-2">
                 <div className="space-y-2.5">
                   <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
-                    {t({ id: 'manageChallenges.content.aboutChallengesTitle', defaultMessage: 'About Challenges' }
-                    )}
+                    {t({
+                      id: 'manageChallenges.content.aboutChallengesTitle',
+                      defaultMessage: 'About Challenges',
+                    })}
                   </h2>
                   <p className="text-pretty text-sm text-zinc-600 leading-relaxed dark:text-zinc-400">
-                    {t({ id: 'manageChallenges.content.aboutChallengesBody', defaultMessage: 'Challenges contain tasks that mappers work through to improve OpenStreetMap data.' }
-                    )}
+                    {t({
+                      id: 'manageChallenges.content.aboutChallengesBody',
+                      defaultMessage:
+                        'Challenges contain tasks that mappers work through to improve OpenStreetMap data.',
+                    })}
                   </p>
                 </div>
                 <Button
@@ -331,32 +338,47 @@ export const ManageChallengesContent = () => {
                 <div className="space-y-4 text-sm text-zinc-600 leading-relaxed dark:text-zinc-300">
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t({ id: 'manageChallenges.content.tipWriteClearInstructionsTitle', defaultMessage: 'Write clear instructions' }
-                      )}
+                      {t({
+                        id: 'manageChallenges.content.tipWriteClearInstructionsTitle',
+                        defaultMessage: 'Write clear instructions',
+                      })}
                     </p>
                     <p>
-                      {t({ id: 'manageChallenges.content.tipWriteClearInstructionsBody', defaultMessage: 'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.' }
-                      )}
+                      {t({
+                        id: 'manageChallenges.content.tipWriteClearInstructionsBody',
+                        defaultMessage:
+                          'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.',
+                      })}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t({ id: 'manageChallenges.content.tipSetDifficultyTitle', defaultMessage: 'Set appropriate difficulty' }
-                      )}
+                      {t({
+                        id: 'manageChallenges.content.tipSetDifficultyTitle',
+                        defaultMessage: 'Set appropriate difficulty',
+                      })}
                     </p>
                     <p>
-                      {t({ id: 'manageChallenges.content.tipSetDifficultyBody', defaultMessage: 'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.' }
-                      )}
+                      {t({
+                        id: 'manageChallenges.content.tipSetDifficultyBody',
+                        defaultMessage:
+                          'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.',
+                      })}
                     </p>
                   </div>
                   <div>
                     <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {t({ id: 'manageChallenges.content.tipMonitorProgressTitle', defaultMessage: 'Monitor progress' }
-                      )}
+                      {t({
+                        id: 'manageChallenges.content.tipMonitorProgressTitle',
+                        defaultMessage: 'Monitor progress',
+                      })}
                     </p>
                     <p>
-                      {t({ id: 'manageChallenges.content.tipMonitorProgressBody', defaultMessage: 'Check completion rates and review feedback. Archive challenges once all tasks are resolved.' }
-                      )}
+                      {t({
+                        id: 'manageChallenges.content.tipMonitorProgressBody',
+                        defaultMessage:
+                          'Check completion rates and review feedback. Archive challenges once all tasks are resolved.',
+                      })}
                     </p>
                   </div>
                 </div>
@@ -372,31 +394,40 @@ export const ManageChallengesContent = () => {
                     className="flex items-center gap-2 text-xs text-zinc-700 hover:underline dark:text-zinc-200"
                   >
                     <FolderKanban className="h-3.5 w-3.5 text-zinc-500" />
-                    {t({ id: 'manageChallenges.content.manageProjectsLink', defaultMessage: 'Manage Projects' })}
+                    {t({
+                      id: 'manageChallenges.content.manageProjectsLink',
+                      defaultMessage: 'Manage Projects',
+                    })}
                   </Link>
                   <DocsLink
                     page="creatingAChallenge"
                     icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
                     className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
                   >
-                    {t({ id: 'manageChallenges.content.challengeCreationGuideLink', defaultMessage: 'Challenge Creation Guide' }
-                    )}
+                    {t({
+                      id: 'manageChallenges.content.challengeCreationGuideLink',
+                      defaultMessage: 'Challenge Creation Guide',
+                    })}
                   </DocsLink>
                   <DocsLink
                     page="taskPriorityRules"
                     icon={<ListOrdered className="h-3.5 w-3.5 text-zinc-500" />}
                     className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
                   >
-                    {t({ id: 'manageChallenges.content.taskPriorityRulesLink', defaultMessage: 'Task Priority Rules' }
-                    )}
+                    {t({
+                      id: 'manageChallenges.content.taskPriorityRulesLink',
+                      defaultMessage: 'Task Priority Rules',
+                    })}
                   </DocsLink>
                   <DocsLink
                     page="bulkEditingChallenges"
                     icon={<PencilLine className="h-3.5 w-3.5 text-zinc-500" />}
                     className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
                   >
-                    {t({ id: 'manageChallenges.content.bulkEditingLink', defaultMessage: 'Bulk Editing Challenges' }
-                    )}
+                    {t({
+                      id: 'manageChallenges.content.bulkEditingLink',
+                      defaultMessage: 'Bulk Editing Challenges',
+                    })}
                   </DocsLink>
                 </div>
               </div>
@@ -423,7 +454,10 @@ export const ManageChallengesContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t({ id: 'common.searchChallenges2', defaultMessage: 'Search challenges...' })}
+                placeholder={t({
+                  id: 'common.searchChallenges2',
+                  defaultMessage: 'Search challenges...',
+                })}
                 className="w-full sm:max-w-xs"
               />
               <FilterToggle
@@ -486,10 +520,18 @@ export const ManageChallengesContent = () => {
                   getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: ListChecks,
-                    title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
-                    description: t({ id: 'manageChallenges.content.emptyDescription', defaultMessage: "You haven't created any challenges yet" }
-                    ),
-                    actionLabel: t({ id: 'common.createChallenge', defaultMessage: 'Create Challenge' }),
+                    title: t({
+                      id: 'common.noChallengesFound',
+                      defaultMessage: 'No challenges found',
+                    }),
+                    description: t({
+                      id: 'manageChallenges.content.emptyDescription',
+                      defaultMessage: "You haven't created any challenges yet",
+                    }),
+                    actionLabel: t({
+                      id: 'common.createChallenge',
+                      defaultMessage: 'Create Challenge',
+                    }),
                     actionTo: '/manage/challenge/new',
                   }}
                 />
@@ -516,12 +558,17 @@ export const ManageChallengesContent = () => {
               {t({ id: 'common.deleteChallenge2', defaultMessage: 'Delete challenge?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t({ id: 'common.deleteChallengeWarning', defaultMessage: 'This will delete this challenge and all its tasks. This action cannot be undone.' }
-              )}
+              {t({
+                id: 'common.deleteChallengeWarning',
+                defaultMessage:
+                  'This will delete this challenge and all its tasks. This action cannot be undone.',
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteChallenge}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"

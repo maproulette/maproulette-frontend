@@ -75,12 +75,16 @@ export const ManageTaskEdit = () => {
       <ManageFormLayout>
         <FormCard
           title={t({ id: 'common.accessDenied', defaultMessage: 'Access denied' })}
-          description={t({ id: 'manageTaskEdit.index.accessDeniedDescription', defaultMessage: 'Only challenge owners and admins can edit tasks.' }
-          )}
+          description={t({
+            id: 'manageTaskEdit.index.accessDeniedDescription',
+            defaultMessage: 'Only challenge owners and admins can edit tasks.',
+          })}
         >
           <p className="text-zinc-600 dark:text-zinc-400">
-            {t({ id: 'manageTaskEdit.index.noPermission', defaultMessage: 'You do not have permission to edit this task.' }
-            )}
+            {t({
+              id: 'manageTaskEdit.index.noPermission',
+              defaultMessage: 'You do not have permission to edit this task.',
+            })}
           </p>
         </FormCard>
       </ManageFormLayout>
@@ -91,8 +95,10 @@ export const ManageTaskEdit = () => {
     <ManageFormLayout>
       <FormCard
         title={t({ id: 'manageTaskEdit.index.taskDetailsTitle', defaultMessage: 'Task Details' })}
-        description={t({ id: 'manageTaskEdit.index.taskDetailsDescription', defaultMessage: 'Modify the fields below and save to update the task' }
-        )}
+        description={t({
+          id: 'manageTaskEdit.index.taskDetailsDescription',
+          defaultMessage: 'Modify the fields below and save to update the task',
+        })}
       >
         <TaskForm task={task} onSubmit={handleSubmit} onCancel={handleCancel} />
       </FormCard>

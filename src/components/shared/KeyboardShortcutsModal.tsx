@@ -24,7 +24,10 @@ export const KeyboardShortcutsModal = () => {
   const { shortcuts, isModalOpen, setModalOpen } = useKeyboardShortcuts()
 
   const categoryLabels: Record<ShortcutCategory, string> = {
-    taskActions: t({ id: 'keyboardShortcuts.category.taskActions', defaultMessage: 'Task actions' }),
+    taskActions: t({
+      id: 'keyboardShortcuts.category.taskActions',
+      defaultMessage: 'Task actions',
+    }),
     editors: t({ id: 'keyboardShortcuts.category.editors', defaultMessage: 'Editors' }),
     map: t({ id: 'common.map', defaultMessage: 'Map' }),
     multiTask: t({ id: 'keyboardShortcuts.category.multiTask', defaultMessage: 'Multi-task' }),
@@ -49,8 +52,10 @@ export const KeyboardShortcutsModal = () => {
             {t({ id: 'keyboardShortcuts.title', defaultMessage: 'Keyboard Shortcuts' })}
           </DialogTitle>
           <DialogDescription>
-            {t({ id: 'keyboardShortcuts.description', defaultMessage: 'Use these shortcuts to speed up your workflow' }
-            )}
+            {t({
+              id: 'keyboardShortcuts.description',
+              defaultMessage: 'Use these shortcuts to speed up your workflow',
+            })}
           </DialogDescription>
         </DialogHeader>
 
@@ -70,7 +75,10 @@ export const KeyboardShortcutsModal = () => {
         </div>
 
         <DocsLink page="keyboardShortcuts" className="text-sm">
-          {t({ id: 'keyboardShortcuts.docsLink', defaultMessage: 'See the full list of keyboard shortcuts' })}
+          {t({
+            id: 'keyboardShortcuts.docsLink',
+            defaultMessage: 'See the full list of keyboard shortcuts',
+          })}
         </DocsLink>
       </DialogContent>
     </Dialog>

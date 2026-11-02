@@ -8,8 +8,10 @@ export const NewTeamPage = () => {
     <ManageFormLayout>
       <FormCard
         title={t({ id: 'teams.newTeam.title', defaultMessage: 'Create a team' })}
-        description={t({ id: 'teams.newTeam.description', defaultMessage: 'Fill in the information below to create your new team' }
-        )}
+        description={t({
+          id: 'teams.newTeam.description',
+          defaultMessage: 'Fill in the information below to create your new team',
+        })}
       >
         <TeamForm />
       </FormCard>

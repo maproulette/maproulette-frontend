@@ -47,11 +47,18 @@ export const isUploadedTeamAvatarUrl = (
  */
 export const teamImageFileProblem = (file: File, t: TranslateFn): string | undefined => {
   if (!(TEAM_IMAGE_MIME_TYPES as readonly string[]).includes(file.type)) {
-    return t({ id: 'teamImages.validation.fileType', defaultMessage: 'Image must be a PNG, JPEG, WebP or GIF file' }
-    )
+    return t({
+      id: 'teamImages.validation.fileType',
+      defaultMessage: 'Image must be a PNG, JPEG, WebP or GIF file',
+    })
   }
   if (file.size > TEAM_IMAGE_MAX_BYTES) {
-    return t({ id: 'teamImages.validation.fileSize', defaultMessage: 'Image must be smaller than {max}MB' }, { max: TEAM_IMAGE_MAX_BYTES / (1024 * 1024) }
+    return t(
+      {
+        id: 'teamImages.validation.fileSize',
+        defaultMessage: 'Image must be smaller than {max}MB',
+      },
+      { max: TEAM_IMAGE_MAX_BYTES / (1024 * 1024) }
     )
   }
   return undefined

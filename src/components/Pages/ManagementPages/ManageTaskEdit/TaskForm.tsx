@@ -52,13 +52,17 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
   const handleSubmit = async (values: TaskFormValues) => {
     try {
       await onSubmit(values)
-      toast.success(t({ id: 'manageTaskEdit.form.updateSuccess', defaultMessage: 'Task updated successfully' }))
+      toast.success(
+        t({ id: 'manageTaskEdit.form.updateSuccess', defaultMessage: 'Task updated successfully' })
+      )
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
-          : t({ id: 'manageTaskEdit.form.updateError', defaultMessage: 'Failed to save task. Please try again.' }
-            )
+          : t({
+              id: 'manageTaskEdit.form.updateError',
+              defaultMessage: 'Failed to save task. Please try again.',
+            })
       toast.error(message)
       logger.error('Failed to save task', { error })
     }
@@ -79,12 +83,18 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                 <FormLabel>{t({ id: 'common.name', defaultMessage: 'Name' })}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={t({ id: 'manageTaskEdit.form.namePlaceholder', defaultMessage: 'Task name' })}
+                    placeholder={t({
+                      id: 'manageTaskEdit.form.namePlaceholder',
+                      defaultMessage: 'Task name',
+                    })}
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  {t({ id: 'manageTaskEdit.form.nameDescription', defaultMessage: 'Name of the task' })}
+                  {t({
+                    id: 'manageTaskEdit.form.nameDescription',
+                    defaultMessage: 'Name of the task',
+                  })}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -96,18 +106,25 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             name="instruction"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t({ id: 'common.instructions', defaultMessage: 'Instructions' })}</FormLabel>
+                <FormLabel>
+                  {t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={t({ id: 'manageTaskEdit.form.instructionsPlaceholder', defaultMessage: 'Instructions for this task (overrides challenge instructions)' }
-                    )}
+                    placeholder={t({
+                      id: 'manageTaskEdit.form.instructionsPlaceholder',
+                      defaultMessage:
+                        'Instructions for this task (overrides challenge instructions)',
+                    })}
                     className="min-h-24 resize-none"
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  {t({ id: 'manageTaskEdit.form.instructionsDescription', defaultMessage: 'Instructions for users doing this specific task' }
-                  )}
+                  {t({
+                    id: 'manageTaskEdit.form.instructionsDescription',
+                    defaultMessage: 'Instructions for users doing this specific task',
+                  })}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -128,8 +145,11 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                   />
                 </FormControl>
                 <FormDescription>
-                  {t({ id: 'manageTaskEdit.form.geoJsonDescription', defaultMessage: 'GeoJSON for this task (point, line or polygon). Must be valid JSON.' }
-                  )}
+                  {t({
+                    id: 'manageTaskEdit.form.geoJsonDescription',
+                    defaultMessage:
+                      'GeoJSON for this task (point, line or polygon). Must be valid JSON.',
+                  })}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -149,8 +169,10 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue
-                        placeholder={t({ id: 'manageTaskEdit.form.statusPlaceholder', defaultMessage: 'Select status' }
-                        )}
+                        placeholder={t({
+                          id: 'manageTaskEdit.form.statusPlaceholder',
+                          defaultMessage: 'Select status',
+                        })}
                       />
                     </SelectTrigger>
                   </FormControl>
@@ -163,8 +185,10 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  {t({ id: 'manageTaskEdit.form.statusDescription', defaultMessage: 'Current status of the task' }
-                  )}
+                  {t({
+                    id: 'manageTaskEdit.form.statusDescription',
+                    defaultMessage: 'Current status of the task',
+                  })}
                 </FormDescription>
                 <FormMessage />
               </FormItem>

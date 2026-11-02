@@ -21,10 +21,14 @@ export const SignIn = ({ className, ...props }: React.ComponentProps<typeof Empt
         <EmptyMedia variant="icon">
           <UserLock />
         </EmptyMedia>
-        <EmptyTitle>{t({ id: 'shared.signIn.title', defaultMessage: 'Please sign in' })}</EmptyTitle>
+        <EmptyTitle>
+          {t({ id: 'shared.signIn.title', defaultMessage: 'Please sign in' })}
+        </EmptyTitle>
         <EmptyDescription>
-          {t({ id: 'shared.signIn.description', defaultMessage: 'You need to be signed in to manage your account.' }
-          )}
+          {t({
+            id: 'shared.signIn.description',
+            defaultMessage: 'You need to be signed in to manage your account.',
+          })}
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>

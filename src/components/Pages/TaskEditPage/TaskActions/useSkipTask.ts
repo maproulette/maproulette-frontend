@@ -39,7 +39,10 @@ export const useSkipTask = (task: Task) => {
         await navigateToTask(randomTasks[0].id)
       } else {
         toast.info(
-          t({ id: 'common.noMoreTasksInChallenge', defaultMessage: 'No more tasks available in this challenge' })
+          t({
+            id: 'common.noMoreTasksInChallenge',
+            defaultMessage: 'No more tasks available in this challenge',
+          })
         )
         await navigate({
           to: '/challenge/$challengeId',
@@ -49,7 +52,10 @@ export const useSkipTask = (task: Task) => {
     } catch (error) {
       logger.error('Skip failed', { error })
       toast.error(
-        t({ id: 'taskEditPage.taskActions.skipButton.skipFailed', defaultMessage: 'Could not skip this task' })
+        t({
+          id: 'taskEditPage.taskActions.skipButton.skipFailed',
+          defaultMessage: 'Could not skip this task',
+        })
       )
     } finally {
       setIsSkipping(false)

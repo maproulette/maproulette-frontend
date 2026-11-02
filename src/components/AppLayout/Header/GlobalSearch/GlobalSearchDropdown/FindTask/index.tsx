@@ -31,8 +31,10 @@ export const FindTask = () => {
             {t({ id: 'common.findATask', defaultMessage: 'Find a Task' })}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t({ id: 'appLayout.header.globalSearch.findTask.hint', defaultMessage: 'Enter a task ID to look it up' }
-            )}
+            {t({
+              id: 'appLayout.header.globalSearch.findTask.hint',
+              defaultMessage: 'Enter a task ID to look it up',
+            })}
           </p>
         </div>
       </div>
@@ -44,7 +46,12 @@ export const FindTask = () => {
       <div className="flex flex-col items-center justify-center gap-3 py-12">
         <Spinner size="lg" className="text-blue-500" />
         <p className="text-sm text-zinc-500 dark:text-slate-400">
-          {t({ id: 'appLayout.header.globalSearch.findTask.lookingUp', defaultMessage: 'Looking up task {id}...' }, { id: numericId }
+          {t(
+            {
+              id: 'appLayout.header.globalSearch.findTask.lookingUp',
+              defaultMessage: 'Looking up task {id}...',
+            },
+            { id: numericId }
           )}
         </p>
       </div>
@@ -59,12 +66,19 @@ export const FindTask = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t({ id: 'appLayout.header.globalSearch.findTask.noResults', defaultMessage: 'No task found with ID {id}' }, { id: debouncedId }
+            {t(
+              {
+                id: 'appLayout.header.globalSearch.findTask.noResults',
+                defaultMessage: 'No task found with ID {id}',
+              },
+              { id: debouncedId }
             )}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t({ id: 'appLayout.header.globalSearch.findTask.noResultsHint', defaultMessage: 'Try a different task ID' }
-            )}
+            {t({
+              id: 'appLayout.header.globalSearch.findTask.noResultsHint',
+              defaultMessage: 'Try a different task ID',
+            })}
           </p>
         </div>
       </div>
@@ -99,16 +113,25 @@ export const FindTask = () => {
               onClick={onResultSelect}
               className="stretched-link"
             >
-              {task.name || t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })}
+              {task.name ||
+                t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })}
             </Link>
           </h3>
           <div className="flex items-center gap-2">
             <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
-              {t({ id: 'appLayout.header.globalSearch.findTask.status.label', defaultMessage: 'Status: {status}' }, { status: statusLabel }
+              {t(
+                {
+                  id: 'appLayout.header.globalSearch.findTask.status.label',
+                  defaultMessage: 'Status: {status}',
+                },
+                { status: statusLabel }
               )}
             </span>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' }, { id: task.parent })}
+              {t(
+                { id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' },
+                { id: task.parent }
+              )}
             </span>
           </div>
         </div>

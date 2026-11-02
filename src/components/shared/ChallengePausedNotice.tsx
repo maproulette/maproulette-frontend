@@ -8,10 +8,15 @@ export const ChallengePausedNotice = ({ message }: { message?: string }) => {
   return (
     <Alert variant="warning">
       <PauseCircle />
-      <AlertTitle>{t({ id: 'common.challengePausedTitle', defaultMessage: 'Challenge Paused' })}</AlertTitle>
+      <AlertTitle>
+        {t({ id: 'common.challengePausedTitle', defaultMessage: 'Challenge Paused' })}
+      </AlertTitle>
       <AlertDescription>
         {message ??
-          t({ id: 'common.challengePausedDescription', defaultMessage: 'This challenge is currently paused.' })}
+          t({
+            id: 'common.challengePausedDescription',
+            defaultMessage: 'This challenge is currently paused.',
+          })}
       </AlertDescription>
     </Alert>
   )

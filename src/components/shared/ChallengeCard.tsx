@@ -103,7 +103,10 @@ export const ChallengeCard = ({
         <div
           className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
         >
-          {t({ id: 'shared.challengeCard.project', defaultMessage: '{name}' }, { name: displayParentName })}
+          {t(
+            { id: 'shared.challengeCard.project', defaultMessage: '{name}' },
+            { name: displayParentName }
+          )}
         </div>
 
         <h3
@@ -162,7 +165,9 @@ export const ChallengeCard = ({
             </span>
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
-                {t({ id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' }, { date: formatDate(new Date(lastUpdated), locale) }
+                {t(
+                  { id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' },
+                  { date: formatDate(new Date(lastUpdated), locale) }
                 )}
               </span>
             ) : null}

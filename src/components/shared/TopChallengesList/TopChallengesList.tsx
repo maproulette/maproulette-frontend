@@ -27,7 +27,10 @@ export const TopChallengesList = ({ userId, monthDuration = -1, limit = 5 }: Pro
   if (isError) {
     return (
       <p className="text-sm text-zinc-500 dark:text-slate-400">
-        {t({ id: 'topChallenges.list.loadError', defaultMessage: "Couldn't load top challenges right now." })}
+        {t({
+          id: 'topChallenges.list.loadError',
+          defaultMessage: "Couldn't load top challenges right now.",
+        })}
       </p>
     )
   }
@@ -42,8 +45,11 @@ export const TopChallengesList = ({ userId, monthDuration = -1, limit = 5 }: Pro
             {t({ id: 'topChallenges.list.emptyTitle', defaultMessage: 'No contributions yet' })}
           </EmptyTitle>
           <EmptyDescription>
-            {t({ id: 'topChallenges.list.emptyDescription', defaultMessage: 'Once you start working on challenges, your top ones will show up here.' }
-            )}
+            {t({
+              id: 'topChallenges.list.emptyDescription',
+              defaultMessage:
+                'Once you start working on challenges, your top ones will show up here.',
+            })}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { getDifficultyColor, getDifficultyLabel } from './difficultyLevelData.ts'
 import { testT } from '@/test/translate'
+import { getDifficultyColor, getDifficultyLabel } from './difficultyLevelData.ts'
 
 const t = testT
 

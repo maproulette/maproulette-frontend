@@ -69,16 +69,20 @@ export const useTaskMapShortcuts = (fitToTask: () => void) => {
       },
       {
         ...MAP_BINDINGS.toggleMarkers,
-        description: t({ id: 'taskMap.shortcuts.toggleMarkers', defaultMessage: 'Toggle all markers visibility' }
-        ),
+        description: t({
+          id: 'taskMap.shortcuts.toggleMarkers',
+          defaultMessage: 'Toggle all markers visibility',
+        }),
         category: 'map',
         handler: () => setMarkersHidden(!markersHidden),
         enabled: mapLoaded,
       },
       {
         ...MAP_BINDINGS.toggleExploreLayer,
-        description: t({ id: 'taskMap.shortcuts.toggleExploreLayer', defaultMessage: 'Toggle tasks from other challenges' }
-        ),
+        description: t({
+          id: 'taskMap.shortcuts.toggleExploreLayer',
+          defaultMessage: 'Toggle tasks from other challenges',
+        }),
         category: 'map',
         handler: () => setShowExploreLayer(!showExploreLayer),
         enabled: mapLoaded,
@@ -87,39 +91,55 @@ export const useTaskMapShortcuts = (fitToTask: () => void) => {
         // MapRoulette 3 replayed its line-drawing animation on this key; here
         // it turns the standing direction indicators off and on instead.
         ...MAP_BINDINGS.toggleDirectionIndicators,
-        description: t({ id: 'taskMap.shortcuts.toggleDirectionIndicators', defaultMessage: 'Toggle direction indicators on task geometry' }
-        ),
+        description: t({
+          id: 'taskMap.shortcuts.toggleDirectionIndicators',
+          defaultMessage: 'Toggle direction indicators on task geometry',
+        }),
         category: 'map',
         handler: () => setShowDirectionIndicators(!showDirectionIndicators),
         enabled: mapLoaded,
       },
       {
         ...MAP_BINDINGS.toggleBundleOnly,
-        description: t({ id: 'taskMap.shortcuts.toggleFilter', defaultMessage: 'Toggle filter (show bundled tasks only)' }
-        ),
+        description: t({
+          id: 'taskMap.shortcuts.toggleFilter',
+          defaultMessage: 'Toggle filter (show bundled tasks only)',
+        }),
         category: 'map',
         handler: () => setShowBundleOnly(!showBundleOnly),
         enabled: !!activeBundle,
-        disabledReason: t({ id: 'keyboardShortcuts.unavailable.noSelection', defaultMessage: 'Select more than one task first' }
-        ),
+        disabledReason: t({
+          id: 'keyboardShortcuts.unavailable.noSelection',
+          defaultMessage: 'Select more than one task first',
+        }),
       },
       {
         ...MAP_BINDINGS.startDrawing,
-        description: t({ id: 'taskMap.shortcuts.startDrawing', defaultMessage: 'Start drawing to add tasks' }),
+        description: t({
+          id: 'taskMap.shortcuts.startDrawing',
+          defaultMessage: 'Start drawing to add tasks',
+        }),
         category: 'multiTask',
         handler: () => startDrawing('select'),
         enabled: !drawingMode,
-        disabledReason: t({ id: 'keyboardShortcuts.unavailable.alreadyDrawing', defaultMessage: 'Already drawing' }
-        ),
+        disabledReason: t({
+          id: 'keyboardShortcuts.unavailable.alreadyDrawing',
+          defaultMessage: 'Already drawing',
+        }),
       },
       {
         ...MAP_BINDINGS.exitMultiTask,
-        description: t({ id: 'taskMap.shortcuts.exitMultiTask', defaultMessage: 'Exit multi-task mode' }),
+        description: t({
+          id: 'taskMap.shortcuts.exitMultiTask',
+          defaultMessage: 'Exit multi-task mode',
+        }),
         category: 'multiTask',
         handler: () => setShowDeleteDialog(true),
         enabled: !!activeBundle,
-        disabledReason: t({ id: 'keyboardShortcuts.unavailable.noSelection', defaultMessage: 'Select more than one task first' }
-        ),
+        disabledReason: t({
+          id: 'keyboardShortcuts.unavailable.noSelection',
+          defaultMessage: 'Select more than one task first',
+        }),
       },
       {
         ...MAP_BINDINGS.cancel,
@@ -132,7 +152,10 @@ export const useTaskMapShortcuts = (fitToTask: () => void) => {
       },
       {
         ...MAP_BINDINGS.cancel,
-        description: t({ id: 'taskEditPage.shortcuts.backToMap', defaultMessage: 'Close the editor' }),
+        description: t({
+          id: 'taskEditPage.shortcuts.backToMap',
+          defaultMessage: 'Close the editor',
+        }),
         category: 'editors',
         handler: showMap,
         enabled: activeView === 'id' && !drawingMode,

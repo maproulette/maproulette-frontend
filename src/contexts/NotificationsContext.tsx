@@ -76,14 +76,25 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
             refetch()
             const count = notificationIds.length
             toast.success(
-              t({ id: 'notifications.toast.actionSuccess', defaultMessage: '{count, plural, one {# notification {action}} other {# notifications {action}}}' }, { count, action }
+              t(
+                {
+                  id: 'notifications.toast.actionSuccess',
+                  defaultMessage:
+                    '{count, plural, one {# notification {action}} other {# notifications {action}}}',
+                },
+                { count, action }
               )
             )
             setLoadingId?.(null)
           },
           onError: (error: Error) => {
             toast.error(
-              t({ id: 'notifications.toast.actionError', defaultMessage: 'Failed to {verb} notification: {message}' }, { verb: action.replace(/ed$/, '').replace(/d$/, ''), message: error.message }
+              t(
+                {
+                  id: 'notifications.toast.actionError',
+                  defaultMessage: 'Failed to {verb} notification: {message}',
+                },
+                { verb: action.replace(/ed$/, '').replace(/d$/, ''), message: error.message }
               )
             )
             setLoadingId?.(null)

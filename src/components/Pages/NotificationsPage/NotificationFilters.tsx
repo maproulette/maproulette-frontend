@@ -145,7 +145,13 @@ export const NotificationFilters = () => {
             {filterOptions.types.map((typeId: number) => (
               <SelectItem key={typeId} value={typeId.toString()}>
                 {NOTIFICATION_TYPE_NAMES[typeId] ||
-                  t({ id: 'notificationsPage.filters.typeOptionFallback', defaultMessage: 'Type {typeId}' }, { typeId })}
+                  t(
+                    {
+                      id: 'notificationsPage.filters.typeOptionFallback',
+                      defaultMessage: 'Type {typeId}',
+                    },
+                    { typeId }
+                  )}
               </SelectItem>
             ))}
           </SelectContent>
@@ -154,7 +160,10 @@ export const NotificationFilters = () => {
         <Select value={filterFrom} onValueChange={setFilterFrom}>
           <SelectTrigger className="h-9 w-40">
             <SelectValue
-              placeholder={t({ id: 'notificationsPage.filters.fromPlaceholder', defaultMessage: 'From' })}
+              placeholder={t({
+                id: 'notificationsPage.filters.fromPlaceholder',
+                defaultMessage: 'From',
+              })}
             />
           </SelectTrigger>
           <SelectContent>

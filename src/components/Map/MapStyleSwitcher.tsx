@@ -113,7 +113,10 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
               id={`${fieldId}-name`}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={t({ id: 'map.styleSwitcher.namePlaceholder', defaultMessage: 'My imagery' })}
+              placeholder={t({
+                id: 'map.styleSwitcher.namePlaceholder',
+                defaultMessage: 'My imagery',
+              })}
             />
           </div>
           <div className="space-y-1">

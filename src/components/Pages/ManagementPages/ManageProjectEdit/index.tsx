@@ -39,8 +39,10 @@ export const ManageProjectEdit = () => {
     <ManageFormLayout>
       <FormCard
         title={t({ id: 'manageProjectEdit.pageTitle', defaultMessage: 'Project Details' })}
-        description={t({ id: 'manageProjectEdit.pageDescription', defaultMessage: 'Modify the information below to update your project' }
-        )}
+        description={t({
+          id: 'manageProjectEdit.pageDescription',
+          defaultMessage: 'Modify the information below to update your project',
+        })}
         isLoading={isLoading}
       >
         <ProjectForm project={projectData} onSubmit={handleSubmit} onCancel={handleCancel} />

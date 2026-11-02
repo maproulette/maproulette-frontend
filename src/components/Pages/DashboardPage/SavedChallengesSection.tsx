@@ -45,11 +45,16 @@ export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) 
               <Bookmark className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
             <p className="text-sm text-zinc-600 dark:text-slate-400">
-              {t({ id: 'dashboard.savedChallenges.empty.title', defaultMessage: 'No saved challenges' })}
+              {t({
+                id: 'dashboard.savedChallenges.empty.title',
+                defaultMessage: 'No saved challenges',
+              })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              {t({ id: 'dashboard.savedChallenges.empty.description', defaultMessage: 'Save challenges to work on later' }
-              )}
+              {t({
+                id: 'dashboard.savedChallenges.empty.description',
+                defaultMessage: 'Save challenges to work on later',
+              })}
             </p>
           </div>
         )}

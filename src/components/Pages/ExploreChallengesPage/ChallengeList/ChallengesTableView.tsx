@@ -32,32 +32,55 @@ export const ChallengesTableView = () => {
               {t({ id: 'exploreChallenges.challengeList.table.author', defaultMessage: 'Author' })}
             </TableHead>
             <TableHead>
-              {t({ id: 'exploreChallenges.challengeList.table.organisation', defaultMessage: 'Organisation' })}
+              {t({
+                id: 'exploreChallenges.challengeList.table.organisation',
+                defaultMessage: 'Organisation',
+              })}
             </TableHead>
             <TableHead className="text-center">
-              {t({ id: 'exploreChallenges.challengeList.table.percentMapped', defaultMessage: 'Percent mapped' }
-              )}
+              {t({
+                id: 'exploreChallenges.challengeList.table.percentMapped',
+                defaultMessage: 'Percent mapped',
+              })}
             </TableHead>
             <TableHead className="text-center">
-              {t({ id: 'exploreChallenges.challengeList.table.percentValidated', defaultMessage: 'Percent validated' }
-              )}
+              {t({
+                id: 'exploreChallenges.challengeList.table.percentValidated',
+                defaultMessage: 'Percent validated',
+              })}
             </TableHead>
             <TableHead className="text-center">
-              {t({ id: 'exploreChallenges.challengeList.table.contributors', defaultMessage: 'Contributors' })}
+              {t({
+                id: 'exploreChallenges.challengeList.table.contributors',
+                defaultMessage: 'Contributors',
+              })}
             </TableHead>
-            <TableHead className="text-center">{t({ id: 'common.type', defaultMessage: 'Type' })}</TableHead>
+            <TableHead className="text-center">
+              {t({ id: 'common.type', defaultMessage: 'Type' })}
+            </TableHead>
             <TableHead className="text-center">
               {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
             </TableHead>
-            <TableHead className="text-center">{t({ id: 'common.status', defaultMessage: 'Status' })}</TableHead>
-            <TableHead>
-              {t({ id: 'exploreChallenges.challengeList.table.location', defaultMessage: 'Location' })}
+            <TableHead className="text-center">
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
             </TableHead>
             <TableHead>
-              {t({ id: 'exploreChallenges.challengeList.table.lastUpdated', defaultMessage: 'Last updated' })}
+              {t({
+                id: 'exploreChallenges.challengeList.table.location',
+                defaultMessage: 'Location',
+              })}
             </TableHead>
             <TableHead>
-              {t({ id: 'exploreChallenges.challengeList.table.dueDate', defaultMessage: 'Due date' })}
+              {t({
+                id: 'exploreChallenges.challengeList.table.lastUpdated',
+                defaultMessage: 'Last updated',
+              })}
+            </TableHead>
+            <TableHead>
+              {t({
+                id: 'exploreChallenges.challengeList.table.dueDate',
+                defaultMessage: 'Due date',
+              })}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -78,13 +101,23 @@ export const ChallengesTableView = () => {
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
                   {challenge.owner
-                    ? t({ id: 'exploreChallenges.challengeList.table.userLabel', defaultMessage: 'User {owner}' }, { owner: challenge.owner }
+                    ? t(
+                        {
+                          id: 'exploreChallenges.challengeList.table.userLabel',
+                          defaultMessage: 'User {owner}',
+                        },
+                        { owner: challenge.owner }
                       )
                     : '--'}
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
                   {challenge.parent
-                    ? t({ id: 'exploreChallenges.challengeList.table.projectLabel', defaultMessage: 'Project {name}' }, { name: parentName }
+                    ? t(
+                        {
+                          id: 'exploreChallenges.challengeList.table.projectLabel',
+                          defaultMessage: 'Project {name}',
+                        },
+                        { name: parentName }
                       )
                     : '--'}
                 </TableCell>
@@ -114,11 +147,16 @@ export const ChallengesTableView = () => {
                     className="text-xs"
                   >
                     {!challenge.enabled
-                      ? t({ id: 'exploreChallenges.challengeList.table.disabled', defaultMessage: 'Disabled' })
+                      ? t({
+                          id: 'exploreChallenges.challengeList.table.disabled',
+                          defaultMessage: 'Disabled',
+                        })
                       : isChallengeComplete(challenge)
                         ? t({ id: 'common.completed', defaultMessage: 'Completed' })
-                        : t({ id: 'exploreChallenges.challengeList.table.published', defaultMessage: 'Published' }
-                          )}
+                        : t({
+                            id: 'exploreChallenges.challengeList.table.published',
+                            defaultMessage: 'Published',
+                          })}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">

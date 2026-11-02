@@ -88,7 +88,12 @@ export const UserProfileSection = ({ user }: UserProfileSectionProps) => {
               {t({ id: 'common.level', defaultMessage: 'Level {level}' }, { level: userLevel })}
             </span>
             <span className="font-semibold text-zinc-900 dark:text-white">
-              {t({ id: 'dashboard.profile.progressToNext', defaultMessage: '{current, number} / {total, number} to next level' }, {
+              {t(
+                {
+                  id: 'dashboard.profile.progressToNext',
+                  defaultMessage: '{current, number} / {total, number} to next level',
+                },
+                {
                   current: pointsIntoLevel,
                   total: pointsNeededForLevel,
                 }

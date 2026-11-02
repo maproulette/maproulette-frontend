@@ -19,7 +19,10 @@ export const statusHexByKey: Record<string, string> = {
 export const statusMessageByKey = defineMessages({
   created: { id: 'statusBreakdownBar.status.created', defaultMessage: 'Available' },
   fixed: { id: 'statusBreakdownBar.status.fixed', defaultMessage: 'Fixed' },
-  falsePositive: { id: 'statusBreakdownBar.status.falsePositive', defaultMessage: 'False positive' },
+  falsePositive: {
+    id: 'statusBreakdownBar.status.falsePositive',
+    defaultMessage: 'False positive',
+  },
   skipped: { id: 'statusBreakdownBar.status.skipped', defaultMessage: 'Skipped' },
   deleted: { id: 'statusBreakdownBar.status.deleted', defaultMessage: 'Deleted' },
   alreadyFixed: { id: 'statusBreakdownBar.status.alreadyFixed', defaultMessage: 'Already fixed' },

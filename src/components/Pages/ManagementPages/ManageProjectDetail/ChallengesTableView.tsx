@@ -66,9 +66,14 @@ export const ChallengesTableView = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">{t({ id: 'common.status', defaultMessage: 'Status' })}</TableHead>
+            <TableHead className="w-[80px]">
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
+            </TableHead>
             <TableHead className="w-12">
-              <span title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })} className="flex justify-center">
+              <span
+                title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
+                className="flex justify-center"
+              >
                 <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
             </TableHead>
@@ -80,7 +85,10 @@ export const ChallengesTableView = ({
               {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
             </TableHead>
             <TableHead className="hidden w-32 text-center md:table-cell">
-              {t({ id: 'manageProjectDetail.challengesTable.columnTasksLeft', defaultMessage: 'Tasks Left' })}
+              {t({
+                id: 'manageProjectDetail.challengesTable.columnTasksLeft',
+                defaultMessage: 'Tasks Left',
+              })}
             </TableHead>
             <TableHead className="hidden max-w-[200px] lg:table-cell">
               {t({ id: 'common.description', defaultMessage: 'Description' })}
@@ -162,12 +170,18 @@ export const ChallengesTableView = ({
                         onClick={() => onTogglePaused(challenge.id, challenge.paused ?? false)}
                         title={
                           challenge.paused
-                            ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+                            ? t({
+                                id: 'common.resumeChallenge',
+                                defaultMessage: 'Resume challenge',
+                              })
                             : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
                         }
                         aria-label={
                           challenge.paused
-                            ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+                            ? t({
+                                id: 'common.resumeChallenge',
+                                defaultMessage: 'Resume challenge',
+                              })
                             : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
                         }
                       >
@@ -189,13 +203,25 @@ export const ChallengesTableView = ({
                         onClick={() => onArchive(challenge.id, challenge.isArchived ?? false)}
                         title={
                           challenge.isArchived
-                            ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
-                            : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
+                            ? t({
+                                id: 'common.unarchiveChallenge',
+                                defaultMessage: 'Unarchive challenge',
+                              })
+                            : t({
+                                id: 'common.archiveChallenge',
+                                defaultMessage: 'Archive challenge',
+                              })
                         }
                         aria-label={
                           challenge.isArchived
-                            ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
-                            : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
+                            ? t({
+                                id: 'common.unarchiveChallenge',
+                                defaultMessage: 'Unarchive challenge',
+                              })
+                            : t({
+                                id: 'common.archiveChallenge',
+                                defaultMessage: 'Archive challenge',
+                              })
                         }
                       >
                         <Archive
@@ -216,13 +242,25 @@ export const ChallengesTableView = ({
                         onClick={() => onToggleEnabled(challenge)}
                         title={
                           challenge.enabled
-                            ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
-                            : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
+                            ? t({
+                                id: 'common.makeNotDiscoverable',
+                                defaultMessage: 'Make not discoverable',
+                              })
+                            : t({
+                                id: 'common.makeDiscoverable',
+                                defaultMessage: 'Make discoverable',
+                              })
                         }
                         aria-label={
                           challenge.enabled
-                            ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
-                            : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
+                            ? t({
+                                id: 'common.makeNotDiscoverable',
+                                defaultMessage: 'Make not discoverable',
+                              })
+                            : t({
+                                id: 'common.makeDiscoverable',
+                                defaultMessage: 'Make discoverable',
+                              })
                         }
                       >
                         {challenge.enabled ? (
@@ -250,7 +288,10 @@ export const ChallengesTableView = ({
                               className="flex cursor-pointer items-center gap-2"
                             >
                               <Play className="h-4 w-4" />
-                              {t({ id: 'common.startChallenge', defaultMessage: 'Start challenge' })}
+                              {t({
+                                id: 'common.startChallenge',
+                                defaultMessage: 'Start challenge',
+                              })}
                             </Link>
                           </DropdownMenuItem>
                         )}
@@ -290,8 +331,14 @@ export const ChallengesTableView = ({
                           >
                             <Archive className="h-4 w-4" />
                             {challenge.isArchived
-                              ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
-                              : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })}
+                              ? t({
+                                  id: 'common.unarchiveChallenge',
+                                  defaultMessage: 'Unarchive challenge',
+                                })
+                              : t({
+                                  id: 'common.archiveChallenge',
+                                  defaultMessage: 'Archive challenge',
+                                })}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -309,8 +356,14 @@ export const ChallengesTableView = ({
                             className="flex cursor-pointer items-center gap-2"
                           >
                             {challenge.enabled
-                              ? t({ id: 'common.disableChallenge', defaultMessage: 'Disable challenge' })
-                              : t({ id: 'common.enableChallenge', defaultMessage: 'Enable challenge' })}
+                              ? t({
+                                  id: 'common.disableChallenge',
+                                  defaultMessage: 'Disable challenge',
+                                })
+                              : t({
+                                  id: 'common.enableChallenge',
+                                  defaultMessage: 'Enable challenge',
+                                })}
                           </DropdownMenuItem>
                         )}
                         {challenge.id != null && (
@@ -324,7 +377,10 @@ export const ChallengesTableView = ({
                               )}
                             >
                               <Trash2 className="h-4 w-4" />
-                              {t({ id: 'common.deleteChallenge', defaultMessage: 'Delete challenge' })}
+                              {t({
+                                id: 'common.deleteChallenge',
+                                defaultMessage: 'Delete challenge',
+                              })}
                             </DropdownMenuItem>
                           </>
                         )}

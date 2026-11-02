@@ -73,7 +73,8 @@ export const TaskInfoHeader = ({
   const projectDescription = projectDescriptionText(project)
 
   const status = task.status ?? 0
-  const statusLabel = getStatusLabel(t, status) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
+  const statusLabel =
+    getStatusLabel(t, status) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const isEditable = EDITABLE_STATUSES.includes(status) || isTaskEditableByPlugins(task)
@@ -178,14 +179,21 @@ export const TaskInfoHeader = ({
               <>
                 <DescriptionBreadcrumbButton
                   icon={BookOpen}
-                  label={t({ id: 'taskEditPage.taskInfoHeader.viewChallengeDescription', defaultMessage: 'View challenge description' }
-                  )}
-                  recommendationLabel={t({ id: 'taskEditPage.taskInfoHeader.readChallengeDescription', defaultMessage: 'Make sure that you have read the challenge description as it could have important information not mentioned in the task instructions' }
-                  )}
+                  label={t({
+                    id: 'taskEditPage.taskInfoHeader.viewChallengeDescription',
+                    defaultMessage: 'View challenge description',
+                  })}
+                  recommendationLabel={t({
+                    id: 'taskEditPage.taskInfoHeader.readChallengeDescription',
+                    defaultMessage:
+                      'Make sure that you have read the challenge description as it could have important information not mentioned in the task instructions',
+                  })}
                   recommended={relation === 'primary' && recommended}
                   disabled={!challengeDescription}
-                  disabledReason={t({ id: 'taskEditPage.taskInfoHeader.noChallengeDescription', defaultMessage: 'This challenge has no description' }
-                  )}
+                  disabledReason={t({
+                    id: 'taskEditPage.taskInfoHeader.noChallengeDescription',
+                    defaultMessage: 'This challenge has no description',
+                  })}
                   onClick={() => {
                     markDescriptionRead()
                     showView('challengeDescription')
@@ -205,11 +213,15 @@ export const TaskInfoHeader = ({
               <>
                 <DescriptionBreadcrumbButton
                   icon={FolderOpen}
-                  label={t({ id: 'taskEditPage.taskInfoHeader.viewProjectDescription', defaultMessage: 'View project description' }
-                  )}
+                  label={t({
+                    id: 'taskEditPage.taskInfoHeader.viewProjectDescription',
+                    defaultMessage: 'View project description',
+                  })}
                   disabled={!projectDescription}
-                  disabledReason={t({ id: 'taskEditPage.taskInfoHeader.noProjectDescription', defaultMessage: 'This project has no description' }
-                  )}
+                  disabledReason={t({
+                    id: 'taskEditPage.taskInfoHeader.noProjectDescription',
+                    defaultMessage: 'This project has no description',
+                  })}
                   onClick={() => showView('projectDescription')}
                 />
                 <Link
@@ -235,7 +247,10 @@ export const TaskInfoHeader = ({
             url={`${window.location.origin}/tasks/${task.id}`}
             title={
               task.name
-                ? t({ id: 'common.taskWithName', defaultMessage: 'Task: {name}' }, { name: task.name })
+                ? t(
+                    { id: 'common.taskWithName', defaultMessage: 'Task: {name}' },
+                    { name: task.name }
+                  )
                 : t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })
             }
             description={challenge?.name}

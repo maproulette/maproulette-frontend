@@ -1,7 +1,7 @@
+import { defineMessage, type MessageDescriptor } from 'react-intl'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup'
 import { useIntl } from '@/i18n'
 import { useProfilePageContext } from './contexts/ProfilePageContext'
-import { defineMessage, type MessageDescriptor } from 'react-intl'
 
 const presets: Array<{ label: MessageDescriptor; monthDuration: number }> = [
   {

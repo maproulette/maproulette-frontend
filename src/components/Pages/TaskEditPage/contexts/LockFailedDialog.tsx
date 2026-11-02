@@ -46,8 +46,10 @@ export const LockFailedDialog = ({
     } catch (error) {
       logger.error('Failed to request unlock', { taskId, error })
       toast.error(
-        t({ id: 'taskEditPage.lockFailedDialog.requestUnlockFailed', defaultMessage: 'Could not request unlock' }
-        )
+        t({
+          id: 'taskEditPage.lockFailedDialog.requestUnlockFailed',
+          defaultMessage: 'Could not request unlock',
+        })
       )
     }
   }
@@ -58,14 +60,21 @@ export const LockFailedDialog = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <LockOpen className="size-5 text-amber-500" aria-hidden="true" />
-            {t({ id: 'taskEditPage.lockFailedDialog.title', defaultMessage: 'Unable to Lock Task' })}
+            {t({
+              id: 'taskEditPage.lockFailedDialog.title',
+              defaultMessage: 'Unable to Lock Task',
+            })}
           </DialogTitle>
           <DialogDescription>
             {failure?.message ??
-              t({ id: 'taskEditPage.lockFailedDialog.genericLockFailure', defaultMessage: 'Task lock could not be acquired' }
-              )}
-            {t({ id: 'taskEditPage.lockFailedDialog.previewAvailable', defaultMessage: '. A read-only preview is available.' }
-            )}
+              t({
+                id: 'taskEditPage.lockFailedDialog.genericLockFailure',
+                defaultMessage: 'Task lock could not be acquired',
+              })}
+            {t({
+              id: 'taskEditPage.lockFailedDialog.previewAvailable',
+              defaultMessage: '. A read-only preview is available.',
+            })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:flex-wrap sm:gap-2 sm:space-x-0">
@@ -76,18 +85,27 @@ export const LockFailedDialog = ({
             {t({ id: 'taskEditPage.lockFailedDialog.retryLock', defaultMessage: 'Retry Lock' })}
           </Button>
           <Button variant="outline" onClick={onBrowseChallenge} disabled={busy}>
-            {t({ id: 'taskEditPage.lockFailedDialog.browseChallenge', defaultMessage: 'Browse Challenge' })}
+            {t({
+              id: 'taskEditPage.lockFailedDialog.browseChallenge',
+              defaultMessage: 'Browse Challenge',
+            })}
           </Button>
           {requestedTaskId === taskId ? (
             <span className="self-center text-sm">
-              {t({ id: 'taskEditPage.lockFailedDialog.requestSent', defaultMessage: 'Request Sent!' })}
+              {t({
+                id: 'taskEditPage.lockFailedDialog.requestSent',
+                defaultMessage: 'Request Sent!',
+              })}
             </span>
           ) : (
             <Button
               onClick={handleRequestUnlock}
               disabled={busy || requestUnlockMutation.isPending}
             >
-              {t({ id: 'taskEditPage.lockFailedDialog.requestUnlock', defaultMessage: 'Request Unlock' })}
+              {t({
+                id: 'taskEditPage.lockFailedDialog.requestUnlock',
+                defaultMessage: 'Request Unlock',
+              })}
             </Button>
           )}
         </DialogFooter>

@@ -32,8 +32,14 @@ export const BundleStateIndicator = ({
       >
         <Package className="mr-2 h-3.5 w-3.5" />
         {isAddingToBundle
-          ? t({ id: 'taskInfoPanel.taskTab.bundleState.addingToBundle', defaultMessage: 'Locking task...' })
-          : t({ id: 'taskInfoPanel.taskTab.bundleState.addToBundle', defaultMessage: 'Add to Bundle' })}
+          ? t({
+              id: 'taskInfoPanel.taskTab.bundleState.addingToBundle',
+              defaultMessage: 'Locking task...',
+            })
+          : t({
+              id: 'taskInfoPanel.taskTab.bundleState.addToBundle',
+              defaultMessage: 'Add to Bundle',
+            })}
       </Button>
     )
   }
@@ -47,7 +53,10 @@ export const BundleStateIndicator = ({
         className="w-full border-red-500/50 bg-red-50 text-red-700 shadow-sm transition-all hover:border-red-500 hover:bg-red-100 hover:shadow-md dark:border-red-600/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50"
       >
         <Trash2 className="mr-2 h-3.5 w-3.5" />
-        {t({ id: 'taskInfoPanel.taskTab.bundleState.removeFromBundle', defaultMessage: 'Remove from Bundle' })}
+        {t({
+          id: 'taskInfoPanel.taskTab.bundleState.removeFromBundle',
+          defaultMessage: 'Remove from Bundle',
+        })}
       </Button>
     )
   }

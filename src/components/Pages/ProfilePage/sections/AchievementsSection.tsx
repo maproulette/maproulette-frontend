@@ -34,7 +34,12 @@ export const AchievementsSection = ({ earnedIds }: Props) => {
           {t({ id: 'profilePage.achievements.title', defaultMessage: 'Achievements' })}
         </h2>
         <span className="text-sm text-zinc-500 dark:text-slate-400">
-          {t({ id: 'profilePage.achievements.earnedCount', defaultMessage: '{earned, number} of {total, number} earned' }, { earned: earnedCount, total: totalCount }
+          {t(
+            {
+              id: 'profilePage.achievements.earnedCount',
+              defaultMessage: '{earned, number} of {total, number} earned',
+            },
+            { earned: earnedCount, total: totalCount }
           )}
         </span>
       </div>

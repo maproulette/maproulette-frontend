@@ -35,7 +35,12 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        aria-label={t({ id: 'appLayout.header.notifications.triggerLabel', defaultMessage: 'Notifications for {name}' }, { name: user.osmProfile.displayName }
+        aria-label={t(
+          {
+            id: 'appLayout.header.notifications.triggerLabel',
+            defaultMessage: 'Notifications for {name}',
+          },
+          { name: user.osmProfile.displayName }
         )}
         className="relative flex"
       >
@@ -46,8 +51,10 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
             className="-right-0.75 -top-0.75 absolute size-1.25 rounded-full bg-red-400 motion-safe:animate-pulse"
           >
             <span className="sr-only">
-              {t({ id: 'appLayout.header.notifications.unreadSrOnly', defaultMessage: 'You have unread notifications' }
-              )}
+              {t({
+                id: 'appLayout.header.notifications.unreadSrOnly',
+                defaultMessage: 'You have unread notifications',
+              })}
             </span>
           </span>
         )}
@@ -55,17 +62,26 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
       <PopoverContent
         align="end"
         sideOffset={10}
-        aria-label={t({ id: 'appLayout.header.notifications.panelAriaLabel', defaultMessage: 'Notifications' })}
+        aria-label={t({
+          id: 'appLayout.header.notifications.panelAriaLabel',
+          defaultMessage: 'Notifications',
+        })}
         className="flex w-96 max-w-[calc(100vw-2rem)] flex-col p-4"
       >
         <Tabs defaultValue="unread" className="flex min-h-0 flex-1 flex-col">
           <div className="mb-4 flex items-center justify-between gap-2">
             <TabsList>
               <TabsTrigger value="unread">
-                {t({ id: 'common.unread', defaultMessage: 'Unread ({count})' }, { count: unreadCount })}
+                {t(
+                  { id: 'common.unread', defaultMessage: 'Unread ({count})' },
+                  { count: unreadCount }
+                )}
               </TabsTrigger>
               <TabsTrigger value="all">
-                {t({ id: 'common.all', defaultMessage: 'All ({count})' }, { count: notifications.length })}
+                {t(
+                  { id: 'common.all', defaultMessage: 'All ({count})' },
+                  { count: notifications.length }
+                )}
               </TabsTrigger>
             </TabsList>
             <Button
@@ -81,7 +97,10 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
           {isLoading ? (
             <Card className="p-6">
               <div className="text-center text-sm text-zinc-500 dark:text-slate-500">
-                {t({ id: 'common.loadingNotifications', defaultMessage: 'Loading notifications...' })}
+                {t({
+                  id: 'common.loadingNotifications',
+                  defaultMessage: 'Loading notifications...',
+                })}
               </div>
             </Card>
           ) : (
@@ -92,9 +111,14 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
               >
                 <NotificationList
                   notifications={unreadNotifications}
-                  emptyTitle={t({ id: 'common.youreAllUpToDate', defaultMessage: "You're all up to date" })}
-                  emptyDescription={t({ id: 'common.noUnreadNotificationsYet', defaultMessage: 'You have no unread notifications at the moment.' }
-                  )}
+                  emptyTitle={t({
+                    id: 'common.youreAllUpToDate',
+                    defaultMessage: "You're all up to date",
+                  })}
+                  emptyDescription={t({
+                    id: 'common.noUnreadNotificationsYet',
+                    defaultMessage: 'You have no unread notifications at the moment.',
+                  })}
                   onLinkClick={() => setOpen(false)}
                 />
               </TabsContent>
@@ -104,9 +128,14 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
               >
                 <NotificationList
                   notifications={notifications}
-                  emptyTitle={t({ id: 'common.youreAllUpToDate', defaultMessage: "You're all up to date" })}
-                  emptyDescription={t({ id: 'common.noNotificationsYet', defaultMessage: 'You have no notifications.' }
-                  )}
+                  emptyTitle={t({
+                    id: 'common.youreAllUpToDate',
+                    defaultMessage: "You're all up to date",
+                  })}
+                  emptyDescription={t({
+                    id: 'common.noNotificationsYet',
+                    defaultMessage: 'You have no notifications.',
+                  })}
                   onLinkClick={() => setOpen(false)}
                 />
               </TabsContent>

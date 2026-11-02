@@ -125,8 +125,10 @@ export const LocationSearchFilter = () => {
 
         if (data.length === 0) {
           setError(
-            t({ id: 'exploreChallenges.filterBar.location.noResults', defaultMessage: 'No locations found. Try a different search term.' }
-            )
+            t({
+              id: 'exploreChallenges.filterBar.location.noResults',
+              defaultMessage: 'No locations found. Try a different search term.',
+            })
           )
         }
         setSuggestions(data)
@@ -134,8 +136,10 @@ export const LocationSearchFilter = () => {
         if (err instanceof Error && err.name !== 'AbortError') {
           logger.error('Error fetching suggestions', { error: err })
           setError(
-            t({ id: 'exploreChallenges.filterBar.location.networkError', defaultMessage: 'Network error. Please check your connection.' }
-            )
+            t({
+              id: 'exploreChallenges.filterBar.location.networkError',
+              defaultMessage: 'Network error. Please check your connection.',
+            })
           )
         }
       } finally {
@@ -187,13 +191,19 @@ export const LocationSearchFilter = () => {
           )
         } else {
           setError(
-            t({ id: 'exploreChallenges.filterBar.location.notFound', defaultMessage: 'Location not found' })
+            t({
+              id: 'exploreChallenges.filterBar.location.notFound',
+              defaultMessage: 'Location not found',
+            })
           )
         }
       } catch (err) {
         logger.error('Error loading location', { error: err })
         setError(
-          t({ id: 'exploreChallenges.filterBar.location.loadFailed', defaultMessage: 'Failed to load location' })
+          t({
+            id: 'exploreChallenges.filterBar.location.loadFailed',
+            defaultMessage: 'Failed to load location',
+          })
         )
       } finally {
         setIsLocationLoading(false)
@@ -241,8 +251,10 @@ export const LocationSearchFilter = () => {
       } catch (err) {
         logger.error('Error fetching location details', { error: err })
         setError(
-          t({ id: 'exploreChallenges.filterBar.location.geometryLoadFailed', defaultMessage: 'Failed to load location geometry' }
-          )
+          t({
+            id: 'exploreChallenges.filterBar.location.geometryLoadFailed',
+            defaultMessage: 'Failed to load location geometry',
+          })
         )
         return null
       }
@@ -275,8 +287,10 @@ export const LocationSearchFilter = () => {
         }
       } else {
         setError(
-          t({ id: 'exploreChallenges.filterBar.location.noOsmId', defaultMessage: 'Selected location has no OSM identifier' }
-          )
+          t({
+            id: 'exploreChallenges.filterBar.location.noOsmId',
+            defaultMessage: 'Selected location has no OSM identifier',
+          })
         )
         return
       }
@@ -415,8 +429,10 @@ export const LocationSearchFilter = () => {
                   setShowSuggestions(true)
                 }
               }}
-              placeholder={t({ id: 'exploreChallenges.filterBar.location.searchPlaceholder', defaultMessage: 'Search location...' }
-              )}
+              placeholder={t({
+                id: 'exploreChallenges.filterBar.location.searchPlaceholder',
+                defaultMessage: 'Search location...',
+              })}
               className="bg-white pr-9 pl-9 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/50"
               aria-autocomplete="list"
               aria-controls={`${inputId}-listbox`}
@@ -430,8 +446,10 @@ export const LocationSearchFilter = () => {
                   onClick={handleClearLocation}
                   onMouseDown={(e) => e.preventDefault()}
                   className="h-6 w-6 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
-                  aria-label={t({ id: 'exploreChallenges.filterBar.location.clearAriaLabel', defaultMessage: 'Clear location' }
-                  )}
+                  aria-label={t({
+                    id: 'exploreChallenges.filterBar.location.clearAriaLabel',
+                    defaultMessage: 'Clear location',
+                  })}
                 >
                   <X className="h-3.5 w-3.5" />
                 </Button>
@@ -443,8 +461,10 @@ export const LocationSearchFilter = () => {
 
       <PopoverContent
         align="start"
-        aria-label={t({ id: 'exploreChallenges.filterBar.location.suggestionsAriaLabel', defaultMessage: 'Location suggestions' }
-        )}
+        aria-label={t({
+          id: 'exploreChallenges.filterBar.location.suggestionsAriaLabel',
+          defaultMessage: 'Location suggestions',
+        })}
         className="w-[var(--radix-popover-trigger-width)] p-0"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >

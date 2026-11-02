@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { makeProjectFormSchema, type ProjectFormValues } from './projectFormSchema'
 import { testT } from '@/test/translate'
+import { makeProjectFormSchema, type ProjectFormValues } from './projectFormSchema'
 
 // A fake `t` matching the real IntlContext signature: returns the default
 // message when provided (like the real implementation does when a

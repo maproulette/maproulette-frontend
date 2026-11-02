@@ -79,8 +79,10 @@ export const UnifiedSearchList = () => {
             icon: FolderOpen,
             badge: {
               variant: 'default',
-              label: t({ id: 'appLayout.header.globalSearch.unifiedList.goToProject', defaultMessage: 'Go to project' }
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToProject',
+                defaultMessage: 'Go to project',
+              }),
             },
             href: '/project/$projectId',
             params: { projectId: String(project.id) },
@@ -98,8 +100,10 @@ export const UnifiedSearchList = () => {
             icon: Target,
             badge: {
               variant: 'default',
-              label: t({ id: 'appLayout.header.globalSearch.unifiedList.goToChallenge', defaultMessage: 'Go to challenge' }
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToChallenge',
+                defaultMessage: 'Go to challenge',
+              }),
             },
             href: '/challenge/$challengeId',
             params: { challengeId: String(challenge.id) },
@@ -117,8 +121,10 @@ export const UnifiedSearchList = () => {
             icon: FolderOpen,
             badge: {
               variant: 'default',
-              label: t({ id: 'appLayout.header.globalSearch.unifiedList.goToProject', defaultMessage: 'Go to project' }
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToProject',
+                defaultMessage: 'Go to project',
+              }),
             },
             href: '/project/$projectId',
             params: { projectId: String(project.id) },
@@ -136,8 +142,10 @@ export const UnifiedSearchList = () => {
             icon: Target,
             badge: {
               variant: 'default',
-              label: t({ id: 'appLayout.header.globalSearch.unifiedList.goToChallenge', defaultMessage: 'Go to challenge' }
-              ),
+              label: t({
+                id: 'appLayout.header.globalSearch.unifiedList.goToChallenge',
+                defaultMessage: 'Go to challenge',
+              }),
             },
             href: '/challenge/$challengeId',
             params: { challengeId: String(challenge.id) },

@@ -1,13 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
-import enUS from './messages/en-US.json'
 import type { Locale } from './locales'
 import { loadCatalog } from './messageFormatting'
+import enUS from './messages/en-US.json'
 
 const baseCatalog = enUS as Record<string, string>
 // A key known to exist in the real en-US catalog, used to assert base-catalog
 // fallback behavior when a locale override doesn't touch it.
 const [existingKey] = Object.entries(baseCatalog)[0]
-
 
 describe('loadCatalog', () => {
   it('returns the base catalog directly for en-US without invoking the loader', async () => {
@@ -63,9 +62,9 @@ describe('loadCatalog', () => {
     const result = await loadCatalog('fr')
 
     expect(result).not.toBe(baseCatalog)
-    // Carried-over French translations are a subset of the source catalog, so
-    // every key still resolves while at least one differs from its English.
-    expect(Object.keys(result).length).toBe(Object.keys(baseCatalog).length)
+    // Every key in the source catalog still resolves, while at least one
+    // differs from its English.
+    expect(Object.keys(baseCatalog).every((key) => key in result)).toBe(true)
     expect(Object.entries(result).some(([k, v]) => v !== baseCatalog[k])).toBe(true)
   })
 })

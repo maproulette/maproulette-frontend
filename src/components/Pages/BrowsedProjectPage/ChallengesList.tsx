@@ -119,7 +119,9 @@ export const ChallengesList = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
+              <span className="sr-only">
+                {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -182,8 +184,10 @@ export const ChallengesList = () => {
             />
           )}
           <FilterToggle
-            label={t({ id: 'browsedProjectPage.challengesList.showCompletedFilter', defaultMessage: 'Show completed' }
-            )}
+            label={t({
+              id: 'browsedProjectPage.challengesList.showCompletedFilter',
+              defaultMessage: 'Show completed',
+            })}
             icon={ListChecks}
             checked={showCompleted}
             onCheckedChange={setShowCompleted}
@@ -233,10 +237,14 @@ export const ChallengesList = () => {
                 icon: ListChecks,
                 title: t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' }),
                 description: hasActiveFilters
-                  ? t({ id: 'browsedProjectPage.challengesList.emptyDescriptionFiltered', defaultMessage: 'Try clearing the filters to see more results.' }
-                    )
-                  : t({ id: 'browsedProjectPage.challengesList.emptyDescription', defaultMessage: 'This project has no challenges yet.' }
-                    ),
+                  ? t({
+                      id: 'browsedProjectPage.challengesList.emptyDescriptionFiltered',
+                      defaultMessage: 'Try clearing the filters to see more results.',
+                    })
+                  : t({
+                      id: 'browsedProjectPage.challengesList.emptyDescription',
+                      defaultMessage: 'This project has no challenges yet.',
+                    }),
               }}
             />
           </div>

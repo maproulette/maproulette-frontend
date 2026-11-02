@@ -106,8 +106,11 @@ export const ProjectTeamSection = () => {
   return (
     <FormSection
       title={t({ id: 'manageProjectNew.projectForm.teamTitle', defaultMessage: 'Team' })}
-      description={t({ id: 'manageProjectNew.projectForm.teamDescription', defaultMessage: "An optional team to own this project. Everyone who manages that team can run it, and the team's image becomes the picture on its card." }
-      )}
+      description={t({
+        id: 'manageProjectNew.projectForm.teamDescription',
+        defaultMessage:
+          "An optional team to own this project. Everyone who manages that team can run it, and the team's image becomes the picture on its card.",
+      })}
     >
       <FormField
         control={form.control}
@@ -122,14 +125,19 @@ export const ProjectTeamSection = () => {
               </div>
             ) : isError ? (
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                {t({ id: 'manageProjectNew.projectForm.teamLoadError', defaultMessage: 'Could not load your teams.' }
-                )}
+                {t({
+                  id: 'manageProjectNew.projectForm.teamLoadError',
+                  defaultMessage: 'Could not load your teams.',
+                })}
               </p>
             ) : (
               <div className="space-y-3">
                 <ul className={TILE_GRID}>
                   <TeamTile
-                    label={t({ id: 'manageProjectNew.projectForm.teamNoneOption', defaultMessage: 'No team' })}
+                    label={t({
+                      id: 'manageProjectNew.projectForm.teamNoneOption',
+                      defaultMessage: 'No team',
+                    })}
                     selected={field.value == null}
                     onSelect={() => field.onChange(null)}
                   >
@@ -154,13 +162,19 @@ export const ProjectTeamSection = () => {
 
                 {options.length === 0 && (
                   <p className="rounded-lg border border-zinc-200 border-dashed p-3 text-sm text-zinc-600 dark:border-slate-700 dark:text-zinc-400">
-                    {t({ id: 'manageProjectNew.projectForm.teamNoneAvailable', defaultMessage: "You don't manage any teams yet. Only a team's owners, admins and managers can give it a project." }
-                    )}{' '}
+                    {t({
+                      id: 'manageProjectNew.projectForm.teamNoneAvailable',
+                      defaultMessage:
+                        "You don't manage any teams yet. Only a team's owners, admins and managers can give it a project.",
+                    })}{' '}
                     <Link
                       to="/dashboard"
                       className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
-                      {t({ id: 'manageProjectNew.projectForm.teamGoToTeams', defaultMessage: 'Your teams' })}
+                      {t({
+                        id: 'manageProjectNew.projectForm.teamGoToTeams',
+                        defaultMessage: 'Your teams',
+                      })}
                     </Link>
                   </p>
                 )}

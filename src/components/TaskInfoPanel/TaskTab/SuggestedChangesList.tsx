@@ -54,8 +54,10 @@ export const SuggestedChangesList = ({
             </code>
             {changes.length === 0 ? (
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {t({ id: 'taskInfoPanel.suggested.alreadyApplied', defaultMessage: 'This element already carries the suggested tags.' }
-                )}
+                {t({
+                  id: 'taskInfoPanel.suggested.alreadyApplied',
+                  defaultMessage: 'This element already carries the suggested tags.',
+                })}
               </p>
             ) : (
               <ul className="space-y-1">

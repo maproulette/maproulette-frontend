@@ -68,7 +68,10 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
               {t({ id: 'dashboard.teams.empty.title', defaultMessage: 'No teams' })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              {t({ id: 'dashboard.teams.empty.description', defaultMessage: 'Join a team to collaborate' })}
+              {t({
+                id: 'dashboard.teams.empty.description',
+                defaultMessage: 'Join a team to collaborate',
+              })}
             </p>
           </div>
         )}

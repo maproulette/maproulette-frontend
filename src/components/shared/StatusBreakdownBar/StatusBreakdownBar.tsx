@@ -44,7 +44,13 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
           </TooltipTrigger>
           <TooltipContent>
             <span className="text-xs">
-              {segment.label}: {formatNumber(segment.count)} ({formatNumber(segment.percent / 100, { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 })})
+              {segment.label}: {formatNumber(segment.count)} (
+              {formatNumber(segment.percent / 100, {
+                style: 'percent',
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1,
+              })}
+              )
             </span>
           </TooltipContent>
         </Tooltip>

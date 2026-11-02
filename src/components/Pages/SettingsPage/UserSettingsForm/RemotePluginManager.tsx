@@ -134,7 +134,10 @@ export const RemotePluginManager = () => {
       <Alert variant="warning">
         <AlertCircle className="size-4" />
         <AlertTitle>
-          {t({ id: 'settings.remotePlugins.securityWarningTitle', defaultMessage: 'Security Warning' })}
+          {t({
+            id: 'settings.remotePlugins.securityWarningTitle',
+            defaultMessage: 'Security Warning',
+          })}
         </AlertTitle>
         <AlertDescription>
           {t({

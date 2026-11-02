@@ -29,7 +29,12 @@ export const TopChallengeRow = ({ rank, challenge, maxActivity }: Props) => {
         <Progress value={percent} className="mt-1 h-1" />
       </div>
       <span className="font-mono text-xs text-zinc-500 tabular-nums dark:text-slate-400">
-        {t({ id: 'common.tasksWithCount', defaultMessage: '{count, plural, one {# task} other {# tasks}}' }, { count: challenge.activity }
+        {t(
+          {
+            id: 'common.tasksWithCount',
+            defaultMessage: '{count, plural, one {# task} other {# tasks}}',
+          },
+          { count: challenge.activity }
         )}
       </span>
     </div>

@@ -42,7 +42,12 @@ export const AchievementBadge = ({
       onClick={onClick}
       disabled={!onClick}
       aria-label={
-        locked ? t({ id: 'shared.achievementBadge.lockedLabel', defaultMessage: '{title} (locked)' }, { title }) : title
+        locked
+          ? t(
+              { id: 'shared.achievementBadge.lockedLabel', defaultMessage: '{title} (locked)' },
+              { title }
+            )
+          : title
       }
       className={cn(
         'relative inline-flex items-center justify-center rounded-full border-2 transition-all',

@@ -38,12 +38,20 @@ export const useMappingAvailability = () => {
   const disabledReason = !isAuthenticated
     ? t({ id: 'keyboardShortcuts.unavailable.signIn', defaultMessage: 'Sign in to map this task' })
     : challenge.paused
-      ? t({ id: 'keyboardShortcuts.unavailable.paused', defaultMessage: 'This challenge is paused' })
+      ? t({
+          id: 'keyboardShortcuts.unavailable.paused',
+          defaultMessage: 'This challenge is paused',
+        })
       : !isEditable
-        ? t({ id: 'keyboardShortcuts.unavailable.notEditable', defaultMessage: 'This task is not editable' })
+        ? t({
+            id: 'keyboardShortcuts.unavailable.notEditable',
+            defaultMessage: 'This task is not editable',
+          })
         : !isLocked
-          ? t({ id: 'keyboardShortcuts.unavailable.notMapping', defaultMessage: 'Start mapping this task first' }
-            )
+          ? t({
+              id: 'keyboardShortcuts.unavailable.notMapping',
+              defaultMessage: 'Start mapping this task first',
+            })
           : undefined
 
   return { canEdit: disabledReason === undefined, disabledReason }
@@ -82,7 +90,10 @@ export const useTaskShortcuts = () => {
         })),
       {
         ...SKIP_TASK_BINDING,
-        description: t({ id: 'taskEditPage.taskActions.skipButton.label', defaultMessage: 'Skip this task' }),
+        description: t({
+          id: 'taskEditPage.taskActions.skipButton.label',
+          defaultMessage: 'Skip this task',
+        }),
         category: 'taskActions' as const,
         handler: skipTask,
         enabled: canSkip,

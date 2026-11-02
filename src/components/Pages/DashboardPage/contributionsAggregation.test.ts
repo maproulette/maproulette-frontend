@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import type { UserContribution } from '@/types/User'
 import { aggregateContributions } from './contributionsAggregation'
-import { testT } from '@/test/translate'
 
 // Minimal stand-in for the real t() - returns the default message with any
 // {placeholder} values substituted, which is enough to exercise the

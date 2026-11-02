@@ -46,18 +46,30 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
             </div>
             <div className="mt-0.5 flex items-center gap-2 text-xs text-zinc-500 dark:text-slate-400">
               <span>
-                {t({ id: 'dashboard.contributions.lockedTasks.taskId', defaultMessage: 'Task #{id}' }, { id: lockedTask.id }
+                {t(
+                  {
+                    id: 'dashboard.contributions.lockedTasks.taskId',
+                    defaultMessage: 'Task #{id}',
+                  },
+                  { id: lockedTask.id }
                 )}
               </span>
               {(lockedTask.bundledTasks?.length ?? 0) > 1 && (
                 <span className="flex items-center gap-1">
                   <Package className="h-3 w-3" />
-                  {t({ id: 'dashboard.contributions.lockedTasks.bundleCount', defaultMessage: '{count, plural, one {# task} other {# tasks}}' }, { count: lockedTask.bundledTasks?.length ?? 0 }
+                  {t(
+                    {
+                      id: 'dashboard.contributions.lockedTasks.bundleCount',
+                      defaultMessage: '{count, plural, one {# task} other {# tasks}}',
+                    },
+                    { count: lockedTask.bundledTasks?.length ?? 0 }
                   )}
                 </span>
               )}
               {lockedTask.startedAt ? (
-                <span className="ml-auto">{formatTimeAgo(new Date(lockedTask.startedAt), locale)}</span>
+                <span className="ml-auto">
+                  {formatTimeAgo(new Date(lockedTask.startedAt), locale)}
+                </span>
               ) : null}
             </div>
           </div>

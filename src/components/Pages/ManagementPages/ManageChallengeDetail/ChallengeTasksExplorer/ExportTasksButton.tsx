@@ -61,7 +61,10 @@ export const ExportTasksButton = () => {
     } catch (error) {
       logger.error('Challenge export failed', { challengeId, format, error })
       toast.error(
-        t({ id: 'manageChallengeDetail.export.failed', defaultMessage: 'Could not export this challenge' })
+        t({
+          id: 'manageChallengeDetail.export.failed',
+          defaultMessage: 'Could not export this challenge',
+        })
       )
     }
   }
@@ -80,10 +83,16 @@ export const ExportTasksButton = () => {
               {t({ id: 'manageChallengeDetail.export.title', defaultMessage: 'Export tasks' })}
             </DialogTitle>
             <DialogDescription>
-              {t({ id: 'manageChallengeDetail.export.description', defaultMessage: 'The filters currently applied to the task table are applied to the export as well.' }
-              )}{' '}
+              {t({
+                id: 'manageChallengeDetail.export.description',
+                defaultMessage:
+                  'The filters currently applied to the task table are applied to the export as well.',
+              })}{' '}
               <DocsLink page="exportingChallengeData" icon={null}>
-                {t({ id: 'manageChallengeDetail.export.docsLink', defaultMessage: 'About challenge exports' })}
+                {t({
+                  id: 'manageChallengeDetail.export.docsLink',
+                  defaultMessage: 'About challenge exports',
+                })}
               </DocsLink>
             </DialogDescription>
           </DialogHeader>
@@ -101,15 +110,19 @@ export const ExportTasksButton = () => {
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="csv" id={`${fieldId}-csv`} />
                   <Label htmlFor={`${fieldId}-csv`} className="font-normal">
-                    {t({ id: 'manageChallengeDetail.export.formatCsv', defaultMessage: 'CSV — one row per task' }
-                    )}
+                    {t({
+                      id: 'manageChallengeDetail.export.formatCsv',
+                      defaultMessage: 'CSV — one row per task',
+                    })}
                   </Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="geojson" id={`${fieldId}-geojson`} />
                   <Label htmlFor={`${fieldId}-geojson`} className="font-normal">
-                    {t({ id: 'manageChallengeDetail.export.formatGeoJSON', defaultMessage: 'GeoJSON — task geometries and properties' }
-                    )}
+                    {t({
+                      id: 'manageChallengeDetail.export.formatGeoJSON',
+                      defaultMessage: 'GeoJSON — task geometries and properties',
+                    })}
                   </Label>
                 </div>
               </RadioGroup>
@@ -117,7 +130,10 @@ export const ExportTasksButton = () => {
 
             <div className="space-y-2">
               <Label htmlFor={`${fieldId}-timezone`}>
-                {t({ id: 'manageChallengeDetail.export.timezoneLabel', defaultMessage: 'Timestamp timezone' })}
+                {t({
+                  id: 'manageChallengeDetail.export.timezoneLabel',
+                  defaultMessage: 'Timestamp timezone',
+                })}
               </Label>
               <Select value={timezone} onValueChange={setTimezone}>
                 <SelectTrigger id={`${fieldId}-timezone`} className="w-full">
@@ -140,7 +156,10 @@ export const ExportTasksButton = () => {
             </Button>
             <Button onClick={handleExport} disabled={exportMutation.isPending}>
               {exportMutation.isPending
-                ? t({ id: 'manageChallengeDetail.export.preparing', defaultMessage: 'Preparing...' })
+                ? t({
+                    id: 'manageChallengeDetail.export.preparing',
+                    defaultMessage: 'Preparing...',
+                  })
                 : t({ id: 'manageChallengeDetail.export.confirm', defaultMessage: 'Download' })}
             </Button>
           </DialogFooter>

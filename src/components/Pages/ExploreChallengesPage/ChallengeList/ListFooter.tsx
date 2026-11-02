@@ -14,8 +14,11 @@ export const ListFooter = () => {
       hasNextPage={hasNextPage}
       isFetching={isFetchingNextPage}
       onLoadMore={fetchNextPage}
-      endOfListHint={t({ id: 'exploreChallenges.challengeList.footer.endOfListHint', defaultMessage: 'Adjust your filters or explore a different area to discover more challenges' }
-      )}
+      endOfListHint={t({
+        id: 'exploreChallenges.challengeList.footer.endOfListHint',
+        defaultMessage:
+          'Adjust your filters or explore a different area to discover more challenges',
+      })}
       className={hasNextPage ? undefined : 'pb-12'}
     />
   )

@@ -34,10 +34,19 @@ export const MultiTaskPanel = () => {
           <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
             {activeBundle ? (
               <>
-                {t({ id: 'taskMap.multiTaskPanel.workingOnTasks', defaultMessage: '{count, plural, one {Working on # task} other {Working on # tasks}}' }, { count: activeBundle.taskIds.length }
+                {t(
+                  {
+                    id: 'taskMap.multiTaskPanel.workingOnTasks',
+                    defaultMessage:
+                      '{count, plural, one {Working on # task} other {Working on # tasks}}',
+                  },
+                  { count: activeBundle.taskIds.length }
                 )}
                 <span className="ml-1 text-zinc-400">
-                  {t({ id: 'taskMap.multiTaskPanel.maxBadge', defaultMessage: '({max} max)' }, { max: MAX_SELECTED_TASKS })}
+                  {t(
+                    { id: 'taskMap.multiTaskPanel.maxBadge', defaultMessage: '({max} max)' },
+                    { max: MAX_SELECTED_TASKS }
+                  )}
                 </span>
               </>
             ) : (
@@ -78,9 +87,15 @@ export const MultiTaskPanel = () => {
             )}
             title={
               activeBundle && activeBundle.taskIds.length >= MAX_SELECTED_TASKS
-                ? t({ id: 'taskMap.multiTaskPanel.maxReached', defaultMessage: 'Maximum tasks reached' })
+                ? t({
+                    id: 'taskMap.multiTaskPanel.maxReached',
+                    defaultMessage: 'Maximum tasks reached',
+                  })
                 : withBindingHint(
-                    t({ id: 'taskMap.multiTaskPanel.drawTooltip', defaultMessage: 'Draw to add tasks' }),
+                    t({
+                      id: 'taskMap.multiTaskPanel.drawTooltip',
+                      defaultMessage: 'Draw to add tasks',
+                    }),
                     MAP_BINDINGS.startDrawing
                   )
             }
@@ -99,7 +114,10 @@ export const MultiTaskPanel = () => {
               className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
             >
               <Trash2 className="h-4 w-4" />
-              {t({ id: 'taskMap.multiTaskPanel.clearAll', defaultMessage: 'Work on only the primary task' })}
+              {t({
+                id: 'taskMap.multiTaskPanel.clearAll',
+                defaultMessage: 'Work on only the primary task',
+              })}
             </button>
           )}
 
@@ -115,13 +133,18 @@ export const MultiTaskPanel = () => {
                 className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-sm text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-slate-700"
               >
                 <RotateCcw className="h-4 w-4" />
-                {t({ id: 'taskMap.multiTaskPanel.resetBundle', defaultMessage: 'Reset to initial bundle' })}
+                {t({
+                  id: 'taskMap.multiTaskPanel.resetBundle',
+                  defaultMessage: 'Reset to initial bundle',
+                })}
               </button>
             )}
 
           <DocsLink page="solvingMultipleTasksTogether" className="px-3 text-xs">
-            {t({ id: 'taskMap.multiTaskPanel.docsLink', defaultMessage: 'Learn about solving multiple tasks together' }
-            )}
+            {t({
+              id: 'taskMap.multiTaskPanel.docsLink',
+              defaultMessage: 'Learn about solving multiple tasks together',
+            })}
           </DocsLink>
         </div>
       </CollapsibleContent>

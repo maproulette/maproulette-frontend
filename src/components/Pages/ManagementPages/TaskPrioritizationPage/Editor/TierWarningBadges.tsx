@@ -27,8 +27,14 @@ export const TierWarningBadges = ({
         >
           <AlertTriangle className="size-3" />
           {w.kind === 'dead-rule'
-            ? t({ id: 'taskPrioritizationPage.tierWarningBadges.noMatches', defaultMessage: 'No matches' })
-            : t({ id: 'taskPrioritizationPage.tierWarningBadges.matchesAll', defaultMessage: 'Matches all' })}
+            ? t({
+                id: 'taskPrioritizationPage.tierWarningBadges.noMatches',
+                defaultMessage: 'No matches',
+              })
+            : t({
+                id: 'taskPrioritizationPage.tierWarningBadges.matchesAll',
+                defaultMessage: 'Matches all',
+              })}
         </Badge>
       ))}
     </div>

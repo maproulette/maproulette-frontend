@@ -61,13 +61,17 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
         {
           onSuccess: () =>
             toast.success(
-              t({ id: 'taskEditPage.taskActions.editorButton.defaultUpdated', defaultMessage: 'Default editor updated' }
-              )
+              t({
+                id: 'taskEditPage.taskActions.editorButton.defaultUpdated',
+                defaultMessage: 'Default editor updated',
+              })
             ),
           onError: () =>
             toast.error(
-              t({ id: 'taskEditPage.taskActions.editorButton.defaultUpdateFailed', defaultMessage: 'Failed to update default editor' }
-              )
+              t({
+                id: 'taskEditPage.taskActions.editorButton.defaultUpdateFailed',
+                defaultMessage: 'Failed to update default editor',
+              })
             ),
         }
       )
@@ -84,14 +88,22 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
       return t({ id: 'taskEditPage.taskActions.editorButton.short.id', defaultMessage: 'iD' })
     if (label.includes('JOSM')) {
       if (label.includes('new layer'))
-        return t({ id: 'taskEditPage.taskActions.editorButton.short.josmLayer', defaultMessage: 'JOSM Layer' })
+        return t({
+          id: 'taskEditPage.taskActions.editorButton.short.josmLayer',
+          defaultMessage: 'JOSM Layer',
+        })
       if (label.includes('features'))
-        return t({ id: 'taskEditPage.taskActions.editorButton.short.josmFeatures', defaultMessage: 'JOSM Features' }
-        )
+        return t({
+          id: 'taskEditPage.taskActions.editorButton.short.josmFeatures',
+          defaultMessage: 'JOSM Features',
+        })
       return t({ id: 'taskEditPage.taskActions.editorButton.short.josm', defaultMessage: 'JOSM' })
     }
     if (label.includes('level0'))
-      return t({ id: 'taskEditPage.taskActions.editorButton.short.level0', defaultMessage: 'Level0' })
+      return t({
+        id: 'taskEditPage.taskActions.editorButton.short.level0',
+        defaultMessage: 'Level0',
+      })
     if (label.includes('Rapid'))
       return t({ id: 'taskEditPage.taskActions.editorButton.short.rapid', defaultMessage: 'Rapid' })
     return label
@@ -107,7 +119,12 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
           onClick={openDefaultEditor}
           className="gap-2 rounded-r-none rounded-l-full border-r border-r-background/20"
           variant="default"
-          title={t({ id: 'taskEditPage.taskActions.editorButton.openTaskIn', defaultMessage: 'Open task in {editor}' }, { editor: primaryEditorLabel }
+          title={t(
+            {
+              id: 'taskEditPage.taskActions.editorButton.openTaskIn',
+              defaultMessage: 'Open task in {editor}',
+            },
+            { editor: primaryEditorLabel }
           )}
           disabled={busy}
         >
@@ -120,8 +137,10 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
               size="sm"
               variant="default"
               className="rounded-r-full rounded-l-none px-2"
-              title={t({ id: 'taskEditPage.taskActions.editorButton.chooseEditor', defaultMessage: 'Open in another editor, or change the default' }
-              )}
+              title={t({
+                id: 'taskEditPage.taskActions.editorButton.chooseEditor',
+                defaultMessage: 'Open in another editor, or change the default',
+              })}
               disabled={busy}
             >
               <ChevronDown className="h-4 w-4" />
@@ -132,7 +151,10 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
                 that does the same thing, so the shortcuts are discoverable
                 right where a mapper goes looking for an editor. */}
             <DropdownMenuLabel>
-              {t({ id: 'taskEditPage.taskActions.editorButton.openIn', defaultMessage: 'Open this task in:' })}
+              {t({
+                id: 'taskEditPage.taskActions.editorButton.openIn',
+                defaultMessage: 'Open this task in:',
+              })}
             </DropdownMenuLabel>
             {selectableEditors.map((option) => (
               <DropdownMenuItem
@@ -148,8 +170,10 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuLabel>
-              {t({ id: 'taskEditPage.taskActions.editorButton.setDefaultEditor', defaultMessage: 'Set Default Editor:' }
-              )}
+              {t({
+                id: 'taskEditPage.taskActions.editorButton.setDefaultEditor',
+                defaultMessage: 'Set Default Editor:',
+              })}
             </DropdownMenuLabel>
             {selectableEditors.map((option) => (
               <DropdownMenuItem

@@ -27,8 +27,10 @@ export const SuperAdminHome = () => {
           </h1>
         </div>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'superAdminHome.subtitle', defaultMessage: 'Manage all aspects of the MapRoulette platform.' }
-          )}
+          {t({
+            id: 'superAdminHome.subtitle',
+            defaultMessage: 'Manage all aspects of the MapRoulette platform.',
+          })}
         </p>
       </div>
 
@@ -45,13 +47,17 @@ export const SuperAdminHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.users.description', defaultMessage: 'Manage all platform users and permissions' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.users.description',
+                defaultMessage: 'Manage all platform users and permissions',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
-              <span>{t({ id: 'superAdminHome.cards.users.button', defaultMessage: 'View Users' })}</span>
+              <span>
+                {t({ id: 'superAdminHome.cards.users.button', defaultMessage: 'View Users' })}
+              </span>
             </Button>
           </CardContent>
         </Card>
@@ -68,8 +74,10 @@ export const SuperAdminHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'common.viewManageProjectsSubtitle', defaultMessage: 'View and manage all projects across the platform' }
-              )}
+              {t({
+                id: 'common.viewManageProjectsSubtitle',
+                defaultMessage: 'View and manage all projects across the platform',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -91,8 +99,10 @@ export const SuperAdminHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.challenges.description', defaultMessage: 'Browse and manage all challenges' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.challenges.description',
+                defaultMessage: 'Browse and manage all challenges',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -110,19 +120,26 @@ export const SuperAdminHome = () => {
             </div>
             <CardTitle>
               <Link to="/super-admin/challenge-reports" className="stretched-link">
-                {t({ id: 'superAdminHome.cards.challengeReports.title', defaultMessage: 'Challenge Reports' })}
+                {t({
+                  id: 'superAdminHome.cards.challengeReports.title',
+                  defaultMessage: 'Challenge Reports',
+                })}
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.challengeReports.description', defaultMessage: 'Triage reports that a challenge is causing incorrect edits' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.challengeReports.description',
+                defaultMessage: 'Triage reports that a challenge is causing incorrect edits',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
               <span>
-                {t({ id: 'superAdminHome.cards.challengeReports.button', defaultMessage: 'View Challenge Reports' }
-                )}
+                {t({
+                  id: 'superAdminHome.cards.challengeReports.button',
+                  defaultMessage: 'View Challenge Reports',
+                })}
               </span>
             </Button>
           </CardContent>
@@ -140,13 +157,20 @@ export const SuperAdminHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.teamImages.description', defaultMessage: 'Review challenge images teams have requested' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.teamImages.description',
+                defaultMessage: 'Review challenge images teams have requested',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
-              <span>{t({ id: 'superAdminHome.cards.teamImages.button', defaultMessage: 'Review Images' })}</span>
+              <span>
+                {t({
+                  id: 'superAdminHome.cards.teamImages.button',
+                  defaultMessage: 'Review Images',
+                })}
+              </span>
             </Button>
           </CardContent>
         </Card>
@@ -163,13 +187,17 @@ export const SuperAdminHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.plugins.description', defaultMessage: 'Manage plugins and integrations' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.plugins.description',
+                defaultMessage: 'Manage plugins and integrations',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
-              <span>{t({ id: 'superAdminHome.cards.plugins.button', defaultMessage: 'View Plugins' })}</span>
+              <span>
+                {t({ id: 'superAdminHome.cards.plugins.button', defaultMessage: 'View Plugins' })}
+              </span>
             </Button>
           </CardContent>
         </Card>
@@ -186,13 +214,20 @@ export const SuperAdminHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.analytics.description', defaultMessage: 'View platform-wide analytics and metrics' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.analytics.description',
+                defaultMessage: 'View platform-wide analytics and metrics',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
-              <span>{t({ id: 'superAdminHome.cards.analytics.button', defaultMessage: 'View Analytics' })}</span>
+              <span>
+                {t({
+                  id: 'superAdminHome.cards.analytics.button',
+                  defaultMessage: 'View Analytics',
+                })}
+              </span>
             </Button>
           </CardContent>
         </Card>
@@ -203,10 +238,14 @@ export const SuperAdminHome = () => {
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-900">
               <Database className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
             </div>
-            <CardTitle>{t({ id: 'superAdminHome.cards.database.title', defaultMessage: 'Database' })}</CardTitle>
+            <CardTitle>
+              {t({ id: 'superAdminHome.cards.database.title', defaultMessage: 'Database' })}
+            </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.database.description', defaultMessage: 'Database management and maintenance' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.database.description',
+                defaultMessage: 'Database management and maintenance',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -228,13 +267,17 @@ export const SuperAdminHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'superAdminHome.cards.settings.description', defaultMessage: 'Platform settings and configuration' }
-              )}
+              {t({
+                id: 'superAdminHome.cards.settings.description',
+                defaultMessage: 'Platform settings and configuration',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
-              <span>{t({ id: 'superAdminHome.cards.settings.button', defaultMessage: 'View Settings' })}</span>
+              <span>
+                {t({ id: 'superAdminHome.cards.settings.button', defaultMessage: 'View Settings' })}
+              </span>
             </Button>
           </CardContent>
         </Card>

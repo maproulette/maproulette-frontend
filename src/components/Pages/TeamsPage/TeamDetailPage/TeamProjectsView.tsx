@@ -27,8 +27,10 @@ export const TeamProjectsView = () => {
         emptyState={{
           icon: FolderOpen,
           title: t({ id: 'teams.detail.noProjectsTitle', defaultMessage: 'No projects' }),
-          description: t({ id: 'teams.detail.noProjectsDescription', defaultMessage: 'This team has not been given a role on any project.' }
-          ),
+          description: t({
+            id: 'teams.detail.noProjectsDescription',
+            defaultMessage: 'This team has not been given a role on any project.',
+          }),
         }}
       />
     </div>

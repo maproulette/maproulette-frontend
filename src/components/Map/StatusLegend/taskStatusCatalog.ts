@@ -21,7 +21,8 @@ const STATUS_ICONS: Record<number, LucideIcon> = {
 export const getStatusLegendEntries = (t: TranslateFn): StatusLegendEntry[] =>
   Object.keys(STATUS_ICONS).map((status) => ({
     status: Number(status),
-    label: getStatusLabel(t, Number(status)) ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
+    label:
+      getStatusLabel(t, Number(status)) ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
     color: resolveHex(STATUS_HEX_COLORS[Number(status)] ?? 'zinc-400'),
     icon: STATUS_ICONS[Number(status)] ?? Plus,
   }))

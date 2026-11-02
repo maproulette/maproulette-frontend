@@ -32,18 +32,18 @@ const RoleSelect = ({
 }) => {
   const { t } = useIntl()
   return (
-  <Select value={String(value)} disabled={disabled} onValueChange={(v) => onChange(Number(v))}>
-    <SelectTrigger size="sm" className="w-28">
-      <SelectValue />
-    </SelectTrigger>
-    <SelectContent>
-      {projectRoleOptions.map((option) => (
-        <SelectItem key={option.value} value={String(option.value)}>
-          {t(option.label)}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
+    <Select value={String(value)} disabled={disabled} onValueChange={(v) => onChange(Number(v))}>
+      <SelectTrigger size="sm" className="w-28">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {projectRoleOptions.map((option) => (
+          <SelectItem key={option.value} value={String(option.value)}>
+            {t(option.label)}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
 
@@ -90,13 +90,21 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       await setUserRole.mutateAsync({ challengeId, userId, role: newRole })
       setUserQuery('')
       toast.success(
-        t({ id: 'manageChallengeDetail.managers.added', defaultMessage: '{name} can now manage this challenge' }, { name: displayName }
+        t(
+          {
+            id: 'manageChallengeDetail.managers.added',
+            defaultMessage: '{name} can now manage this challenge',
+          },
+          { name: displayName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant challenge role', { userId, challengeId, error })
       toast.error(
-        t({ id: 'manageChallengeDetail.managers.addFailed', defaultMessage: 'Could not add that manager' })
+        t({
+          id: 'manageChallengeDetail.managers.addFailed',
+          defaultMessage: 'Could not add that manager',
+        })
       )
     }
   }
@@ -105,13 +113,21 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
     try {
       await removeUser.mutateAsync({ challengeId, userId })
       toast.success(
-        t({ id: 'manageChallengeDetail.managers.removed', defaultMessage: '{name} can no longer manage this challenge' }, { name: displayName }
+        t(
+          {
+            id: 'manageChallengeDetail.managers.removed',
+            defaultMessage: '{name} can no longer manage this challenge',
+          },
+          { name: displayName }
         )
       )
     } catch (error) {
       logger.error('Failed to revoke challenge role', { userId, challengeId, error })
       toast.error(
-        t({ id: 'manageChallengeDetail.managers.removeFailed', defaultMessage: 'Could not remove that manager' })
+        t({
+          id: 'manageChallengeDetail.managers.removeFailed',
+          defaultMessage: 'Could not remove that manager',
+        })
       )
     }
   }
@@ -121,13 +137,21 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       await setTeamRole.mutateAsync({ challengeId, teamId, role: TEAM_ATTACHMENT_ROLE })
       setTeamQuery('')
       toast.success(
-        t({ id: 'manageChallengeDetail.managers.teamAdded', defaultMessage: '{name} can now manage this challenge' }, { name: teamName }
+        t(
+          {
+            id: 'manageChallengeDetail.managers.teamAdded',
+            defaultMessage: '{name} can now manage this challenge',
+          },
+          { name: teamName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant challenge team role', { teamId, challengeId, error })
       toast.error(
-        t({ id: 'manageChallengeDetail.managers.addTeamFailed', defaultMessage: 'Could not add that team' })
+        t({
+          id: 'manageChallengeDetail.managers.addTeamFailed',
+          defaultMessage: 'Could not add that team',
+        })
       )
     }
   }
@@ -141,13 +165,19 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
         </h3>
       </div>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
-        {t({ id: 'manageChallengeDetail.managers.description', defaultMessage: 'Give someone a role on this challenge alone. Anyone who manages the parent project, or the team that owns this challenge, already has access and is not listed here.' }
-        )}
+        {t({
+          id: 'manageChallengeDetail.managers.description',
+          defaultMessage:
+            'Give someone a role on this challenge alone. Anyone who manages the parent project, or the team that owns this challenge, already has access and is not listed here.',
+        })}
       </p>
 
       {isLoading ? (
         <Loader
-          message={t({ id: 'manageChallengeDetail.managers.loading', defaultMessage: 'Loading managers...' })}
+          message={t({
+            id: 'manageChallengeDetail.managers.loading',
+            defaultMessage: 'Loading managers...',
+          })}
         />
       ) : (
         <ul className="space-y-2">
@@ -168,7 +198,9 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
                 type="button"
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 onClick={() => handleRemove(manager.userId, manager.name)}
-                aria-label={t({ id: 'manageChallengeDetail.managers.remove', defaultMessage: 'Remove {name}' }, { name: manager.name }
+                aria-label={t(
+                  { id: 'manageChallengeDetail.managers.remove', defaultMessage: 'Remove {name}' },
+                  { name: manager.name }
                 )}
               >
                 <Trash2 className="h-4 w-4" />
@@ -192,8 +224,10 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             id={addManagerId}
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
-            placeholder={t({ id: 'manageChallengeDetail.managers.searchPlaceholder', defaultMessage: 'OpenStreetMap username' }
-            )}
+            placeholder={t({
+              id: 'manageChallengeDetail.managers.searchPlaceholder',
+              defaultMessage: 'OpenStreetMap username',
+            })}
           />
           <RoleSelect value={newRole} onChange={setNewRole} />
         </div>
@@ -213,7 +247,10 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             ))}
             {userMatches?.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t({ id: 'manageChallengeDetail.managers.noMatches', defaultMessage: 'No matching users' })}
+                {t({
+                  id: 'manageChallengeDetail.managers.noMatches',
+                  defaultMessage: 'No matching users',
+                })}
               </li>
             )}
           </ul>
@@ -225,8 +262,11 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
         {t({ id: 'manageChallengeDetail.managers.teamsTitle', defaultMessage: 'Teams' })}
       </h4>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
-        {t({ id: 'manageChallengeDetail.managers.teamsDescription', defaultMessage: 'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.' }
-        )}
+        {t({
+          id: 'manageChallengeDetail.managers.teamsDescription',
+          defaultMessage:
+            'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.',
+        })}
       </p>
       <ul className="space-y-2">
         {(teamManagers ?? []).map(({ team }) => {
@@ -238,7 +278,12 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
                 type="button"
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 onClick={() => removeTeam.mutate({ challengeId, teamId: team.id })}
-                aria-label={t({ id: 'manageChallengeDetail.managers.removeTeam', defaultMessage: 'Remove {name}' }, { name: team.name }
+                aria-label={t(
+                  {
+                    id: 'manageChallengeDetail.managers.removeTeam',
+                    defaultMessage: 'Remove {name}',
+                  },
+                  { name: team.name }
                 )}
               >
                 <Trash2 className="h-4 w-4" />
@@ -262,8 +307,10 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             id={addTeamId}
             value={teamQuery}
             onChange={(e) => setTeamQuery(e.target.value)}
-            placeholder={t({ id: 'manageChallengeDetail.managers.teamSearchPlaceholder', defaultMessage: 'Team name' }
-            )}
+            placeholder={t({
+              id: 'manageChallengeDetail.managers.teamSearchPlaceholder',
+              defaultMessage: 'Team name',
+            })}
           />
         </div>
         {teamQuery.length > 2 && (
@@ -284,7 +331,10 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
               ))}
             {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t({ id: 'manageChallengeDetail.managers.noTeamMatches', defaultMessage: 'No matching teams' })}
+                {t({
+                  id: 'manageChallengeDetail.managers.noTeamMatches',
+                  defaultMessage: 'No matching teams',
+                })}
               </li>
             )}
           </ul>

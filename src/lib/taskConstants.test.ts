@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import {
   getStatusLabel,
   resolveHex,
@@ -14,7 +15,6 @@ import {
   TAILWIND_HEX,
   tabTriggerClass,
 } from './taskConstants.ts'
-import { testT } from '@/test/translate'
 
 const t = testT
 

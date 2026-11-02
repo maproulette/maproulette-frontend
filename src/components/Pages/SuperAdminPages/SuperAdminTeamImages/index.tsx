@@ -42,7 +42,10 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
     } catch (error) {
       logger.error('Team image review failed', { decision, error })
       toast.error(
-        t({ id: 'superAdminTeamImages.reviewError', defaultMessage: 'Could not record that decision' })
+        t({
+          id: 'superAdminTeamImages.reviewError',
+          defaultMessage: 'Could not record that decision',
+        })
       )
     }
   }
@@ -65,7 +68,12 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
       <div className="min-w-48 flex-1">
         <p className="font-medium text-sm">{image.name}</p>
         <p className="text-xs text-zinc-500 dark:text-slate-400">
-          {t({ id: 'superAdminTeamImages.requestMeta', defaultMessage: '{team} · requested by {user} on {date}' }, {
+          {t(
+            {
+              id: 'superAdminTeamImages.requestMeta',
+              defaultMessage: '{team} · requested by {user} on {date}',
+            },
+            {
               team: image.teamName ?? String(image.teamId),
               user: image.requestedByName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
               date: formatDate(new Date(image.created), locale),
@@ -79,7 +87,10 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
       <Input
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        placeholder={t({ id: 'superAdminTeamImages.commentPlaceholder', defaultMessage: 'Note (optional)' })}
+        placeholder={t({
+          id: 'superAdminTeamImages.commentPlaceholder',
+          defaultMessage: 'Note (optional)',
+        })}
         className="w-56"
         aria-label={t({ id: 'superAdminTeamImages.commentLabel', defaultMessage: 'Review note' })}
       />
@@ -111,8 +122,11 @@ export const SuperAdminTeamImages = () => {
           {t({ id: 'superAdminTeamImages.title', defaultMessage: 'Team challenge images' })}
         </h1>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'superAdminTeamImages.subtitle', defaultMessage: 'Images teams have requested for their challenges. A team carries a single image, so approving a request replaces the one that team is using, including on the challenges already showing it.' }
-          )}
+          {t({
+            id: 'superAdminTeamImages.subtitle',
+            defaultMessage:
+              'Images teams have requested for their challenges. A team carries a single image, so approving a request replaces the one that team is using, including on the challenges already showing it.',
+          })}
         </p>
       </div>
 
@@ -120,7 +134,10 @@ export const SuperAdminTeamImages = () => {
         <Loader />
       ) : isError ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'superAdminTeamImages.loadError', defaultMessage: 'Could not load the review queue.' })}
+          {t({
+            id: 'superAdminTeamImages.loadError',
+            defaultMessage: 'Could not load the review queue.',
+          })}
         </p>
       ) : images && images.length > 0 ? (
         <ul className="space-y-2">
@@ -138,8 +155,10 @@ export const SuperAdminTeamImages = () => {
               {t({ id: 'superAdminTeamImages.emptyTitle', defaultMessage: 'Nothing to review' })}
             </EmptyTitle>
             <EmptyDescription>
-              {t({ id: 'superAdminTeamImages.emptyDescription', defaultMessage: 'No team has an image awaiting approval right now.' }
-              )}
+              {t({
+                id: 'superAdminTeamImages.emptyDescription',
+                defaultMessage: 'No team has an image awaiting approval right now.',
+              })}
             </EmptyDescription>
           </EmptyContent>
         </Empty>

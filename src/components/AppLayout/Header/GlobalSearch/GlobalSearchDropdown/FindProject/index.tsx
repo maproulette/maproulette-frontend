@@ -74,7 +74,12 @@ export const FindProject = () => {
           </h3>
           {!isLoading && data && data.length > 0 && (
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'appLayout.header.globalSearch.findProject.resultCount', defaultMessage: '{count, plural, one {# project} other {# projects}}' }, { count: data.length }
+              {t(
+                {
+                  id: 'appLayout.header.globalSearch.findProject.resultCount',
+                  defaultMessage: '{count, plural, one {# project} other {# projects}}',
+                },
+                { count: data.length }
               )}
             </span>
           )}
@@ -86,8 +91,10 @@ export const FindProject = () => {
               <div className="flex flex-col items-center gap-3">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-600 dark:text-slate-400">
-                  {t({ id: 'appLayout.header.globalSearch.findProject.loadingMore', defaultMessage: 'Loading more projects...' }
-                  )}
+                  {t({
+                    id: 'appLayout.header.globalSearch.findProject.loadingMore',
+                    defaultMessage: 'Loading more projects...',
+                  })}
                 </p>
               </div>
             </div>
@@ -98,8 +105,10 @@ export const FindProject = () => {
               <div className="flex flex-col items-center justify-center gap-3 py-12">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-500 dark:text-slate-400">
-                  {t({ id: 'appLayout.header.globalSearch.findProject.loading', defaultMessage: 'Loading projects...' }
-                  )}
+                  {t({
+                    id: 'appLayout.header.globalSearch.findProject.loading',
+                    defaultMessage: 'Loading projects...',
+                  })}
                 </p>
               </div>
             ) : results.length === 0 ? (
@@ -112,8 +121,10 @@ export const FindProject = () => {
                     {t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' })}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-slate-400">
-                    {t({ id: 'appLayout.header.globalSearch.findProject.noResultsHint', defaultMessage: 'Try a different search term' }
-                    )}
+                    {t({
+                      id: 'appLayout.header.globalSearch.findProject.noResultsHint',
+                      defaultMessage: 'Try a different search term',
+                    })}
                   </p>
                 </div>
               </div>
@@ -160,8 +171,10 @@ export const FindProject = () => {
                           {t({ id: 'common.thatsAll', defaultMessage: "That's all!" })}
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-slate-400">
-                          {t({ id: 'appLayout.header.globalSearch.findProject.noMoreToLoad', defaultMessage: 'No more projects to load' }
-                          )}
+                          {t({
+                            id: 'appLayout.header.globalSearch.findProject.noMoreToLoad',
+                            defaultMessage: 'No more projects to load',
+                          })}
                         </p>
                       </div>
                     </div>

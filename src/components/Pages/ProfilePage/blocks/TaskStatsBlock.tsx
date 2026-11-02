@@ -25,13 +25,19 @@ export const TaskStatsBlock = () => {
           <Skeleton className="h-12 w-32" />
         ) : isError || !data ? (
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t({ id: 'profilePage.taskStats.loadError', defaultMessage: "Couldn't load task stats." })}
+            {t({
+              id: 'profilePage.taskStats.loadError',
+              defaultMessage: "Couldn't load task stats.",
+            })}
           </p>
         ) : (
           <>
             <div>
               <div className="mb-1 text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                {t({ id: 'profilePage.taskStats.totalCompleted', defaultMessage: 'Total completed' })}
+                {t({
+                  id: 'profilePage.taskStats.totalCompleted',
+                  defaultMessage: 'Total completed',
+                })}
               </div>
               <DigitDisplay value={data.total ?? 0} size="lg" />
             </div>
@@ -41,7 +47,10 @@ export const TaskStatsBlock = () => {
                   <div key={status} className="flex justify-between">
                     <dt className="text-zinc-600 dark:text-slate-400">
                       {getStatusLabel(t, Number(status)) ??
-                        t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })}
+                        t(
+                          { id: 'common.statusWithStatus', defaultMessage: 'Status {status}' },
+                          { status }
+                        )}
                     </dt>
                     <dd className="font-medium font-mono tabular-nums">{formatNumber(count)}</dd>
                   </div>

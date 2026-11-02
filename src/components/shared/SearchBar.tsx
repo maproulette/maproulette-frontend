@@ -17,7 +17,9 @@ export const SearchBar = ({ value, onChange, placeholder, className }: SearchBar
       <Search className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 h-4 w-4 text-zinc-500 dark:text-slate-400" />
       <Input
         type="search"
-        placeholder={placeholder ?? t({ id: 'shared.searchBar.placeholder', defaultMessage: 'Search...' })}
+        placeholder={
+          placeholder ?? t({ id: 'shared.searchBar.placeholder', defaultMessage: 'Search...' })
+        }
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="pl-9"

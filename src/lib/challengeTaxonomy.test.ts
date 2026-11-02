@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest'
 import { createIntl } from 'react-intl'
+import { describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import {
   COOPERATIVE_TYPE_CHANGEFILE,
   COOPERATIVE_TYPE_NONE,
@@ -7,7 +8,6 @@ import {
   getChallengeTaxonomy,
   isCooperative,
 } from './challengeTaxonomy'
-import { testT } from '@/test/translate'
 
 const t = testT
 

@@ -36,8 +36,11 @@ export const PendingEditsModal = ({
             {t({ id: 'taskEditPage.pendingEdits.title', defaultMessage: 'Unsaved changes' })}
           </DialogTitle>
           <DialogDescription>
-            {t({ id: 'taskEditPage.pendingEdits.description', defaultMessage: 'What is currently pending in the editor. Save from the editor to send it to OpenStreetMap.' }
-            )}
+            {t({
+              id: 'taskEditPage.pendingEdits.description',
+              defaultMessage:
+                'What is currently pending in the editor. Save from the editor to send it to OpenStreetMap.',
+            })}
           </DialogDescription>
         </DialogHeader>
 

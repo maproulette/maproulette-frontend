@@ -144,7 +144,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       logger.error('Failed to unlock task', { taskId: task.id, error })
       toast.error(
-        t({ id: 'taskEditPage.taskActions.lockButton.unlockFailed', defaultMessage: 'Failed to unlock task' })
+        t({
+          id: 'taskEditPage.taskActions.lockButton.unlockFailed',
+          defaultMessage: 'Failed to unlock task',
+        })
       )
       return false
     }

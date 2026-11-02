@@ -70,7 +70,10 @@ export const ChallengeComments = () => {
     }
     if (!user) {
       toast.error(
-        t({ id: 'common.youMustBeLoggedInToComment', defaultMessage: 'You must be logged in to comment' })
+        t({
+          id: 'common.youMustBeLoggedInToComment',
+          defaultMessage: 'You must be logged in to comment',
+        })
       )
       return
     }
@@ -80,8 +83,10 @@ export const ChallengeComments = () => {
         onSuccess: () => {
           setCommentText('')
           toast.success(
-            t({ id: 'browsedChallengePage.challengeModals.comments.addSuccess', defaultMessage: 'Comment added successfully' }
-            )
+            t({
+              id: 'browsedChallengePage.challengeModals.comments.addSuccess',
+              defaultMessage: 'Comment added successfully',
+            })
           )
           setTimeout(() => {
             commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -89,7 +94,9 @@ export const ChallengeComments = () => {
         },
         onError: (error) => {
           logger.error('Error adding comment', { error })
-          toast.error(t({ id: 'common.failedToAddComment', defaultMessage: 'Failed to add comment' }))
+          toast.error(
+            t({ id: 'common.failedToAddComment', defaultMessage: 'Failed to add comment' })
+          )
         },
       }
     )
@@ -117,8 +124,10 @@ export const ChallengeComments = () => {
               className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-slate-600"
             />
             <span>
-              {t({ id: 'browsedChallengePage.challengeModals.comments.showTaskComments', defaultMessage: 'Show task comments' }
-              )}
+              {t({
+                id: 'browsedChallengePage.challengeModals.comments.showTaskComments',
+                defaultMessage: 'Show task comments',
+              })}
             </span>
           </label>
         </div>
@@ -130,8 +139,10 @@ export const ChallengeComments = () => {
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
               <p className="text-sm text-zinc-500 dark:text-slate-400">
-                {t({ id: 'browsedChallengePage.challengeModals.comments.empty', defaultMessage: 'No comments yet. Be the first to comment!' }
-                )}
+                {t({
+                  id: 'browsedChallengePage.challengeModals.comments.empty',
+                  defaultMessage: 'No comments yet. Be the first to comment!',
+                })}
               </p>
             </div>
           ) : (
@@ -171,8 +182,10 @@ export const ChallengeComments = () => {
                       </a>
                       {isOwner && (
                         <span className="rounded bg-yellow-100 px-2 py-0.5 font-medium text-xs text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
-                          {t({ id: 'browsedChallengePage.challengeModals.comments.owner', defaultMessage: 'Owner' }
-                          )}
+                          {t({
+                            id: 'browsedChallengePage.challengeModals.comments.owner',
+                            defaultMessage: 'Owner',
+                          })}
                         </span>
                       )}
                       {comment.taskId && (
@@ -181,7 +194,12 @@ export const ChallengeComments = () => {
                           params={{ taskId: String(comment.taskId) }}
                           className="text-xs text-zinc-500 hover:underline dark:text-slate-400"
                         >
-                          {t({ id: 'browsedChallengePage.challengeModals.comments.reTask', defaultMessage: 'Re: Task {taskId}' }, { taskId: comment.taskId }
+                          {t(
+                            {
+                              id: 'browsedChallengePage.challengeModals.comments.reTask',
+                              defaultMessage: 'Re: Task {taskId}',
+                            },
+                            { taskId: comment.taskId }
                           )}
                         </Link>
                       )}
@@ -240,16 +258,22 @@ export const ChallengeComments = () => {
             >
               <Send className="size-4" />
               {addCommentMutation.isPending
-                ? t({ id: 'browsedChallengePage.challengeModals.comments.sending', defaultMessage: 'Sending...' }
-                  )
-                : t({ id: 'browsedChallengePage.challengeModals.comments.send', defaultMessage: 'Send' })}
+                ? t({
+                    id: 'browsedChallengePage.challengeModals.comments.sending',
+                    defaultMessage: 'Sending...',
+                  })
+                : t({
+                    id: 'browsedChallengePage.challengeModals.comments.send',
+                    defaultMessage: 'Send',
+                  })}
             </Button>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-slate-400">
             {t(
               {
                 id: 'browsedChallengePage.challengeModals.comments.characterCount',
-                defaultMessage: '{count, number}/{max, plural, one {# character} other {# characters}}',
+                defaultMessage:
+                  '{count, number}/{max, plural, one {# character} other {# characters}}',
               },
               { count: commentText.length, max: 5000 }
             )}
@@ -257,8 +281,10 @@ export const ChallengeComments = () => {
         </form>
       ) : (
         <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-          {t({ id: 'browsedChallengePage.challengeModals.comments.signInRequired', defaultMessage: 'Please sign in to add comments' }
-          )}
+          {t({
+            id: 'browsedChallengePage.challengeModals.comments.signInRequired',
+            defaultMessage: 'Please sign in to add comments',
+          })}
         </div>
       )}
     </div>

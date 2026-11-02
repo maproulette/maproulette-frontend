@@ -19,15 +19,11 @@ import {
 import { useIntl } from '@/i18n'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
 import { cn } from '@/lib/utils'
+import { PRIORITY_MESSAGES } from '@/types/Priority'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
-import {
-  SORT_FIELD_MESSAGES,
-  SORT_FIELDS,
-  type SortField,
-} from './constants'
+import { SORT_FIELD_MESSAGES, SORT_FIELDS, type SortField } from './constants'
 import { ExportTasksButton } from './ExportTasksButton'
 import { PropertyFilterButton } from './PropertyFilterButton'
-import { PRIORITY_MESSAGES } from '@/types/Priority'
 
 /** Horizontal filter & sort controls rendered above the task table. */
 export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) => {
@@ -79,8 +75,10 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           </DropdownMenuTrigger>
           <DropdownMenuContent className="max-h-72 w-56 overflow-y-auto" align="start">
             <DropdownMenuLabel>
-              {t({ id: 'manageChallengeDetail.tasksExplorer.taskStatusMenuLabel', defaultMessage: 'Task status' }
-              )}
+              {t({
+                id: 'manageChallengeDetail.tasksExplorer.taskStatusMenuLabel',
+                defaultMessage: 'Task status',
+              })}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {DEFAULT_TASK_STATUS_FILTER.map((s) => (
@@ -115,7 +113,9 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>{t({ id: 'common.priority', defaultMessage: 'Priority' })}</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {t({ id: 'common.priority', defaultMessage: 'Priority' })}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {DEFAULT_PRIORITY_FILTER.map((p) => (
               <DropdownMenuCheckboxItem
@@ -141,8 +141,10 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           className="h-9 gap-1 text-zinc-600 hover:text-zinc-900 disabled:opacity-40 dark:text-zinc-400 dark:hover:text-zinc-100"
           disabled={!filtersDirty}
           onClick={clearFilters}
-          title={t({ id: 'manageChallengeDetail.tasksExplorer.clearFiltersTitle', defaultMessage: 'Clear all filters and reset sort' }
-          )}
+          title={t({
+            id: 'manageChallengeDetail.tasksExplorer.clearFiltersTitle',
+            defaultMessage: 'Clear all filters and reset sort',
+          })}
         >
           <X className="h-4 w-4" />
           {t({ id: 'common.clear', defaultMessage: 'Clear' })}
@@ -175,21 +177,31 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           onClick={() => setSortDesc((d) => !d)}
           title={
             sortDesc
-              ? t({ id: 'manageChallengeDetail.tasksExplorer.sortDescTitle', defaultMessage: 'Descending — click for ascending' }
-                )
-              : t({ id: 'manageChallengeDetail.tasksExplorer.sortAscTitle', defaultMessage: 'Ascending — click for descending' }
-                )
+              ? t({
+                  id: 'manageChallengeDetail.tasksExplorer.sortDescTitle',
+                  defaultMessage: 'Descending — click for ascending',
+                })
+              : t({
+                  id: 'manageChallengeDetail.tasksExplorer.sortAscTitle',
+                  defaultMessage: 'Ascending — click for descending',
+                })
           }
         >
           {sortDesc ? (
             <>
               <ArrowDownAZ className="h-4 w-4" />
-              {t({ id: 'manageChallengeDetail.tasksExplorer.sortDescButton', defaultMessage: 'Desc' })}
+              {t({
+                id: 'manageChallengeDetail.tasksExplorer.sortDescButton',
+                defaultMessage: 'Desc',
+              })}
             </>
           ) : (
             <>
               <ArrowUpAZ className="h-4 w-4" />
-              {t({ id: 'manageChallengeDetail.tasksExplorer.sortAscButton', defaultMessage: 'Asc' })}
+              {t({
+                id: 'manageChallengeDetail.tasksExplorer.sortAscButton',
+                defaultMessage: 'Asc',
+              })}
             </>
           )}
         </Button>

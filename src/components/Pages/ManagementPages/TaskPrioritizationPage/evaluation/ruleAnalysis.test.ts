@@ -42,9 +42,7 @@ describe('analyzeWarnings', () => {
     it('warns when no tier has any configuration at all', () => {
       const result = analyzeWarnings(baseInput({ totalTasks: 10 }))
 
-      expect(result.global).toEqual([
-        expect.objectContaining({ kind: 'no-rules' }),
-      ])
+      expect(result.global).toEqual([expect.objectContaining({ kind: 'no-rules' })])
     })
 
     it('does not warn when at least one tier is configured', () => {
@@ -237,9 +235,7 @@ describe('analyzeWarnings', () => {
         })
       )
 
-      expect(result.global).toEqual([
-        expect.objectContaining({ kind: 'no-rules' }),
-      ])
+      expect(result.global).toEqual([expect.objectContaining({ kind: 'no-rules' })])
     })
   })
 
@@ -273,9 +269,7 @@ describe('analyzeWarnings', () => {
       expect(result.tier[0]).toEqual([])
       expect(result.tier[1]).toEqual([expect.objectContaining({ kind: 'all-match' })])
       expect(result.tier[2]).toEqual([expect.objectContaining({ kind: 'dead-rule' })])
-      expect(result.global).toEqual([
-        expect.objectContaining({ kind: 'swallowed-default' }),
-      ])
+      expect(result.global).toEqual([expect.objectContaining({ kind: 'swallowed-default' })])
     })
   })
 })

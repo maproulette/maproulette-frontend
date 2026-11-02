@@ -26,12 +26,20 @@ export const BulkDeleteDialog = ({ open, onOpenChange, onConfirm, count, busy }:
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <TriangleAlert className="size-5 text-red-500" aria-hidden="true" />
-            {t({ id: 'managementPages.bulkActionsToolbar.deleteDialog.title', defaultMessage: '{count, plural, one {Delete # task?} other {Delete # tasks?}}' }, { count }
+            {t(
+              {
+                id: 'managementPages.bulkActionsToolbar.deleteDialog.title',
+                defaultMessage: '{count, plural, one {Delete # task?} other {Delete # tasks?}}',
+              },
+              { count }
             )}
           </DialogTitle>
           <DialogDescription>
-            {t({ id: 'managementPages.bulkActionsToolbar.deleteDialog.description', defaultMessage: 'This cannot be undone. Tasks and their comments, reviews, and tags are permanently removed.' }
-            )}
+            {t({
+              id: 'managementPages.bulkActionsToolbar.deleteDialog.description',
+              defaultMessage:
+                'This cannot be undone. Tasks and their comments, reviews, and tags are permanently removed.',
+            })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -40,8 +48,10 @@ export const BulkDeleteDialog = ({ open, onOpenChange, onConfirm, count, busy }:
           </Button>
           <Button variant="destructive" onClick={onConfirm} disabled={busy}>
             {busy
-              ? t({ id: 'managementPages.bulkActionsToolbar.deleteDialog.deleting', defaultMessage: 'Deleting…' }
-                )
+              ? t({
+                  id: 'managementPages.bulkActionsToolbar.deleteDialog.deleting',
+                  defaultMessage: 'Deleting…',
+                })
               : t({ id: 'common.delete', defaultMessage: 'Delete' })}
           </Button>
         </DialogFooter>

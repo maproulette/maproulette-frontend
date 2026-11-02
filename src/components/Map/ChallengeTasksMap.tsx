@@ -147,8 +147,10 @@ export const ChallengeTasksMap = ({
                 {
                   icon: Maximize2,
                   onClick: zoomToAll,
-                  tooltip: t({ id: 'manageChallengeDetail.miniMap.zoomToAllTasksTooltip', defaultMessage: 'Zoom to all tasks' }
-                  ),
+                  tooltip: t({
+                    id: 'manageChallengeDetail.miniMap.zoomToAllTasksTooltip',
+                    defaultMessage: 'Zoom to all tasks',
+                  }),
                   disabled: !mapLoaded,
                 },
               ]

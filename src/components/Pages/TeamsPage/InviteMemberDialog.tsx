@@ -65,7 +65,9 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
       onOpenChange(false)
     } catch (error) {
       logger.error('Invite failed', { error })
-      toast.error(t({ id: 'teams.inviteMember.sendError', defaultMessage: 'Could not send invitation' }))
+      toast.error(
+        t({ id: 'teams.inviteMember.sendError', defaultMessage: 'Could not send invitation' })
+      )
     }
   }
 
@@ -77,8 +79,10 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
             {t({ id: 'teams.inviteMember.title', defaultMessage: 'Invite a team member' })}
           </DialogTitle>
           <DialogDescription>
-            {t({ id: 'teams.inviteMember.description', defaultMessage: 'Search for an OSM user and pick a role for them.' }
-            )}
+            {t({
+              id: 'teams.inviteMember.description',
+              defaultMessage: 'Search for an OSM user and pick a role for them.',
+            })}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
@@ -87,7 +91,10 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t({ id: 'common.searchOsmUsername', defaultMessage: 'Search OSM username' })}
+              placeholder={t({
+                id: 'common.searchOsmUsername',
+                defaultMessage: 'Search OSM username',
+              })}
               className="pl-8"
             />
           </div>

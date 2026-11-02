@@ -27,16 +27,24 @@ export const SortByFilter = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="name">{t({ id: 'common.name', defaultMessage: 'Name' })}</SelectItem>
-          <SelectItem value="created">{t({ id: 'common.newest', defaultMessage: 'Newest' })}</SelectItem>
+          <SelectItem value="created">
+            {t({ id: 'common.newest', defaultMessage: 'Newest' })}
+          </SelectItem>
           <SelectItem value="modified">
             {t({ id: 'exploreChallenges.filterBar.sortBy.oldest', defaultMessage: 'Oldest' })}
           </SelectItem>
-          <SelectItem value="popularity">{t({ id: 'common.popular', defaultMessage: 'Popular' })}</SelectItem>
+          <SelectItem value="popularity">
+            {t({ id: 'common.popular', defaultMessage: 'Popular' })}
+          </SelectItem>
           <SelectItem value="difficulty">
             {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
           </SelectItem>
-          <SelectItem value="featured">{t({ id: 'common.featured', defaultMessage: 'Featured' })}</SelectItem>
-          <SelectItem value="tag_fix">{t({ id: 'common.tagFix', defaultMessage: 'Tag Fix' })}</SelectItem>
+          <SelectItem value="featured">
+            {t({ id: 'common.featured', defaultMessage: 'Featured' })}
+          </SelectItem>
+          <SelectItem value="tag_fix">
+            {t({ id: 'common.tagFix', defaultMessage: 'Tag Fix' })}
+          </SelectItem>
           <SelectItem value="cooperative">
             {t({ id: 'common.cooperative', defaultMessage: 'Cooperative' })}
           </SelectItem>

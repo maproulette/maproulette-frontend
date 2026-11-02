@@ -15,8 +15,10 @@ export const SuperAdminPlugins = () => {
           </h1>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'superAdminPlugins.subtitle', defaultMessage: 'Manage plugins and integrations for the platform' }
-          )}
+          {t({
+            id: 'superAdminPlugins.subtitle',
+            defaultMessage: 'Manage plugins and integrations for the platform',
+          })}
         </p>
       </div>
 
@@ -29,8 +31,11 @@ export const SuperAdminPlugins = () => {
             {t({ id: 'superAdminPlugins.comingSoon.title', defaultMessage: 'Coming soon' })}
           </EmptyTitle>
           <EmptyDescription>
-            {t({ id: 'superAdminPlugins.comingSoon.description', defaultMessage: 'Plugin management is not yet available. There is currently no plugins API to install, configure, or browse plugins against, so this page is a placeholder until that support lands.' }
-            )}
+            {t({
+              id: 'superAdminPlugins.comingSoon.description',
+              defaultMessage:
+                'Plugin management is not yet available. There is currently no plugins API to install, configure, or browse plugins against, so this page is a placeholder until that support lands.',
+            })}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>

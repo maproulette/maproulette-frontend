@@ -229,7 +229,10 @@ export const TaskMap = () => {
             type="button"
             onClick={openIdEditor}
             className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
-            title={t({ id: 'taskEditPage.taskMap.editInId', defaultMessage: 'Edit in iD (inline)' })}
+            title={t({
+              id: 'taskEditPage.taskMap.editInId',
+              defaultMessage: 'Edit in iD (inline)',
+            })}
           >
             <OsmIcon className="h-4 w-4" />
             {t({ id: 'taskEditPage.taskMap.editInIdShort', defaultMessage: 'Edit in iD' })}
@@ -251,14 +254,18 @@ export const TaskMap = () => {
       <div className="-translate-x-1/2 absolute top-14 left-1/2 z-10 flex flex-col items-center gap-2">
         {drawingMode && (
           <div className="rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
-            {t({ id: 'taskEditPage.taskMap.drawingModeHint', defaultMessage: 'Click and drag to select tasks • ESC to cancel' }
-            )}
+            {t({
+              id: 'taskEditPage.taskMap.drawingModeHint',
+              defaultMessage: 'Click and drag to select tasks • ESC to cancel',
+            })}
           </div>
         )}
         {focusedFeature && (
           <div className="flex items-center gap-2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
-            {t({ id: 'taskEditPage.taskMap.focusedFeatureHint', defaultMessage: 'Showing one feature of this task' }
-            )}
+            {t({
+              id: 'taskEditPage.taskMap.focusedFeatureHint',
+              defaultMessage: 'Showing one feature of this task',
+            })}
             <button
               type="button"
               onClick={clearFocusedFeature}

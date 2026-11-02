@@ -74,19 +74,27 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
           {t({ id: 'common.recentActivity', defaultMessage: 'Recent Activity' })}
         </CardTitle>
         <CardDescription>
-          {t({ id: 'manageChallengeDetail.recentActivity.description', defaultMessage: 'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).' }
-          )}
+          {t({
+            id: 'manageChallengeDetail.recentActivity.description',
+            defaultMessage:
+              'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).',
+          })}
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
         {isError ? (
           <p className="text-red-600 text-sm dark:text-red-400">
-            {t({ id: 'manageChallengeDetail.recentActivity.loadError', defaultMessage: 'Could not load activity.' }
-            )}
+            {t({
+              id: 'manageChallengeDetail.recentActivity.loadError',
+              defaultMessage: 'Could not load activity.',
+            })}
           </p>
         ) : dayGroups.length === 0 ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t({ id: 'manageChallengeDetail.recentActivity.empty', defaultMessage: 'No recent activity.' })}
+            {t({
+              id: 'manageChallengeDetail.recentActivity.empty',
+              defaultMessage: 'No recent activity.',
+            })}
           </p>
         ) : (
           <ol className="relative ms-2 space-y-6 border-zinc-200 border-l ps-6 dark:border-slate-600">

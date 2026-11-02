@@ -24,8 +24,14 @@ export const directionsControlButton = ({
   icon: MoveRight,
   onClick: () => onToggle(!show),
   tooltip: show
-    ? t({ id: 'taskMap.controls.hideDirectionIndicators', defaultMessage: 'Hide direction indicators' })
-    : t({ id: 'taskMap.controls.showDirectionIndicators', defaultMessage: 'Show direction indicators' }),
+    ? t({
+        id: 'taskMap.controls.hideDirectionIndicators',
+        defaultMessage: 'Hide direction indicators',
+      })
+    : t({
+        id: 'taskMap.controls.showDirectionIndicators',
+        defaultMessage: 'Show direction indicators',
+      }),
   disabled,
   isActive: show,
   binding: DIRECTIONS_BINDING,
@@ -43,8 +49,10 @@ const useDirectionsShortcut = (
     () => [
       {
         ...DIRECTIONS_BINDING,
-        description: t({ id: 'taskMap.shortcuts.toggleDirectionIndicators', defaultMessage: 'Toggle direction indicators on task geometry' }
-        ),
+        description: t({
+          id: 'taskMap.shortcuts.toggleDirectionIndicators',
+          defaultMessage: 'Toggle direction indicators on task geometry',
+        }),
         category: 'map',
         handler: () => onToggle(!show),
         enabled,

@@ -34,8 +34,10 @@ const AreaHistory = () => {
         </span>
       </div>
       <p className="mt-1 mb-2 text-xs text-zinc-500 dark:text-slate-400">
-        {t({ id: 'taskInfoPanel.data.areaHistoryDescription', defaultMessage: 'View recent changes in the area around this task' }
-        )}
+        {t({
+          id: 'taskInfoPanel.data.areaHistoryDescription',
+          defaultMessage: 'View recent changes in the area around this task',
+        })}
       </p>
       <div className={linkCardClass}>
         <div>
@@ -46,11 +48,20 @@ const AreaHistory = () => {
               rel="noopener noreferrer"
               className="stretched-link"
             >
-              {t({ id: 'taskInfoPanel.data.osmHistoryAtLocation', defaultMessage: 'OSM History at Location' })}
+              {t({
+                id: 'taskInfoPanel.data.osmHistoryAtLocation',
+                defaultMessage: 'OSM History at Location',
+              })}
             </a>
           </div>
           <div className="mt-0.5 text-xs text-zinc-500 dark:text-slate-400">
-            {t({ id: 'taskInfoPanel.data.recentEditsNear', defaultMessage: 'Recent edits near {location}' }, { location })}
+            {t(
+              {
+                id: 'taskInfoPanel.data.recentEditsNear',
+                defaultMessage: 'Recent edits near {location}',
+              },
+              { location }
+            )}
           </div>
         </div>
         <ExternalLink className="h-4 w-4 shrink-0 text-zinc-400 dark:text-slate-500" />
@@ -81,7 +92,12 @@ export const OsmFeatureSection = () => {
               </a>
             </div>
             <div className="mt-0.5 text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'taskInfoPanel.data.viewOnOsm', defaultMessage: 'View {type} on OpenStreetMap' }, { type: osmFeature.type }
+              {t(
+                {
+                  id: 'taskInfoPanel.data.viewOnOsm',
+                  defaultMessage: 'View {type} on OpenStreetMap',
+                },
+                { type: osmFeature.type }
               )}
             </div>
           </div>
@@ -89,8 +105,11 @@ export const OsmFeatureSection = () => {
         </div>
       ) : (
         <p className="text-xs text-zinc-500 dark:text-slate-400">
-          {t({ id: 'taskInfoPanel.data.noOsmFeature', defaultMessage: 'This task\'s geometry does not reference an OSM element (like @id: "way/12345").' }
-          )}
+          {t({
+            id: 'taskInfoPanel.data.noOsmFeature',
+            defaultMessage:
+              'This task\'s geometry does not reference an OSM element (like @id: "way/12345").',
+          })}
         </p>
       )}
 

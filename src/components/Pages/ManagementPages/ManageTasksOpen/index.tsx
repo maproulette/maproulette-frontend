@@ -41,8 +41,11 @@ export const ManageTasksOpen = () => {
             {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
           </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
-            {t({ id: 'manageTasksOpen.description', defaultMessage: 'Open a task by ID to view details or edit it (name, instructions, status, etc.).' }
-            )}
+            {t({
+              id: 'manageTasksOpen.description',
+              defaultMessage:
+                'Open a task by ID to view details or edit it (name, instructions, status, etc.).',
+            })}
           </p>
         </div>
 
@@ -53,8 +56,11 @@ export const ManageTasksOpen = () => {
               {t({ id: 'common.openTaskById', defaultMessage: 'Open task by ID' })}
             </CardTitle>
             <CardDescription>
-              {t({ id: 'manageTasksOpen.cardDescription', defaultMessage: 'Enter a task ID below. You can find task IDs when working on a task (URL or header) or from your saved/locked tasks on the dashboard.' }
-              )}
+              {t({
+                id: 'manageTasksOpen.cardDescription',
+                defaultMessage:
+                  'Enter a task ID below. You can find task IDs when working on a task (URL or header) or from your saved/locked tasks on the dashboard.',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -67,7 +73,10 @@ export const ManageTasksOpen = () => {
                   id={taskIdInputId}
                   type="number"
                   min={1}
-                  placeholder={t({ id: 'manageTasksOpen.taskIdPlaceholder', defaultMessage: 'e.g. 12345' })}
+                  placeholder={t({
+                    id: 'manageTasksOpen.taskIdPlaceholder',
+                    defaultMessage: 'e.g. 12345',
+                  })}
                   value={taskIdInput}
                   onChange={(e) => setTaskIdInput(e.target.value)}
                   className="font-mono"
@@ -94,12 +103,18 @@ export const ManageTasksOpen = () => {
             },
             {
               projects: (chunks) => (
-                <Link to="/manage/projects" className="text-blue-600 hover:underline dark:text-blue-400">
+                <Link
+                  to="/manage/projects"
+                  className="text-blue-600 hover:underline dark:text-blue-400"
+                >
                   {chunks}
                 </Link>
               ),
               challenges: (chunks) => (
-                <Link to="/manage/challenges" className="text-blue-600 hover:underline dark:text-blue-400">
+                <Link
+                  to="/manage/challenges"
+                  className="text-blue-600 hover:underline dark:text-blue-400"
+                >
                   {chunks}
                 </Link>
               ),

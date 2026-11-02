@@ -35,17 +35,24 @@ export const ProjectDetail = () => {
         })
       } else {
         await navigator.clipboard.writeText(url)
-        toast.success(t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' }))
+        toast.success(
+          t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' })
+        )
       }
     } catch (error) {
       if (error instanceof Error && error.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(url)
-          toast.success(t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' }))
+          toast.success(
+            t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' })
+          )
         } catch (clipboardError) {
           logger.error('Error copying to clipboard', { error: clipboardError })
           toast.error(
-            t({ id: 'browsedProjectPage.projectDetail.shareError', defaultMessage: 'Failed to share project' })
+            t({
+              id: 'browsedProjectPage.projectDetail.shareError',
+              defaultMessage: 'Failed to share project',
+            })
           )
         }
       }
@@ -90,7 +97,12 @@ export const ProjectDetail = () => {
               <>
                 <span className="text-zinc-400 dark:text-zinc-500">•</span>
                 <span className="whitespace-nowrap">
-                  {t({ id: 'browsedProjectPage.projectDetail.byOwner', defaultMessage: 'by {owner}' }, { owner: project.owner }
+                  {t(
+                    {
+                      id: 'browsedProjectPage.projectDetail.byOwner',
+                      defaultMessage: 'by {owner}',
+                    },
+                    { owner: project.owner }
                   )}
                 </span>
               </>
@@ -133,7 +145,12 @@ export const ProjectDetail = () => {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                      {t({ id: 'browsedProjectPage.projectDetail.percentComplete', defaultMessage: '{percent}% complete' }, { percent: Math.round(completionPercentage) }
+                      {t(
+                        {
+                          id: 'browsedProjectPage.projectDetail.percentComplete',
+                          defaultMessage: '{percent}% complete',
+                        },
+                        { percent: Math.round(completionPercentage) }
                       )}
                     </span>
                     <span className="text-zinc-500 dark:text-zinc-400">
@@ -156,9 +173,7 @@ export const ProjectDetail = () => {
                 <span className="text-zinc-600 dark:text-zinc-400">
                   {t({ id: 'common.tasksRemaining', defaultMessage: 'Tasks remaining' })}
                 </span>
-                <span className="font-semibold tabular-nums">
-                  {formatNumber(remainingTasks)}
-                </span>
+                <span className="font-semibold tabular-nums">{formatNumber(remainingTasks)}</span>
               </div>
 
               {(project.created || project.modified) && (
@@ -169,7 +184,9 @@ export const ProjectDetail = () => {
                       <span className="text-zinc-600 dark:text-zinc-400">
                         {t({ id: 'common.created', defaultMessage: 'Created' })}
                       </span>
-                      <span className="font-medium">{formatDate(new Date(project.created), locale)}</span>
+                      <span className="font-medium">
+                        {formatDate(new Date(project.created), locale)}
+                      </span>
                     </div>
                   )}
                   {project.modified && (
@@ -177,7 +194,9 @@ export const ProjectDetail = () => {
                       <span className="text-zinc-600 dark:text-zinc-400">
                         {t({ id: 'common.modified', defaultMessage: 'Modified' })}
                       </span>
-                      <span className="font-medium">{formatDate(new Date(project.modified), locale)}</span>
+                      <span className="font-medium">
+                        {formatDate(new Date(project.modified), locale)}
+                      </span>
                     </div>
                   )}
                 </>

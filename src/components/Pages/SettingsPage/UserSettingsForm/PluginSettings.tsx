@@ -65,9 +65,7 @@ export const PluginSettings = () => {
         toast.error(`Failed to add plugin: ${result.error}`)
       }
     } catch (error) {
-      toast.error(
-        t({ id: 'settings.plugins.addError', defaultMessage: 'Failed to add plugin' })
-      )
+      toast.error(t({ id: 'settings.plugins.addError', defaultMessage: 'Failed to add plugin' }))
       logger.error('Failed to add plugin', { error })
     }
   }
@@ -94,9 +92,7 @@ export const PluginSettings = () => {
   if (loading) {
     return (
       <FieldSet>
-        <FieldLegend>
-          {t({ id: 'settings.plugins.title', defaultMessage: 'Plugins' })}
-        </FieldLegend>
+        <FieldLegend>{t({ id: 'settings.plugins.title', defaultMessage: 'Plugins' })}</FieldLegend>
         <FieldDescription>
           {t({ id: 'settings.plugins.loading', defaultMessage: 'Loading plugins...' })}
         </FieldDescription>

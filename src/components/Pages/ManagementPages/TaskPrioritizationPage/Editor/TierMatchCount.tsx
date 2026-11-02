@@ -1,8 +1,8 @@
 import { Badge } from '@/components/ui/Badge'
+import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
 import { useTaskPreview } from '../TaskPreviewContext'
-import { useIntl } from '@/i18n'
 
 export const TierMatchCount = ({
   priority,

@@ -48,8 +48,10 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
               <br />
               <Link to="/profile">
                 <span className="text-xs text-zinc-500 hover:text-zinc-400 dark:text-slate-500 dark:hover:text-slate-400">
-                  {t({ id: 'appLayout.header.userMenu.viewPublicProfile', defaultMessage: 'View public profile' }
-                  )}
+                  {t({
+                    id: 'appLayout.header.userMenu.viewPublicProfile',
+                    defaultMessage: 'View public profile',
+                  })}
                 </span>
               </Link>
             </div>
@@ -59,7 +61,10 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
         <DropdownMenuItem asChild>
           <Link to="/settings">
             <CircleUser className="size-4" aria-hidden="true" />{' '}
-            {t({ id: 'appLayout.header.userMenu.accountSettings', defaultMessage: 'Account Settings' })}
+            {t({
+              id: 'appLayout.header.userMenu.accountSettings',
+              defaultMessage: 'Account Settings',
+            })}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

@@ -45,9 +45,14 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
           <div className="min-w-0">
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
               {isChallenge
-                ? t({ id: 'taskEditPage.descriptionPanel.challengeTitle', defaultMessage: 'About this challenge' }
-                  )
-                : t({ id: 'taskEditPage.descriptionPanel.projectTitle', defaultMessage: 'About this project' })}
+                ? t({
+                    id: 'taskEditPage.descriptionPanel.challengeTitle',
+                    defaultMessage: 'About this challenge',
+                  })
+                : t({
+                    id: 'taskEditPage.descriptionPanel.projectTitle',
+                    defaultMessage: 'About this project',
+                  })}
             </p>
             <h2 className="truncate font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
               {name}
@@ -63,10 +68,14 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
           ) : (
             <p className="text-sm text-zinc-500 dark:text-slate-400">
               {isChallenge
-                ? t({ id: 'taskEditPage.descriptionPanel.noChallengeDescription', defaultMessage: 'This challenge has no description.' }
-                  )
-                : t({ id: 'taskEditPage.descriptionPanel.noProjectDescription', defaultMessage: 'This project has no description.' }
-                  )}
+                ? t({
+                    id: 'taskEditPage.descriptionPanel.noChallengeDescription',
+                    defaultMessage: 'This challenge has no description.',
+                  })
+                : t({
+                    id: 'taskEditPage.descriptionPanel.noProjectDescription',
+                    defaultMessage: 'This project has no description.',
+                  })}
             </p>
           )}
         </div>

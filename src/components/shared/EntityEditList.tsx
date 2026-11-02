@@ -55,8 +55,10 @@ export const EntityEditList = ({ edits }: { edits: EntityEdit[] }) => {
 
             {edit.geometryOnly ? (
               <p className="pl-6 text-xs text-zinc-500 dark:text-zinc-400">
-                {t({ id: 'taskEditPage.pendingEdits.geometryOnly', defaultMessage: 'Geometry changed; no tags were altered.' }
-                )}
+                {t({
+                  id: 'taskEditPage.pendingEdits.geometryOnly',
+                  defaultMessage: 'Geometry changed; no tags were altered.',
+                })}
               </p>
             ) : (
               <ul className="space-y-1 pl-6">

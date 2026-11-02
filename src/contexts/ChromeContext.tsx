@@ -72,11 +72,22 @@ export const ChromeProvider = ({ children }: { children: ReactNode }) => {
   // because scripts/extractMessages.mjs only sees literal ids.
   const navigationLabels: Record<string, string> = useMemo(
     () => ({
-      'appLayout.header.nav.dashboard': t({ id: 'appLayout.header.nav.dashboard', defaultMessage: 'Dashboard' }),
-      'appLayout.header.nav.exploreChallenges': t({ id: 'appLayout.header.nav.exploreChallenges', defaultMessage: 'Explore Challenges' }
-      ),
-      'appLayout.header.nav.learn': t({ id: 'appLayout.header.nav.learn', defaultMessage: 'Learn' }),
-      'appLayout.header.nav.donate': t({ id: 'appLayout.header.nav.donate', defaultMessage: 'Donate' }),
+      'appLayout.header.nav.dashboard': t({
+        id: 'appLayout.header.nav.dashboard',
+        defaultMessage: 'Dashboard',
+      }),
+      'appLayout.header.nav.exploreChallenges': t({
+        id: 'appLayout.header.nav.exploreChallenges',
+        defaultMessage: 'Explore Challenges',
+      }),
+      'appLayout.header.nav.learn': t({
+        id: 'appLayout.header.nav.learn',
+        defaultMessage: 'Learn',
+      }),
+      'appLayout.header.nav.donate': t({
+        id: 'appLayout.header.nav.donate',
+        defaultMessage: 'Donate',
+      }),
     }),
     [t]
   )

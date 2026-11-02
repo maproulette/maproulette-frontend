@@ -65,8 +65,10 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
               {t({ id: 'dashboard.contributions.empty.title', defaultMessage: 'No contributions' })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              {t({ id: 'dashboard.contributions.empty.description', defaultMessage: 'Start mapping to track progress' }
-              )}
+              {t({
+                id: 'dashboard.contributions.empty.description',
+                defaultMessage: 'Start mapping to track progress',
+              })}
             </p>
           </div>
         )}
@@ -107,12 +109,22 @@ export const ContributionsSection = ({ userId }: ContributionsSectionProps) => {
                             </span>
                             <span className="text-zinc-400 dark:text-slate-500">
                               {DISPLAYED_STATUS_IDS.has(action.status)
-                                ? t({ id: 'dashboard.contributions.statusSetLabel', defaultMessage: 'Set Status on Task as {statusLabel}' }, {
+                                ? t(
+                                    {
+                                      id: 'dashboard.contributions.statusSetLabel',
+                                      defaultMessage: 'Set Status on Task as {statusLabel}',
+                                    },
+                                    {
                                       statusLabel:
                                         getStatusLabel(t, action.status) ?? String(action.status),
                                     }
                                   )
-                                : t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status: action.status }
+                                : t(
+                                    {
+                                      id: 'common.statusWithStatus',
+                                      defaultMessage: 'Status {status}',
+                                    },
+                                    { status: action.status }
                                   )}
                             </span>
                           </div>

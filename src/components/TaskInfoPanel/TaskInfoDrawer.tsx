@@ -62,7 +62,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   }
 
   const status = task?.status ?? selectedTask?.status ?? 0
-  const statusLabel = getStatusLabel(t, status) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
+  const statusLabel =
+    getStatusLabel(t, status) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const osmFeature = task ? parseOsmFeatureFromTask(task) : null
@@ -142,8 +143,14 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                       url={`${window.location.origin}/tasks/${task.id}`}
                       title={
                         task.name
-                          ? t({ id: 'common.taskWithName', defaultMessage: 'Task: {name}' }, { name: task.name })
-                          : t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })
+                          ? t(
+                              { id: 'common.taskWithName', defaultMessage: 'Task: {name}' },
+                              { name: task.name }
+                            )
+                          : t(
+                              { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
+                              { id: task.id }
+                            )
                       }
                       description={challenge?.name}
                     />
@@ -181,7 +188,10 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
           {/* Task ID */}
           <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-            {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: selectedTask?.id ?? '' })}
+            {t(
+              { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
+              { id: selectedTask?.id ?? '' }
+            )}
           </div>
 
           {/* Challenge › Project breadcrumb */}
@@ -236,7 +246,9 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                     <div className="flex items-center gap-2 pb-2">
                       <Package className="h-3.5 w-3.5 text-zinc-400" />
                       <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                        {t({ id: 'common.bundledTasks', defaultMessage: 'Bundled Tasks ({count})' }, { count: bundleData.taskIds.length - 1 }
+                        {t(
+                          { id: 'common.bundledTasks', defaultMessage: 'Bundled Tasks ({count})' },
+                          { count: bundleData.taskIds.length - 1 }
                         )}
                       </span>
                     </div>
@@ -251,7 +263,10 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                             className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
                           >
                             <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
-                              {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: taskId })}
+                              {t(
+                                { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
+                                { id: taskId }
+                              )}
                             </span>
                           </Link>
                         ))}

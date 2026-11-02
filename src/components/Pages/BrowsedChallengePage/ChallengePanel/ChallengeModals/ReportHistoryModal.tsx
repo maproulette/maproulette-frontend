@@ -31,9 +31,18 @@ const statusBadgeVariant = (statusName: string) => {
 }
 
 const REPORT_STATUS_MESSAGES = defineMessages({
-  open: { id: 'browsedChallengePage.challengeModals.reportHistory.status.open', defaultMessage: 'Open' },
-  actioned: { id: 'browsedChallengePage.challengeModals.reportHistory.status.actioned', defaultMessage: 'Actioned' },
-  dismissed: { id: 'browsedChallengePage.challengeModals.reportHistory.status.dismissed', defaultMessage: 'Dismissed' },
+  open: {
+    id: 'browsedChallengePage.challengeModals.reportHistory.status.open',
+    defaultMessage: 'Open',
+  },
+  actioned: {
+    id: 'browsedChallengePage.challengeModals.reportHistory.status.actioned',
+    defaultMessage: 'Actioned',
+  },
+  dismissed: {
+    id: 'browsedChallengePage.challengeModals.reportHistory.status.dismissed',
+    defaultMessage: 'Dismissed',
+  },
 })
 
 /**
@@ -53,9 +62,17 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
     <li className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs text-zinc-500 dark:text-slate-400">
-          {t({ id: 'browsedChallengePage.challengeModals.reportHistory.reportedBy', defaultMessage: 'Reported by {user} on {date}' }, {
+          {t(
+            {
+              id: 'browsedChallengePage.challengeModals.reportHistory.reportedBy',
+              defaultMessage: 'Reported by {user} on {date}',
+            },
+            {
               user: isOwnReport
-                ? t({ id: 'browsedChallengePage.challengeModals.reportHistory.you', defaultMessage: 'you' })
+                ? t({
+                    id: 'browsedChallengePage.challengeModals.reportHistory.you',
+                    defaultMessage: 'you',
+                  })
                 : (report.reporterName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' })),
               date: formatDateTime(new Date(report.reportedAt), locale),
             }
@@ -84,15 +101,27 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
 
       <p className="text-xs text-zinc-500 dark:text-slate-400">
         {report.statusName === 'open'
-          ? t({ id: 'browsedChallengePage.challengeModals.reportHistory.awaitingReview', defaultMessage: 'Awaiting review by the MapRoulette administrators.' }
-            )
+          ? t({
+              id: 'browsedChallengePage.challengeModals.reportHistory.awaitingReview',
+              defaultMessage: 'Awaiting review by the MapRoulette administrators.',
+            })
           : report.reviewedAt
-            ? t({ id: 'browsedChallengePage.challengeModals.reportHistory.resolvedOn', defaultMessage: 'Marked {status} on {date}' }, {
+            ? t(
+                {
+                  id: 'browsedChallengePage.challengeModals.reportHistory.resolvedOn',
+                  defaultMessage: 'Marked {status} on {date}',
+                },
+                {
                   status: statusLabel.toLowerCase(),
                   date: formatDateTime(new Date(report.reviewedAt), locale),
                 }
               )
-            : t({ id: 'browsedChallengePage.challengeModals.reportHistory.resolved', defaultMessage: 'Marked {status}' }, { status: statusLabel.toLowerCase() }
+            : t(
+                {
+                  id: 'browsedChallengePage.challengeModals.reportHistory.resolved',
+                  defaultMessage: 'Marked {status}',
+                },
+                { status: statusLabel.toLowerCase() }
               )}
       </p>
     </li>
@@ -119,12 +148,17 @@ export const ReportHistoryModal = () => {
       <DialogContent size="lg">
         <DialogHeader>
           <DialogTitle>
-            {t({ id: 'browsedChallengePage.challengeModals.reportHistory.title', defaultMessage: 'Reports on This Challenge' }
-            )}
+            {t({
+              id: 'browsedChallengePage.challengeModals.reportHistory.title',
+              defaultMessage: 'Reports on This Challenge',
+            })}
           </DialogTitle>
           <DialogDescription>
-            {t({ id: 'browsedChallengePage.challengeModals.reportHistory.description', defaultMessage: 'Reports filed against this challenge and where each one stands. The MapRoulette administrators review every report.' }
-            )}
+            {t({
+              id: 'browsedChallengePage.challengeModals.reportHistory.description',
+              defaultMessage:
+                'Reports filed against this challenge and where each one stands. The MapRoulette administrators review every report.',
+            })}
           </DialogDescription>
         </DialogHeader>
 
@@ -132,8 +166,10 @@ export const ReportHistoryModal = () => {
           <Loader />
         ) : isError ? (
           <p className="py-6 text-center text-sm text-zinc-600 dark:text-slate-400">
-            {t({ id: 'browsedChallengePage.challengeModals.reportHistory.loadError', defaultMessage: 'Could not load the reports.' }
-            )}
+            {t({
+              id: 'browsedChallengePage.challengeModals.reportHistory.loadError',
+              defaultMessage: 'Could not load the reports.',
+            })}
           </p>
         ) : reports && reports.length > 0 ? (
           <ul className="max-h-[60vh] space-y-3 overflow-y-auto">
@@ -145,8 +181,10 @@ export const ReportHistoryModal = () => {
           <div className="flex flex-col items-center gap-2 py-8">
             <Flag className="size-10 text-zinc-300 dark:text-slate-700" aria-hidden="true" />
             <p className="text-sm text-zinc-600 dark:text-slate-400">
-              {t({ id: 'browsedChallengePage.challengeModals.reportHistory.empty', defaultMessage: 'No one has reported this challenge.' }
-              )}
+              {t({
+                id: 'browsedChallengePage.challengeModals.reportHistory.empty',
+                defaultMessage: 'No one has reported this challenge.',
+              })}
             </p>
           </div>
         )}

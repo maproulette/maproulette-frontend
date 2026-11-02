@@ -76,7 +76,9 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
           size="icon"
           onClick={() => {
             copy(url)
-            toast.success(t({ id: 'shareLink.popover.copied', defaultMessage: 'Copied to clipboard' }))
+            toast.success(
+              t({ id: 'shareLink.popover.copied', defaultMessage: 'Copied to clipboard' })
+            )
           }}
           aria-label={t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
         >
@@ -124,7 +126,10 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
             ref={canvasRef}
             width={QR_SIZE}
             height={QR_SIZE}
-            aria-label={t({ id: 'shareLink.popover.qrCanvas', defaultMessage: 'QR code for share URL' })}
+            aria-label={t({
+              id: 'shareLink.popover.qrCanvas',
+              defaultMessage: 'QR code for share URL',
+            })}
             role="img"
           />
         </div>

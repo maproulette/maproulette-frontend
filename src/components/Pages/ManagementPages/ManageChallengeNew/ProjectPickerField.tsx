@@ -34,8 +34,10 @@ export const ProjectPickerField = ({
         <ProjectPickerButton projectId={value} onClick={() => onOpenChange(true)} />
       </FormControl>
       <FormDescription>
-        {t({ id: 'manageChallengeNew.challengeForm.projectPicker.description', defaultMessage: 'Select the project this challenge belongs to' }
-        )}
+        {t({
+          id: 'manageChallengeNew.challengeForm.projectPicker.description',
+          defaultMessage: 'Select the project this challenge belongs to',
+        })}
       </FormDescription>
       <FormMessage />
       <ProjectPickerModal

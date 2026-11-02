@@ -40,10 +40,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
   const { openComments } = useChallengeModals()
   const { t } = useIntl()
   const needsSignIn = !user?.id
-  const likeSignInMsg = t({ id: 'browsedChallengePage.header.signInToLike', defaultMessage: 'Sign in to like challenges' }
-  )
-  const saveSignInMsg = t({ id: 'browsedChallengePage.header.signInToSave', defaultMessage: 'Sign in to save challenges' }
-  )
+  const likeSignInMsg = t({
+    id: 'browsedChallengePage.header.signInToLike',
+    defaultMessage: 'Sign in to like challenges',
+  })
+  const saveSignInMsg = t({
+    id: 'browsedChallengePage.header.signInToSave',
+    defaultMessage: 'Sign in to save challenges',
+  })
 
   const favoriteMutation = api.challenge.useFavoriteChallenge()
   const unfavoriteMutation = api.challenge.useUnfavoriteChallenge()
@@ -57,8 +61,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     if (!challenge.id) return
     if (!user?.id) {
       toast.error(
-        t({ id: 'browsedChallengePage.header.pleaseSignInToSave', defaultMessage: 'Please sign in to save challenges' }
-        )
+        t({
+          id: 'browsedChallengePage.header.pleaseSignInToSave',
+          defaultMessage: 'Please sign in to save challenges',
+        })
       )
       return
     }
@@ -67,19 +73,27 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
       if (isFavorited) {
         await unfavoriteMutation.mutateAsync(challenge.id)
         toast.success(
-          t({ id: 'browsedChallengePage.header.removedFromFavorites', defaultMessage: 'Removed from favorites' })
+          t({
+            id: 'browsedChallengePage.header.removedFromFavorites',
+            defaultMessage: 'Removed from favorites',
+          })
         )
       } else {
         await favoriteMutation.mutateAsync(challenge.id)
         toast.success(
-          t({ id: 'browsedChallengePage.header.addedToFavorites', defaultMessage: 'Added to favorites' })
+          t({
+            id: 'browsedChallengePage.header.addedToFavorites',
+            defaultMessage: 'Added to favorites',
+          })
         )
       }
     } catch (error) {
       logger.error('Error toggling favorite', { error })
       toast.error(
-        t({ id: 'browsedChallengePage.header.failedToUpdateFavorite', defaultMessage: 'Failed to update favorite status' }
-        )
+        t({
+          id: 'browsedChallengePage.header.failedToUpdateFavorite',
+          defaultMessage: 'Failed to update favorite status',
+        })
       )
     }
   }
@@ -88,8 +102,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     if (!challenge.id) return
     if (!user?.id) {
       toast.error(
-        t({ id: 'browsedChallengePage.header.pleaseSignInToLike', defaultMessage: 'Please sign in to like challenges' }
-        )
+        t({
+          id: 'browsedChallengePage.header.pleaseSignInToLike',
+          defaultMessage: 'Please sign in to like challenges',
+        })
       )
       return
     }
@@ -97,18 +113,25 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     try {
       if (isLiked) {
         await unlikeMutation.mutateAsync(challenge.id)
-        toast.success(t({ id: 'browsedChallengePage.header.likeRemoved', defaultMessage: 'Like removed' }))
+        toast.success(
+          t({ id: 'browsedChallengePage.header.likeRemoved', defaultMessage: 'Like removed' })
+        )
       } else {
         await likeMutation.mutateAsync(challenge.id)
         toast.success(
-          t({ id: 'browsedChallengePage.header.challengeLiked', defaultMessage: 'Challenge liked!' })
+          t({
+            id: 'browsedChallengePage.header.challengeLiked',
+            defaultMessage: 'Challenge liked!',
+          })
         )
       }
     } catch (error) {
       logger.error('Error toggling like', { error })
       toast.error(
-        t({ id: 'browsedChallengePage.header.failedToUpdateLike', defaultMessage: 'Failed to update like status' }
-        )
+        t({
+          id: 'browsedChallengePage.header.failedToUpdateLike',
+          defaultMessage: 'Failed to update like status',
+        })
       )
     }
   }
@@ -121,23 +144,35 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
       if (navigator.share) {
         await navigator.share({
           title: name,
-          text: t({ id: 'browsedChallengePage.header.checkOutChallenge', defaultMessage: 'Check out this challenge: {name}' }, { name }
+          text: t(
+            {
+              id: 'browsedChallengePage.header.checkOutChallenge',
+              defaultMessage: 'Check out this challenge: {name}',
+            },
+            { name }
           ),
           url,
         })
       } else {
         await navigator.clipboard.writeText(url)
-        toast.success(t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' }))
+        toast.success(
+          t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' })
+        )
       }
     } catch (error) {
       if (error instanceof Error && error.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(url)
-          toast.success(t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' }))
+          toast.success(
+            t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' })
+          )
         } catch (clipboardError) {
           logger.error('Error copying to clipboard', { error: clipboardError })
           toast.error(
-            t({ id: 'browsedChallengePage.header.failedToShare', defaultMessage: 'Failed to share challenge' })
+            t({
+              id: 'browsedChallengePage.header.failedToShare',
+              defaultMessage: 'Failed to share challenge',
+            })
           )
         }
       }
@@ -162,7 +197,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   if (!challenge.enabled) {
     taxonomyItems.push({
-      label: t({ id: 'browsedChallengePage.header.taxonomy.undiscoverable', defaultMessage: 'Undiscoverable' }),
+      label: t({
+        id: 'browsedChallengePage.header.taxonomy.undiscoverable',
+        defaultMessage: 'Undiscoverable',
+      }),
       className: 'text-red-500 dark:text-red-400',
     })
   }
@@ -206,7 +244,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   if (challenge.cooperativeType === COOPERATIVE_TYPE_CHANGEFILE) {
     taxonomyItems.push({
-      label: t({ id: 'browsedChallengePage.header.taxonomy.cooperative', defaultMessage: 'Cooperative' }),
+      label: t({
+        id: 'browsedChallengePage.header.taxonomy.cooperative',
+        defaultMessage: 'Cooperative',
+      }),
       className: 'text-rose-500 dark:text-rose-400',
     })
   }
@@ -290,10 +331,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                     disabled={needsSignIn}
                     aria-label={
                       isLiked
-                        ? t({ id: 'browsedChallengePage.header.unlikeChallenge', defaultMessage: 'Unlike challenge' }
-                          )
-                        : t({ id: 'browsedChallengePage.header.likeChallenge', defaultMessage: 'Like challenge' }
-                          )
+                        ? t({
+                            id: 'browsedChallengePage.header.unlikeChallenge',
+                            defaultMessage: 'Unlike challenge',
+                          })
+                        : t({
+                            id: 'browsedChallengePage.header.likeChallenge',
+                            defaultMessage: 'Like challenge',
+                          })
                     }
                   >
                     <Heart
@@ -308,8 +353,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                   variant="ghost"
                   size="icon-sm"
                   onClick={openComments}
-                  aria-label={t({ id: 'browsedChallengePage.header.viewComments', defaultMessage: 'View comments' }
-                  )}
+                  aria-label={t({
+                    id: 'browsedChallengePage.header.viewComments',
+                    defaultMessage: 'View comments',
+                  })}
                 >
                   <MessageSquare className="size-4" />
                 </Button>
@@ -321,10 +368,14 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                     disabled={needsSignIn}
                     aria-label={
                       isFavorited
-                        ? t({ id: 'browsedChallengePage.header.removeFromFavorites', defaultMessage: 'Remove from favorites' }
-                          )
-                        : t({ id: 'browsedChallengePage.header.addToFavorites', defaultMessage: 'Add to favorites' }
-                          )
+                        ? t({
+                            id: 'browsedChallengePage.header.removeFromFavorites',
+                            defaultMessage: 'Remove from favorites',
+                          })
+                        : t({
+                            id: 'browsedChallengePage.header.addToFavorites',
+                            defaultMessage: 'Add to favorites',
+                          })
                     }
                   >
                     <Bookmark
@@ -339,8 +390,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                   variant="ghost"
                   size="icon-sm"
                   onClick={handleShare}
-                  aria-label={t({ id: 'browsedChallengePage.header.shareChallenge', defaultMessage: 'Share challenge' }
-                  )}
+                  aria-label={t({
+                    id: 'browsedChallengePage.header.shareChallenge',
+                    defaultMessage: 'Share challenge',
+                  })}
                 >
                   <Share2 className="size-4" />
                 </Button>
@@ -388,7 +441,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                     <>
                       <span className="whitespace-nowrap">
                         {t(
-                          { id: 'browsedChallengePage.header.byline', defaultMessage: 'by <owner>{name}</owner>' },
+                          {
+                            id: 'browsedChallengePage.header.byline',
+                            defaultMessage: 'by <owner>{name}</owner>',
+                          },
                           {
                             name: bylineName,
                             owner: (chunks) =>

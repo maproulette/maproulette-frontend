@@ -12,16 +12,20 @@ export const makeProjectFormSchema = (t: T) =>
       .string()
       .min(
         1,
-        t({ id: 'manageProjectNew.projectForm.validation.nameRequired', defaultMessage: 'Project name is required' }
-        )
+        t({
+          id: 'manageProjectNew.projectForm.validation.nameRequired',
+          defaultMessage: 'Project name is required',
+        })
       )
       .max(255),
     displayName: z
       .string()
       .min(
         1,
-        t({ id: 'manageProjectNew.projectForm.validation.displayNameRequired', defaultMessage: 'Display name is required' }
-        )
+        t({
+          id: 'manageProjectNew.projectForm.validation.displayNameRequired',
+          defaultMessage: 'Display name is required',
+        })
       )
       .max(255),
     description: z.string().optional().or(z.literal('')),

@@ -149,8 +149,10 @@ export const KeyboardShortcutsProvider = ({ children }: { children: React.ReactN
     () => [
       {
         key: '?',
-        description: t({ id: 'keyboardShortcuts.showShortcuts', defaultMessage: 'Show this list of keyboard shortcuts' }
-        ),
+        description: t({
+          id: 'keyboardShortcuts.showShortcuts',
+          defaultMessage: 'Show this list of keyboard shortcuts',
+        }),
         category: 'general',
         handler: () => setModalOpen(true),
       },

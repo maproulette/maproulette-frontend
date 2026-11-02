@@ -20,7 +20,9 @@ export const GeoJsonSection = () => {
           onClick={() => void copy(geoJson)}
         >
           {isCopied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-          {isCopied ? t({ id: 'common.copied', defaultMessage: 'Copied' }) : t({ id: 'common.copy', defaultMessage: 'Copy' })}
+          {isCopied
+            ? t({ id: 'common.copied', defaultMessage: 'Copied' })
+            : t({ id: 'common.copy', defaultMessage: 'Copy' })}
         </Button>
       </div>
       <pre className="max-h-96 overflow-auto rounded bg-zinc-100 p-2 text-xs text-zinc-900 dark:bg-slate-800/50 dark:text-white">

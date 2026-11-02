@@ -64,7 +64,10 @@ export const SavedViewsMenu = () => {
     const name = newName.trim()
     if (!name) {
       toast.error(
-        t({ id: 'notificationsPage.savedViews.nameRequired', defaultMessage: 'View name is required' })
+        t({
+          id: 'notificationsPage.savedViews.nameRequired',
+          defaultMessage: 'View name is required',
+        })
       )
       return
     }
@@ -78,9 +81,16 @@ export const SavedViewsMenu = () => {
       persistSavedViews(updated)
       setViews(updated)
       resetNamingState()
-      toast.success(t({ id: 'notificationsPage.savedViews.saved', defaultMessage: 'Saved view "{name}"' }, { name }))
+      toast.success(
+        t(
+          { id: 'notificationsPage.savedViews.saved', defaultMessage: 'Saved view "{name}"' },
+          { name }
+        )
+      )
     } catch {
-      toast.error(t({ id: 'notificationsPage.savedViews.saveFailed', defaultMessage: 'Failed to save view' }))
+      toast.error(
+        t({ id: 'notificationsPage.savedViews.saveFailed', defaultMessage: 'Failed to save view' })
+      )
     }
   }
 
@@ -88,7 +98,10 @@ export const SavedViewsMenu = () => {
     applyFilterState(view.state)
     setIsOpen(false)
     toast.success(
-      t({ id: 'notificationsPage.savedViews.applied', defaultMessage: 'Applied view "{name}"' }, { name: view.name })
+      t(
+        { id: 'notificationsPage.savedViews.applied', defaultMessage: 'Applied view "{name}"' },
+        { name: view.name }
+      )
     )
   }
 
@@ -97,10 +110,15 @@ export const SavedViewsMenu = () => {
     try {
       persistSavedViews(updated)
       setViews(updated)
-      toast.success(t({ id: 'notificationsPage.savedViews.deleted', defaultMessage: 'View deleted' }))
+      toast.success(
+        t({ id: 'notificationsPage.savedViews.deleted', defaultMessage: 'View deleted' })
+      )
     } catch {
       toast.error(
-        t({ id: 'notificationsPage.savedViews.deleteFailed', defaultMessage: 'Failed to delete view' })
+        t({
+          id: 'notificationsPage.savedViews.deleteFailed',
+          defaultMessage: 'Failed to delete view',
+        })
       )
     }
   }
@@ -114,7 +132,10 @@ export const SavedViewsMenu = () => {
     const name = editingName.trim()
     if (!name) {
       toast.error(
-        t({ id: 'notificationsPage.savedViews.nameRequired', defaultMessage: 'View name is required' })
+        t({
+          id: 'notificationsPage.savedViews.nameRequired',
+          defaultMessage: 'View name is required',
+        })
       )
       return
     }
@@ -123,10 +144,15 @@ export const SavedViewsMenu = () => {
       persistSavedViews(updated)
       setViews(updated)
       resetEditingState()
-      toast.success(t({ id: 'notificationsPage.savedViews.renamed', defaultMessage: 'View renamed' }))
+      toast.success(
+        t({ id: 'notificationsPage.savedViews.renamed', defaultMessage: 'View renamed' })
+      )
     } catch {
       toast.error(
-        t({ id: 'notificationsPage.savedViews.renameFailed', defaultMessage: 'Failed to rename view' })
+        t({
+          id: 'notificationsPage.savedViews.renameFailed',
+          defaultMessage: 'Failed to rename view',
+        })
       )
     }
   }
@@ -136,7 +162,9 @@ export const SavedViewsMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="gap-1.5">
           <BookmarkIcon className="size-4" />
-          <span>{t({ id: 'notificationsPage.savedViews.title', defaultMessage: 'Saved views' })}</span>
+          <span>
+            {t({ id: 'notificationsPage.savedViews.title', defaultMessage: 'Saved views' })}
+          </span>
           {views.length > 0 ? (
             <span className="ml-1 rounded-full bg-zinc-100 px-1.5 text-xs text-zinc-700 dark:bg-slate-700 dark:text-slate-200">
               {views.length}
@@ -170,14 +198,19 @@ export const SavedViewsMenu = () => {
                   }}
                   autoFocus
                   className="h-7 text-sm"
-                  aria-label={t({ id: 'notificationsPage.savedViews.renameInputLabel', defaultMessage: 'Rename saved view' }
-                  )}
+                  aria-label={t({
+                    id: 'notificationsPage.savedViews.renameInputLabel',
+                    defaultMessage: 'Rename saved view',
+                  })}
                 />
                 <Button
                   size="icon-sm"
                   variant="ghost"
                   onClick={() => handleCommitRename(view.id)}
-                  aria-label={t({ id: 'notificationsPage.savedViews.saveName', defaultMessage: 'Save name' })}
+                  aria-label={t({
+                    id: 'notificationsPage.savedViews.saveName',
+                    defaultMessage: 'Save name',
+                  })}
                 >
                   <CheckIcon className="size-4" />
                 </Button>
@@ -185,8 +218,10 @@ export const SavedViewsMenu = () => {
                   size="icon-sm"
                   variant="ghost"
                   onClick={resetEditingState}
-                  aria-label={t({ id: 'notificationsPage.savedViews.cancelRename', defaultMessage: 'Cancel rename' }
-                  )}
+                  aria-label={t({
+                    id: 'notificationsPage.savedViews.cancelRename',
+                    defaultMessage: 'Cancel rename',
+                  })}
                 >
                   <XIcon className="size-4" />
                 </Button>
@@ -213,7 +248,12 @@ export const SavedViewsMenu = () => {
                     e.stopPropagation()
                     handleStartRename(view)
                   }}
-                  aria-label={t({ id: 'notificationsPage.savedViews.renameAction', defaultMessage: 'Rename {name}' }, { name: view.name }
+                  aria-label={t(
+                    {
+                      id: 'notificationsPage.savedViews.renameAction',
+                      defaultMessage: 'Rename {name}',
+                    },
+                    { name: view.name }
                   )}
                 >
                   <PencilIcon className="size-3.5" />
@@ -229,7 +269,12 @@ export const SavedViewsMenu = () => {
                     e.stopPropagation()
                     handleDelete(view.id)
                   }}
-                  aria-label={t({ id: 'notificationsPage.savedViews.deleteAction', defaultMessage: 'Delete {name}' }, { name: view.name }
+                  aria-label={t(
+                    {
+                      id: 'notificationsPage.savedViews.deleteAction',
+                      defaultMessage: 'Delete {name}',
+                    },
+                    { name: view.name }
                   )}
                 >
                   <TrashIcon className="size-3.5" />
@@ -254,17 +299,24 @@ export const SavedViewsMenu = () => {
                 }
               }}
               autoFocus
-              placeholder={t({ id: 'notificationsPage.savedViews.namePlaceholder', defaultMessage: 'View name' }
-              )}
+              placeholder={t({
+                id: 'notificationsPage.savedViews.namePlaceholder',
+                defaultMessage: 'View name',
+              })}
               className="h-7 text-sm"
-              aria-label={t({ id: 'notificationsPage.savedViews.newNameLabel', defaultMessage: 'Saved view name' }
-              )}
+              aria-label={t({
+                id: 'notificationsPage.savedViews.newNameLabel',
+                defaultMessage: 'Saved view name',
+              })}
             />
             <Button
               size="icon-sm"
               variant="ghost"
               onClick={handleSaveCurrent}
-              aria-label={t({ id: 'notificationsPage.savedViews.saveView', defaultMessage: 'Save view' })}
+              aria-label={t({
+                id: 'notificationsPage.savedViews.saveView',
+                defaultMessage: 'Save view',
+              })}
             >
               <CheckIcon className="size-4" />
             </Button>
@@ -272,7 +324,10 @@ export const SavedViewsMenu = () => {
               size="icon-sm"
               variant="ghost"
               onClick={resetNamingState}
-              aria-label={t({ id: 'notificationsPage.savedViews.cancelSave', defaultMessage: 'Cancel save' })}
+              aria-label={t({
+                id: 'notificationsPage.savedViews.cancelSave',
+                defaultMessage: 'Cancel save',
+              })}
             >
               <XIcon className="size-4" />
             </Button>
@@ -287,7 +342,10 @@ export const SavedViewsMenu = () => {
           >
             <PlusIcon className="size-4" />
             <span>
-              {t({ id: 'notificationsPage.savedViews.saveCurrentAs', defaultMessage: 'Save current as…' })}
+              {t({
+                id: 'notificationsPage.savedViews.saveCurrentAs',
+                defaultMessage: 'Save current as…',
+              })}
             </span>
           </DropdownMenuItem>
         )}

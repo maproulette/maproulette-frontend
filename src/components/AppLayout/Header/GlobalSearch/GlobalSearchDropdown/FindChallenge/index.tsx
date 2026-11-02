@@ -137,7 +137,12 @@ export const FindChallenge = () => {
           </h3>
           {!isLoading && data && data.length > 0 && (
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'appLayout.header.globalSearch.findChallenge.resultCount', defaultMessage: '{count, plural, one {# challenge} other {# challenges}}' }, { count: data.length }
+              {t(
+                {
+                  id: 'appLayout.header.globalSearch.findChallenge.resultCount',
+                  defaultMessage: '{count, plural, one {# challenge} other {# challenges}}',
+                },
+                { count: data.length }
               )}
             </span>
           )}
@@ -149,8 +154,10 @@ export const FindChallenge = () => {
               <div className="flex flex-col items-center gap-3">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-600 dark:text-slate-400">
-                  {t({ id: 'appLayout.header.globalSearch.findChallenge.loadingMore', defaultMessage: 'Loading more challenges...' }
-                  )}
+                  {t({
+                    id: 'appLayout.header.globalSearch.findChallenge.loadingMore',
+                    defaultMessage: 'Loading more challenges...',
+                  })}
                 </p>
               </div>
             </div>
@@ -174,8 +181,10 @@ export const FindChallenge = () => {
                     {t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' })}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-slate-400">
-                    {t({ id: 'appLayout.header.globalSearch.findChallenge.noResultsHint', defaultMessage: 'Try adjusting your filters' }
-                    )}
+                    {t({
+                      id: 'appLayout.header.globalSearch.findChallenge.noResultsHint',
+                      defaultMessage: 'Try adjusting your filters',
+                    })}
                   </p>
                 </div>
               </div>
@@ -222,8 +231,10 @@ export const FindChallenge = () => {
                           {t({ id: 'common.thatsAll', defaultMessage: "That's all!" })}
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-slate-400">
-                          {t({ id: 'appLayout.header.globalSearch.findChallenge.noMoreToLoad', defaultMessage: 'No more challenges to load' }
-                          )}
+                          {t({
+                            id: 'appLayout.header.globalSearch.findChallenge.noMoreToLoad',
+                            defaultMessage: 'No more challenges to load',
+                          })}
                         </p>
                       </div>
                     </div>

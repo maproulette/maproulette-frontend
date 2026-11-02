@@ -25,8 +25,10 @@ export const ManageHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'manageHome.projectsDescription', defaultMessage: 'Create and manage your MapRoulette projects' }
-              )}
+              {t({
+                id: 'manageHome.projectsDescription',
+                defaultMessage: 'Create and manage your MapRoulette projects',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -47,8 +49,10 @@ export const ManageHome = () => {
               </Link>
             </CardTitle>
             <CardDescription>
-              {t({ id: 'manageHome.challengesDescription', defaultMessage: 'Browse and manage all your challenges' }
-              )}
+              {t({
+                id: 'manageHome.challengesDescription',
+                defaultMessage: 'Browse and manage all your challenges',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -70,8 +74,10 @@ export const ManageHome = () => {
                 </Link>
               </CardTitle>
               <CardDescription>
-                {t({ id: 'manageHome.tasksDescription', defaultMessage: 'Open a task by ID to view or edit it' }
-                )}
+                {t({
+                  id: 'manageHome.tasksDescription',
+                  defaultMessage: 'Open a task by ID to view or edit it',
+                })}
               </CardDescription>
             </CardHeader>
             <CardContent>

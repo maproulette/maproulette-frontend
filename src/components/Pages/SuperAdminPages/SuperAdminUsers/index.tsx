@@ -54,8 +54,10 @@ export const SuperAdminUsers = () => {
               </h1>
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
-              {t({ id: 'superAdminUsers.subtitle', defaultMessage: 'Manage all users and their permissions across the platform' }
-              )}
+              {t({
+                id: 'superAdminUsers.subtitle',
+                defaultMessage: 'Manage all users and their permissions across the platform',
+              })}
             </p>
           </div>
           <Button size="lg">
@@ -67,8 +69,10 @@ export const SuperAdminUsers = () => {
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder={t({ id: 'superAdminUsers.searchPlaceholder', defaultMessage: 'Search this page by name or email...' }
-          )}
+          placeholder={t({
+            id: 'superAdminUsers.searchPlaceholder',
+            defaultMessage: 'Search this page by name or email...',
+          })}
         />
       </div>
 
@@ -83,20 +87,29 @@ export const SuperAdminUsers = () => {
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t({ id: 'superAdminUsers.stats.perPage', defaultMessage: 'Showing {limit} per page' }, { limit })}
+              {t(
+                { id: 'superAdminUsers.stats.perPage', defaultMessage: 'Showing {limit} per page' },
+                { limit }
+              )}
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-3">
             <CardDescription>
-              {t({ id: 'superAdminUsers.stats.filteredResults', defaultMessage: 'Filtered Results' })}
+              {t({
+                id: 'superAdminUsers.stats.filteredResults',
+                defaultMessage: 'Filtered Results',
+              })}
             </CardDescription>
             <CardTitle className="font-semibold text-base">{filteredUsers.length}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              {t({ id: 'superAdminUsers.stats.basedOnSearch', defaultMessage: 'Based on current search' })}
+              {t({
+                id: 'superAdminUsers.stats.basedOnSearch',
+                defaultMessage: 'Based on current search',
+              })}
             </div>
           </CardContent>
         </Card>
@@ -120,9 +133,16 @@ export const SuperAdminUsers = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>{t({ id: 'superAdminUsers.table.title', defaultMessage: 'All Users' })}</CardTitle>
+              <CardTitle>
+                {t({ id: 'superAdminUsers.table.title', defaultMessage: 'All Users' })}
+              </CardTitle>
               <CardDescription>
-                {t({ id: 'superAdminUsers.table.subtitle', defaultMessage: 'A list of all users in the system (page {page})' }, { page: page + 1 }
+                {t(
+                  {
+                    id: 'superAdminUsers.table.subtitle',
+                    defaultMessage: 'A list of all users in the system (page {page})',
+                  },
+                  { page: page + 1 }
                 )}
               </CardDescription>
             </div>
@@ -217,7 +237,10 @@ export const SuperAdminUsers = () => {
                           <div className="flex items-center gap-2">
                             <Mail className="h-4 w-4 text-zinc-400" />
                             {user.settings?.email ||
-                              t({ id: 'superAdminUsers.table.notAvailable', defaultMessage: 'N/A' })}
+                              t({
+                                id: 'superAdminUsers.table.notAvailable',
+                                defaultMessage: 'N/A',
+                              })}
                           </div>
                         </TableCell>
                         <TableCell>
@@ -253,12 +276,17 @@ export const SuperAdminUsers = () => {
                       <Search />
                     </EmptyMedia>
                     <EmptyTitle>
-                      {t({ id: 'superAdminUsers.empty.title', defaultMessage: 'No matching users on this page' }
-                      )}
+                      {t({
+                        id: 'superAdminUsers.empty.title',
+                        defaultMessage: 'No matching users on this page',
+                      })}
                     </EmptyTitle>
                     <EmptyDescription>
-                      {t({ id: 'superAdminUsers.empty.description', defaultMessage: 'This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term.' }
-                      )}
+                      {t({
+                        id: 'superAdminUsers.empty.description',
+                        defaultMessage:
+                          'This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term.',
+                      })}
                     </EmptyDescription>
                   </EmptyHeader>
                 </Empty>

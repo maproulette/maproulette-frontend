@@ -59,9 +59,14 @@ export const ProjectsTableView = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">{t({ id: 'common.status', defaultMessage: 'Status' })}</TableHead>
+            <TableHead className="w-[80px]">
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
+            </TableHead>
             <TableHead className="w-12">
-              <span title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })} className="flex justify-center">
+              <span
+                title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
+                className="flex justify-center"
+              >
                 <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
             </TableHead>
@@ -233,8 +238,14 @@ export const ProjectsTableView = ({
                           >
                             <Archive className="h-4 w-4" />
                             {project.isArchived
-                              ? t({ id: 'common.unarchiveProject', defaultMessage: 'Unarchive project' })
-                              : t({ id: 'common.archiveProject', defaultMessage: 'Archive project' })}
+                              ? t({
+                                  id: 'common.unarchiveProject',
+                                  defaultMessage: 'Unarchive project',
+                                })
+                              : t({
+                                  id: 'common.archiveProject',
+                                  defaultMessage: 'Archive project',
+                                })}
                           </DropdownMenuItem>
                         )}
                         {onDeleteProject && project.id != null && (

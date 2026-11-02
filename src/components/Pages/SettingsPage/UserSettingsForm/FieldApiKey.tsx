@@ -36,7 +36,9 @@ export const FieldApiKey = ({ apiKey, userId }: Props) => {
 
   return (
     <FormItem>
-      <FormLabel htmlFor={id}>{t({ id: 'settings.apiKey.keyLabel', defaultMessage: 'Key' })}</FormLabel>
+      <FormLabel htmlFor={id}>
+        {t({ id: 'settings.apiKey.keyLabel', defaultMessage: 'Key' })}
+      </FormLabel>
       <FormControl>
         <ButtonGroup className="w-full">
           <InputGroup>

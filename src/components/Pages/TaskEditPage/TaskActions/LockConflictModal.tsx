@@ -38,17 +38,35 @@ export const LockConflictModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Lock className="size-5 text-amber-500" aria-hidden="true" />
-            {t({ id: 'taskEditPage.lockConflictModal.title', defaultMessage: 'You already have a task locked' })}
+            {t({
+              id: 'taskEditPage.lockConflictModal.title',
+              defaultMessage: 'You already have a task locked',
+            })}
           </DialogTitle>
           <DialogDescription>
             {conflict?.parentName
-              ? t({ id: 'taskEditPage.lockConflictModal.descriptionWithParent', defaultMessage: 'You currently have a task locked in "{parentName}". Unlock it and lock this task instead?' }, { parentName: conflict.parentName }
+              ? t(
+                  {
+                    id: 'taskEditPage.lockConflictModal.descriptionWithParent',
+                    defaultMessage:
+                      'You currently have a task locked in "{parentName}". Unlock it and lock this task instead?',
+                  },
+                  { parentName: conflict.parentName }
                 )
-              : t({ id: 'taskEditPage.lockConflictModal.description', defaultMessage: 'You currently have another task locked. Unlock it and lock this task instead?' }
-                )}
+              : t({
+                  id: 'taskEditPage.lockConflictModal.description',
+                  defaultMessage:
+                    'You currently have another task locked. Unlock it and lock this task instead?',
+                })}
             {bundledCount > 0 &&
               ' ' +
-                t({ id: 'taskEditPage.lockConflictModal.bundleNote', defaultMessage: '{count, plural, one {This will also release # bundled task.} other {This will also release # bundled tasks.}}' }, { count: bundledCount }
+                t(
+                  {
+                    id: 'taskEditPage.lockConflictModal.bundleNote',
+                    defaultMessage:
+                      '{count, plural, one {This will also release # bundled task.} other {This will also release # bundled tasks.}}',
+                  },
+                  { count: bundledCount }
                 )}
           </DialogDescription>
         </DialogHeader>
@@ -59,7 +77,10 @@ export const LockConflictModal = ({
           <Button onClick={onConfirm} disabled={busy}>
             {busy
               ? t({ id: 'taskEditPage.lockConflictModal.unlocking', defaultMessage: 'Unlocking…' })
-              : t({ id: 'taskEditPage.lockConflictModal.confirm', defaultMessage: 'Unlock and continue' })}
+              : t({
+                  id: 'taskEditPage.lockConflictModal.confirm',
+                  defaultMessage: 'Unlock and continue',
+                })}
           </Button>
         </DialogFooter>
       </DialogContent>

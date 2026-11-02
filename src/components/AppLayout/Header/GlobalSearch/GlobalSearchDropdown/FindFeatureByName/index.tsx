@@ -79,7 +79,12 @@ export const FindFeatureByName = () => {
               {t({ id: 'common.noResultsFound', defaultMessage: 'No results found' })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'appLayout.header.globalSearch.findFeatureByName.nothingMatches', defaultMessage: 'Nothing matches "{query}"' }, { query: debouncedQuery }
+              {t(
+                {
+                  id: 'appLayout.header.globalSearch.findFeatureByName.nothingMatches',
+                  defaultMessage: 'Nothing matches "{query}"',
+                },
+                { query: debouncedQuery }
               )}
             </p>
           </div>
@@ -92,11 +97,18 @@ export const FindFeatureByName = () => {
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery
                     ? t({ id: 'common.projects', defaultMessage: 'Projects' })
-                    : t({ id: 'appLayout.header.globalSearch.findFeatureByName.featuredProjects', defaultMessage: 'Featured Projects' }
-                      )}
+                    : t({
+                        id: 'appLayout.header.globalSearch.findFeatureByName.featuredProjects',
+                        defaultMessage: 'Featured Projects',
+                      })}
                 </h3>
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
-                  {t({ id: 'appLayout.header.globalSearch.findFeatureByName.resultCount', defaultMessage: '{count, plural, one {# result} other {# results}}' }, { count: projects.length }
+                  {t(
+                    {
+                      id: 'appLayout.header.globalSearch.findFeatureByName.resultCount',
+                      defaultMessage: '{count, plural, one {# result} other {# results}}',
+                    },
+                    { count: projects.length }
                   )}
                 </span>
               </div>
@@ -136,11 +148,18 @@ export const FindFeatureByName = () => {
                 <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
                   {hasSearchQuery
                     ? t({ id: 'common.challenges', defaultMessage: 'Challenges' })
-                    : t({ id: 'appLayout.header.globalSearch.findFeatureByName.exploreChallenges', defaultMessage: 'Explore Challenges' }
-                      )}
+                    : t({
+                        id: 'appLayout.header.globalSearch.findFeatureByName.exploreChallenges',
+                        defaultMessage: 'Explore Challenges',
+                      })}
                 </h3>
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
-                  {t({ id: 'appLayout.header.globalSearch.findFeatureByName.resultCount', defaultMessage: '{count, plural, one {# result} other {# results}}' }, { count: challenges.length }
+                  {t(
+                    {
+                      id: 'appLayout.header.globalSearch.findFeatureByName.resultCount',
+                      defaultMessage: '{count, plural, one {# result} other {# results}}',
+                    },
+                    { count: challenges.length }
                   )}
                 </span>
               </div>
@@ -181,7 +200,12 @@ export const FindFeatureByName = () => {
                   {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
                 </h3>
                 <span className="text-xs text-zinc-500 dark:text-slate-400">
-                  {t({ id: 'appLayout.header.globalSearch.findFeatureByName.resultCount', defaultMessage: '{count, plural, one {# result} other {# results}}' }, { count: tasks.length }
+                  {t(
+                    {
+                      id: 'appLayout.header.globalSearch.findFeatureByName.resultCount',
+                      defaultMessage: '{count, plural, one {# result} other {# results}}',
+                    },
+                    { count: tasks.length }
                   )}
                 </span>
               </div>

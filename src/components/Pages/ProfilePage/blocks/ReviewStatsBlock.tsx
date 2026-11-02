@@ -38,7 +38,10 @@ export const ReviewStatsBlock = () => {
           <Skeleton className="h-24 w-full" />
         ) : isError || !data ? (
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t({ id: 'profilePage.reviewStats.loadError', defaultMessage: "Couldn't load review stats." })}
+            {t({
+              id: 'profilePage.reviewStats.loadError',
+              defaultMessage: "Couldn't load review stats.",
+            })}
           </p>
         ) : (
           <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
@@ -46,7 +49,10 @@ export const ReviewStatsBlock = () => {
               <div key={status} className="flex justify-between">
                 <dt className="text-zinc-600 dark:text-slate-400">
                   {reviewStatusLabels[status] ??
-                    t({ id: 'common.statusWithStatus', defaultMessage: 'Status {status}' }, { status })}
+                    t(
+                      { id: 'common.statusWithStatus', defaultMessage: 'Status {status}' },
+                      { status }
+                    )}
                 </dt>
                 <dd className="font-medium font-mono tabular-nums">{formatNumber(count)}</dd>
               </div>

@@ -48,11 +48,16 @@ export const ProjectDetailDialogs = () => {
         <DialogContent size="lg">
           <DialogHeader>
             <DialogTitle>
-              {t({ id: 'manageProjectDetail.managers.modalTitle', defaultMessage: 'Managers and teams' })}
+              {t({
+                id: 'manageProjectDetail.managers.modalTitle',
+                defaultMessage: 'Managers and teams',
+              })}
             </DialogTitle>
             <DialogDescription>
-              {t({ id: 'manageProjectDetail.managers.modalDescription', defaultMessage: 'Who can manage this project, and at what level.' }
-              )}
+              {t({
+                id: 'manageProjectDetail.managers.modalDescription',
+                defaultMessage: 'Who can manage this project, and at what level.',
+              })}
             </DialogDescription>
           </DialogHeader>
           <div className="max-h-[70vh] overflow-y-auto pr-1">
@@ -81,12 +86,17 @@ export const ProjectDetailDialogs = () => {
               {t({ id: 'common.deleteChallenge2', defaultMessage: 'Delete challenge?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t({ id: 'common.deleteChallengeWarning', defaultMessage: 'This will delete this challenge and all its tasks. This action cannot be undone.' }
-              )}
+              {t({
+                id: 'common.deleteChallengeWarning',
+                defaultMessage:
+                  'This will delete this challenge and all its tasks. This action cannot be undone.',
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteChallenge}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
@@ -104,12 +114,17 @@ export const ProjectDetailDialogs = () => {
               {t({ id: 'common.deleteProject2', defaultMessage: 'Delete project?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t({ id: 'manageProjectDetail.content.deleteProjectDescription', defaultMessage: 'This will delete this project and all its challenges and tasks. This action cannot be undone.' }
-              )}
+              {t({
+                id: 'manageProjectDetail.content.deleteProjectDescription',
+                defaultMessage:
+                  'This will delete this project and all its challenges and tasks. This action cannot be undone.',
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t({ id: 'common.cancel', defaultMessage: 'Cancel' })}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteProject}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"

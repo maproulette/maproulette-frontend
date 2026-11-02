@@ -9,8 +9,8 @@ import {
 } from 'react'
 import {
   type IntlShape,
-  IntlProvider as ReactIntlProvider,
   ReactIntlErrorCode,
+  IntlProvider as ReactIntlProvider,
   useIntl as useReactIntl,
 } from 'react-intl'
 import { defaultLocale, type Locale, resolveInitialLocale } from './locales'

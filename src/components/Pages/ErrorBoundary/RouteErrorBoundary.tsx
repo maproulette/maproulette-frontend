@@ -36,8 +36,10 @@ const NotFoundError = () => {
   return (
     <ErrorLayout
       title={t({ id: 'errorBoundary.notFound.title', defaultMessage: '404 - Not Found' })}
-      description={t({ id: 'errorBoundary.notFound.description', defaultMessage: "The page or resource you're looking for doesn't exist." }
-      )}
+      description={t({
+        id: 'errorBoundary.notFound.description',
+        defaultMessage: "The page or resource you're looking for doesn't exist.",
+      })}
       icon={<AlertCircle className="h-16 w-16 text-yellow-500" />}
       actions={
         <>
@@ -62,8 +64,10 @@ const ForbiddenError = () => {
   return (
     <ErrorLayout
       title={t({ id: 'errorBoundary.forbidden.title', defaultMessage: '403 - Forbidden' })}
-      description={t({ id: 'errorBoundary.forbidden.description', defaultMessage: "You don't have permission to access this resource." }
-      )}
+      description={t({
+        id: 'errorBoundary.forbidden.description',
+        defaultMessage: "You don't have permission to access this resource.",
+      })}
       icon={<AlertCircle className="h-16 w-16 text-orange-500" />}
       actions={
         <>
@@ -88,8 +92,10 @@ const UnauthorizedError = () => {
   return (
     <ErrorLayout
       title={t({ id: 'errorBoundary.unauthorized.title', defaultMessage: '401 - Unauthorized' })}
-      description={t({ id: 'errorBoundary.unauthorized.description', defaultMessage: 'You need to be logged in to access this resource.' }
-      )}
+      description={t({
+        id: 'errorBoundary.unauthorized.description',
+        defaultMessage: 'You need to be logged in to access this resource.',
+      })}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       actions={
         <Button asChild>
@@ -108,8 +114,10 @@ const ServerError = ({ error, reset }: { error: HTTPError; reset?: () => void })
   return (
     <ErrorLayout
       title={t({ id: 'errorBoundary.serverError.title', defaultMessage: 'Server Error' })}
-      description={t({ id: 'errorBoundary.serverError.description', defaultMessage: 'The server encountered an error. Please try again later.' }
-      )}
+      description={t({
+        id: 'errorBoundary.serverError.description',
+        defaultMessage: 'The server encountered an error. Please try again later.',
+      })}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       details={
         import.meta.env.DEV ? (
@@ -142,10 +150,14 @@ const GenericHttpError = ({ error, reset }: { error: HTTPError; reset?: () => vo
   const { t } = useIntl()
   return (
     <ErrorLayout
-      title={t({ id: 'errorBoundary.genericHttp.title', defaultMessage: 'Error {status}' }, { status: error.response.status }
+      title={t(
+        { id: 'errorBoundary.genericHttp.title', defaultMessage: 'Error {status}' },
+        { status: error.response.status }
       )}
-      description={t({ id: 'errorBoundary.genericHttp.description', defaultMessage: 'An unexpected error occurred while loading this page.' }
-      )}
+      description={t({
+        id: 'errorBoundary.genericHttp.description',
+        defaultMessage: 'An unexpected error occurred while loading this page.',
+      })}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       details={
         import.meta.env.DEV ? (
@@ -179,8 +191,10 @@ const GenericError = ({ error, reset }: { error: Error; reset?: () => void }) =>
   return (
     <ErrorLayout
       title={t({ id: 'common.error', defaultMessage: 'Something went wrong' })}
-      description={t({ id: 'common.unexpectedErrorTryAgain', defaultMessage: 'An unexpected error occurred. Please try again.' }
-      )}
+      description={t({
+        id: 'common.unexpectedErrorTryAgain',
+        defaultMessage: 'An unexpected error occurred. Please try again.',
+      })}
       icon={<AlertCircle className="h-16 w-16 text-red-500" />}
       details={
         import.meta.env.DEV ? (

@@ -30,7 +30,9 @@ export const TeamChallengeActions = ({ challenge }: { challenge: Challenge }) =>
 
   const handleCopyLink = async () => {
     await copy(`${window.location.origin}/challenge/${challengeId}`)
-    toast.success(t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' }))
+    toast.success(
+      t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' })
+    )
   }
 
   return (
@@ -38,7 +40,9 @@ export const TeamChallengeActions = ({ challenge }: { challenge: Challenge }) =>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="h-8 w-8">
           <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">{t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}</span>
+          <span className="sr-only">
+            {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

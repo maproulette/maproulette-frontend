@@ -16,7 +16,10 @@ export const DefaultPrioritySelect = () => {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <Label className="text-sm text-zinc-700 dark:text-slate-200">
-        {t({ id: 'taskPrioritizationPage.defaultPrioritySelect.label', defaultMessage: 'Default priority' })}
+        {t({
+          id: 'taskPrioritizationPage.defaultPrioritySelect.label',
+          defaultMessage: 'Default priority',
+        })}
       </Label>
       <RadioGroup
         className="auto-cols-max grid-flow-col gap-4"

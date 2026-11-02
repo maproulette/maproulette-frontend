@@ -18,24 +18,26 @@ const makeBaseChallengeFormSchema = (t: T) =>
       .string()
       .min(
         3,
-        t({ id: 'manageChallengeNew.challengeForm.validation.nameMinLength', defaultMessage: 'Challenge name must be at least 3 characters' }
-        )
+        t({
+          id: 'manageChallengeNew.challengeForm.validation.nameMinLength',
+          defaultMessage: 'Challenge name must be at least 3 characters',
+        })
       )
       .max(255),
-    description: z
-      .string()
-      .min(
-        1,
-        t({ id: 'manageChallengeNew.challengeForm.validation.descriptionRequired', defaultMessage: 'Description is required' }
-        )
-      ),
-    instruction: z
-      .string()
-      .min(
-        1,
-        t({ id: 'manageChallengeNew.challengeForm.validation.instructionRequired', defaultMessage: 'Instructions are required' }
-        )
-      ),
+    description: z.string().min(
+      1,
+      t({
+        id: 'manageChallengeNew.challengeForm.validation.descriptionRequired',
+        defaultMessage: 'Description is required',
+      })
+    ),
+    instruction: z.string().min(
+      1,
+      t({
+        id: 'manageChallengeNew.challengeForm.validation.instructionRequired',
+        defaultMessage: 'Instructions are required',
+      })
+    ),
     difficulty: z.number().min(1).max(3),
     category: z.enum(CHALLENGE_CATEGORIES),
     additionalKeywords: z.string().optional().or(z.literal('')),
@@ -44,16 +46,20 @@ const makeBaseChallengeFormSchema = (t: T) =>
       .trim()
       .min(
         1,
-        t({ id: 'manageChallengeNew.challengeForm.validation.checkinCommentRequired', defaultMessage: 'A changeset comment is required' }
-        )
+        t({
+          id: 'manageChallengeNew.challengeForm.validation.checkinCommentRequired',
+          defaultMessage: 'A changeset comment is required',
+        })
       ),
     checkinSource: z
       .string()
       .trim()
       .min(
         1,
-        t({ id: 'manageChallengeNew.challengeForm.validation.checkinSourceRequired', defaultMessage: 'A changeset source is required' }
-        )
+        t({
+          id: 'manageChallengeNew.challengeForm.validation.checkinSourceRequired',
+          defaultMessage: 'A changeset source is required',
+        })
       ),
     dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
     overpassQL: z.string().optional().or(z.literal('')),
@@ -93,8 +99,10 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['overpassQL'],
-          message: t({ id: 'manageChallengeNew.challengeForm.validation.overpassRequired', defaultMessage: 'An Overpass query is required' }
-          ),
+          message: t({
+            id: 'manageChallengeNew.challengeForm.validation.overpassRequired',
+            defaultMessage: 'An Overpass query is required',
+          }),
         })
       }
     }
@@ -103,8 +111,10 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['localGeoJSON'],
-          message: t({ id: 'manageChallengeNew.challengeForm.validation.localGeoJSONRequired', defaultMessage: 'Please upload a GeoJSON file' }
-          ),
+          message: t({
+            id: 'manageChallengeNew.challengeForm.validation.localGeoJSONRequired',
+            defaultMessage: 'Please upload a GeoJSON file',
+          }),
         })
       }
     }
@@ -113,8 +123,10 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['remoteGeoJSON'],
-          message: t({ id: 'manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired', defaultMessage: 'A GeoJSON URL is required' }
-          ),
+          message: t({
+            id: 'manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired',
+            defaultMessage: 'A GeoJSON URL is required',
+          }),
         })
       }
     }
@@ -123,8 +135,10 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
       ctx.addIssue({
         code: 'custom',
         path: ['automatedEditsCodeAgreement'],
-        message: t({ id: 'manageChallengeNew.challengeForm.validation.agreementRequired', defaultMessage: 'You must read and accept the Automated Edits code of conduct' }
-        ),
+        message: t({
+          id: 'manageChallengeNew.challengeForm.validation.agreementRequired',
+          defaultMessage: 'You must read and accept the Automated Edits code of conduct',
+        }),
       })
     }
   })

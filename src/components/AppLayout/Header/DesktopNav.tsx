@@ -24,7 +24,12 @@ export const DesktopNav = () => {
           {item.openInNewTab && (
             <ExternalLink
               className="size-3.5 text-current"
-              aria-label={t({ id: 'appLayout.header.nav.openInNewTab', defaultMessage: 'Open {label} in a new tab' }, { label: item.label }
+              aria-label={t(
+                {
+                  id: 'appLayout.header.nav.openInNewTab',
+                  defaultMessage: 'Open {label} in a new tab',
+                },
+                { label: item.label }
               )}
             />
           )}

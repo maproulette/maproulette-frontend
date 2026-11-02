@@ -33,12 +33,16 @@ export const FindById = () => {
         </div>
         <div className="space-y-1 text-center">
           <p className="font-medium text-sm text-zinc-900 dark:text-white">
-            {t({ id: 'appLayout.header.globalSearch.findById.enterNumericId', defaultMessage: 'Enter a numeric ID' }
-            )}
+            {t({
+              id: 'appLayout.header.globalSearch.findById.enterNumericId',
+              defaultMessage: 'Enter a numeric ID',
+            })}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t({ id: 'appLayout.header.globalSearch.findById.typeIdHint', defaultMessage: 'Type a project, challenge, or task ID number' }
-            )}
+            {t({
+              id: 'appLayout.header.globalSearch.findById.typeIdHint',
+              defaultMessage: 'Type a project, challenge, or task ID number',
+            })}
           </p>
         </div>
       </div>
@@ -56,8 +60,10 @@ export const FindById = () => {
             {t({ id: 'common.findByMaprouletteId', defaultMessage: 'Find by MapRoulette ID' })}
           </p>
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t({ id: 'appLayout.header.globalSearch.findById.hint', defaultMessage: 'Enter a numeric ID to find a project, challenge, or task' }
-            )}
+            {t({
+              id: 'appLayout.header.globalSearch.findById.hint',
+              defaultMessage: 'Enter a numeric ID to find a project, challenge, or task',
+            })}
           </p>
         </div>
       </div>
@@ -92,7 +98,8 @@ export const FindById = () => {
       type: 'challenge',
       label: t({ id: 'common.challenge', defaultMessage: 'Challenge' }),
       name:
-        data.challenge.name || t({ id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' }, { id: debouncedId }),
+        data.challenge.name ||
+        t({ id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' }, { id: debouncedId }),
       href: '/challenge/$challengeId',
       params: { challengeId: String(debouncedId) },
       icon: Target,
@@ -103,7 +110,9 @@ export const FindById = () => {
     results.push({
       type: 'task',
       label: t({ id: 'common.task', defaultMessage: 'Task' }),
-      name: data.task.name || t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: debouncedId }),
+      name:
+        data.task.name ||
+        t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: debouncedId }),
       href: '/tasks/$taskId',
       params: {
         taskId: String(debouncedId),
@@ -128,7 +137,12 @@ export const FindById = () => {
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner size="lg" className="text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t({ id: 'appLayout.header.globalSearch.findById.lookingUpId', defaultMessage: 'Looking up ID {id}...' }, { id: numericId }
+            {t(
+              {
+                id: 'appLayout.header.globalSearch.findById.lookingUpId',
+                defaultMessage: 'Looking up ID {id}...',
+              },
+              { id: numericId }
             )}
           </p>
         </div>
@@ -139,12 +153,19 @@ export const FindById = () => {
           </div>
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
-              {t({ id: 'appLayout.header.globalSearch.findById.noResults', defaultMessage: 'No results for ID {id}' }, { id: debouncedId }
+              {t(
+                {
+                  id: 'appLayout.header.globalSearch.findById.noResults',
+                  defaultMessage: 'No results for ID {id}',
+                },
+                { id: debouncedId }
               )}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'appLayout.header.globalSearch.findById.noResultsHint', defaultMessage: 'No project, challenge, or task found with this ID' }
-              )}
+              {t({
+                id: 'appLayout.header.globalSearch.findById.noResultsHint',
+                defaultMessage: 'No project, challenge, or task found with this ID',
+              })}
             </p>
           </div>
         </div>
@@ -152,11 +173,21 @@ export const FindById = () => {
         <>
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-              {t({ id: 'appLayout.header.globalSearch.findById.resultsForId', defaultMessage: 'Results for ID {id}' }, { id: debouncedId }
+              {t(
+                {
+                  id: 'appLayout.header.globalSearch.findById.resultsForId',
+                  defaultMessage: 'Results for ID {id}',
+                },
+                { id: debouncedId }
               )}
             </h3>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
-              {t({ id: 'appLayout.header.globalSearch.findById.matchCount', defaultMessage: '{count, plural, one {# match} other {# matches}}' }, { count: results.length }
+              {t(
+                {
+                  id: 'appLayout.header.globalSearch.findById.matchCount',
+                  defaultMessage: '{count, plural, one {# match} other {# matches}}',
+                },
+                { count: results.length }
               )}
             </span>
           </div>

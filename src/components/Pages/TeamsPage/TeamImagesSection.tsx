@@ -52,8 +52,14 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
         <p className="truncate font-medium text-sm">{image.name}</p>
         <p className="truncate text-xs text-zinc-500 dark:text-slate-400">
           {image.requestedByName
-            ? t({ id: 'teamImages.requestedBy', defaultMessage: 'Requested by {name}' }, { name: image.requestedByName })
-            : t({ id: 'teamImages.requestedByUnknown', defaultMessage: 'Requester no longer available' })}
+            ? t(
+                { id: 'teamImages.requestedBy', defaultMessage: 'Requested by {name}' },
+                { name: image.requestedByName }
+              )
+            : t({
+                id: 'teamImages.requestedByUnknown',
+                defaultMessage: 'Requester no longer available',
+              })}
           {image.reviewComment ? ` · ${image.reviewComment}` : ''}
         </p>
       </div>
@@ -64,15 +70,21 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
           size="sm"
           onClick={handleDelete}
           disabled={deleteImage.isPending}
-          aria-label={t({ id: 'teamImages.deleteLabel', defaultMessage: 'Remove {name}' }, { name: image.name })}
+          aria-label={t(
+            { id: 'teamImages.deleteLabel', defaultMessage: 'Remove {name}' },
+            { name: image.name }
+          )}
         >
           <Trash2 className="size-4" aria-hidden="true" />
         </Button>
       ) : (
         <DisabledTooltip
           show
-          message={t({ id: 'teamImages.deleteDisabledReason', defaultMessage: 'Only a team admin, or the requester of an image still awaiting review, can remove it' }
-          )}
+          message={t({
+            id: 'teamImages.deleteDisabledReason',
+            defaultMessage:
+              'Only a team admin, or the requester of an image still awaiting review, can remove it',
+          })}
         >
           <Button
             variant="outline"
@@ -126,15 +138,19 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
     try {
       await requestImage.mutateAsync({ teamId, imageFile: file, name: name.trim() || undefined })
       toast.success(
-        t({ id: 'teamImages.requestSuccess', defaultMessage: 'Image submitted — a super admin will review it before it can be used' }
-        )
+        t({
+          id: 'teamImages.requestSuccess',
+          defaultMessage: 'Image submitted — a super admin will review it before it can be used',
+        })
       )
       setFile(null)
       setName('')
       if (fileInputRef.current) fileInputRef.current.value = ''
     } catch (error) {
       logger.error('Team image request failed', { error })
-      toast.error(t({ id: 'teamImages.requestError', defaultMessage: 'Could not submit the image' }))
+      toast.error(
+        t({ id: 'teamImages.requestError', defaultMessage: 'Could not submit the image' })
+      )
     }
   }
 
@@ -148,8 +164,11 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
           {t({ id: 'teamImages.heading', defaultMessage: 'Challenge image' })}
         </h2>
         <p className="text-xs text-zinc-500 dark:text-slate-400">
-          {t({ id: 'teamImages.description', defaultMessage: 'The image this team can put on its challenges. A team has one image: anyone on the team can request a replacement, and once a super admin approves it, it takes over from the current one on every challenge using it.' }
-          )}
+          {t({
+            id: 'teamImages.description',
+            defaultMessage:
+              'The image this team can put on its challenges. A team has one image: anyone on the team can request a replacement, and once a super admin approves it, it takes over from the current one on every challenge using it.',
+          })}
         </p>
       </div>
 
@@ -182,8 +201,11 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
           </div>
           <DisabledTooltip
             show={blockedByPending}
-            message={t({ id: 'teamImages.requestDisabledReason', defaultMessage: 'This team already has an image awaiting review. Withdraw it before requesting a different one.' }
-            )}
+            message={t({
+              id: 'teamImages.requestDisabledReason',
+              defaultMessage:
+                'This team already has an image awaiting review. Withdraw it before requesting a different one.',
+            })}
           >
             <Button
               onClick={handleSubmit}
@@ -206,7 +228,12 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
           }
         >
           {problem ??
-            t({ id: 'teamImages.fileHint', defaultMessage: 'PNG, JPEG, WebP or GIF, up to {max}MB. Square images look best.' }, { max: TEAM_IMAGE_MAX_BYTES / (1024 * 1024) }
+            t(
+              {
+                id: 'teamImages.fileHint',
+                defaultMessage: 'PNG, JPEG, WebP or GIF, up to {max}MB. Square images look best.',
+              },
+              { max: TEAM_IMAGE_MAX_BYTES / (1024 * 1024) }
             )}
         </p>
       </div>
@@ -220,14 +247,19 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
       ) : (
         <div className="space-y-3">
           <div className="space-y-2">
-            <SubHeading>{t({ id: 'teamImages.currentHeading', defaultMessage: 'In use' })}</SubHeading>
+            <SubHeading>
+              {t({ id: 'teamImages.currentHeading', defaultMessage: 'In use' })}
+            </SubHeading>
             {current ? (
               <ul>
                 <ImageRow image={current} canDelete={canDelete(current)} />
               </ul>
             ) : (
               <p className="text-sm text-zinc-600 dark:text-slate-400">
-                {t({ id: 'teamImages.empty', defaultMessage: 'This team has no challenge image yet.' })}
+                {t({
+                  id: 'teamImages.empty',
+                  defaultMessage: 'This team has no challenge image yet.',
+                })}
               </p>
             )}
           </div>
@@ -242,17 +274,24 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
               </ul>
               <p className="text-xs text-zinc-500 dark:text-slate-400">
                 {current
-                  ? t({ id: 'teamImages.pendingReplaces', defaultMessage: 'If a super admin approves this, it replaces the image in use above.' }
-                    )
-                  : t({ id: 'teamImages.pendingFirst', defaultMessage: "It becomes the team's image once a super admin approves it." }
-                    )}
+                  ? t({
+                      id: 'teamImages.pendingReplaces',
+                      defaultMessage:
+                        'If a super admin approves this, it replaces the image in use above.',
+                    })
+                  : t({
+                      id: 'teamImages.pendingFirst',
+                      defaultMessage: "It becomes the team's image once a super admin approves it.",
+                    })}
               </p>
             </div>
           )}
 
           {rejected.length > 0 && (
             <div className="space-y-2">
-              <SubHeading>{t({ id: 'teamImages.rejectedHeading', defaultMessage: 'Not approved' })}</SubHeading>
+              <SubHeading>
+                {t({ id: 'teamImages.rejectedHeading', defaultMessage: 'Not approved' })}
+              </SubHeading>
               <ul className="space-y-2">
                 {rejected.map((image) => (
                   <ImageRow key={image.id} image={image} canDelete={canDelete(image)} />

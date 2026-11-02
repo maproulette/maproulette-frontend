@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-  PROJECT_ROLE,
-  projectRoleOptions,
-  strongestRole,
-} from './projectRoles.ts'
+import { PROJECT_ROLE, projectRoleOptions, strongestRole } from './projectRoles.ts'
 
 describe('projectRoleOptions', () => {
   it('covers every role the server defines', () => {

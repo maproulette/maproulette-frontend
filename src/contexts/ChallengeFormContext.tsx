@@ -50,8 +50,10 @@ export const CreateChallengeFormProvider = ({
       const selectedProjectId = values.projectId
       if (!selectedProjectId) {
         throw new Error(
-          t({ id: 'challengeForm.errors.projectIdRequired', defaultMessage: 'Project ID is required to create a challenge' }
-          )
+          t({
+            id: 'challengeForm.errors.projectIdRequired',
+            defaultMessage: 'Project ID is required to create a challenge',
+          })
         )
       }
 

@@ -91,16 +91,22 @@ export const ChallengeForm = () => {
       await onSubmit(values)
       toast.success(
         challenge
-          ? t({ id: 'manageChallengeNew.challengeForm.updateSuccessToast', defaultMessage: 'Challenge updated successfully' }
-            )
-          : t({ id: 'manageChallengeNew.challengeForm.createSuccessToast', defaultMessage: 'Challenge created successfully' }
-            )
+          ? t({
+              id: 'manageChallengeNew.challengeForm.updateSuccessToast',
+              defaultMessage: 'Challenge updated successfully',
+            })
+          : t({
+              id: 'manageChallengeNew.challengeForm.createSuccessToast',
+              defaultMessage: 'Challenge created successfully',
+            })
       )
     } catch (error) {
       const errorMessage = await getErrorMessage(
         error,
-        t({ id: 'manageChallengeNew.challengeForm.saveErrorToast', defaultMessage: 'Failed to save challenge. Please try again.' }
-        )
+        t({
+          id: 'manageChallengeNew.challengeForm.saveErrorToast',
+          defaultMessage: 'Failed to save challenge. Please try again.',
+        })
       )
       if (isNameConflict(errorMessage)) {
         form.setError('name', { type: 'server', message: errorMessage }, { shouldFocus: true })
@@ -137,7 +143,12 @@ export const ChallengeForm = () => {
           )}
 
           <BasicInfoFields
-            namePlaceholder={t({ id: 'manageChallengeNew.challengeForm.namePlaceholder', defaultMessage: "{user}'s Challenge" }, { user: user?.osmProfile.displayName ?? '' }
+            namePlaceholder={t(
+              {
+                id: 'manageChallengeNew.challengeForm.namePlaceholder',
+                defaultMessage: "{user}'s Challenge",
+              },
+              { user: user?.osmProfile.displayName ?? '' }
             )}
           />
 
@@ -161,10 +172,14 @@ export const ChallengeForm = () => {
           <Alert variant="destructive" className="mt-4 shrink-0">
             <AlertTitle>
               {challenge
-                ? t({ id: 'manageChallengeNew.challengeForm.updateErrorTitle', defaultMessage: 'Challenge could not be updated' }
-                  )
-                : t({ id: 'manageChallengeNew.challengeForm.createErrorTitle', defaultMessage: 'Challenge could not be created' }
-                  )}
+                ? t({
+                    id: 'manageChallengeNew.challengeForm.updateErrorTitle',
+                    defaultMessage: 'Challenge could not be updated',
+                  })
+                : t({
+                    id: 'manageChallengeNew.challengeForm.createErrorTitle',
+                    defaultMessage: 'Challenge could not be created',
+                  })}
             </AlertTitle>
             <AlertDescription>{serverError}</AlertDescription>
           </Alert>
@@ -180,7 +195,13 @@ export const ChallengeForm = () => {
                   className="mr-auto flex items-center gap-1.5 text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400"
                 >
                   <CircleAlert className="h-3.5 w-3.5 shrink-0" />
-                  {t({ id: 'manageChallengeNew.challengeForm.fieldErrorsTitle', defaultMessage: '{count, plural, one {# field needs} other {# fields need}} attention' }, { count: fieldErrors.length }
+                  {t(
+                    {
+                      id: 'manageChallengeNew.challengeForm.fieldErrorsTitle',
+                      defaultMessage:
+                        '{count, plural, one {# field needs} other {# fields need}} attention',
+                    },
+                    { count: fieldErrors.length }
                   )}
                 </button>
               </PopoverTrigger>
@@ -188,8 +209,10 @@ export const ChallengeForm = () => {
                 align="start"
                 side="top"
                 className="w-80 p-2"
-                aria-label={t({ id: 'manageChallengeNew.challengeForm.fieldErrorsAriaLabel', defaultMessage: 'Fields that need attention' }
-                )}
+                aria-label={t({
+                  id: 'manageChallengeNew.challengeForm.fieldErrorsAriaLabel',
+                  defaultMessage: 'Fields that need attention',
+                })}
               >
                 <ul className="space-y-0.5">
                   {fieldErrors.map((error) => (
@@ -215,7 +238,10 @@ export const ChallengeForm = () => {
             {form.formState.isSubmitting
               ? t({ id: 'common.saving2', defaultMessage: 'Saving...' })
               : challenge
-                ? t({ id: 'manageChallengeNew.challengeForm.updateButton', defaultMessage: 'Update Challenge' })
+                ? t({
+                    id: 'manageChallengeNew.challengeForm.updateButton',
+                    defaultMessage: 'Update Challenge',
+                  })
                 : t({ id: 'common.createChallenge', defaultMessage: 'Create Challenge' })}
           </Button>
         </div>

@@ -64,15 +64,24 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
       })
       toast.success(
         status === 'actioned'
-          ? t({ id: 'superAdminChallengeReports.actionedSuccess', defaultMessage: 'Report marked actioned' })
-          : t({ id: 'superAdminChallengeReports.dismissedSuccess', defaultMessage: 'Report dismissed' })
+          ? t({
+              id: 'superAdminChallengeReports.actionedSuccess',
+              defaultMessage: 'Report marked actioned',
+            })
+          : t({
+              id: 'superAdminChallengeReports.dismissedSuccess',
+              defaultMessage: 'Report dismissed',
+            })
       )
     } catch (error) {
       logger.error('Challenge report triage failed', { status, error })
       toast.error(
         await getErrorMessage(
           error,
-          t({ id: 'superAdminChallengeReports.reviewError', defaultMessage: 'Could not record that decision' })
+          t({
+            id: 'superAdminChallengeReports.reviewError',
+            defaultMessage: 'Could not record that decision',
+          })
         )
       )
     }
@@ -94,7 +103,12 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
             <p className="font-medium text-sm">#{report.challengeId}</p>
           )}
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t({ id: 'superAdminChallengeReports.reportMeta', defaultMessage: '{project} · reported by {user} on {date}' }, {
+            {t(
+              {
+                id: 'superAdminChallengeReports.reportMeta',
+                defaultMessage: '{project} · reported by {user} on {date}',
+              },
+              {
                 project: report.projectName ?? String(report.projectId ?? ''),
                 user: report.reporterName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
                 date: formatDate(new Date(report.reportedAt), locale),
@@ -124,10 +138,15 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
           <Input
             value={reviewComment}
             onChange={(e) => setReviewComment(e.target.value)}
-            placeholder={t({ id: 'superAdminChallengeReports.commentPlaceholder', defaultMessage: 'Note (optional)' }
-            )}
+            placeholder={t({
+              id: 'superAdminChallengeReports.commentPlaceholder',
+              defaultMessage: 'Note (optional)',
+            })}
             className="w-56"
-            aria-label={t({ id: 'superAdminChallengeReports.commentLabel', defaultMessage: 'Review note' })}
+            aria-label={t({
+              id: 'superAdminChallengeReports.commentLabel',
+              defaultMessage: 'Review note',
+            })}
           />
           <Button size="sm" onClick={() => decide('actioned')} disabled={busy}>
             <Check className="size-4" aria-hidden="true" />{' '}
@@ -142,13 +161,21 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
               to="/manage/challenge/$challengeId"
               params={{ challengeId: String(report.challengeId) }}
             >
-              {t({ id: 'superAdminChallengeReports.manageChallenge', defaultMessage: 'Manage challenge' })}
+              {t({
+                id: 'superAdminChallengeReports.manageChallenge',
+                defaultMessage: 'Manage challenge',
+              })}
             </Link>
           </Button>
         </div>
       ) : (
         <p className="text-xs text-zinc-500 dark:text-slate-400">
-          {t({ id: 'superAdminChallengeReports.resolvedMeta', defaultMessage: '{status} by {user} on {date}' }, {
+          {t(
+            {
+              id: 'superAdminChallengeReports.resolvedMeta',
+              defaultMessage: '{status} by {user} on {date}',
+            },
+            {
               status: report.statusName,
               user: report.reviewedByName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
               date: report.reviewedAt ? formatDate(new Date(report.reviewedAt), locale) : '',
@@ -181,8 +208,11 @@ export const SuperAdminChallengeReports = () => {
           {t({ id: 'superAdminChallengeReports.title', defaultMessage: 'Challenge reports' })}
         </h1>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'superAdminChallengeReports.subtitle', defaultMessage: 'Reports that a challenge is poorly designed and is causing incorrect edits. Mark one actioned once you have dealt with it — by archiving the challenge, say — or dismiss it.' }
-          )}
+          {t({
+            id: 'superAdminChallengeReports.subtitle',
+            defaultMessage:
+              'Reports that a challenge is poorly designed and is causing incorrect edits. Mark one actioned once you have dealt with it — by archiving the challenge, say — or dismiss it.',
+          })}
         </p>
       </div>
 
@@ -211,8 +241,10 @@ export const SuperAdminChallengeReports = () => {
             checked={activeOnly}
             onCheckedChange={(checked) => setActiveOnly(checked === true)}
           />
-          {t({ id: 'superAdminChallengeReports.activeOnlyLabel', defaultMessage: 'Only challenges that are still active' }
-          )}
+          {t({
+            id: 'superAdminChallengeReports.activeOnlyLabel',
+            defaultMessage: 'Only challenges that are still active',
+          })}
         </label>
       </div>
 
@@ -220,7 +252,10 @@ export const SuperAdminChallengeReports = () => {
         <Loader />
       ) : isError ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'superAdminChallengeReports.loadError', defaultMessage: 'Could not load the reports.' })}
+          {t({
+            id: 'superAdminChallengeReports.loadError',
+            defaultMessage: 'Could not load the reports.',
+          })}
         </p>
       ) : reports && reports.length > 0 ? (
         <ul className="space-y-3">
@@ -235,11 +270,16 @@ export const SuperAdminChallengeReports = () => {
           </EmptyMedia>
           <EmptyContent>
             <EmptyTitle>
-              {t({ id: 'superAdminChallengeReports.emptyTitle', defaultMessage: 'Nothing to review' })}
+              {t({
+                id: 'superAdminChallengeReports.emptyTitle',
+                defaultMessage: 'Nothing to review',
+              })}
             </EmptyTitle>
             <EmptyDescription>
-              {t({ id: 'superAdminChallengeReports.emptyDescription', defaultMessage: 'No challenge reports match these filters right now.' }
-              )}
+              {t({
+                id: 'superAdminChallengeReports.emptyDescription',
+                defaultMessage: 'No challenge reports match these filters right now.',
+              })}
             </EmptyDescription>
           </EmptyContent>
         </Empty>

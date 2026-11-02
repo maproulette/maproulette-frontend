@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import {
   isUploadedTeamAvatarUrl,
   resolveTeamImageUrl,
@@ -7,7 +8,6 @@ import {
   TEAM_IMAGE_MIME_TYPES,
   teamImageFileProblem,
 } from './teamImage'
-import { testT } from '@/test/translate'
 
 const t = testT
 

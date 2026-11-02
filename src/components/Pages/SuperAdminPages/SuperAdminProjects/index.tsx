@@ -20,8 +20,10 @@ export const SuperAdminProjects = () => {
           </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          {t({ id: 'common.viewManageProjectsSubtitle', defaultMessage: 'View and manage all projects across the platform' }
-          )}
+          {t({
+            id: 'common.viewManageProjectsSubtitle',
+            defaultMessage: 'View and manage all projects across the platform',
+          })}
         </p>
       </div>
 
@@ -31,11 +33,17 @@ export const SuperAdminProjects = () => {
             <FolderKanban />
           </EmptyMedia>
           <EmptyTitle>
-            {t({ id: 'superAdminProjects.comingSoon.title', defaultMessage: 'Project management coming soon' })}
+            {t({
+              id: 'superAdminProjects.comingSoon.title',
+              defaultMessage: 'Project management coming soon',
+            })}
           </EmptyTitle>
           <EmptyDescription>
-            {t({ id: 'superAdminProjects.comingSoon.description', defaultMessage: "We're building out project management tools for super admins. Check back soon." }
-            )}
+            {t({
+              id: 'superAdminProjects.comingSoon.description',
+              defaultMessage:
+                "We're building out project management tools for super admins. Check back soon.",
+            })}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>

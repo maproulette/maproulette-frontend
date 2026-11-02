@@ -16,22 +16,32 @@ export const TaskTabsList = ({ commentsCount, taskCount }: TaskTabsListProps) =>
       <TabsList className="h-auto w-full justify-start gap-1 rounded-none bg-transparent p-0">
         <TabsTrigger value="task" className={tabTriggerClass}>
           <BookOpen className="h-3.5 w-3.5" />
-          <span className="text-xs">{t({ id: 'common.instructions', defaultMessage: 'Instructions' })}</span>
+          <span className="text-xs">
+            {t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
+          </span>
         </TabsTrigger>
         <TabsTrigger value="features" className={tabTriggerClass}>
           <Shapes className="h-3.5 w-3.5" />
           <span className="text-xs">
-            {t({ id: 'taskInfoPanel.tabs.features', defaultMessage: 'Features ({count})' }, { count: taskCount })}
+            {t(
+              { id: 'taskInfoPanel.tabs.features', defaultMessage: 'Features ({count})' },
+              { count: taskCount }
+            )}
           </span>
         </TabsTrigger>
         <TabsTrigger value="data" className={tabTriggerClass}>
           <Braces className="h-3.5 w-3.5" />
-          <span className="text-xs">{t({ id: 'taskInfoPanel.tabs.data', defaultMessage: 'Data' })}</span>
+          <span className="text-xs">
+            {t({ id: 'taskInfoPanel.tabs.data', defaultMessage: 'Data' })}
+          </span>
         </TabsTrigger>
         <TabsTrigger value="comments" className={tabTriggerClass}>
           <MessageSquare className="h-3.5 w-3.5" />
           <span className="text-xs">
-            {t({ id: 'taskInfoPanel.tabs.comments', defaultMessage: 'Comments ({count})' }, { count: commentsCount })}
+            {t(
+              { id: 'taskInfoPanel.tabs.comments', defaultMessage: 'Comments ({count})' },
+              { count: commentsCount }
+            )}
           </span>
         </TabsTrigger>
       </TabsList>

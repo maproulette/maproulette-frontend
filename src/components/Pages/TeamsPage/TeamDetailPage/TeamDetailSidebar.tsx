@@ -47,7 +47,12 @@ export const TeamDetailSidebar = () => {
               <p className="mt-1 text-sm text-zinc-600 dark:text-slate-400">{team.description}</p>
             )}
             <p className="mt-1 text-xs text-zinc-500 dark:text-slate-500">
-              {t({ id: 'teams.detail.memberCount', defaultMessage: '{count, plural, one {# member} other {# members}}' }, { count: members.length }
+              {t(
+                {
+                  id: 'teams.detail.memberCount',
+                  defaultMessage: '{count, plural, one {# member} other {# members}}',
+                },
+                { count: members.length }
               )}
             </p>
           </div>
@@ -67,8 +72,10 @@ export const TeamDetailSidebar = () => {
             </Button>
             <DisabledTooltip
               show={!iAmOwner}
-              message={t({ id: 'teams.detail.deleteDisabledReason', defaultMessage: 'Only an owner of the team can delete it' }
-              )}
+              message={t({
+                id: 'teams.detail.deleteDisabledReason',
+                defaultMessage: 'Only an owner of the team can delete it',
+              })}
             >
               <Button
                 variant="outline"

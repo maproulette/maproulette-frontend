@@ -12,8 +12,10 @@ const EditChallengeLayout = () => {
     <ManageFormLayout>
       <FormCard
         title={t({ id: 'manageChallengeEdit.pageTitle', defaultMessage: 'Challenge Editor' })}
-        description={t({ id: 'manageChallengeEdit.pageDescription', defaultMessage: 'Modify the information below to update your challenge' }
-        )}
+        description={t({
+          id: 'manageChallengeEdit.pageDescription',
+          defaultMessage: 'Modify the information below to update your challenge',
+        })}
         isLoading={isLoading}
       >
         <ChallengeForm />

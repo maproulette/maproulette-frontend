@@ -33,12 +33,16 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            {t({ id: 'managementPages.bulkActionsToolbar.statusDialog.title', defaultMessage: 'Change task status' }
-            )}
+            {t({
+              id: 'managementPages.bulkActionsToolbar.statusDialog.title',
+              defaultMessage: 'Change task status',
+            })}
           </DialogTitle>
           <DialogDescription>
-            {t({ id: 'managementPages.bulkActionsToolbar.statusDialog.description', defaultMessage: 'Updates every selected task to the chosen status.' }
-            )}
+            {t({
+              id: 'managementPages.bulkActionsToolbar.statusDialog.description',
+              defaultMessage: 'Updates every selected task to the chosen status.',
+            })}
           </DialogDescription>
         </DialogHeader>
         <Select value={status} onValueChange={setStatus}>

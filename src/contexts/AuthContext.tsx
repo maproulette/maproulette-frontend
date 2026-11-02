@@ -155,7 +155,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (loginFailed && !isLoading && !isVerifying) {
       toast.error(
-        t({ id: 'auth.loginFailed', defaultMessage: 'Sign-in failed or expired. Please try signing in again.' })
+        t({
+          id: 'auth.loginFailed',
+          defaultMessage: 'Sign-in failed or expired. Please try signing in again.',
+        })
       )
       setLoginFailed(false)
     }

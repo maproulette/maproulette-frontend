@@ -35,8 +35,10 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
         value={rule.key}
         list={propertyKeys.length ? listId : undefined}
         onChange={(e) => onChange({ ...rule, key: e.target.value })}
-        placeholder={t({ id: 'taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder', defaultMessage: 'property' }
-        )}
+        placeholder={t({
+          id: 'taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder',
+          defaultMessage: 'property',
+        })}
         className="max-w-40"
       />
       {propertyKeys.length > 0 && (
@@ -81,7 +83,10 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
         <Input
           value={rule.value}
           onChange={(e) => onChange({ ...rule, value: e.target.value })}
-          placeholder={t({ id: 'taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder', defaultMessage: 'value' })}
+          placeholder={t({
+            id: 'taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder',
+            defaultMessage: 'value',
+          })}
           className="max-w-40"
         />
       )}
@@ -95,8 +100,10 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
             checked={!!rule.commaSeparate}
             onCheckedChange={(checked) => onChange({ ...rule, commaSeparate: checked === true })}
           />
-          {t({ id: 'taskPropertyQueryBuilder.ruleLeaf.commaSeparate', defaultMessage: 'Comma-separated values' }
-          )}
+          {t({
+            id: 'taskPropertyQueryBuilder.ruleLeaf.commaSeparate',
+            defaultMessage: 'Comma-separated values',
+          })}
         </label>
       )}
       {onRemove && (
@@ -105,7 +112,10 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
           variant="ghost"
           size="icon"
           onClick={onRemove}
-          aria-label={t({ id: 'taskPropertyQueryBuilder.ruleLeaf.removeRule', defaultMessage: 'Remove rule' })}
+          aria-label={t({
+            id: 'taskPropertyQueryBuilder.ruleLeaf.removeRule',
+            defaultMessage: 'Remove rule',
+          })}
         >
           <X className="size-4" aria-hidden="true" />
         </Button>
