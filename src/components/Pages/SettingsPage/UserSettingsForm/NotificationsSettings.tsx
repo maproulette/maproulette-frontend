@@ -50,9 +50,7 @@ export const NotificationsSettings = ({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {t({ id: 'common.email', defaultMessage: 'Email' })}
-              </FormLabel>
+              <FormLabel>{t({ id: 'common.email', defaultMessage: 'Email' })}</FormLabel>
               <FormControl>
                 <Input type="email" {...field} />
               </FormControl>

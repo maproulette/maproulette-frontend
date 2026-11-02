@@ -186,12 +186,8 @@ export const SuperAdminUsers = () => {
                     <TableHead>
                       {t({ id: 'superAdminUsers.table.columns.osmId', defaultMessage: 'OSM ID' })}
                     </TableHead>
-                    <TableHead>
-                      {t({ id: 'common.email', defaultMessage: 'Email' })}
-                    </TableHead>
-                    <TableHead>
-                      {t({ id: 'common.role', defaultMessage: 'Role' })}
-                    </TableHead>
+                    <TableHead>{t({ id: 'common.email', defaultMessage: 'Email' })}</TableHead>
+                    <TableHead>{t({ id: 'common.role', defaultMessage: 'Role' })}</TableHead>
                     <TableHead>
                       {t({ id: 'superAdminUsers.table.columns.score', defaultMessage: 'Score' })}
                     </TableHead>
