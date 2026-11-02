@@ -593,6 +593,7 @@
   "manageChallengeNew.challengeForm.localGeoJSONReadOnlyBody": "This challenge was built from an uploaded GeoJSON file, which can't be shown here. To replace it with fresh GeoJSON, use Rebuild Tasks when managing your challenge.",
   "manageChallengeNew.challengeForm.localGeoJSONReadOnlyLabel": "Uploaded GeoJSON file",
   "manageChallengeNew.challengeForm.namePlaceholder": "{user}'s Challenge",
+  "manageChallengeNew.challengeForm.nameTaken": "A challenge with this name already exists in this project",
   "manageChallengeNew.challengeForm.osmIdPropertyDescription": "The feature property holding each task's identifier. Leave blank to let MapRoulette detect it.",
   "manageChallengeNew.challengeForm.osmIdPropertyDocsLink": "About task identifiers",
   "manageChallengeNew.challengeForm.osmIdPropertyLabel": "OSM/External Id Property",
