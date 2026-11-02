@@ -19,7 +19,7 @@ test('a user can start mapping a challenge from its challenge page', async ({
 
   await expect(page).toHaveURL(new RegExp(`/tasks/${task.id}`), { timeout: 30_000 })
   await expect(page.getByText(`Task #${task.id}`).first()).toBeVisible({ timeout: 20_000 })
-  await expect(page.getByText('Fix the identified issue.')).toBeVisible({ timeout: 15_000 })
+  await expect(page.getByText('Fix this point.')).toBeVisible({ timeout: 15_000 })
 
   // Deliberately not asserting that the task arrives already locked: this
   // navigation claims the task with `claimTask=true`, and the backend really

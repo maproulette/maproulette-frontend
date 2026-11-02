@@ -17,9 +17,8 @@ test('a second user is told a task is locked when they open it after the first u
   // A second, distinct real user opens the same task while it's still locked.
   await reviewerPage.goto(`/tasks/${task.id}`)
   await reviewerPage.getByRole('button', { name: 'Map this task' }).click()
-  await expect(
-    reviewerPage.getByText(
-      'This task is currently locked by another mapper. Try again later or pick a different task.'
-    )
-  ).toBeVisible({ timeout: 20_000 })
+  const dialog = reviewerPage.getByRole('dialog', { name: 'Unable to Lock Task' })
+  await expect(dialog).toBeVisible({ timeout: 20_000 })
+  await expect(dialog).toContainText('Task is currently locked by user e2e-super-user')
+  await expect(dialog.getByRole('button', { name: 'Preview Task' })).toBeVisible()
 })
