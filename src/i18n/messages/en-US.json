@@ -1319,6 +1319,7 @@
   "taskInfoPanel.comments.emptyState": "No activity yet. Be the first to comment!",
   "taskInfoPanel.comments.emptyStateReadOnly": "No activity yet.",
   "taskInfoPanel.comments.markedAs": "marked as",
+  "taskInfoPanel.comments.send": "Send comment",
   "taskInfoPanel.comments.signInPrompt": "Sign in to add comments",
   "taskInfoPanel.comments.systemUser": "System",
   "taskInfoPanel.data.areaHistory": "Area History",
