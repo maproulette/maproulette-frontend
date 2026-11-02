@@ -219,13 +219,11 @@ export const TaskActionModal = ({
               bundleId: resolvedBundleId,
               primaryTaskId: task.id,
               commentText: comment.trim(),
-              actionId: newStatus,
             })
           } else {
             await addTaskCommentMutation.mutateAsync({
               taskId: task.id,
               commentText: comment.trim(),
-              actionId: newStatus,
             })
           }
         } catch (error) {

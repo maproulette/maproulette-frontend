@@ -177,35 +177,35 @@ describe('taskComments.useAddTaskComment', () => {
 })
 
 describe('taskComments.useAddTaskComment actionId', () => {
-  it('passes the status the comment was left with as actionId', async () => {
+  it('never sends an actionId, since the backend reads it as an action row id', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify(fakeComment()), { status: 200 }))
 
     const { result } = renderHook(() => taskComments.useAddTaskComment(), {
       wrapper: queryClientWrapper(),
     })
-    result.current.mutate({ taskId: 5, commentText: 'done', actionId: 1 })
+    result.current.mutate({ taskId: 5, commentText: 'done' })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     const [request] = fetchMock.mock.calls[0]
-    expect(new URL((request as Request).url).searchParams.get('actionId')).toBe('1')
+    expect(new URL((request as Request).url).searchParams.has('actionId')).toBe(false)
   })
 })
 
 describe('taskComments.useAddTaskBundleComment', () => {
-  it('posts the comment to every task in the bundle with the status as actionId', async () => {
+  it('posts the comment to every task in the bundle without an actionId', async () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
 
     const { result } = renderHook(() => taskComments.useAddTaskBundleComment(), {
       wrapper: queryClientWrapper(),
     })
-    result.current.mutate({ bundleId: 8, primaryTaskId: 5, commentText: 'done', actionId: 2 })
+    result.current.mutate({ bundleId: 8, primaryTaskId: 5, commentText: 'done' })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     const [request] = fetchMock.mock.calls[0]
     const url = new URL((request as Request).url)
     expect((request as Request).method).toBe('POST')
     expect(url.pathname).toBe('/api/v2/taskBundle/8/comment')
-    expect(url.searchParams.get('actionId')).toBe('2')
+    expect(url.searchParams.has('actionId')).toBe(false)
     expect(await (request as Request).clone().json()).toEqual({ comment: 'done' })
   })
 })
