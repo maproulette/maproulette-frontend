@@ -17,15 +17,15 @@ export const statusHexByKey: Record<string, string> = {
 // Labels here intentionally diverge from STATUS_MESSAGES: in the action-breakdown context, "created"
 // means "available to work on" rather than the historical "Created" status name.
 export const statusMessageByKey = defineMessages({
-  created: { id: 'statusBreakdownBar.status.created', defaultMessage: 'Available' },
-  fixed: { id: 'statusBreakdownBar.status.fixed', defaultMessage: 'Fixed' },
+  created: { id: 'common.available', defaultMessage: 'Available' },
+  fixed: { id: 'common.fixed', defaultMessage: 'Fixed' },
   falsePositive: {
     id: 'statusBreakdownBar.status.falsePositive',
     defaultMessage: 'False positive',
   },
-  skipped: { id: 'statusBreakdownBar.status.skipped', defaultMessage: 'Skipped' },
-  deleted: { id: 'statusBreakdownBar.status.deleted', defaultMessage: 'Deleted' },
+  skipped: { id: 'common.skipped', defaultMessage: 'Skipped' },
+  deleted: { id: 'common.deleted', defaultMessage: 'Deleted' },
   alreadyFixed: { id: 'statusBreakdownBar.status.alreadyFixed', defaultMessage: 'Already fixed' },
-  tooHard: { id: 'statusBreakdownBar.status.tooHard', defaultMessage: "Can't Complete" },
-  disabled: { id: 'statusBreakdownBar.status.disabled', defaultMessage: 'Disabled' },
+  tooHard: { id: 'common.cantComplete', defaultMessage: "Can't Complete" },
+  disabled: { id: 'common.disabled', defaultMessage: 'Disabled' },
 })

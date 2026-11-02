@@ -28,30 +28,30 @@ export const WorkOnFilter = () => {
           </SelectItem>
           <SelectItem value="Roads / Pedestrian / Cycleways">
             {t({
-              id: 'exploreChallenges.filterBar.workOn.roadsPedestrianCycleways',
+              id: 'common.category.navigation',
               defaultMessage: 'Roads / Pedestrian / Cycleways',
             })}
           </SelectItem>
           <SelectItem value="Water">
-            {t({ id: 'exploreChallenges.filterBar.workOn.water', defaultMessage: 'Water' })}
+            {t({ id: 'common.category.water', defaultMessage: 'Water' })}
           </SelectItem>
           <SelectItem value="Points / Areas of Interest">
             {t({
-              id: 'exploreChallenges.filterBar.workOn.pointsAreasOfInterest',
+              id: 'common.category.pointsOfInterest',
               defaultMessage: 'Points / Areas of Interest',
             })}
           </SelectItem>
           <SelectItem value="Buildings">
-            {t({ id: 'exploreChallenges.filterBar.workOn.buildings', defaultMessage: 'Buildings' })}
+            {t({ id: 'common.category.buildings', defaultMessage: 'Buildings' })}
           </SelectItem>
           <SelectItem value="Land Use / Administrative Boundaries">
             {t({
-              id: 'exploreChallenges.filterBar.workOn.landUseAdministrativeBoundaries',
+              id: 'common.category.landUse',
               defaultMessage: 'Land Use / Administrative Boundaries',
             })}
           </SelectItem>
           <SelectItem value="Transit">
-            {t({ id: 'exploreChallenges.filterBar.workOn.transit', defaultMessage: 'Transit' })}
+            {t({ id: 'common.category.transit', defaultMessage: 'Transit' })}
           </SelectItem>
         </SelectContent>
       </Select>

@@ -72,10 +72,10 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
               {t({ id: 'settings.general.title', defaultMessage: 'General' })}
             </TabsTrigger>
             <TabsTrigger value="notifications">
-              {t({ id: 'settings.notifications.title', defaultMessage: 'Notifications' })}
+              {t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
             </TabsTrigger>
             <TabsTrigger value="plugins">
-              {t({ id: 'settings.plugins.title', defaultMessage: 'Plugins' })}
+              {t({ id: 'common.plugins', defaultMessage: 'Plugins' })}
             </TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>

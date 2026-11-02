@@ -89,54 +89,54 @@ const StatisticsDialogContent = ({
 
   const statusCounts: Array<{ id: string; label: string; value: number | undefined }> = [
     {
-      id: 'manageChallengeDetail.detail.statistics.available',
+      id: 'common.available',
       label: t({
-        id: 'manageChallengeDetail.detail.statistics.available',
+        id: 'common.available',
         defaultMessage: 'Available',
       }),
       value: stats?.available,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.fixed',
-      label: t({ id: 'manageChallengeDetail.detail.statistics.fixed', defaultMessage: 'Fixed' }),
+      id: 'common.fixed',
+      label: t({ id: 'common.fixed', defaultMessage: 'Fixed' }),
       value: stats?.fixed,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.falsePositive',
+      id: 'common.falsePositive',
       label: t({
-        id: 'manageChallengeDetail.detail.statistics.falsePositive',
+        id: 'common.falsePositive',
         defaultMessage: 'False Positive',
       }),
       value: stats?.falsePositive,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.skipped',
+      id: 'common.skipped',
       label: t({
-        id: 'manageChallengeDetail.detail.statistics.skipped',
+        id: 'common.skipped',
         defaultMessage: 'Skipped',
       }),
       value: stats?.skipped,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.alreadyFixed',
+      id: 'common.alreadyFixed',
       label: t({
-        id: 'manageChallengeDetail.detail.statistics.alreadyFixed',
+        id: 'common.alreadyFixed',
         defaultMessage: 'Already Fixed',
       }),
       value: stats?.alreadyFixed,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.tooHard',
+      id: 'common.cantComplete',
       label: t({
-        id: 'manageChallengeDetail.detail.statistics.tooHard',
+        id: 'common.cantComplete',
         defaultMessage: "Can't Complete",
       }),
       value: stats?.tooHard,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.disabled',
+      id: 'common.disabled',
       label: t({
-        id: 'manageChallengeDetail.detail.statistics.disabled',
+        id: 'common.disabled',
         defaultMessage: 'Disabled',
       }),
       value: stats?.disabled,

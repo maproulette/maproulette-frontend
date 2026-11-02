@@ -77,7 +77,7 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
           onClick={() => {
             copy(url)
             toast.success(
-              t({ id: 'shareLink.popover.copied', defaultMessage: 'Copied to clipboard' })
+              t({ id: 'common.copiedToClipboard', defaultMessage: 'Copied to clipboard' })
             )
           }}
           aria-label={t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}

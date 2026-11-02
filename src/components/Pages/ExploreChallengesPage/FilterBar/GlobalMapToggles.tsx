@@ -17,7 +17,7 @@ export const GlobalToggle = () => {
         onCheckedChange={(checked) => setGlobal(checked)}
       />
       <span className="text-sm text-zinc-700 dark:text-zinc-300">
-        {t({ id: 'exploreChallenges.filterBar.global.label', defaultMessage: 'Global' })}
+        {t({ id: 'common.global', defaultMessage: 'Global' })}
       </span>
     </Label>
   )

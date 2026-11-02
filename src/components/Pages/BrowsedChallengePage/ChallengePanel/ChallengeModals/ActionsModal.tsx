@@ -72,7 +72,7 @@ export const ActionsModal = () => {
                 <div>
                   <p className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
                     {t({
-                      id: 'browsedChallengePage.challengeModals.actions.completed',
+                      id: 'common.completed',
                       defaultMessage: 'Completed',
                     })}
                   </p>
@@ -139,7 +139,7 @@ export const ActionsModal = () => {
                   {validated !== undefined && validated > 0 && (
                     <MetaRow
                       label={t({
-                        id: 'browsedChallengePage.challengeModals.actions.validated',
+                        id: 'common.validated',
                         defaultMessage: 'Validated',
                       })}
                       value={formatNumber(validated)}

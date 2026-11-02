@@ -151,7 +151,7 @@ export const ProjectDetailSidebar = () => {
               >
                 <Users className="h-4 w-4" />
                 {t({
-                  id: 'manageProjectDetail.content.manageAccess',
+                  id: 'manageProjectDetail.managers.modalTitle',
                   defaultMessage: 'Managers and teams',
                 })}
               </Button>

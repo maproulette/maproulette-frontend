@@ -71,7 +71,7 @@ export const FieldApiKey = ({ apiKey, userId }: Props) => {
                   copy(apiKey)
                   toast.success(
                     t({
-                      id: 'settings.apiKey.copiedToClipboard',
+                      id: 'common.copiedToClipboard',
                       defaultMessage: 'Copied to clipboard',
                     })
                   )

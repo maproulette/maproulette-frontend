@@ -108,7 +108,7 @@ export const TaskPickerMenu = ({ picker, onSelect, onClose }: TaskPickerMenuProp
               >
                 <span className="font-medium tabular-nums">
                   {t(
-                    { id: 'map.taskPicker.task', defaultMessage: 'Task #{taskId}' },
+                    { id: 'common.taskWithTaskId', defaultMessage: 'Task #{taskId}' },
                     { taskId: marker.id }
                   )}
                 </span>

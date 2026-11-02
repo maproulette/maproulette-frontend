@@ -43,7 +43,7 @@ export const SuperAdminHome = () => {
             </div>
             <CardTitle>
               <Link to="/super-admin/users" className="stretched-link">
-                {t({ id: 'superAdminHome.cards.users.title', defaultMessage: 'Users' })}
+                {t({ id: 'common.users', defaultMessage: 'Users' })}
               </Link>
             </CardTitle>
             <CardDescription>
@@ -183,7 +183,7 @@ export const SuperAdminHome = () => {
             </div>
             <CardTitle>
               <Link to="/super-admin/plugins" className="stretched-link">
-                {t({ id: 'superAdminHome.cards.plugins.title', defaultMessage: 'Plugins' })}
+                {t({ id: 'common.plugins', defaultMessage: 'Plugins' })}
               </Link>
             </CardTitle>
             <CardDescription>
@@ -250,7 +250,7 @@ export const SuperAdminHome = () => {
           </CardHeader>
           <CardContent>
             <Button variant="outline" className="w-full" disabled>
-              {t({ id: 'superAdminHome.cards.database.button', defaultMessage: 'Coming Soon' })}
+              {t({ id: 'common.comingSoon', defaultMessage: 'Coming Soon' })}
             </Button>
           </CardContent>
         </Card>

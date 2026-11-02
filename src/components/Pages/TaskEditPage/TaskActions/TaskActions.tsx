@@ -110,7 +110,7 @@ export const TaskActions = () => {
         id: 'taskEditPage.taskActions.main.markFalsePositiveTitle',
         defaultMessage: 'Mark as False Positive',
       }),
-      label: t({ id: 'taskEditPage.taskActions.main.notAnIssue', defaultMessage: 'Not an Issue' }),
+      label: t({ id: 'common.notAnIssue', defaultMessage: 'Not an Issue' }),
     },
     {
       status: TASK_STATUS.tooHard,
@@ -176,7 +176,7 @@ export const TaskActions = () => {
         <Button variant="success" size="lg" className="w-full" onClick={login}>
           <LogIn />
           {t({
-            id: 'taskEditPage.taskActions.main.signInToMap',
+            id: 'common.signInToMapTask',
             defaultMessage: 'Sign in to map this task',
           })}
         </Button>

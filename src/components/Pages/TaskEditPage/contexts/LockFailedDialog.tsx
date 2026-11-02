@@ -86,7 +86,7 @@ export const LockFailedDialog = ({
           </Button>
           <Button variant="outline" onClick={onBrowseChallenge} disabled={busy}>
             {t({
-              id: 'taskEditPage.lockFailedDialog.browseChallenge',
+              id: 'common.browseChallengeButton',
               defaultMessage: 'Browse Challenge',
             })}
           </Button>

@@ -121,7 +121,7 @@ export const PropertyFilterButton = () => {
             }}
           >
             {t({
-              id: 'manageChallengeDetail.tasksExplorer.propertyFilterApply',
+              id: 'common.apply',
               defaultMessage: 'Apply',
             })}
           </Button>

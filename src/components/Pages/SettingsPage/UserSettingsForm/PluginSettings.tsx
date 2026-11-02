@@ -92,7 +92,7 @@ export const PluginSettings = () => {
   if (loading) {
     return (
       <FieldSet>
-        <FieldLegend>{t({ id: 'settings.plugins.title', defaultMessage: 'Plugins' })}</FieldLegend>
+        <FieldLegend>{t({ id: 'common.plugins', defaultMessage: 'Plugins' })}</FieldLegend>
         <FieldDescription>
           {t({ id: 'settings.plugins.loading', defaultMessage: 'Loading plugins...' })}
         </FieldDescription>
@@ -102,7 +102,7 @@ export const PluginSettings = () => {
 
   return (
     <FieldSet className="min-h-0 flex-auto">
-      <FieldLegend>{t({ id: 'settings.plugins.title', defaultMessage: 'Plugins' })}</FieldLegend>
+      <FieldLegend>{t({ id: 'common.plugins', defaultMessage: 'Plugins' })}</FieldLegend>
       <FieldDescription>
         {t({
           id: 'settings.plugins.description',

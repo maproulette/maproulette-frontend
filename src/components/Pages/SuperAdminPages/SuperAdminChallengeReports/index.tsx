@@ -79,7 +79,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
         await getErrorMessage(
           error,
           t({
-            id: 'superAdminChallengeReports.reviewError',
+            id: 'superAdminReview.reviewError',
             defaultMessage: 'Could not record that decision',
           })
         )
@@ -139,12 +139,12 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
             value={reviewComment}
             onChange={(e) => setReviewComment(e.target.value)}
             placeholder={t({
-              id: 'superAdminChallengeReports.commentPlaceholder',
+              id: 'superAdminReview.commentPlaceholder',
               defaultMessage: 'Note (optional)',
             })}
             className="w-56"
             aria-label={t({
-              id: 'superAdminChallengeReports.commentLabel',
+              id: 'superAdminReview.commentLabel',
               defaultMessage: 'Review note',
             })}
           />
@@ -162,7 +162,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
               params={{ challengeId: String(report.challengeId) }}
             >
               {t({
-                id: 'superAdminChallengeReports.manageChallenge',
+                id: 'common.manageChallenge',
                 defaultMessage: 'Manage challenge',
               })}
             </Link>
@@ -253,7 +253,7 @@ export const SuperAdminChallengeReports = () => {
       ) : isError ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
           {t({
-            id: 'superAdminChallengeReports.loadError',
+            id: 'common.reportsLoadError',
             defaultMessage: 'Could not load the reports.',
           })}
         </p>
@@ -271,7 +271,7 @@ export const SuperAdminChallengeReports = () => {
           <EmptyContent>
             <EmptyTitle>
               {t({
-                id: 'superAdminChallengeReports.emptyTitle',
+                id: 'superAdminReview.emptyTitle',
                 defaultMessage: 'Nothing to review',
               })}
             </EmptyTitle>

@@ -138,7 +138,7 @@ export const ChallengeFooter = () => {
                 ? t({ id: 'common.loading2', defaultMessage: 'Loading...' })
                 : isBrowseOnly
                   ? t({
-                      id: 'browsedChallengePage.footer.browseChallenge',
+                      id: 'common.browseChallengeButton',
                       defaultMessage: 'Browse Challenge',
                     })
                   : t({

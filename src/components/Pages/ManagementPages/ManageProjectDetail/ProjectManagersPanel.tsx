@@ -110,7 +110,7 @@ export const ProjectManagersPanel = () => {
       logger.error('Failed to grant project role', { userId, projectId: id, error })
       toast.error(
         t({
-          id: 'manageProjectDetail.managers.addFailed',
+          id: 'managers.addFailed',
           defaultMessage: 'Could not add that manager',
         })
       )
@@ -124,7 +124,7 @@ export const ProjectManagersPanel = () => {
       toast.success(
         t(
           {
-            id: 'manageProjectDetail.managers.teamAdded',
+            id: 'manageProjectDetail.managers.added',
             defaultMessage: '{name} can now manage this project',
           },
           { name: teamName }
@@ -134,7 +134,7 @@ export const ProjectManagersPanel = () => {
       logger.error('Failed to grant team project role', { teamId, projectId: id, error })
       toast.error(
         t({
-          id: 'manageProjectDetail.managers.addTeamFailed',
+          id: 'managers.addTeamFailed',
           defaultMessage: 'Could not add that team',
         })
       )
@@ -161,7 +161,7 @@ export const ProjectManagersPanel = () => {
       {isLoading ? (
         <Loader
           message={t({
-            id: 'manageProjectDetail.managers.loading',
+            id: 'managers.loading',
             defaultMessage: 'Loading managers...',
           })}
         />
@@ -188,7 +188,7 @@ export const ProjectManagersPanel = () => {
                   className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                   onClick={() => removeUser.mutate({ userId: manager.userId, projectId: id, role })}
                   aria-label={t(
-                    { id: 'manageProjectDetail.managers.remove', defaultMessage: 'Remove {name}' },
+                    { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
                     { name: manager.displayName }
                   )}
                 >
@@ -199,7 +199,7 @@ export const ProjectManagersPanel = () => {
           })}
           {managers?.length === 0 && (
             <li className="text-sm text-zinc-500 dark:text-zinc-400">
-              {t({ id: 'manageProjectDetail.managers.none', defaultMessage: 'No managers yet.' })}
+              {t({ id: 'managers.none', defaultMessage: 'No managers yet.' })}
             </li>
           )}
         </ul>
@@ -207,7 +207,7 @@ export const ProjectManagersPanel = () => {
 
       <div className="space-y-2">
         <Label htmlFor={addManagerId}>
-          {t({ id: 'manageProjectDetail.managers.addLabel', defaultMessage: 'Add a manager' })}
+          {t({ id: 'managers.addLabel', defaultMessage: 'Add a manager' })}
         </Label>
         <div className="flex gap-2">
           <Input
@@ -215,7 +215,7 @@ export const ProjectManagersPanel = () => {
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
             placeholder={t({
-              id: 'manageProjectDetail.managers.searchPlaceholder',
+              id: 'managers.searchPlaceholder',
               defaultMessage: 'OpenStreetMap username',
             })}
           />
@@ -238,7 +238,7 @@ export const ProjectManagersPanel = () => {
             {userMatches?.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
                 {t({
-                  id: 'manageProjectDetail.managers.noMatches',
+                  id: 'managers.noMatches',
                   defaultMessage: 'No matching users',
                 })}
               </li>
@@ -249,11 +249,11 @@ export const ProjectManagersPanel = () => {
 
       <Separator />
       <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-        {t({ id: 'manageProjectDetail.managers.teamsTitle', defaultMessage: 'Teams' })}
+        {t({ id: 'common.teams', defaultMessage: 'Teams' })}
       </h4>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
         {t({
-          id: 'manageProjectDetail.managers.teamsDescription',
+          id: 'managers.teamsDescription',
           defaultMessage:
             'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.',
         })}
@@ -270,7 +270,7 @@ export const ProjectManagersPanel = () => {
                 onClick={() => removeTeam.mutate({ teamId: team.id, projectId: id })}
                 aria-label={t(
                   {
-                    id: 'manageProjectDetail.managers.removeTeam',
+                    id: 'common.removeWithName',
                     defaultMessage: 'Remove {name}',
                   },
                   { name: team.name }
@@ -283,14 +283,14 @@ export const ProjectManagersPanel = () => {
         })}
         {teamManagers?.length === 0 && (
           <li className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t({ id: 'manageProjectDetail.managers.noTeams', defaultMessage: 'No teams yet.' })}
+            {t({ id: 'managers.noTeams', defaultMessage: 'No teams yet.' })}
           </li>
         )}
       </ul>
 
       <div className="space-y-2">
         <Label htmlFor={addTeamId}>
-          {t({ id: 'manageProjectDetail.managers.addTeamLabel', defaultMessage: 'Add a team' })}
+          {t({ id: 'managers.addTeamLabel', defaultMessage: 'Add a team' })}
         </Label>
         <div className="flex gap-2">
           <Input
@@ -298,7 +298,7 @@ export const ProjectManagersPanel = () => {
             value={teamQuery}
             onChange={(e) => setTeamQuery(e.target.value)}
             placeholder={t({
-              id: 'manageProjectDetail.managers.teamSearchPlaceholder',
+              id: 'managers.teamSearchPlaceholder',
               defaultMessage: 'Team name',
             })}
           />
@@ -322,7 +322,7 @@ export const ProjectManagersPanel = () => {
             {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
                 {t({
-                  id: 'manageProjectDetail.managers.noTeamMatches',
+                  id: 'managers.noTeamMatches',
                   defaultMessage: 'No matching teams',
                 })}
               </li>

@@ -63,7 +63,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
         align="end"
         sideOffset={10}
         aria-label={t({
-          id: 'appLayout.header.notifications.panelAriaLabel',
+          id: 'common.notifications',
           defaultMessage: 'Notifications',
         })}
         className="flex w-96 max-w-[calc(100vw-2rem)] flex-col p-4"

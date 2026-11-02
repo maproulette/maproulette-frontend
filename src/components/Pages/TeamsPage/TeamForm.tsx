@@ -272,7 +272,7 @@ export const TeamForm = ({ team }: Props) => {
                           )
                         : t(
                             {
-                              id: 'teams.form.avatarHint',
+                              id: 'teamImages.fileHint',
                               defaultMessage:
                                 'PNG, JPEG, WebP or GIF, up to {max}MB. Square images look best.',
                             },

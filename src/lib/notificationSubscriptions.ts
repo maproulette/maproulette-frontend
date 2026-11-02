@@ -93,7 +93,7 @@ export const SUBSCRIPTION_FIELDS = [
   {
     key: 'mention',
     label: defineMessage({
-      id: 'notificationSubscriptions.field.mention.label',
+      id: 'common.mentions',
       defaultMessage: 'Mentions',
     }),
     description: defineMessage({
@@ -159,7 +159,7 @@ export const SUBSCRIPTION_FIELDS = [
   {
     key: 'team',
     label: defineMessage({
-      id: 'notificationSubscriptions.field.team.label',
+      id: 'common.teams',
       defaultMessage: 'Teams',
     }),
     description: defineMessage({

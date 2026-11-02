@@ -93,7 +93,7 @@ export const MultiTaskPanel = () => {
                   })
                 : withBindingHint(
                     t({
-                      id: 'taskMap.multiTaskPanel.drawTooltip',
+                      id: 'taskMap.multiTaskPanel.drawButton',
                       defaultMessage: 'Draw to add tasks',
                     }),
                     MAP_BINDINGS.startDrawing

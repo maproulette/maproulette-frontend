@@ -101,7 +101,7 @@ export const ChallengeTeamSection = () => {
 
   return (
     <FormSection
-      title={t({ id: 'manageChallengeNew.challengeForm.teamTitle', defaultMessage: 'Team' })}
+      title={t({ id: 'ownerTeam.title', defaultMessage: 'Team' })}
       description={t({
         id: 'manageChallengeNew.challengeForm.teamDescription',
         defaultMessage:
@@ -122,7 +122,7 @@ export const ChallengeTeamSection = () => {
             ) : isError ? (
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 {t({
-                  id: 'manageChallengeNew.challengeForm.teamLoadError',
+                  id: 'ownerTeam.loadError',
                   defaultMessage: 'Could not load your teams.',
                 })}
               </p>
@@ -131,7 +131,7 @@ export const ChallengeTeamSection = () => {
                 <ul className={TILE_GRID}>
                   <TeamTile
                     label={t({
-                      id: 'manageChallengeNew.challengeForm.teamNoneOption',
+                      id: 'ownerTeam.noneOption',
                       defaultMessage: 'No team',
                     })}
                     selected={field.value == null}
@@ -168,7 +168,7 @@ export const ChallengeTeamSection = () => {
                       className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       {t({
-                        id: 'manageChallengeNew.challengeForm.teamGoToTeams',
+                        id: 'ownerTeam.goToTeams',
                         defaultMessage: 'Your teams',
                       })}
                     </Link>

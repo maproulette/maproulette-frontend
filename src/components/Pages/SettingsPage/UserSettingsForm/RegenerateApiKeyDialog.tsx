@@ -89,7 +89,7 @@ export const RegenerateApiKeyDialog = ({ userId, open, onOpenChange }: Props) =>
                   copy(revealedKey)
                   toast.success(
                     t({
-                      id: 'settings.apiKey.copiedToClipboard',
+                      id: 'common.copiedToClipboard',
                       defaultMessage: 'Copied to clipboard',
                     })
                   )

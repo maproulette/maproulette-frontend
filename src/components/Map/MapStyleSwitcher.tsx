@@ -92,7 +92,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
                 onClick={() => handleRemove(custom.id)}
                 className="rounded p-2 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 aria-label={t(
-                  { id: 'map.styleSwitcher.removeLayer', defaultMessage: 'Remove {name}' },
+                  { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
                   { name: custom.name }
                 )}
               >
@@ -107,7 +107,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
         <div className="mt-2 space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
           <div className="space-y-1">
             <Label htmlFor={`${fieldId}-name`}>
-              {t({ id: 'map.styleSwitcher.nameLabel', defaultMessage: 'Name' })}
+              {t({ id: 'common.name', defaultMessage: 'Name' })}
             </Label>
             <Input
               id={`${fieldId}-name`}
@@ -121,7 +121,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
           </div>
           <div className="space-y-1">
             <Label htmlFor={`${fieldId}-type`}>
-              {t({ id: 'map.styleSwitcher.typeLabel', defaultMessage: 'Type' })}
+              {t({ id: 'common.type', defaultMessage: 'Type' })}
             </Label>
             <Select value={type} onValueChange={(v) => setType(v as CustomLayerType)}>
               <SelectTrigger id={`${fieldId}-type`} className="w-full">

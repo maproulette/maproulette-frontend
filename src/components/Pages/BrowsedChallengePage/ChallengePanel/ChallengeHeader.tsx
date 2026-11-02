@@ -237,7 +237,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
 
   if (challenge.cooperativeType === COOPERATIVE_TYPE_TAGS) {
     taxonomyItems.push({
-      label: t({ id: 'browsedChallengePage.header.taxonomy.tagFix', defaultMessage: 'Tag Fix' }),
+      label: t({ id: 'common.tagFix', defaultMessage: 'Tag Fix' }),
       className: 'text-rose-500 dark:text-rose-400',
     })
   }
@@ -245,7 +245,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
   if (challenge.cooperativeType === COOPERATIVE_TYPE_CHANGEFILE) {
     taxonomyItems.push({
       label: t({
-        id: 'browsedChallengePage.header.taxonomy.cooperative',
+        id: 'common.cooperative',
         defaultMessage: 'Cooperative',
       }),
       className: 'text-rose-500 dark:text-rose-400',
@@ -538,7 +538,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onClick={openComments}
           >
             <MessageSquare className="size-3.5" />
-            {t({ id: 'browsedChallengePage.header.comments', defaultMessage: 'Comments' })}
+            {t({ id: 'common.comments', defaultMessage: 'Comments' })}
           </Button>
           <DisabledTooltip show={needsSignIn} message={saveSignInMsg} className="w-full sm:w-auto">
             <Button

@@ -111,7 +111,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
                   challengeName ??
                   t(
                     {
-                      id: 'taskPrioritizationPage.content.challengeNumber',
+                      id: 'common.challengeWithChallengeId',
                       defaultMessage: 'Challenge #{challengeId}',
                     },
                     { challengeId }

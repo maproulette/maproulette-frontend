@@ -16,7 +16,7 @@ export const SuperAdminChallenges = () => {
             {t({ id: 'common.allChallenges', defaultMessage: 'All Challenges' })}
           </h1>
           <Badge variant="secondary">
-            {t({ id: 'superAdminChallenges.comingSoonBadge', defaultMessage: 'Coming Soon' })}
+            {t({ id: 'common.comingSoon', defaultMessage: 'Coming Soon' })}
           </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">

@@ -105,7 +105,7 @@ export const ProjectTeamSection = () => {
 
   return (
     <FormSection
-      title={t({ id: 'manageProjectNew.projectForm.teamTitle', defaultMessage: 'Team' })}
+      title={t({ id: 'ownerTeam.title', defaultMessage: 'Team' })}
       description={t({
         id: 'manageProjectNew.projectForm.teamDescription',
         defaultMessage:
@@ -126,7 +126,7 @@ export const ProjectTeamSection = () => {
             ) : isError ? (
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 {t({
-                  id: 'manageProjectNew.projectForm.teamLoadError',
+                  id: 'ownerTeam.loadError',
                   defaultMessage: 'Could not load your teams.',
                 })}
               </p>
@@ -135,7 +135,7 @@ export const ProjectTeamSection = () => {
                 <ul className={TILE_GRID}>
                   <TeamTile
                     label={t({
-                      id: 'manageProjectNew.projectForm.teamNoneOption',
+                      id: 'ownerTeam.noneOption',
                       defaultMessage: 'No team',
                     })}
                     selected={field.value == null}
@@ -172,7 +172,7 @@ export const ProjectTeamSection = () => {
                       className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       {t({
-                        id: 'manageProjectNew.projectForm.teamGoToTeams',
+                        id: 'ownerTeam.goToTeams',
                         defaultMessage: 'Your teams',
                       })}
                     </Link>

@@ -48,7 +48,7 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
               <span>
                 {t(
                   {
-                    id: 'dashboard.contributions.lockedTasks.taskId',
+                    id: 'common.taskWithId',
                     defaultMessage: 'Task #{id}',
                   },
                   { id: lockedTask.id }
@@ -59,7 +59,7 @@ export const LockedTasksBlock = ({ userId }: LockedTasksBlockProps) => {
                   <Package className="h-3 w-3" />
                   {t(
                     {
-                      id: 'dashboard.contributions.lockedTasks.bundleCount',
+                      id: 'common.tasksWithCount',
                       defaultMessage: '{count, plural, one {# task} other {# tasks}}',
                     },
                     { count: lockedTask.bundledTasks?.length ?? 0 }

@@ -62,7 +62,7 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
             {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button onClick={() => onConfirm(Number(status))}>
-            {t({ id: 'managementPages.bulkActionsToolbar.apply', defaultMessage: 'Apply' })}
+            {t({ id: 'common.apply', defaultMessage: 'Apply' })}
           </Button>
         </DialogFooter>
       </DialogContent>

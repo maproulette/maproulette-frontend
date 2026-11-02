@@ -67,14 +67,14 @@ export const NOTIFICATION_STATUSES: NotificationStatus[] = ['all', 'unread', 're
 export const NOTIFICATION_CATEGORY_MESSAGES: Record<NotificationCategory, MessageDescriptor> =
   defineMessages({
     all: { id: 'notificationsPage.filters.category.all', defaultMessage: 'All' },
-    task_comment: { id: 'notificationsPage.filters.category.comments', defaultMessage: 'Comments' },
-    mention: { id: 'notificationsPage.filters.category.mentions', defaultMessage: 'Mentions' },
+    task_comment: { id: 'common.comments', defaultMessage: 'Comments' },
+    mention: { id: 'common.mentions', defaultMessage: 'Mentions' },
     review: { id: 'notificationsPage.filters.category.reviews', defaultMessage: 'Reviews' },
     challenge: {
-      id: 'notificationsPage.filters.category.challenges',
+      id: 'common.challenges',
       defaultMessage: 'Challenges',
     },
-    team: { id: 'notificationsPage.filters.category.teams', defaultMessage: 'Teams' },
+    team: { id: 'common.teams', defaultMessage: 'Teams' },
     system: { id: 'notificationsPage.filters.category.system', defaultMessage: 'System' },
   })
 

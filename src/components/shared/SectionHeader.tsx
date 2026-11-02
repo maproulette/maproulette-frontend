@@ -19,12 +19,12 @@ interface SectionHeaderProps {
 /** Maps singular entity path segments to their plural list page path and label catalog id */
 const ENTITY_LIST_ROUTES: Record<string, { label: MessageDescriptor; path: string }> = {
   project: {
-    label: defineMessage({ id: 'shared.sectionHeader.entityProjects', defaultMessage: 'projects' }),
+    label: defineMessage({ id: 'common.projects2', defaultMessage: 'projects' }),
     path: '/manage/projects',
   },
   challenge: {
     label: defineMessage({
-      id: 'shared.sectionHeader.entityChallenges',
+      id: 'common.challenges2',
       defaultMessage: 'challenges',
     }),
     path: '/manage/challenges',

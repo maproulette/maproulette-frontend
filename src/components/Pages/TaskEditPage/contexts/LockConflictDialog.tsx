@@ -37,7 +37,7 @@ export const LockConflictDialog = ({ conflict, onOpenChange, onConfirm, busy }: 
           <DialogTitle className="flex items-center gap-2">
             <LockOpen className="size-5 text-amber-500" aria-hidden="true" />
             {t({
-              id: 'taskEditPage.lockConflictDialog.title',
+              id: 'taskEditPage.lockConflictModal.title',
               defaultMessage: 'You already have a task locked',
             })}
           </DialogTitle>

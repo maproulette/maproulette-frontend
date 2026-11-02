@@ -48,7 +48,7 @@ export const SuperAdminSettings = () => {
             {t({ id: 'superAdminSettings.title', defaultMessage: 'Platform Settings' })}
           </h1>
           <Badge variant="secondary">
-            {t({ id: 'superAdminSettings.comingSoonBadge', defaultMessage: 'Coming Soon' })}
+            {t({ id: 'common.comingSoon', defaultMessage: 'Coming Soon' })}
           </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">

@@ -93,7 +93,7 @@ export const NotificationsPageContent = () => {
     <div className="h-full overflow-auto">
       <div className="container mx-auto max-w-4xl px-4 py-6">
         <PageHeader
-          title={t({ id: 'notificationsPage.content.title', defaultMessage: 'Notifications' })}
+          title={t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
           description={t({
             id: 'notificationsPage.content.description',
             defaultMessage: 'View and manage your notifications',

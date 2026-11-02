@@ -167,7 +167,7 @@ export const ReportHistoryModal = () => {
         ) : isError ? (
           <p className="py-6 text-center text-sm text-zinc-600 dark:text-slate-400">
             {t({
-              id: 'browsedChallengePage.challengeModals.reportHistory.loadError',
+              id: 'common.reportsLoadError',
               defaultMessage: 'Could not load the reports.',
             })}
           </p>

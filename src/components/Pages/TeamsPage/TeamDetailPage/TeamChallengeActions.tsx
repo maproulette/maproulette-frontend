@@ -66,7 +66,7 @@ export const TeamChallengeActions = ({ challenge }: { challenge: Challenge }) =>
               className="flex cursor-pointer items-center gap-2"
             >
               <Settings className="h-4 w-4" />
-              {t({ id: 'teams.detail.manageChallenge', defaultMessage: 'Manage challenge' })}
+              {t({ id: 'common.manageChallenge', defaultMessage: 'Manage challenge' })}
             </Link>
           </DropdownMenuItem>
         )}

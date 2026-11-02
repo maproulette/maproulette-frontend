@@ -43,7 +43,7 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
       logger.error('Team image review failed', { decision, error })
       toast.error(
         t({
-          id: 'superAdminTeamImages.reviewError',
+          id: 'superAdminReview.reviewError',
           defaultMessage: 'Could not record that decision',
         })
       )
@@ -88,11 +88,11 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         placeholder={t({
-          id: 'superAdminTeamImages.commentPlaceholder',
+          id: 'superAdminReview.commentPlaceholder',
           defaultMessage: 'Note (optional)',
         })}
         className="w-56"
-        aria-label={t({ id: 'superAdminTeamImages.commentLabel', defaultMessage: 'Review note' })}
+        aria-label={t({ id: 'superAdminReview.commentLabel', defaultMessage: 'Review note' })}
       />
       <div className="flex gap-2">
         <Button size="sm" onClick={() => decide('approve')} disabled={busy}>
@@ -152,7 +152,7 @@ export const SuperAdminTeamImages = () => {
           </EmptyMedia>
           <EmptyContent>
             <EmptyTitle>
-              {t({ id: 'superAdminTeamImages.emptyTitle', defaultMessage: 'Nothing to review' })}
+              {t({ id: 'superAdminReview.emptyTitle', defaultMessage: 'Nothing to review' })}
             </EmptyTitle>
             <EmptyDescription>
               {t({

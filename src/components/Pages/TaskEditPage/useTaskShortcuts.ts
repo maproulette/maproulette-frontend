@@ -36,7 +36,7 @@ export const useMappingAvailability = () => {
   const { isAuthenticated } = useAuthContext()
 
   const disabledReason = !isAuthenticated
-    ? t({ id: 'keyboardShortcuts.unavailable.signIn', defaultMessage: 'Sign in to map this task' })
+    ? t({ id: 'common.signInToMapTask', defaultMessage: 'Sign in to map this task' })
     : challenge.paused
       ? t({
           id: 'keyboardShortcuts.unavailable.paused',

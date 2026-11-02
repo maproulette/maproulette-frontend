@@ -5,10 +5,10 @@ export const SORT_FIELDS = [{ value: 'id' }, { value: 'status' }, { value: 'prio
 export type SortField = (typeof SORT_FIELDS)[number]['value']
 
 export const SORT_FIELD_MESSAGES: Record<SortField, MessageDescriptor> = defineMessages({
-  id: { id: 'manageChallengeDetail.tasksExplorer.sortFieldId', defaultMessage: 'ID' },
-  status: { id: 'manageChallengeDetail.tasksExplorer.sortFieldStatus', defaultMessage: 'Status' },
+  id: { id: 'common.id', defaultMessage: 'ID' },
+  status: { id: 'common.status', defaultMessage: 'Status' },
   priority: {
-    id: 'manageChallengeDetail.tasksExplorer.sortFieldPriority',
+    id: 'common.priority',
     defaultMessage: 'Priority',
   },
 })

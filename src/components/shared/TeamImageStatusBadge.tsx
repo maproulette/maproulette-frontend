@@ -18,7 +18,7 @@ export const TeamImageStatusBadge = ({ status, className }: TeamImageStatusBadge
 
   const { label, tone } = {
     [TEAM_IMAGE_STATUS_PENDING]: {
-      label: t({ id: 'teamImages.status.pending', defaultMessage: 'Awaiting review' }),
+      label: t({ id: 'teamImages.pendingHeading', defaultMessage: 'Awaiting review' }),
       tone: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100',
     },
     [TEAM_IMAGE_STATUS_APPROVED]: {

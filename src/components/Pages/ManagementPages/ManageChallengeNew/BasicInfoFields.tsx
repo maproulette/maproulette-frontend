@@ -33,24 +33,24 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
 
   const categoryLabels: Record<ChallengeCategory, string> = {
     navigation: t({
-      id: 'manageChallengeNew.challengeForm.category.navigation',
+      id: 'common.category.navigation',
       defaultMessage: 'Roads / Pedestrian / Cycleways',
     }),
-    water: t({ id: 'manageChallengeNew.challengeForm.category.water', defaultMessage: 'Water' }),
+    water: t({ id: 'common.category.water', defaultMessage: 'Water' }),
     pointsOfInterest: t({
-      id: 'manageChallengeNew.challengeForm.category.pointsOfInterest',
+      id: 'common.category.pointsOfInterest',
       defaultMessage: 'Points / Areas of Interest',
     }),
     buildings: t({
-      id: 'manageChallengeNew.challengeForm.category.buildings',
+      id: 'common.category.buildings',
       defaultMessage: 'Buildings',
     }),
     landUse: t({
-      id: 'manageChallengeNew.challengeForm.category.landUse',
+      id: 'common.category.landUse',
       defaultMessage: 'Land Use / Administrative Boundaries',
     }),
     transit: t({
-      id: 'manageChallengeNew.challengeForm.category.transit',
+      id: 'common.category.transit',
       defaultMessage: 'Transit',
     }),
     other: t({ id: 'manageChallengeNew.challengeForm.category.other', defaultMessage: 'Other' }),

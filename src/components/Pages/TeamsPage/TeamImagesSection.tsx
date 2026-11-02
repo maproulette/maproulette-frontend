@@ -213,7 +213,7 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
             >
               <ImagePlus className="size-4" aria-hidden="true" />{' '}
               {requestImage.isPending
-                ? t({ id: 'teamImages.requesting', defaultMessage: 'Submitting...' })
+                ? t({ id: 'common.submitting', defaultMessage: 'Submitting...' })
                 : current
                   ? t({ id: 'teamImages.replaceButton', defaultMessage: 'Request replacement' })
                   : t({ id: 'teamImages.requestButton', defaultMessage: 'Request image' })}

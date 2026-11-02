@@ -109,7 +109,7 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
                 <SelectTrigger
                   size="sm"
                   className="w-32"
-                  aria-label={t({ id: 'teams.detail.roleLabel', defaultMessage: 'Role' })}
+                  aria-label={t({ id: 'common.role', defaultMessage: 'Role' })}
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -178,8 +178,8 @@ export const TeamMembersTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t({ id: 'teams.detail.columnName', defaultMessage: 'Name' })}</TableHead>
-            <TableHead>{t({ id: 'teams.detail.roleLabel', defaultMessage: 'Role' })}</TableHead>
+            <TableHead>{t({ id: 'common.name', defaultMessage: 'Name' })}</TableHead>
+            <TableHead>{t({ id: 'common.role', defaultMessage: 'Role' })}</TableHead>
             <TableHead>{t({ id: 'common.status', defaultMessage: 'Status' })}</TableHead>
             <TableHead className="text-right">
               {t({ id: 'common.actions', defaultMessage: 'Actions' })}

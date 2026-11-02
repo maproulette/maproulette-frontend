@@ -102,7 +102,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       logger.error('Failed to grant challenge role', { userId, challengeId, error })
       toast.error(
         t({
-          id: 'manageChallengeDetail.managers.addFailed',
+          id: 'managers.addFailed',
           defaultMessage: 'Could not add that manager',
         })
       )
@@ -139,7 +139,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       toast.success(
         t(
           {
-            id: 'manageChallengeDetail.managers.teamAdded',
+            id: 'manageChallengeDetail.managers.added',
             defaultMessage: '{name} can now manage this challenge',
           },
           { name: teamName }
@@ -149,7 +149,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       logger.error('Failed to grant challenge team role', { teamId, challengeId, error })
       toast.error(
         t({
-          id: 'manageChallengeDetail.managers.addTeamFailed',
+          id: 'managers.addTeamFailed',
           defaultMessage: 'Could not add that team',
         })
       )
@@ -175,7 +175,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       {isLoading ? (
         <Loader
           message={t({
-            id: 'manageChallengeDetail.managers.loading',
+            id: 'managers.loading',
             defaultMessage: 'Loading managers...',
           })}
         />
@@ -199,7 +199,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 onClick={() => handleRemove(manager.userId, manager.name)}
                 aria-label={t(
-                  { id: 'manageChallengeDetail.managers.remove', defaultMessage: 'Remove {name}' },
+                  { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
                   { name: manager.name }
                 )}
               >
@@ -209,7 +209,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
           ))}
           {managers?.length === 0 && (
             <li className="text-sm text-zinc-500 dark:text-zinc-400">
-              {t({ id: 'manageChallengeDetail.managers.none', defaultMessage: 'No managers yet.' })}
+              {t({ id: 'managers.none', defaultMessage: 'No managers yet.' })}
             </li>
           )}
         </ul>
@@ -217,7 +217,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
 
       <div className="space-y-2">
         <Label htmlFor={addManagerId}>
-          {t({ id: 'manageChallengeDetail.managers.addLabel', defaultMessage: 'Add a manager' })}
+          {t({ id: 'managers.addLabel', defaultMessage: 'Add a manager' })}
         </Label>
         <div className="flex gap-2">
           <Input
@@ -225,7 +225,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
             placeholder={t({
-              id: 'manageChallengeDetail.managers.searchPlaceholder',
+              id: 'managers.searchPlaceholder',
               defaultMessage: 'OpenStreetMap username',
             })}
           />
@@ -248,7 +248,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             {userMatches?.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
                 {t({
-                  id: 'manageChallengeDetail.managers.noMatches',
+                  id: 'managers.noMatches',
                   defaultMessage: 'No matching users',
                 })}
               </li>
@@ -259,11 +259,11 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
 
       <Separator />
       <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-        {t({ id: 'manageChallengeDetail.managers.teamsTitle', defaultMessage: 'Teams' })}
+        {t({ id: 'common.teams', defaultMessage: 'Teams' })}
       </h4>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
         {t({
-          id: 'manageChallengeDetail.managers.teamsDescription',
+          id: 'managers.teamsDescription',
           defaultMessage:
             'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.',
         })}
@@ -280,7 +280,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
                 onClick={() => removeTeam.mutate({ challengeId, teamId: team.id })}
                 aria-label={t(
                   {
-                    id: 'manageChallengeDetail.managers.removeTeam',
+                    id: 'common.removeWithName',
                     defaultMessage: 'Remove {name}',
                   },
                   { name: team.name }
@@ -293,14 +293,14 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
         })}
         {teamManagers?.length === 0 && (
           <li className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t({ id: 'manageChallengeDetail.managers.noTeams', defaultMessage: 'No teams yet.' })}
+            {t({ id: 'managers.noTeams', defaultMessage: 'No teams yet.' })}
           </li>
         )}
       </ul>
 
       <div className="space-y-2">
         <Label htmlFor={addTeamId}>
-          {t({ id: 'manageChallengeDetail.managers.addTeamLabel', defaultMessage: 'Add a team' })}
+          {t({ id: 'managers.addTeamLabel', defaultMessage: 'Add a team' })}
         </Label>
         <div className="flex gap-2">
           <Input
@@ -308,7 +308,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             value={teamQuery}
             onChange={(e) => setTeamQuery(e.target.value)}
             placeholder={t({
-              id: 'manageChallengeDetail.managers.teamSearchPlaceholder',
+              id: 'managers.teamSearchPlaceholder',
               defaultMessage: 'Team name',
             })}
           />
@@ -332,7 +332,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
                 {t({
-                  id: 'manageChallengeDetail.managers.noTeamMatches',
+                  id: 'managers.noTeamMatches',
                   defaultMessage: 'No matching teams',
                 })}
               </li>

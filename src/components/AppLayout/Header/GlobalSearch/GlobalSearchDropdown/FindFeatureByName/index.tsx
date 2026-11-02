@@ -149,7 +149,7 @@ export const FindFeatureByName = () => {
                   {hasSearchQuery
                     ? t({ id: 'common.challenges', defaultMessage: 'Challenges' })
                     : t({
-                        id: 'appLayout.header.globalSearch.findFeatureByName.exploreChallenges',
+                        id: 'appLayout.header.nav.exploreChallenges',
                         defaultMessage: 'Explore Challenges',
                       })}
                 </h3>

@@ -29,7 +29,7 @@ export const NotificationsSettings = ({
   return (
     <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>
-        {t({ id: 'settings.notifications.title', defaultMessage: 'Notifications' })}
+        {t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
       </FieldLegend>
       <FieldDescription>
         {t({
@@ -51,7 +51,7 @@ export const NotificationsSettings = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                {t({ id: 'settings.notifications.emailLabel', defaultMessage: 'Email' })}
+                {t({ id: 'common.email', defaultMessage: 'Email' })}
               </FormLabel>
               <FormControl>
                 <Input type="email" {...field} />

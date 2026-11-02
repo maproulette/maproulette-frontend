@@ -54,7 +54,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
           >
             <Play className="h-4 w-4" />
             {t({
-              id: 'dashboard.savedChallenges.actions.browse',
+              id: 'common.browseChallenge',
               defaultMessage: 'Browse challenge',
             })}
           </Link>
@@ -68,7 +68,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
             >
               <Settings className="h-4 w-4" />
               {t({
-                id: 'dashboard.savedChallenges.actions.manage',
+                id: 'common.manageChallenge',
                 defaultMessage: 'Manage challenge',
               })}
             </Link>

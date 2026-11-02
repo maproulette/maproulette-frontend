@@ -40,7 +40,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   // The primary button opens embedded iD for a tag fix, so it must say so
   // rather than advertising the mapper's usual editor.
   const primaryEditorLabel = isTagFix
-    ? t({ id: 'taskEditPage.taskActions.editorButton.editInId', defaultMessage: 'Edit in iD' })
+    ? t({ id: 'taskEditPage.taskMap.editInIdShort', defaultMessage: 'Edit in iD' })
     : currentEditorOption.label
 
   const handleSetDefaultEditor = async (editorValue: number) => {
