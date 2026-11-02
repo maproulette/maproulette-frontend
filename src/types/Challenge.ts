@@ -97,6 +97,8 @@ export type Challenge = Omit<
    * writes it, but it is not declared on `BaseChallenge` in the API spec.
    */
   ownerTeamId?: number | null
+  presets?: string[] | null
+  datasetUrl?: string | null
   completionMetrics?: CompletionMetrics
 }
 

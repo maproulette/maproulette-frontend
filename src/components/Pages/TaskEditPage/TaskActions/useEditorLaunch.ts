@@ -84,6 +84,9 @@ export const useEditorLaunch = (task: Task) => {
         const [lng, lat] =
           mapView || tasks.length > 1 ? bboxCenter(taskBounds) : task.location.coordinates
         const zoom = mapView ? Math.round(mapView.mapZoom * 100) / 100 : DEFAULT_EDITOR_ZOOM
+        const presets = challenge?.presets?.length
+          ? `presets=${encodeURIComponent(challenge.presets.join(','))}`
+          : null
         const imagery = editorImageryForStyle(mapView?.mapRef.current?.getMap().getStyle())
 
         const checkinComment = buildChangesetComment(challenge, task)
@@ -111,6 +114,7 @@ export const useEditorLaunch = (task: Task) => {
             if (checkinComment) hashParts.push(`comment=${encodeURIComponent(checkinComment)}`)
             if (checkinSource) hashParts.push(`source=${encodeURIComponent(checkinSource)}`)
             if (imagery) hashParts.push(editorBackgroundParam(imagery))
+            if (presets) hashParts.push(presets)
             const query = selectionParts.length ? `&${selectionParts.join('&')}` : ''
             editorUrl = `https://www.openstreetmap.org/edit?editor=id${query}#${hashParts.join('&')}`
             break
@@ -202,7 +206,10 @@ export const useEditorLaunch = (task: Task) => {
             if (checkinComment) parts.push(`comment=${encodeURIComponent(checkinComment)}`)
             if (checkinSource) parts.push(`source=${encodeURIComponent(checkinSource)}`)
             if (imagery) parts.push(editorBackgroundParam(imagery))
+            if (presets) parts.push(presets)
             parts.push(`map=${zoom}/${lat}/${lng}`)
+            if (challenge?.datasetUrl)
+              parts.push(`data=${encodeURIComponent(challenge.datasetUrl)}`)
             editorUrl = `https://rapideditor.org/edit#${parts.join('&')}`
             break
           }
