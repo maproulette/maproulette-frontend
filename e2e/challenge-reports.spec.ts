@@ -1,3 +1,4 @@
+import type { ChallengeReport } from '@/types/ChallengeReport'
 import { BACKEND_URL, expect, test } from './fixtures'
 
 // Reporting a challenge, end to end: a mapper files one, a second mapper files
@@ -20,12 +21,7 @@ test('a mapper can file a report, and it names them', async ({ challenge, mapper
   )
   expect(response.status()).toBe(201)
 
-  const report = (await response.json()) as {
-    challengeId: number
-    reporterId: number
-    status: number
-    statusName: string
-  }
+  const report = (await response.json()) as ChallengeReport
   expect(report.challengeId).toBe(challenge.id)
   expect(report.reporterId).toBe(mapperRequest.user.id)
   // A new report is open until an admin rules on it.
@@ -151,7 +147,7 @@ test('a super admin can action a report, and the reporter sees the outcome only'
     `${BACKEND_URL}/api/v2/challenge/${challenge.id}/report`,
     { data: { comment: REPORT_TEXT } }
   )
-  const report = (await filed.json()) as { id: number }
+  const report = (await filed.json()) as ChallengeReport
 
   const decided = await request.put(`${BACKEND_URL}/api/v2/challenge/report/${report.id}/status`, {
     headers: { 'Content-Type': 'application/json' },
@@ -186,7 +182,7 @@ test('resolving a report frees the reporter to raise the challenge again', async
     `${BACKEND_URL}/api/v2/challenge/${challenge.id}/report`,
     { data: { comment: REPORT_TEXT } }
   )
-  const report = (await filed.json()) as { id: number }
+  const report = (await filed.json()) as ChallengeReport
 
   await request.put(`${BACKEND_URL}/api/v2/challenge/report/${report.id}/status`, {
     headers: { 'Content-Type': 'application/json' },
@@ -205,7 +201,7 @@ test('an ordinary mapper cannot rule on a report', async ({ challenge, mapperReq
     `${BACKEND_URL}/api/v2/challenge/${challenge.id}/report`,
     { data: { comment: REPORT_TEXT } }
   )
-  const report = (await filed.json()) as { id: number }
+  const report = (await filed.json()) as ChallengeReport
 
   // Not even on their own report.
   const response = await mapperRequest.request.put(

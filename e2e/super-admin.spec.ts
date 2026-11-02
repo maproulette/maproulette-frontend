@@ -1,11 +1,5 @@
+import type { UserWhoamiResponse } from '@/types/User'
 import { BACKEND_URL, expect, test } from './fixtures'
-
-interface WhoamiUser {
-  id: number
-  osmProfile: {
-    displayName: string
-  }
-}
 
 test('the super-admin users page lists the real authenticated user from the backend', async ({
   page,
@@ -16,7 +10,7 @@ test('the super-admin users page lists the real authenticated user from the back
   // render from the database.
   const whoamiResponse = await request.get(`${BACKEND_URL}/api/v2/user/whoami`)
   expect(whoamiResponse.ok()).toBeTruthy()
-  const currentUser = (await whoamiResponse.json()) as WhoamiUser
+  const currentUser = (await whoamiResponse.json()) as UserWhoamiResponse
 
   await page.goto('/super-admin/users')
 

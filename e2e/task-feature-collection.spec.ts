@@ -1,4 +1,5 @@
 import type { APIRequestContext } from '@playwright/test'
+import type { Task } from '@/types/Task'
 import { BACKEND_URL, expect, test } from './fixtures'
 
 // A task built from a GeoJSON FeatureCollection holds several features at
@@ -32,7 +33,7 @@ const createTaskWithGeometries = async (
     },
   })
   expect(response.ok(), `task creation failed: ${response.status()}`).toBeTruthy()
-  return ((await response.json()) as { id: number }).id
+  return ((await response.json()) as Task).id
 }
 
 test('every feature of a FeatureCollection task is listed, and one can be singled out', async ({
