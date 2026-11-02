@@ -13,6 +13,11 @@ import { editorOptions } from '@/data/account.json'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { isTagFixTask } from '@/lib/cooperativeWork'
+import {
+  editorBackgroundParam,
+  editorImageryForStyle,
+  josmImageryCommand,
+} from '@/lib/editorImagery'
 import { JOSM_HOST, sendJosmCommands } from '@/lib/josmRemoteControl'
 import { logger } from '@/lib/logger'
 import { josmImportUrl, referenceLayers } from '@/lib/taskAttachments'
@@ -79,6 +84,7 @@ export const useEditorLaunch = (task: Task) => {
         const [lng, lat] =
           mapView || tasks.length > 1 ? bboxCenter(taskBounds) : task.location.coordinates
         const zoom = mapView ? Math.round(mapView.mapZoom * 100) / 100 : DEFAULT_EDITOR_ZOOM
+        const imagery = editorImageryForStyle(mapView?.mapRef.current?.getMap().getStyle())
 
         const checkinComment = buildChangesetComment(challenge, task)
         const checkinSource = challenge?.checkinSource ?? ''
@@ -104,6 +110,7 @@ export const useEditorLaunch = (task: Task) => {
             const hashParts = [`map=${zoom}/${lat}/${lng}`]
             if (checkinComment) hashParts.push(`comment=${encodeURIComponent(checkinComment)}`)
             if (checkinSource) hashParts.push(`source=${encodeURIComponent(checkinSource)}`)
+            if (imagery) hashParts.push(editorBackgroundParam(imagery))
             const query = selectionParts.length ? `&${selectionParts.join('&')}` : ''
             editorUrl = `https://www.openstreetmap.org/edit?editor=id${query}#${hashParts.join('&')}`
             break
@@ -194,6 +201,7 @@ export const useEditorLaunch = (task: Task) => {
             if (selection) parts.push(`id=${selection}`)
             if (checkinComment) parts.push(`comment=${encodeURIComponent(checkinComment)}`)
             if (checkinSource) parts.push(`source=${encodeURIComponent(checkinSource)}`)
+            if (imagery) parts.push(editorBackgroundParam(imagery))
             parts.push(`map=${zoom}/${lat}/${lng}`)
             editorUrl = `https://rapideditor.org/edit#${parts.join('&')}`
             break
@@ -219,6 +227,7 @@ export const useEditorLaunch = (task: Task) => {
           )
 
         if (josmCommands.length > 0) {
+          if (imagery) josmCommands.push(josmImageryCommand(JOSM_HOST, imagery))
           void sendJosmCommands(josmCommands).then((opened) => {
             if (opened) {
               notifyOpened()
