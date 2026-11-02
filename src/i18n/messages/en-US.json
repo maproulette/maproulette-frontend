@@ -636,7 +636,7 @@
   "manageChallenges.content.manageProjectsLink": "Manage Projects",
   "manageChallenges.content.quickLinks": "Quick Links",
   "manageChallenges.content.taskPriorityRulesLink": "Task Priority Rules",
-  "manageChallenges.content.tipMonitorProgressBody": "Check completion rates and review feedback. Archive challenges once all tasks are resolved.",
+  "manageChallenges.content.tipMonitorProgressBody": "Check completion rates and mapper comments. Archive challenges once all tasks are resolved.",
   "manageChallenges.content.tipMonitorProgressTitle": "Monitor progress",
   "manageChallenges.content.tipSetDifficultyBody": "Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.",
   "manageChallenges.content.tipSetDifficultyTitle": "Set appropriate difficulty",
