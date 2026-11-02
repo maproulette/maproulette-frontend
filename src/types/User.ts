@@ -16,20 +16,8 @@ interface UserTaskMetrics {
   avgTimeSpent: number
 }
 
-export interface UserReviewMetrics {
-  total: number
-  requested: number
-  approved: number
-  rejected: number
-  assisted: number
-  disputed: number
-  avgReviewTime: number
-}
-
 export interface UserMetricsResponse {
   tasks?: UserTaskMetrics
-  reviewTasks?: UserReviewMetrics
-  asReviewerTasks?: UserReviewMetrics
 }
 
 export type UserSettings = components['schemas']['org.maproulette.framework.model.UserSettings']
