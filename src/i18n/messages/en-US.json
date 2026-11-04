@@ -1136,7 +1136,6 @@
   "superAdminTeamImages.requestMeta": "{team} · requested by {user} on {date}",
   "superAdminTeamImages.subtitle": "Images teams have requested for their challenges. A team carries a single image, so approving a request replaces the one that team is using, including on the challenges already showing it.",
   "superAdminTeamImages.title": "Team challenge images",
-  "superAdminUsers.addButton": "Add New User",
   "superAdminUsers.empty.description": "This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term.",
   "superAdminUsers.empty.title": "No matching users on this page",
   "superAdminUsers.searchPlaceholder": "Search this page by name or email...",
