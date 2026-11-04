@@ -227,4 +227,55 @@ describe('user basemap settings', () => {
       defaultBasemapId: '',
     })
   })
+
+  it('loads an MR3 custom basemap as the custom option with its URL', () => {
+    const values = getDefaultValues(
+      settings({ defaultBasemap: 3, defaultBasemapId: 'https://tiles.example/{z}/{x}/{y}.png' }),
+      'en-US'
+    )
+    expect(values.defaultBasemap).toBe(3)
+    expect(values.defaultBasemapId).toBe('https://tiles.example/{z}/{x}/{y}.png')
+    expect(formSchema.safeParse(values).success).toBe(true)
+  })
+
+  it('stores a custom basemap URL the way MR3 did', () => {
+    const stored = settings({ defaultBasemap: -1 })
+    const values = {
+      ...getDefaultValues(stored, 'en-US'),
+      defaultBasemap: 3,
+      defaultBasemapId: ' https://tiles.example/{z}/{x}/{y}.png ',
+    }
+    expect(basemapSettings(values, stored)).toEqual({
+      defaultBasemap: 3,
+      defaultBasemapId: 'https://tiles.example/{z}/{x}/{y}.png',
+    })
+  })
+
+  it('requires a URL when the custom basemap is picked', () => {
+    const result = formSchema.safeParse({ ...validInput, defaultBasemap: 3, defaultBasemapId: ' ' })
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.error.issues[0].path).toEqual(['defaultBasemapId'])
+    }
+  })
+
+  it('drops the custom URL when another basemap is picked', () => {
+    const stored = settings({
+      defaultBasemap: 3,
+      defaultBasemapId: 'https://tiles.example/{z}/{x}/{y}',
+    })
+    const values = { ...getDefaultValues(stored, 'en-US'), defaultBasemap: -1 }
+    expect(basemapSettings(values, stored)).toEqual({ defaultBasemap: -1, defaultBasemapId: '' })
+  })
+
+  it.each(['Mapbox', 'OpenAerialMapMosaic', 'tf-cycle'])(
+    'keeps an MR3 %s basemap, which has no style here, as the current basemap',
+    (layerId) => {
+      const values = getDefaultValues(
+        settings({ defaultBasemap: 4, defaultBasemapId: layerId }),
+        'en-US'
+      )
+      expect(values.defaultBasemap).toBe('current')
+    }
+  )
 })
