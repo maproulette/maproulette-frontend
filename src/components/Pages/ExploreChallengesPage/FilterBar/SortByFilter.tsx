@@ -30,7 +30,7 @@ export const SortByFilter = () => {
           <SelectItem value="created">
             {t({ id: 'common.newest', defaultMessage: 'Newest' })}
           </SelectItem>
-          <SelectItem value="modified">
+          <SelectItem value="oldest">
             {t({ id: 'exploreChallenges.filterBar.sortBy.oldest', defaultMessage: 'Oldest' })}
           </SelectItem>
           <SelectItem value="popularity">
