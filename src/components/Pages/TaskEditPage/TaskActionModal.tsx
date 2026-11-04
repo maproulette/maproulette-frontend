@@ -386,7 +386,7 @@ export const TaskActionModal = ({
             <DialogDescription>
               {t({
                 id: 'taskEditPage.taskActionModal.description',
-                defaultMessage: 'Update the task status and optionally add a comment or tags',
+                defaultMessage: 'Update the task status and optionally add a comment',
               })}
             </DialogDescription>
           </DialogHeader>

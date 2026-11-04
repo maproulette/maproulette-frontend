@@ -1209,7 +1209,7 @@
   "taskEditPage.taskActionModal.commentLabel": "Comment (Optional)",
   "taskEditPage.taskActionModal.commentPlaceholder": "Add any notes or comments about this task...",
   "taskEditPage.taskActionModal.completeAndContinue": "Complete & Continue",
-  "taskEditPage.taskActionModal.description": "Update the task status and optionally add a comment or tags",
+  "taskEditPage.taskActionModal.description": "Update the task status and optionally add a comment",
   "taskEditPage.taskActionModal.nearbyTask.description": "Select a task near the current one, or auto-select the nearest",
   "taskEditPage.taskActionModal.nearbyTask.label": "Nearby Task",
   "taskEditPage.taskActionModal.nextTask": "Next Task",
