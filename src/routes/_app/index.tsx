@@ -22,6 +22,7 @@ const challengesSearchSchema = z.object({
     .enum([
       'name',
       'created',
+      'oldest',
       'modified',
       'popularity',
       'difficulty',

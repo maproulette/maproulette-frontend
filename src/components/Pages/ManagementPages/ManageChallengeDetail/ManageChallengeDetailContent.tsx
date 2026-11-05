@@ -80,7 +80,7 @@ const StatisticsDialogContent = ({
   const { data: statsData, isLoading } = api.challenge.getChallengeStats(challengeId)
   const challengeStats = statsData?.[0]
   const stats = challengeStats?.actions
-  const tasksRemaining = stats?.available ?? challengeData?.completionMetrics?.tasksRemaining ?? 0
+  const tasksRemaining = challengeData?.completionMetrics?.tasksRemaining ?? stats?.available ?? 0
   const totalTasks = stats?.total ?? 0
   const completedTasks = totalTasks > 0 ? totalTasks - tasksRemaining : 0
   const completionPercentage =
@@ -102,11 +102,8 @@ const StatisticsDialogContent = ({
       value: stats?.fixed,
     },
     {
-      id: 'common.falsePositive',
-      label: t({
-        id: 'common.falsePositive',
-        defaultMessage: 'False Positive',
-      }),
+      id: 'common.notAnIssue',
+      label: t({ id: 'common.notAnIssue', defaultMessage: 'Not an Issue' }),
       value: stats?.falsePositive,
     },
     {

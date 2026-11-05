@@ -7128,6 +7128,7 @@ export interface operations {
         sortBy?:
           | 'name'
           | 'created'
+          | 'oldest'
           | 'modified'
           | 'popularity'
           | 'difficulty'
@@ -7171,6 +7172,7 @@ export interface operations {
         sortBy?:
           | 'name'
           | 'created'
+          | 'oldest'
           | 'modified'
           | 'popularity'
           | 'difficulty'

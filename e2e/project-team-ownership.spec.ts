@@ -1,3 +1,4 @@
+import type { Project } from '@/types/Project'
 import { BACKEND_URL, expect, test } from './fixtures'
 
 // Giving a project to a team from the project form, the same way a challenge
@@ -42,7 +43,7 @@ test('choosing a team on the form gives the project to that team', async ({
 
   // The server is the authority on whether ownership actually took.
   const response = await request.get(`${BACKEND_URL}/api/v2/project/${project.id}`)
-  const body = (await response.json()) as { ownerTeamId?: number; avatarUrl?: string }
+  const body = (await response.json()) as Project
   expect(body.ownerTeamId).toBe(team.id)
 })
 
@@ -58,7 +59,7 @@ test('a project owned by a team carries that team image url', async ({
   await expect(page).toHaveURL(`/manage/project/${project.id}`, { timeout: 15_000 })
 
   const response = await request.get(`${BACKEND_URL}/api/v2/project/${project.id}`)
-  const body = (await response.json()) as { avatarUrl?: string }
+  const body = (await response.json()) as Project
 
   // The url is addressed by owning team and answers 404 until that team has an
   // approved image, which is why a card can carry one and still show nothing.
@@ -77,7 +78,7 @@ test('a project can be handed back from a team', async ({ page, project, team, r
   await expect(page).toHaveURL(`/manage/project/${project.id}`, { timeout: 15_000 })
 
   const response = await request.get(`${BACKEND_URL}/api/v2/project/${project.id}`)
-  const body = (await response.json()) as { ownerTeamId?: number | null; avatarUrl?: string }
+  const body = (await response.json()) as Project
   expect(body.ownerTeamId ?? null).toBeNull()
   // No owning team means no picture at all, rather than a url that 404s.
   expect(body.avatarUrl).toBeUndefined()

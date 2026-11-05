@@ -107,8 +107,8 @@ export const TaskActions = () => {
       icon: <Flag />,
       onClick: handleMarkAsFalsePositive,
       title: t({
-        id: 'taskEditPage.taskActions.main.markFalsePositiveTitle',
-        defaultMessage: 'Mark as False Positive',
+        id: 'taskEditPage.taskActions.main.markNotAnIssueTitle',
+        defaultMessage: 'Mark as Not an Issue',
       }),
       label: t({ id: 'common.notAnIssue', defaultMessage: 'Not an Issue' }),
     },

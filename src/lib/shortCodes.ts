@@ -170,7 +170,8 @@ export const tokenizeInstructions = (content: string | null | undefined): Instru
 export const hasShortCodes = (content: string | null | undefined): boolean =>
   tokenizeInstructions(content).some((token) => token.kind !== 'text')
 
-const OSM_BASE_URL = (): string => window.env?.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
+export const OSM_BASE_URL = (): string =>
+  window.env?.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
 
 /**
  * Rewrite OSM element and viewport short codes as Markdown links, for text

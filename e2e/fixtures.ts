@@ -1,6 +1,12 @@
 import { execFileSync } from 'node:child_process'
 import { createHash, createHmac, randomUUID } from 'node:crypto'
 import { type APIRequest, type APIRequestContext, test as base, type Page } from '@playwright/test'
+import type { Challenge } from '@/types/Challenge'
+import type { components } from '@/types/openApiTypes'
+import type { Project } from '@/types/Project'
+import type { Task } from '@/types/Task'
+import type { Team } from '@/types/Team'
+import type { UserWhoamiResponse } from '@/types/User'
 
 // Where the test stack's backend is listening. Overridable so the stack can sit
 // beside a local development backend on 9000 rather than fighting it for the
@@ -89,6 +95,13 @@ export function newSessionRequest(api: APIRequest, user: SessionUser) {
 const uniqueName = (prefix: string) =>
   `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`
 
+export const storedProjectId = (project: Project): number => {
+  if (project.id === undefined) {
+    throw new Error(`The backend returned project ${project.name} without an id`)
+  }
+  return project.id
+}
+
 export interface TestProject {
   id: number
   name: string
@@ -125,8 +138,8 @@ async function createProject(request: APIRequestContext, name: string): Promise<
   if (!response.ok()) {
     throw new Error(`Failed to create project: ${response.status()} ${await response.text()}`)
   }
-  const body = (await response.json()) as { id: number }
-  return { id: body.id, name }
+  const body = (await response.json()) as Project
+  return { id: storedProjectId(body), name }
 }
 
 async function deleteProject(request: APIRequestContext, id: number): Promise<void> {
@@ -164,7 +177,7 @@ async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
       console.warn(`Lock teardown could not identify the acting user: ${whoami.status()}`)
       return
     }
-    const { id: userId } = (await whoami.json()) as { id: number }
+    const { id: userId } = (await whoami.json()) as UserWhoamiResponse
 
     const locked = await request.get(`${BACKEND_URL}/api/v2/user/${userId}/lockedTasks`)
     if (!locked.ok()) {
@@ -172,7 +185,7 @@ async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
       return
     }
 
-    for (const task of (await locked.json()) as { id: number }[]) {
+    for (const task of (await locked.json()) as components['schemas']['org.maproulette.framework.model.LockedTaskData'][]) {
       const released = await request.get(`${BACKEND_URL}/api/v2/task/${task.id}/release`)
       if (!released.ok()) {
         console.warn(`Task ${task.id} lock teardown returned ${released.status()}`)
@@ -212,7 +225,7 @@ async function createChallenge(
   if (!response.ok()) {
     throw new Error(`Failed to create challenge: ${response.status()} ${await response.text()}`)
   }
-  const body = (await response.json()) as { id: number }
+  const body = (await response.json()) as Challenge
   return { id: body.id, name, projectId }
 }
 
@@ -238,7 +251,7 @@ async function createTask(
   if (!response.ok()) {
     throw new Error(`Failed to create task: ${response.status()} ${await response.text()}`)
   }
-  const body = (await response.json()) as { id: number }
+  const body = (await response.json()) as Task
   return { id: body.id, name, challengeId, coordinates }
 }
 
@@ -256,7 +269,7 @@ async function createTeam(request: APIRequestContext, name: string): Promise<Tes
   if (!response.ok()) {
     throw new Error(`Failed to create team: ${response.status()} ${await response.text()}`)
   }
-  const body = (await response.json()) as { id: number }
+  const body = (await response.json()) as Team
   return { id: body.id, name }
 }
 
@@ -442,7 +455,7 @@ async function createTagFixTask(
   if (!response.ok()) {
     throw new Error(`Failed to create tag-fix task: ${response.status()} ${await response.text()}`)
   }
-  const body = (await response.json()) as { id: number }
+  const body = (await response.json()) as Task
   return { id: body.id, name, challengeId, coordinates }
 }
 
@@ -554,7 +567,7 @@ export const test = base.extend<{
 
   cooperativeChallenge: async ({ request, tagFixTask }, use) => {
     const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${tagFixTask.challengeId}`)
-    const body = (await response.json()) as { id: number; name: string; parent: number }
+    const body = (await response.json()) as Challenge
     await use({ id: body.id, name: body.name, projectId: body.parent })
   },
 

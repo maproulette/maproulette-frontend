@@ -2,6 +2,7 @@
  * @vitest-environment happy-dom
  */
 import { QueryClientProvider } from '@tanstack/react-query'
+import { HTTPError, type NormalizedOptions } from 'ky'
 import { act, createElement, type ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient } from '@/test/queryClient'
@@ -119,18 +120,41 @@ describe('TaskContext locks', () => {
       vi.advanceTimersByTime(15 * 60 * 1000)
     })
 
-    expect(state.lockFailure).toEqual({ message: undefined })
+    expect(state.lockFailure).toEqual({ message: undefined, lockedByAnotherUser: false })
   })
 
   it('reports a task it could not claim', async () => {
     state.claimTask = true
     state.task = task()
-    state.lock.mockRejectedValue(new Error('locked by someone else'))
+    state.lock.mockRejectedValue(new Error('network down'))
     renderHook(() => useTaskContext(), { wrapper })
 
     await act(async () => {})
 
-    expect(state.lockFailure).toEqual({ message: undefined })
+    expect(state.lockFailure).toEqual({ message: undefined, lockedByAnotherUser: false })
+  })
+
+  it('reports a task somebody else holds as locked by another user', async () => {
+    state.claimTask = true
+    state.task = task()
+    state.lock.mockRejectedValue(
+      new HTTPError(
+        new Response(
+          JSON.stringify({ status: 'Forbidden', message: 'Task is currently locked by user x' }),
+          { status: 403 }
+        ),
+        new Request('http://example.test/api/v2/task/1/start'),
+        {} as NormalizedOptions
+      )
+    )
+    renderHook(() => useTaskContext(), { wrapper })
+
+    await act(async () => {})
+
+    expect(state.lockFailure).toEqual({
+      message: 'Task is currently locked by user x',
+      lockedByAnotherUser: true,
+    })
   })
 
   it('does not refresh a lock it does not hold', () => {

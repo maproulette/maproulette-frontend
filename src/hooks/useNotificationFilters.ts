@@ -182,7 +182,6 @@ export const useNotificationFilters = (notifications: Notification[]) => {
       all: notifications.length,
       task_comment: 0,
       mention: 0,
-      review: 0,
       challenge: 0,
       team: 0,
       system: 0,

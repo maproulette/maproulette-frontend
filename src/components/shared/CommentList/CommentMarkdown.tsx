@@ -1,6 +1,6 @@
 import ReactMarkdown, { type Components } from 'react-markdown'
 import { markdownRemarkPlugins } from '@/lib/markdown'
-import { linkifyOsmShortCodes } from '@/lib/shortCodes'
+import { linkifyOsmShortCodes, OSM_BASE_URL } from '@/lib/shortCodes'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -16,7 +16,8 @@ interface Props {
 const bracketedMentionPattern = /\[@([^\]]+)\](?!\()/g
 const mentionPattern = /@([A-Za-z0-9_-]+)/g
 
-const mentionLink = (name: string): string => `[@${name}](/search?user=${encodeURIComponent(name)})`
+const mentionLink = (name: string): string =>
+  `[@${name}](${OSM_BASE_URL()}/user/${encodeURIComponent(name)})`
 
 const linkifyMentions = (text: string): string =>
   text

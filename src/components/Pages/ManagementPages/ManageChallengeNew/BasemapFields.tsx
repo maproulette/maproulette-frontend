@@ -57,7 +57,7 @@ export const BasemapFields = () => {
                 defaultMessage: 'Challenge basemap',
               })}
             </FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select onValueChange={(value) => value && field.onChange(value)} value={field.value}>
               <FormControl>
                 <SelectTrigger className="w-full">
                   <SelectValue />

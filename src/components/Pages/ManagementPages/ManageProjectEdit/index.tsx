@@ -21,7 +21,7 @@ export const ManageProjectEdit = () => {
       updates: {
         name: values.name,
         displayName: values.displayName,
-        description: values.description || undefined,
+        description: values.description ?? '',
         enabled: values.enabled,
         featured: values.featured,
         ownerTeamId: values.ownerTeamId,

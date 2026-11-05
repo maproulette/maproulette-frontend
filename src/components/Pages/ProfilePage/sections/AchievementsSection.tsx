@@ -24,7 +24,7 @@ export const AchievementsSection = ({ earnedIds }: Props) => {
     {} as Record<AchievementCategory, typeof achievementDefinitions>
   )
 
-  const earnedCount = earnedIds.length
+  const earnedCount = achievementDefinitions.filter(({ id }) => earnedSet.has(id)).length
   const totalCount = achievementDefinitions.length
 
   return (

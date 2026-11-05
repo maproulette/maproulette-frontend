@@ -377,7 +377,7 @@ export const ManageChallengesContent = () => {
                       {t({
                         id: 'manageChallenges.content.tipMonitorProgressBody',
                         defaultMessage:
-                          'Check completion rates and review feedback. Archive challenges once all tasks are resolved.',
+                          'Check completion rates and mapper comments. Archive challenges once all tasks are resolved.',
                       })}
                     </p>
                   </div>

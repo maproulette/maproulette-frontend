@@ -20,13 +20,9 @@ test('a user can comment on a task and see it in the task activity feed', async 
     timeout: 15_000,
   })
 
-  // The comment form's submit button is icon-only and has no accessible name,
-  // so it's reached through the form that owns the comment box rather than by
-  // role and name.
   const commentBox = page.getByPlaceholder('Add a comment...')
-  const commentForm = page.locator('form').filter({ has: commentBox })
   await commentBox.fill(commentText)
-  await commentForm.getByRole('button').click()
+  await page.getByRole('button', { name: 'Send comment' }).click()
 
   await expect(page.getByText('Comment added')).toBeVisible({ timeout: 15_000 })
 

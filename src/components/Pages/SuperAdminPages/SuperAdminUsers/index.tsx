@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { Calendar, ChevronLeft, ChevronRight, Mail, Search, Users } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
@@ -60,10 +61,6 @@ export const SuperAdminUsers = () => {
               })}
             </p>
           </div>
-          <Button size="lg">
-            <Users className="mr-2 h-5 w-5" />
-            {t({ id: 'superAdminUsers.addButton', defaultMessage: 'Add New User' })}
-          </Button>
         </div>
 
         <SearchBar
@@ -255,8 +252,10 @@ export const SuperAdminUsers = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm">
-                              {t({ id: 'common.view', defaultMessage: 'View' })}
+                            <Button asChild variant="outline" size="sm">
+                              <Link to="/profile/$userId" params={{ userId: String(user.id) }}>
+                                {t({ id: 'common.view', defaultMessage: 'View' })}
+                              </Link>
                             </Button>
                           </div>
                         </TableCell>

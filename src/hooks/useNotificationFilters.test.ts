@@ -156,7 +156,7 @@ describe('useNotificationFilters', () => {
       const { result } = renderHook(() => useNotificationFilters([]))
       const state: NotificationFilterState = {
         ...DEFAULT_FILTER_STATE,
-        category: 'review',
+        category: 'challenge',
         status: 'unread',
         filterTask: '42',
         filterType: '3',
@@ -172,7 +172,7 @@ describe('useNotificationFilters', () => {
         search({ category: 'stale', status: 'stale', task: 'stale', notificationId: 1 })
       ).toEqual({
         notificationId: 1,
-        category: 'review',
+        category: 'challenge',
         status: 'unread',
         task: '42',
         type: '3',
@@ -309,10 +309,9 @@ describe('useNotificationFilters', () => {
         all: 3,
         task_comment: 0,
         mention: 1,
-        review: 1,
         challenge: 0,
         team: 0,
-        system: 1,
+        system: 2,
       })
     })
   })
@@ -392,7 +391,7 @@ describe('useNotificationFilters', () => {
         LAST_FILTERS_KEY,
         JSON.stringify({ ...DEFAULT_FILTER_STATE, category: 'mention' })
       )
-      mockSearch({ category: 'review' })
+      mockSearch({ category: 'challenge' })
 
       renderHook(() => useNotificationFilters([]))
 
@@ -496,12 +495,12 @@ describe('useNotificationFilters', () => {
         }
       )
 
-      mockSearch({ category: 'review' })
+      mockSearch({ category: 'challenge' })
       rerender([])
 
       expect(JSON.parse(localStorage.getItem(LAST_FILTERS_KEY) ?? '{}')).toEqual({
         ...DEFAULT_FILTER_STATE,
-        category: 'review',
+        category: 'challenge',
       })
     })
 

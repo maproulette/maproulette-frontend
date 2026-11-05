@@ -1,3 +1,4 @@
+import type { Challenge } from '@/types/Challenge'
 import { BACKEND_URL, expect, giveChallengeToTeam, test } from './fixtures'
 
 // Handing a challenge to a team: the team becomes its byline and the team's
@@ -67,7 +68,7 @@ test('choosing a team on the form gives the challenge to that team', async ({
   // rather than trusting the page it navigates to.
   await expect(async () => {
     const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}`)
-    const body = (await response.json()) as { ownerTeamId?: number | null }
+    const body = (await response.json()) as Challenge
     expect(body.ownerTeamId).toBe(team.id)
   }).toPass({ timeout: 20_000 })
 })

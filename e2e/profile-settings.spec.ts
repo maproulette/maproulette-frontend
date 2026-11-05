@@ -1,4 +1,5 @@
 import { expect, test } from './fixtures'
+import { pickOption } from './helpers/challenge'
 
 // Note: this test does NOT reload the page to verify the setting survived a
 // fresh fetch, nor does it read/restore the user's settings via the backend
@@ -14,6 +15,7 @@ test('a user can update their custom basemap URL setting', async ({ page }) => {
 
   await page.goto('/settings')
 
+  await pickOption(page, 'Default Basemap', 'Custom tile layer…')
   const basemapUrlField = page.getByLabel('Custom Basemap URL')
   await expect(basemapUrlField).toBeVisible({ timeout: 15_000 })
 
