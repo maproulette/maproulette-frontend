@@ -32,10 +32,13 @@ test('the save button stays disabled until something changes', async ({ memberPa
   const submit = page.getByRole('button', { name: 'Save Changes' })
   await expect(submit).toBeDisabled({ timeout: 20_000 })
 
-  await page.getByLabel('Custom Basemap URL').fill('https://example.com/{z}/{x}/{y}.png')
+  const basemap = page.getByRole('combobox', { name: 'Default Basemap' })
+  const original = (await basemap.textContent())?.trim() ?? ''
+
+  await pick(page, 'Default Basemap', 'Custom tile layer…')
   await expect(submit).toBeEnabled()
 
-  await page.getByLabel('Custom Basemap URL').fill('')
+  await pick(page, 'Default Basemap', original)
   await expect(submit).toBeDisabled()
 })
 
