@@ -28,6 +28,10 @@ export const getErrorMessage = async (error: unknown, fallback: string): Promise
   return fallback
 }
 
+/** Whether a failed request was refused because what it saves clashes with something stored. */
+export const isConflictError = (error: unknown): boolean =>
+  error instanceof HTTPError && error.response.status === 409
+
 /** The lock a user already holds elsewhere, as returned by a 409 lock-conflict response. */
 export interface LockConflictInfo {
   lockedTaskId: number
