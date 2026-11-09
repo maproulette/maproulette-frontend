@@ -1,4 +1,4 @@
-import { Archive, ArchiveRestore, ChevronDown, Trash2, UserCog, X } from 'lucide-react'
+import { Archive, ArchiveRestore, ChevronDown, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -12,7 +12,6 @@ import {
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { BulkDeleteDialog } from './BulkDeleteDialog'
-import { BulkReassignDialog } from './BulkReassignDialog'
 import { BulkStatusDialog } from './BulkStatusDialog'
 
 interface Props {
@@ -24,11 +23,9 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
   const { t } = useIntl()
   const [statusOpen, setStatusOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
-  const [reassignOpen, setReassignOpen] = useState(false)
   const bulkStatus = api.task.useBulkUpdateStatus()
   const bulkDelete = api.task.useBulkDelete()
   const bulkArchive = api.task.useBulkArchive()
-  const bulkReassign = api.task.useBulkReassign()
 
   if (selectedIds.length === 0) return null
 
@@ -127,32 +124,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
     }
   }
 
-  const handleReassign = async (userId: number) => {
-    try {
-      const result = await bulkReassign.mutateAsync({ taskIds: selectedIds, userId })
-      toast.success(
-        t(
-          {
-            id: 'managementPages.bulkActionsToolbar.reassignSuccess',
-            defaultMessage:
-              'Reassigned {updated, number} of {requested, plural, one {# task} other {# tasks}}',
-          },
-          { updated: result.updated, requested: result.requested }
-        )
-      )
-      setReassignOpen(false)
-      onClearSelection()
-    } catch (error) {
-      logger.error('Bulk reassign failed', { error })
-      toast.error(
-        t({
-          id: 'managementPages.bulkActionsToolbar.reassignError',
-          defaultMessage: 'Could not reassign tasks',
-        })
-      )
-    }
-  }
-
   return (
     <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white p-3 shadow-lg dark:border-slate-700 dark:bg-slate-900">
       <span className="font-medium text-sm">
@@ -206,10 +177,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="outline" size="sm" onClick={() => setReassignOpen(true)}>
-          <UserCog className="size-3.5" aria-hidden="true" />{' '}
-          {t({ id: 'managementPages.bulkActionsToolbar.reassign', defaultMessage: 'Reassign' })}
-        </Button>
         <Button variant="outline" size="sm" onClick={() => setDeleteOpen(true)}>
           <Trash2 className="size-3.5" aria-hidden="true" />{' '}
           {t({ id: 'common.delete', defaultMessage: 'Delete' })}
@@ -233,13 +200,6 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
         onConfirm={handleDelete}
         count={selectedIds.length}
         busy={bulkDelete.isPending}
-      />
-      <BulkReassignDialog
-        open={reassignOpen}
-        onOpenChange={setReassignOpen}
-        onConfirm={handleReassign}
-        count={selectedIds.length}
-        busy={bulkReassign.isPending}
       />
     </div>
   )

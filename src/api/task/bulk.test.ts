@@ -131,26 +131,3 @@ describe('taskBulk.useBulkArchive', () => {
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
   })
 })
-
-describe('taskBulk.useBulkReassign', () => {
-  it('PUTs the new owner for the given task ids and returns the reassign result', async () => {
-    const reassignResult = { requested: 2, updated: 2 }
-    const fetchMock = stubFetch(new Response(JSON.stringify(reassignResult), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskBulk.useBulkReassign(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ taskIds: [1, 2], userId: 99 })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual(reassignResult)
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL((request as Request).url).pathname).toBe('/api/v2/tasks/reassign')
-    expect(await (request as Request).clone().json()).toEqual({ taskIds: [1, 2], userId: 99 })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
-  })
-})
