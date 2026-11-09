@@ -32,6 +32,10 @@ export const getErrorMessage = async (error: unknown, fallback: string): Promise
 export const isConflictError = (error: unknown): boolean =>
   error instanceof HTTPError && error.response.status === 409
 
+/** Whether a lock request was refused because another user holds the task. */
+export const isLockedByAnotherUser = (error: unknown): boolean =>
+  error instanceof HTTPError && error.response.status === 403
+
 /** The lock a user already holds elsewhere, as returned by a 409 lock-conflict response. */
 export interface LockConflictInfo {
   lockedTaskId: number
