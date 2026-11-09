@@ -6,6 +6,7 @@ import {
   getErrorMessage,
   getLockConflict,
   getLockConflictInfo,
+  isConflictError,
 } from './apiError.ts'
 
 const makeHttpError = (body: unknown, status = 400) => {
@@ -72,6 +73,14 @@ describe('getErrorMessage', () => {
 
   it('falls back for a non-error value', async () => {
     await expect(getErrorMessage('nope', 'Failed to save')).resolves.toBe('Failed to save')
+  })
+})
+
+describe('isConflictError', () => {
+  it('is true only for a 409 response', () => {
+    expect(isConflictError(makeHttpError({ status: 'Conflict' }, 409))).toBe(true)
+    expect(isConflictError(makeHttpError({ status: 'KO' }, 500))).toBe(false)
+    expect(isConflictError(new Error('Conflict'))).toBe(false)
   })
 })
 
