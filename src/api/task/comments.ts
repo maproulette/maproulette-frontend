@@ -48,19 +48,10 @@ export const taskComments = {
   useAddTaskComment: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: ({
-        taskId,
-        commentText,
-        actionId,
-      }: {
-        taskId: number
-        commentText: string
-        actionId?: number
-      }) =>
+      mutationFn: ({ taskId, commentText }: { taskId: number; commentText: string }) =>
         apiRequest
           .post(`api/v2/task/${taskId}/comment`, {
             json: { comment: commentText },
-            searchParams: actionId != null ? { actionId } : undefined,
           })
           .json<Comment>(),
       onSuccess: (newComment, variables) => {
@@ -85,17 +76,14 @@ export const taskComments = {
       mutationFn: ({
         bundleId,
         commentText,
-        actionId,
       }: {
         bundleId: number
         primaryTaskId: number
         commentText: string
-        actionId?: number
       }) =>
         apiRequest
           .post(`api/v2/taskBundle/${bundleId}/comment`, {
             json: { comment: commentText },
-            searchParams: actionId != null ? { actionId } : undefined,
           })
           .text(),
       onSuccess: (_data, variables) => {
