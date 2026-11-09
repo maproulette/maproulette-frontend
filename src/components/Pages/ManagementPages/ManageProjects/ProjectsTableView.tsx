@@ -1,23 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import {
-  Archive,
-  Copy,
-  Eye,
-  FileDown,
-  MoreHorizontal,
-  Pencil,
-  Pin,
-  Plus,
-  Trash2,
-} from 'lucide-react'
+import { Pin } from 'lucide-react'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu'
 import {
   Table,
   TableBody,
@@ -28,15 +12,14 @@ import {
 } from '@/components/ui/Table'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
+import { ProjectActionsMenu } from './ProjectActionsMenu'
+import type { ChallengeCounts } from './useProjectChallengeCounts'
 
 interface ProjectsTableViewProps {
   projects: Project[]
-  challengeCountsByProjectId?: Record<number, { total: number; completed: number }>
+  challengeCountsByProjectId?: Record<number, ChallengeCounts>
   pinnedProjectIds?: number[]
   onTogglePin?: (projectId: number) => void
-  onExportCsv?: (projectId: number) => void
-  onArchiveProject?: (projectId: number, isArchived: boolean) => void
-  onDeleteProject?: (projectId: number, projectName: string) => void
   onSelectProject?: (project: Project) => void
   selectedProjectId?: number
 }
@@ -46,9 +29,6 @@ export const ProjectsTableView = ({
   challengeCountsByProjectId = {},
   pinnedProjectIds = [],
   onTogglePin,
-  onExportCsv,
-  onArchiveProject,
-  onDeleteProject,
   onSelectProject,
   selectedProjectId,
 }: ProjectsTableViewProps) => {
@@ -170,100 +150,7 @@ export const ProjectsTableView = ({
                 </TableCell>
                 {showActions && (
                   <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">
-                            {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
-                          </span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to="/manage/project/$projectId"
-                            params={{ projectId: String(project.id) }}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Eye className="h-4 w-4" />
-                            {t({ id: 'common.viewProject', defaultMessage: 'View project' })}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to="/manage/project/$projectId/edit"
-                            params={{ projectId: String(project.id) }}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Pencil className="h-4 w-4" />
-                            {t({ id: 'common.editProject', defaultMessage: 'Edit project' })}
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link
-                            to="/manage/challenge/new"
-                            search={{ projectId: Number(project.id) }}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Plus className="h-4 w-4" />
-                            {t({ id: 'common.addChallenge', defaultMessage: 'Add challenge' })}
-                          </Link>
-                        </DropdownMenuItem>
-                        {onExportCsv && project.id != null && (
-                          <DropdownMenuItem
-                            onClick={() => onExportCsv(project.id as number)}
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <FileDown className="h-4 w-4" />
-                            {t({ id: 'common.exportCsv', defaultMessage: 'Export CSV' })}
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onClick={() => {
-                            const url = `${window.location.origin}/manage/project/${project.id}`
-                            void navigator.clipboard.writeText(url)
-                          }}
-                          className="flex cursor-pointer items-center gap-2"
-                        >
-                          <Copy className="h-4 w-4" />
-                          {t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
-                        </DropdownMenuItem>
-                        {onArchiveProject && project.id != null && (
-                          <DropdownMenuItem
-                            onClick={() =>
-                              onArchiveProject(project.id as number, project.isArchived ?? false)
-                            }
-                            className="flex cursor-pointer items-center gap-2"
-                          >
-                            <Archive className="h-4 w-4" />
-                            {project.isArchived
-                              ? t({
-                                  id: 'common.unarchiveProject',
-                                  defaultMessage: 'Unarchive project',
-                                })
-                              : t({
-                                  id: 'common.archiveProject',
-                                  defaultMessage: 'Archive project',
-                                })}
-                          </DropdownMenuItem>
-                        )}
-                        {onDeleteProject && project.id != null && (
-                          <DropdownMenuItem
-                            onClick={() =>
-                              onDeleteProject(
-                                project.id as number,
-                                project.displayName || project.name
-                              )
-                            }
-                            className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            {t({ id: 'common.deleteProject', defaultMessage: 'Delete project' })}
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <ProjectActionsMenu project={project} />
                   </TableCell>
                 )}
               </TableRow>

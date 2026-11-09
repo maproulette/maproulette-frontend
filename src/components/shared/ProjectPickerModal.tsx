@@ -185,23 +185,24 @@ export const ProjectPickerModal = ({
               className="grid gap-4 p-1"
               style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
             >
-              {projectsToShow.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  challengeMeta={{
-                    totalChallenges:
-                      project.id != null ? (challengeCountsByProjectId[project.id]?.total ?? 0) : 0,
-                    pinned: 0,
-                    completed:
-                      project.id != null
-                        ? (challengeCountsByProjectId[project.id]?.completed ?? 0)
-                        : 0,
-                  }}
-                  onSelect={() => handleSelect(project)}
-                  selected={project.id != null && project.id === selectedProjectId}
-                />
-              ))}
+              {projectsToShow.map((project) => {
+                const totalTasks = project.completionMetrics?.total ?? 0
+                const challengeStats = challengeCountsByProjectId[project.id]
+                return (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    challengeMeta={{
+                      totalTasks,
+                      completed: totalTasks - (project.completionMetrics?.tasksRemaining ?? 0),
+                    }}
+                    totalChallenges={challengeStats?.total}
+                    completedChallenges={challengeStats?.completed}
+                    onSelect={() => handleSelect(project)}
+                    selected={project.id === selectedProjectId}
+                  />
+                )
+              })}
             </div>
           )}
 

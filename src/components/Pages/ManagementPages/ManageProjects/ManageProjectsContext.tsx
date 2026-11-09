@@ -12,64 +12,13 @@ type ViewMode = 'grid' | 'list'
 
 const PAGE_SIZE = 20
 
-interface ManageProjectsContextType {
-  // Query state
-  projects: Project[]
-  projectsToShow: Project[]
-  isLoading: boolean
-  isFetching: boolean
-  hasNextPage: boolean
-
-  // Filters
-  searchQuery: string
-  setSearchQuery: (query: string) => void
-  onlyEnabled: boolean
-  setOnlyEnabled: (value: boolean) => void
-  onlyOwned: boolean
-  setOnlyOwned: (value: boolean) => void
-  onlyShowArchived: boolean
-  setOnlyShowArchived: (value: boolean) => void
-  onlyShowPinned: boolean
-  setOnlyShowPinned: (value: boolean) => void
-
-  // View state
-  viewMode: ViewMode
-  setViewMode: (mode: ViewMode) => void
-  showPanel: boolean
-  setShowPanel: (show: boolean) => void
-
-  // Pagination
-  loadMore: () => void
-
-  // Pinned projects
-  pinnedProjectIds: number[]
-  toggleProjectPin: (projectId: number) => void
-
-  // Challenge counts
-  challengeCountsByProjectId: Record<number, { total: number; completed: number }>
-
-  // Mutations
-  updateProject: (projectId: number, updates: Partial<Project>) => void
-  handleExportCsv: (projectId: number) => void
-  handleArchiveProject: (projectId: number, isArchived: boolean) => void
-
-  // Delete confirmation
-  deleteProjectConfirm: { projectId: number; projectName: string } | null
-  handleDeleteProject: (projectId: number, projectName: string) => void
-  confirmDeleteProject: () => void
-  setDeleteProjectConfirm: (value: { projectId: number; projectName: string } | null) => void
-}
-
-const ManageProjectsContext = createContext<ManageProjectsContextType | undefined>(undefined)
-
-export const ManageProjectsProvider = ({ children }: { children: ReactNode }) => {
+const useManageProjectsState = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [onlyEnabled, setOnlyEnabled] = useState(false)
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyShowArchived, setOnlyShowArchived] = useState(false)
   const [onlyShowPinned, setOnlyShowPinned] = useState(false)
-  const [showPanel, setShowPanel] = useState(true)
   const [deleteProjectConfirm, setDeleteProjectConfirm] = useState<{
     projectId: number
     projectName: string
@@ -179,7 +128,7 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
   }, [fetchNextPage])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
-  const value = useMemo<ManageProjectsContextType>(
+  return useMemo(
     () => ({
       projects,
       projectsToShow,
@@ -198,8 +147,6 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
       setOnlyShowPinned,
       viewMode,
       setViewMode,
-      showPanel,
-      setShowPanel,
       loadMore,
       pinnedProjectIds,
       toggleProjectPin,
@@ -224,7 +171,6 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
       onlyShowArchived,
       onlyShowPinned,
       viewMode,
-      showPanel,
       loadMore,
       pinnedProjectIds,
       toggleProjectPin,
@@ -237,8 +183,17 @@ export const ManageProjectsProvider = ({ children }: { children: ReactNode }) =>
       confirmDeleteProject,
     ]
   )
+}
 
-  return <ManageProjectsContext.Provider value={value}>{children}</ManageProjectsContext.Provider>
+type ManageProjectsContextType = ReturnType<typeof useManageProjectsState>
+const ManageProjectsContext = createContext<ManageProjectsContextType | undefined>(undefined)
+
+export const ManageProjectsProvider = ({ children }: { children: ReactNode }) => {
+  return (
+    <ManageProjectsContext.Provider value={useManageProjectsState()}>
+      {children}
+    </ManageProjectsContext.Provider>
+  )
 }
 
 export const useManageProjectsContext = () => {

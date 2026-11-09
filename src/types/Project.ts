@@ -1,9 +1,4 @@
-import type { CompletionMetrics } from './Challenge'
-import type { components, operations, paths } from './openApiTypes'
-
-/* Responses */
-export type ProjectGetResponse =
-  paths['/project/{id}']['get']['responses']['200']['content']['application/json']
+import type { components, operations } from './openApiTypes'
 
 export type ManagedProjectsFilters = Pick<
   NonNullable<operations['project_list_all_the_managed_projects']['parameters']['query']>,
@@ -14,15 +9,7 @@ type ProjectChallengeCounts = NonNullable<
   operations['project_list_all_the_managed_projects']['responses']['200']['content']['application/json'][number]['challengeCounts']
 >
 
-/* Types From API (isArchived supported by API but not in generated schema) */
-export type Project = components['schemas']['Project'] & {
-  isArchived?: boolean
-  completionMetrics?: CompletionMetrics
-  /**
-   * The team that owns this project, if one does. Its managers run the project
-   * and its image is the picture on the card, exactly as for a challenge.
-   */
-  ownerTeamId?: number | null
+export type Project = components['schemas']['org.maproulette.framework.model.Project'] & {
   /**
    * The owning team's image, derived server-side from `ownerTeamId`. Absent
    * when no team owns the project.

@@ -9,7 +9,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
-import type { ManagedProjectsFilters, Project, ProjectGetResponse } from '@/types/Project'
+import type { ManagedProjectsFilters, Project } from '@/types/Project'
 import type { Team } from '@/types/Team'
 import { apiRequest } from './client'
 
@@ -65,7 +65,7 @@ export const project = {
     useQuery(
       queryOptions({
         queryKey: ['project', projectId],
-        queryFn: () => apiRequest.get(`api/v2/project/${projectId}`).json<ProjectGetResponse>(),
+        queryFn: () => apiRequest.get(`api/v2/project/${projectId}`).json<Project>(),
         enabled: !!projectId,
       })
     ),
@@ -73,7 +73,7 @@ export const project = {
   getProjectOptions: (projectId: number) =>
     queryOptions({
       queryKey: ['project', projectId],
-      queryFn: () => apiRequest.get(`api/v2/project/${projectId}`).json<ProjectGetResponse>(),
+      queryFn: () => apiRequest.get(`api/v2/project/${projectId}`).json<Project>(),
     }),
 
   getManagedProjects: ({
@@ -221,7 +221,7 @@ export const project = {
       // them on click rather than after the round trip; `onSuccess` then swaps in
       // the server's copy.
       onMutate: ({ projectId, updates }) => {
-        const previousProject = queryClient.getQueryData<ProjectGetResponse>(['project', projectId])
+        const previousProject = queryClient.getQueryData<Project>(['project', projectId])
         const previousManaged = queryClient.getQueriesData<Project[]>({
           queryKey: ['project', 'managed'],
         })
@@ -229,7 +229,7 @@ export const project = {
           queryKey: ['project', 'managedInfinite'],
         })
         if (previousProject) {
-          queryClient.setQueryData<ProjectGetResponse>(['project', projectId], {
+          queryClient.setQueryData<Project>(['project', projectId], {
             ...previousProject,
             ...updates,
           })
@@ -251,7 +251,7 @@ export const project = {
       },
       onError: (_error, variables, context) => {
         if (context?.previousProject) {
-          queryClient.setQueryData<ProjectGetResponse>(
+          queryClient.setQueryData<Project>(
             ['project', variables.projectId],
             context.previousProject
           )
@@ -264,7 +264,7 @@ export const project = {
         }
       },
       onSuccess: (updatedProject) => {
-        queryClient.setQueryData<ProjectGetResponse>(['project', updatedProject.id], updatedProject)
+        queryClient.setQueryData<Project>(['project', updatedProject.id], updatedProject)
         queryClient.setQueriesData<Project[]>({ queryKey: ['project', 'managed'] }, (oldProjects) =>
           oldProjects?.map((p) => (p.id === updatedProject.id ? updatedProject : p))
         )
