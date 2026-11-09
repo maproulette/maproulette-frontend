@@ -1,5 +1,6 @@
 import { useIntl } from '@/i18n'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
+import { CategorizeFilter } from './CategorizeFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
 import { GlobalToggle } from './GlobalMapToggles'
@@ -31,7 +32,7 @@ export const FilterBar = () => {
   const showListFilters = viewMode !== 'grid-map'
 
   return (
-    <div className="flex items-center gap-3 overflow-x-auto">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
       {showListFilters && (
         <span className="shrink-0 font-medium text-sm text-zinc-600 dark:text-zinc-300">
           {t({ id: 'exploreChallenges.filterBar.title', defaultMessage: 'Challenge List Filters' })}
@@ -43,6 +44,7 @@ export const FilterBar = () => {
         <>
           <WorkOnFilter />
           <DifficultyFilter />
+          <CategorizeFilter />
           <GlobalToggle />
           <ClearFiltersButton />
         </>

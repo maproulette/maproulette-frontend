@@ -19,18 +19,21 @@ export const SortByFilter = () => {
         {t({ id: 'exploreChallenges.filterBar.sortBy.label', defaultMessage: 'Sort by' })}
       </Label>
       <Select
-        value={sortBy || 'name'}
+        value={sortBy}
         onValueChange={(value) => setSortBy(value as ExtendedFindParamsSortBy)}
       >
         <SelectTrigger className="h-9 w-32">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="default">
+            {t({ id: 'exploreChallenges.filterBar.sortBy.default', defaultMessage: 'Default' })}
+          </SelectItem>
           <SelectItem value="name">{t({ id: 'common.name', defaultMessage: 'Name' })}</SelectItem>
           <SelectItem value="created">
             {t({ id: 'common.newest', defaultMessage: 'Newest' })}
           </SelectItem>
-          <SelectItem value="modified">
+          <SelectItem value="oldest">
             {t({ id: 'exploreChallenges.filterBar.sortBy.oldest', defaultMessage: 'Oldest' })}
           </SelectItem>
           <SelectItem value="popularity">

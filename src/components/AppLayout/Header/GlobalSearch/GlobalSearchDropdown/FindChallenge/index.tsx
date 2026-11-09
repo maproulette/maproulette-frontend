@@ -22,11 +22,8 @@ import type {
   ExtendedFindParamsSortBy,
 } from '@/types/Challenge'
 
-const buildKeywords = (categories: string[], workOn: string): string | undefined => {
+const buildKeywords = (workOn: string): string | undefined => {
   const allKeywords: string[] = []
-  if (categories.length > 0) {
-    allKeywords.push(...categories)
-  }
   if (workOn !== 'Anything') {
     const workOnKeywords = workOnCategoryMap[workOn as keyof typeof workOnCategoryMap]
     if (workOnKeywords && Array.isArray(workOnKeywords)) {
@@ -73,12 +70,12 @@ export const FindChallenge = () => {
     const result: NonNullable<ExploreChallengesParams> = {
       global: urlGlobal ?? false,
       bounds: DEFAULT_WORLD_BOUNDS,
-      keywords: buildKeywords(selectedCategories, workOn),
+      keywords: buildKeywords(workOn),
+      categorizationKeywords:
+        selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
       difficulty,
       limit: limit,
-    }
-    if (urlSortBy) {
-      result.sortBy = urlSortBy
+      sortBy: urlSortBy ?? 'default',
     }
     return result
   }, [urlDifficulty, urlWorkOn, urlCategories, urlSortBy, urlGlobal, limit])

@@ -20,8 +20,10 @@ const challengesSearchSchema = z.object({
   categories: z.string().optional(), // comma-separated string
   sortBy: z
     .enum([
+      'default',
       'name',
       'created',
+      'oldest',
       'modified',
       'popularity',
       'difficulty',
@@ -30,7 +32,7 @@ const challengesSearchSchema = z.object({
       'cooperative',
     ])
     .optional()
-    .catch('name'),
+    .catch('default'),
   global: z.boolean().optional().catch(false),
   osm_type: z.enum(['N', 'W', 'R']).optional(),
   osm_id: z.number().optional(),

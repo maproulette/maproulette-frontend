@@ -1,5 +1,7 @@
 import type { UserProperties } from '@/types/User'
 
+export const MR_APP_ID = 'mr3Frontend'
+
 export const getAppSetting = (
   properties: UserProperties | null | undefined,
   appId: string,
