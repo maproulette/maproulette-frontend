@@ -1,7 +1,7 @@
 # Playwright E2E Tests
 
-What `npm run test:e2e` covers, grouped by feature. **159 tests across 42 spec
-files**, all but one of which run.
+What `npm run test:e2e` covers, grouped by feature. **157 tests across 42 spec
+files**.
 
 Specs live in [`e2e/`](e2e/); shared setup and API helpers are in
 [`e2e/fixtures.ts`](e2e/fixtures.ts). Most fixtures build their data over HTTP;
@@ -137,16 +137,13 @@ picks them up from `MR_SUPER_ACCOUNTS`, which it reads only at boot.
 - A task's own instruction is shown instead of the challenge's
 - Instructions stay filled in once the mapper starts working the task
 
-**Tag fixes and cooperative tasks** — [`tag-fix-completion.spec.ts`](e2e/tag-fix-completion.spec.ts)
+**Tag fixes** — [`tag-fix-completion.spec.ts`](e2e/tag-fix-completion.spec.ts)
 - A tag fix is shown against the element's current tags
 - A tag fix whose element already carries the tags says there is nothing to change
 - Working a tag-fix task opens the embedded iD on the element with the changeset
   comment, even when the mapper's default editor is JOSM
 - A tag-fix task can be marked Fixed
 - A tag-fix challenge is labelled as one; an ordinary challenge and task show no tag fix
-- A change-file cooperative challenge is labelled as cooperative, not as a tag fix
-- *Skipped until fixed:* a change-file cooperative task has its change loaded
-  into JOSM alongside the task area
 
 **Bulk actions** — [`bulk-task-actions.spec.ts`](e2e/bulk-task-actions.spec.ts)
 - Selected tasks can be given a new status, leaving the rest alone

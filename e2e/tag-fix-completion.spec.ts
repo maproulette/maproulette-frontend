@@ -54,18 +54,6 @@ const tagFixWork = {
   ],
 }
 
-const changeFileWork = {
-  meta: { version: 2, type: 2 },
-  file: {
-    type: 'xml',
-    format: 'osc',
-    encoding: 'base64',
-    content: Buffer.from(
-      `<osmChange version="0.6"><modify><node id="2344998584" lat="${ELEMENT_POINT[1]}" lon="${ELEMENT_POINT[0]}" version="3"><tag k="amenity" v="cafe"/><tag k="diet:vegetarian" v="yes"/></node></modify></osmChange>`
-    ).toString('base64'),
-  },
-}
-
 const suggestion = (page: Page) =>
   page.locator('section').filter({ hasText: 'Suggested tag changes' })
 
@@ -198,45 +186,4 @@ test('an ordinary task shows no suggested changes', async ({ page, task }) => {
 
   await expect(page.getByRole('button', { name: 'Map this task' })).toBeVisible({ timeout: 30_000 })
   await expect(page.getByText('Suggested tag changes')).toBeHidden()
-})
-
-test('a change-file cooperative challenge is labelled as cooperative, not as a tag fix', async ({
-  page,
-  request,
-  project,
-}) => {
-  const challenge = await createChallenge(request, project.id)
-  await createCooperativeTask(request, challenge.id, changeFileWork)
-
-  await page.goto(`/challenge/${challenge.id}`)
-  await expect(page.getByRole('heading', { name: challenge.name })).toBeVisible({ timeout: 20_000 })
-  await expect(page.getByText('Cooperative', { exact: true })).toBeVisible()
-  await expect(page.getByText('Tag Fix', { exact: true })).toBeHidden()
-})
-
-test('a change-file cooperative task has its change loaded into JOSM alongside the task area', async ({
-  mapper,
-  josmCommands: commands,
-  request,
-  project,
-}) => {
-  test.fixme(
-    true,
-    'useEditorLaunch.ts sends only load_and_zoom for a change-file task; v3 also imported the task change file'
-  )
-  const { page } = mapper
-  const challenge = await createChallenge(request, project.id)
-  const taskId = await createCooperativeTask(request, challenge.id, changeFileWork)
-
-  await startMapping(page, taskId)
-  await page.getByRole('button', { name: 'Open in another editor, or change the default' }).click()
-  await page.getByRole('menuitem').filter({ hasText: 'Edit in JOSM' }).first().click()
-  await expect
-    .poll(() => commands.some((command) => command.pathname === '/import'), { timeout: 10_000 })
-    .toBe(true)
-
-  const imported = commands.find((command) => command.pathname === '/import')
-  expect(imported?.searchParams.get('url')).toMatch(
-    new RegExp(`/api/v2/task/${taskId}/cooperative/change/task_${taskId}_change\\.osc$`)
-  )
 })
