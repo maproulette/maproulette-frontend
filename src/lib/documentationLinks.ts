@@ -23,8 +23,7 @@ export const DOCS_PAGES = {
   searchboxShortCommands: 'documentation/searchbox-short-commands',
   pointScoring: 'documentation/point-scoring',
   // Mapping
-  usingLayouts: 'documentation/using-layouts',
-  rapidEditor: 'documentation/rapid-editor',
+  idEditor: 'documentation/id-editor',
   solvingMultipleTasksTogether: 'documentation/solving-multiple-tasks-together',
   tagFixChallenges: 'documentation/tag-fix-challenges',
   // User settings
