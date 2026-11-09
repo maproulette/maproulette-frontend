@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { testT } from '@/test/translate'
 import {
   getStatusLabel,
   resolveHex,
@@ -7,7 +8,7 @@ import {
   STATUS_HEX,
   STATUS_HEX_COLORS,
   STATUS_KEY_TO_ID,
-  STATUS_LABELS,
+  STATUS_MESSAGES,
   STATUS_PILL_COLORS,
   STATUS_TEXT_COLORS,
   STATUS_TINT_COLORS,
@@ -15,13 +16,13 @@ import {
   tabTriggerClass,
 } from './taskConstants.ts'
 
-const t = (_id: string, _values: unknown, defaultMessage?: string) => defaultMessage ?? _id
+const t = testT
 
-describe('STATUS_LABELS', () => {
-  it('has a label for every canonical status id', () => {
-    expect(STATUS_LABELS[0]).toBe('Created')
-    expect(STATUS_LABELS[9]).toBe('Disabled')
-    expect(Object.keys(STATUS_LABELS)).toHaveLength(10)
+describe('STATUS_MESSAGES', () => {
+  it('has a message for every canonical status id', () => {
+    expect(STATUS_MESSAGES[0].defaultMessage).toBe('Created')
+    expect(STATUS_MESSAGES[9].defaultMessage).toBe('Disabled')
+    expect(Object.keys(STATUS_MESSAGES)).toHaveLength(10)
   })
 })
 
@@ -71,7 +72,7 @@ describe('STATUS_HEX', () => {
 })
 
 describe('color record completeness', () => {
-  const ids = Object.keys(STATUS_LABELS).map(Number)
+  const ids = Object.keys(STATUS_MESSAGES).map(Number)
 
   it.each([
     ['STATUS_COLORS', STATUS_COLORS],

@@ -27,7 +27,10 @@ vi.mock('@/api', () => ({
   },
 }))
 vi.mock('@/contexts/AuthContext', () => ({ useAuthContext: () => ({ user: { id: 7 } }) }))
-vi.mock('@/i18n', () => ({ useIntl: () => ({ t: (_k: string, _v: unknown, d: string) => d }) }))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  return { useIntl: () => ({ t: testT }) }
+})
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }))
 vi.mock('@/components/Pages/TaskEditPage/contexts/TaskContext', () => ({
   useTaskContext: () => ({

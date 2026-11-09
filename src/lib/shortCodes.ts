@@ -26,7 +26,7 @@ export interface SelectToken {
   values: string[]
 }
 
-export interface CopyableToken {
+interface CopyableToken {
   kind: 'copyable'
   text: string
 }
@@ -38,14 +38,14 @@ export interface OsmElementsToken {
 }
 
 /** A map viewport, e.g. `[v17/37.11777/126.99754]`. */
-export interface ViewportToken {
+interface ViewportToken {
   kind: 'viewport'
   zoom: string
   lat: string
   lon: string
 }
 
-export interface TextToken {
+interface TextToken {
   kind: 'text'
   text: string
 }

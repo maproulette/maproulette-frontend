@@ -1,6 +1,5 @@
 import type {
   BinaryGroup,
-  BinaryLeaf,
   BinaryNode,
   PropertyRule,
   PropertyRuleGroup,
@@ -94,4 +93,3 @@ const emptyLeaf = (): PropertyRuleLeaf => ({
 })
 
 export { emptyLeaf as createEmptyLeaf }
-export type { BinaryLeaf }

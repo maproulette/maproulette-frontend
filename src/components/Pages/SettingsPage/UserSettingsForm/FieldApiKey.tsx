@@ -11,6 +11,7 @@ import {
   InputGroupInput,
 } from '@/components/ui/InputGroup'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { useIntl } from '@/i18n'
 import { RegenerateApiKeyDialog } from './RegenerateApiKeyDialog'
 
 export const maskKey = (key: string): string => {
@@ -25,6 +26,7 @@ interface Props {
 }
 
 export const FieldApiKey = ({ apiKey, userId }: Props) => {
+  const { t } = useIntl()
   const id = useId()
   const [revealed, setRevealed] = useState(false)
   const [regenerateOpen, setRegenerateOpen] = useState(false)
@@ -34,7 +36,9 @@ export const FieldApiKey = ({ apiKey, userId }: Props) => {
 
   return (
     <FormItem>
-      <FormLabel htmlFor={id}>Key</FormLabel>
+      <FormLabel htmlFor={id}>
+        {t({ id: 'settings.apiKey.keyLabel', defaultMessage: 'Key' })}
+      </FormLabel>
       <FormControl>
         <ButtonGroup className="w-full">
           <InputGroup>
@@ -43,7 +47,7 @@ export const FieldApiKey = ({ apiKey, userId }: Props) => {
               value={displayValue}
               placeholder={apiKey ? '' : 'No API key assigned'}
               readOnly
-              aria-label="API key"
+              aria-label={t({ id: 'settings.apiKey.label', defaultMessage: 'API key' })}
             />
             <InputGroupAddon align="inline-end">
               <InputGroupButton
@@ -59,13 +63,18 @@ export const FieldApiKey = ({ apiKey, userId }: Props) => {
               </InputGroupButton>
               <InputGroupButton
                 type="button"
-                aria-label="Copy API key"
-                title="Copy"
+                aria-label={t({ id: 'settings.apiKey.copyLabel', defaultMessage: 'Copy API key' })}
+                title={t({ id: 'common.copy', defaultMessage: 'Copy' })}
                 size="icon-xs"
                 onClick={() => {
                   if (!apiKey) return
                   copy(apiKey)
-                  toast.success('Copied to clipboard')
+                  toast.success(
+                    t({
+                      id: 'common.copiedToClipboard',
+                      defaultMessage: 'Copied to clipboard',
+                    })
+                  )
                 }}
                 disabled={!apiKey}
               >
@@ -76,8 +85,11 @@ export const FieldApiKey = ({ apiKey, userId }: Props) => {
           <Button
             type="button"
             variant="outline"
-            aria-label="Regenerate API key"
-            title="Regenerate"
+            aria-label={t({
+              id: 'settings.apiKey.regenerateLabel',
+              defaultMessage: 'Regenerate API key',
+            })}
+            title={t({ id: 'settings.apiKey.regenerate', defaultMessage: 'Regenerate' })}
             onClick={() => setRegenerateOpen(true)}
             disabled={!userId}
           >

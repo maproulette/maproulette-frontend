@@ -10,7 +10,7 @@ interface CompletionResponsesContextValue {
 const CompletionResponsesContext = createContext<CompletionResponsesContextValue | null>(null)
 
 /** Parse the responses the backend stores as a JSON string on the task. */
-export const parseCompletionResponses = (raw: string | null | undefined): CompletionResponses => {
+const parseCompletionResponses = (raw: string | null | undefined): CompletionResponses => {
   if (!raw) return {}
   try {
     const parsed = JSON.parse(raw)

@@ -34,20 +34,18 @@ export const NavigationActions = ({
         await navigateToTask(nearbyTasks[0].id)
       } else {
         toast.info(
-          t(
-            'taskEditPage.taskActions.navigation.noNearbyTasks',
-            undefined,
-            'No nearby tasks available'
-          )
+          t({
+            id: 'taskEditPage.taskActions.navigation.noNearbyTasks',
+            defaultMessage: 'No nearby tasks available',
+          })
         )
       }
     } catch {
       toast.error(
-        t(
-          'taskEditPage.taskActions.navigation.loadNearbyFailed',
-          undefined,
-          'Failed to load nearby task'
-        )
+        t({
+          id: 'taskEditPage.taskActions.navigation.loadNearbyFailed',
+          defaultMessage: 'Failed to load nearby task',
+        })
       )
     } finally {
       setIsLoadingNearby(false)
@@ -62,7 +60,10 @@ export const NavigationActions = ({
         await navigateToTask(randomTasks[0].id)
       } else {
         toast.info(
-          t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')
+          t({
+            id: 'common.noMoreTasksInChallenge',
+            defaultMessage: 'No more tasks available in this challenge',
+          })
         )
         await navigate({
           to: '/challenge/$challengeId',
@@ -70,7 +71,9 @@ export const NavigationActions = ({
         })
       }
     } catch {
-      toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
+      toast.error(
+        t({ id: 'common.failedToLoadNextTask', defaultMessage: 'Failed to load next task' })
+      )
     } finally {
       setIsLoadingRandom(false)
     }
@@ -79,11 +82,10 @@ export const NavigationActions = ({
   return (
     <div className="rounded-lg bg-zinc-100 p-2.5 dark:bg-slate-800/60">
       <p className="mb-2 text-center font-medium text-sm text-zinc-700 dark:text-slate-300">
-        {t(
-          'taskEditPage.taskActions.navigation.wantToMap',
-          undefined,
-          'Want to map this challenge?'
-        )}
+        {t({
+          id: 'taskEditPage.taskActions.navigation.wantToMap',
+          defaultMessage: 'Want to map this challenge?',
+        })}
       </p>
       <div className="grid grid-cols-2 gap-1.5">
         <Button
@@ -94,8 +96,11 @@ export const NavigationActions = ({
         >
           {isLoadingNearby ? <Spinner /> : <Navigation />}
           {isLoadingNearby
-            ? t('common.loading2', undefined, 'Loading...')
-            : t('taskEditPage.taskActions.navigation.nearbyTask', undefined, 'Nearby task')}
+            ? t({ id: 'common.loading2', defaultMessage: 'Loading...' })
+            : t({
+                id: 'taskEditPage.taskActions.navigation.nearbyTask',
+                defaultMessage: 'Nearby task',
+              })}
         </Button>
         <Button
           variant="success"
@@ -105,8 +110,11 @@ export const NavigationActions = ({
         >
           {isLoadingRandom ? <Spinner /> : <Shuffle />}
           {isLoadingRandom
-            ? t('common.loading2', undefined, 'Loading...')
-            : t('taskEditPage.taskActions.navigation.randomTask', undefined, 'Random task')}
+            ? t({ id: 'common.loading2', defaultMessage: 'Loading...' })
+            : t({
+                id: 'taskEditPage.taskActions.navigation.randomTask',
+                defaultMessage: 'Random task',
+              })}
         </Button>
       </div>
     </div>

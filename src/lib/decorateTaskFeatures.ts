@@ -1,4 +1,3 @@
-import type { TaskStyleRule } from '@/components/Map/FeatureStyleLegend/styleRuleToText'
 import type { Task } from '@/types/Task'
 import { resolveFeatureStyle } from './taskFeatureStyle'
 
@@ -42,7 +41,7 @@ const withRenderableId = (feature: GeoJSON.Feature): GeoJSON.Feature => {
   return rest as GeoJSON.Feature
 }
 
-export const taskFeatures = (task: Task): GeoJSON.Feature[] => {
+const taskFeatures = (task: Task): GeoJSON.Feature[] => {
   const flatten = (feature: GeoJSON.Feature): GeoJSON.Feature[] => {
     if (feature.geometry?.type !== 'GeometryCollection') return [feature]
     return feature.geometry.geometries.flatMap((geometry) =>
@@ -57,9 +56,8 @@ export const taskFeatures = (task: Task): GeoJSON.Feature[] => {
  * Decorate each feature's properties with `taskId` so map layers can style
  * features by which task they belong to, with `featureKey`/`featureIndex` so a
  * single feature can be highlighted, isolated, or zoomed to, and with the
- * colors resolved from the data's own simplestyle properties (and the
- * challenge's style rules) under `mr`-prefixed names the paint expressions
- * read.
+ * colors resolved from the data's own simplestyle properties under
+ * `mr`-prefixed names the paint expressions read.
  *
  * A Multi* geometry becomes one drawn feature per part, each under its own
  * `partKey`. Rendering is unchanged -- six lines drawn as six features look
@@ -69,13 +67,10 @@ export const taskFeatures = (task: Task): GeoJSON.Feature[] => {
  * map layers select on; `featureKey` stays the owning feature's, shared by all
  * of its parts.
  */
-export const decorateTaskFeatures = (
-  task: Task,
-  styleRules: TaskStyleRule[] = []
-): GeoJSON.FeatureCollection => ({
+export const decorateTaskFeatures = (task: Task): GeoJSON.FeatureCollection => ({
   type: 'FeatureCollection',
   features: taskFeatures(task).flatMap((f, index) => {
-    const style = resolveFeatureStyle(f, styleRules)
+    const style = resolveFeatureStyle(f)
     // Only styles the data actually specified are attached, so `coalesce` in
     // the paint expressions falls through to the default for the rest.
     const styleProperties = Object.fromEntries(

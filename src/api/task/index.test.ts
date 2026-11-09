@@ -4,7 +4,6 @@ import { taskComments } from './comments'
 import { task } from './index'
 import { taskMultiple } from './multiple'
 import { taskSingle } from './single'
-import { taskTags } from './tags'
 
 describe('task', () => {
   it('merges every source module without any member being overwritten', () => {
@@ -12,7 +11,6 @@ describe('task', () => {
       ...taskSingle,
       ...taskMultiple,
       ...taskComments,
-      ...taskTags,
       ...taskBulk,
     }
 
@@ -40,12 +38,6 @@ describe('task', () => {
     }
   })
 
-  it('re-exports every member of taskTags by identity', () => {
-    for (const [key, value] of Object.entries(taskTags)) {
-      expect(task[key as keyof typeof task]).toBe(value)
-    }
-  })
-
   it('re-exports every member of taskBulk by identity', () => {
     for (const [key, value] of Object.entries(taskBulk)) {
       expect(task[key as keyof typeof task]).toBe(value)
@@ -57,7 +49,6 @@ describe('task', () => {
       Object.keys(taskSingle),
       Object.keys(taskMultiple),
       Object.keys(taskComments),
-      Object.keys(taskTags),
       Object.keys(taskBulk),
     ]
     const allKeys = keySets.flat()

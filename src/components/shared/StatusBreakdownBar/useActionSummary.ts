@@ -1,5 +1,5 @@
 import { useIntl } from '@/i18n'
-import { statusHexByKey, statusLabelByKey } from './statusColors'
+import { statusHexByKey, statusMessageByKey } from './statusColors'
 
 /**
  * Raw per-status counts as they arrive from the backend. Mirrors the shape of
@@ -21,7 +21,7 @@ export type ActionCounts = {
 }
 
 /** Canonical status key used by `statusColors` and the breakdown UI. */
-export type StatusKey =
+type StatusKey =
   | 'created'
   | 'fixed'
   | 'alreadyFixed'
@@ -35,7 +35,7 @@ export type StatusKey =
  * Canonical render order. Matches the "consistent status order" requirement in
  * the Progress Status Blocks feature plan.
  */
-export const STATUS_ORDER: readonly StatusKey[] = [
+const STATUS_ORDER: readonly StatusKey[] = [
   'created',
   'fixed',
   'alreadyFixed',
@@ -46,7 +46,7 @@ export const STATUS_ORDER: readonly StatusKey[] = [
   'disabled',
 ]
 
-export interface ActionSummarySegment {
+interface ActionSummarySegment {
   key: StatusKey
   label: string
   color: string
@@ -55,11 +55,7 @@ export interface ActionSummarySegment {
 }
 
 /** Statuses that count as "done" for completion percentages. */
-export const COMPLETED_STATUS_KEYS: readonly StatusKey[] = [
-  'fixed',
-  'alreadyFixed',
-  'falsePositive',
-]
+const COMPLETED_STATUS_KEYS: readonly StatusKey[] = ['fixed', 'alreadyFixed', 'falsePositive']
 
 export interface ActionSummary {
   total: number
@@ -68,7 +64,7 @@ export interface ActionSummary {
   /** Non-zero segments, ordered by STATUS_ORDER. */
   segments: ActionSummarySegment[]
   /** Counts keyed by canonical status, zero-count entries omitted. Suitable
-   * for feeding into `StatusBreakdownBar` / `StatusBreakdownLegend`. */
+   * for feeding into `StatusBreakdownBar`. */
   counts: Partial<Record<StatusKey, number>>
 }
 
@@ -118,7 +114,7 @@ export const useActionSummary = (actions: ActionCounts | undefined): ActionSumma
     counts[key] = count
     segments.push({
       key,
-      label: t(`statusBreakdownBar.status.${key}`, undefined, statusLabelByKey[key] ?? key),
+      label: t(statusMessageByKey[key]),
       color: statusHexByKey[key] ?? '#71717a',
       count,
       percent: total > 0 ? (count / total) * 100 : 0,

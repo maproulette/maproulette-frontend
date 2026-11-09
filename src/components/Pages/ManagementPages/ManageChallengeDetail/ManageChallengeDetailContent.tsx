@@ -76,7 +76,7 @@ const StatisticsDialogContent = ({
   challengeId: number
   challengeData: ChallengeGetResponse | undefined
 }) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   const { data: statsData, isLoading } = api.challenge.getChallengeStats(challengeId)
   const challengeStats = statsData?.[0]
   const stats = challengeStats?.actions
@@ -87,40 +87,58 @@ const StatisticsDialogContent = ({
     challengeData?.completionPercentage ??
     (totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0)
 
-  const statusCounts: Array<{ id: string; defaultLabel: string; value: number | undefined }> = [
+  const statusCounts: Array<{ id: string; label: string; value: number | undefined }> = [
     {
-      id: 'manageChallengeDetail.detail.statistics.available',
-      defaultLabel: 'Available',
+      id: 'common.available',
+      label: t({
+        id: 'common.available',
+        defaultMessage: 'Available',
+      }),
       value: stats?.available,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.fixed',
-      defaultLabel: 'Fixed',
+      id: 'common.fixed',
+      label: t({ id: 'common.fixed', defaultMessage: 'Fixed' }),
       value: stats?.fixed,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.falsePositive',
-      defaultLabel: 'False Positive',
+      id: 'common.falsePositive',
+      label: t({
+        id: 'common.falsePositive',
+        defaultMessage: 'False Positive',
+      }),
       value: stats?.falsePositive,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.skipped',
-      defaultLabel: 'Skipped',
+      id: 'common.skipped',
+      label: t({
+        id: 'common.skipped',
+        defaultMessage: 'Skipped',
+      }),
       value: stats?.skipped,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.alreadyFixed',
-      defaultLabel: 'Already Fixed',
+      id: 'common.alreadyFixed',
+      label: t({
+        id: 'common.alreadyFixed',
+        defaultMessage: 'Already Fixed',
+      }),
       value: stats?.alreadyFixed,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.tooHard',
-      defaultLabel: "Can't Complete",
+      id: 'common.cantComplete',
+      label: t({
+        id: 'common.cantComplete',
+        defaultMessage: "Can't Complete",
+      }),
       value: stats?.tooHard,
     },
     {
-      id: 'manageChallengeDetail.detail.statistics.disabled',
-      defaultLabel: 'Disabled',
+      id: 'common.disabled',
+      label: t({
+        id: 'common.disabled',
+        defaultMessage: 'Disabled',
+      }),
       value: stats?.disabled,
     },
   ]
@@ -128,7 +146,7 @@ const StatisticsDialogContent = ({
   if (isLoading) {
     return (
       <p className="text-sm text-zinc-500 dark:text-zinc-400">
-        {t('common.loading', undefined, 'Loading…')}
+        {t({ id: 'common.loading', defaultMessage: 'Loading…' })}
       </p>
     )
   }
@@ -137,7 +155,7 @@ const StatisticsDialogContent = ({
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <span className="text-zinc-600 dark:text-zinc-400">
-          {t('common.tasksRemaining', undefined, 'Tasks remaining')}
+          {t({ id: 'common.tasksRemaining', defaultMessage: 'Tasks remaining' })}
         </span>
         <span className="font-semibold">
           {tasksRemaining}
@@ -149,7 +167,10 @@ const StatisticsDialogContent = ({
       <div>
         <div className="mb-1 flex items-center justify-between">
           <span className="text-zinc-600 dark:text-zinc-400">
-            {t('manageChallengeDetail.detail.statistics.completion', undefined, 'Completion')}
+            {t({
+              id: 'manageChallengeDetail.detail.statistics.completion',
+              defaultMessage: 'Completion',
+            })}
           </span>
           <span className="font-semibold">{Math.round(completionPercentage)}%</span>
         </div>
@@ -158,19 +179,22 @@ const StatisticsDialogContent = ({
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
           <Calendar className="h-4 w-4 opacity-70" />
-          {t('common.created', undefined, 'Created')}
+          {t({ id: 'common.created', defaultMessage: 'Created' })}
         </span>
         <span className="font-medium">
-          {challengeData?.created ? formatDate(new Date(challengeData.created)) : '—'}
+          {challengeData?.created ? formatDate(new Date(challengeData.created), locale) : '—'}
         </span>
       </div>
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
           <Clock className="h-4 w-4 opacity-70" />
-          {t('manageChallengeDetail.detail.statistics.lastModified', undefined, 'Last modified')}
+          {t({
+            id: 'manageChallengeDetail.detail.statistics.lastModified',
+            defaultMessage: 'Last modified',
+          })}
         </span>
         <span className="font-medium">
-          {challengeData?.modified ? formatDate(new Date(challengeData.modified)) : '—'}
+          {challengeData?.modified ? formatDate(new Date(challengeData.modified), locale) : '—'}
         </span>
       </div>
 
@@ -179,23 +203,22 @@ const StatisticsDialogContent = ({
           <Separator />
           <div className="space-y-2">
             <h3 className="font-semibold text-zinc-700 dark:text-zinc-300">
-              {t(
-                'manageChallengeDetail.detail.statistics.taskCountsByStatus',
-                undefined,
-                'Task counts by status'
-              )}
+              {t({
+                id: 'manageChallengeDetail.detail.statistics.taskCountsByStatus',
+                defaultMessage: 'Task counts by status',
+              })}
             </h3>
-            {statusCounts.map(({ id, defaultLabel, value }) => (
+            {statusCounts.map(({ id, label, value }) => (
               <div key={id} className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  {t(id, undefined, defaultLabel)}
-                </span>
+                <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
                 <span className="font-semibold">{value || 0}</span>
               </div>
             ))}
             <Separator />
             <div className="flex items-center justify-between">
-              <span className="font-semibold">{t('common.total', undefined, 'Total')}</span>
+              <span className="font-semibold">
+                {t({ id: 'common.total', defaultMessage: 'Total' })}
+              </span>
               <span className="font-bold text-base">{stats.total || 0}</span>
             </div>
           </div>
@@ -227,16 +250,16 @@ export const ManageChallengeDetailContent = () => {
       projectId != null
         ? [
             {
-              label: t('common.createManage', undefined, 'create & manage'),
+              label: t({ id: 'common.createManage', defaultMessage: 'create & manage' }),
               href: '/manage',
             },
             {
-              label: t('common.projects2', undefined, 'projects'),
+              label: t({ id: 'common.projects2', defaultMessage: 'projects' }),
               href: '/manage/projects',
             },
             { label: String(projectId), href: `/manage/project/${projectId}` },
             {
-              label: t('common.challenges2', undefined, 'challenges'),
+              label: t({ id: 'common.challenges2', defaultMessage: 'challenges' }),
               href: '/manage/challenges',
             },
             { label: challengeId, href: `/manage/challenge/${challengeId}` },
@@ -257,7 +280,7 @@ export const ManageChallengeDetailContent = () => {
                 <ul className="flex flex-wrap items-center gap-2.5">
                   <li>
                     <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
-                      {t('common.featured', undefined, 'Featured')}
+                      {t({ id: 'common.featured', defaultMessage: 'Featured' })}
                     </span>
                   </li>
                 </ul>
@@ -272,7 +295,7 @@ export const ManageChallengeDetailContent = () => {
                   <StatusBadge enabled={challengeData?.enabled || false} />
                   <span className="text-zinc-400 dark:text-zinc-500">•</span>
                   <span className="whitespace-nowrap">
-                    {t('common.idNumber', { id: challengeId }, 'ID {id}')}
+                    {t({ id: 'common.idNumber', defaultMessage: 'ID {id}' }, { id: challengeId })}
                   </span>
                   <span className="text-zinc-400 dark:text-zinc-500">•</span>
                   <span
@@ -292,35 +315,32 @@ export const ManageChallengeDetailContent = () => {
                     id={challengeData.id}
                     enabled={challengeData.enabled}
                     onToggle={toggleField('enabled')}
-                    label={t('common.enabled', undefined, 'Enabled')}
-                    errorMessage={t(
-                      'common.couldNotUpdateVisibility',
-                      undefined,
-                      'Could not update visibility'
-                    )}
+                    label={t({ id: 'common.enabled', defaultMessage: 'Enabled' })}
+                    errorMessage={t({
+                      id: 'common.couldNotUpdateVisibility',
+                      defaultMessage: 'Could not update visibility',
+                    })}
                   />
                   <VisibilityToggle
                     id={challengeData.id}
                     enabled={challengeData.paused}
                     onToggle={toggleField('paused')}
-                    label={t('common.paused', undefined, 'Paused')}
-                    errorMessage={t(
-                      'manageChallengeDetail.detail.pausedError',
-                      undefined,
-                      'Could not update paused state'
-                    )}
+                    label={t({ id: 'common.paused', defaultMessage: 'Paused' })}
+                    errorMessage={t({
+                      id: 'manageChallengeDetail.detail.pausedError',
+                      defaultMessage: 'Could not update paused state',
+                    })}
                   />
                   {canSetFeatured && (
                     <VisibilityToggle
                       id={challengeData.id}
                       enabled={challengeData.featured}
                       onToggle={toggleField('featured')}
-                      label={t('common.featured', undefined, 'Featured')}
-                      errorMessage={t(
-                        'manageChallengeDetail.detail.featuredError',
-                        undefined,
-                        'Could not update featured state'
-                      )}
+                      label={t({ id: 'common.featured', defaultMessage: 'Featured' })}
+                      errorMessage={t({
+                        id: 'manageChallengeDetail.detail.featuredError',
+                        defaultMessage: 'Could not update featured state',
+                      })}
                     />
                   )}
                 </div>
@@ -337,44 +357,37 @@ export const ManageChallengeDetailContent = () => {
 
             <div className="flex-1 overflow-y-auto border-zinc-200/50 border-t dark:border-slate-700/50">
               <div className="flex flex-col gap-2 px-6 py-4">
-                <Link to="/challenge/$challengeId" params={{ challengeId }} className="block">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start gap-2 rounded-full"
-                  >
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start gap-2 rounded-full"
+                >
+                  <Link to="/challenge/$challengeId" params={{ challengeId }}>
                     <Eye className="h-4 w-4" />
-                    {t('common.browseChallenge', undefined, 'Browse challenge')}
-                  </Button>
-                </Link>
-                <Link
-                  to="/manage/challenge/$challengeId/edit"
-                  params={{ challengeId }}
-                  className="block"
-                >
-                  <Button size="sm" className="w-full justify-start gap-2 rounded-full">
+                    {t({ id: 'common.browseChallenge', defaultMessage: 'Browse challenge' })}
+                  </Link>
+                </Button>
+                <Button asChild size="sm" className="w-full justify-start gap-2 rounded-full">
+                  <Link to="/manage/challenge/$challengeId/edit" params={{ challengeId }}>
                     <Pencil className="h-4 w-4" />
-                    {t('common.editChallenge', undefined, 'Edit challenge')}
-                  </Button>
-                </Link>
-                <Link
-                  to="/manage/challenge/$challengeId/prioritization"
-                  params={{ challengeId }}
-                  className="block"
+                    {t({ id: 'common.editChallenge', defaultMessage: 'Edit challenge' })}
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start gap-2 rounded-full"
                 >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start gap-2 rounded-full"
-                  >
+                  <Link to="/manage/challenge/$challengeId/prioritization" params={{ challengeId }}>
                     <Target className="h-4 w-4" />
-                    {t(
-                      'manageChallengeDetail.detail.configurePrioritization',
-                      undefined,
-                      'Configure prioritization'
-                    )}
-                  </Button>
-                </Link>
+                    {t({
+                      id: 'manageChallengeDetail.detail.configurePrioritization',
+                      defaultMessage: 'Configure prioritization',
+                    })}
+                  </Link>
+                </Button>
 
                 {!isLoadingChallenge && challengeData?.id != null && (
                   <Button
@@ -384,14 +397,20 @@ export const ManageChallengeDetailContent = () => {
                     onClick={() => setRebuildOpen(true)}
                   >
                     <Hammer className="h-4 w-4" />
-                    {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
+                    {t({ id: 'common.rebuildTasks', defaultMessage: 'Rebuild tasks' })}
                   </Button>
                 )}
 
                 <DialogActionButton
                   icon={<BarChart3 className="h-4 w-4" />}
-                  label={t('manageChallengeDetail.detail.statisticsLabel', undefined, 'Statistics')}
-                  title={t('manageChallengeDetail.detail.statisticsLabel', undefined, 'Statistics')}
+                  label={t({
+                    id: 'manageChallengeDetail.detail.statisticsLabel',
+                    defaultMessage: 'Statistics',
+                  })}
+                  title={t({
+                    id: 'manageChallengeDetail.detail.statisticsLabel',
+                    defaultMessage: 'Statistics',
+                  })}
                 >
                   <StatisticsDialogContent
                     challengeId={Number(challengeId)}
@@ -402,8 +421,14 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.id && (
                   <DialogActionButton
                     icon={<Users className="h-4 w-4" />}
-                    label={t('manageChallengeDetail.detail.managersLabel', undefined, 'Managers')}
-                    title={t('manageChallengeDetail.detail.managersLabel', undefined, 'Managers')}
+                    label={t({
+                      id: 'manageChallengeDetail.detail.managersLabel',
+                      defaultMessage: 'Managers',
+                    })}
+                    title={t({
+                      id: 'manageChallengeDetail.detail.managersLabel',
+                      defaultMessage: 'Managers',
+                    })}
                   >
                     <ChallengeManagersPanel challengeId={challengeData.id} />
                   </DialogActionButton>
@@ -412,8 +437,8 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.id && (
                   <DialogActionButton
                     icon={<History className="h-4 w-4" />}
-                    label={t('common.recentActivity', undefined, 'Recent Activity')}
-                    title={t('common.recentActivity', undefined, 'Recent Activity')}
+                    label={t({ id: 'common.recentActivity', defaultMessage: 'Recent Activity' })}
+                    title={t({ id: 'common.recentActivity', defaultMessage: 'Recent Activity' })}
                   >
                     <ChallengeRecentActivity challengeId={challengeData.id} />
                   </DialogActionButton>
@@ -424,8 +449,8 @@ export const ManageChallengeDetailContent = () => {
                   challengeData.description !== challengeData.blurb && (
                     <DialogActionButton
                       icon={<Info className="h-4 w-4" />}
-                      label={t('common.description', undefined, 'Description')}
-                      title={t('common.description', undefined, 'Description')}
+                      label={t({ id: 'common.description', defaultMessage: 'Description' })}
+                      title={t({ id: 'common.description', defaultMessage: 'Description' })}
                     >
                       <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                         {challengeData.description}
@@ -436,8 +461,8 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.instruction && (
                   <DialogActionButton
                     icon={<FileText className="h-4 w-4" />}
-                    label={t('common.instructions', undefined, 'Instructions')}
-                    title={t('common.instructions', undefined, 'Instructions')}
+                    label={t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
+                    title={t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
                   >
                     <p className="whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
                       {challengeData.instruction}

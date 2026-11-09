@@ -31,9 +31,9 @@ export const EntityEditList = ({ edits }: { edits: EntityEdit[] }) => {
   const { t } = useIntl()
 
   const kindLabel: Record<EditKind, string> = {
-    created: t('taskEditPage.pendingEdits.created', undefined, 'Created'),
-    modified: t('taskEditPage.pendingEdits.modified', undefined, 'Modified'),
-    deleted: t('taskEditPage.pendingEdits.deleted', undefined, 'Deleted'),
+    created: t({ id: 'taskEditPage.pendingEdits.created', defaultMessage: 'Created' }),
+    modified: t({ id: 'taskEditPage.pendingEdits.modified', defaultMessage: 'Modified' }),
+    deleted: t({ id: 'taskEditPage.pendingEdits.deleted', defaultMessage: 'Deleted' }),
   }
 
   return (
@@ -55,11 +55,10 @@ export const EntityEditList = ({ edits }: { edits: EntityEdit[] }) => {
 
             {edit.geometryOnly ? (
               <p className="pl-6 text-xs text-zinc-500 dark:text-zinc-400">
-                {t(
-                  'taskEditPage.pendingEdits.geometryOnly',
-                  undefined,
-                  'Geometry changed; no tags were altered.'
-                )}
+                {t({
+                  id: 'taskEditPage.pendingEdits.geometryOnly',
+                  defaultMessage: 'Geometry changed; no tags were altered.',
+                })}
               </p>
             ) : (
               <ul className="space-y-1 pl-6">

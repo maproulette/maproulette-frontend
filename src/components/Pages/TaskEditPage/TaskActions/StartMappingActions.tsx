@@ -24,7 +24,10 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
         await navigateToTask(randomTasks[0].id)
       } else {
         toast.info(
-          t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')
+          t({
+            id: 'common.noMoreTasksInChallenge',
+            defaultMessage: 'No more tasks available in this challenge',
+          })
         )
         await navigate({
           to: '/challenge/$challengeId',
@@ -32,7 +35,9 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
         })
       }
     } catch {
-      toast.error(t('common.failedToLoadNextTask', undefined, 'Failed to load next task'))
+      toast.error(
+        t({ id: 'common.failedToLoadNextTask', defaultMessage: 'Failed to load next task' })
+      )
     } finally {
       setIsLoadingNext(false)
     }
@@ -44,8 +49,14 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
         <Button variant="success" size="lg" onClick={lockTask} disabled={isLocking}>
           {isLocking ? <Spinner /> : <MapPin />}
           {isLocking
-            ? t('taskEditPage.taskActions.startMapping.starting', undefined, 'Starting...')
-            : t('taskEditPage.taskActions.startMapping.mapThisTask', undefined, 'Map this task')}
+            ? t({
+                id: 'taskEditPage.taskActions.startMapping.starting',
+                defaultMessage: 'Starting...',
+              })
+            : t({
+                id: 'taskEditPage.taskActions.startMapping.mapThisTask',
+                defaultMessage: 'Map this task',
+              })}
         </Button>
         <Button
           variant="secondary"
@@ -55,8 +66,11 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
         >
           {isLoadingNext ? <Spinner /> : <Shuffle />}
           {isLoadingNext
-            ? t('common.loading2', undefined, 'Loading...')
-            : t('taskEditPage.taskActions.startMapping.differentTask', undefined, 'Different task')}
+            ? t({ id: 'common.loading2', defaultMessage: 'Loading...' })
+            : t({
+                id: 'taskEditPage.taskActions.startMapping.differentTask',
+                defaultMessage: 'Different task',
+              })}
         </Button>
       </div>
     </div>

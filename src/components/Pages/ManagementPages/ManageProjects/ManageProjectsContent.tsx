@@ -1,18 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import {
-  Archive,
-  CheckCircle2,
-  Eye,
-  FolderKanban,
-  PanelLeftOpen,
-  Pin,
-  Plus,
-  User,
-} from 'lucide-react'
+import { Archive, Eye, FolderKanban, PanelLeftOpen, Pin, Plus, User } from 'lucide-react'
 import { useState } from 'react'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
 import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
@@ -25,7 +17,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/Empty'
-import { Spinner } from '@/components/ui/Spinner'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
@@ -57,18 +48,18 @@ export const ManageProjectsContent = () => {
     loadMore,
     pinnedProjectIds,
     toggleProjectPin,
-    challengesPerProject,
+    challengeCountsByProjectId,
   } = useManageProjectsContext()
 
   const [showPanel, setShowPanel] = useState(true)
 
   useSetHeaderActions(
-    <Link to="/manage/project/new">
-      <Button size="sm" className="gap-1.5 rounded-full">
+    <Button asChild size="sm" className="gap-1.5 rounded-full">
+      <Link to="/manage/project/new">
         <Plus className="h-4 w-4" />
-        {t('common.createProject', undefined, 'Create Project')}
-      </Button>
-    </Link>
+        {t({ id: 'common.createProject', defaultMessage: 'Create Project' })}
+      </Link>
+    </Button>
   )
 
   return (
@@ -76,29 +67,57 @@ export const ManageProjectsContent = () => {
       <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-4' : '')}>
         {showPanel && (
           <ManageInfoPanel
-            title={t('manageProjects.content.aboutTitle')}
-            description={t('manageProjects.content.aboutDescription')}
+            title={t({ id: 'manageProjects.content.aboutTitle', defaultMessage: 'About Projects' })}
+            description={t({
+              id: 'manageProjects.content.aboutDescription',
+              defaultMessage:
+                'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.',
+            })}
             sections={[
               {
                 id: 'manageProjects.content.tipScopeTitle',
-                title: t('manageProjects.content.tipScopeTitle'),
-                description: t('manageProjects.content.tipScopeBody'),
+                title: t({
+                  id: 'manageProjects.content.tipScopeTitle',
+                  defaultMessage: 'Define scope early',
+                }),
+                description: t({
+                  id: 'manageProjects.content.tipScopeBody',
+                  defaultMessage:
+                    'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.',
+                }),
               },
               {
                 id: 'manageProjects.content.tipPublishTitle',
-                title: t('manageProjects.content.tipPublishTitle'),
-                description: t('manageProjects.content.tipPublishBody'),
+                title: t({
+                  id: 'manageProjects.content.tipPublishTitle',
+                  defaultMessage: 'Publish intentionally',
+                }),
+                description: t({
+                  id: 'manageProjects.content.tipPublishBody',
+                  defaultMessage:
+                    'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.',
+                }),
               },
               {
                 id: 'manageProjects.content.tipOwnershipTitle',
-                title: t('manageProjects.content.tipOwnershipTitle'),
-                description: t('manageProjects.content.tipOwnershipBody'),
+                title: t({
+                  id: 'manageProjects.content.tipOwnershipTitle',
+                  defaultMessage: 'Share ownership',
+                }),
+                description: t({
+                  id: 'manageProjects.content.tipOwnershipBody',
+                  defaultMessage:
+                    'Add co-managers before launch so triage, support, and archival responsibilities are covered.',
+                }),
               },
             ]}
             docs={[
               {
                 page: 'projectsAndProjectManagers',
-                text: t('manageProjects.content.projectManagement'),
+                text: t({
+                  id: 'manageProjects.content.projectManagement',
+                  defaultMessage: 'Project Management',
+                }),
               },
             ]}
             onClose={() => setShowPanel(false)}
@@ -116,7 +135,7 @@ export const ManageProjectsContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title={t('common.showPanel', undefined, 'Show panel')}
+                  title={t({ id: 'common.showPanel', defaultMessage: 'Show panel' })}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -124,28 +143,31 @@ export const ManageProjectsContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t('common.searchProjects', undefined, 'Search projects...')}
+                placeholder={t({
+                  id: 'common.searchProjects',
+                  defaultMessage: 'Search projects...',
+                })}
               />
               <FilterToggle
-                label={t('common.discoverable', undefined, 'Discoverable')}
+                label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
                 icon={Eye}
                 checked={onlyEnabled}
                 onCheckedChange={setOnlyEnabled}
               />
               <FilterToggle
-                label={t('common.owned', undefined, 'Owned')}
+                label={t({ id: 'common.owned', defaultMessage: 'Owned' })}
                 icon={User}
                 checked={onlyOwned}
                 onCheckedChange={setOnlyOwned}
               />
               <FilterToggle
-                label={t('common.pinned', undefined, 'Pinned')}
+                label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                 icon={Pin}
                 checked={onlyShowPinned}
                 onCheckedChange={setOnlyShowPinned}
               />
               <FilterToggle
-                label={t('common.archived', undefined, 'Archived')}
+                label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
                 icon={Archive}
                 checked={onlyShowArchived}
                 onCheckedChange={setOnlyShowArchived}
@@ -171,7 +193,7 @@ export const ManageProjectsContent = () => {
               (projectsToShow?.length ?? 0) > 0 ? (
                 <ProjectsTableView
                   projects={projectsToShow}
-                  challengeCountsByProjectId={challengesPerProject}
+                  challengeCountsByProjectId={challengeCountsByProjectId}
                   pinnedProjectIds={pinnedProjectIds}
                   onTogglePin={toggleProjectPin}
                 />
@@ -182,23 +204,22 @@ export const ManageProjectsContent = () => {
                       <FolderKanban />
                     </EmptyMedia>
                     <EmptyTitle>
-                      {t('common.noProjectsFound', undefined, 'No projects found')}
+                      {t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' })}
                     </EmptyTitle>
                     <EmptyDescription>
-                      {t(
-                        'manageProjects.content.noProjectsDescription',
-                        undefined,
-                        'Get started by creating your first project.'
-                      )}
+                      {t({
+                        id: 'manageProjects.content.noProjectsDescription',
+                        defaultMessage: 'Get started by creating your first project.',
+                      })}
                     </EmptyDescription>
                   </EmptyHeader>
                   <EmptyContent>
-                    <Link to="/manage/project/new">
-                      <Button>
+                    <Button asChild>
+                      <Link to="/manage/project/new">
                         <Plus />
-                        {t('common.createProject', undefined, 'Create Project')}
-                      </Button>
-                    </Link>
+                        {t({ id: 'common.createProject', defaultMessage: 'Create Project' })}
+                      </Link>
+                    </Button>
                   </EmptyContent>
                 </Empty>
               )
@@ -214,7 +235,7 @@ export const ManageProjectsContent = () => {
                     const isPinned = projectId != null && pinnedProjectIds.includes(projectId)
                     const totalTasks = proj.completionMetrics?.total ?? 0
                     const completed = totalTasks - (proj.completionMetrics?.tasksRemaining ?? 0)
-                    const challengeStats = challengesPerProject[projectId]
+                    const challengeStats = challengeCountsByProjectId[projectId]
                     const challengeMeta: ChallengeMeta = {
                       totalTasks,
                       completed,
@@ -234,52 +255,28 @@ export const ManageProjectsContent = () => {
                   getItemKey={(proj) => proj.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: FolderKanban,
-                    title: t('common.noProjectsFound', undefined, 'No projects found'),
-                    description: t(
-                      'manageProjects.content.noProjectsDescriptionShort',
-                      undefined,
-                      'Get started by creating your first project'
-                    ),
-                    actionLabel: t('common.createProject', undefined, 'Create Project'),
+                    title: t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' }),
+                    description: t({
+                      id: 'manageProjects.content.noProjectsDescriptionShort',
+                      defaultMessage: 'Get started by creating your first project',
+                    }),
+                    actionLabel: t({
+                      id: 'common.createProject',
+                      defaultMessage: 'Create Project',
+                    }),
                     actionTo: '/manage/project/new',
                   }}
                 />
               </div>
             )}
 
-            {/* Load More / End of list */}
-            {!isLoading &&
-              (projectsToShow?.length ?? 0) > 0 &&
-              (hasNextPage ? (
-                <div className="flex justify-center p-4">
-                  <Button
-                    variant="outline"
-                    className="rounded-full"
-                    onClick={loadMore}
-                    disabled={isFetching}
-                  >
-                    {isFetching ? (
-                      <>
-                        <Spinner />
-                        {t('common.loading2', undefined, 'Loading...')}
-                      </>
-                    ) : (
-                      t('common.loadMore', undefined, 'Load More')
-                    )}
-                  </Button>
-                </div>
-              ) : (
-                <div className="mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-slate-700">
-                  <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
-                  <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
-                    {t(
-                      'common.youveReachedTheEndOfTheList',
-                      undefined,
-                      "You've reached the end of the list"
-                    )}
-                  </p>
-                </div>
-              ))}
+            {!isLoading && (projectsToShow?.length ?? 0) > 0 && (
+              <LoadMoreFooter
+                hasNextPage={hasNextPage}
+                isFetching={isFetching}
+                onLoadMore={loadMore}
+              />
+            )}
           </div>
         </div>
       </div>

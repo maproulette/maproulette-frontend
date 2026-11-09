@@ -31,7 +31,7 @@ export interface AuthContextType {
   logout: () => Promise<void>
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null)
+const AuthContext = createContext<AuthContextType | null>(null)
 
 export const isSecurityError = (error: ApiError): boolean => {
   return error.status === 401 || error.status === 403
@@ -66,7 +66,7 @@ export const getStoredRedirectUrl = (): string | null => {
   return localStorage.getItem('redirect')
 }
 
-export const clearStoredRedirectUrl = (): void => {
+const clearStoredRedirectUrl = (): void => {
   localStorage.removeItem('redirect')
 }
 
@@ -155,7 +155,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (loginFailed && !isLoading && !isVerifying) {
       toast.error(
-        t('auth.loginFailed', {}, 'Sign-in failed or expired. Please try signing in again.')
+        t({
+          id: 'auth.loginFailed',
+          defaultMessage: 'Sign-in failed or expired. Please try signing in again.',
+        })
       )
       setLoginFailed(false)
     }

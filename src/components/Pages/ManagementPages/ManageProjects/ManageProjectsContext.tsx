@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import type { Project } from '@/types/Project'
 import { buildPropertiesWithPinnedProjects, getPinnedProjectIds } from './pinnedProjects'
 import { useProjectChallengeCounts } from './useProjectChallengeCounts'
@@ -13,7 +15,6 @@ const PAGE_SIZE = 20
 const useManageProjectsState = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [loadedPages, setLoadedPages] = useState(1)
   const [onlyEnabled, setOnlyEnabled] = useState(false)
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyShowArchived, setOnlyShowArchived] = useState(false)
@@ -23,33 +24,31 @@ const useManageProjectsState = () => {
     projectName: string
   } | null>(null)
 
-  // Reset loaded pages when server-side filters change
-  useEffect(() => {
-    setLoadedPages(1)
-  }, [searchQuery, onlyEnabled, onlyOwned])
-
-  const {
-    data: projects,
-    isLoading,
-    isFetching,
-  } = api.project.getManagedProjects({
-    limit: PAGE_SIZE * loadedPages,
-    page: 0,
-    searchString: searchQuery,
-    onlyEnabled,
-    onlyOwned,
-  })
-
-  const hasNextPage = (projects?.length ?? 0) >= PAGE_SIZE * loadedPages
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
 
   const { user } = useAuthContext()
+  const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
+  const canList = !onlyShowPinned || pinnedProjectIds.length > 0
+
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
+    api.project.managedProjectsInfinite(
+      {
+        searchString: debouncedSearchQuery,
+        onlyEnabled,
+        onlyOwned,
+        isArchived: onlyShowArchived,
+        projectIds: onlyShowPinned ? pinnedProjectIds.join(',') : '',
+      },
+      { limit: PAGE_SIZE, enabled: canList }
+    )
+  const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
+
   const updateSettingsMutation = api.user.useUpdateUserSettings()
   const updateProjectMutation = api.project.useUpdateProject()
   const deleteProjectMutation = api.project.useDeleteProject()
-  const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
+  const actionErrors = useManageActionErrors()
 
-  const projectsSortedByPinned = useMemo(() => {
-    if (!projects?.length) return projects ?? []
+  const projectsToShow = useMemo(() => {
     const set = new Set(pinnedProjectIds)
     return [...projects].sort((a, b) => {
       const aPinned = a.id != null && set.has(a.id) ? 1 : 0
@@ -58,98 +57,132 @@ const useManageProjectsState = () => {
     })
   }, [projects, pinnedProjectIds])
 
-  const projectsToShow = useMemo(() => {
-    const list = projectsSortedByPinned ?? []
-    const byArchived = list.filter((p) => (p.isArchived ?? false) === onlyShowArchived)
-    if (onlyShowPinned) {
-      return byArchived.filter((p) => p.id != null && pinnedProjectIds.includes(p.id))
-    }
-    return byArchived
-  }, [projectsSortedByPinned, onlyShowArchived, onlyShowPinned, pinnedProjectIds])
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 
-  const challengesPerProject = useProjectChallengeCounts(projects ?? [])
+  // All useCallback hooks below are stored in the context value — stable references
+  // prevent all context consumers from re-rendering on every provider render.
+  const handleExportCsv = useCallback(
+    (projectId: number) => {
+      const name =
+        projects.find((p) => p.id === projectId)?.displayName ??
+        projects.find((p) => p.id === projectId)?.name
+      const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '-') : ''
+      void api.project.exportProjectTasksCsv(
+        projectId,
+        safeName ? `project-${safeName}-tasks.csv` : undefined
+      )
+    },
+    [projects]
+  )
 
-  const handleExportCsv = (projectId: number) => {
-    const name =
-      projects?.find((p) => p.id === projectId)?.displayName ??
-      projects?.find((p) => p.id === projectId)?.name
-    const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '-') : ''
-    void api.project.exportProjectTasksCsv(
-      projectId,
-      safeName ? `project-${safeName}-tasks.csv` : undefined
-    )
-  }
+  const handleArchiveProject = useCallback(
+    (projectId: number, isArchived: boolean) => {
+      updateProjectMutation.mutate(
+        {
+          projectId,
+          updates: { isArchived: !isArchived } as Partial<Project>,
+        },
+        { onError: actionErrors.projectSave }
+      )
+    },
+    [updateProjectMutation, actionErrors]
+  )
 
-  const handleArchiveProject = (projectId: number, isArchived: boolean) => {
-    updateProjectMutation.mutate({
-      projectId,
-      updates: { isArchived: !isArchived } as Partial<Project>,
-    })
-  }
+  const updateProject = useCallback(
+    (projectId: number, updates: Partial<Project>) => {
+      updateProjectMutation.mutate({ projectId, updates }, { onError: actionErrors.projectSave })
+    },
+    [updateProjectMutation, actionErrors]
+  )
 
-  const updateProject = (projectId: number, updates: Partial<Project>) => {
-    updateProjectMutation.mutate({ projectId, updates })
-  }
-
-  const handleDeleteProject = (projectId: number, projectName: string) => {
+  const handleDeleteProject = useCallback((projectId: number, projectName: string) => {
     setDeleteProjectConfirm({ projectId, projectName })
-  }
+  }, [])
 
-  const confirmDeleteProject = () => {
+  const confirmDeleteProject = useCallback(() => {
     if (!deleteProjectConfirm) return
     deleteProjectMutation.mutate(
       { projectId: deleteProjectConfirm.projectId },
-      { onSettled: () => setDeleteProjectConfirm(null) }
+      { onSettled: () => setDeleteProjectConfirm(null), onError: actionErrors.projectDelete }
     )
-  }
+  }, [deleteProjectConfirm, deleteProjectMutation, actionErrors])
 
-  const toggleProjectPin = (projectId: number) => {
-    if (!user?.id) return
-    const next = pinnedProjectIds.includes(projectId)
-      ? pinnedProjectIds.filter((id) => id !== projectId)
-      : [...pinnedProjectIds, projectId]
-    const properties = buildPropertiesWithPinnedProjects(user, next)
-    updateSettingsMutation.mutate({
-      userId: user.id,
-      settings: user.settings ?? {},
-      properties,
-    })
-  }
+  const toggleProjectPin = useCallback(
+    (projectId: number) => {
+      if (!user?.id) return
+      const next = pinnedProjectIds.includes(projectId)
+        ? pinnedProjectIds.filter((id) => id !== projectId)
+        : [...pinnedProjectIds, projectId]
+      const properties = buildPropertiesWithPinnedProjects(user, next)
+      updateSettingsMutation.mutate({
+        userId: user.id,
+        settings: user.settings ?? {},
+        properties,
+      })
+    },
+    [user, pinnedProjectIds, updateSettingsMutation]
+  )
 
-  const loadMore = () => {
-    setLoadedPages((p) => p + 1)
-  }
+  const loadMore = useCallback(() => {
+    void fetchNextPage()
+  }, [fetchNextPage])
 
-  return {
-    projects: projects ?? [],
-    projectsToShow,
-    isLoading,
-    isFetching,
-    hasNextPage,
-    searchQuery,
-    setSearchQuery,
-    onlyEnabled,
-    setOnlyEnabled,
-    onlyOwned,
-    setOnlyOwned,
-    onlyShowArchived,
-    setOnlyShowArchived,
-    onlyShowPinned,
-    setOnlyShowPinned,
-    viewMode,
-    setViewMode,
-    loadMore,
-    pinnedProjectIds,
-    toggleProjectPin,
-    challengesPerProject,
-    updateProject,
-    handleExportCsv,
-    handleArchiveProject,
-    deleteProjectConfirm,
-    handleDeleteProject,
-    confirmDeleteProject,
-    setDeleteProjectConfirm,
-  }
+  // Reason: context value must be stable to prevent all consumers from re-rendering
+  return useMemo(
+    () => ({
+      projects,
+      projectsToShow,
+      isLoading,
+      isFetching,
+      hasNextPage,
+      searchQuery,
+      setSearchQuery,
+      onlyEnabled,
+      setOnlyEnabled,
+      onlyOwned,
+      setOnlyOwned,
+      onlyShowArchived,
+      setOnlyShowArchived,
+      onlyShowPinned,
+      setOnlyShowPinned,
+      viewMode,
+      setViewMode,
+      loadMore,
+      pinnedProjectIds,
+      toggleProjectPin,
+      challengeCountsByProjectId,
+      updateProject,
+      handleExportCsv,
+      handleArchiveProject,
+      deleteProjectConfirm,
+      handleDeleteProject,
+      confirmDeleteProject,
+      setDeleteProjectConfirm,
+    }),
+    [
+      projects,
+      projectsToShow,
+      isLoading,
+      isFetching,
+      hasNextPage,
+      searchQuery,
+      onlyEnabled,
+      onlyOwned,
+      onlyShowArchived,
+      onlyShowPinned,
+      viewMode,
+      loadMore,
+      pinnedProjectIds,
+      toggleProjectPin,
+      challengeCountsByProjectId,
+      updateProject,
+      handleExportCsv,
+      handleArchiveProject,
+      deleteProjectConfirm,
+      handleDeleteProject,
+      confirmDeleteProject,
+    ]
+  )
 }
 
 type ManageProjectsContextType = ReturnType<typeof useManageProjectsState>

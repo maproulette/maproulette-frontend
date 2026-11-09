@@ -28,13 +28,13 @@ export const ProjectActions = ({ project, isPinned }: ProjectActionsProps) => {
           }}
           title={
             isPinned
-              ? t('common.unpinProject', undefined, 'Unpin project')
-              : t('common.pinProject', undefined, 'Pin project')
+              ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
+              : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
           }
           aria-label={
             isPinned
-              ? t('common.unpinProject', undefined, 'Unpin project')
-              : t('common.pinProject', undefined, 'Pin project')
+              ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
+              : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
           }
         >
           <Pin
@@ -58,13 +58,13 @@ export const ProjectActions = ({ project, isPinned }: ProjectActionsProps) => {
           }}
           title={
             project.enabled
-              ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-              : t('common.makeDiscoverable', undefined, 'Make discoverable')
+              ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+              : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
           }
           aria-label={
             project.enabled
-              ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-              : t('common.makeDiscoverable', undefined, 'Make discoverable')
+              ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+              : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
           }
         >
           {project.enabled ? (

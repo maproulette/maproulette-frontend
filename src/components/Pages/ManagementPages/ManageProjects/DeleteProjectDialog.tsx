@@ -25,23 +25,28 @@ export const DeleteProjectDialog = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('common.deleteProject2', undefined, 'Delete project?')}
+            {t({ id: 'common.deleteProject2', defaultMessage: 'Delete project?' })}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {t(
-              'manageProjects.content.deleteProjectDescription',
-              { projectName: deleteProjectConfirm?.projectName ?? '' },
-              'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.'
+              {
+                id: 'manageProjects.content.deleteProjectDescription',
+                defaultMessage:
+                  'This will delete the project "{projectName}" and all its challenges and tasks. This action cannot be undone.',
+              },
+              { projectName: deleteProjectConfirm?.projectName ?? '' }
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+          <AlertDialogCancel>
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={confirmDeleteProject}
             className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
           >
-            {t('common.delete', undefined, 'Delete')}
+            {t({ id: 'common.delete', defaultMessage: 'Delete' })}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -90,7 +90,7 @@ export const DescriptionBreadcrumbButton = ({
             <button
               type="button"
               onClick={() => setCalloutOpen(false)}
-              aria-label={t('common.close', undefined, 'Close')}
+              aria-label={t({ id: 'common.close', defaultMessage: 'Close' })}
               className="-mr-1 -mt-1 shrink-0 cursor-pointer rounded-sm p-1 text-zinc-400 transition-colors hover:text-zinc-700 dark:hover:text-slate-200"
             >
               <X className="size-4" />

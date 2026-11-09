@@ -23,7 +23,7 @@ export const ViewModeToggle = ({ value, onValueChange }: ViewModeToggleProps) =>
     >
       <ToggleGroupItem
         value="grid"
-        title={t('common.gridView', undefined, 'Grid view')}
+        title={t({ id: 'common.gridView', defaultMessage: 'Grid view' })}
         size="sm"
         className={itemClass}
       >
@@ -31,7 +31,7 @@ export const ViewModeToggle = ({ value, onValueChange }: ViewModeToggleProps) =>
       </ToggleGroupItem>
       <ToggleGroupItem
         value="list"
-        title={t('common.listView', undefined, 'List view')}
+        title={t({ id: 'common.listView', defaultMessage: 'List view' })}
         size="sm"
         className={itemClass}
       >

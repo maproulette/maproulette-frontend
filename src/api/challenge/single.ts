@@ -153,18 +153,10 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   void queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] })
-}
-
-const LINE_BY_LINE_UPLOAD_CHUNK_SIZE = 100
-
-const lineByLineChunks = async (file: File) => {
-  const lines = (await file.text()).split('\n').filter((line) => line.trim() !== '')
-  const chunks: File[] = []
-  for (let start = 0; start < lines.length; start += LINE_BY_LINE_UPLOAD_CHUNK_SIZE) {
-    const chunkLines = lines.slice(start, start + LINE_BY_LINE_UPLOAD_CHUNK_SIZE)
-    chunks.push(new File([chunkLines.join('\n')], file.name, { type: file.type }))
-  }
-  return chunks
+  void queryClient.invalidateQueries({
+    predicate: ({ queryKey }) => holdsChallengeRecords(queryKey) && typeof queryKey[1] !== 'number',
+    refetchType: 'none',
+  })
 }
 
 export const challengeSingle = {
@@ -380,7 +372,7 @@ export const challengeSingle = {
 
   getRandomTask: (challengeId: number) =>
     apiRequest
-      .get(`api/v2/challenge/${challengeId}/tasks/random`, { searchParams: { limit: 1 } })
+      .get(`api/v2/challenge/${challengeId}/tasks/prioritizedTasks`, { searchParams: { limit: 1 } })
       .json<Task[]>(),
 
   // Any task in the challenge, regardless of status - used to drop into read-only
@@ -414,33 +406,6 @@ export const challengeSingle = {
     ),
 
   // Mutation hook
-  useCloneChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      // `projectId` is optional; the backend clones into the original challenge's
-      // project when it is omitted.
-      mutationFn: ({
-        challengeId,
-        newName,
-        projectId,
-      }: {
-        challengeId: number
-        newName: string
-        projectId?: number
-      }) =>
-        apiRequest
-          .put(`api/v2/challenge/${challengeId}/clone/${encodeURIComponent(newName)}`, {
-            ...(projectId != null && { searchParams: { projectId } }),
-          })
-          .json<ChallengeGetResponse>(),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['challenge'] })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'managed'] })
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
-      },
-    })
-  },
-
   useCreateChallenge: () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -479,6 +444,16 @@ export const challengeSingle = {
       },
     })
   },
+
+  useRemoveChallengeKeywords: () =>
+    useMutation({
+      mutationFn: ({ challengeId, keywords }: { challengeId: number; keywords: string[] }) =>
+        apiRequest
+          .delete(`api/v2/challenge/${challengeId}/tags`, {
+            searchParams: { tags: keywords.join(',') },
+          })
+          .text(),
+    }),
 
   useUpdateChallenge: () => {
     const queryClient = useQueryClient()
@@ -612,7 +587,7 @@ export const challengeSingle = {
   useUploadGeoJSON: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: async ({
+      mutationFn: ({
         challengeId,
         geoJSONFile,
         options,
@@ -635,31 +610,16 @@ export const challengeSingle = {
           searchParams.dataOriginDate = options.dataOriginDate
         }
 
-        const upload = (file: File, params: Record<string, string>) => {
-          const formData = new FormData()
-          formData.append('json', file)
+        const formData = new FormData()
+        formData.append('json', geoJSONFile)
 
-          return apiRequest
-            .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
-              body: formData,
-              searchParams: params,
-            })
-            .json<void>()
-        }
-
-        const chunks = options?.lineByLine ? await lineByLineChunks(geoJSONFile) : []
-        if (chunks.length === 0) {
-          return upload(geoJSONFile, searchParams)
-        }
-
-        for (const [index, chunk] of chunks.entries()) {
-          await upload(
-            chunk,
-            index === 0
-              ? searchParams
-              : { ...searchParams, removeUnmatched: 'false', skipSnapshot: 'true' }
-          )
-        }
+        return apiRequest
+          .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
+            body: formData,
+            searchParams,
+            timeout: false,
+          })
+          .json<void>()
       },
       onSuccess: (_data, variables) => {
         // Invalidate challenge task markers since tasks changed
@@ -771,10 +731,10 @@ export const challengeSingle = {
         if (removeUnmatched !== undefined) searchParams.removeUnmatched = String(removeUnmatched)
         if (skipSnapshot !== undefined) searchParams.skipSnapshot = String(skipSnapshot)
         return apiRequest
-          .put(`api/v2/challenge/${challengeId}/rebuild`, { searchParams })
+          .put(`api/v2/challenge/${challengeId}/rebuild`, { searchParams, timeout: false })
           .json<void>()
       },
-      onSuccess: (_, variables) => {
+      onSettled: (_, _error, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })

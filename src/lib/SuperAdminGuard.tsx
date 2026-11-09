@@ -60,14 +60,14 @@ export const SuperAdminGuard = ({ children, fallback }: SuperAdminGuardProps) =>
       fallback || (
         <div className="mx-auto px-4 py-16 text-center">
           <h1 className="mb-4 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
-            {t('superAdminGuard.accessDenied.title', undefined, 'Access Denied')}
+            {t({ id: 'superAdminGuard.accessDenied.title', defaultMessage: 'Access Denied' })}
           </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
-            {t(
-              'superAdminGuard.accessDenied.message',
-              undefined,
-              'You do not have permission to access this area. Super admin privileges are required.'
-            )}
+            {t({
+              id: 'superAdminGuard.accessDenied.message',
+              defaultMessage:
+                'You do not have permission to access this area. Super admin privileges are required.',
+            })}
           </p>
         </div>
       )

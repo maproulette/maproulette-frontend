@@ -31,6 +31,7 @@ import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import {
   createTagFixQueue,
+  discardAllEdits,
   markSuggestionCheckpoint,
   restoreSuggestionCheckpoint,
 } from './applyTagFixes'
@@ -86,6 +87,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     setPendingEdits,
     pendingEdits: currentEdits,
     resetToSuggestionRef,
+    discardIdEditsRef,
   } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(true)
@@ -466,6 +468,18 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     }
   }, [resetToSuggestionRef])
 
+  useEffect(() => {
+    discardIdEditsRef.current = () => {
+      const context = idContextRef.current
+      if (!context) return
+      discardAllEdits(context, getIdGlobal(iframeRef.current?.contentWindow))
+      suggestionSignatureRef.current = null
+    }
+    return () => {
+      discardIdEditsRef.current = null
+    }
+  }, [discardIdEditsRef])
+
   // iD re-renders the map surface constantly, and any class we add to an
   // element is lost when it does — a full redraw, as happens when the map
   // crosses the zoom iD stops editing at, drops it for good. It always renders
@@ -607,7 +621,10 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           className={`flex items-center bg-slate-900/95 pl-1.5 ${
             dragging ? 'cursor-grabbing' : 'cursor-grab'
           }`}
-          title={t('taskEditPage.idEditor.dragPanel', undefined, 'Drag to move these controls')}
+          title={t({
+            id: 'taskEditPage.idEditor.dragPanel',
+            defaultMessage: 'Drag to move these controls',
+          })}
         >
           <GripVertical className="h-4 w-4 text-slate-500" aria-hidden="true" />
         </div>
@@ -617,8 +634,8 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           className="flex h-10 items-center gap-1.5 bg-slate-900/95 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
           title={
             drawerOpen
-              ? t('taskEditPage.idEditor.collapsePanel', undefined, 'Collapse panel')
-              : t('taskEditPage.idEditor.expandPanel', undefined, 'Expand panel')
+              ? t({ id: 'taskEditPage.idEditor.collapsePanel', defaultMessage: 'Collapse panel' })
+              : t({ id: 'taskEditPage.idEditor.expandPanel', defaultMessage: 'Expand panel' })
           }
         >
           {drawerOpen ? (
@@ -640,18 +657,20 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                 type="button"
                 onClick={handleShowPendingEdits}
                 className="flex items-center gap-1.5 rounded-md bg-yellow-500/90 px-2.5 py-1.5 transition-colors hover:bg-yellow-400"
-                title={t(
-                  'taskEditPage.idEditor.reviewChanges',
-                  undefined,
-                  'Review the unsaved changes'
-                )}
+                title={t({
+                  id: 'taskEditPage.idEditor.reviewChanges',
+                  defaultMessage: 'Review the unsaved changes',
+                })}
               >
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
                 <span className="whitespace-nowrap font-semibold text-[11px] text-white">
                   {t(
-                    'taskEditPage.idEditor.unsavedChanges',
-                    { count: idUnsavedCount },
-                    '{count, plural, one {# unsaved change} other {# unsaved changes}}'
+                    {
+                      id: 'taskEditPage.idEditor.unsavedChanges',
+                      defaultMessage:
+                        '{count, plural, one {# unsaved change} other {# unsaved changes}}',
+                    },
+                    { count: idUnsavedCount }
                   )}
                 </span>
                 <ChevronDown className="h-3 w-3 text-white/80" aria-hidden="true" />
@@ -663,10 +682,13 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
               type="button"
               onClick={handleResetView}
               className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-              title={t('common.resetViewToTaskLocation', undefined, 'Reset view to task location')}
+              title={t({
+                id: 'common.resetViewToTaskLocation',
+                defaultMessage: 'Reset view to task location',
+              })}
             >
               <Crosshair className="h-4 w-4" />
-              {t('taskEditPage.idEditor.reCenter', undefined, 'Re-Center')}
+              {t({ id: 'taskEditPage.idEditor.reCenter', defaultMessage: 'Re-Center' })}
             </button>
             {osmEntityIds.length > 0 && (
               <button
@@ -678,14 +700,13 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                   selectValidEntities(ctx, iDGlobal, osmEntityIdsRef.current)
                 }}
                 className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-                title={t(
-                  'taskEditPage.idEditor.selectTasksTitle',
-                  undefined,
-                  'Select task features in iD'
-                )}
+                title={t({
+                  id: 'taskEditPage.idEditor.selectTasksTitle',
+                  defaultMessage: 'Select task features in iD',
+                })}
               >
                 <MousePointerClick className="h-4 w-4" />
-                {t('taskEditPage.idEditor.selectTasks', undefined, 'Select Tasks')}
+                {t({ id: 'taskEditPage.idEditor.selectTasks', defaultMessage: 'Select Tasks' })}
               </button>
             )}
             <button
@@ -698,31 +719,32 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
               }`}
               title={
                 focusMode
-                  ? t('taskEditPage.idEditor.showAllTitle', undefined, 'Show all map features')
-                  : t(
-                      'taskEditPage.idEditor.focusTitle',
-                      undefined,
-                      'Dim other features to focus on tasks'
-                    )
+                  ? t({
+                      id: 'taskEditPage.idEditor.showAllTitle',
+                      defaultMessage: 'Show all map features',
+                    })
+                  : t({
+                      id: 'taskEditPage.idEditor.focusTitle',
+                      defaultMessage: 'Dim other features to focus on tasks',
+                    })
               }
             >
               {focusMode ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
               {focusMode
-                ? t('taskEditPage.idEditor.showAll', undefined, 'Show All')
-                : t('taskEditPage.idEditor.focus', undefined, 'Focus')}
+                ? t({ id: 'taskEditPage.idEditor.showAll', defaultMessage: 'Show All' })
+                : t({ id: 'taskEditPage.idEditor.focus', defaultMessage: 'Focus' })}
             </button>
             <button
               type="button"
               onClick={onClose}
               className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
-              title={t(
-                'taskEditPage.idEditor.closeEditorTitle',
-                undefined,
-                'Close editor and return to task map'
-              )}
+              title={t({
+                id: 'taskEditPage.idEditor.closeEditorTitle',
+                defaultMessage: 'Close editor and return to task map',
+              })}
             >
               <MapIcon className="h-4 w-4" />
-              {t('taskEditPage.idEditor.closeEditor', undefined, 'Close editor')}
+              {t({ id: 'taskEditPage.idEditor.closeEditor', defaultMessage: 'Close editor' })}
             </button>
           </div>
         </div>
@@ -734,7 +756,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           <div className="text-center">
             <div className="mx-auto mb-4 size-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
             <div className="text-zinc-700 dark:text-zinc-300">
-              {t('taskEditPage.idEditor.loading', undefined, 'Loading iD Editor...')}
+              {t({ id: 'taskEditPage.idEditor.loading', defaultMessage: 'Loading iD Editor...' })}
             </div>
           </div>
         </div>

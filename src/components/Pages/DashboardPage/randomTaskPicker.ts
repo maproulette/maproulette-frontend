@@ -3,7 +3,7 @@ import type { Challenge } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
 
 /** Challenge difficulties, as stored on the challenge itself. */
-export const ROULETTE_DIFFICULTIES = [1, 2, 3] as const
+const ROULETTE_DIFFICULTIES = [1, 2, 3] as const
 export type RouletteDifficulty = (typeof ROULETTE_DIFFICULTIES)[number]
 
 const CANDIDATE_POOL_SIZE = 50

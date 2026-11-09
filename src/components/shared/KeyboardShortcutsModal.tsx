@@ -24,11 +24,14 @@ export const KeyboardShortcutsModal = () => {
   const { shortcuts, isModalOpen, setModalOpen } = useKeyboardShortcuts()
 
   const categoryLabels: Record<ShortcutCategory, string> = {
-    taskActions: t('keyboardShortcuts.category.taskActions', undefined, 'Task actions'),
-    editors: t('keyboardShortcuts.category.editors', undefined, 'Editors'),
-    map: t('common.map', undefined, 'Map'),
-    multiTask: t('keyboardShortcuts.category.multiTask', undefined, 'Multi-task'),
-    general: t('keyboardShortcuts.category.general', undefined, 'General'),
+    taskActions: t({
+      id: 'keyboardShortcuts.category.taskActions',
+      defaultMessage: 'Task actions',
+    }),
+    editors: t({ id: 'keyboardShortcuts.category.editors', defaultMessage: 'Editors' }),
+    map: t({ id: 'common.map', defaultMessage: 'Map' }),
+    multiTask: t({ id: 'keyboardShortcuts.category.multiTask', defaultMessage: 'Multi-task' }),
+    general: t({ id: 'keyboardShortcuts.category.general', defaultMessage: 'General' }),
   }
 
   // Within a category, what the mapper can do right now comes first; the rest
@@ -46,14 +49,13 @@ export const KeyboardShortcutsModal = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Keyboard className="h-5 w-5" />
-            {t('keyboardShortcuts.title', undefined, 'Keyboard Shortcuts')}
+            {t({ id: 'keyboardShortcuts.title', defaultMessage: 'Keyboard Shortcuts' })}
           </DialogTitle>
           <DialogDescription>
-            {t(
-              'keyboardShortcuts.description',
-              undefined,
-              'Use these shortcuts to speed up your workflow'
-            )}
+            {t({
+              id: 'keyboardShortcuts.description',
+              defaultMessage: 'Use these shortcuts to speed up your workflow',
+            })}
           </DialogDescription>
         </DialogHeader>
 
@@ -73,7 +75,10 @@ export const KeyboardShortcutsModal = () => {
         </div>
 
         <DocsLink page="keyboardShortcuts" className="text-sm">
-          {t('keyboardShortcuts.docsLink', undefined, 'See the full list of keyboard shortcuts')}
+          {t({
+            id: 'keyboardShortcuts.docsLink',
+            defaultMessage: 'See the full list of keyboard shortcuts',
+          })}
         </DocsLink>
       </DialogContent>
     </Dialog>

@@ -1,5 +1,5 @@
 import type maplibregl from 'maplibre-gl'
-import { PRIORITY_COLOR, PRIORITY_LABEL, type TaskPriorityValue } from '@/types/Priority'
+import { PRIORITY_COLOR, type TaskPriorityValue } from '@/types/Priority'
 
 const PIXEL_RATIO = 4
 
@@ -21,6 +21,8 @@ const buildPinSvg = (color: string, label: string) => `
     <text x="13.5" y="17" font-family="sans-serif" font-size="10" font-weight="bold" fill="#000000" text-anchor="middle">${label}</text>
   </svg>`
 
+const PIN_LETTER: Record<TaskPriorityValue, string> = { 0: 'H', 1: 'M', 2: 'L' }
+
 export const createPriorityMarkerIcons = (map: maplibregl.Map, onComplete?: () => void): void => {
   const tiers: TaskPriorityValue[] = [0, 1, 2]
   let loaded = 0
@@ -31,7 +33,7 @@ export const createPriorityMarkerIcons = (map: maplibregl.Map, onComplete?: () =
       if (loaded === tiers.length) onComplete?.()
       continue
     }
-    const svg = buildPinSvg(PRIORITY_COLOR[priority].hex, PRIORITY_LABEL[priority][0])
+    const svg = buildPinSvg(PRIORITY_COLOR[priority].hex, PIN_LETTER[priority])
     const img = new Image(27 * PIXEL_RATIO, 36 * PIXEL_RATIO)
     img.src = `data:image/svg+xml;base64,${btoa(svg)}`
     img.onload = () => {

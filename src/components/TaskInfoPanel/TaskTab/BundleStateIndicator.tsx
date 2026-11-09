@@ -32,8 +32,14 @@ export const BundleStateIndicator = ({
       >
         <Package className="mr-2 h-3.5 w-3.5" />
         {isAddingToBundle
-          ? t('taskInfoPanel.taskTab.bundleState.addingToBundle', undefined, 'Locking task...')
-          : t('taskInfoPanel.taskTab.bundleState.addToBundle', undefined, 'Add to Bundle')}
+          ? t({
+              id: 'taskInfoPanel.taskTab.bundleState.addingToBundle',
+              defaultMessage: 'Locking task...',
+            })
+          : t({
+              id: 'taskInfoPanel.taskTab.bundleState.addToBundle',
+              defaultMessage: 'Add to Bundle',
+            })}
       </Button>
     )
   }
@@ -47,7 +53,10 @@ export const BundleStateIndicator = ({
         className="w-full border-red-500/50 bg-red-50 text-red-700 shadow-sm transition-all hover:border-red-500 hover:bg-red-100 hover:shadow-md dark:border-red-600/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50"
       >
         <Trash2 className="mr-2 h-3.5 w-3.5" />
-        {t('taskInfoPanel.taskTab.bundleState.removeFromBundle', undefined, 'Remove from Bundle')}
+        {t({
+          id: 'taskInfoPanel.taskTab.bundleState.removeFromBundle',
+          defaultMessage: 'Remove from Bundle',
+        })}
       </Button>
     )
   }
@@ -56,7 +65,7 @@ export const BundleStateIndicator = ({
     return (
       <div className="flex items-center justify-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 font-medium text-xs text-zinc-600 dark:bg-slate-800/50 dark:text-slate-400">
         <Package className="h-3.5 w-3.5" />
-        {t('taskInfoPanel.taskTab.bundleState.inBundle', undefined, 'In bundle')}
+        {t({ id: 'taskInfoPanel.taskTab.bundleState.inBundle', defaultMessage: 'In bundle' })}
       </div>
     )
   }

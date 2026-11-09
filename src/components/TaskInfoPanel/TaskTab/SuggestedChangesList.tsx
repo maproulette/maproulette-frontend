@@ -26,9 +26,9 @@ export const SuggestedChangesList = ({
   const { t } = useIntl()
 
   const label: Record<TagChange['status'], string> = {
-    added: t('taskInfoPanel.suggested.add', undefined, 'add'),
-    changed: t('taskInfoPanel.suggested.change', undefined, 'change'),
-    removed: t('taskInfoPanel.suggested.remove', undefined, 'remove'),
+    added: t({ id: 'taskInfoPanel.suggested.add', defaultMessage: 'add' }),
+    changed: t({ id: 'taskInfoPanel.suggested.change', defaultMessage: 'change' }),
+    removed: t({ id: 'taskInfoPanel.suggested.remove', defaultMessage: 'remove' }),
   }
 
   return (
@@ -54,11 +54,10 @@ export const SuggestedChangesList = ({
             </code>
             {changes.length === 0 ? (
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {t(
-                  'taskInfoPanel.suggested.alreadyApplied',
-                  undefined,
-                  'This element already carries the suggested tags.'
-                )}
+                {t({
+                  id: 'taskInfoPanel.suggested.alreadyApplied',
+                  defaultMessage: 'This element already carries the suggested tags.',
+                })}
               </p>
             ) : (
               <ul className="space-y-1">

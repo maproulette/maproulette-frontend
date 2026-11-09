@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Project } from '@/types/Project'
@@ -15,7 +16,7 @@ export const FindProject = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
-  const trimmedSearchQuery = searchQuery.trim()
+  const trimmedSearchQuery = useDebouncedValue(searchQuery.trim())
   const hasSearchQuery = trimmedSearchQuery.length > 0
 
   const searchQueryResult = api.project.searchProjects({ search: trimmedSearchQuery })
@@ -69,14 +70,16 @@ export const FindProject = () => {
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-            {t('common.results', undefined, 'Results')}
+            {t({ id: 'common.results', defaultMessage: 'Results' })}
           </h3>
           {!isLoading && data && data.length > 0 && (
             <span className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
-                'appLayout.header.globalSearch.findProject.resultCount',
-                { count: data.length },
-                '{count, plural, one {# project} other {# projects}}'
+                {
+                  id: 'appLayout.header.globalSearch.findProject.resultCount',
+                  defaultMessage: '{count, plural, one {# project} other {# projects}}',
+                },
+                { count: data.length }
               )}
             </span>
           )}
@@ -88,11 +91,10 @@ export const FindProject = () => {
               <div className="flex flex-col items-center gap-3">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-600 dark:text-slate-400">
-                  {t(
-                    'appLayout.header.globalSearch.findProject.loadingMore',
-                    undefined,
-                    'Loading more projects...'
-                  )}
+                  {t({
+                    id: 'appLayout.header.globalSearch.findProject.loadingMore',
+                    defaultMessage: 'Loading more projects...',
+                  })}
                 </p>
               </div>
             </div>
@@ -103,11 +105,10 @@ export const FindProject = () => {
               <div className="flex flex-col items-center justify-center gap-3 py-12">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-500 dark:text-slate-400">
-                  {t(
-                    'appLayout.header.globalSearch.findProject.loading',
-                    undefined,
-                    'Loading projects...'
-                  )}
+                  {t({
+                    id: 'appLayout.header.globalSearch.findProject.loading',
+                    defaultMessage: 'Loading projects...',
+                  })}
                 </p>
               </div>
             ) : results.length === 0 ? (
@@ -117,34 +118,37 @@ export const FindProject = () => {
                 </div>
                 <div className="space-y-1 text-center">
                   <p className="font-medium text-sm text-zinc-900 dark:text-white">
-                    {t('common.noProjectsFound', undefined, 'No projects found')}
+                    {t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' })}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-slate-400">
-                    {t(
-                      'appLayout.header.globalSearch.findProject.noResultsHint',
-                      undefined,
-                      'Try a different search term'
-                    )}
+                    {t({
+                      id: 'appLayout.header.globalSearch.findProject.noResultsHint',
+                      defaultMessage: 'Try a different search term',
+                    })}
                   </p>
                 </div>
               </div>
             ) : (
               <>
                 {results.map((result: Project) => (
-                  <Link
+                  <div
                     key={result.id}
-                    to="/project/$projectId"
-                    params={{ projectId: String(result.id) }}
-                    onClick={onResultSelect}
                     className={cn(
-                      'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+                      'group stretched-link-container flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
                       'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
                       'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
                     )}
                   >
                     <div className="min-w-0 flex-1 space-y-2">
                       <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                        {result.displayName || result.name}
+                        <Link
+                          to="/project/$projectId"
+                          params={{ projectId: String(result.id) }}
+                          onClick={onResultSelect}
+                          className="stretched-link"
+                        >
+                          {result.displayName || result.name}
+                        </Link>
                       </h3>
                       {result.description && (
                         <p className="line-clamp-2 text-sm text-zinc-600 leading-relaxed dark:text-slate-400">
@@ -153,7 +157,7 @@ export const FindProject = () => {
                       )}
                     </div>
                     <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-                  </Link>
+                  </div>
                 ))}
 
                 {hasMore && <div ref={loadMoreRef} className="h-4" />}
@@ -164,14 +168,13 @@ export const FindProject = () => {
                       <div className="h-1.5 w-16 rounded-full bg-zinc-400 dark:bg-slate-600" />
                       <div className="space-y-1 text-center">
                         <p className="font-semibold text-base text-zinc-800 dark:text-slate-200">
-                          {t('common.thatsAll', undefined, "That's all!")}
+                          {t({ id: 'common.thatsAll', defaultMessage: "That's all!" })}
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-slate-400">
-                          {t(
-                            'appLayout.header.globalSearch.findProject.noMoreToLoad',
-                            undefined,
-                            'No more projects to load'
-                          )}
+                          {t({
+                            id: 'appLayout.header.globalSearch.findProject.noMoreToLoad',
+                            defaultMessage: 'No more projects to load',
+                          })}
                         </p>
                       </div>
                     </div>

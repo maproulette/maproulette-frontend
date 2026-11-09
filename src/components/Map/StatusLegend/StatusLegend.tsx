@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
 import { LegendRow } from './LegendRow'
-import { getStatusLegendEntries, priorityEntries } from './taskStatusCatalog'
+import { getPriorityLegendEntries, getStatusLegendEntries } from './taskStatusCatalog'
 
 interface Props {
   defaultOpen?: boolean
@@ -26,7 +26,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
       >
         <span className="flex items-center gap-1.5">
           <MapIcon className="size-3.5" aria-hidden="true" />{' '}
-          {t('statusLegend.legend', undefined, 'Legend')}
+          {t({ id: 'statusLegend.legend', defaultMessage: 'Legend' })}
         </span>
         {open ? (
           <ChevronDown className="size-3.5" aria-hidden="true" />
@@ -43,7 +43,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
         <div className="space-y-2 p-2">
           <div>
             <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-              {t('common.status', undefined, 'Status')}
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
             </div>
             <ul className="space-y-1">
               {statusLegendEntries.map((entry) => (
@@ -59,10 +59,10 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
           </div>
           <div>
             <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-              {t('common.priority', undefined, 'Priority')}
+              {t({ id: 'common.priority', defaultMessage: 'Priority' })}
             </div>
             <ul className="space-y-1">
-              {priorityEntries.map((entry) => (
+              {getPriorityLegendEntries(t).map((entry) => (
                 <LegendRow
                   key={entry.priority}
                   variant="priority"

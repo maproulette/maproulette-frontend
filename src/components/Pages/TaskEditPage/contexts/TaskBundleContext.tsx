@@ -101,11 +101,10 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
         {
           onError: () => {
             toast.error(
-              t(
-                'taskEditPage.taskBundle.lockUpdateFailed',
-                undefined,
-                'Could not update the tasks that were locked with this bundle.'
-              )
+              t({
+                id: 'taskEditPage.taskBundle.lockUpdateFailed',
+                defaultMessage: 'Could not update the tasks that were locked with this bundle.',
+              })
             )
           },
         }
@@ -162,20 +161,18 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     lockBundleTasks(null)
       .then(() => {
         toast.success(
-          t(
-            'taskEditPage.taskBundle.clearedSuccess',
-            undefined,
-            'Now working on only the primary task'
-          )
+          t({
+            id: 'taskEditPage.taskBundle.clearedSuccess',
+            defaultMessage: 'Now working on only the primary task',
+          })
         )
       })
       .catch(() => {
         toast.error(
-          t(
-            'taskEditPage.taskBundle.lockUpdateFailed',
-            undefined,
-            'Could not update the tasks that were locked with this bundle.'
-          )
+          t({
+            id: 'taskEditPage.taskBundle.lockUpdateFailed',
+            defaultMessage: 'Could not update the tasks that were locked with this bundle.',
+          })
         )
       })
     clearBundle()
@@ -316,11 +313,10 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
       setDrawerTaskId(addedId)
     } catch {
       toast.error(
-        t(
-          'taskEditPage.taskBundle.addFailed',
-          undefined,
-          'Could not lock that task, so it was not added to the bundle.'
-        )
+        t({
+          id: 'taskEditPage.taskBundle.addFailed',
+          defaultMessage: 'Could not lock that task, so it was not added to the bundle.',
+        })
       )
     }
   }, [

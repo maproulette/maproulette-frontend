@@ -37,7 +37,7 @@ import { useDescriptionRecommendation } from './useDescriptionRecommendation'
 
 export type TaskRelation = 'primary' | 'bundle' | 'selection'
 
-export const HEADER_GRADIENTS: Record<TaskRelation, string> = {
+const HEADER_GRADIENTS: Record<TaskRelation, string> = {
   primary:
     'bg-gradient-to-r from-amber-200 via-amber-100/50 to-white dark:from-amber-800/50 dark:via-amber-900/25 dark:to-slate-800',
   bundle:
@@ -73,7 +73,8 @@ export const TaskInfoHeader = ({
   const projectDescription = projectDescriptionText(project)
 
   const status = task.status ?? 0
-  const statusLabel = getStatusLabel(t, status) || t('common.unknown', undefined, 'Unknown')
+  const statusLabel =
+    getStatusLabel(t, status) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
   const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const isEditable = EDITABLE_STATUSES.includes(status) || isTaskEditableByPlugins(task)
@@ -112,7 +113,7 @@ export const TaskInfoHeader = ({
             {relation === 'primary' && (
               <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
                 <Star className="h-3 w-3 fill-current" />
-                {t('common.primary', undefined, 'Primary')}
+                {t({ id: 'common.primary', defaultMessage: 'Primary' })}
               </span>
             )}
           </div>
@@ -124,8 +125,8 @@ export const TaskInfoHeader = ({
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  aria-label={t('common.openMenu', undefined, 'Open menu')}
-                  title={t('common.openMenu', undefined, 'Open menu')}
+                  aria-label={t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+                  title={t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
                 >
                   <MoreHorizontal className="size-4" />
                 </Button>
@@ -136,7 +137,7 @@ export const TaskInfoHeader = ({
                   onSelect={() => setShareOpen(true)}
                 >
                   <Share2 className="size-4" />
-                  {t('common.shareTask', undefined, 'Share task')}
+                  {t({ id: 'common.shareTask', defaultMessage: 'Share task' })}
                 </DropdownMenuItem>
                 {canManageTask && (
                   <DropdownMenuItem asChild>
@@ -146,7 +147,7 @@ export const TaskInfoHeader = ({
                       className="flex cursor-pointer items-center gap-2"
                     >
                       <Pencil className="size-4" />
-                      {t('common.editTask', undefined, 'Edit task')}
+                      {t({ id: 'common.editTask', defaultMessage: 'Edit task' })}
                     </Link>
                   </DropdownMenuItem>
                 )}
@@ -157,8 +158,8 @@ export const TaskInfoHeader = ({
                 variant="ghost"
                 size="icon-sm"
                 onClick={onClose}
-                aria-label={t('common.closeTask', undefined, 'Close task')}
-                title={t('common.closeTask', undefined, 'Close task')}
+                aria-label={t({ id: 'common.closeTask', defaultMessage: 'Close task' })}
+                title={t({ id: 'common.closeTask', defaultMessage: 'Close task' })}
               >
                 <X className="size-4" />
               </Button>
@@ -168,7 +169,7 @@ export const TaskInfoHeader = ({
 
         {/* Task ID */}
         <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-          {t('common.taskWithId', { id: task.id }, 'Task #{id}')}
+          {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })}
         </div>
 
         {/* Challenge › Project breadcrumb, each with a button opening its description */}
@@ -178,23 +179,21 @@ export const TaskInfoHeader = ({
               <>
                 <DescriptionBreadcrumbButton
                   icon={BookOpen}
-                  label={t(
-                    'taskEditPage.taskInfoHeader.viewChallengeDescription',
-                    undefined,
-                    'View challenge description'
-                  )}
-                  recommendationLabel={t(
-                    'taskEditPage.taskInfoHeader.readChallengeDescription',
-                    undefined,
-                    'Make sure that you have read the challenge description as it could have important information not mentioned in the task instructions'
-                  )}
+                  label={t({
+                    id: 'taskEditPage.taskInfoHeader.viewChallengeDescription',
+                    defaultMessage: 'View challenge description',
+                  })}
+                  recommendationLabel={t({
+                    id: 'taskEditPage.taskInfoHeader.readChallengeDescription',
+                    defaultMessage:
+                      'Make sure that you have read the challenge description as it could have important information not mentioned in the task instructions',
+                  })}
                   recommended={relation === 'primary' && recommended}
                   disabled={!challengeDescription}
-                  disabledReason={t(
-                    'taskEditPage.taskInfoHeader.noChallengeDescription',
-                    undefined,
-                    'This challenge has no description'
-                  )}
+                  disabledReason={t({
+                    id: 'taskEditPage.taskInfoHeader.noChallengeDescription',
+                    defaultMessage: 'This challenge has no description',
+                  })}
                   onClick={() => {
                     markDescriptionRead()
                     showView('challengeDescription')
@@ -214,17 +213,15 @@ export const TaskInfoHeader = ({
               <>
                 <DescriptionBreadcrumbButton
                   icon={FolderOpen}
-                  label={t(
-                    'taskEditPage.taskInfoHeader.viewProjectDescription',
-                    undefined,
-                    'View project description'
-                  )}
+                  label={t({
+                    id: 'taskEditPage.taskInfoHeader.viewProjectDescription',
+                    defaultMessage: 'View project description',
+                  })}
                   disabled={!projectDescription}
-                  disabledReason={t(
-                    'taskEditPage.taskInfoHeader.noProjectDescription',
-                    undefined,
-                    'This project has no description'
-                  )}
+                  disabledReason={t({
+                    id: 'taskEditPage.taskInfoHeader.noProjectDescription',
+                    defaultMessage: 'This project has no description',
+                  })}
                   onClick={() => showView('projectDescription')}
                 />
                 <Link
@@ -244,14 +241,17 @@ export const TaskInfoHeader = ({
       <Dialog open={shareOpen} onOpenChange={setShareOpen}>
         <DialogContent size="sm" className="p-0">
           <DialogHeader className="sr-only">
-            <DialogTitle>{t('common.shareTask', undefined, 'Share task')}</DialogTitle>
+            <DialogTitle>{t({ id: 'common.shareTask', defaultMessage: 'Share task' })}</DialogTitle>
           </DialogHeader>
           <SharePopoverContent
             url={`${window.location.origin}/tasks/${task.id}`}
             title={
               task.name
-                ? t('common.taskWithName', { name: task.name }, 'Task: {name}')
-                : t('common.taskWithId', { id: task.id }, 'Task #{id}')
+                ? t(
+                    { id: 'common.taskWithName', defaultMessage: 'Task: {name}' },
+                    { name: task.name }
+                  )
+                : t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })
             }
             description={challenge?.name}
           />

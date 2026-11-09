@@ -49,7 +49,7 @@ export const ManageInfoPanel = ({
             size="icon"
             className="h-8 w-8 shrink-0"
             onClick={() => onClose()}
-            title={t('common.hidePanel')}
+            title={t({ id: 'common.hidePanel', defaultMessage: 'Hide panel' })}
           >
             <PanelLeftClose className="size-4" />
           </Button>
@@ -72,7 +72,10 @@ export const ManageInfoPanel = ({
 
         <div className="mt-auto border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
           <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-            {t('managementPages.manageInfoPanel.documentation')}
+            {t({
+              id: 'managementPages.manageInfoPanel.documentation',
+              defaultMessage: 'Documentation',
+            })}
           </p>
           <div className="flex flex-col space-y-2">
             {docs.map((d) => {

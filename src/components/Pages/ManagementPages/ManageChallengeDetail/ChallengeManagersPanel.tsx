@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { Separator } from '@/components/ui/Separator'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { PROJECT_ROLE, projectRoleOptions, TEAM_ATTACHMENT_ROLE } from '@/lib/projectRoles'
@@ -28,20 +29,23 @@ const RoleSelect = ({
   value: number
   disabled?: boolean
   onChange: (role: number) => void
-}) => (
-  <Select value={String(value)} disabled={disabled} onValueChange={(v) => onChange(Number(v))}>
-    <SelectTrigger size="sm" className="w-28">
-      <SelectValue />
-    </SelectTrigger>
-    <SelectContent>
-      {projectRoleOptions.map((option) => (
-        <SelectItem key={option.value} value={String(option.value)}>
-          {option.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-)
+}) => {
+  const { t } = useIntl()
+  return (
+    <Select value={String(value)} disabled={disabled} onValueChange={(v) => onChange(Number(v))}>
+      <SelectTrigger size="sm" className="w-28">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {projectRoleOptions.map((option) => (
+          <SelectItem key={option.value} value={String(option.value)}>
+            {t(option.label)}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
 
 /**
  * Who can manage this challenge in particular. A role granted here reaches only
@@ -59,14 +63,24 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
   const [userQuery, setUserQuery] = useState('')
   const [newRole, setNewRole] = useState<number>(PROJECT_ROLE.write)
   const addManagerId = useId()
-  const { data: userMatches } = api.user.findUsers(userQuery, 10, userQuery.length > 2)
+  const debouncedUserQuery = useDebouncedValue(userQuery)
+  const { data: userMatches } = api.user.findUsers(
+    debouncedUserQuery,
+    10,
+    debouncedUserQuery.length > 2
+  )
 
   const { data: teamManagers } = api.challenge.teamManagers(challengeId)
   const setTeamRole = api.challenge.useSetTeamChallengeRole()
   const removeTeam = api.challenge.useRemoveTeamFromChallenge()
   const [teamQuery, setTeamQuery] = useState('')
   const addTeamId = useId()
-  const { data: teamMatches } = api.team.findTeamsByName(teamQuery, 10, teamQuery.length > 2)
+  const debouncedTeamQuery = useDebouncedValue(teamQuery)
+  const { data: teamMatches } = api.team.findTeamsByName(
+    debouncedTeamQuery,
+    10,
+    debouncedTeamQuery.length > 2
+  )
   // A team already granted a role here is edited in the list above, not added
   // again, so keep those out of the results.
   const existingTeamIds = new Set((teamManagers ?? []).map(({ team }) => team.id))
@@ -77,15 +91,20 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       setUserQuery('')
       toast.success(
         t(
-          'manageChallengeDetail.managers.added',
-          { name: displayName },
-          '{name} can now manage this challenge'
+          {
+            id: 'manageChallengeDetail.managers.added',
+            defaultMessage: '{name} can now manage this challenge',
+          },
+          { name: displayName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant challenge role', { userId, challengeId, error })
       toast.error(
-        t('manageChallengeDetail.managers.addFailed', undefined, 'Could not add that manager')
+        t({
+          id: 'managers.addFailed',
+          defaultMessage: 'Could not add that manager',
+        })
       )
     }
   }
@@ -95,15 +114,20 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       await removeUser.mutateAsync({ challengeId, userId })
       toast.success(
         t(
-          'manageChallengeDetail.managers.removed',
-          { name: displayName },
-          '{name} can no longer manage this challenge'
+          {
+            id: 'manageChallengeDetail.managers.removed',
+            defaultMessage: '{name} can no longer manage this challenge',
+          },
+          { name: displayName }
         )
       )
     } catch (error) {
       logger.error('Failed to revoke challenge role', { userId, challengeId, error })
       toast.error(
-        t('manageChallengeDetail.managers.removeFailed', undefined, 'Could not remove that manager')
+        t({
+          id: 'manageChallengeDetail.managers.removeFailed',
+          defaultMessage: 'Could not remove that manager',
+        })
       )
     }
   }
@@ -114,15 +138,20 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       setTeamQuery('')
       toast.success(
         t(
-          'manageChallengeDetail.managers.teamAdded',
-          { name: teamName },
-          '{name} can now manage this challenge'
+          {
+            id: 'manageChallengeDetail.managers.added',
+            defaultMessage: '{name} can now manage this challenge',
+          },
+          { name: teamName }
         )
       )
     } catch (error) {
       logger.error('Failed to grant challenge team role', { teamId, challengeId, error })
       toast.error(
-        t('manageChallengeDetail.managers.addTeamFailed', undefined, 'Could not add that team')
+        t({
+          id: 'managers.addTeamFailed',
+          defaultMessage: 'Could not add that team',
+        })
       )
     }
   }
@@ -132,20 +161,23 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4 text-zinc-500" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('manageChallengeDetail.managers.title', undefined, 'Challenge managers')}
+          {t({ id: 'manageChallengeDetail.managers.title', defaultMessage: 'Challenge managers' })}
         </h3>
       </div>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
-        {t(
-          'manageChallengeDetail.managers.description',
-          undefined,
-          'Give someone a role on this challenge alone. Anyone who manages the parent project, or the team that owns this challenge, already has access and is not listed here.'
-        )}
+        {t({
+          id: 'manageChallengeDetail.managers.description',
+          defaultMessage:
+            'Give someone a role on this challenge alone. Anyone who manages the parent project, or the team that owns this challenge, already has access and is not listed here.',
+        })}
       </p>
 
       {isLoading ? (
         <Loader
-          message={t('manageChallengeDetail.managers.loading', undefined, 'Loading managers...')}
+          message={t({
+            id: 'managers.loading',
+            defaultMessage: 'Loading managers...',
+          })}
         />
       ) : (
         <ul className="space-y-2">
@@ -167,9 +199,8 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 onClick={() => handleRemove(manager.userId, manager.name)}
                 aria-label={t(
-                  'manageChallengeDetail.managers.remove',
-                  { name: manager.name },
-                  'Remove {name}'
+                  { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
+                  { name: manager.name }
                 )}
               >
                 <Trash2 className="h-4 w-4" />
@@ -178,7 +209,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
           ))}
           {managers?.length === 0 && (
             <li className="text-sm text-zinc-500 dark:text-zinc-400">
-              {t('manageChallengeDetail.managers.none', undefined, 'No managers yet.')}
+              {t({ id: 'managers.none', defaultMessage: 'No managers yet.' })}
             </li>
           )}
         </ul>
@@ -186,18 +217,17 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
 
       <div className="space-y-2">
         <Label htmlFor={addManagerId}>
-          {t('manageChallengeDetail.managers.addLabel', undefined, 'Add a manager')}
+          {t({ id: 'managers.addLabel', defaultMessage: 'Add a manager' })}
         </Label>
         <div className="flex gap-2">
           <Input
             id={addManagerId}
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
-            placeholder={t(
-              'manageChallengeDetail.managers.searchPlaceholder',
-              undefined,
-              'OpenStreetMap username'
-            )}
+            placeholder={t({
+              id: 'managers.searchPlaceholder',
+              defaultMessage: 'OpenStreetMap username',
+            })}
           />
           <RoleSelect value={newRole} onChange={setNewRole} />
         </div>
@@ -217,7 +247,10 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
             ))}
             {userMatches?.length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t('manageChallengeDetail.managers.noMatches', undefined, 'No matching users')}
+                {t({
+                  id: 'managers.noMatches',
+                  defaultMessage: 'No matching users',
+                })}
               </li>
             )}
           </ul>
@@ -226,14 +259,14 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
 
       <Separator />
       <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-        {t('manageChallengeDetail.managers.teamsTitle', undefined, 'Teams')}
+        {t({ id: 'common.teams', defaultMessage: 'Teams' })}
       </h4>
       <p className="text-xs text-zinc-500 dark:text-slate-400">
-        {t(
-          'manageChallengeDetail.managers.teamsDescription',
-          undefined,
-          'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.'
-        )}
+        {t({
+          id: 'managers.teamsDescription',
+          defaultMessage:
+            'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.',
+        })}
       </p>
       <ul className="space-y-2">
         {(teamManagers ?? []).map(({ team }) => {
@@ -246,9 +279,11 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
                 className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
                 onClick={() => removeTeam.mutate({ challengeId, teamId: team.id })}
                 aria-label={t(
-                  'manageChallengeDetail.managers.removeTeam',
-                  { name: team.name },
-                  'Remove {name}'
+                  {
+                    id: 'common.removeWithName',
+                    defaultMessage: 'Remove {name}',
+                  },
+                  { name: team.name }
                 )}
               >
                 <Trash2 className="h-4 w-4" />
@@ -258,25 +293,24 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
         })}
         {teamManagers?.length === 0 && (
           <li className="text-sm text-zinc-500 dark:text-zinc-400">
-            {t('manageChallengeDetail.managers.noTeams', undefined, 'No teams yet.')}
+            {t({ id: 'managers.noTeams', defaultMessage: 'No teams yet.' })}
           </li>
         )}
       </ul>
 
       <div className="space-y-2">
         <Label htmlFor={addTeamId}>
-          {t('manageChallengeDetail.managers.addTeamLabel', undefined, 'Add a team')}
+          {t({ id: 'managers.addTeamLabel', defaultMessage: 'Add a team' })}
         </Label>
         <div className="flex gap-2">
           <Input
             id={addTeamId}
             value={teamQuery}
             onChange={(e) => setTeamQuery(e.target.value)}
-            placeholder={t(
-              'manageChallengeDetail.managers.teamSearchPlaceholder',
-              undefined,
-              'Team name'
-            )}
+            placeholder={t({
+              id: 'managers.teamSearchPlaceholder',
+              defaultMessage: 'Team name',
+            })}
           />
         </div>
         {teamQuery.length > 2 && (
@@ -297,7 +331,10 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
               ))}
             {(teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id)).length === 0 && (
               <li className="px-2 py-1.5 text-sm text-zinc-500">
-                {t('manageChallengeDetail.managers.noTeamMatches', undefined, 'No matching teams')}
+                {t({
+                  id: 'managers.noTeamMatches',
+                  defaultMessage: 'No matching teams',
+                })}
               </li>
             )}
           </ul>

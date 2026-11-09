@@ -1,6 +1,6 @@
-import { api } from '@/api'
+import { defineMessage, defineMessages, type MessageDescriptor } from 'react-intl'
 import type { ProgressSegment } from '@/components/shared/ProgressBar'
-import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import type { CompletionMetrics } from '@/types/Challenge'
 
@@ -22,18 +22,18 @@ const STATUS_COLORS: Record<string, string> = {
   disabled: colorForKey('disabled'),
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  fixed: 'Fixed',
-  falsePositive: 'Not an Issue',
-  alreadyFixed: 'Already Fixed',
-  validated: 'Validated',
-  answered: 'Answered',
-  deleted: 'Deleted',
-  disabled: 'Disabled',
-  tooHard: "Can't Complete",
-  skipped: 'Skipped',
-  available: 'Created',
-}
+const SEGMENT_MESSAGES: Record<string, MessageDescriptor> = defineMessages({
+  fixed: { id: 'common.fixed', defaultMessage: 'Fixed' },
+  falsePositive: { id: 'common.notAnIssue', defaultMessage: 'Not an Issue' },
+  alreadyFixed: { id: 'common.alreadyFixed', defaultMessage: 'Already Fixed' },
+  tooHard: { id: 'common.cantComplete', defaultMessage: "Can't Complete" },
+  remaining: { id: 'challengeProgress.remaining', defaultMessage: 'Remaining' },
+})
+
+const SEGMENT_TITLE: MessageDescriptor = defineMessage({
+  id: 'challengeProgress.segmentTitle',
+  defaultMessage: '{status}: {count, number}',
+})
 
 // Left side: completed statuses (count toward completion %)
 const COMPLETED_STATUSES = ['fixed', 'falsePositive', 'alreadyFixed'] as const
@@ -48,7 +48,7 @@ const REMAINING_FILL_STYLE = { color: '#9ca3af', opacity: 0.45 }
 
 // All per-status fields the backend reports; used to derive a total when
 // `actions.total` is missing or zero (the backend sometimes omits it even when
-// individual counts are present, which used to hide the progress bar entirely).
+// individual metrics are present, which used to hide the progress bar entirely).
 const ALL_STATUS_FIELDS = [
   'fixed',
   'falsePositive',
@@ -62,36 +62,34 @@ const ALL_STATUS_FIELDS = [
   'validated',
 ] as const
 
-export const useChallengeProgress = (challengeId: number, fallback?: CompletionMetrics) => {
-  const { isAuthenticated } = useAuthContext()
-  // /api/v2/data/challenge/:id requires auth; skip it for logged-out users and
-  // fall back to the listing-provided metrics instead of a doomed 401 request.
-  const { data: challengeStatsData } = api.challenge.getChallengeStats(challengeId, isAuthenticated)
-  // Prefer per-challenge stats when loaded; otherwise use the listing-provided
-  // metrics so list views show segmented bars without waiting on per-card
-  // requests. Both shapes share the same per-status field names.
-  const counts: Partial<Record<(typeof ALL_STATUS_FIELDS)[number] | 'total', number>> | undefined =
-    challengeStatsData?.[0]?.actions ?? fallback
-
-  const summedTotal = counts
-    ? ALL_STATUS_FIELDS.reduce((acc, field) => acc + (counts[field] ?? 0), 0)
+const getTotal = (metrics?: CompletionMetrics) => {
+  const summedTotal = metrics
+    ? ALL_STATUS_FIELDS.reduce((acc, field) => acc + (metrics[field] ?? 0), 0)
     : 0
-  const total = counts?.total && counts.total > 0 ? counts.total : summedTotal
+  return metrics?.total && metrics.total > 0 ? metrics.total : summedTotal
+}
 
-  const completionPercentage = (() => {
-    if (total === 0 || !counts) return 0
-    const completed = (counts.fixed || 0) + (counts.falsePositive || 0) + (counts.alreadyFixed || 0)
-    return Math.round((completed / total) * 100)
-  })()
+const getCompletionPercentage = (metrics?: CompletionMetrics) => {
+  const total = getTotal(metrics)
+  if (total === 0 || !metrics) return 0
+  const completed =
+    (metrics.fixed || 0) + (metrics.falsePositive || 0) + (metrics.alreadyFixed || 0)
+  return Math.round((completed / total) * 100)
+}
+
+export const useChallengeProgress = (metrics?: CompletionMetrics) => {
+  const { t } = useIntl()
+  const total = getTotal(metrics)
+  const completionPercentage = getCompletionPercentage(metrics)
 
   const buildSegments = (): ProgressSegment[] => {
-    if (total === 0 || !counts) return []
+    if (total === 0 || !metrics) return []
 
     const completed: ProgressSegment[] = []
     const remaining: ProgressSegment[] = []
 
     for (const status of COMPLETED_STATUSES) {
-      const count = counts[status]
+      const count = metrics[status]
       if (count && count > 0) {
         completed.push({
           key: status,
@@ -99,18 +97,21 @@ export const useChallengeProgress = (challengeId: number, fallback?: CompletionM
           // COMPLETED_STATUSES are all backed by a STATUS_COLORS entry; fallback is unreachable.
           /* v8 ignore next -- @preserve */
           color: STATUS_COLORS[status] || '#9ca3af',
-          title: `${STATUS_LABELS[status]}: ${count}`,
+          title: t(SEGMENT_TITLE, { status: t(SEGMENT_MESSAGES[status]), count }),
         })
       }
     }
 
-    const tooHardCount = counts[PROBLEM_STATUS] ?? 0
+    const tooHardCount = metrics[PROBLEM_STATUS] ?? 0
     if (tooHardCount > 0) {
       remaining.push({
         key: PROBLEM_STATUS,
         percentage: (tooHardCount / total) * 100,
         color: PROBLEM_STYLE.color,
-        title: `${STATUS_LABELS[PROBLEM_STATUS]}: ${tooHardCount}`,
+        title: t(SEGMENT_TITLE, {
+          status: t(SEGMENT_MESSAGES[PROBLEM_STATUS]),
+          count: tooHardCount,
+        }),
         opacity: PROBLEM_STYLE.opacity,
       })
     }
@@ -125,7 +126,10 @@ export const useChallengeProgress = (challengeId: number, fallback?: CompletionM
         key: 'remaining',
         percentage: fillPercent,
         color: REMAINING_FILL_STYLE.color,
-        title: `Remaining: ${total - Math.round(((completedSum + tooHardPercent) / 100) * total)}`,
+        title: t(SEGMENT_TITLE, {
+          status: t(SEGMENT_MESSAGES.remaining),
+          count: total - Math.round(((completedSum + tooHardPercent) / 100) * total),
+        }),
         opacity: REMAINING_FILL_STYLE.opacity,
       })
     }
@@ -134,9 +138,10 @@ export const useChallengeProgress = (challengeId: number, fallback?: CompletionM
   }
 
   const segments = buildSegments()
-  const hasActions = !!counts && total > 0
+  const hasActions = !!metrics && total > 0
 
-  const tasksRemaining = (counts?.available ?? 0) + (counts?.skipped ?? 0) + (counts?.tooHard ?? 0)
+  const tasksRemaining =
+    (metrics?.available ?? 0) + (metrics?.skipped ?? 0) + (metrics?.tooHard ?? 0)
 
   return { completionPercentage, segments, hasActions, total, tasksRemaining }
 }

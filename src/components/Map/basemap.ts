@@ -26,11 +26,18 @@ const STYLE_NAME_FOR_BASEMAP: Record<number, string> = {
   [CHALLENGE_BASEMAP.bing]: 'Bing Aerial',
 }
 
+const STYLE_NAME_FOR_LAYER_ID: Record<string, string> = {
+  MAPNIK: 'OSM Carto',
+  Bing: 'Bing Aerial',
+  EsriWorldImagery: 'Esri World Imagery',
+  EsriWorldImageryClarity: 'Esri World Imagery (Clarity)',
+}
+
 /** The bundled style with this name, if there is one. */
-export const styleByName = (name: string | null | undefined): StyleSpecification | undefined =>
+const styleByName = (name: string | null | undefined): StyleSpecification | undefined =>
   name ? allMapStyles().find((style) => style.name === name) : undefined
 
-interface BasemapSettings {
+export interface BasemapSettings {
   defaultBasemap?: number | null
   defaultBasemapId?: string | null
   customBasemap?: string | null
@@ -49,7 +56,11 @@ export const basemapStyle = ({
   if (defaultBasemap === CHALLENGE_BASEMAP.none) return null
 
   if (defaultBasemap === CHALLENGE_BASEMAP.identified) {
-    return styleByName(defaultBasemapId) ?? null
+    return (
+      styleByName(defaultBasemapId) ??
+      styleByName(defaultBasemapId ? STYLE_NAME_FOR_LAYER_ID[defaultBasemapId] : undefined) ??
+      null
+    )
   }
 
   if (defaultBasemap === CHALLENGE_BASEMAP.custom) {
@@ -79,6 +90,7 @@ export const resolveMapStyle = (
 export const BASEMAP_NONE = 'none'
 /** Form selection meaning "use the tile template typed alongside it". */
 export const BASEMAP_CUSTOM = 'custom'
+export const BASEMAP_CURRENT = 'current'
 
 /** Names of the bundled styles, in the order the Map style control shows them. */
 export const bundledStyleNames = (): string[] =>
@@ -97,7 +109,11 @@ export const basemapSelection = (challenge: BasemapSettings | null | undefined):
   if (defaultBasemap === CHALLENGE_BASEMAP.custom && (customBasemap || defaultBasemapId)) {
     return BASEMAP_CUSTOM
   }
-  return basemapStyle(challenge)?.name ?? BASEMAP_NONE
+  const style = basemapStyle(challenge)
+  if (style?.name) return style.name
+  return defaultBasemap == null || defaultBasemap === CHALLENGE_BASEMAP.none
+    ? BASEMAP_NONE
+    : BASEMAP_CURRENT
 }
 
 /**
@@ -107,8 +123,18 @@ export const basemapSelection = (challenge: BasemapSettings | null | undefined):
  */
 export const basemapSubmission = (
   selection: string,
-  customBasemapUrl: string
-): Required<BasemapSettings> => {
+  customBasemapUrl: string,
+  stored?: BasemapSettings | null
+): BasemapSettings => {
+  if (selection === BASEMAP_CURRENT) return {}
+  if (
+    stored &&
+    selection === basemapSelection(stored) &&
+    (selection !== BASEMAP_CUSTOM ||
+      customBasemapUrl === (stored.customBasemap || stored.defaultBasemapId || ''))
+  ) {
+    return {}
+  }
   if (selection === BASEMAP_CUSTOM && customBasemapUrl) {
     return {
       defaultBasemap: CHALLENGE_BASEMAP.custom,

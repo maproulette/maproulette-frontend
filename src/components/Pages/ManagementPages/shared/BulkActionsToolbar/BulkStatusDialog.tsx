@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
-import { getStatusLabel, STATUS_LABEL_KEYS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_MESSAGES } from '@/lib/taskConstants'
 
 interface Props {
   open: boolean
@@ -33,18 +33,16 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            {t(
-              'managementPages.bulkActionsToolbar.statusDialog.title',
-              undefined,
-              'Change task status'
-            )}
+            {t({
+              id: 'managementPages.bulkActionsToolbar.statusDialog.title',
+              defaultMessage: 'Change task status',
+            })}
           </DialogTitle>
           <DialogDescription>
-            {t(
-              'managementPages.bulkActionsToolbar.statusDialog.description',
-              undefined,
-              'Updates every selected task to the chosen status.'
-            )}
+            {t({
+              id: 'managementPages.bulkActionsToolbar.statusDialog.description',
+              defaultMessage: 'Updates every selected task to the chosen status.',
+            })}
           </DialogDescription>
         </DialogHeader>
         <Select value={status} onValueChange={setStatus}>
@@ -52,7 +50,7 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {Object.keys(STATUS_LABEL_KEYS).map((key) => (
+            {Object.keys(STATUS_MESSAGES).map((key) => (
               <SelectItem key={key} value={key}>
                 {getStatusLabel(t, Number(key))}
               </SelectItem>
@@ -61,10 +59,10 @@ export const BulkStatusDialog = ({ open, onOpenChange, onConfirm }: Props) => {
         </Select>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            {t('common.cancel', undefined, 'Cancel')}
+            {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>
           <Button onClick={() => onConfirm(Number(status))}>
-            {t('managementPages.bulkActionsToolbar.apply', undefined, 'Apply')}
+            {t({ id: 'common.apply', defaultMessage: 'Apply' })}
           </Button>
         </DialogFooter>
       </DialogContent>

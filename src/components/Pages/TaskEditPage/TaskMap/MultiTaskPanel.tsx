@@ -29,25 +29,31 @@ export const MultiTaskPanel = () => {
     >
       {/* Header - always visible, clickable to expand/collapse */}
       <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
-        <div className="flex items-center gap-2">
+        <span className="flex items-center gap-2">
           <Users className="h-4 w-4 text-blue-500" />
           <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
             {activeBundle ? (
               <>
                 {t(
-                  'taskMap.multiTaskPanel.workingOnTasks',
-                  { count: activeBundle.taskIds.length },
-                  '{count, plural, one {Working on # task} other {Working on # tasks}}'
+                  {
+                    id: 'taskMap.multiTaskPanel.workingOnTasks',
+                    defaultMessage:
+                      '{count, plural, one {Working on # task} other {Working on # tasks}}',
+                  },
+                  { count: activeBundle.taskIds.length }
                 )}
                 <span className="ml-1 text-zinc-400">
-                  {t('taskMap.multiTaskPanel.maxBadge', { max: MAX_SELECTED_TASKS }, '({max} max)')}
+                  {t(
+                    { id: 'taskMap.multiTaskPanel.maxBadge', defaultMessage: '({max} max)' },
+                    { max: MAX_SELECTED_TASKS }
+                  )}
                 </span>
               </>
             ) : (
-              t('taskMap.multiTaskPanel.title', undefined, 'Work on multiple tasks')
+              t({ id: 'taskMap.multiTaskPanel.title', defaultMessage: 'Work on multiple tasks' })
             )}
           </span>
-        </div>
+        </span>
         <ChevronDown
           className={cn(
             'h-4 w-4 text-zinc-400 transition-transform',
@@ -81,17 +87,23 @@ export const MultiTaskPanel = () => {
             )}
             title={
               activeBundle && activeBundle.taskIds.length >= MAX_SELECTED_TASKS
-                ? t('taskMap.multiTaskPanel.maxReached', undefined, 'Maximum tasks reached')
+                ? t({
+                    id: 'taskMap.multiTaskPanel.maxReached',
+                    defaultMessage: 'Maximum tasks reached',
+                  })
                 : withBindingHint(
-                    t('taskMap.multiTaskPanel.drawTooltip', undefined, 'Draw to add tasks'),
+                    t({
+                      id: 'taskMap.multiTaskPanel.drawButton',
+                      defaultMessage: 'Draw to add tasks',
+                    }),
                     MAP_BINDINGS.startDrawing
                   )
             }
           >
             <Lasso className="h-4 w-4" />
             {drawingMode === 'select'
-              ? t('taskMap.multiTaskPanel.drawing', undefined, 'Drawing...')
-              : t('taskMap.multiTaskPanel.drawButton', undefined, 'Draw to add tasks')}
+              ? t({ id: 'taskMap.multiTaskPanel.drawing', defaultMessage: 'Drawing...' })
+              : t({ id: 'taskMap.multiTaskPanel.drawButton', defaultMessage: 'Draw to add tasks' })}
           </button>
 
           {/* Clear all - only show when there's a bundle */}
@@ -102,7 +114,10 @@ export const MultiTaskPanel = () => {
               className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
             >
               <Trash2 className="h-4 w-4" />
-              {t('taskMap.multiTaskPanel.clearAll', undefined, 'Work on only the primary task')}
+              {t({
+                id: 'taskMap.multiTaskPanel.clearAll',
+                defaultMessage: 'Work on only the primary task',
+              })}
             </button>
           )}
 
@@ -118,16 +133,18 @@ export const MultiTaskPanel = () => {
                 className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-sm text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-slate-700"
               >
                 <RotateCcw className="h-4 w-4" />
-                {t('taskMap.multiTaskPanel.resetBundle', undefined, 'Reset to initial bundle')}
+                {t({
+                  id: 'taskMap.multiTaskPanel.resetBundle',
+                  defaultMessage: 'Reset to initial bundle',
+                })}
               </button>
             )}
 
           <DocsLink page="solvingMultipleTasksTogether" className="px-3 text-xs">
-            {t(
-              'taskMap.multiTaskPanel.docsLink',
-              undefined,
-              'Learn about solving multiple tasks together'
-            )}
+            {t({
+              id: 'taskMap.multiTaskPanel.docsLink',
+              defaultMessage: 'Learn about solving multiple tasks together',
+            })}
           </DocsLink>
         </div>
       </CollapsibleContent>

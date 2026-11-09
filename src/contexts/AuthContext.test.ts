@@ -44,7 +44,10 @@ vi.mock('@/components/ui/Loader', () => ({ Loader: vi.fn(() => null) }))
 
 vi.mock('@/lib/logger', () => ({ logger: { warn: vi.fn(), error: vi.fn() } }))
 
-vi.mock('@/i18n', () => ({ useIntl: () => ({ t: (_k: string, _v: unknown, d: string) => d }) }))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  return { useIntl: () => ({ t: testT }) }
+})
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }))
 

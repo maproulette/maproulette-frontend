@@ -12,8 +12,12 @@ vi.mock('@/contexts/PluginContext', () => ({
   usePluginContext: () => ({ navigationItems: pluginNavigationItems.current }),
 }))
 // Stable t and context value, as the real IntlContext provides (t is a useCallback).
-const intl = { t: (_id: string, _values: unknown, defaultMessage: string) => defaultMessage }
-vi.mock('@/i18n', () => ({ useIntl: () => intl }))
+const intl = vi.hoisted(() => ({ t: undefined as unknown }))
+vi.mock('@/i18n', async () => {
+  const { testT } = await import('@/test/translate')
+  intl.t = testT
+  return { useIntl: () => intl }
+})
 
 const {
   ChromeProvider,

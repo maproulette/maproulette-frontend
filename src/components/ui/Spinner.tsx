@@ -27,7 +27,7 @@ export const Spinner = ({
   return (
     <Loader2Icon
       role="status"
-      aria-label={t('ui.spinner.loading', undefined, 'Loading')}
+      aria-label={t({ id: 'ui.spinner.loading', defaultMessage: 'Loading' })}
       className={cn(spinnerVariants({ size }), className)}
       {...props}
     />

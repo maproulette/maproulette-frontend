@@ -13,6 +13,7 @@ import {
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type {
@@ -82,7 +83,7 @@ export const FindChallenge = () => {
     return result
   }, [urlDifficulty, urlWorkOn, urlCategories, urlSortBy, urlGlobal, limit])
 
-  const trimmedSearchQuery = searchQuery.trim()
+  const trimmedSearchQuery = useDebouncedValue(searchQuery.trim())
   const hasSearchQuery = trimmedSearchQuery.length > 0
 
   const searchQueryResult = api.challenge.searchChallenges({ search: trimmedSearchQuery })
@@ -132,14 +133,16 @@ export const FindChallenge = () => {
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
-            {t('common.results', undefined, 'Results')}
+            {t({ id: 'common.results', defaultMessage: 'Results' })}
           </h3>
           {!isLoading && data && data.length > 0 && (
             <span className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
-                'appLayout.header.globalSearch.findChallenge.resultCount',
-                { count: data.length },
-                '{count, plural, one {# challenge} other {# challenges}}'
+                {
+                  id: 'appLayout.header.globalSearch.findChallenge.resultCount',
+                  defaultMessage: '{count, plural, one {# challenge} other {# challenges}}',
+                },
+                { count: data.length }
               )}
             </span>
           )}
@@ -151,11 +154,10 @@ export const FindChallenge = () => {
               <div className="flex flex-col items-center gap-3">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-600 dark:text-slate-400">
-                  {t(
-                    'appLayout.header.globalSearch.findChallenge.loadingMore',
-                    undefined,
-                    'Loading more challenges...'
-                  )}
+                  {t({
+                    id: 'appLayout.header.globalSearch.findChallenge.loadingMore',
+                    defaultMessage: 'Loading more challenges...',
+                  })}
                 </p>
               </div>
             </div>
@@ -166,7 +168,7 @@ export const FindChallenge = () => {
               <div className="flex flex-col items-center justify-center gap-3 py-12">
                 <Spinner size="lg" className="text-blue-500" />
                 <p className="text-sm text-zinc-500 dark:text-slate-400">
-                  {t('common.loadingChallenges', undefined, 'Loading challenges...')}
+                  {t({ id: 'common.loadingChallenges', defaultMessage: 'Loading challenges...' })}
                 </p>
               </div>
             ) : results.length === 0 ? (
@@ -176,34 +178,37 @@ export const FindChallenge = () => {
                 </div>
                 <div className="space-y-1 text-center">
                   <p className="font-medium text-sm text-zinc-900 dark:text-white">
-                    {t('common.noChallengesFound', undefined, 'No challenges found')}
+                    {t({ id: 'common.noChallengesFound', defaultMessage: 'No challenges found' })}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-slate-400">
-                    {t(
-                      'appLayout.header.globalSearch.findChallenge.noResultsHint',
-                      undefined,
-                      'Try adjusting your filters'
-                    )}
+                    {t({
+                      id: 'appLayout.header.globalSearch.findChallenge.noResultsHint',
+                      defaultMessage: 'Try adjusting your filters',
+                    })}
                   </p>
                 </div>
               </div>
             ) : (
               <>
                 {results.map((result: Challenge) => (
-                  <Link
+                  <div
                     key={result.id}
-                    to="/challenge/$challengeId"
-                    params={{ challengeId: String(result.id) }}
-                    onClick={onResultSelect}
                     className={cn(
-                      'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+                      'group stretched-link-container flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
                       'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
                       'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
                     )}
                   >
                     <div className="min-w-0 flex-1 space-y-2">
                       <h3 className="font-semibold text-base text-zinc-900 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                        {result.name}
+                        <Link
+                          to="/challenge/$challengeId"
+                          params={{ challengeId: String(result.id) }}
+                          onClick={onResultSelect}
+                          className="stretched-link"
+                        >
+                          {result.name}
+                        </Link>
                       </h3>
                       {result.description && (
                         <p className="line-clamp-2 text-sm text-zinc-600 leading-relaxed dark:text-slate-400">
@@ -212,7 +217,7 @@ export const FindChallenge = () => {
                       )}
                     </div>
                     <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-                  </Link>
+                  </div>
                 ))}
 
                 {hasMore && <div ref={loadMoreRef} className="h-4" />}
@@ -223,14 +228,13 @@ export const FindChallenge = () => {
                       <div className="h-1.5 w-16 rounded-full bg-zinc-400 dark:bg-slate-600" />
                       <div className="space-y-1 text-center">
                         <p className="font-semibold text-base text-zinc-800 dark:text-slate-200">
-                          {t('common.thatsAll', undefined, "That's all!")}
+                          {t({ id: 'common.thatsAll', defaultMessage: "That's all!" })}
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-slate-400">
-                          {t(
-                            'appLayout.header.globalSearch.findChallenge.noMoreToLoad',
-                            undefined,
-                            'No more challenges to load'
-                          )}
+                          {t({
+                            id: 'appLayout.header.globalSearch.findChallenge.noMoreToLoad',
+                            defaultMessage: 'No more challenges to load',
+                          })}
                         </p>
                       </div>
                     </div>

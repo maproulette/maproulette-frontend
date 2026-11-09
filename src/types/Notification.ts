@@ -1,3 +1,4 @@
+import { defineMessages, type MessageDescriptor } from 'react-intl'
 import type { components } from './openApiTypes'
 
 export const NotificationType = {
@@ -63,21 +64,26 @@ export const NOTIFICATION_CATEGORIES: NotificationCategory[] = [
 
 export const NOTIFICATION_STATUSES: NotificationStatus[] = ['all', 'unread', 'read']
 
-export const NOTIFICATION_CATEGORY_LABELS: Record<NotificationCategory, string> = {
-  all: 'All',
-  task_comment: 'Comments',
-  mention: 'Mentions',
-  review: 'Reviews',
-  challenge: 'Challenges',
-  team: 'Teams',
-  system: 'System',
-}
+export const NOTIFICATION_CATEGORY_MESSAGES: Record<NotificationCategory, MessageDescriptor> =
+  defineMessages({
+    all: { id: 'notificationsPage.filters.category.all', defaultMessage: 'All' },
+    task_comment: { id: 'common.comments', defaultMessage: 'Comments' },
+    mention: { id: 'common.mentions', defaultMessage: 'Mentions' },
+    review: { id: 'notificationsPage.filters.category.reviews', defaultMessage: 'Reviews' },
+    challenge: {
+      id: 'common.challenges',
+      defaultMessage: 'Challenges',
+    },
+    team: { id: 'common.teams', defaultMessage: 'Teams' },
+    system: { id: 'notificationsPage.filters.category.system', defaultMessage: 'System' },
+  })
 
-export const NOTIFICATION_STATUS_LABELS: Record<NotificationStatus, string> = {
-  all: 'All',
-  unread: 'Unread',
-  read: 'Read',
-}
+export const NOTIFICATION_STATUS_MESSAGES: Record<NotificationStatus, MessageDescriptor> =
+  defineMessages({
+    all: { id: 'notificationsPage.filters.status.all', defaultMessage: 'All' },
+    unread: { id: 'notificationsPage.filters.status.unread', defaultMessage: 'Unread' },
+    read: { id: 'notificationsPage.filters.status.read', defaultMessage: 'Read' },
+  })
 
 // Reason: maps raw notification type numbers to a smaller set of user-facing categories.
 // Notifications not covered here fall into 'system'.

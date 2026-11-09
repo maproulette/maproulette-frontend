@@ -6,7 +6,7 @@ import { TeamMembersTable } from './TeamMembersTable'
 import { TeamProjectsView } from './TeamProjectsView'
 
 export const TEAM_SECTIONS = ['users', 'projects', 'challenges'] as const
-export type TeamSection = (typeof TEAM_SECTIONS)[number]
+type TeamSection = (typeof TEAM_SECTIONS)[number]
 
 /**
  * Right-hand panel of the team detail page: a header naming what a team has,
@@ -19,9 +19,9 @@ export const TeamContentPanel = () => {
   const { section = 'users' } = useSearch({ from: '/_app/teams/$teamId/' })
 
   const labels: Record<TeamSection, string> = {
-    users: t('teams.detail.tabUsers', undefined, 'Users'),
-    projects: t('teams.detail.tabProjects', undefined, 'Projects'),
-    challenges: t('teams.detail.tabChallenges', undefined, 'Challenges'),
+    users: t({ id: 'common.users', defaultMessage: 'Users' }),
+    projects: t({ id: 'common.projects', defaultMessage: 'Projects' }),
+    challenges: t({ id: 'common.challenges', defaultMessage: 'Challenges' }),
   }
 
   return (

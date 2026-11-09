@@ -19,8 +19,26 @@ afterEach(() => {
 })
 
 describe('taskBulk.useBulkUpdateStatus', () => {
-  it('PUTs a status update for every task id and invalidates task/challenge queries', async () => {
-    const fetchMock = stubFetch(new Response('', { status: 200 }))
+  it('PUTs the full tasks with the new status and cleared review fields in one batch update', async () => {
+    const fetchMock = vi.fn(async (request: Request) => {
+      const path = new URL(request.url).pathname
+      const match = path.match(/^\/api\/v2\/task\/(\d+)$/)
+      if (match) {
+        const id = Number(match[1])
+        return new Response(
+          JSON.stringify({
+            id,
+            name: `task ${id}`,
+            parent: 9,
+            status: 1,
+            cooperativeWork: { a: id },
+          }),
+          { status: 200 }
+        )
+      }
+      return new Response('', { status: 200 })
+    })
+    vi.stubGlobal('fetch', fetchMock)
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
@@ -28,16 +46,28 @@ describe('taskBulk.useBulkUpdateStatus', () => {
       wrapper: queryClientWrapper(queryClient),
     })
 
-    result.current.mutate({ taskIds: [1, 2], status: 3 })
+    result.current.mutate({ taskIds: [1, 2], status: 0 })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual({ taskIds: [1, 2] })
-    expect(fetchMock).toHaveBeenCalledTimes(2)
-    const urls = fetchMock.mock.calls
-      .map(([request]) => new URL((request as Request).url).pathname)
-      .sort()
-    expect(urls).toEqual(['/api/v2/task/1/3', '/api/v2/task/2/3'])
+    const put = fetchMock.mock.calls
+      .map(([request]) => request)
+      .find((request) => request.method === 'PUT')
+    expect(put).toBeDefined()
+    expect(new URL((put as Request).url).pathname).toBe('/api/v2/tasks')
+    const reset = {
+      status: 0,
+      mappedOn: null,
+      reviewStatus: null,
+      reviewRequestedBy: null,
+      reviewedBy: null,
+      reviewedAt: null,
+    }
+    expect(await (put as Request).clone().json()).toEqual([
+      { id: '1', name: 'task 1', parent: 9, cooperativeWork: { a: 1 }, ...reset },
+      { id: '2', name: 'task 2', parent: 9, cooperativeWork: { a: 2 }, ...reset },
+    ])
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
   })
@@ -54,33 +84,9 @@ describe('taskBulk.useBulkUpdateStatus', () => {
   })
 })
 
-describe('taskBulk.useBulkAddTags', () => {
-  it('GETs a tag update with comma-joined tags for every task id and invalidates task queries', async () => {
-    const fetchMock = stubFetch(new Response('', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskBulk.useBulkAddTags(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ taskIds: [4, 5], tags: ['foo', 'bar'] })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(fetchMock).toHaveBeenCalledTimes(2)
-    for (const [request] of fetchMock.mock.calls) {
-      const url = new URL((request as Request).url)
-      expect(url.searchParams.get('tags')).toBe('foo,bar')
-      expect(url.pathname).toMatch(/^\/api\/v2\/task\/[45]\/tags\/update$/)
-    }
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
-  })
-})
-
 describe('taskBulk.useBulkDelete', () => {
   it('DELETEs the given task ids and returns the bulk delete result', async () => {
-    const deleteResult = { requested: 2, deleted: 1, denied: [2] }
+    const deleteResult = { requested: 2, deleted: 1 }
     const fetchMock = stubFetch(new Response(JSON.stringify(deleteResult), { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -146,28 +152,5 @@ describe('taskBulk.useBulkReassign', () => {
     expect(new URL((request as Request).url).pathname).toBe('/api/v2/tasks/reassign')
     expect(await (request as Request).clone().json()).toEqual({ taskIds: [1, 2], userId: 99 })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
-  })
-})
-
-describe('taskBulk.useBulkClearLock', () => {
-  it('POSTs the given task ids to unlock them and invalidates task/challenge queries', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify({ ok: true }), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskBulk.useBulkClearLock(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate([3, 4])
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect((request as Request).method).toBe('POST')
-    expect(new URL((request as Request).url).pathname).toBe('/api/v2/task/bundle/unlock')
-    expect(await (request as Request).clone().json()).toEqual([3, 4])
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
   })
 })

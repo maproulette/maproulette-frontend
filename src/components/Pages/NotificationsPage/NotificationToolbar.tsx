@@ -23,10 +23,13 @@ export const NotificationToolbar = () => {
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'unread' | 'all')}>
         <TabsList>
           <TabsTrigger value="unread">
-            {t('common.unread', { count: filteredUnreadCount }, 'Unread ({count})')}
+            {t(
+              { id: 'common.unread', defaultMessage: 'Unread ({count})' },
+              { count: filteredUnreadCount }
+            )}
           </TabsTrigger>
           <TabsTrigger value="all">
-            {t('common.all', { count: filteredAllCount }, 'All ({count})')}
+            {t({ id: 'common.all', defaultMessage: 'All ({count})' }, { count: filteredAllCount })}
           </TabsTrigger>
         </TabsList>
       </Tabs>
@@ -40,14 +43,19 @@ export const NotificationToolbar = () => {
             disabled={isMarkingSelected || filteredNotifications.length === 0}
           >
             {isMarkingSelected
-              ? t('notificationsPage.toolbar.marking', undefined, 'Marking...')
+              ? t({ id: 'notificationsPage.toolbar.marking', defaultMessage: 'Marking...' })
               : selectedNotificationIds.size > 0
                 ? t(
-                    'notificationsPage.toolbar.markSelectedUnread',
-                    { count: selectedNotificationIds.size },
-                    'Mark {count} as unread'
+                    {
+                      id: 'notificationsPage.toolbar.markSelectedUnread',
+                      defaultMessage: 'Mark {count, number} as unread',
+                    },
+                    { count: selectedNotificationIds.size }
                   )
-                : t('notificationsPage.toolbar.markAllUnread', undefined, 'Mark all as unread')}
+                : t({
+                    id: 'notificationsPage.toolbar.markAllUnread',
+                    defaultMessage: 'Mark all as unread',
+                  })}
           </Button>
         ) : (
           <Button
@@ -57,14 +65,16 @@ export const NotificationToolbar = () => {
             disabled={isMarkingSelected || filteredNotifications.length === 0}
           >
             {isMarkingSelected
-              ? t('notificationsPage.toolbar.marking', undefined, 'Marking...')
+              ? t({ id: 'notificationsPage.toolbar.marking', defaultMessage: 'Marking...' })
               : selectedNotificationIds.size > 0
                 ? t(
-                    'notificationsPage.toolbar.markSelectedRead',
-                    { count: selectedNotificationIds.size },
-                    'Mark {count} as read'
+                    {
+                      id: 'notificationsPage.toolbar.markSelectedRead',
+                      defaultMessage: 'Mark {count, number} as read',
+                    },
+                    { count: selectedNotificationIds.size }
                   )
-                : t('common.markAllAsRead', undefined, 'Mark all as read')}
+                : t({ id: 'common.markAllAsRead', defaultMessage: 'Mark all as read' })}
           </Button>
         )}
       </div>

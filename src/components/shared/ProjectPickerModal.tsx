@@ -1,15 +1,15 @@
 import { Archive, Eye, Pin, User } from 'lucide-react'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { api } from '@/api'
 import { ProjectsTableView } from '@/components/Pages/ManagementPages/ManageProjects/ProjectsTableView'
 import { getPinnedProjectIds } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { useProjectChallengeCounts } from '@/components/Pages/ManagementPages/ManageProjects/useProjectChallengeCounts'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
 import { ProjectCard } from '@/components/shared/ProjectCard'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
-import { Button } from '@/components/ui/Button'
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/Dialog'
 import { Spinner } from '@/components/ui/Spinner'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
 
@@ -50,63 +51,52 @@ export const ProjectPickerModal = ({
   children,
 }: ProjectPickerModalProps) => {
   const { t } = useIntl()
-  const resolvedTitle = title ?? t('common.selectAProject', undefined, 'Select a project')
+  const resolvedTitle =
+    title ?? t({ id: 'common.selectAProject', defaultMessage: 'Select a project' })
   const resolvedDescription =
     description ??
-    t(
-      'shared.projectPickerModal.description',
-      undefined,
-      'Choose the project this challenge belongs to.'
-    )
+    t({
+      id: 'shared.projectPickerModal.description',
+      defaultMessage: 'Choose the project this challenge belongs to.',
+    })
   const [searchQuery, setSearchQuery] = useState('')
   const [onlyEnabled, setOnlyEnabled] = useState(false)
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyShowArchived, setOnlyShowArchived] = useState(false)
   const [onlyShowPinned, setOnlyShowPinned] = useState(false)
-  const [loadedPages, setLoadedPages] = useState(1)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
-  // Reset pagination when server-side filters change so a narrower result set
-  // doesn't keep an oversized limit from a prior search.
-  useEffect(() => {
-    setLoadedPages(1)
-  }, [searchQuery, onlyEnabled, onlyOwned])
-
-  const {
-    data: projects,
-    isLoading,
-    isFetching,
-  } = api.project.getManagedProjects({
-    limit: PAGE_SIZE * loadedPages,
-    page: 0,
-    searchString: searchQuery,
-    onlyEnabled,
-    onlyOwned,
-  })
-
-  const hasNextPage = (projects?.length ?? 0) >= PAGE_SIZE * loadedPages
-  const challengeCountsByProjectId = useProjectChallengeCounts(projects ?? [])
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
 
   const { user } = useAuthContext()
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
   const excluded = useMemo(() => new Set(excludeProjectIds ?? []), [excludeProjectIds])
+  const canList = open && (!onlyShowPinned || pinnedProjectIds.length > 0)
+
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
+    api.project.managedProjectsInfinite(
+      {
+        searchString: debouncedSearchQuery,
+        onlyEnabled,
+        onlyOwned,
+        isArchived: onlyShowArchived,
+        projectIds: onlyShowPinned ? pinnedProjectIds.join(',') : '',
+      },
+      { limit: PAGE_SIZE, enabled: canList }
+    )
+  const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 
   const projectsToShow = useMemo(() => {
-    const list = projects ?? []
     const set = new Set(pinnedProjectIds)
-    const sorted = [...list].sort((a, b) => {
-      const aPinned = a.id != null && set.has(a.id) ? 1 : 0
-      const bPinned = b.id != null && set.has(b.id) ? 1 : 0
-      return bPinned - aPinned
-    })
-    const filtered = sorted.filter(
-      (p) => (p.isArchived ?? false) === onlyShowArchived && !(p.id != null && excluded.has(p.id))
-    )
-    if (onlyShowPinned) {
-      return filtered.filter((p) => p.id != null && set.has(p.id))
-    }
-    return filtered
-  }, [projects, pinnedProjectIds, onlyShowArchived, onlyShowPinned, excluded])
+    return projects
+      .filter((p) => !(p.id != null && excluded.has(p.id)))
+      .sort((a, b) => {
+        const aPinned = a.id != null && set.has(a.id) ? 1 : 0
+        const bPinned = b.id != null && set.has(b.id) ? 1 : 0
+        return bPinned - aPinned
+      })
+  }, [projects, pinnedProjectIds, excluded])
 
   const handleSelect = (project: Project) => {
     onSelectProject(project)
@@ -127,28 +117,28 @@ export const ProjectPickerModal = ({
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder={t('common.searchProjects', undefined, 'Search projects...')}
+            placeholder={t({ id: 'common.searchProjects', defaultMessage: 'Search projects...' })}
           />
           <FilterToggle
-            label={t('common.discoverable', undefined, 'Discoverable')}
+            label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
             icon={Eye}
             checked={onlyEnabled}
             onCheckedChange={setOnlyEnabled}
           />
           <FilterToggle
-            label={t('common.owned', undefined, 'Owned')}
+            label={t({ id: 'common.owned', defaultMessage: 'Owned' })}
             icon={User}
             checked={onlyOwned}
             onCheckedChange={setOnlyOwned}
           />
           <FilterToggle
-            label={t('common.pinned', undefined, 'Pinned')}
+            label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
             icon={Pin}
             checked={onlyShowPinned}
             onCheckedChange={setOnlyShowPinned}
           />
           <FilterToggle
-            label={t('common.archived', undefined, 'Archived')}
+            label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
             icon={Archive}
             checked={onlyShowArchived}
             onCheckedChange={setOnlyShowArchived}
@@ -177,7 +167,10 @@ export const ProjectPickerModal = ({
             </div>
           ) : projectsToShow.length === 0 ? (
             <div className="rounded-lg border border-zinc-200 p-6 text-center text-sm text-zinc-500 dark:border-slate-700 dark:text-zinc-400">
-              {t('shared.projectPickerModal.noProjectsFound', undefined, 'No projects found.')}
+              {t({
+                id: 'shared.projectPickerModal.noProjectsFound',
+                defaultMessage: 'No projects found.',
+              })}
             </div>
           ) : viewMode === 'list' ? (
             <ProjectsTableView
@@ -206,33 +199,22 @@ export const ProjectPickerModal = ({
                     totalChallenges={challengeStats?.total}
                     completedChallenges={challengeStats?.completed}
                     onSelect={() => handleSelect(project)}
-                    selected={project.id != null && project.id === selectedProjectId}
+                    selected={project.id === selectedProjectId}
                   />
                 )
               })}
             </div>
           )}
 
-          {!isLoading && projectsToShow.length > 0 && hasNextPage && (
-            <div className="flex justify-center p-3">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="rounded-full"
-                onClick={() => setLoadedPages((p) => p + 1)}
-                disabled={isFetching}
-              >
-                {isFetching ? (
-                  <>
-                    <Spinner />
-                    {t('common.loading2', undefined, 'Loading...')}
-                  </>
-                ) : (
-                  t('common.loadMore', undefined, 'Load More')
-                )}
-              </Button>
-            </div>
+          {!isLoading && projectsToShow.length > 0 && (
+            <LoadMoreFooter
+              hasNextPage={hasNextPage}
+              isFetching={isFetching}
+              onLoadMore={() => void fetchNextPage()}
+              showEndOfList={false}
+              size="sm"
+              className="p-3"
+            />
           )}
         </fieldset>
         {children}

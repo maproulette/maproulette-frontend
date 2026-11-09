@@ -2,6 +2,7 @@ import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIntl } from '@/i18n'
 import { canManageChallenge } from '@/lib/challengePermissions'
 import { formatLongDate } from '@/lib/date'
 import type { Challenge } from '@/types/Challenge'
@@ -43,6 +44,7 @@ type BrowsedChallengeContextType = {
 const BrowsedChallengeContext = createContext<BrowsedChallengeContextType | undefined>(undefined)
 
 export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) => {
+  const { locale } = useIntl()
   const { challenge: loadedChallenge } = useLoaderData({ from: '/_app/challenge/$challengeId/' })
   // The loader is typed from the OpenAPI spec, which doesn't declare every field
   // the backend writes (see the notes on `Challenge`), so read it through the
@@ -73,7 +75,9 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const projectName = projectData?.displayName || projectData?.name
 
-  const formattedDate = challenge.created ? formatLongDate(new Date(challenge.created)) : null
+  const formattedDate = challenge.created
+    ? formatLongDate(new Date(challenge.created), locale)
+    : null
   const hasOverpass = !!challenge.overpassQL
   const canManage = canManageChallenge(user, challenge)
 

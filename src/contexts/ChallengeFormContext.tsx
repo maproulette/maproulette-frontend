@@ -3,12 +3,18 @@ import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
+import { isChallengeSourceEditable } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeFormSchema'
+import {
+  buildCloneFormValues,
+  clonedChallengeSettings,
+} from '@/components/Pages/ManagementPages/ManageChallengeNew/cloneChallenge'
 import { buildChallengeSubmission } from '@/contexts/challengeSubmission'
 import { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
 
 interface ChallengeFormContextType {
   challenge?: Challenge
+  initialValues?: ChallengeFormValues
   projectId?: number
   isLoading: boolean
   onSubmit: (values: ChallengeFormValues) => Promise<void>
@@ -20,12 +26,21 @@ const ChallengeFormContext = createContext<ChallengeFormContextType | undefined>
 export const CreateChallengeFormProvider = ({
   children,
   projectId,
+  cloneFromChallengeId,
 }: {
   children: ReactNode
   projectId?: number
+  cloneFromChallengeId?: number
 }) => {
   const navigate = useNavigate()
   const { t } = useIntl()
+  const { data: cloneSource, isLoading: isLoadingCloneSource } = api.challenge.getChallenge(
+    cloneFromChallengeId ?? 0
+  )
+  const initialValues = useMemo(
+    () => (cloneSource ? buildCloneFormValues(cloneSource, projectId) : undefined),
+    [cloneSource, projectId]
+  )
   const createChallengeMutation = api.challenge.useCreateChallenge()
   const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
@@ -35,19 +50,25 @@ export const CreateChallengeFormProvider = ({
       const selectedProjectId = values.projectId
       if (!selectedProjectId) {
         throw new Error(
-          t(
-            'challengeForm.errors.projectIdRequired',
-            undefined,
-            'Project ID is required to create a challenge'
-          )
+          t({
+            id: 'challengeForm.errors.projectIdRequired',
+            defaultMessage: 'Project ID is required to create a challenge',
+          })
         )
       }
 
-      const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(values, true)
+      const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(
+        values,
+        true,
+        true,
+        cloneSource
+      )
 
       const newChallenge = await createChallengeMutation.mutateAsync({
         projectId: selectedProjectId,
-        challengeData,
+        challengeData: cloneSource
+          ? { ...clonedChallengeSettings(cloneSource), ...challengeData }
+          : challengeData,
       })
 
       if (newChallenge.id && localGeoJSONUpload) {
@@ -83,7 +104,14 @@ export const CreateChallengeFormProvider = ({
         })
       }
     },
-    [createChallengeMutation, deleteChallengeMutation, navigate, uploadGeoJSONMutation, t]
+    [
+      createChallengeMutation,
+      deleteChallengeMutation,
+      navigate,
+      uploadGeoJSONMutation,
+      t,
+      cloneSource,
+    ]
   )
 
   const onCancel = useCallback(() => {
@@ -95,8 +123,8 @@ export const CreateChallengeFormProvider = ({
   }, [navigate, projectId])
 
   const value = useMemo<ChallengeFormContextType>(
-    () => ({ projectId, isLoading: false, onSubmit, onCancel }),
-    [projectId, onSubmit, onCancel]
+    () => ({ initialValues, projectId, isLoading: isLoadingCloneSource, onSubmit, onCancel }),
+    [initialValues, projectId, isLoadingCloneSource, onSubmit, onCancel]
   )
 
   return <ChallengeFormContext.Provider value={value}>{children}</ChallengeFormContext.Provider>
@@ -112,22 +140,54 @@ export const EditChallengeFormProvider = ({
   const navigate = useNavigate()
   const { data: challenge, isLoading } = api.challenge.getChallenge(challengeId)
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const removeKeywordsMutation = api.challenge.useRemoveChallengeKeywords()
+  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
 
   const onSubmit = useCallback(
     async (values: ChallengeFormValues) => {
-      const { challengeData } = await buildChallengeSubmission(values, false)
+      const { challengeData, localGeoJSONUpload } = await buildChallengeSubmission(
+        values,
+        false,
+        isChallengeSourceEditable(challenge),
+        challenge
+      )
+
+      const removedKeywords = ((challenge as Challenge | undefined)?.tags ?? []).filter(
+        (keyword) => keyword !== '' && !(challengeData.tags ?? []).includes(keyword)
+      )
+      if (removedKeywords.length > 0) {
+        await removeKeywordsMutation.mutateAsync({ challengeId, keywords: removedKeywords })
+      }
 
       await updateChallengeMutation.mutateAsync({
         challengeId,
         updates: challengeData,
       })
 
+      if (localGeoJSONUpload) {
+        await uploadGeoJSONMutation.mutateAsync({
+          challengeId,
+          geoJSONFile: localGeoJSONUpload.file,
+          options: {
+            lineByLine: localGeoJSONUpload.lineByLine,
+            dataOriginDate: localGeoJSONUpload.dataOriginDate,
+          },
+        })
+      }
+
       navigate({
         to: '/manage/challenge/$challengeId',
         params: { challengeId: String(challengeId) },
       })
     },
-    [challengeId, navigate, updateChallengeMutation]
+    [
+      challenge,
+      challengeId,
+      navigate,
+      removeKeywordsMutation,
+      updateChallengeMutation,
+      uploadGeoJSONMutation,
+    ]
   )
 
   const onCancel = useCallback(() => {

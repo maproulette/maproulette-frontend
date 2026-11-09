@@ -66,6 +66,21 @@ describe('useDescriptionRecommendation', () => {
     expect(result.current.recommended).toBe(false)
   })
 
+  it('stops reading the lock list once the arrival locks are recorded', () => {
+    setup({ heldLocks: undefined })
+    const { rerender } = renderHook(() => useDescriptionRecommendation())
+    expect(vi.mocked(api.user.lockedTasks)).toHaveBeenLastCalledWith(USER_ID, undefined, {
+      enabled: true,
+    })
+
+    setup({ heldLocks: [] })
+    rerender()
+
+    expect(vi.mocked(api.user.lockedTasks)).toHaveBeenLastCalledWith(USER_ID, undefined, {
+      enabled: false,
+    })
+  })
+
   it('nudges a mapper who arrived on a shared link holding no locks', () => {
     setup({ heldLocks: [] })
     const { result } = renderHook(() => useDescriptionRecommendation())

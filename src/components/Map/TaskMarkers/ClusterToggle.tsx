@@ -48,17 +48,15 @@ export const ClusterToggle = ({
 
   const warningMessage = showWarnings
     ? taskCount && taskCount > 5000
-      ? t(
-          'map.taskMarkers.clusterToggle.tooLargeWarning',
-          undefined,
-          'Data is too large to cluster, zoom in to view tasks'
-        )
+      ? t({
+          id: 'map.taskMarkers.clusterToggle.tooLargeWarning',
+          defaultMessage: 'Data is too large to cluster, zoom in to view tasks',
+        })
       : taskCount && taskCount > 500
-        ? t(
-            'map.taskMarkers.clusterToggle.enforcedWarning',
-            undefined,
-            'Clustering is enforced for 500+ tasks'
-          )
+        ? t({
+            id: 'map.taskMarkers.clusterToggle.enforcedWarning',
+            defaultMessage: 'Clustering is enforced for 500+ tasks',
+          })
         : null
     : null
 
@@ -102,7 +100,7 @@ export const ClusterToggle = ({
           />
           <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
           <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
-            {t('map.taskMarkers.clusterToggle.label', undefined, 'Cluster Markers')}
+            {t({ id: 'map.taskMarkers.clusterToggle.label', defaultMessage: 'Cluster Markers' })}
           </span>
         </Label>
 
@@ -111,9 +109,11 @@ export const ClusterToggle = ({
             {taskCount !== undefined && taskCount > 0 && (
               <Badge variant="secondary" className="text-xs">
                 {t(
-                  'common.tasksWithCount',
-                  { count: taskCount },
-                  '{count, plural, one {# task} other {# tasks}}'
+                  {
+                    id: 'common.tasksWithCount',
+                    defaultMessage: '{count, plural, one {# task} other {# tasks}}',
+                  },
+                  { count: taskCount }
                 )}
               </Badge>
             )}

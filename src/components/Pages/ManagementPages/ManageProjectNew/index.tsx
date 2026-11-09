@@ -36,12 +36,11 @@ export const ManageProjectNew = () => {
   return (
     <ManageFormLayout>
       <FormCard
-        title={t('common.createNewProject', undefined, 'Create New Project')}
-        description={t(
-          'manageProjectNew.pageDescription',
-          undefined,
-          'Fill in the information below to create your new project'
-        )}
+        title={t({ id: 'common.createNewProject', defaultMessage: 'Create New Project' })}
+        description={t({
+          id: 'manageProjectNew.pageDescription',
+          defaultMessage: 'Fill in the information below to create your new project',
+        })}
       >
         <ProjectForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </FormCard>

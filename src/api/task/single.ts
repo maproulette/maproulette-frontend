@@ -10,16 +10,30 @@ const getCurrentUserId = (queryClient: ReturnType<typeof useQueryClient>): numbe
   return (me as { id?: number } | undefined)?.id ?? null
 }
 
+export const LOCKED_TASKS_INVALIDATION_DELAY_MS = 300
+
+const pendingLockedTasksInvalidations = new WeakMap<
+  ReturnType<typeof useQueryClient>,
+  ReturnType<typeof setTimeout>
+>()
+
 /**
  * Refresh the current user's "locked tasks" list (e.g. the dashboard block). Called whenever
  * their lock state changes - lock, unlock, or a status change that releases the lock - so the
  * list reflects reality without waiting for the 60s stale window.
  */
 export const invalidateLockedTasks = (queryClient: ReturnType<typeof useQueryClient>): void => {
-  const userId = getCurrentUserId(queryClient)
-  if (userId != null) {
-    queryClient.invalidateQueries({ queryKey: ['user', userId, 'lockedTasks'] })
-  }
+  clearTimeout(pendingLockedTasksInvalidations.get(queryClient))
+  pendingLockedTasksInvalidations.set(
+    queryClient,
+    setTimeout(() => {
+      pendingLockedTasksInvalidations.delete(queryClient)
+      const userId = getCurrentUserId(queryClient)
+      if (userId != null) {
+        queryClient.invalidateQueries({ queryKey: ['user', userId, 'lockedTasks'] })
+      }
+    }, LOCKED_TASKS_INVALIDATION_DELAY_MS)
+  )
 }
 
 export interface TaskSearchResult {
@@ -48,9 +62,12 @@ export const taskSingle = {
   startTask: (taskId: number) =>
     useQuery(
       queryOptions({
-        queryKey: ['task', taskId, 'start'],
+        queryKey: ['taskStart', taskId],
         queryFn: () => apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskStartResponse>(),
         enabled: !!taskId,
+        staleTime: Number.POSITIVE_INFINITY,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
       })
     ),
 
@@ -71,7 +88,10 @@ export const taskSingle = {
       mutationFn: (taskId: number) =>
         apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskStartResponse>(),
       onSuccess: (lockedTask, taskId) => {
-        queryClient.setQueryData<TaskGetResponse>(['task', taskId], lockedTask)
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+          ...lockedTask,
+          lockedBy: getCurrentUserId(queryClient),
+        })
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         invalidateLockedTasks(queryClient)
         if (lockedTask?.parent) {
@@ -89,13 +109,22 @@ export const taskSingle = {
         apiRequest.get(`api/v2/task/${taskId}/refreshLock`).json<TaskStartResponse>(),
     }),
 
+  useRequestUnlock: () =>
+    useMutation({
+      mutationFn: (taskId: number) => apiRequest.put(`api/v2/task/${taskId}/unlock/request`).text(),
+    }),
+
   useUnlockTask: () => {
     const queryClient = useQueryClient()
     return useMutation({
       mutationFn: (taskId: number) =>
         apiRequest.get(`api/v2/task/${taskId}/release`).json<TaskGetResponse>(),
       onSuccess: (unlockedTask, taskId) => {
-        queryClient.setQueryData<TaskGetResponse>(['task', taskId], unlockedTask)
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+          ...unlockedTask,
+          lockedBy: null,
+          lockBundledTasks: [],
+        })
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         invalidateLockedTasks(queryClient)
         if (unlockedTask?.parent) {
@@ -122,7 +151,14 @@ export const taskSingle = {
       onError: (error, variables) => {
         logger.error('Failed to update bundle lock', { error, variables })
       },
-      onSuccess: () => {
+      onSuccess: (lock, { taskId }) => {
+        const lockedBy = getCurrentUserId(queryClient)
+        for (const id of new Set([taskId, lock.lockPrimaryTaskId, ...lock.lockBundledTasks])) {
+          queryClient.setQueryData<TaskGetResponse>(
+            ['task', id],
+            (cached) => cached && { ...cached, lockedBy, lockBundledTasks: lock.lockBundledTasks }
+          )
+        }
         queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
         invalidateLockedTasks(queryClient)
       },
@@ -141,7 +177,12 @@ export const taskSingle = {
         // Skip sets status to 3 (Skipped); patch the cached task instead of refetching.
         const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
         if (cached) {
-          queryClient.setQueryData<TaskGetResponse>(['task', taskId], { ...cached, status: 3 })
+          queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+            ...cached,
+            status: 3,
+            lockedBy: null,
+            lockBundledTasks: [],
+          })
         }
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         invalidateLockedTasks(queryClient)
@@ -165,10 +206,14 @@ export const taskSingle = {
       mutationFn: async ({ taskId, body }: { taskId: number; body: TaskGetResponse }) => {
         const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
         const updatedTask = await taskSingle.updateTask(taskId, body)
-        return { updatedTask, oldStatus: cached?.status ?? null }
+        return { updatedTask, oldStatus: cached?.status ?? null, cached }
       },
-      onSuccess: ({ updatedTask, oldStatus }, { taskId }) => {
-        queryClient.setQueryData<TaskGetResponse>(['task', taskId], updatedTask)
+      onSuccess: ({ updatedTask, oldStatus, cached }, { taskId }) => {
+        queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+          ...updatedTask,
+          lockedBy: cached?.lockedBy,
+          lockBundledTasks: cached?.lockBundledTasks,
+        })
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         if (updatedTask?.parent) {
           patchChallengeTaskMarker(queryClient, updatedTask.parent, taskId, {
@@ -188,17 +233,6 @@ export const taskSingle = {
    * instructions. Stored on the task and included in the challenge's CSV and
    * GeoJSON exports.
    */
-  useUpdateCompletionResponses: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ taskId, responses }: { taskId: number; responses: Record<string, unknown> }) =>
-        apiRequest.put(`api/v2/task/${taskId}/responses`, { json: responses }).text(),
-      onSuccess: (_data, { taskId }) => {
-        queryClient.invalidateQueries({ queryKey: ['task', taskId] })
-      },
-    })
-  },
-
   useUpdateTaskStatus: () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -210,17 +244,14 @@ export const taskSingle = {
         taskId: number
         status: number
         options?: {
-          tags?: string[]
           comment?: string
+          completionResponses?: Record<string, unknown>
           /** Opaque query params contributed by plugins */
           queryParams?: Record<string, string | boolean | number | undefined | null>
         }
       }) => {
         // Build query string manually
         const params = new URLSearchParams()
-        if (options?.tags && options.tags.length > 0) {
-          params.set('tags', options.tags.join(','))
-        }
         if (options?.queryParams) {
           for (const [key, value] of Object.entries(options.queryParams)) {
             if (value !== undefined && value !== null) {
@@ -232,7 +263,10 @@ export const taskSingle = {
         const queryString = params.toString()
         const url = `api/v2/task/${taskId}/${status}${queryString ? `?${queryString}` : ''}`
 
-        const response = await apiRequest.put(url)
+        const response = await apiRequest.put(
+          url,
+          options?.completionResponses ? { json: options.completionResponses } : undefined
+        )
 
         // If comment is provided, add it separately. The status change above has
         // already succeeded on the server, so a failure here must not fail the

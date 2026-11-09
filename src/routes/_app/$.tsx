@@ -27,7 +27,7 @@ const DynamicPluginRoute = () => {
     return (
       <Loader
         isFullScreen
-        message={t('dynamicPluginRoute.loading', undefined, 'Loading plugin page...')}
+        message={t({ id: 'dynamicPluginRoute.loading', defaultMessage: 'Loading plugin page...' })}
       />
     )
   }
@@ -37,13 +37,14 @@ const DynamicPluginRoute = () => {
       <div className="mx-auto max-w-4xl px-4 py-8">
         <Alert>
           <AlertCircle className="size-4" />
-          <AlertTitle>{t('common.pageNotFound', undefined, 'Page Not Found')}</AlertTitle>
+          <AlertTitle>
+            {t({ id: 'common.pageNotFound', defaultMessage: 'Page Not Found' })}
+          </AlertTitle>
           <AlertDescription>
-            {t(
-              'dynamicPluginRoute.notFoundDescription',
-              undefined,
-              'The requested plugin page could not be found.'
-            )}
+            {t({
+              id: 'dynamicPluginRoute.notFoundDescription',
+              defaultMessage: 'The requested plugin page could not be found.',
+            })}
           </AlertDescription>
         </Alert>
       </div>

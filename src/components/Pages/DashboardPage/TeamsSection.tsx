@@ -23,12 +23,12 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <Users className="h-4 w-4 text-purple-400" />
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
-          {t('common.teams', undefined, 'Teams')}
+          {t({ id: 'common.teams', defaultMessage: 'Teams' })}
         </h3>
         <DocsLink
           page="teams"
           icon={<ExternalLink className="h-3.5 w-3.5" />}
-          label={t('dashboard.teams.learnMore', undefined, 'Learn more about teams')}
+          label={t({ id: 'dashboard.teams.learnMore', defaultMessage: 'Learn more about teams' })}
           className="rounded p-1 text-zinc-400 no-underline transition-colors hover:text-zinc-600 dark:text-slate-500 dark:hover:text-slate-300"
         />
         <div className="ml-auto flex items-center gap-2">
@@ -40,7 +40,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
           <Link
             to="/teams/new"
             className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-purple-200 hover:text-zinc-700 dark:text-slate-400 dark:hover:bg-purple-500/30 dark:hover:text-slate-100"
-            title={t('common.createTeam', undefined, 'Create team')}
+            title={t({ id: 'common.createTeam', defaultMessage: 'Create team' })}
           >
             <Plus className="h-4 w-4" />
           </Link>
@@ -55,7 +55,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
 
         {error && (
           <div className="py-2 text-center text-red-400 text-sm">
-            {t('dashboard.common.failedToLoad', undefined, 'Failed to load')}
+            {t({ id: 'dashboard.common.failedToLoad', defaultMessage: 'Failed to load' })}
           </div>
         )}
 
@@ -65,10 +65,13 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
               <Users className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
             </div>
             <p className="text-sm text-zinc-600 dark:text-slate-400">
-              {t('dashboard.teams.empty.title', undefined, 'No teams')}
+              {t({ id: 'dashboard.teams.empty.title', defaultMessage: 'No teams' })}
             </p>
             <p className="text-xs text-zinc-500 dark:text-slate-500">
-              {t('dashboard.teams.empty.description', undefined, 'Join a team to collaborate')}
+              {t({
+                id: 'dashboard.teams.empty.description',
+                defaultMessage: 'Join a team to collaborate',
+              })}
             </p>
           </div>
         )}

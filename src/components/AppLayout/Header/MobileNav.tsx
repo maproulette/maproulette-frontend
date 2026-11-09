@@ -19,7 +19,7 @@ export const MobileNav = () => {
         <button
           type="button"
           className="hover:text-lime-600 lg:hidden"
-          aria-label={t('appLayout.header.nav.mobile', undefined, 'Mobile navigation')}
+          aria-label={t({ id: 'appLayout.header.nav.mobile', defaultMessage: 'Mobile navigation' })}
         >
           <MenuIcon className="size-6" />
         </button>
@@ -38,9 +38,11 @@ export const MobileNav = () => {
                 <ExternalLink
                   className="size-3.5"
                   aria-label={t(
-                    'appLayout.header.nav.openInNewTab',
-                    { label: item.label },
-                    'Open {label} in a new tab'
+                    {
+                      id: 'appLayout.header.nav.openInNewTab',
+                      defaultMessage: 'Open {label} in a new tab',
+                    },
+                    { label: item.label }
                   )}
                 />
               )}

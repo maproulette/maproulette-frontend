@@ -90,7 +90,7 @@ export const DialogContent = ({
         {children}
         <DialogPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-zinc-100 data-[state=open]:text-zinc-500 dark:ring-offset-slate-900 dark:data-[state=open]:bg-slate-700 dark:data-[state=open]:text-slate-400 dark:focus:ring-zinc-300">
           <X className="h-4 w-4" />
-          <span className="sr-only">{t('common.close', undefined, 'Close')}</span>
+          <span className="sr-only">{t({ id: 'common.close', defaultMessage: 'Close' })}</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>

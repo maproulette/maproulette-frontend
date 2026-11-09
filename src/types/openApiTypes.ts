@@ -400,7 +400,7 @@ export interface paths {
     }
     /**
      * List challenges in specified projects
-     * @description Retrieves a lightweight listing of challenges, with just a few basic fields for each, that belong to the specified project(s).
+     * @description Retrieves a lightweight listing of challenges, with just a few basic fields for each, that belong to the specified project(s), ordered by name.
      */
     get: operations['challenge_list_challenges_in_specified_projects']
     put?: never
@@ -2016,7 +2016,7 @@ export interface paths {
     }
     /**
      * List all the managed projects.
-     * @description Lists all the managed projects in the system for the authenticated user
+     * @description Lists all the managed projects in the system for the authenticated user, each with the number of challenges it contains and how many of them are complete
      */
     get: operations['project_list_all_the_managed_projects']
     put?: never
@@ -5733,6 +5733,7 @@ export interface components {
       difficulty: number
       /** Format: epoch */
       modified: number
+      parentName?: string | null
     }
     'org.maproulette.framework.model.MapillaryImage': {
       key: string
@@ -7256,6 +7257,14 @@ export interface operations {
         page?: number
         /** @description Flag to set if only wanting enabled Challenges returned. Default value is true. */
         onlyEnabled?: boolean
+        /** @description Only return challenges whose name contains this string. */
+        searchString?: string
+        /** @description Whether to only return challenges owned by the authenticated user. Default value is false. */
+        onlyOwned?: boolean
+        /** @description Whether to only return archived challenges. Default value is false. */
+        onlyArchived?: boolean
+        /** @description Comma-separated list of challenge ids to restrict the listing to. Default value is empty string, ie. no restriction. */
+        challengeIds?: string
         /** @description This field will be ignored for this request */
         parentId?: number
       }
@@ -10546,6 +10555,10 @@ export interface operations {
         searchString?: string
         /** @description The column to sort by. Default column is "display_name" */
         sort?: string
+        /** @description Only return projects with this archived state. By default archived and unarchived projects are both returned. */
+        isArchived?: boolean | null
+        /** @description Comma-separated list of project ids to restrict the listing to. Default value is empty string, ie. no restriction. */
+        projectIds?: string
       }
       header?: never
       path?: never
@@ -10559,7 +10572,13 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Project'][]
+          'application/json': (components['schemas']['Project'] & {
+            /** @description The number of challenges in the project, and how many of them are finished or have every task done. */
+            challengeCounts?: {
+              total?: number
+              completed?: number
+            }
+          })[]
         }
       }
     }

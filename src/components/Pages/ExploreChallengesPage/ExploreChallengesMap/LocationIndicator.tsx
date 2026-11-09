@@ -22,9 +22,11 @@ export const LocationIndicator = () => {
   if (!locationGeojson || !locationName) return null
 
   const label = t(
-    'exploreChallenges.map.locationIndicator.recenter',
-    { name: locationName },
-    'Recenter on the outlined area: {name}'
+    {
+      id: 'exploreChallenges.map.locationIndicator.recenter',
+      defaultMessage: 'Recenter on the outlined area: {name}',
+    },
+    { name: locationName }
   )
 
   const recenter = () => {

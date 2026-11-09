@@ -20,8 +20,8 @@ export const ProjectPickerButton = ({
   const label = selectedProject
     ? `${selectedProject.id} - ${selectedProject.displayName || selectedProject.name}`
     : hasProject
-      ? t('common.projectWithId', { id: projectId }, 'Project #{id}')
-      : t('common.selectAProject', undefined, 'Select a project')
+      ? t({ id: 'common.projectWithId', defaultMessage: 'Project #{id}' }, { id: projectId })
+      : t({ id: 'common.selectAProject', defaultMessage: 'Select a project' })
 
   return (
     <Button

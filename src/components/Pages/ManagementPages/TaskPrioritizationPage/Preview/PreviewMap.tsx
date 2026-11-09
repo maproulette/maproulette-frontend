@@ -169,7 +169,10 @@ export const PreviewMap = ({
           aria-live="polite"
         >
           <Spinner size="sm" />
-          {t('taskPrioritizationPage.previewMap.updatingPreview', undefined, 'Updating preview…')}
+          {t({
+            id: 'taskPrioritizationPage.previewMap.updatingPreview',
+            defaultMessage: 'Updating preview…',
+          })}
         </div>
       )}
 

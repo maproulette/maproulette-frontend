@@ -57,13 +57,19 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
         )}
         <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
           {showingSuggestion
-            ? t('taskInfoPanel.editorChanges.suggestionTitle', undefined, 'Suggested tag changes')
-            : t('taskInfoPanel.editorChanges.title', undefined, 'Your unsaved edits')}
+            ? t({
+                id: 'taskInfoPanel.editorChanges.suggestionTitle',
+                defaultMessage: 'Suggested tag changes',
+              })
+            : t({ id: 'taskInfoPanel.editorChanges.title', defaultMessage: 'Your unsaved edits' })}
         </h3>
         {isTagFix && (
           <DocsLink
             page="tagFixChallenges"
-            label={t('taskInfoPanel.editorChanges.docsLink', undefined, 'About tag fix challenges')}
+            label={t({
+              id: 'taskInfoPanel.editorChanges.docsLink',
+              defaultMessage: 'About tag fix challenges',
+            })}
             className="ml-auto text-zinc-400 no-underline hover:text-zinc-600"
           />
         )}
@@ -71,22 +77,22 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
 
       <p className="text-xs text-zinc-500 dark:text-zinc-400">
         {showingSuggestion
-          ? t(
-              'taskInfoPanel.editorChanges.suggestionDescription',
-              undefined,
-              'What this challenge suggests changing. Opening the editor applies it for you to review.'
-            )
+          ? t({
+              id: 'taskInfoPanel.editorChanges.suggestionDescription',
+              defaultMessage:
+                'What this challenge suggests changing. Opening the editor applies it for you to review.',
+            })
           : isTagFix
-            ? t(
-                'taskInfoPanel.editorChanges.tagFixDescription',
-                undefined,
-                "The challenge's suggested tags were applied for you and are included below. Save from the editor to send everything to OpenStreetMap."
-              )
-            : t(
-                'taskInfoPanel.editorChanges.description',
-                undefined,
-                'Everything currently pending in the editor. Save from the editor to send it to OpenStreetMap.'
-              )}
+            ? t({
+                id: 'taskInfoPanel.editorChanges.tagFixDescription',
+                defaultMessage:
+                  "The challenge's suggested tags were applied for you and are included below. Save from the editor to send everything to OpenStreetMap.",
+              })
+            : t({
+                id: 'taskInfoPanel.editorChanges.description',
+                defaultMessage:
+                  'Everything currently pending in the editor. Save from the editor to send it to OpenStreetMap.',
+              })}
       </p>
 
       {/* Always offered once the suggestion has been applied, not only after
@@ -102,24 +108,22 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
         >
           <p className="min-w-0 flex-1 text-xs text-zinc-600 dark:text-zinc-300">
             {hasDiverged
-              ? t(
-                  'taskInfoPanel.editorChanges.diverged',
-                  undefined,
-                  "You have edited since the challenge's suggestion was applied."
-                )
-              : t(
-                  'taskInfoPanel.editorChanges.matches',
-                  undefined,
-                  "The editor holds the challenge's suggestion and nothing else."
-                )}
+              ? t({
+                  id: 'taskInfoPanel.editorChanges.diverged',
+                  defaultMessage: "You have edited since the challenge's suggestion was applied.",
+                })
+              : t({
+                  id: 'taskInfoPanel.editorChanges.matches',
+                  defaultMessage: "The editor holds the challenge's suggestion and nothing else.",
+                })}
           </p>
           <DisabledTooltip
             show={!hasDiverged}
-            message={t(
-              'taskInfoPanel.editorChanges.resetDisabledTitle',
-              undefined,
-              'Nothing to reset — the editor already holds exactly what the challenge suggests'
-            )}
+            message={t({
+              id: 'taskInfoPanel.editorChanges.resetDisabledTitle',
+              defaultMessage:
+                'Nothing to reset — the editor already holds exactly what the challenge suggests',
+            })}
           >
             <Button
               size="sm"
@@ -127,14 +131,14 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
               className="gap-1.5"
               disabled={!hasDiverged}
               onClick={() => setConfirmingReset(true)}
-              title={t(
-                'taskInfoPanel.editorChanges.resetTitle',
-                undefined,
-                "Discard everything unsaved and go back to the challenge's suggestion"
-              )}
+              title={t({
+                id: 'taskInfoPanel.editorChanges.resetTitle',
+                defaultMessage:
+                  "Discard everything unsaved and go back to the challenge's suggestion",
+              })}
             >
               <RotateCcw className="size-3.5" />
-              {t('taskInfoPanel.editorChanges.reset', undefined, 'Reset')}
+              {t({ id: 'taskInfoPanel.editorChanges.reset', defaultMessage: 'Reset' })}
             </Button>
           </DisabledTooltip>
         </div>

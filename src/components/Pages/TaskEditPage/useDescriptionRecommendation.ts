@@ -42,12 +42,14 @@ export const useDescriptionRecommendation = () => {
   const { challenge } = useChallengeContext()
   const { task } = useTaskContext()
   const { user } = useAuthContext()
-  const { data: heldLocks } = api.user.lockedTasks(user?.id)
 
   const [challengeSeen, setChallengeSeen] = useState(() =>
     hasSeenChallengeDescription(challenge?.id)
   )
   const [arrival, setArrival] = useState<Arrival | null>(() => arrivalFromRecord(task.id))
+  const { data: heldLocks } = api.user.lockedTasks(user?.id, undefined, {
+    enabled: arrival?.taskId !== task.id,
+  })
 
   // Did this task's lock already belong to the mapper as the page first rendered it? Read
   // during render rather than from an effect or the lock list: a lock taken from this page

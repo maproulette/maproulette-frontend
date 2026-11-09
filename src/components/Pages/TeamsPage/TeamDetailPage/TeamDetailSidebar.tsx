@@ -48,9 +48,11 @@ export const TeamDetailSidebar = () => {
             )}
             <p className="mt-1 text-xs text-zinc-500 dark:text-slate-500">
               {t(
-                'teams.detail.memberCount',
-                { count: members.length },
-                '{count, plural, one {# member} other {# members}}'
+                {
+                  id: 'teams.detail.memberCount',
+                  defaultMessage: '{count, plural, one {# member} other {# members}}',
+                },
+                { count: members.length }
               )}
             </p>
           </div>
@@ -61,20 +63,19 @@ export const TeamDetailSidebar = () => {
             <Button variant="outline" size="sm" asChild>
               <Link to="/teams/$teamId/edit" params={{ teamId: String(teamId) }}>
                 <Pencil className="size-4" aria-hidden="true" />{' '}
-                {t('common.edit', undefined, 'Edit')}
+                {t({ id: 'common.edit', defaultMessage: 'Edit' })}
               </Link>
             </Button>
             <Button variant="outline" size="sm" onClick={() => setInviteOpen(true)}>
               <UserPlus className="size-4" aria-hidden="true" />{' '}
-              {t('teams.detail.inviteButton', undefined, 'Invite')}
+              {t({ id: 'teams.detail.inviteButton', defaultMessage: 'Invite' })}
             </Button>
             <DisabledTooltip
               show={!iAmOwner}
-              message={t(
-                'teams.detail.deleteDisabledReason',
-                undefined,
-                'Only an owner of the team can delete it'
-              )}
+              message={t({
+                id: 'teams.detail.deleteDisabledReason',
+                defaultMessage: 'Only an owner of the team can delete it',
+              })}
             >
               <Button
                 variant="outline"
@@ -83,7 +84,7 @@ export const TeamDetailSidebar = () => {
                 disabled={!iAmOwner}
               >
                 <Trash2 className="size-4" aria-hidden="true" />{' '}
-                {t('common.delete', undefined, 'Delete')}
+                {t({ id: 'common.delete', defaultMessage: 'Delete' })}
               </Button>
             </DisabledTooltip>
           </div>

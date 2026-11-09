@@ -7,6 +7,7 @@ import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
+import { useConfirmDiscardIdEdits } from './useConfirmDiscardIdEdits'
 
 /**
  * Skipping the current task and moving on, shared by the skip button and the
@@ -22,9 +23,11 @@ export const useSkipTask = (task: Task) => {
   // the shortcut registration that depends on it.
   const { mutateAsync: skipMutation } = api.task.useSkipTask()
   const [isSkipping, setIsSkipping] = useState(false)
+  const confirmDiscardIdEdits = useConfirmDiscardIdEdits()
 
   const skipTask = useCallback(async () => {
     if (isSkipping) return
+    if (!confirmDiscardIdEdits()) return
     setIsSkipping(true)
     try {
       await skipMutation(task.id).catch((error) => {
@@ -36,7 +39,10 @@ export const useSkipTask = (task: Task) => {
         await navigateToTask(randomTasks[0].id)
       } else {
         toast.info(
-          t('common.noMoreTasksInChallenge', undefined, 'No more tasks available in this challenge')
+          t({
+            id: 'common.noMoreTasksInChallenge',
+            defaultMessage: 'No more tasks available in this challenge',
+          })
         )
         await navigate({
           to: '/challenge/$challengeId',
@@ -46,12 +52,25 @@ export const useSkipTask = (task: Task) => {
     } catch (error) {
       logger.error('Skip failed', { error })
       toast.error(
-        t('taskEditPage.taskActions.skipButton.skipFailed', undefined, 'Could not skip this task')
+        t({
+          id: 'taskEditPage.taskActions.skipButton.skipFailed',
+          defaultMessage: 'Could not skip this task',
+        })
       )
     } finally {
       setIsSkipping(false)
     }
-  }, [isSkipping, skipMutation, task.id, task.parent, queryClient, navigateToTask, navigate, t])
+  }, [
+    isSkipping,
+    confirmDiscardIdEdits,
+    skipMutation,
+    task.id,
+    task.parent,
+    queryClient,
+    navigateToTask,
+    navigate,
+    t,
+  ])
 
   return { skipTask, isSkipping }
 }

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { basemapSelection } from '@/components/Map/basemap'
 import type { useIntl } from '@/i18n'
 import type { Challenge } from '@/types/Challenge'
+import { CHALLENGE_CATEGORIES, splitChallengeKeywords } from './challengeKeywords'
 
 type T = ReturnType<typeof useIntl>['t']
 
@@ -12,60 +13,53 @@ const makeBaseChallengeFormSchema = (t: T) =>
   z.object({
     projectId: z
       .number()
-      .min(1, t('common.pleaseSelectAProject', undefined, 'Please select a project')),
+      .min(1, t({ id: 'common.pleaseSelectAProject', defaultMessage: 'Please select a project' })),
     name: z
       .string()
       .min(
         3,
-        t(
-          'manageChallengeNew.challengeForm.validation.nameMinLength',
-          undefined,
-          'Challenge name must be at least 3 characters'
-        )
+        t({
+          id: 'manageChallengeNew.challengeForm.validation.nameMinLength',
+          defaultMessage: 'Challenge name must be at least 3 characters',
+        })
       )
       .max(255),
-    description: z
-      .string()
-      .min(
-        1,
-        t(
-          'manageChallengeNew.challengeForm.validation.descriptionRequired',
-          undefined,
-          'Description is required'
-        )
-      ),
-    instruction: z
-      .string()
-      .min(
-        1,
-        t(
-          'manageChallengeNew.challengeForm.validation.instructionRequired',
-          undefined,
-          'Instructions are required'
-        )
-      ),
+    description: z.string().min(
+      1,
+      t({
+        id: 'manageChallengeNew.challengeForm.validation.descriptionRequired',
+        defaultMessage: 'Description is required',
+      })
+    ),
+    instruction: z.string().min(
+      1,
+      t({
+        id: 'manageChallengeNew.challengeForm.validation.instructionRequired',
+        defaultMessage: 'Instructions are required',
+      })
+    ),
     difficulty: z.number().min(1).max(3),
+    category: z.enum(CHALLENGE_CATEGORIES),
+    additionalKeywords: z.string().optional().or(z.literal('')),
     checkinComment: z
       .string()
       .trim()
       .min(
         1,
-        t(
-          'manageChallengeNew.challengeForm.validation.checkinCommentRequired',
-          undefined,
-          'A changeset comment is required'
-        )
+        t({
+          id: 'manageChallengeNew.challengeForm.validation.checkinCommentRequired',
+          defaultMessage: 'A changeset comment is required',
+        })
       ),
     checkinSource: z
       .string()
       .trim()
       .min(
         1,
-        t(
-          'manageChallengeNew.challengeForm.validation.checkinSourceRequired',
-          undefined,
-          'A changeset source is required'
-        )
+        t({
+          id: 'manageChallengeNew.challengeForm.validation.checkinSourceRequired',
+          defaultMessage: 'A changeset source is required',
+        })
       ),
     dataSource: z.enum(['overpass', 'localGeoJSON', 'remoteGeoJSON']),
     overpassQL: z.string().optional().or(z.literal('')),
@@ -84,8 +78,6 @@ const makeBaseChallengeFormSchema = (t: T) =>
     taskBundleIdProperty: z.string().optional().or(z.literal('')),
     // Comma-separated MapRoulette tags suggested to mappers, and whether they
     // are the only tags accepted.
-    preferredTags: z.string().optional().or(z.literal('')),
-    limitTags: z.boolean(),
     basemap: z.string(),
     basemapUrl: z.string().optional().or(z.literal('')),
     ownerTeamId: z.number().nullable(),
@@ -107,11 +99,10 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['overpassQL'],
-          message: t(
-            'manageChallengeNew.challengeForm.validation.overpassRequired',
-            undefined,
-            'An Overpass query is required'
-          ),
+          message: t({
+            id: 'manageChallengeNew.challengeForm.validation.overpassRequired',
+            defaultMessage: 'An Overpass query is required',
+          }),
         })
       }
     }
@@ -120,11 +111,10 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['localGeoJSON'],
-          message: t(
-            'manageChallengeNew.challengeForm.validation.localGeoJSONRequired',
-            undefined,
-            'Please upload a GeoJSON file'
-          ),
+          message: t({
+            id: 'manageChallengeNew.challengeForm.validation.localGeoJSONRequired',
+            defaultMessage: 'Please upload a GeoJSON file',
+          }),
         })
       }
     }
@@ -133,11 +123,10 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
         ctx.addIssue({
           code: 'custom',
           path: ['remoteGeoJSON'],
-          message: t(
-            'manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired',
-            undefined,
-            'A GeoJSON URL is required'
-          ),
+          message: t({
+            id: 'manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired',
+            defaultMessage: 'A GeoJSON URL is required',
+          }),
         })
       }
     }
@@ -146,14 +135,16 @@ export const makeChallengeFormSchema = (isEdit: boolean, t: T) =>
       ctx.addIssue({
         code: 'custom',
         path: ['automatedEditsCodeAgreement'],
-        message: t(
-          'manageChallengeNew.challengeForm.validation.agreementRequired',
-          undefined,
-          'You must read and accept the Automated Edits code of conduct'
-        ),
+        message: t({
+          id: 'manageChallengeNew.challengeForm.validation.agreementRequired',
+          defaultMessage: 'You must read and accept the Automated Edits code of conduct',
+        }),
       })
     }
   })
+
+export const isChallengeSourceEditable = (challenge: Challenge | undefined) =>
+  !challenge || (challenge.completionMetrics?.total ?? 0) === 0
 
 export const getDefaultDataSource = (
   challenge?: Challenge
@@ -176,7 +167,8 @@ export const buildFormValues = (
   name: challenge?.name ?? '',
   description: challenge?.description ?? '',
   instruction: challenge?.instruction ?? '',
-  difficulty: challenge?.difficulty ?? 1,
+  difficulty: challenge?.difficulty ?? 2,
+  ...splitChallengeKeywords(challenge?.tags),
   checkinComment: challenge?.checkinComment ?? '',
   checkinSource: challenge?.checkinSource ?? '',
   dataSource: getDefaultDataSource(challenge),
@@ -186,8 +178,6 @@ export const buildFormValues = (
   dataOriginDate: '',
   osmIdProperty: challenge?.osmIdProperty ?? '',
   taskBundleIdProperty: challenge?.taskBundleIdProperty ?? '',
-  preferredTags: challenge?.preferredTags ?? '',
-  limitTags: challenge?.limitTags ?? false,
   basemap: basemapSelection(challenge),
   basemapUrl: challenge?.customBasemap ?? '',
   ownerTeamId: challenge?.ownerTeamId ?? null,

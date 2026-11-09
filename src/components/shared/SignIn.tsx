@@ -21,18 +21,19 @@ export const SignIn = ({ className, ...props }: React.ComponentProps<typeof Empt
         <EmptyMedia variant="icon">
           <UserLock />
         </EmptyMedia>
-        <EmptyTitle>{t('shared.signIn.title', undefined, 'Please sign in')}</EmptyTitle>
+        <EmptyTitle>
+          {t({ id: 'shared.signIn.title', defaultMessage: 'Please sign in' })}
+        </EmptyTitle>
         <EmptyDescription>
-          {t(
-            'shared.signIn.description',
-            undefined,
-            'You need to be signed in to manage your account.'
-          )}
+          {t({
+            id: 'shared.signIn.description',
+            defaultMessage: 'You need to be signed in to manage your account.',
+          })}
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <Button size="lg" onClick={login}>
-          {t('common.signIn', undefined, 'Sign in')}
+          {t({ id: 'common.signIn', defaultMessage: 'Sign in' })}
         </Button>
       </EmptyContent>
     </Empty>

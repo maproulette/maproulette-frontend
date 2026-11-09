@@ -10,7 +10,6 @@ export const ChallengeProgress = () => {
   const { challenge } = useBrowsedChallengeContext()
   const { openActions: onViewDetails } = useChallengeModals()
   const { completionPercentage, segments, hasActions } = useChallengeProgress(
-    challenge.id ?? 0,
     challenge.completionMetrics
   )
   const { t } = useIntl()
@@ -23,7 +22,7 @@ export const ChallengeProgress = () => {
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
           <span className="font-semibold text-zinc-900 dark:text-white">
-            {t('browsedChallengePage.progress.progress', undefined, 'Progress')}
+            {t({ id: 'browsedChallengePage.progress.progress', defaultMessage: 'Progress' })}
           </span>
           <Button
             variant="outline"
@@ -32,7 +31,7 @@ export const ChallengeProgress = () => {
             onClick={onViewDetails}
           >
             <BarChart3 className="size-3.5" />
-            {t('browsedChallengePage.progress.details', undefined, 'Details')}
+            {t({ id: 'browsedChallengePage.progress.details', defaultMessage: 'Details' })}
           </Button>
         </div>
         <div className="flex items-center gap-3">

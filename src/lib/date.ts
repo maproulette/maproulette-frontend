@@ -5,19 +5,19 @@
  * (the backend returns Unix milliseconds, so `new Date(timestamp)` works
  * directly) and for handling missing values themselves.
  *
- * `locale` is optional and falls back to the browser default. Components that
- * want app-locale-aware output should read it from `useIntl()` and pass it in.
+ * `locale` is the app's active locale, read from `useIntl()`, so dates follow
+ * the language the user chose rather than the browser's.
  */
 
-export function formatDate(date: Date, locale?: string): string {
+export function formatDate(date: Date, locale: string): string {
   return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(date)
 }
 
-export function formatLongDate(date: Date, locale?: string): string {
+export function formatLongDate(date: Date, locale: string): string {
   return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(date)
 }
 
-export function formatDateTime(date: Date, locale?: string): string {
+export function formatDateTime(date: Date, locale: string): string {
   return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(date)
 }
 
@@ -31,7 +31,7 @@ const RELATIVE_UNITS: Array<[Intl.RelativeTimeFormatUnit, number]> = [
   ['second', 1000],
 ]
 
-export function formatTimeAgo(date: Date, locale?: string): string {
+export function formatTimeAgo(date: Date, locale: string): string {
   const diffMs = date.getTime() - Date.now()
   const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
   for (const [unit, unitMs] of RELATIVE_UNITS) {
@@ -52,7 +52,7 @@ export function daysSince(date: Date): number {
  * shown, and a zero-valued trailing unit is dropped, so the result stays
  * short enough to sit inline in a stat row.
  */
-export function formatDurationSeconds(totalSeconds: number, locale?: string): string {
+export function formatDurationSeconds(totalSeconds: number, locale: string): string {
   const seconds = Math.max(0, Math.round(totalSeconds))
   const unit = (value: number, unit: 'hour' | 'minute' | 'second') =>
     new Intl.NumberFormat(locale, { style: 'unit', unit, unitDisplay: 'short' }).format(value)

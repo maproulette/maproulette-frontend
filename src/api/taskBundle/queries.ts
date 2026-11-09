@@ -90,20 +90,17 @@ export const taskBundleQueries = {
         bundleId,
         primaryId,
         status,
-        tags,
+        completionResponses,
         queryParams,
       }: {
         bundleId: number
         primaryId: number
         status: number
-        tags?: string[]
+        completionResponses?: Record<string, unknown>
         /** Opaque query params contributed by plugins */
         queryParams?: Record<string, string | boolean | number | undefined | null>
       }) => {
         const searchParams: Record<string, string> = { primaryId: String(primaryId) }
-        if (tags && tags.length > 0) {
-          searchParams.tags = tags.join(',')
-        }
         if (queryParams) {
           for (const [key, value] of Object.entries(queryParams)) {
             if (value !== undefined && value !== null) {
@@ -111,7 +108,10 @@ export const taskBundleQueries = {
             }
           }
         }
-        await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, { searchParams })
+        await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, {
+          searchParams,
+          ...(completionResponses ? { json: completionResponses } : {}),
+        })
       },
       onSuccess: (_data, variables) => {
         queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })

@@ -12,11 +12,10 @@ import { useIntl } from '@/i18n'
 
 export const SuperAdminSettings = () => {
   const { t } = useIntl()
-  const comingSoonMsg = t(
-    'superAdminSettings.comingSoon',
-    undefined,
-    'Platform settings management is not available yet'
-  )
+  const comingSoonMsg = t({
+    id: 'superAdminSettings.comingSoon',
+    defaultMessage: 'Platform settings management is not available yet',
+  })
   const siteNameId = useId()
   const siteDescriptionId = useId()
   const siteUrlId = useId()
@@ -46,18 +45,17 @@ export const SuperAdminSettings = () => {
         <div className="mb-2 flex items-center gap-2">
           <Settings className="h-8 w-8 text-zinc-600 dark:text-zinc-400" />
           <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
-            {t('superAdminSettings.title', undefined, 'Platform Settings')}
+            {t({ id: 'superAdminSettings.title', defaultMessage: 'Platform Settings' })}
           </h1>
           <Badge variant="secondary">
-            {t('superAdminSettings.comingSoonBadge', undefined, 'Coming Soon')}
+            {t({ id: 'common.comingSoon', defaultMessage: 'Coming Soon' })}
           </Badge>
         </div>
         <p className="text-zinc-600 dark:text-zinc-400">
-          {t(
-            'superAdminSettings.subtitle',
-            undefined,
-            'Configure platform-wide settings and preferences'
-          )}
+          {t({
+            id: 'superAdminSettings.subtitle',
+            defaultMessage: 'Configure platform-wide settings and preferences',
+          })}
         </p>
       </div>
 
@@ -68,27 +66,29 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center gap-2">
               <Globe className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
               <CardTitle>
-                {t('superAdminSettings.general.title', undefined, 'General Settings')}
+                {t({ id: 'superAdminSettings.general.title', defaultMessage: 'General Settings' })}
               </CardTitle>
             </div>
             <CardDescription>
-              {t(
-                'superAdminSettings.general.description',
-                undefined,
-                'Basic platform configuration'
-              )}
+              {t({
+                id: 'superAdminSettings.general.description',
+                defaultMessage: 'Basic platform configuration',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor={siteNameId}>
-                {t('superAdminSettings.general.siteName', undefined, 'Site Name')}
+                {t({ id: 'superAdminSettings.general.siteName', defaultMessage: 'Site Name' })}
               </Label>
               <Input disabled id={siteNameId} defaultValue="MapRoulette" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={siteDescriptionId}>
-                {t('superAdminSettings.general.siteDescription', undefined, 'Site Description')}
+                {t({
+                  id: 'superAdminSettings.general.siteDescription',
+                  defaultMessage: 'Site Description',
+                })}
               </Label>
               <Textarea
                 disabled
@@ -99,21 +99,23 @@ export const SuperAdminSettings = () => {
             </div>
             <div className="grid gap-2">
               <Label htmlFor={siteUrlId}>
-                {t('superAdminSettings.general.siteUrl', undefined, 'Site URL')}
+                {t({ id: 'superAdminSettings.general.siteUrl', defaultMessage: 'Site URL' })}
               </Label>
               <Input disabled id={siteUrlId} defaultValue="https://maproulette.org" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={maintenanceId}>
-                  {t('superAdminSettings.general.maintenanceMode', undefined, 'Maintenance Mode')}
+                  {t({
+                    id: 'superAdminSettings.general.maintenanceMode',
+                    defaultMessage: 'Maintenance Mode',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.general.maintenanceModeDescription',
-                    undefined,
-                    'Enable maintenance mode to prevent user access'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.general.maintenanceModeDescription',
+                    defaultMessage: 'Enable maintenance mode to prevent user access',
+                  })}
                 </p>
               </div>
               <Switch disabled id={maintenanceId} />
@@ -127,33 +129,35 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center gap-2">
               <Mail className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
               <CardTitle>
-                {t('superAdminSettings.email.title', undefined, 'Email Settings')}
+                {t({ id: 'superAdminSettings.email.title', defaultMessage: 'Email Settings' })}
               </CardTitle>
             </div>
             <CardDescription>
-              {t(
-                'superAdminSettings.email.description',
-                undefined,
-                'Configure email notifications and SMTP'
-              )}
+              {t({
+                id: 'superAdminSettings.email.description',
+                defaultMessage: 'Configure email notifications and SMTP',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor={smtpHostId}>
-                {t('superAdminSettings.email.smtpHost', undefined, 'SMTP Host')}
+                {t({ id: 'superAdminSettings.email.smtpHost', defaultMessage: 'SMTP Host' })}
               </Label>
               <Input disabled id={smtpHostId} defaultValue="smtp.example.com" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={smtpPortId}>
-                {t('superAdminSettings.email.smtpPort', undefined, 'SMTP Port')}
+                {t({ id: 'superAdminSettings.email.smtpPort', defaultMessage: 'SMTP Port' })}
               </Label>
               <Input disabled id={smtpPortId} type="number" defaultValue="587" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={fromEmailId}>
-                {t('superAdminSettings.email.fromEmail', undefined, 'From Email Address')}
+                {t({
+                  id: 'superAdminSettings.email.fromEmail',
+                  defaultMessage: 'From Email Address',
+                })}
               </Label>
               <Input
                 disabled
@@ -165,18 +169,16 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={emailEnabledId}>
-                  {t(
-                    'superAdminSettings.email.enableNotifications',
-                    undefined,
-                    'Enable Email Notifications'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.email.enableNotifications',
+                    defaultMessage: 'Enable Email Notifications',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.email.enableNotificationsDescription',
-                    undefined,
-                    'Send email notifications to users'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.email.enableNotificationsDescription',
+                    defaultMessage: 'Send email notifications to users',
+                  })}
                 </p>
               </div>
               <Switch disabled id={emailEnabledId} defaultChecked />
@@ -190,33 +192,33 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
               <CardTitle>
-                {t('superAdminSettings.security.title', undefined, 'Security Settings')}
+                {t({
+                  id: 'superAdminSettings.security.title',
+                  defaultMessage: 'Security Settings',
+                })}
               </CardTitle>
             </div>
             <CardDescription>
-              {t(
-                'superAdminSettings.security.description',
-                undefined,
-                'Configure security and authentication'
-              )}
+              {t({
+                id: 'superAdminSettings.security.description',
+                defaultMessage: 'Configure security and authentication',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={requireVerificationId}>
-                  {t(
-                    'superAdminSettings.security.requireVerification',
-                    undefined,
-                    'Require Email Verification'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.security.requireVerification',
+                    defaultMessage: 'Require Email Verification',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.security.requireVerificationDescription',
-                    undefined,
-                    'Users must verify their email before accessing the platform'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.security.requireVerificationDescription',
+                    defaultMessage: 'Users must verify their email before accessing the platform',
+                  })}
                 </p>
               </div>
               <Switch disabled id={requireVerificationId} defaultChecked />
@@ -224,47 +226,42 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={twoFactorId}>
-                  {t(
-                    'superAdminSettings.security.twoFactor',
-                    undefined,
-                    'Enable Two-Factor Authentication'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.security.twoFactor',
+                    defaultMessage: 'Enable Two-Factor Authentication',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.security.twoFactorDescription',
-                    undefined,
-                    'Allow users to enable 2FA for their accounts'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.security.twoFactorDescription',
+                    defaultMessage: 'Allow users to enable 2FA for their accounts',
+                  })}
                 </p>
               </div>
               <Switch disabled id={twoFactorId} defaultChecked />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={sessionTimeoutId}>
-                {t(
-                  'superAdminSettings.security.sessionTimeout',
-                  undefined,
-                  'Session Timeout (minutes)'
-                )}
+                {t({
+                  id: 'superAdminSettings.security.sessionTimeout',
+                  defaultMessage: 'Session Timeout (minutes)',
+                })}
               </Label>
               <Input disabled id={sessionTimeoutId} type="number" defaultValue="60" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={passwordPolicyId}>
-                  {t(
-                    'superAdminSettings.security.passwordPolicy',
-                    undefined,
-                    'Strict Password Policy'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.security.passwordPolicy',
+                    defaultMessage: 'Strict Password Policy',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.security.passwordPolicyDescription',
-                    undefined,
-                    'Require strong passwords (min 12 chars, special chars)'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.security.passwordPolicyDescription',
+                    defaultMessage: 'Require strong passwords (min 12 chars, special chars)',
+                  })}
                 </p>
               </div>
               <Switch disabled id={passwordPolicyId} defaultChecked />
@@ -278,51 +275,61 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center gap-2">
               <Database className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
               <CardTitle>
-                {t('superAdminSettings.database.title', undefined, 'Database Settings')}
+                {t({
+                  id: 'superAdminSettings.database.title',
+                  defaultMessage: 'Database Settings',
+                })}
               </CardTitle>
             </div>
             <CardDescription>
-              {t(
-                'superAdminSettings.database.description',
-                undefined,
-                'Database configuration and maintenance'
-              )}
+              {t({
+                id: 'superAdminSettings.database.description',
+                defaultMessage: 'Database configuration and maintenance',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor={dbHostId}>
-                {t('superAdminSettings.database.host', undefined, 'Database Host')}
+                {t({ id: 'superAdminSettings.database.host', defaultMessage: 'Database Host' })}
               </Label>
               <Input disabled id={dbHostId} defaultValue="localhost" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={dbPortId}>
-                {t('superAdminSettings.database.port', undefined, 'Database Port')}
+                {t({ id: 'superAdminSettings.database.port', defaultMessage: 'Database Port' })}
               </Label>
               <Input disabled id={dbPortId} type="number" defaultValue="5432" />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={autoBackupId}>
-                  {t('superAdminSettings.database.autoBackup', undefined, 'Automatic Backups')}
+                  {t({
+                    id: 'superAdminSettings.database.autoBackup',
+                    defaultMessage: 'Automatic Backups',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.database.autoBackupDescription',
-                    undefined,
-                    'Enable daily automatic database backups'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.database.autoBackupDescription',
+                    defaultMessage: 'Enable daily automatic database backups',
+                  })}
                 </p>
               </div>
               <Switch disabled id={autoBackupId} defaultChecked />
             </div>
             <div className="flex gap-2">
               <Button variant="outline">
-                {t('superAdminSettings.database.runMaintenance', undefined, 'Run Maintenance')}
+                {t({
+                  id: 'superAdminSettings.database.runMaintenance',
+                  defaultMessage: 'Run Maintenance',
+                })}
               </Button>
               <Button variant="outline">
-                {t('superAdminSettings.database.createBackup', undefined, 'Create Backup')}
+                {t({
+                  id: 'superAdminSettings.database.createBackup',
+                  defaultMessage: 'Create Backup',
+                })}
               </Button>
             </div>
           </CardContent>
@@ -334,33 +341,33 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center gap-2">
               <Bell className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
               <CardTitle>
-                {t('superAdminSettings.notifications.title', undefined, 'Notification Settings')}
+                {t({
+                  id: 'superAdminSettings.notifications.title',
+                  defaultMessage: 'Notification Settings',
+                })}
               </CardTitle>
             </div>
             <CardDescription>
-              {t(
-                'superAdminSettings.notifications.description',
-                undefined,
-                'Configure platform notification preferences'
-              )}
+              {t({
+                id: 'superAdminSettings.notifications.description',
+                defaultMessage: 'Configure platform notification preferences',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={notifyNewUserId}>
-                  {t(
-                    'superAdminSettings.notifications.newUser',
-                    undefined,
-                    'New User Notifications'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.notifications.newUser',
+                    defaultMessage: 'New User Notifications',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.notifications.newUserDescription',
-                    undefined,
-                    'Notify admins when new users sign up'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.notifications.newUserDescription',
+                    defaultMessage: 'Notify admins when new users sign up',
+                  })}
                 </p>
               </div>
               <Switch disabled id={notifyNewUserId} defaultChecked />
@@ -368,18 +375,16 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={notifyNewProjectId}>
-                  {t(
-                    'superAdminSettings.notifications.newProject',
-                    undefined,
-                    'New Project Notifications'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.notifications.newProject',
+                    defaultMessage: 'New Project Notifications',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.notifications.newProjectDescription',
-                    undefined,
-                    'Notify admins when new projects are created'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.notifications.newProjectDescription',
+                    defaultMessage: 'Notify admins when new projects are created',
+                  })}
                 </p>
               </div>
               <Switch disabled id={notifyNewProjectId} />
@@ -387,14 +392,16 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={notifyErrorsId}>
-                  {t('superAdminSettings.notifications.errors', undefined, 'Error Notifications')}
+                  {t({
+                    id: 'superAdminSettings.notifications.errors',
+                    defaultMessage: 'Error Notifications',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.notifications.errorsDescription',
-                    undefined,
-                    'Notify admins when system errors occur'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.notifications.errorsDescription',
+                    defaultMessage: 'Notify admins when system errors occur',
+                  })}
                 </p>
               </div>
               <Switch disabled id={notifyErrorsId} defaultChecked />
@@ -408,36 +415,43 @@ export const SuperAdminSettings = () => {
             <div className="flex items-center gap-2">
               <Palette className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
               <CardTitle>
-                {t('superAdminSettings.appearance.title', undefined, 'Appearance Settings')}
+                {t({
+                  id: 'superAdminSettings.appearance.title',
+                  defaultMessage: 'Appearance Settings',
+                })}
               </CardTitle>
             </div>
             <CardDescription>
-              {t(
-                'superAdminSettings.appearance.description',
-                undefined,
-                'Customize the platform appearance'
-              )}
+              {t({
+                id: 'superAdminSettings.appearance.description',
+                defaultMessage: 'Customize the platform appearance',
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor={darkModeId}>
-                  {t('superAdminSettings.appearance.darkMode', undefined, 'Default to Dark Mode')}
+                  {t({
+                    id: 'superAdminSettings.appearance.darkMode',
+                    defaultMessage: 'Default to Dark Mode',
+                  })}
                 </Label>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  {t(
-                    'superAdminSettings.appearance.darkModeDescription',
-                    undefined,
-                    'Set dark mode as the default theme for new users'
-                  )}
+                  {t({
+                    id: 'superAdminSettings.appearance.darkModeDescription',
+                    defaultMessage: 'Set dark mode as the default theme for new users',
+                  })}
                 </p>
               </div>
               <Switch disabled id={darkModeId} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor={primaryColorId}>
-                {t('superAdminSettings.appearance.primaryColor', undefined, 'Primary Brand Color')}
+                {t({
+                  id: 'superAdminSettings.appearance.primaryColor',
+                  defaultMessage: 'Primary Brand Color',
+                })}
               </Label>
               <div className="flex gap-2">
                 <Input
@@ -452,7 +466,7 @@ export const SuperAdminSettings = () => {
             </div>
             <div className="grid gap-2">
               <Label htmlFor={logoUrlId}>
-                {t('superAdminSettings.appearance.logoUrl', undefined, 'Logo URL')}
+                {t({ id: 'superAdminSettings.appearance.logoUrl', defaultMessage: 'Logo URL' })}
               </Label>
               <Input disabled id={logoUrlId} defaultValue="/logo.svg" />
             </div>
@@ -464,7 +478,7 @@ export const SuperAdminSettings = () => {
           <DisabledTooltip show message={comingSoonMsg}>
             <Button size="lg" disabled>
               <Save className="mr-2 h-5 w-5" />
-              {t('superAdminSettings.saveButton', undefined, 'Save All Settings')}
+              {t({ id: 'superAdminSettings.saveButton', defaultMessage: 'Save All Settings' })}
             </Button>
           </DisabledTooltip>
         </div>

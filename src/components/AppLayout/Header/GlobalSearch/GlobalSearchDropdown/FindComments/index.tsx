@@ -1,16 +1,16 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight, MessageCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { api } from '@/api'
 import type { ChallengeCommentResponse } from '@/api/challenge/comments'
 import { Spinner } from '@/components/ui/Spinner'
 import { useGlobalSearchContext } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Comment } from '@/types/Comment'
 
 const cardClassName = cn(
-  'group flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
+  'group stretched-link-container flex items-start justify-between rounded-xl border border-zinc-200 bg-white px-5 py-4',
   'transition-all duration-200 hover:scale-[1.005] hover:border-zinc-300 hover:shadow-md',
   'dark:border-slate-700 dark:bg-slate-900/50 dark:hover:border-slate-700 dark:hover:bg-slate-900'
 )
@@ -19,35 +19,44 @@ const TaskCommentCard = ({ comment }: { comment: Comment }) => {
   const { t } = useIntl()
   const { onResultSelect } = useGlobalSearchContext()
   return (
-    <Link
-      to="/tasks/$taskId"
-      params={{
-        taskId: String(comment.taskId),
-      }}
-      onClick={onResultSelect}
-      className={cardClassName}
-    >
+    <div className={cardClassName}>
       <div className="min-w-0 flex-1 space-y-2">
-        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">{comment.comment}</p>
+        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">
+          <Link
+            to="/tasks/$taskId"
+            params={{
+              taskId: String(comment.taskId),
+            }}
+            onClick={onResultSelect}
+            className="stretched-link"
+          >
+            {comment.comment}
+          </Link>
+        </p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
             {t(
-              'appLayout.header.globalSearch.findComments.byUser',
+              {
+                id: 'appLayout.header.globalSearch.findComments.byUser',
+                defaultMessage: 'by {username}',
+              },
               {
                 username:
                   comment.osm_username ??
-                  t('appLayout.header.globalSearch.findComments.unknownUser', undefined, 'Unknown'),
-              },
-              'by {username}'
+                  t({
+                    id: 'appLayout.header.globalSearch.findComments.unknownUser',
+                    defaultMessage: 'Unknown',
+                  }),
+              }
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-slate-500">
-            {t('common.taskWithId', { id: comment.taskId }, 'Task #{id}')}
+            {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: comment.taskId })}
           </span>
         </div>
       </div>
       <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-    </Link>
+    </div>
   )
 }
 
@@ -55,54 +64,60 @@ const ChallengeCommentCard = ({ comment }: { comment: ChallengeCommentResponse }
   const { t } = useIntl()
   const { onResultSelect } = useGlobalSearchContext()
   return (
-    <Link
-      to="/manage/challenge/$challengeId"
-      params={{ challengeId: String(comment.challengeId) }}
-      onClick={onResultSelect}
-      className={cardClassName}
-    >
+    <div className={cardClassName}>
       <div className="min-w-0 flex-1 space-y-2">
-        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">{comment.comment}</p>
+        <p className="line-clamp-2 text-sm text-zinc-900 dark:text-white">
+          <Link
+            to="/manage/challenge/$challengeId"
+            params={{ challengeId: String(comment.challengeId) }}
+            onClick={onResultSelect}
+            className="stretched-link"
+          >
+            {comment.comment}
+          </Link>
+        </p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-zinc-500 dark:text-slate-400">
             {t(
-              'appLayout.header.globalSearch.findComments.byUser',
+              {
+                id: 'appLayout.header.globalSearch.findComments.byUser',
+                defaultMessage: 'by {username}',
+              },
               {
                 username:
                   comment.osm_username ??
-                  t('appLayout.header.globalSearch.findComments.unknownUser', undefined, 'Unknown'),
-              },
-              'by {username}'
+                  t({
+                    id: 'appLayout.header.globalSearch.findComments.unknownUser',
+                    defaultMessage: 'Unknown',
+                  }),
+              }
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-slate-500">
-            {t('common.challengeWithId', { id: comment.challengeId }, 'Challenge #{id}')}
+            {t(
+              { id: 'common.challengeWithId', defaultMessage: 'Challenge #{id}' },
+              { id: comment.challengeId }
+            )}
           </span>
         </div>
       </div>
       <ChevronRight className="mt-1 ml-4 h-5 w-5 shrink-0 text-zinc-400 transition-all group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400" />
-    </Link>
+    </div>
   )
 }
 
 export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge' }) => {
   const { t } = useIntl()
   const { searchQuery } = useGlobalSearchContext()
-  const [debouncedQuery, setDebouncedQuery] = useState('')
   const trimmed = searchQuery.trim()
   const hasSearchQuery = trimmed.length > 0
   const label =
     commentType === 'task'
-      ? t('common.task', undefined, 'Task')
-      : t('common.challenge', undefined, 'Challenge')
+      ? t({ id: 'common.task', defaultMessage: 'Task' })
+      : t({ id: 'common.challenge', defaultMessage: 'Challenge' })
   const labelLower = label.toLowerCase()
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(trimmed)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [trimmed])
+  const debouncedQuery = useDebouncedValue(trimmed)
 
   const taskCommentResult = api.task.searchTaskComments({
     q: commentType === 'task' ? debouncedQuery : '',
@@ -137,7 +152,7 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
         >
           <Spinner className="text-blue-500" />
           <p className="text-xs text-zinc-500 dark:text-slate-400">
-            {t('common.updatingResults', undefined, 'Updating results...')}
+            {t({ id: 'common.updatingResults', defaultMessage: 'Updating results...' })}
           </p>
         </div>
       )}
@@ -146,11 +161,10 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
         <div className="flex flex-col items-center justify-center gap-3 py-12">
           <Spinner size="lg" className="text-blue-500" />
           <p className="text-sm text-zinc-500 dark:text-slate-400">
-            {t(
-              'appLayout.header.globalSearch.findComments.loading',
-              undefined,
-              'Loading comments...'
-            )}
+            {t({
+              id: 'appLayout.header.globalSearch.findComments.loading',
+              defaultMessage: 'Loading comments...',
+            })}
           </p>
         </div>
       ) : !hasResults ? (
@@ -161,19 +175,23 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           <div className="space-y-1 text-center">
             <p className="font-medium text-sm text-zinc-900 dark:text-white">
               {hasSearchQuery
-                ? t('common.noResultsFound', undefined, 'No results found')
+                ? t({ id: 'common.noResultsFound', defaultMessage: 'No results found' })
                 : t(
-                    'appLayout.header.globalSearch.findComments.noCommentsYet',
-                    { label: labelLower },
-                    'No {label} comments yet'
+                    {
+                      id: 'appLayout.header.globalSearch.findComments.noCommentsYet',
+                      defaultMessage: 'No {label} comments yet',
+                    },
+                    { label: labelLower }
                   )}
             </p>
             {hasSearchQuery && (
               <p className="text-xs text-zinc-500 dark:text-slate-400">
                 {t(
-                  'appLayout.header.globalSearch.findComments.noCommentsMatch',
-                  { label: labelLower, query: debouncedQuery },
-                  'No {label} comments match "{query}"'
+                  {
+                    id: 'appLayout.header.globalSearch.findComments.noCommentsMatch',
+                    defaultMessage: 'No {label} comments match "{query}"',
+                  },
+                  { label: labelLower, query: debouncedQuery }
                 )}
               </p>
             )}
@@ -184,18 +202,22 @@ export const FindComments = ({ commentType }: { commentType: 'task' | 'challenge
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
               {hasSearchQuery
-                ? t('common.results', undefined, 'Results')
+                ? t({ id: 'common.results', defaultMessage: 'Results' })
                 : t(
-                    'appLayout.header.globalSearch.findComments.recentComments',
-                    { label },
-                    'Recent {label} Comments'
+                    {
+                      id: 'appLayout.header.globalSearch.findComments.recentComments',
+                      defaultMessage: 'Recent {label} Comments',
+                    },
+                    { label }
                   )}
             </h3>
             <span className="text-xs text-zinc-500 dark:text-slate-400">
               {t(
-                'appLayout.header.globalSearch.findComments.commentCount',
-                { count: results.length },
-                '{count, plural, one {# comment} other {# comments}}'
+                {
+                  id: 'appLayout.header.globalSearch.findComments.commentCount',
+                  defaultMessage: '{count, plural, one {# comment} other {# comments}}',
+                },
+                { count: results.length }
               )}
             </span>
           </div>

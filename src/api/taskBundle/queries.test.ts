@@ -181,7 +181,7 @@ describe('taskBundleQueries.useDeleteTaskBundle', () => {
 })
 
 describe('taskBundleQueries.useUpdateTaskBundleStatus', () => {
-  it('PUTs the new status with the primary id and joined tags, then invalidates bundle/task/challenge queries', async () => {
+  it('PUTs the new status with the primary id, then invalidates bundle/task/challenge queries', async () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -190,7 +190,7 @@ describe('taskBundleQueries.useUpdateTaskBundleStatus', () => {
       wrapper: queryClientWrapper(queryClient),
     })
 
-    result.current.mutate({ bundleId: 8, primaryId: 1, status: 2, tags: ['a', 'b'] })
+    result.current.mutate({ bundleId: 8, primaryId: 1, status: 2 })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
@@ -199,40 +199,29 @@ describe('taskBundleQueries.useUpdateTaskBundleStatus', () => {
     expect((request as Request).method).toBe('PUT')
     expect(url.pathname).toBe('/api/v2/taskBundle/8/2')
     expect(url.searchParams.get('primaryId')).toBe('1')
-    expect(url.searchParams.get('tags')).toBe('a,b')
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['taskBundle', 8] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
   })
 
-  it('omits the tags search param when tags is undefined', async () => {
+  it('sends completion responses as the request body', async () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
 
     const { result } = renderHook(() => taskBundleQueries.useUpdateTaskBundleStatus(), {
       wrapper: queryClientWrapper(),
     })
 
-    result.current.mutate({ bundleId: 9, primaryId: 1, status: 3 })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL((request as Request).url).searchParams.has('tags')).toBe(false)
-  })
-
-  it('omits the tags search param when tags is an empty array', async () => {
-    const fetchMock = stubFetch(new Response('', { status: 200 }))
-
-    const { result } = renderHook(() => taskBundleQueries.useUpdateTaskBundleStatus(), {
-      wrapper: queryClientWrapper(),
+    result.current.mutate({
+      bundleId: 8,
+      primaryId: 1,
+      status: 1,
+      completionResponses: { surface: 'paved' },
     })
 
-    result.current.mutate({ bundleId: 10, primaryId: 1, status: 3, tags: [] })
-
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     const [request] = fetchMock.mock.calls[0]
-    expect(new URL((request as Request).url).searchParams.has('tags')).toBe(false)
+    expect(await (request as Request).clone().json()).toEqual({ surface: 'paved' })
   })
 
   it('forwards opaque plugin query params, dropping the ones with no value', async () => {

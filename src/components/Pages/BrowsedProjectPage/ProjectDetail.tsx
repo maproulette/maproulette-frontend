@@ -13,7 +13,7 @@ import { formatDate } from '@/lib/date'
 import { logger } from '@/lib/logger'
 
 export const ProjectDetail = () => {
-  const { t } = useIntl()
+  const { t, locale, formatNumber } = useIntl()
   const { project } = useBrowsedProjectContext()
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
@@ -35,17 +35,24 @@ export const ProjectDetail = () => {
         })
       } else {
         await navigator.clipboard.writeText(url)
-        toast.success(t('common.linkCopiedToClipboard', undefined, 'Link copied to clipboard'))
+        toast.success(
+          t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' })
+        )
       }
     } catch (error) {
       if (error instanceof Error && error.name !== 'AbortError') {
         try {
           await navigator.clipboard.writeText(url)
-          toast.success(t('common.linkCopiedToClipboard', undefined, 'Link copied to clipboard'))
+          toast.success(
+            t({ id: 'common.linkCopiedToClipboard', defaultMessage: 'Link copied to clipboard' })
+          )
         } catch (clipboardError) {
           logger.error('Error copying to clipboard', { error: clipboardError })
           toast.error(
-            t('browsedProjectPage.projectDetail.shareError', undefined, 'Failed to share project')
+            t({
+              id: 'browsedProjectPage.projectDetail.shareError',
+              defaultMessage: 'Failed to share project',
+            })
           )
         }
       }
@@ -62,14 +69,14 @@ export const ProjectDetail = () => {
               {project.featured && (
                 <li>
                   <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
-                    {t('common.featured', undefined, 'Featured')}
+                    {t({ id: 'common.featured', defaultMessage: 'Featured' })}
                   </span>
                 </li>
               )}
               {project.isArchived && (
                 <li>
                   <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-                    {t('common.archived', undefined, 'Archived')}
+                    {t({ id: 'common.archived', defaultMessage: 'Archived' })}
                   </span>
                 </li>
               )}
@@ -84,16 +91,18 @@ export const ProjectDetail = () => {
             <StatusBadge enabled={project.enabled || false} />
             <span className="text-zinc-400 dark:text-zinc-500">•</span>
             <span className="whitespace-nowrap">
-              {t('common.idNumber', { id: project.id ?? '' }, 'ID {id}')}
+              {t({ id: 'common.idNumber', defaultMessage: 'ID {id}' }, { id: project.id ?? '' })}
             </span>
             {project.owner && (
               <>
                 <span className="text-zinc-400 dark:text-zinc-500">•</span>
                 <span className="whitespace-nowrap">
                   {t(
-                    'browsedProjectPage.projectDetail.byOwner',
-                    { owner: project.owner },
-                    'by {owner}'
+                    {
+                      id: 'browsedProjectPage.projectDetail.byOwner',
+                      defaultMessage: 'by {owner}',
+                    },
+                    { owner: project.owner }
                   )}
                 </span>
               </>
@@ -102,12 +111,12 @@ export const ProjectDetail = () => {
 
           {/* Action button row — mirrors browse challenge panel's pill row */}
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <Link to="/manage/project/$projectId" params={{ projectId: String(project.id) }}>
-              <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
+            <Button asChild variant="outline" size="sm" className="gap-1.5 rounded-full">
+              <Link to="/manage/project/$projectId" params={{ projectId: String(project.id) }}>
                 <Pencil className="size-4" />
-                {t('common.manage', undefined, 'Manage')}
-              </Button>
-            </Link>
+                {t({ id: 'common.manage', defaultMessage: 'Manage' })}
+              </Link>
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -115,7 +124,7 @@ export const ProjectDetail = () => {
               onClick={handleShare}
             >
               <Share2 className="size-3.5" />
-              {t('common.share', undefined, 'Share')}
+              {t({ id: 'common.share', defaultMessage: 'Share' })}
             </Button>
           </div>
         </div>
@@ -137,13 +146,15 @@ export const ProjectDetail = () => {
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300">
                       {t(
-                        'browsedProjectPage.projectDetail.percentComplete',
-                        { percent: Math.round(completionPercentage) },
-                        '{percent}% complete'
+                        {
+                          id: 'browsedProjectPage.projectDetail.percentComplete',
+                          defaultMessage: '{percent}% complete',
+                        },
+                        { percent: Math.round(completionPercentage) }
                       )}
                     </span>
                     <span className="text-zinc-500 dark:text-zinc-400">
-                      {completedTasks.toLocaleString()} / {totalTasks.toLocaleString()}
+                      {formatNumber(completedTasks)} / {formatNumber(totalTasks)}
                     </span>
                   </div>
                   <Progress value={completionPercentage} className="h-2" />
@@ -154,17 +165,15 @@ export const ProjectDetail = () => {
 
               <div className="flex items-center justify-between">
                 <span className="text-zinc-600 dark:text-zinc-400">
-                  {t('common.challenges', undefined, 'Challenges')}
+                  {t({ id: 'common.challenges', defaultMessage: 'Challenges' })}
                 </span>
                 <span className="font-semibold tabular-nums">{challenges.length}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-zinc-600 dark:text-zinc-400">
-                  {t('common.tasksRemaining', undefined, 'Tasks remaining')}
+                  {t({ id: 'common.tasksRemaining', defaultMessage: 'Tasks remaining' })}
                 </span>
-                <span className="font-semibold tabular-nums">
-                  {remainingTasks.toLocaleString()}
-                </span>
+                <span className="font-semibold tabular-nums">{formatNumber(remainingTasks)}</span>
               </div>
 
               {(project.created || project.modified) && (
@@ -173,17 +182,21 @@ export const ProjectDetail = () => {
                   {project.created && (
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-600 dark:text-zinc-400">
-                        {t('common.created', undefined, 'Created')}
+                        {t({ id: 'common.created', defaultMessage: 'Created' })}
                       </span>
-                      <span className="font-medium">{formatDate(new Date(project.created))}</span>
+                      <span className="font-medium">
+                        {formatDate(new Date(project.created), locale)}
+                      </span>
                     </div>
                   )}
                   {project.modified && (
                     <div className="flex items-center justify-between">
                       <span className="text-zinc-600 dark:text-zinc-400">
-                        {t('common.modified', undefined, 'Modified')}
+                        {t({ id: 'common.modified', defaultMessage: 'Modified' })}
                       </span>
-                      <span className="font-medium">{formatDate(new Date(project.modified))}</span>
+                      <span className="font-medium">
+                        {formatDate(new Date(project.modified), locale)}
+                      </span>
                     </div>
                   )}
                 </>

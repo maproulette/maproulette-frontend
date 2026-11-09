@@ -67,13 +67,13 @@ export const ChallengeCardActions = ({
           }}
           title={
             challenge.paused
-              ? t('common.resumeChallenge', undefined, 'Resume challenge')
-              : t('common.pauseChallenge', undefined, 'Pause challenge')
+              ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+              : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
           }
           aria-label={
             challenge.paused
-              ? t('common.resumeChallenge', undefined, 'Resume challenge')
-              : t('common.pauseChallenge', undefined, 'Pause challenge')
+              ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+              : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
           }
         >
           <Pause
@@ -97,13 +97,13 @@ export const ChallengeCardActions = ({
           }}
           title={
             challenge.isArchived
-              ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-              : t('common.archiveChallenge', undefined, 'Archive challenge')
+              ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+              : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
           }
           aria-label={
             challenge.isArchived
-              ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-              : t('common.archiveChallenge', undefined, 'Archive challenge')
+              ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+              : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
           }
         >
           <Archive
@@ -127,13 +127,13 @@ export const ChallengeCardActions = ({
           }}
           title={
             isPinned
-              ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-              : t('common.pinChallenge', undefined, 'Pin challenge')
+              ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+              : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
           }
           aria-label={
             isPinned
-              ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-              : t('common.pinChallenge', undefined, 'Pin challenge')
+              ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+              : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
           }
         >
           <Pin
@@ -157,13 +157,13 @@ export const ChallengeCardActions = ({
           }}
           title={
             challenge.enabled
-              ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-              : t('common.makeDiscoverable', undefined, 'Make discoverable')
+              ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+              : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
           }
           aria-label={
             challenge.enabled
-              ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-              : t('common.makeDiscoverable', undefined, 'Make discoverable')
+              ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+              : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
           }
         >
           {challenge.enabled ? (
@@ -177,7 +177,9 @@ export const ChallengeCardActions = ({
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-8 w-8">
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+            <span className="sr-only">
+              {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+            </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -189,7 +191,7 @@ export const ChallengeCardActions = ({
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Play className="h-4 w-4" />
-                {t('common.startChallenge', undefined, 'Start challenge')}
+                {t({ id: 'common.startChallenge', defaultMessage: 'Start challenge' })}
               </Link>
             </DropdownMenuItem>
           )}
@@ -200,7 +202,7 @@ export const ChallengeCardActions = ({
               className="flex cursor-pointer items-center gap-2"
             >
               <Pencil className="h-4 w-4" />
-              {t('common.editChallenge', undefined, 'Edit challenge')}
+              {t({ id: 'common.editChallenge', defaultMessage: 'Edit challenge' })}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -210,7 +212,7 @@ export const ChallengeCardActions = ({
             className="flex cursor-pointer items-center gap-2"
           >
             <ArrowRightLeft className="h-4 w-4" />
-            {t('common.moveChallenge', undefined, 'Move challenge')}
+            {t({ id: 'common.moveChallenge', defaultMessage: 'Move challenge' })}
           </DropdownMenuItem>
           {challenge.id != null && (
             <DropdownMenuItem
@@ -218,7 +220,7 @@ export const ChallengeCardActions = ({
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('common.cloneChallenge2', undefined, 'Clone challenge')}
+              {t({ id: 'common.cloneChallenge2', defaultMessage: 'Clone challenge' })}
             </DropdownMenuItem>
           )}
           {challenge.id != null && (
@@ -228,8 +230,8 @@ export const ChallengeCardActions = ({
             >
               <Archive className="h-4 w-4" />
               {challenge.isArchived
-                ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-                : t('common.archiveChallenge', undefined, 'Archive challenge')}
+                ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+                : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })}
             </DropdownMenuItem>
           )}
           {challenge.id != null && (
@@ -238,7 +240,7 @@ export const ChallengeCardActions = ({
               className="flex cursor-pointer items-center gap-2"
             >
               <Hammer className="h-4 w-4" />
-              {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
+              {t({ id: 'common.rebuildTasks', defaultMessage: 'Rebuild tasks' })}
             </DropdownMenuItem>
           )}
           {challenge.id != null && (
@@ -247,8 +249,8 @@ export const ChallengeCardActions = ({
               className="flex cursor-pointer items-center gap-2"
             >
               {challenge.enabled
-                ? t('common.disableChallenge', undefined, 'Disable challenge')
-                : t('common.enableChallenge', undefined, 'Enable challenge')}
+                ? t({ id: 'common.disableChallenge', defaultMessage: 'Disable challenge' })
+                : t({ id: 'common.enableChallenge', defaultMessage: 'Enable challenge' })}
             </DropdownMenuItem>
           )}
           {challenge.id != null && (
@@ -259,7 +261,7 @@ export const ChallengeCardActions = ({
                 className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />
-                {t('common.deleteChallenge', undefined, 'Delete challenge')}
+                {t({ id: 'common.deleteChallenge', defaultMessage: 'Delete challenge' })}
               </DropdownMenuItem>
             </>
           )}

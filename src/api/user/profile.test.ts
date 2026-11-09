@@ -310,6 +310,33 @@ describe('userProfile.lockedTasks', () => {
     expect(new URL(request.url).searchParams.get('limit')).toBe('5')
   })
 
+  it('does not fetch when disabled', () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
+
+    const { result } = renderHook(() => userProfile.lockedTasks(9, undefined, { enabled: false }), {
+      wrapper: queryClientWrapper(),
+    })
+
+    expect(result.current.fetchStatus).toBe('idle')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('is not refetched by an invalidation once disabled', async () => {
+    const fetchMock = vi.fn(async () => new Response('[]', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const queryClient = createTestQueryClient()
+    const { result, rerender } = renderHook(
+      ({ enabled }: { enabled: boolean }) => userProfile.lockedTasks(9, undefined, { enabled }),
+      { wrapper: queryClientWrapper(queryClient), initialProps: { enabled: true } }
+    )
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    rerender({ enabled: false })
+    await queryClient.invalidateQueries({ queryKey: ['user', 9, 'lockedTasks'] })
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it('is disabled when userId is undefined', () => {
     const fetchMock = stubFetch(new Response('[]', { status: 200 }))
 

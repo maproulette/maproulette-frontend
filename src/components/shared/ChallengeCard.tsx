@@ -55,7 +55,7 @@ export const ChallengeCard = ({
   linkSearch,
   onLinkClick,
 }: ChallengeCardProps) => {
-  const { t } = useIntl()
+  const { t, locale } = useIntl()
   // The image url is addressed by owning team, so a challenge can carry one
   // and still have nothing to show when that team has no approved image. Space
   // for it is only reserved while it is actually rendering.
@@ -67,7 +67,7 @@ export const ChallengeCard = ({
     segments,
     total: statsTotal,
     tasksRemaining: statsRemaining,
-  } = useChallengeProgress(challenge.id, challenge.completionMetrics)
+  } = useChallengeProgress(challenge.completionMetrics)
   const metricsRemaining = challenge.completionMetrics?.tasksRemaining
   const tasksRemaining = statsRemaining > 0 ? statsRemaining : (metricsRemaining ?? 0)
   const fallbackPercentage = challenge.completionPercentage || 0
@@ -86,30 +86,14 @@ export const ChallengeCard = ({
   const displayParentName = parentName ?? embeddedParentName
 
   return (
-    <Link
-      to={linkTo ?? '/challenge/$challengeId'}
-      params={linkParams ?? { challengeId: challenge.id.toString() }}
-      search={linkSearch}
-      onClick={onLinkClick}
+    <div
       className={cn(
-        'group relative block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
+        'group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
         className
       )}
     >
       {actions && (
-        <div
-          className="absolute top-3 right-3 z-10 flex items-center gap-1"
-          // The card is a Link, and Radix menus portal but still bubble React events
-          // through it, so keep any action click from navigating to the challenge.
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-          }}
-          onKeyDown={(e) => e.stopPropagation()}
-          role="toolbar"
-        >
-          {actions}
-        </div>
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
       )}
       <SidebarIndicator
         avatarUrl={challenge.avatarUrl}
@@ -119,7 +103,10 @@ export const ChallengeCard = ({
         <div
           className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
         >
-          {t('shared.challengeCard.project', { name: displayParentName }, '{name}')}
+          {t(
+            { id: 'shared.challengeCard.project', defaultMessage: '{name}' },
+            { name: displayParentName }
+          )}
         </div>
 
         <h3
@@ -128,16 +115,36 @@ export const ChallengeCard = ({
             showsImage && 'mr-16'
           )}
         >
-          <span className="line-clamp-2">{challenge.name}</span>
+          <span className="line-clamp-2">
+            <Link
+              to={linkTo ?? '/challenge/$challengeId'}
+              params={linkParams ?? { challengeId: challenge.id.toString() }}
+              search={linkSearch}
+              preload={false}
+              onClick={onLinkClick}
+              className="stretched-link"
+            >
+              {challenge.name}
+            </Link>
+          </span>
         </h3>
 
         <div>
           <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
-            <span className="font-semibold text-zinc-900 dark:text-white">{totalTasks}</span>{' '}
-            {t('common.tasks2', undefined, 'tasks')}
-            {' · '}
-            <span className="font-semibold text-zinc-900 dark:text-white">{pct}%</span>{' '}
-            {t('common.complete', undefined, 'complete')}
+            {t(
+              {
+                id: 'challengeCard.progress',
+                defaultMessage:
+                  '<b>{count, number}</b> {count, plural, one {task} other {tasks}} · <b>{percent, number, percent}</b> complete',
+              },
+              {
+                count: totalTasks,
+                percent: pct / 100,
+                b: (chunks) => (
+                  <span className="font-semibold text-zinc-900 dark:text-white">{chunks}</span>
+                ),
+              }
+            )}
           </div>
 
           <ProgressBar
@@ -151,7 +158,7 @@ export const ChallengeCard = ({
               {challenge.difficulty != null && getDifficultyLabel(t, challenge.difficulty)}
               {isComplete && (
                 <Badge variant="success" className="text-xs">
-                  {t('common.completed', undefined, 'Completed')}
+                  {t({ id: 'common.completed', defaultMessage: 'Completed' })}
                 </Badge>
               )}
               <ChallengeTaxonomy challenge={challenge} />
@@ -159,15 +166,14 @@ export const ChallengeCard = ({
             {lastUpdated ? (
               <span className="text-xs text-zinc-500 dark:text-slate-300">
                 {t(
-                  'common.lastUpdated',
-                  { date: formatDate(new Date(lastUpdated)) },
-                  'Last updated {date}'
+                  { id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' },
+                  { date: formatDate(new Date(lastUpdated), locale) }
                 )}
               </span>
             ) : null}
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

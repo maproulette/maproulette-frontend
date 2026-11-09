@@ -5,16 +5,22 @@ import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
 } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
+import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
+import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { ChallengeListing } from '@/types/Challenge'
 
 export interface ManageChallengesContextType {
   // Data
   challenges: ChallengeListing[]
-  filteredChallenges: ChallengeListing[]
-  projectNamesById: Map<number, string>
   isLoading: boolean
   pinnedChallengeIds: number[]
+
+  // Pagination
+  isFetching: boolean
+  hasNextPage: boolean
+  loadMore: () => void
 
   // Filters
   searchQuery: string
@@ -38,8 +44,11 @@ export interface ManageChallengesContextType {
   toggleChallengeEnabled: (challenge: ChallengeListing) => void
   togglePaused: (challenge: ChallengeListing) => void
   archiveChallenge: (challenge: ChallengeListing) => void
-  rebuildChallenge: (challengeId: number) => void
+  rebuildChallengeId: number | null
+  setRebuildChallengeId: (id: number | null) => void
 }
+
+const PAGE_SIZE = 20
 
 const ManageChallengesContext = createContext<ManageChallengesContextType | undefined>(undefined)
 
@@ -53,41 +62,58 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   const [onlyOwned, setOnlyOwned] = useState(false)
   const [onlyPinned, setOnlyPinned] = useState(false)
   const [deleteChallengeId, setDeleteChallengeId] = useState<number | null>(null)
+  const [rebuildChallengeId, setRebuildChallengeId] = useState<number | null>(null)
 
   // API queries
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
+  const superUser = isSuperUser(user)
   const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects({
-    onlyOwned,
+    limit: -1,
+    enabled: !!user && !superUser,
   })
   const managedProjectIds = useMemo(
     () => managedProjects?.map((p) => p.id).filter((id): id is number => id != null) ?? [],
     [managedProjects]
   )
-  const projectNamesById = useMemo(
-    () =>
-      new Map(
-        (managedProjects ?? []).flatMap((project) =>
-          project.id == null ? [] : [[project.id, project.displayName || project.name] as const]
-        )
-      ),
-    [managedProjects]
+  const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
+  const canList =
+    !!user &&
+    (superUser || managedProjectIds.length > 0) &&
+    (!onlyPinned || pinnedChallengeIds.length > 0)
+  const {
+    data,
+    isLoading: isLoadingChallenges,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = api.challenge.listingInfinite(
+    superUser ? [] : managedProjectIds,
+    {
+      searchString: debouncedSearchQuery,
+      onlyEnabled: onlyDiscoverable,
+      onlyArchived,
+      onlyOwned,
+      challengeIds: onlyPinned ? pinnedChallengeIds.join(',') : '',
+    },
+    {
+      limit: PAGE_SIZE,
+      enabled: canList,
+    }
   )
-  const { data: challenges, isLoading: isLoadingChallenges } = api.challenge.listing(
-    managedProjectIds,
-    100,
-    0,
-    false
-  )
-  const isLoading = isLoadingProjects || isLoadingChallenges
+  const challenges = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
+  const isLoading = (!superUser && isLoadingProjects) || isLoadingChallenges
+
+  const loadMore = useCallback(() => {
+    void fetchNextPage()
+  }, [fetchNextPage])
 
   // Mutations
   const updateSettingsMutation = api.user.useUpdateUserSettings()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
   const pauseChallengeMutation = api.challenge.usePauseChallenge()
-  const rebuildChallengeMutation = api.challenge.useRebuildChallenge()
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
-
-  const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
+  const actionErrors = useManageActionErrors()
 
   // All useCallback hooks below are stored in the context value — stable references
   // prevent all context consumers from re-rendering on every provider render.
@@ -111,71 +137,60 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
     if (deleteChallengeId == null) return
     deleteChallengeMutation.mutate(deleteChallengeId, {
       onSettled: () => setDeleteChallengeId(null),
+      onError: actionErrors.challengeDelete,
     })
-  }, [deleteChallengeId, deleteChallengeMutation])
+  }, [deleteChallengeId, deleteChallengeMutation, actionErrors])
 
   const toggleChallengeEnabled = useCallback(
     (challenge: ChallengeListing) => {
       if (challenge.id == null) return
-      updateChallengeMutation.mutate({
-        challengeId: challenge.id,
-        updates: { enabled: !(challenge.enabled ?? false) },
-      })
+      updateChallengeMutation.mutate(
+        {
+          challengeId: challenge.id,
+          updates: { enabled: !(challenge.enabled ?? false) },
+        },
+        { onError: actionErrors.challengeSave }
+      )
     },
-    [updateChallengeMutation]
+    [updateChallengeMutation, actionErrors]
   )
 
   const archiveChallenge = useCallback(
     (challenge: ChallengeListing) => {
       if (challenge.id == null) return
-      archiveChallengeMutation.mutate({
-        challengeId: challenge.id,
-        isArchived: !(challenge.isArchived ?? false),
-      })
+      archiveChallengeMutation.mutate(
+        {
+          challengeId: challenge.id,
+          isArchived: !(challenge.isArchived ?? false),
+        },
+        { onError: actionErrors.challengeArchive }
+      )
     },
-    [archiveChallengeMutation]
+    [archiveChallengeMutation, actionErrors]
   )
 
   const togglePaused = useCallback(
     (challenge: ChallengeListing) => {
       if (challenge.id == null) return
-      pauseChallengeMutation.mutate({
-        challengeId: challenge.id,
-        paused: !(challenge.paused ?? false),
-      })
-    },
-    [pauseChallengeMutation]
-  )
-
-  const rebuildChallenge = useCallback(
-    (challengeId: number) => {
-      rebuildChallengeMutation.mutate({ challengeId })
-    },
-    [rebuildChallengeMutation]
-  )
-
-  const filteredChallenges = useMemo(() => {
-    const list = challenges ?? []
-    return list
-      .filter((challenge) => challenge.name.toLowerCase().includes(searchQuery.toLowerCase()))
-      .filter((challenge) => (onlyDiscoverable ? !!challenge.enabled : true))
-      .filter((challenge) => (onlyArchived ? !!challenge.isArchived : true))
-      .filter((challenge) =>
-        onlyPinned
-          ? challenge.id != null
-            ? pinnedChallengeIds.includes(challenge.id)
-            : false
-          : true
+      pauseChallengeMutation.mutate(
+        {
+          challengeId: challenge.id,
+          paused: !(challenge.paused ?? false),
+        },
+        { onError: actionErrors.challengeSave }
       )
-  }, [challenges, searchQuery, onlyDiscoverable, onlyArchived, onlyPinned, pinnedChallengeIds])
+    },
+    [pauseChallengeMutation, actionErrors]
+  )
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<ManageChallengesContextType>(
     () => ({
-      challenges: challenges ?? [],
-      filteredChallenges,
-      projectNamesById,
+      challenges,
       isLoading,
+      isFetching,
+      hasNextPage,
+      loadMore,
       pinnedChallengeIds,
       searchQuery,
       setSearchQuery,
@@ -194,13 +209,15 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       toggleChallengeEnabled,
       togglePaused,
       archiveChallenge,
-      rebuildChallenge,
+      rebuildChallengeId,
+      setRebuildChallengeId,
     }),
     [
       challenges,
-      filteredChallenges,
-      projectNamesById,
       isLoading,
+      isFetching,
+      hasNextPage,
+      loadMore,
       pinnedChallengeIds,
       searchQuery,
       onlyDiscoverable,
@@ -213,7 +230,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
       toggleChallengeEnabled,
       togglePaused,
       archiveChallenge,
-      rebuildChallenge,
+      rebuildChallengeId,
     ]
   )
 

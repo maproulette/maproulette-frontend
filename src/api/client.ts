@@ -1,9 +1,10 @@
 import ky from 'ky'
 
 export const apiKey = window.env.VITE_SERVER_API_KEY
+export const apiBaseUrl = window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 
 export const apiRequest = ky.extend({
-  prefixUrl: window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000',
+  prefixUrl: apiBaseUrl,
   credentials: 'include',
   timeout: 60000,
   retry: {

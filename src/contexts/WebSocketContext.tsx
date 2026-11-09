@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
 import useWebSocketHook, { ReadyState } from 'react-use-websocket'
+import { apiBaseUrl } from '@/api/client'
 import { wsLogger } from '@/lib/logger'
 import type { WebSocketMessageTypes } from '@/types/WebSocket'
 import { useAuthContext } from './AuthContext'
@@ -18,7 +19,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuthContext()
 
   const { lastMessage, readyState, sendMessage } = useWebSocketHook(
-    user ? import.meta.env.VITE_MAP_ROULETTE_SERVER_WEBSOCKET_URL : null,
+    user ? `${apiBaseUrl.replace(/^http/, 'ws').replace(/\/$/, '')}/ws` : null,
     {
       shouldReconnect: () => user !== null,
       reconnectAttempts: 10,

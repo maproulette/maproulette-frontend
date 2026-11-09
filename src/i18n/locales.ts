@@ -19,12 +19,19 @@ export const localeOptions = [
 
 export type Locale = (typeof localeOptions)[number]['value']
 
-export const supportedLocales: readonly Locale[] = localeOptions.map((option) => option.value)
+const supportedLocales: readonly Locale[] = localeOptions.map((option) => option.value)
 
 export const defaultLocale: Locale = 'en-US'
 
 export const isSupportedLocale = (value: string | undefined | null): value is Locale =>
   !!value && (supportedLocales as readonly string[]).includes(value)
+
+const legacyLocaleAliases: Record<string, Locale> = { en: 'en-US' }
+
+export const normalizeLocale = (value: string | undefined | null): Locale | undefined => {
+  if (isSupportedLocale(value)) return value
+  return value ? legacyLocaleAliases[value] : undefined
+}
 
 export const resolveInitialLocale = (preferred?: string | null): Locale => {
   if (isSupportedLocale(preferred)) return preferred

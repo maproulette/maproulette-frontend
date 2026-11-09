@@ -17,10 +17,16 @@ import {
   User,
 } from 'lucide-react'
 import { useState } from 'react'
+import { api } from '@/api'
+import {
+  getChallengeSourceType,
+  RebuildTasksDialog,
+} from '@/components/Pages/ManagementPages/shared/RebuildTasksDialog'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
 import { SearchBar } from '@/components/shared/SearchBar'
 import {
   AlertDialog,
@@ -51,9 +57,11 @@ import { useManageChallengesContext } from './ManageChallengesContext'
 export const ManageChallengesContent = () => {
   const { t } = useIntl()
   const {
-    filteredChallenges,
-    projectNamesById,
+    challenges,
     isLoading,
+    isFetching,
+    hasNextPage,
+    loadMore,
     pinnedChallengeIds,
     searchQuery,
     setSearchQuery,
@@ -72,18 +80,19 @@ export const ManageChallengesContent = () => {
     toggleChallengeEnabled,
     togglePaused,
     archiveChallenge,
-    rebuildChallenge,
+    rebuildChallengeId,
+    setRebuildChallengeId,
   } = useManageChallengesContext()
 
   const [showPanel, setShowPanel] = useState(true)
 
   useSetHeaderActions(
-    <Link to="/manage/challenge/new">
-      <Button size="sm" className="gap-1.5 rounded-full">
+    <Button asChild size="sm" className="gap-1.5 rounded-full">
+      <Link to="/manage/challenge/new">
         <Plus className="h-4 w-4" />
-        {t('common.createChallenge', undefined, 'Create Challenge')}
-      </Button>
-    </Link>
+        {t({ id: 'common.createChallenge', defaultMessage: 'Create Challenge' })}
+      </Link>
+    </Button>
   )
 
   const buildChallengeActions = (challenge: ChallengeListing, isPinned: boolean) => {
@@ -101,13 +110,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               challenge.paused
-                ? t('common.resumeChallenge', undefined, 'Resume challenge')
-                : t('common.pauseChallenge', undefined, 'Pause challenge')
+                ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+                : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
             }
             aria-label={
               challenge.paused
-                ? t('common.resumeChallenge', undefined, 'Resume challenge')
-                : t('common.pauseChallenge', undefined, 'Pause challenge')
+                ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
+                : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
             }
           >
             <Pause
@@ -131,13 +140,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               challenge.isArchived
-                ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-                : t('common.archiveChallenge', undefined, 'Archive challenge')
+                ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+                : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
             }
             aria-label={
               challenge.isArchived
-                ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-                : t('common.archiveChallenge', undefined, 'Archive challenge')
+                ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+                : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
             }
           >
             <Archive
@@ -161,13 +170,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               isPinned
-                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-                : t('common.pinChallenge', undefined, 'Pin challenge')
+                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
             }
             aria-label={
               isPinned
-                ? t('common.unpinChallenge', undefined, 'Unpin challenge')
-                : t('common.pinChallenge', undefined, 'Pin challenge')
+                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
+                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
             }
           >
             <Pin
@@ -191,13 +200,13 @@ export const ManageChallengesContent = () => {
             }}
             title={
               challenge.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+                ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+                : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
             }
             aria-label={
               challenge.enabled
-                ? t('common.makeNotDiscoverable', undefined, 'Make not discoverable')
-                : t('common.makeDiscoverable', undefined, 'Make discoverable')
+                ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
+                : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
             }
           >
             {challenge.enabled ? (
@@ -211,7 +220,9 @@ export const ManageChallengesContent = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+              <span className="sr-only">
+                {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -223,7 +234,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2"
                 >
                   <Play className="h-4 w-4" />
-                  {t('common.startChallenge', undefined, 'Start challenge')}
+                  {t({ id: 'common.startChallenge', defaultMessage: 'Start challenge' })}
                 </Link>
               </DropdownMenuItem>
             )}
@@ -234,7 +245,7 @@ export const ManageChallengesContent = () => {
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Pencil className="h-4 w-4" />
-                {t('common.editChallenge', undefined, 'Edit challenge')}
+                {t({ id: 'common.editChallenge', defaultMessage: 'Edit challenge' })}
               </Link>
             </DropdownMenuItem>
             {challenge.id != null && (
@@ -244,17 +255,17 @@ export const ManageChallengesContent = () => {
               >
                 <Archive className="h-4 w-4" />
                 {challenge.isArchived
-                  ? t('common.unarchiveChallenge', undefined, 'Unarchive challenge')
-                  : t('common.archiveChallenge', undefined, 'Archive challenge')}
+                  ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
+                  : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })}
               </DropdownMenuItem>
             )}
             {challenge.id != null && (
               <DropdownMenuItem
-                onClick={() => rebuildChallenge(challenge.id)}
+                onClick={() => setRebuildChallengeId(challenge.id)}
                 className="flex cursor-pointer items-center gap-2"
               >
                 <Hammer className="h-4 w-4" />
-                {t('common.rebuildTasks', undefined, 'Rebuild tasks')}
+                {t({ id: 'common.rebuildTasks', defaultMessage: 'Rebuild tasks' })}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -265,7 +276,7 @@ export const ManageChallengesContent = () => {
               className="flex cursor-pointer items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              {t('common.copyUrl', undefined, 'Copy URL')}
+              {t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
             </DropdownMenuItem>
             {challenge.id != null && (
               <>
@@ -275,7 +286,7 @@ export const ManageChallengesContent = () => {
                   className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                 >
                   <Trash2 className="h-4 w-4" />
-                  {t('common.deleteChallenge', undefined, 'Delete challenge')}
+                  {t({ id: 'common.deleteChallenge', defaultMessage: 'Delete challenge' })}
                 </DropdownMenuItem>
               </>
             )}
@@ -290,37 +301,74 @@ export const ManageChallengesContent = () => {
       <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-3' : '')}>
         {showPanel && (
           <ManageInfoPanel
-            title={t('manageChallenges.content.aboutChallengesTitle')}
-            description={t('manageChallenges.content.aboutChallengesBody')}
+            title={t({
+              id: 'manageChallenges.content.aboutChallengesTitle',
+              defaultMessage: 'About Challenges',
+            })}
+            description={t({
+              id: 'manageChallenges.content.aboutChallengesBody',
+              defaultMessage:
+                'Challenges contain tasks that mappers work through to improve OpenStreetMap data.',
+            })}
             sections={[
               {
                 id: 'manageChallenges.content.tipWriteClearInstructionsTitle',
-                title: t('manageChallenges.content.tipWriteClearInstructionsTitle'),
-                description: t('manageChallenges.content.tipWriteClearInstructionsBody'),
+                title: t({
+                  id: 'manageChallenges.content.tipWriteClearInstructionsTitle',
+                  defaultMessage: 'Write clear instructions',
+                }),
+                description: t({
+                  id: 'manageChallenges.content.tipWriteClearInstructionsBody',
+                  defaultMessage:
+                    'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.',
+                }),
               },
               {
                 id: 'manageChallenges.content.tipSetDifficultyTitle',
-                title: t('manageChallenges.content.tipSetDifficultyTitle'),
-                description: t('manageChallenges.content.tipSetDifficultyBody'),
+                title: t({
+                  id: 'manageChallenges.content.tipSetDifficultyTitle',
+                  defaultMessage: 'Set appropriate difficulty',
+                }),
+                description: t({
+                  id: 'manageChallenges.content.tipSetDifficultyBody',
+                  defaultMessage:
+                    'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.',
+                }),
               },
               {
                 id: 'manageChallenges.content.tipMonitorProgressTitle',
-                title: t('manageChallenges.content.tipMonitorProgressTitle'),
-                description: t('manageChallenges.content.tipMonitorProgressBody'),
+                title: t({
+                  id: 'manageChallenges.content.tipMonitorProgressTitle',
+                  defaultMessage: 'Monitor progress',
+                }),
+                description: t({
+                  id: 'manageChallenges.content.tipMonitorProgressBody',
+                  defaultMessage:
+                    'Check completion rates and review feedback. Archive challenges once all tasks are resolved.',
+                }),
               },
             ]}
             docs={[
               {
                 page: 'creatingAChallenge',
-                text: t('manageChallenges.content.challengeCreationGuideLink'),
+                text: t({
+                  id: 'manageChallenges.content.challengeCreationGuideLink',
+                  defaultMessage: 'Challenge Creation Guide',
+                }),
               },
               {
                 page: 'taskPriorityRules',
-                text: t('manageChallenges.content.taskPriorityRulesLink'),
+                text: t({
+                  id: 'manageChallenges.content.taskPriorityRulesLink',
+                  defaultMessage: 'Task Priority Rules',
+                }),
               },
               {
                 page: 'bulkEditingChallenges',
-                text: t('manageChallenges.content.bulkEditingLink'),
+                text: t({
+                  id: 'manageChallenges.content.bulkEditingLink',
+                  defaultMessage: 'Bulk Editing Challenges',
+                }),
               },
             ]}
             onClose={() => setShowPanel(false)}
@@ -338,7 +386,7 @@ export const ManageChallengesContent = () => {
                   size="icon"
                   className="h-9 w-9 shrink-0"
                   onClick={() => setShowPanel(true)}
-                  title={t('common.showPanel', undefined, 'Show panel')}
+                  title={t({ id: 'common.showPanel', defaultMessage: 'Show panel' })}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
                 </Button>
@@ -346,29 +394,32 @@ export const ManageChallengesContent = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder={t('common.searchChallenges2', undefined, 'Search challenges...')}
+                placeholder={t({
+                  id: 'common.searchChallenges2',
+                  defaultMessage: 'Search challenges...',
+                })}
                 className="w-full sm:max-w-xs"
               />
               <FilterToggle
-                label={t('common.discoverable', undefined, 'Discoverable')}
+                label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
                 icon={Eye}
                 checked={onlyDiscoverable}
                 onCheckedChange={setOnlyDiscoverable}
               />
               <FilterToggle
-                label={t('common.archived', undefined, 'Archived')}
+                label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
                 icon={Archive}
                 checked={onlyArchived}
                 onCheckedChange={setOnlyArchived}
               />
               <FilterToggle
-                label={t('common.owned', undefined, 'Owned')}
+                label={t({ id: 'common.owned', defaultMessage: 'Owned' })}
                 icon={User}
                 checked={onlyOwned}
                 onCheckedChange={setOnlyOwned}
               />
               <FilterToggle
-                label={t('common.pinned', undefined, 'Pinned')}
+                label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                 icon={Pin}
                 checked={onlyPinned}
                 onCheckedChange={setOnlyPinned}
@@ -392,14 +443,14 @@ export const ManageChallengesContent = () => {
             >
               {!isLoading && (
                 <EntityGrid
-                  items={filteredChallenges || []}
+                  items={challenges}
                   renderItem={(challenge) => {
                     const isPinned =
                       challenge.id != null && pinnedChallengeIds.includes(challenge.id)
                     return (
                       <ChallengeCard
                         challenge={challenge}
-                        parentName={projectNamesById.get(challenge.parent)}
+                        parentName={challenge.parentName ?? undefined}
                         linkTo="/manage/challenge/$challengeId"
                         linkParams={{ challengeId: challenge.id.toString() }}
                         actions={buildChallengeActions(challenge, isPinned)}
@@ -409,18 +460,31 @@ export const ManageChallengesContent = () => {
                   getItemKey={(challenge) => challenge.id ?? crypto.randomUUID()}
                   emptyState={{
                     icon: ListChecks,
-                    title: t('common.noChallengesFound', undefined, 'No challenges found'),
-                    description: t(
-                      'manageChallenges.content.emptyDescription',
-                      undefined,
-                      "You haven't created any challenges yet"
-                    ),
-                    actionLabel: t('common.createChallenge', undefined, 'Create Challenge'),
+                    title: t({
+                      id: 'common.noChallengesFound',
+                      defaultMessage: 'No challenges found',
+                    }),
+                    description: t({
+                      id: 'manageChallenges.content.emptyDescription',
+                      defaultMessage: "You haven't created any challenges yet",
+                    }),
+                    actionLabel: t({
+                      id: 'common.createChallenge',
+                      defaultMessage: 'Create Challenge',
+                    }),
                     actionTo: '/manage/challenge/new',
                   }}
                 />
               )}
             </div>
+
+            {!isLoading && challenges.length > 0 && (
+              <LoadMoreFooter
+                hasNextPage={hasNextPage}
+                isFetching={isFetching}
+                onLoadMore={loadMore}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -431,27 +495,55 @@ export const ManageChallengesContent = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t('common.deleteChallenge2', undefined, 'Delete challenge?')}
+              {t({ id: 'common.deleteChallenge2', defaultMessage: 'Delete challenge?' })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t(
-                'common.deleteChallengeWarning',
-                undefined,
-                'This will delete this challenge and all its tasks. This action cannot be undone.'
-              )}
+              {t({
+                id: 'common.deleteChallengeWarning',
+                defaultMessage:
+                  'This will delete this challenge and all its tasks. This action cannot be undone.',
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.cancel', undefined, 'Cancel')}</AlertDialogCancel>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDeleteChallenge}
               className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
             >
-              {t('common.delete', undefined, 'Delete')}
+              {t({ id: 'common.delete', defaultMessage: 'Delete' })}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {rebuildChallengeId != null && (
+        <ChallengeRebuildDialog
+          challengeId={rebuildChallengeId}
+          onClose={() => setRebuildChallengeId(null)}
+        />
+      )}
     </div>
+  )
+}
+
+const ChallengeRebuildDialog = ({
+  challengeId,
+  onClose,
+}: {
+  challengeId: number
+  onClose: () => void
+}) => {
+  const { data: challenge } = api.challenge.getChallenge(challengeId)
+  if (!challenge) return null
+  return (
+    <RebuildTasksDialog
+      open
+      onOpenChange={(open) => !open && onClose()}
+      challengeId={challengeId}
+      sourceType={getChallengeSourceType(challenge)}
+      taskBundleIdProperty={challenge.taskBundleIdProperty}
+    />
   )
 }

@@ -19,7 +19,7 @@ export const MapLoadingIndicator = ({ isLoading, centered }: MapLoadingIndicator
         centered ? '-translate-x-1/2 left-1/2' : 'left-4'
       )}
     >
-      {t('shared.mapLoadingIndicator.loading', undefined, 'Loading task markers...')}
+      {t({ id: 'shared.mapLoadingIndicator.loading', defaultMessage: 'Loading task markers...' })}
     </div>
   )
 }

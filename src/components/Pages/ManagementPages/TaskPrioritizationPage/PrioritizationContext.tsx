@@ -11,7 +11,7 @@ export const TIER_TO_PRIORITY: Record<Tier, TaskPriorityValue> = {
   low: TaskPriority.LOW,
 }
 
-export interface TierDraft {
+interface TierDraft {
   rules: BinaryNode | null
   bounds: GeoJSON.FeatureCollection | null
 }

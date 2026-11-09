@@ -5,7 +5,7 @@ import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
 import type { TaskGetResponse } from '@/types/Task'
-import { taskSingle } from './single'
+import { invalidateLockedTasks, LOCKED_TASKS_INVALIDATION_DELAY_MS, taskSingle } from './single'
 
 function makeTask(overrides: Partial<TaskGetResponse> = {}): TaskGetResponse {
   return {
@@ -93,6 +93,24 @@ describe('taskSingle.startTask', () => {
     expect(new URL(request.url).pathname).toBe('/api/v2/task/7/start')
   })
 
+  it('does not lock the task again when the task is invalidated', async () => {
+    const fetchMock = vi.fn(
+      async () => new Response(JSON.stringify(makeTask({ id: 7 })), { status: 200 })
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    const queryClient = createTestQueryClient()
+
+    const { result } = renderHook(() => taskSingle.startTask(7), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    await queryClient.invalidateQueries({ queryKey: ['task', 7] })
+    await queryClient.refetchQueries({ stale: true })
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it('is disabled when taskId is falsy', () => {
     const fetchMock = stubFetch(new Response('{}', { status: 200 }))
 
@@ -164,7 +182,7 @@ describe('taskSingle.useLockTask', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    expect(queryClient.getQueryData(['task', 1])).toEqual(lockedTask)
+    expect(queryClient.getQueryData(['task', 1])).toEqual({ ...lockedTask, lockedBy: 42 })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 1] })
     const markers = queryClient.getQueryData<{ markers: Array<{ id: number; lockedBy: number }> }>([
       'challenge',
@@ -209,7 +227,7 @@ describe('taskSingle.useLockTask', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    expect(queryClient.getQueryData(['task', 3])).toEqual(lockedTask)
+    expect(queryClient.getQueryData(['task', 3])).toEqual({ ...lockedTask, lockedBy: null })
     expect(queryClient.getQueryData(['challenge', 'taskMarkers', 0])).toBeUndefined()
   })
 })
@@ -232,7 +250,11 @@ describe('taskSingle.useUnlockTask', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    expect(queryClient.getQueryData(['task', 3])).toEqual(unlockedTask)
+    expect(queryClient.getQueryData(['task', 3])).toEqual({
+      ...unlockedTask,
+      lockedBy: null,
+      lockBundledTasks: [],
+    })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 3] })
     const markers = queryClient.getQueryData<{
       markers: Array<{ id: number; lockedBy: number | null }>
@@ -468,12 +490,11 @@ describe('taskSingle.useUpdateTask', () => {
 })
 
 describe('taskSingle.useUpdateTaskStatus', () => {
-  it('builds a query string with tags and opaque plugin queryParams, posts a comment, and falls back to a GET when the PUT has no JSON body', async () => {
+  it('builds a query string with opaque plugin queryParams, posts a comment, and falls back to a GET when the PUT has no JSON body', async () => {
     const finalTask = makeTask({ id: 1, parent: 10, status: 2 })
     const fetchMock = stubRoutedFetch((request) => {
       const url = new URL(request.url)
       if (request.method === 'PUT' && url.pathname === '/api/v2/task/1/2') {
-        expect(url.searchParams.get('tags')).toBe('a,b')
         expect(url.searchParams.get('pluginFlag')).toBe('true')
         return new Response(null, { status: 204 })
       }
@@ -503,7 +524,6 @@ describe('taskSingle.useUpdateTaskStatus', () => {
       taskId: 1,
       status: 2,
       options: {
-        tags: ['a', 'b'],
         // A plugin passing an absent value must not turn into `?omitted=null`.
         queryParams: { pluginFlag: true, omitted: null, alsoOmitted: undefined },
         comment: 'looks good',
@@ -600,7 +620,6 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     const fetchMock = stubRoutedFetch((request) => {
       const url = new URL(request.url)
       expect(url.searchParams.get('pluginFlag')).toBe('false')
-      expect(url.searchParams.has('tags')).toBe(false)
       return new Response(JSON.stringify(finalTask), {
         status: 200,
         headers: { 'content-type': 'application/json' },
@@ -628,11 +647,9 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     )
   })
 
-  it('treats an empty tags array as absent, and skips aggregate invalidation when the status is unchanged', async () => {
+  it('skips aggregate invalidation when the status is unchanged', async () => {
     const finalTask = makeTask({ id: 4, parent: 7, status: 2 })
-    const fetchMock = stubRoutedFetch((request) => {
-      const url = new URL(request.url)
-      expect(url.searchParams.has('tags')).toBe(false)
+    const fetchMock = stubRoutedFetch(() => {
       return new Response(JSON.stringify(finalTask), {
         status: 200,
         headers: { 'content-type': 'application/json' },
@@ -649,7 +666,7 @@ describe('taskSingle.useUpdateTaskStatus', () => {
       wrapper: queryClientWrapper(queryClient),
     })
 
-    result.current.mutate({ taskId: 4, status: 2, options: { tags: [] } })
+    result.current.mutate({ taskId: 4, status: 2 })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
@@ -680,21 +697,95 @@ describe('taskSingle.useRefreshLock', () => {
   })
 })
 
-describe('taskSingle.useUpdateCompletionResponses', () => {
-  it('saves the answers to the task’s form fields and refreshes the task', async () => {
-    const fetchMock = stubFetch(new Response('ok', { status: 200 }))
+describe('task lock state in the cache', () => {
+  it('records the bundle lock on every cached task it covers', async () => {
+    stubFetch(
+      new Response(JSON.stringify({ lockPrimaryTaskId: 1, lockBundledTasks: [1, 2] }), {
+        status: 200,
+      })
+    )
     const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+    queryClient.setQueryData(['user', 'whoami'], { id: 42 })
+    queryClient.setQueryData(['task', 1], makeTask({ id: 1 }))
+    queryClient.setQueryData(['task', 2], makeTask({ id: 2 }))
 
-    const { result } = renderHook(() => taskSingle.useUpdateCompletionResponses(), {
+    const { result } = renderHook(() => taskSingle.useLockTaskBundle(), {
       wrapper: queryClientWrapper(queryClient),
     })
-    await result.current.mutateAsync({ taskId: 5, responses: { surface: 'gravel' } })
+    result.current.mutate({ taskId: 1, taskIds: [2] })
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    const [request] = fetchMock.mock.calls[0]
-    expect((request as Request).method).toBe('PUT')
-    expect(new URL((request as Request).url).pathname).toBe('/api/v2/task/5/responses')
-    expect(await (request as Request).clone().json()).toEqual({ surface: 'gravel' })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 5] })
+    for (const id of [1, 2]) {
+      expect(queryClient.getQueryData<TaskGetResponse>(['task', id])).toMatchObject({
+        lockedBy: 42,
+        lockBundledTasks: [1, 2],
+      })
+    }
+    expect(queryClient.getQueryData(['task', 3])).toBeUndefined()
+  })
+
+  it('clears the lock when a task is skipped', async () => {
+    stubFetch(new Response('', { status: 200 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['task', 1],
+      makeTask({ id: 1, status: 0, lockedBy: 42, lockBundledTasks: [1, 2] })
+    )
+
+    const { result } = renderHook(() => taskSingle.useSkipTask(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    result.current.mutate(1)
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])).toMatchObject({
+      lockedBy: null,
+      lockBundledTasks: [],
+    })
+  })
+
+  it('keeps the lock when the task itself is edited', async () => {
+    stubFetch(new Response(JSON.stringify(makeTask({ id: 1, priority: 2 })), { status: 200 }))
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(
+      ['task', 1],
+      makeTask({ id: 1, lockedBy: 42, lockBundledTasks: [1, 2] })
+    )
+
+    const { result } = renderHook(() => taskSingle.useUpdateTask(), {
+      wrapper: queryClientWrapper(queryClient),
+    })
+    result.current.mutate({ taskId: 1, body: makeTask({ id: 1, priority: 2 }) })
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])).toMatchObject({
+      priority: 2,
+      lockedBy: 42,
+      lockBundledTasks: [1, 2],
+    })
+  })
+})
+
+describe('invalidateLockedTasks', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('refreshes the locked tasks list once for a burst of lock changes', () => {
+    vi.useFakeTimers()
+    const queryClient = createTestQueryClient()
+    queryClient.setQueryData(['user', 'whoami'], { id: 42 })
+    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
+
+    invalidateLockedTasks(queryClient)
+    invalidateLockedTasks(queryClient)
+    vi.advanceTimersByTime(LOCKED_TASKS_INVALIDATION_DELAY_MS - 1)
+    invalidateLockedTasks(queryClient)
+    expect(invalidateSpy).not.toHaveBeenCalled()
+
+    vi.advanceTimersByTime(LOCKED_TASKS_INVALIDATION_DELAY_MS)
+
+    expect(invalidateSpy).toHaveBeenCalledTimes(1)
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['user', 42, 'lockedTasks'] })
   })
 })

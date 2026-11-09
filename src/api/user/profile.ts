@@ -112,7 +112,11 @@ export const userProfile = {
       })
     ),
 
-  lockedTasks: (userId: number | undefined, limit: number = 50) =>
+  lockedTasks: (
+    userId: number | undefined,
+    limit: number = 50,
+    { enabled = true }: { enabled?: boolean } = {}
+  ) =>
     useQuery(
       queryOptions({
         queryKey: ['user', userId, 'lockedTasks', { limit }],
@@ -122,7 +126,7 @@ export const userProfile = {
               searchParams: { limit },
             })
             .json<LockedTaskData[]>(),
-        enabled: !!userId,
+        enabled: enabled && !!userId,
       })
     ),
 

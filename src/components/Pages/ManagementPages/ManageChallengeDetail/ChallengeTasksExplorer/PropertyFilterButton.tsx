@@ -51,11 +51,10 @@ export const PropertyFilterButton = () => {
         >
           <SlidersHorizontal className="h-4 w-4 shrink-0 opacity-60" />
           <span>
-            {t(
-              'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
-              undefined,
-              'Filter by property'
-            )}
+            {t({
+              id: 'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
+              defaultMessage: 'Filter by property',
+            })}
             {propertyFilterActive ? ' •' : ''}
           </span>
           <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
@@ -64,32 +63,29 @@ export const PropertyFilterButton = () => {
       <PopoverContent
         align="start"
         className="w-[32rem] max-w-[90vw] space-y-3"
-        aria-label={t(
-          'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
-          undefined,
-          'Filter by property'
-        )}
+        aria-label={t({
+          id: 'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
+          defaultMessage: 'Filter by property',
+        })}
       >
         <div>
           <p className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
-            {t(
-              'manageChallengeDetail.tasksExplorer.propertyFilterTitle',
-              undefined,
-              'Filter tasks by feature property'
-            )}
+            {t({
+              id: 'manageChallengeDetail.tasksExplorer.propertyFilterTitle',
+              defaultMessage: 'Filter tasks by feature property',
+            })}
           </p>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            {t(
-              'manageChallengeDetail.tasksExplorer.propertyFilterHelp',
-              undefined,
-              'Combine property comparisons with AND/OR. Tasks matching the rule are shown in the table and on the map.'
-            )}{' '}
+            {t({
+              id: 'manageChallengeDetail.tasksExplorer.propertyFilterHelp',
+              defaultMessage:
+                'Combine property comparisons with AND/OR. Tasks matching the rule are shown in the table and on the map.',
+            })}{' '}
             <DocsLink page="filteringTasksByProperties" icon={null}>
-              {t(
-                'manageChallengeDetail.tasksExplorer.propertyFilterDocsLink',
-                undefined,
-                'Learn more'
-              )}
+              {t({
+                id: 'manageChallengeDetail.tasksExplorer.propertyFilterDocsLink',
+                defaultMessage: 'Learn more',
+              })}
             </DocsLink>
           </p>
         </div>
@@ -113,7 +109,7 @@ export const PropertyFilterButton = () => {
               setOpen(false)
             }}
           >
-            {t('common.clear', undefined, 'Clear')}
+            {t({ id: 'common.clear', defaultMessage: 'Clear' })}
           </Button>
           <Button
             type="button"
@@ -124,7 +120,10 @@ export const PropertyFilterButton = () => {
               setOpen(false)
             }}
           >
-            {t('manageChallengeDetail.tasksExplorer.propertyFilterApply', undefined, 'Apply')}
+            {t({
+              id: 'common.apply',
+              defaultMessage: 'Apply',
+            })}
           </Button>
         </div>
       </PopoverContent>

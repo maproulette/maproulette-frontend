@@ -4,6 +4,7 @@
 import { act, type ReactNode } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { IntlProvider } from '@/i18n'
 import { PluginErrorBoundary, wrapPluginComponent } from './PluginErrorBoundary'
 
 const Boom = ({ message = 'plugin boom' }: { message?: string }) => {
@@ -27,7 +28,7 @@ describe('PluginErrorBoundary', () => {
     document.body.appendChild(container)
     root = createRoot(container)
     act(() => {
-      root.render(ui)
+      root.render(<IntlProvider initialLocale="en-US">{ui}</IntlProvider>)
     })
   }
 

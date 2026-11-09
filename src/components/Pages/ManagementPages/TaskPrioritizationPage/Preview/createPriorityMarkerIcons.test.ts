@@ -1,6 +1,9 @@
 import type maplibregl from 'maplibre-gl'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { PRIORITY_COLOR, PRIORITY_LABEL } from '@/types/Priority'
+import { PRIORITY_COLOR } from '@/types/Priority'
+
+const LETTERS = { 0: 'H', 1: 'M', 2: 'L' } as const
+
 import {
   createPriorityMarkerIcons,
   PRIORITY_PIN_PREFIX,
@@ -77,7 +80,7 @@ describe('createPriorityMarkerIcons', () => {
       expect(img.src.startsWith('data:image/svg+xml;base64,')).toBe(true)
       const svg = atob(img.src.replace('data:image/svg+xml;base64,', ''))
       expect(svg).toContain(PRIORITY_COLOR[priority].hex)
-      expect(svg).toContain(`>${PRIORITY_LABEL[priority][0]}<`)
+      expect(svg).toContain(`>${LETTERS[priority]}<`)
     })
   })
 

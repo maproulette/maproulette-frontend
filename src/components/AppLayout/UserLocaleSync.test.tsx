@@ -17,7 +17,7 @@ vi.mock('@/contexts/AuthContext', () => ({
 vi.mock('@/i18n', async () => {
   const locales = await import('@/i18n/locales')
   return {
-    isSupportedLocale: locales.isSupportedLocale,
+    normalizeLocale: locales.normalizeLocale,
     useIntl: () => ({ locale: currentLocale, setLocale }),
   }
 })
@@ -70,6 +70,15 @@ describe('UserLocaleSync', () => {
     mount(<UserLocaleSync />)
 
     expect(setLocale).not.toHaveBeenCalled()
+  })
+
+  it('maps a legacy "en" saved locale to en-US', () => {
+    currentLocale = 'de'
+    currentUser = userWithLocale('en')
+
+    mount(<UserLocaleSync />)
+
+    expect(setLocale).toHaveBeenCalledWith('en-US')
   })
 
   it('leaves the locale alone when no user is signed in', () => {

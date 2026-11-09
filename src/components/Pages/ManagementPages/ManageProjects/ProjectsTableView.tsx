@@ -39,25 +39,30 @@ export const ProjectsTableView = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">{t('common.status', undefined, 'Status')}</TableHead>
+            <TableHead className="w-[80px]">
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
+            </TableHead>
             <TableHead className="w-12">
-              <span title={t('common.pinned', undefined, 'Pinned')} className="flex justify-center">
+              <span
+                title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
+                className="flex justify-center"
+              >
                 <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               </span>
             </TableHead>
-            <TableHead>{t('common.name', undefined, 'Name')}</TableHead>
+            <TableHead>{t({ id: 'common.name', defaultMessage: 'Name' })}</TableHead>
             <TableHead className="hidden w-20 md:table-cell">
-              {t('common.id', undefined, 'ID')}
+              {t({ id: 'common.id', defaultMessage: 'ID' })}
             </TableHead>
             <TableHead className="hidden w-24 text-center md:table-cell">
-              {t('common.challenges', undefined, 'Challenges')}
+              {t({ id: 'common.challenges', defaultMessage: 'Challenges' })}
             </TableHead>
             <TableHead className="hidden max-w-[240px] lg:table-cell">
-              {t('common.description', undefined, 'Description')}
+              {t({ id: 'common.description', defaultMessage: 'Description' })}
             </TableHead>
             {showActions && (
               <TableHead className="w-[60px] text-right">
-                {t('common.actions', undefined, 'Actions')}
+                {t({ id: 'common.actions', defaultMessage: 'Actions' })}
               </TableHead>
             )}
           </TableRow>
@@ -84,13 +89,13 @@ export const ProjectsTableView = ({
                       onClick={() => onTogglePin(project.id as number)}
                       title={
                         pinned
-                          ? t('common.unpinProject', undefined, 'Unpin project')
-                          : t('common.pinProject', undefined, 'Pin project')
+                          ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
+                          : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
                       }
                       aria-label={
                         pinned
-                          ? t('common.unpinProject', undefined, 'Unpin project')
-                          : t('common.pinProject', undefined, 'Pin project')
+                          ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
+                          : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
                       }
                     >
                       <Pin
@@ -103,7 +108,7 @@ export const ProjectsTableView = ({
                     </Button>
                   ) : pinned ? (
                     <span
-                      title={t('common.pinned', undefined, 'Pinned')}
+                      title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                       className="flex justify-center"
                     >
                       <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />

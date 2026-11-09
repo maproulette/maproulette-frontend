@@ -1,13 +1,11 @@
 import { useMemo } from 'react'
 import { api } from '@/api'
 import { TaskGeometrySource } from '@/components/Map/TaskMarkers/TaskGeometrySource'
-import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
-import { parseStyleRules } from '@/lib/taskFeatureStyle'
 
 /**
  * TaskGeometryLayer that always shows the primary task's geometries,
@@ -22,7 +20,6 @@ export const TaskGeometryLayer = () => {
   const { selectedMarker } = useTaskMapContext()
   const { activeBundle } = useTaskBundleContext()
   const { task } = useTaskContext()
-  const { challenge } = useChallengeContext()
   const { focusedFeature, highlightedFeature, showDirectionIndicators } = useTaskFeatureContext()
   const primaryTaskId = task.id
 
@@ -37,20 +34,16 @@ export const TaskGeometryLayer = () => {
   const selectedTaskId = selectedMarker?.id ?? null
   const { data: selectedTask } = api.task.getTask(selectedTaskId ?? 0)
 
-  // Conditional styles configured on the challenge, applied on top of each
-  // feature's own simplestyle properties.
-  const styleRules = useMemo(() => parseStyleRules(challenge?.taskStyles), [challenge?.taskStyles])
-
   const geometries = useMemo(() => {
     const allFeatures: GeoJSON.Feature[] = []
 
     if (primaryTask) {
-      allFeatures.push(...decorateTaskFeatures(primaryTask, styleRules).features)
+      allFeatures.push(...decorateTaskFeatures(primaryTask).features)
     }
 
     if (bundledTasks) {
       for (const task of bundledTasks) {
-        allFeatures.push(...decorateTaskFeatures(task, styleRules).features)
+        allFeatures.push(...decorateTaskFeatures(task).features)
       }
     }
 
@@ -60,7 +53,7 @@ export const TaskGeometryLayer = () => {
       selectedTask.id !== primaryTaskId &&
       !activeBundle?.taskIds.includes(selectedTask.id)
     ) {
-      allFeatures.push(...decorateTaskFeatures(selectedTask, styleRules).features)
+      allFeatures.push(...decorateTaskFeatures(selectedTask).features)
     }
 
     // Focusing one feature hides the rest of the task's geometry, so a single
@@ -80,7 +73,6 @@ export const TaskGeometryLayer = () => {
     bundledTasks,
     activeBundle,
     focusedFeature,
-    styleRules,
   ])
 
   if (!geometries) {

@@ -27,8 +27,8 @@ export const useMapControlButtons = (
         onClick: handleCenterToTask,
         tooltip:
           activeBundle && activeBundle.taskIds.length > 1
-            ? t('taskMap.controls.centerToBundle', undefined, 'Center to Bundle')
-            : t('taskMap.controls.centerToTask', undefined, 'Center to Task'),
+            ? t({ id: 'taskMap.controls.centerToBundle', defaultMessage: 'Center to Bundle' })
+            : t({ id: 'taskMap.controls.centerToTask', defaultMessage: 'Center to Task' }),
         disabled: !mapLoaded,
         binding: MAP_BINDINGS.fitToTask,
       },
@@ -37,8 +37,8 @@ export const useMapControlButtons = (
         icon: markersHidden ? EyeOff : Eye,
         onClick: () => setMarkersHidden(!markersHidden),
         tooltip: markersHidden
-          ? t('taskMap.controls.showAllMarkers', undefined, 'Show all markers')
-          : t('taskMap.controls.hideAllMarkers', undefined, 'Hide all markers'),
+          ? t({ id: 'taskMap.controls.showAllMarkers', defaultMessage: 'Show all markers' })
+          : t({ id: 'taskMap.controls.hideAllMarkers', defaultMessage: 'Hide all markers' }),
         disabled: !mapLoaded,
         isActive: markersHidden,
         binding: MAP_BINDINGS.toggleMarkers,
@@ -48,10 +48,16 @@ export const useMapControlButtons = (
         icon: Filter,
         onClick: () => setShowBundleOnly(!showBundleOnly),
         tooltip: showBundleOnly
-          ? t('taskMap.controls.showAllTasks', undefined, 'Show all tasks')
+          ? t({ id: 'taskMap.controls.showAllTasks', defaultMessage: 'Show all tasks' })
           : activeBundle
-            ? t('taskMap.controls.showSelectedOnly', undefined, 'Show selected tasks only')
-            : t('taskMap.controls.showPrimaryOnly', undefined, 'Show primary task only'),
+            ? t({
+                id: 'taskMap.controls.showSelectedOnly',
+                defaultMessage: 'Show selected tasks only',
+              })
+            : t({
+                id: 'taskMap.controls.showPrimaryOnly',
+                defaultMessage: 'Show primary task only',
+              }),
         disabled: !mapLoaded,
         isActive: showBundleOnly,
         binding: MAP_BINDINGS.toggleBundleOnly,
@@ -67,12 +73,14 @@ export const useMapControlButtons = (
         icon: Globe,
         onClick: () => setShowExploreLayer(!showExploreLayer),
         tooltip: showExploreLayer
-          ? t('taskMap.controls.hideOtherChallenges', undefined, 'Hide tasks from other challenges')
-          : t(
-              'taskMap.controls.showOtherChallenges',
-              undefined,
-              'Show tasks from other challenges'
-            ),
+          ? t({
+              id: 'taskMap.controls.hideOtherChallenges',
+              defaultMessage: 'Hide tasks from other challenges',
+            })
+          : t({
+              id: 'taskMap.controls.showOtherChallenges',
+              defaultMessage: 'Show tasks from other challenges',
+            }),
         disabled: !mapLoaded,
         isActive: showExploreLayer,
         binding: MAP_BINDINGS.toggleExploreLayer,

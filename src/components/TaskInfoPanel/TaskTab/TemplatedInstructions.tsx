@@ -30,9 +30,11 @@ const CopyableText = ({ text }: { text: string }) => {
         onClick={() => copy(text)}
         className="rounded p-0.5 text-zinc-500 hover:text-zinc-800 dark:text-slate-400 dark:hover:text-slate-100"
         aria-label={t(
-          'taskInfoPanel.instructions.copy',
-          { text },
-          'Copy "{text}" to the clipboard'
+          {
+            id: 'taskInfoPanel.instructions.copy',
+            defaultMessage: 'Copy "{text}" to the clipboard',
+          },
+          { text }
         )}
       >
         {isCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}

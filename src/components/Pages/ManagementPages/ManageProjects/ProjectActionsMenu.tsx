@@ -26,7 +26,9 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="h-8 w-8">
           <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">{t('common.openMenu', undefined, 'Open menu')}</span>
+          <span className="sr-only">
+            {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -37,7 +39,7 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
             className="flex cursor-pointer items-center gap-2"
           >
             <Eye className="h-4 w-4" />
-            {t('common.viewProject', undefined, 'View project')}
+            {t({ id: 'common.viewProject', defaultMessage: 'View project' })}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
@@ -47,7 +49,7 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
             className="flex cursor-pointer items-center gap-2"
           >
             <Pencil className="h-4 w-4" />
-            {t('common.editProject', undefined, 'Edit project')}
+            {t({ id: 'common.editProject', defaultMessage: 'Edit project' })}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
@@ -57,7 +59,7 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
             className="flex cursor-pointer items-center gap-2"
           >
             <Plus className="h-4 w-4" />
-            {t('common.addChallenge', undefined, 'Add challenge')}
+            {t({ id: 'common.addChallenge', defaultMessage: 'Add challenge' })}
           </Link>
         </DropdownMenuItem>
         {projectId != null && (
@@ -66,7 +68,7 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
             className="flex cursor-pointer items-center gap-2"
           >
             <FileDown className="h-4 w-4" />
-            {t('common.exportCsv', undefined, 'Export CSV')}
+            {t({ id: 'common.exportCsv', defaultMessage: 'Export CSV' })}
           </DropdownMenuItem>
         )}
         <DropdownMenuItem
@@ -77,7 +79,7 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
           className="flex cursor-pointer items-center gap-2"
         >
           <Copy className="h-4 w-4" />
-          {t('common.copyUrl', undefined, 'Copy URL')}
+          {t({ id: 'common.copyUrl', defaultMessage: 'Copy URL' })}
         </DropdownMenuItem>
         {projectId != null && (
           <DropdownMenuItem
@@ -86,8 +88,8 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
           >
             <Archive className="h-4 w-4" />
             {project.isArchived
-              ? t('common.unarchiveProject', undefined, 'Unarchive project')
-              : t('common.archiveProject', undefined, 'Archive project')}
+              ? t({ id: 'common.unarchiveProject', defaultMessage: 'Unarchive project' })
+              : t({ id: 'common.archiveProject', defaultMessage: 'Archive project' })}
           </DropdownMenuItem>
         )}
         {projectId != null && (
@@ -96,7 +98,7 @@ export const ProjectActionsMenu = ({ project }: ProjectActionsMenuProps) => {
             className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
           >
             <Trash2 className="h-4 w-4" />
-            {t('common.deleteProject', undefined, 'Delete project')}
+            {t({ id: 'common.deleteProject', defaultMessage: 'Delete project' })}
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

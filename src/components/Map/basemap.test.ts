@@ -36,6 +36,15 @@ describe('basemapStyle', () => {
     expect(basemapStyle(settings)?.name).toBe('Esri World Imagery')
   })
 
+  it('resolves the MR3 editor-layer-index ids onto the bundled styles', () => {
+    const style = (defaultBasemapId: string) =>
+      basemapStyle({ defaultBasemap: CHALLENGE_BASEMAP.identified, defaultBasemapId })?.name
+    expect(style('MAPNIK')).toBe('OSM Carto')
+    expect(style('Bing')).toBe('Bing Aerial')
+    expect(style('EsriWorldImagery')).toBe('Esri World Imagery')
+    expect(style('EsriWorldImageryClarity')).toBe('Esri World Imagery (Clarity)')
+  })
+
   it('is no override when the identified style is not bundled', () => {
     const settings = { defaultBasemap: CHALLENGE_BASEMAP.identified, defaultBasemapId: 'tf-cycle' }
     expect(basemapStyle(settings)).toBeNull()
@@ -115,6 +124,25 @@ describe('basemapSelection', () => {
     expect(basemapSelection({ defaultBasemap: CHALLENGE_BASEMAP.bing })).toBe('Bing Aerial')
   })
 
+  it('resolves an MR3 editor-layer-index id to the bundled style it maps onto', () => {
+    expect(
+      basemapSelection({
+        defaultBasemap: CHALLENGE_BASEMAP.identified,
+        defaultBasemapId: 'EsriWorldImagery',
+      })
+    ).toBe('Esri World Imagery')
+  })
+
+  it('keeps a stored basemap this build has no style for', () => {
+    expect(basemapSelection({ defaultBasemap: CHALLENGE_BASEMAP.openCycleMap })).toBe('current')
+    expect(
+      basemapSelection({
+        defaultBasemap: CHALLENGE_BASEMAP.identified,
+        defaultBasemapId: 'tf-cycle',
+      })
+    ).toBe('current')
+  })
+
   it('is custom when a tile template is stored', () => {
     const challenge = {
       defaultBasemap: CHALLENGE_BASEMAP.custom,
@@ -150,6 +178,31 @@ describe('basemapSubmission', () => {
     expect(basemapSubmission('none', '')).toEqual(cleared)
     expect(basemapSubmission('custom', '')).toEqual(cleared)
     expect(basemapSubmission('Not A Bundled Style', '')).toEqual(cleared)
+  })
+
+  it('writes nothing when the selection is what the stored basemap loads as', () => {
+    const stored = { defaultBasemap: CHALLENGE_BASEMAP.identified, defaultBasemapId: 'Bing' }
+    expect(basemapSubmission('Bing Aerial', '', stored)).toEqual({})
+    expect(
+      basemapSubmission('current', '', { defaultBasemap: CHALLENGE_BASEMAP.openCycleMap })
+    ).toEqual({})
+    const custom = { defaultBasemap: CHALLENGE_BASEMAP.custom, customBasemap: 'https://e.org/{z}' }
+    expect(basemapSubmission('custom', 'https://e.org/{z}', custom)).toEqual({})
+  })
+
+  it('writes the new basemap when the selection changed from the stored one', () => {
+    const stored = { defaultBasemap: CHALLENGE_BASEMAP.identified, defaultBasemapId: 'Bing' }
+    expect(basemapSubmission('none', '', stored)).toEqual({
+      defaultBasemap: CHALLENGE_BASEMAP.none,
+      defaultBasemapId: null,
+      customBasemap: null,
+    })
+    const custom = { defaultBasemap: CHALLENGE_BASEMAP.custom, customBasemap: 'https://e.org/{z}' }
+    expect(basemapSubmission('custom', 'https://other.org/{z}', custom)).toEqual({
+      defaultBasemap: CHALLENGE_BASEMAP.custom,
+      defaultBasemapId: null,
+      customBasemap: 'https://other.org/{z}',
+    })
   })
 
   it('round-trips a selection back through basemapSelection', () => {

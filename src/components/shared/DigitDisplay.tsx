@@ -38,7 +38,14 @@ export const DigitDisplay = ({
   return (
     <span className={cn('inline-flex gap-0.5 font-bold font-mono', className)}>
       <span className="sr-only">
-        {ariaLabel ?? t('shared.digitDisplay.pointsLabel', { value }, '{value} points')}
+        {ariaLabel ??
+          t(
+            {
+              id: 'shared.digitDisplay.pointsLabel',
+              defaultMessage: '{value, plural, one {# point} other {# points}}',
+            },
+            { value }
+          )}
       </span>
       {digits.map((digit, i) => {
         const isBlank = digit === ' '
