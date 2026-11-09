@@ -356,8 +356,12 @@ export const CommentsHistoryTab = ({
                 size="sm"
                 disabled={!commentText.trim() || addCommentMutation.isPending}
                 className="self-end"
+                aria-label={t({
+                  id: 'taskInfoPanel.comments.send',
+                  defaultMessage: 'Send comment',
+                })}
               >
-                <Send className="size-3.5" />
+                <Send className="size-3.5" aria-hidden="true" />
               </Button>
             </div>
           </form>
