@@ -64,6 +64,16 @@ services:
       MR_OSM_SERVER: https://master.apis.dev.openstreetmap.org
       MR_OAUTH_CONSUMER_KEY: not_a_real_key
       MR_OAUTH_CONSUMER_SECRET: not_a_real_secret
+      # Overpass is an external service, so the backend is pointed at the stub
+      # the Overpass spec serves on the host (startOverpassStub in
+      # e2e/helpers/challengeSources.ts). The setting has no env override, so it
+      # goes in as a system property.
+      JAVA_OPTS: "-Dosm.ql.provider=http://host.docker.internal:${E2E_OVERPASS_STUB_PORT:-18555}/api/interpreter"
+    # Lets the backend reach the stub servers the specs start on the host, for
+    # remote GeoJSON and Overpass. Docker Desktop provides the name already;
+    # Linux needs it mapped.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       # Overridable so the stack can run beside a local development backend
       # already holding 9000: set E2E_BACKEND_PORT to match .env.test.local.
