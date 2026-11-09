@@ -36,7 +36,7 @@ export const FieldSubmit = ({
               {t({ id: 'common.saving2', defaultMessage: 'Saving...' })}
             </>
           ) : (
-            'Save Changes'
+            t({ id: 'settings.submit.saveChanges', defaultMessage: 'Save Changes' })
           )}
         </Button>
       </DisabledTooltip>
