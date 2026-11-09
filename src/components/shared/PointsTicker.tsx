@@ -37,7 +37,8 @@ export const PointsTicker = ({
         aria-label={t(
           {
             id: 'shared.pointsTicker.viewProfile',
-            defaultMessage: '{score, plural, one {# point} other {# points}} — view profile',
+            defaultMessage:
+              '{score, plural, one {# point — view profile} other {# points — view profile}}',
           },
           { score }
         )}

@@ -47,7 +47,7 @@ export const ChallengeTasksExplorerMain = () => {
                         {
                           id: 'manageChallengeDetail.tasksExplorer.showingCount',
                           defaultMessage:
-                            'Showing {shown, number} of {total, plural, one {# task} other {# tasks}}',
+                            '{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}',
                         },
                         { shown: visibleMarkers.length, total: filteredMarkers.length }
                       )

@@ -279,7 +279,7 @@ export const ReportModal = () => {
                 {
                   id: 'browsedChallengePage.challengeModals.reportModal.minLengthError',
                   defaultMessage:
-                    'Report must be at least {min, plural, one {# character} other {# characters}}',
+                    '{min, plural, one {Report must be at least # character} other {Report must be at least # characters}}',
                 },
                 { min: MIN_CHARACTERS }
               )}

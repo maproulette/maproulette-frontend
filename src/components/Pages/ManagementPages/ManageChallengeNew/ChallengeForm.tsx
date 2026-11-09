@@ -200,7 +200,7 @@ export const ChallengeForm = () => {
                     {
                       id: 'manageChallengeNew.challengeForm.fieldErrorsTitle',
                       defaultMessage:
-                        '{count, plural, one {# field needs} other {# fields need}} attention',
+                        '{count, plural, one {# field needs attention} other {# fields need attention}}',
                     },
                     { count: fieldErrors.length }
                   )}

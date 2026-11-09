@@ -11,7 +11,8 @@ export const makeTeamFormSchema = (t: TranslateFn) =>
         t(
           {
             id: 'teams.form.tooLong',
-            defaultMessage: 'Keep it under {max, plural, one {# character} other {# characters}}',
+            defaultMessage:
+              '{max, plural, one {Keep it under # character} other {Keep it under # characters}}',
           },
           { max: 100 }
         )
@@ -23,7 +24,8 @@ export const makeTeamFormSchema = (t: TranslateFn) =>
         t(
           {
             id: 'teams.form.tooLong',
-            defaultMessage: 'Keep it under {max, plural, one {# character} other {# characters}}',
+            defaultMessage:
+              '{max, plural, one {Keep it under # character} other {Keep it under # characters}}',
           },
           { max: 1000 }
         )
