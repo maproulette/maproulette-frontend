@@ -1,11 +1,5 @@
+import type { UserWhoamiResponse } from '@/types/User'
 import { BACKEND_URL, expect, test } from './fixtures'
-
-interface WhoamiUser {
-  id: number
-  osmProfile: {
-    displayName: string
-  }
-}
 
 test('the super-admin users page lists the real authenticated user from the backend', async ({
   page,
@@ -16,7 +10,7 @@ test('the super-admin users page lists the real authenticated user from the back
   // render from the database.
   const whoamiResponse = await request.get(`${BACKEND_URL}/api/v2/user/whoami`)
   expect(whoamiResponse.ok()).toBeTruthy()
-  const currentUser = (await whoamiResponse.json()) as WhoamiUser
+  const currentUser = (await whoamiResponse.json()) as UserWhoamiResponse
 
   await page.goto('/super-admin/users')
 
@@ -29,7 +23,7 @@ test('the super-admin users page lists the real authenticated user from the back
   await expect(userRow.getByText(`ID: ${currentUser.id}`)).toBeVisible()
   await expect(userRow.getByText('super admin')).toBeVisible()
 
-  const searchInput = page.getByPlaceholder('Search users by name or email...')
+  const searchInput = page.getByPlaceholder('Search this page by name or email...')
 
   // Filtering by the real display name keeps the row visible.
   await searchInput.fill(currentUser.osmProfile.displayName)
@@ -38,5 +32,5 @@ test('the super-admin users page lists the real authenticated user from the back
   // An unmatched search filters the row out and shows the empty state.
   await searchInput.fill('no-such-user-xyz-123')
   await expect(userRow).not.toBeVisible()
-  await expect(page.getByText('No users found')).toBeVisible({ timeout: 15_000 })
+  await expect(page.getByText('No matching users on this page')).toBeVisible({ timeout: 15_000 })
 })
