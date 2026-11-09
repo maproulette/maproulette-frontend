@@ -102,11 +102,8 @@ const StatisticsDialogContent = ({
       value: stats?.fixed,
     },
     {
-      id: 'common.falsePositive',
-      label: t({
-        id: 'common.falsePositive',
-        defaultMessage: 'False Positive',
-      }),
+      id: 'common.notAnIssue',
+      label: t({ id: 'common.notAnIssue', defaultMessage: 'Not an Issue' }),
       value: stats?.falsePositive,
     },
     {
