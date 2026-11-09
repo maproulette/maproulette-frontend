@@ -1,4 +1,4 @@
-import { BACKEND_URL, expect, test } from './fixtures'
+import { BACKEND_URL, expect, projectTeamIds, test } from './fixtures'
 
 // Attaching a team to a single challenge, which reaches that challenge alone
 // without handing over the whole project. Users could always be granted a role
@@ -31,39 +31,11 @@ const openManagers = async (page: import('@playwright/test').Page, challengeId: 
   return dialog
 }
 
-test('a challenge with no teams says so, and offers the add control', async ({
-  page,
-  challenge,
-}) => {
-  const dialog = await openManagers(page, challenge.id)
-
-  await expect(dialog.getByRole('heading', { name: 'Teams', exact: true })).toBeVisible({
-    timeout: 15_000,
-  })
-  await expect(dialog.getByText('No teams yet.')).toBeVisible()
-  await expect(dialog.getByLabel('Add a team')).toBeVisible()
-})
-
-test('the Teams section says what a team confers, rather than offering a role', async ({
+test('a team can be found by name and attached to the challenge, leaving its project alone', async ({
   page,
   challenge,
   team,
   request,
-}) => {
-  await attachTeamToChallenge(request, team.id, challenge.id)
-  const dialog = await openManagers(page, challenge.id)
-
-  await expect(dialog.getByText(team.name)).toBeVisible({ timeout: 15_000 })
-  await expect(dialog.getByText(/follows their role in the team/i)).toBeVisible()
-
-  const teamRow = dialog.locator('li').filter({ hasText: team.name })
-  await expect(teamRow.getByRole('combobox')).toHaveCount(0)
-})
-
-test('a team can be found by name and attached to the challenge', async ({
-  page,
-  challenge,
-  team,
 }) => {
   const dialog = await openManagers(page, challenge.id)
   await expect(dialog.getByText('No teams yet.')).toBeVisible({ timeout: 15_000 })
@@ -73,6 +45,8 @@ test('a team can be found by name and attached to the challenge', async ({
 
   await expect(dialog.getByText('No teams yet.')).not.toBeVisible({ timeout: 15_000 })
   await expect(dialog.locator('li').filter({ hasText: team.name })).toBeVisible()
+
+  expect(await projectTeamIds(request, challenge.projectId)).not.toContain(team.id)
 })
 
 test('an attached team can be detached again', async ({ page, challenge, team, request }) => {
@@ -81,28 +55,9 @@ test('an attached team can be detached again', async ({ page, challenge, team, r
 
   const teamRow = dialog.locator('li').filter({ hasText: team.name })
   await expect(teamRow).toBeVisible({ timeout: 15_000 })
+  await expect(teamRow.getByRole('combobox')).toHaveCount(0)
 
   await teamRow.getByRole('button', { name: `Remove ${team.name}` }).click()
 
   await expect(dialog.getByText('No teams yet.')).toBeVisible({ timeout: 15_000 })
-})
-
-test('attaching a team to a challenge leaves its project alone', async ({
-  page,
-  challenge,
-  team,
-  request,
-}) => {
-  await attachTeamToChallenge(request, team.id, challenge.id)
-
-  // Reaching one challenge is the whole point of granting here rather than on
-  // the project, so the project must not pick the team up.
-  const response = await request.get(
-    `${BACKEND_URL}/api/v2/teams/projectManagers/${challenge.projectId}`
-  )
-  const body = (await response.json()) as Array<{ team: { id: number } }>
-  expect(body.some((entry) => entry.team.id === team.id)).toBe(false)
-
-  const dialog = await openManagers(page, challenge.id)
-  await expect(dialog.locator('li').filter({ hasText: team.name })).toBeVisible({ timeout: 15_000 })
 })

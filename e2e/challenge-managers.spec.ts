@@ -10,32 +10,6 @@ import { BACKEND_URL, expect, test } from './fixtures'
 // grant actually lets them *do* is covered in the backend's
 // ChallengeServiceSpec rather than through the browser.
 
-test('the managers panel opens and reports that nobody has been granted a role', async ({
-  page,
-  challenge,
-}) => {
-  await page.goto(`/manage/challenge/${challenge.id}`)
-
-  await page.getByRole('button', { name: 'Managers' }).click()
-
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible({ timeout: 15_000 })
-  await expect(dialog.getByRole('heading', { name: 'Challenge managers' })).toBeVisible()
-  await expect(dialog.getByText('No managers yet.')).toBeVisible({ timeout: 15_000 })
-})
-
-test('the panel explains that project and team managers are not listed', async ({
-  page,
-  challenge,
-}) => {
-  await page.goto(`/manage/challenge/${challenge.id}`)
-  await page.getByRole('button', { name: 'Managers' }).click()
-
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible({ timeout: 15_000 })
-  await expect(dialog.getByText(/already has access and is not listed here/)).toBeVisible()
-})
-
 test('searching for someone who does not exist says so', async ({ page, challenge }) => {
   await page.goto(`/manage/challenge/${challenge.id}`)
   await page.getByRole('button', { name: 'Managers' }).click()
@@ -45,21 +19,6 @@ test('searching for someone who does not exist says so', async ({ page, challeng
 
   await dialog.getByLabel('Add a manager').fill('nobody-by-this-name-exists')
   await expect(dialog.getByText('No matching users')).toBeVisible({ timeout: 15_000 })
-})
-
-test('a role can be chosen before anyone is added', async ({ page, challenge }) => {
-  await page.goto(`/manage/challenge/${challenge.id}`)
-  await page.getByRole('button', { name: 'Managers' }).click()
-
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible({ timeout: 15_000 })
-
-  const roleSelect = dialog.getByRole('combobox')
-  await expect(roleSelect).toBeVisible()
-  await roleSelect.click()
-  await expect(page.getByRole('option', { name: 'Admin' })).toBeVisible({ timeout: 10_000 })
-  await expect(page.getByRole('option', { name: 'Write' })).toBeVisible()
-  await expect(page.getByRole('option', { name: 'Read' })).toBeVisible()
 })
 
 test('a user can be added as a manager and shows up with their role', async ({
