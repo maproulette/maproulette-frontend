@@ -1046,7 +1046,7 @@
   "shared.achievementBadge.lockedLabel": "{title} (locked)",
   "shared.achievementBadge.notYetEarned": "Not yet earned",
   "shared.challengeCard.project": "{name}",
-  "shared.clearManageFiltersButton.label": "CLEAR FILTERS",
+  "shared.clearManageFiltersButton.label": "Clear filters",
   "shared.commentComposer.mention.userSuggestions": "User suggestions",
   "shared.commentComposer.placeholder": "Write a comment…",
   "shared.commentComposer.posting": "Posting…",

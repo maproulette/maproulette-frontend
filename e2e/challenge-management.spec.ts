@@ -63,6 +63,6 @@ test('a user can archive an existing challenge and see it flagged as archived', 
   // The "Archived" filter only shows challenges with isArchived set, so the
   // challenge remaining visible after switching it on confirms the archived
   // state took effect server-side, not just in the dropdown label.
-  await page.getByRole('switch', { name: 'Archived' }).click()
+  await page.getByRole('button', { name: 'Archived', exact: true }).click()
   await expect(row).toBeVisible({ timeout: 15_000 })
 })
