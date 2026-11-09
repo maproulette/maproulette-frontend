@@ -10,6 +10,8 @@
  * mustache tags (`{{property}}`) are untouched.
  */
 
+import { getOsmServerUrl } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
+
 const SHORT_CODE_PATTERN = /(\{\{\{[^}]+\}\}\}|\[[^\]]+\](?![(]))/
 const SHORT_CODE_PATTERN_GLOBAL = new RegExp(SHORT_CODE_PATTERN.source, 'g')
 
@@ -170,16 +172,14 @@ export const tokenizeInstructions = (content: string | null | undefined): Instru
 export const hasShortCodes = (content: string | null | undefined): boolean =>
   tokenizeInstructions(content).some((token) => token.kind !== 'text')
 
-const OSM_BASE_URL = (): string => window.env?.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
-
 /**
  * Rewrite OSM element and viewport short codes as Markdown links, for text
  * that goes through a Markdown renderer rather than being tokenized into
  * components — comments, in practice. Form-field short codes are deliberately
  * untouched here: a comment is not a place to collect responses.
  */
-export const linkifyOsmShortCodes = (text: string): string => {
-  const base = OSM_BASE_URL()
+const linkifyOsmShortCodes = (text: string): string => {
+  const base = getOsmServerUrl()
   return text.replace(SHORT_CODE_PATTERN_GLOBAL, (match) => {
     const token = parseShortCode(match)
     if (token.kind === 'osmElements') {
@@ -192,4 +192,47 @@ export const linkifyOsmShortCodes = (text: string): string => {
     }
     return match
   })
+}
+
+// A bare @mention covers the usual OSM display name. Names containing spaces
+// or punctuation can't be matched that way, so they may be wrapped in square
+// brackets — `[@example user]` — which is how MapRoulette has always written
+// them. The bracketed form is matched first so its contents aren't cut short
+// by the bare pattern.
+const BRACKETED_MENTION = /\[@([^\]]+)\](?!\()/g
+const BARE_MENTION = /(^|\s)@([A-Za-z0-9_-]+)/g
+
+const mentionLink = (name: string): string =>
+  `[@${name}](${getOsmServerUrl()}/user/${encodeURIComponent(name)})`
+
+const linkifyMentions = (text: string): string =>
+  text
+    .replace(BRACKETED_MENTION, (_, name: string) => mentionLink(name.trim()))
+    .replace(BARE_MENTION, (_, before: string, name: string) => before + mentionLink(name))
+
+// Mentions first: a bracketed mention would otherwise be offered to the OSM
+// short-code parser, which correctly declines it, but the order makes the
+// intent explicit.
+export const linkifyShortCodes = (text: string): string =>
+  linkifyOsmShortCodes(linkifyMentions(text))
+
+const OSM_ELEMENT_PATH = /^\/(node|way|relation)\/(\d+)$/
+const OSM_VIEWPORT_PATH = /^\/#map=(\d+)\/(-?[\d.]+)\/(-?[\d.]+)$/
+
+export const parseOsmShortCodeLink = (href: string): OsmElementsToken | ViewportToken | null => {
+  const base = getOsmServerUrl()
+  if (!href.startsWith(base)) return null
+  const path = href.slice(base.length)
+
+  const element = OSM_ELEMENT_PATH.exec(path)
+  if (element) {
+    return { kind: 'osmElements', elements: [{ type: ELEMENT_TYPES[element[1]], id: element[2] }] }
+  }
+
+  const viewport = OSM_VIEWPORT_PATH.exec(path)
+  if (viewport) {
+    return { kind: 'viewport', zoom: viewport[1], lat: viewport[2], lon: viewport[3] }
+  }
+
+  return null
 }

@@ -1,32 +1,13 @@
 import ReactMarkdown, { type Components } from 'react-markdown'
+import { ShortCodeLink } from '@/components/shared/ShortCodeLink'
 import { markdownRemarkPlugins } from '@/lib/markdown'
-import { linkifyOsmShortCodes } from '@/lib/shortCodes'
+import { linkifyShortCodes } from '@/lib/shortCodes'
 import { cn } from '@/lib/utils'
 
 interface Props {
   children: string
   className?: string
 }
-
-// A bare @mention covers the usual OSM display name. Names containing spaces
-// or punctuation can't be matched that way, so they may be wrapped in square
-// brackets — `[@example user]` — which is how MapRoulette has always written
-// them. The bracketed form is matched first so its contents aren't cut short
-// by the bare pattern.
-const bracketedMentionPattern = /\[@([^\]]+)\](?!\()/g
-const mentionPattern = /@([A-Za-z0-9_-]+)/g
-
-const mentionLink = (name: string): string => `[@${name}](/search?user=${encodeURIComponent(name)})`
-
-const linkifyMentions = (text: string): string =>
-  text
-    .replace(bracketedMentionPattern, (_, name) => mentionLink(name.trim()))
-    .replace(mentionPattern, (_, name) => mentionLink(name))
-
-// Mentions first: a bracketed mention would otherwise be offered to the OSM
-// short-code parser, which correctly declines it, but the order makes the
-// intent explicit.
-const prepare = (text: string): string => linkifyOsmShortCodes(linkifyMentions(text))
 
 const components: Components = {
   a: ({ href, children, ...props }) => {
@@ -36,7 +17,7 @@ const components: Components = {
     }
     const isExternal = /^https?:/i.test(href as string)
     return (
-      <a
+      <ShortCodeLink
         {...props}
         href={href}
         target={isExternal ? '_blank' : undefined}
@@ -44,7 +25,7 @@ const components: Components = {
         className="text-teal-600 underline hover:text-teal-700 dark:text-teal-400"
       >
         {children}
-      </a>
+      </ShortCodeLink>
     )
   },
   code: ({ className, children, ...props }) => (
@@ -58,7 +39,7 @@ const components: Components = {
 }
 
 export const CommentMarkdown = ({ children, className }: Props) => {
-  const linkified = prepare(children ?? '')
+  const linkified = linkifyShortCodes(children ?? '')
   return (
     <div className={cn('prose prose-sm dark:prose-invert max-w-none', className)}>
       <ReactMarkdown remarkPlugins={markdownRemarkPlugins} components={components}>

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   hasShortCodes,
-  linkifyOsmShortCodes,
+  linkifyShortCodes,
+  parseOsmShortCodeLink,
   responseFieldNames,
   tokenizeInstructions,
 } from './shortCodes.ts'
@@ -163,33 +164,79 @@ describe('viewport short codes', () => {
   })
 })
 
-describe('linkifyOsmShortCodes', () => {
+describe('linkifyShortCodes with OSM short codes', () => {
   it('turns an element short code into a markdown link', () => {
-    expect(linkifyOsmShortCodes('see [w/123] please')).toBe(
+    expect(linkifyShortCodes('see [w/123] please')).toBe(
       'see [way 123](https://www.openstreetmap.org/way/123) please'
     )
   })
 
   it('turns several elements into a comma-separated list of links', () => {
-    expect(linkifyOsmShortCodes('[n1, w2]')).toBe(
+    expect(linkifyShortCodes('[n1, w2]')).toBe(
       '[node 1](https://www.openstreetmap.org/node/1), [way 2](https://www.openstreetmap.org/way/2)'
     )
   })
 
   it('turns a viewport short code into a link to that view', () => {
-    expect(linkifyOsmShortCodes('[v17/37.11/126.99]')).toBe(
+    expect(linkifyShortCodes('[v17/37.11/126.99]')).toBe(
       '[37.11, 126.99](https://www.openstreetmap.org/#map=17/37.11/126.99)'
     )
   })
 
   it('leaves form-field short codes alone — a comment is not a form', () => {
     const text = '[checkbox "Locked?" name="locked"]'
-    expect(linkifyOsmShortCodes(text)).toBe(text)
+    expect(linkifyShortCodes(text)).toBe(text)
   })
 
   it('leaves markdown links and ordinary prose alone', () => {
     for (const text of ['[a link](https://example.org)', 'a [bracketed aside] here']) {
-      expect(linkifyOsmShortCodes(text)).toBe(text)
+      expect(linkifyShortCodes(text)).toBe(text)
     }
+  })
+})
+
+describe('parseOsmShortCodeLink', () => {
+  it('reads an element link back into the element it points at', () => {
+    expect(parseOsmShortCodeLink('https://www.openstreetmap.org/way/123')).toEqual({
+      kind: 'osmElements',
+      elements: [{ type: 'way', id: '123' }],
+    })
+  })
+
+  it('reads a map link back into its viewport', () => {
+    expect(parseOsmShortCodeLink('https://www.openstreetmap.org/#map=17/37.11/-126.99')).toEqual({
+      kind: 'viewport',
+      zoom: '17',
+      lat: '37.11',
+      lon: '-126.99',
+    })
+  })
+
+  it('ignores other links', () => {
+    for (const href of [
+      'https://www.openstreetmap.org/user/someone',
+      'https://example.org/way/123',
+      'https://www.openstreetmap.org/way/123/history',
+    ]) {
+      expect(parseOsmShortCodeLink(href)).toBeNull()
+    }
+  })
+})
+
+describe('linkifyShortCodes', () => {
+  it('links bare and bracketed mentions to the OSM user page', () => {
+    expect(linkifyShortCodes('hi @abc and [@example user]')).toBe(
+      'hi [@abc](https://www.openstreetmap.org/user/abc) and [@example user](https://www.openstreetmap.org/user/example%20user)'
+    )
+  })
+
+  it('leaves email addresses alone', () => {
+    expect(linkifyShortCodes('write to someone@example.org')).toBe('write to someone@example.org')
+  })
+
+  it('links OSM element short codes alongside mentions', () => {
+    expect(linkifyShortCodes('@abc see [w1]')).toBe(
+      '[@abc](https://www.openstreetmap.org/user/abc) see [way 1](https://www.openstreetmap.org/way/1)'
+    )
   })
 })
