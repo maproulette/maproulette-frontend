@@ -1,4 +1,7 @@
-import { backendJsonToBinary } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
+import {
+  backendJsonToBinary,
+  binaryToBackendJson,
+} from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
 import { logger } from '@/lib/logger'
 import type { PrioritizationDraft, Tier } from './PrioritizationContext'
@@ -57,3 +60,20 @@ export const draftsEqual = (a: PrioritizationDraft, b: PrioritizationDraft): boo
   }
   return true
 }
+
+// Matches the shape the backend's `ChallengePriority.isValidBounds` accepts:
+// an array of GeoJSON Features (rejects FeatureCollection). Empty string
+// (not `undefined`) clears previously-saved bounds for that tier — omitting
+// the key would leave them untouched.
+const boundsToString = (fc: GeoJSON.FeatureCollection | null): string =>
+  fc && fc.features.length > 0 ? JSON.stringify(fc.features) : ''
+
+export const draftToPriorityBody = (draft: PrioritizationDraft) => ({
+  defaultPriority: draft.defaultPriority,
+  highPriorityRule: binaryToBackendJson(draft.high.rules),
+  highPriorityBounds: boundsToString(draft.high.bounds),
+  mediumPriorityRule: binaryToBackendJson(draft.medium.rules),
+  mediumPriorityBounds: boundsToString(draft.medium.bounds),
+  lowPriorityRule: binaryToBackendJson(draft.low.rules),
+  lowPriorityBounds: boundsToString(draft.low.bounds),
+})

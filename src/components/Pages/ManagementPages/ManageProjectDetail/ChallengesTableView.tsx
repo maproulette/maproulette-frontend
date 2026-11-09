@@ -35,6 +35,7 @@ import { useIntl } from '@/i18n'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
+import { ChallengeSelectCheckbox, SelectAllChallengesCheckbox } from './ChallengeSelection'
 
 interface ChallengesTableViewProps {
   challenges: Challenge[]
@@ -66,6 +67,9 @@ export const ChallengesTableView = ({
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-10">
+              <SelectAllChallengesCheckbox />
+            </TableHead>
             <TableHead className="w-[80px]">
               {t({ id: 'common.status', defaultMessage: 'Status' })}
             </TableHead>
@@ -104,6 +108,14 @@ export const ChallengesTableView = ({
             const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
             return (
               <TableRow key={challenge.id}>
+                <TableCell>
+                  {challenge.id != null && (
+                    <ChallengeSelectCheckbox
+                      challengeId={challenge.id}
+                      challengeName={challenge.name}
+                    />
+                  )}
+                </TableCell>
                 <TableCell>
                   <StatusBadge enabled={challenge.enabled ?? false} />
                 </TableCell>

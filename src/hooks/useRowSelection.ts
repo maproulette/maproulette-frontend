@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 /**
  * Reusable row-selection state for admin tables and other list-style UIs.
@@ -9,7 +9,7 @@ import { useState } from 'react'
 export const useRowSelection = <TId>() => {
   const [ids, setIds] = useState<Set<TId>>(new Set())
 
-  const toggle = (id: TId) => {
+  const toggle = useCallback((id: TId) => {
     setIds((prev) => {
       const next = new Set(prev)
       if (next.has(id)) {
@@ -19,9 +19,9 @@ export const useRowSelection = <TId>() => {
       }
       return next
     })
-  }
+  }, [])
 
-  const set = (id: TId, selected: boolean) => {
+  const set = useCallback((id: TId, selected: boolean) => {
     setIds((prev) => {
       if (selected === prev.has(id)) return prev
       const next = new Set(prev)
@@ -32,11 +32,25 @@ export const useRowSelection = <TId>() => {
       }
       return next
     })
-  }
+  }, [])
 
-  const selectAll = (all: TId[]) => setIds(new Set(all))
+  const setMany = useCallback((many: TId[], selected: boolean) => {
+    setIds((prev) => {
+      const next = new Set(prev)
+      for (const id of many) {
+        if (selected) {
+          next.add(id)
+        } else {
+          next.delete(id)
+        }
+      }
+      return next
+    })
+  }, [])
 
-  const clear = () => setIds(new Set())
+  const selectAll = useCallback((all: TId[]) => setIds(new Set(all)), [])
+
+  const clear = useCallback(() => setIds(new Set()), [])
 
   const has = (id: TId) => ids.has(id)
 
@@ -47,6 +61,7 @@ export const useRowSelection = <TId>() => {
     has,
     toggle,
     set,
+    setMany,
     selectAll,
     clear,
   }

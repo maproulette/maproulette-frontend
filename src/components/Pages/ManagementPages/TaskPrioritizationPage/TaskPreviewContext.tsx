@@ -1,10 +1,10 @@
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { api } from '@/api'
-import { binaryToBackendJson } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import type { TaskPriorityValue } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { analyzeWarnings, type PrioritizationWarnings } from './evaluation/ruleAnalysis'
-import { type PrioritizationDraft, usePrioritizationContext } from './PrioritizationContext'
+import { usePrioritizationContext } from './PrioritizationContext'
+import { draftToPriorityBody } from './prioritizationParsing'
 
 export interface PreviewResult {
   /** Computed priority keyed by task id (server-evaluated). */
@@ -34,23 +34,6 @@ const TaskPreviewContext = createContext<TaskPreviewContextValue | null>(null)
 // server on every keystroke of a rule value.
 const DEBOUNCE_MS = 250
 
-// Matches the shape the backend's `ChallengePriority.isValidBounds` accepts:
-// an array of GeoJSON Features (rejects FeatureCollection). Empty string
-// (not `undefined`) clears previously-saved bounds for that tier — we want
-// the preview to reflect a cleared draft, not inherit the persisted value.
-const boundsToString = (fc: GeoJSON.FeatureCollection | null): string =>
-  fc && fc.features.length > 0 ? JSON.stringify(fc.features) : ''
-
-const draftToPreviewBody = (draft: PrioritizationDraft) => ({
-  defaultPriority: draft.defaultPriority,
-  highPriorityRule: binaryToBackendJson(draft.high.rules),
-  highPriorityBounds: boundsToString(draft.high.bounds),
-  mediumPriorityRule: binaryToBackendJson(draft.medium.rules),
-  mediumPriorityBounds: boundsToString(draft.medium.bounds),
-  lowPriorityRule: binaryToBackendJson(draft.low.rules),
-  lowPriorityBounds: boundsToString(draft.low.bounds),
-})
-
 export const TaskPreviewProvider = ({
   children,
   markers,
@@ -71,7 +54,7 @@ export const TaskPreviewProvider = ({
 
   // Stable body reference so the query key only changes when the debounced
   // draft genuinely changes shape.
-  const previewBody = useMemo(() => draftToPreviewBody(debouncedDraft), [debouncedDraft])
+  const previewBody = useMemo(() => draftToPriorityBody(debouncedDraft), [debouncedDraft])
   const previewQuery = api.challenge.usePreviewPriorities(challengeId, previewBody)
 
   const preview = useMemo<PreviewResult>(() => {

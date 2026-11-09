@@ -6,7 +6,6 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { DocsLink } from '@/components/shared/DocsLink'
-import { binaryToBackendJson } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import { DrawerPortalTarget, useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
 import { Button } from '@/components/ui/Button'
@@ -20,14 +19,18 @@ import { DefaultPrioritySelect } from './Editor/DefaultPrioritySelect'
 import { PriorityTierPanel } from './Editor/PriorityTierPanel'
 import { PreviewLegend } from './Preview/PreviewLegend'
 import { PreviewMap } from './Preview/PreviewMap'
-import { TIER_TO_PRIORITY, type Tier, usePrioritizationContext } from './PrioritizationContext'
+import {
+  TIER_ORDER,
+  TIER_TO_PRIORITY,
+  type Tier,
+  usePrioritizationContext,
+} from './PrioritizationContext'
+import { draftToPriorityBody } from './prioritizationParsing'
 
 interface Props {
   challengeId: number
   challengeName?: string | null
 }
-
-const TIER_ORDER: Tier[] = ['high', 'medium', 'low']
 
 interface PreviewMapBridgeValue {
   mapRef: React.RefObject<MapRef | null>
@@ -49,25 +52,9 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
 
   const handleSave = async () => {
     try {
-      // Backend's `Challenge.isValidBounds` accepts an array of GeoJSON
-      // Features OR a single Feature, but rejects FeatureCollection. Send
-      // the `features` array directly so the validity check passes and the
-      // bounds are persisted. Return `""` (not undefined) when there are
-      // no features so the backend actually clears previously-saved bounds
-      // — omitting the key would leave them untouched.
-      const boundsToString = (fc: GeoJSON.FeatureCollection | null): string =>
-        fc && fc.features.length > 0 ? JSON.stringify(fc.features) : ''
       await mutation.mutateAsync({
         challengeId,
-        priorities: {
-          defaultPriority: draft.defaultPriority,
-          highPriorityRule: binaryToBackendJson(draft.high.rules),
-          highPriorityBounds: boundsToString(draft.high.bounds),
-          mediumPriorityRule: binaryToBackendJson(draft.medium.rules),
-          mediumPriorityBounds: boundsToString(draft.medium.bounds),
-          lowPriorityRule: binaryToBackendJson(draft.low.rules),
-          lowPriorityBounds: boundsToString(draft.low.bounds),
-        },
+        priorities: draftToPriorityBody(draft),
       })
       markSaved()
       toast.success(
