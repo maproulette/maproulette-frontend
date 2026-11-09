@@ -2,8 +2,10 @@ import { Link } from '@tanstack/react-router'
 import {
   BookOpen,
   FolderOpen,
+  Layers,
   Map as MapIcon,
   MoreHorizontal,
+  MousePointerClick,
   Pencil,
   Share2,
   Star,
@@ -48,13 +50,19 @@ import { useDescriptionRecommendation } from './useDescriptionRecommendation'
 
 export type TaskRelation = 'primary' | 'bundle' | 'selection'
 
-const HEADER_GRADIENTS: Record<TaskRelation, string> = {
-  primary:
-    'bg-gradient-to-r from-amber-200 via-amber-100/50 to-white dark:from-amber-800/50 dark:via-amber-900/25 dark:to-slate-800',
-  bundle:
-    'bg-gradient-to-r from-green-200 via-green-100/50 to-white dark:from-green-800/50 dark:via-green-900/25 dark:to-slate-800',
-  selection:
-    'bg-gradient-to-r from-purple-200 via-purple-100/50 to-white dark:from-purple-800/50 dark:via-purple-900/25 dark:to-slate-800',
+const RELATION_PILLS: Record<TaskRelation, { className: string; icon: typeof Star }> = {
+  primary: {
+    className: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+    icon: Star,
+  },
+  bundle: {
+    className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    icon: Layers,
+  },
+  selection: {
+    className: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+    icon: MousePointerClick,
+  },
 }
 
 export const TaskInfoHeader = ({
@@ -102,13 +110,15 @@ export const TaskInfoHeader = ({
 
   const showActionRow = showActions && canEdit
 
+  const RelationIcon = RELATION_PILLS[relation].icon
+  const relationLabel = {
+    primary: t({ id: 'common.primary', defaultMessage: 'Primary' }),
+    bundle: t({ id: 'taskEditPage.taskInfoHeader.bundled', defaultMessage: 'Bundled' }),
+    selection: t({ id: 'taskEditPage.taskInfoHeader.selected', defaultMessage: 'Selected' }),
+  }[relation]
+
   return (
-    <div
-      className={cn(
-        'shrink-0 rounded-t-lg border-slate-200 border-b bg-white px-4 py-3 dark:border-slate-700/50 dark:bg-slate-800',
-        HEADER_GRADIENTS[relation]
-      )}
-    >
+    <div className="shrink-0 rounded-t-lg border-slate-200 border-b bg-white px-4 py-3 dark:border-slate-700/50 dark:bg-slate-800">
       {/* Info zone: badges row, title, breadcrumb */}
       <div className="space-y-1.5">
         {/* Status + Primary badge (left) | icon utilities + ellipsis (right) */}
@@ -123,12 +133,15 @@ export const TaskInfoHeader = ({
               <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
               {statusLabel}
             </div>
-            {relation === 'primary' && (
-              <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 text-xs dark:bg-amber-900/30 dark:text-amber-400">
-                <Star className="h-3 w-3 fill-current" />
-                {t({ id: 'common.primary', defaultMessage: 'Primary' })}
-              </span>
-            )}
+            <span
+              className={cn(
+                'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-xs',
+                RELATION_PILLS[relation].className
+              )}
+            >
+              <RelationIcon className={cn('h-3 w-3', relation === 'primary' && 'fill-current')} />
+              {relationLabel}
+            </span>
           </div>
 
           <div className="flex gap-1">
@@ -180,14 +193,34 @@ export const TaskInfoHeader = ({
           </div>
         </div>
 
-        {/* Task ID */}
-        <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-          {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })}
-        </div>
-
-        {/* Challenge › Project breadcrumb, each with a button opening its description */}
+        {/* Project › Challenge breadcrumb, each with a button opening its description */}
         {(challenge || project) && (
           <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-500 leading-tight dark:text-zinc-400">
+            {project && (
+              <>
+                <DescriptionBreadcrumbButton
+                  icon={FolderOpen}
+                  label={t({
+                    id: 'taskEditPage.taskInfoHeader.viewProjectDescription',
+                    defaultMessage: 'View project description',
+                  })}
+                  disabled={!projectDescription}
+                  disabledReason={t({
+                    id: 'taskEditPage.taskInfoHeader.noProjectDescription',
+                    defaultMessage: 'This project has no description',
+                  })}
+                  onClick={() => showView('projectDescription')}
+                />
+                <Link
+                  to="/project/$projectId"
+                  params={{ projectId: String(project.id) }}
+                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                >
+                  {project.displayName ?? project.name}
+                </Link>
+              </>
+            )}
+            {challenge && project && <span className="text-zinc-400 dark:text-zinc-500">›</span>}
             {challenge && (
               <>
                 <DescriptionBreadcrumbButton
@@ -221,33 +254,13 @@ export const TaskInfoHeader = ({
                 </Link>
               </>
             )}
-            {challenge && project && <span className="text-zinc-400 dark:text-zinc-500">›</span>}
-            {project && (
-              <>
-                <DescriptionBreadcrumbButton
-                  icon={FolderOpen}
-                  label={t({
-                    id: 'taskEditPage.taskInfoHeader.viewProjectDescription',
-                    defaultMessage: 'View project description',
-                  })}
-                  disabled={!projectDescription}
-                  disabledReason={t({
-                    id: 'taskEditPage.taskInfoHeader.noProjectDescription',
-                    defaultMessage: 'This project has no description',
-                  })}
-                  onClick={() => showView('projectDescription')}
-                />
-                <Link
-                  to="/project/$projectId"
-                  params={{ projectId: String(project.id) }}
-                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
-                >
-                  {project.displayName ?? project.name}
-                </Link>
-              </>
-            )}
           </div>
         )}
+
+        {/* Task ID */}
+        <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
+          {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })}
+        </div>
       </div>
 
       {/* The share panel the overflow menu opens: copy link, QR code, native share. */}
