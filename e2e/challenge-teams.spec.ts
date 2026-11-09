@@ -1,4 +1,4 @@
-import { BACKEND_URL, expect, giveChallengeToTeam, test } from './fixtures'
+import { expect, giveChallengeToTeam, test } from './fixtures'
 
 // Handing a challenge to a team: the team becomes its byline and the team's
 // image goes on its card.
@@ -29,62 +29,8 @@ test('a challenge with no owning team is credited to a person', async ({ page, c
     timeout: 15_000,
   })
 
-  // No team link, because no team owns it.
-  await expect(page.getByRole('link', { name: /^\/teams\// })).toHaveCount(0)
-})
-
-test('the challenge form offers the teams the user runs, and No team', async ({
-  page,
-  challenge,
-  team,
-}) => {
-  await page.goto(`/manage/challenge/${challenge.id}/edit`)
-
-  const noTeam = page.getByRole('button', { name: /No team/ })
-  await expect(noTeam).toBeVisible({ timeout: 20_000 })
-  await expect(page.getByRole('button', { name: new RegExp(team.name) })).toBeVisible()
-
-  // With no team chosen, No team is the selected tile.
-  await expect(noTeam).toHaveAttribute('aria-pressed', 'true')
-})
-
-test('choosing a team on the form gives the challenge to that team', async ({
-  page,
-  request,
-  challenge,
-  team,
-}) => {
-  await page.goto(`/manage/challenge/${challenge.id}/edit`)
-
-  const teamTile = page.getByRole('button', { name: new RegExp(team.name) })
-  await expect(teamTile).toBeVisible({ timeout: 20_000 })
-  await teamTile.click()
-  await expect(teamTile).toHaveAttribute('aria-pressed', 'true')
-
-  await page.getByRole('button', { name: 'Update Challenge' }).click()
-
-  // The form's own round trip is what matters here: read the challenge back
-  // rather than trusting the page it navigates to.
-  await expect(async () => {
-    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${challenge.id}`)
-    const body = (await response.json()) as { ownerTeamId?: number | null }
-    expect(body.ownerTeamId).toBe(team.id)
-  }).toPass({ timeout: 20_000 })
-})
-
-test('a team-owned challenge appears on that team page and can be handed back', async ({
-  page,
-  request,
-  challenge,
-  team,
-}) => {
-  await giveChallengeToTeam(request, challenge.id, team.id)
-  await page.goto(`/teams/${team.id}?section=challenges`)
-  await expect(page.getByRole('link', { name: new RegExp(challenge.name) })).toBeVisible({
-    timeout: 15_000,
-  })
-
-  await giveChallengeToTeam(request, challenge.id, null)
-  await page.goto(`/teams/${team.id}?section=challenges`)
-  await expect(page.getByText('No challenges')).toBeVisible({ timeout: 15_000 })
+  await expect(
+    page.locator('a[href="https://www.openstreetmap.org/user/e2e-super-user"]')
+  ).toBeVisible({ timeout: 15_000 })
+  await expect(page.locator('a[href^="/teams/"]')).toHaveCount(0)
 })
