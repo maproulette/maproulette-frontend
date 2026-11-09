@@ -1,5 +1,7 @@
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown, { type Components } from 'react-markdown'
+import { ShortCodeLink } from '@/components/shared/ShortCodeLink'
 import { markdownRemarkPlugins } from '@/lib/markdown'
+import { linkifyShortCodes } from '@/lib/shortCodes'
 import { cn } from '@/lib/utils'
 
 const markdownClasses =
@@ -9,30 +11,45 @@ const markdownClasses =
 const autoLinkUrls = (text: string): string =>
   text.replace(/(?<!\]\()(?<!\()(https?:\/\/[^\s)<>]+)/g, (url) => `[${url}](${url})`)
 
+const linkClassName = 'text-blue-600 hover:underline dark:text-blue-400'
+
+const plainComponents: Components = {
+  a: (props) => (
+    <a {...props} target="_blank" rel="noopener noreferrer" className={linkClassName} />
+  ),
+}
+
+const shortCodeComponents: Components = {
+  a: (props) => (
+    <ShortCodeLink {...props} target="_blank" rel="noopener noreferrer" className={linkClassName} />
+  ),
+}
+
 interface Props {
   children: string
   /** Link bare URLs found in the text (for author-written prose that isn't strict Markdown). */
   autoLink?: boolean
+  shortCodes?: boolean
   className?: string
 }
 
 /** Markdown prose as MapRoulette renders it: task instructions, challenge and project text. */
-export const MarkdownContent = ({ children, autoLink = true, className }: Props) => (
-  <div className={cn(markdownClasses, className)}>
-    <ReactMarkdown
-      remarkPlugins={markdownRemarkPlugins}
-      components={{
-        a: (props) => (
-          <a
-            {...props}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline dark:text-blue-400"
-          />
-        ),
-      }}
-    >
-      {autoLink ? autoLinkUrls(children) : children}
-    </ReactMarkdown>
-  </div>
-)
+export const MarkdownContent = ({
+  children,
+  autoLink = true,
+  shortCodes = false,
+  className,
+}: Props) => {
+  const text = shortCodes ? linkifyShortCodes(children) : children
+
+  return (
+    <div className={cn(markdownClasses, className)}>
+      <ReactMarkdown
+        remarkPlugins={markdownRemarkPlugins}
+        components={shortCodes ? shortCodeComponents : plainComponents}
+      >
+        {autoLink ? autoLinkUrls(text) : text}
+      </ReactMarkdown>
+    </div>
+  )
+}

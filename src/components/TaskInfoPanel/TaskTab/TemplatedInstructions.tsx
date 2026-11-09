@@ -1,5 +1,7 @@
 import { Check, Copy } from 'lucide-react'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
+import { ShortCodeLink } from '@/components/shared/ShortCodeLink'
+import { getOsmServerUrl } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { Label } from '@/components/ui/Label'
 import {
@@ -11,6 +13,7 @@ import {
 } from '@/components/ui/Select'
 import { useCompletionResponses } from '@/contexts/CompletionResponsesContext'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { useJosmShortCodes } from '@/hooks/useJosmShortCodes'
 import { useIntl } from '@/i18n'
 import {
   type InstructionToken,
@@ -99,37 +102,44 @@ const SelectField = ({
   )
 }
 
-const OSM_BASE = window.env.VITE_OSM_SERVER || 'https://www.openstreetmap.org'
-
 const externalLinkClass = 'text-blue-600 hover:underline dark:text-blue-400'
 
-const OsmElements = ({ elements }: { elements: OsmElementsToken['elements'] }) => (
-  <span className="inline-flex flex-wrap items-center gap-1">
-    {elements.map((element, i) => (
-      <span key={`${element.type}-${element.id}`}>
-        {i > 0 && ', '}
-        <a
-          href={`${OSM_BASE}/${element.type}/${element.id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={externalLinkClass}
-        >
-          {element.type} {element.id}
-        </a>
-      </span>
-    ))}
-  </span>
-)
+const OsmElements = ({ elements }: { elements: OsmElementsToken['elements'] }) => {
+  const josm = useJosmShortCodes()
+
+  return (
+    <span className="inline-flex flex-wrap items-center gap-1">
+      {elements.map((element, i) => (
+        <span key={`${element.type}-${element.id}`}>
+          {i > 0 && ', '}
+          <a
+            href={`${getOsmServerUrl()}/${element.type}/${element.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={externalLinkClass}
+            onClick={(event) => {
+              if (!josm) return
+              event.preventDefault()
+              josm.loadElements(elements)
+            }}
+          >
+            {element.type} {element.id}
+          </a>
+        </span>
+      ))}
+    </span>
+  )
+}
 
 const ViewportLink = ({ zoom, lat, lon }: { zoom: string; lat: string; lon: string }) => (
-  <a
-    href={`${OSM_BASE}/#map=${zoom}/${lat}/${lon}`}
+  <ShortCodeLink
+    href={`${getOsmServerUrl()}/#map=${zoom}/${lat}/${lon}`}
     target="_blank"
     rel="noopener noreferrer"
     className={externalLinkClass}
   >
     {lat}, {lon}
-  </a>
+  </ShortCodeLink>
 )
 
 const renderToken = (token: InstructionToken, key: number) => {

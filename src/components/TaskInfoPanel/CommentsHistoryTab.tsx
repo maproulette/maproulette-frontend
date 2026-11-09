@@ -16,10 +16,11 @@ import {
   XCircle,
 } from 'lucide-react'
 import { useContext, useMemo, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown, { type Components } from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { TaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { ShortCodeLink } from '@/components/shared/ShortCodeLink'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
@@ -30,6 +31,7 @@ import { useIntl } from '@/i18n'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
 import { markdownRemarkPlugins } from '@/lib/markdown'
+import { linkifyShortCodes } from '@/lib/shortCodes'
 import {
   getStatusLabel,
   STATUS_BAR_COLORS,
@@ -101,6 +103,17 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
       {label}
     </span>
   )
+}
+
+const commentComponents: Components = {
+  a: (props) => (
+    <ShortCodeLink
+      {...props}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 hover:underline dark:text-blue-400"
+    />
+  ),
 }
 
 export const CommentsHistoryTab = ({
@@ -218,20 +231,8 @@ export const CommentsHistoryTab = ({
             </div>
 
             <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
-              <ReactMarkdown
-                remarkPlugins={markdownRemarkPlugins}
-                components={{
-                  a: ({ ...props }) => (
-                    <a
-                      {...props}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline dark:text-blue-400"
-                    />
-                  ),
-                }}
-              >
-                {commentText}
+              <ReactMarkdown remarkPlugins={markdownRemarkPlugins} components={commentComponents}>
+                {linkifyShortCodes(commentText)}
               </ReactMarkdown>
             </div>
 
