@@ -13,7 +13,7 @@ const numberLeaf = (overrides: Partial<BinaryLeaf> = {}): BinaryLeaf => ({
   key: 'lanes',
   value: '2',
   operator: 'equals',
-  valueType: 'number',
+  valueType: 'double',
   ...overrides,
 })
 
@@ -168,7 +168,7 @@ describe('backendJsonToBinary', () => {
     expect(backendJsonToBinary(raw)).toEqual(stringLeaf({ value: '' }))
   })
 
-  it('parses numeric types and sets valueType: number', () => {
+  it('parses a double rule as a double', () => {
     const raw = { condition: 'AND', rules: [{ value: 'lanes.2', type: 'double', operator: '==' }] }
     expect(backendJsonToBinary(raw)).toEqual(numberLeaf())
   })
@@ -255,6 +255,20 @@ describe('round-trip: binaryToBackendJson -> backendJsonToBinary', () => {
     const original = stringLeaf()
     const restored = backendJsonToBinary(binaryToBackendJson(original))
     expect(restored).toEqual(original)
+  })
+
+  it('keeps integer and long rules as their own types through a save and reload', () => {
+    for (const valueType of ['integer', 'long'] as const) {
+      const original = numberLeaf({ valueType })
+      const json = binaryToBackendJson(original)
+      expect(JSON.parse(json).rules[0].type).toBe(valueType)
+      expect(backendJsonToBinary(json)).toEqual(original)
+    }
+  })
+
+  it('saves a plain number rule as a double', () => {
+    const json = binaryToBackendJson(numberLeaf({ valueType: 'number' }))
+    expect(JSON.parse(json).rules[0].type).toBe('double')
   })
 
   it('round-trips a single number leaf', () => {

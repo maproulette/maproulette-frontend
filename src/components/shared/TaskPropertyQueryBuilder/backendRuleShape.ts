@@ -1,5 +1,15 @@
 import { logger } from '@/lib/logger'
-import type { BinaryGroup, BinaryLeaf, BinaryNode, PropertyOperator } from './propertyRuleTypes'
+import {
+  type BinaryGroup,
+  type BinaryLeaf,
+  type BinaryNode,
+  isNumericValueType,
+  type NumericValueType,
+  type PropertyOperator,
+  type RuleValueType,
+} from './propertyRuleTypes'
+
+export const PRIORITY_RULE_VALUE_TYPES: RuleValueType[] = ['string', 'integer', 'double', 'long']
 
 // The backend's `Challenge.matchesJSONRule` / `PriorityRule.doesMatch` expect
 // rules shaped like {condition: "AND"|"OR", rules: [{value: "key.value",
@@ -47,12 +57,13 @@ const NUMBER_OP_TO_BACKEND: Partial<Record<PropertyOperator, string>> = {
 const leafToBackend = (leaf: BinaryLeaf): BackendLeaf | null => {
   const key = leaf.key.trim()
   if (!key) return null
-  const isNumber = leaf.valueType === 'number'
+  const valueType = leaf.valueType
+  const isNumber = isNumericValueType(valueType)
   // `double` is the most permissive numeric type the backend accepts — its
   // value parser handles both decimal (`0.8`) and integer-looking (`5`)
   // strings. Picking `integer` here would fail for any decimal value with
   // `"0.8".toLong → NumberFormatException`, aborting the recompute.
-  const type = isNumber ? 'double' : 'string'
+  const type = !isNumber ? 'string' : valueType === 'number' ? 'double' : valueType
   const operator = isNumber
     ? (NUMBER_OP_TO_BACKEND[leaf.operator] ?? '==')
     : (STRING_OP_TO_BACKEND[leaf.operator] ?? 'equal')
@@ -110,7 +121,12 @@ const NUMBER_OP_FROM_BACKEND: Record<string, PropertyOperator> = {
   '<=': 'lessThanOrEqual',
 }
 
-const NUMERIC_TYPES = new Set(['integer', 'double', 'long', 'number'])
+const NUMERIC_TYPES: Record<string, NumericValueType> = {
+  integer: 'integer',
+  double: 'double',
+  long: 'long',
+  number: 'double',
+}
 
 const parseBackendLeaf = (leaf: Record<string, unknown>): BinaryLeaf | null => {
   const rawValue = leaf.value
@@ -121,14 +137,14 @@ const parseBackendLeaf = (leaf: Record<string, unknown>): BinaryLeaf | null => {
   const rest = rawValue.slice(dotIndex + 1)
   const value = rest === ' ' ? '' : rest
   const rawType = typeof leaf.type === 'string' ? leaf.type : 'string'
-  const isNumber = NUMERIC_TYPES.has(rawType)
+  const numericType: NumericValueType | undefined = NUMERIC_TYPES[rawType]
   const rawOperator = typeof leaf.operator === 'string' ? leaf.operator : ''
-  const operator = isNumber
+  const operator = numericType
     ? NUMBER_OP_FROM_BACKEND[rawOperator]
     : STRING_OP_FROM_BACKEND[rawOperator]
   if (!operator) return null
   const result: BinaryLeaf = { key, value, operator }
-  if (isNumber) result.valueType = 'number'
+  if (numericType) result.valueType = numericType
   return result
 }
 
