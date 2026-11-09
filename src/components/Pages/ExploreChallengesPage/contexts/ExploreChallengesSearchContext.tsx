@@ -122,8 +122,8 @@ export interface ExploreChallengesSearchContextType {
   selectedCategories: string[]
   setSelectedCategories: Dispatch<SetStateAction<string[]>>
 
-  sortBy: ExtendedFindParamsSortBy | undefined
-  setSortBy: Dispatch<SetStateAction<ExtendedFindParamsSortBy | undefined>>
+  sortBy: ExtendedFindParamsSortBy
+  setSortBy: Dispatch<SetStateAction<ExtendedFindParamsSortBy>>
 
   keywords: string | undefined
 
@@ -147,14 +147,13 @@ interface ExploreChallengesSearchContextProviderProps {
   children: ReactNode
 }
 
-const buildKeywords = (categories: string[], workOnValue: WorkOnCategory): string | undefined => {
-  const allKeywords: string[] = [...categories]
+const buildKeywords = (workOnValue: WorkOnCategory): string | undefined => {
   const workOnKeywords = workOnCategoryMap[workOnValue]
-  if (workOnKeywords) {
-    allKeywords.push(...workOnKeywords)
-  }
-  return allKeywords.length > 0 ? allKeywords.join(',') : undefined
+  return workOnKeywords && workOnKeywords.length > 0 ? workOnKeywords.join(',') : undefined
 }
+
+const buildCategorizationKeywords = (categories: string[]): string | undefined =>
+  categories.length > 0 ? categories.join(',') : undefined
 
 interface PersistedFilters {
   difficulty?: DifficultyLevel
@@ -202,8 +201,8 @@ export const ExploreChallengesSearchContextProvider = ({
       ? initialCategories.split(',').filter(Boolean)
       : (persistedFilters?.selectedCategories ?? [])
   )
-  const [sortBy, setSortBy] = useState<ExtendedFindParamsSortBy | undefined>(
-    initialSortBy ?? persistedFilters?.sortBy
+  const [sortBy, setSortBy] = useState<ExtendedFindParamsSortBy>(
+    initialSortBy ?? persistedFilters?.sortBy ?? 'default'
   )
   const [cluster, setCluster] = useState<boolean>(persistedFilters?.cluster ?? true)
   const [viewMode, setViewMode] = useState<ViewMode>(
@@ -299,7 +298,7 @@ export const ExploreChallengesSearchContextProvider = ({
       setSelectedCategories(initialCategories.split(',').filter(Boolean))
     }
     if (initialSortBy !== undefined) {
-      setSortBy(initialSortBy as ExtendedFindParamsSortBy)
+      setSortBy(initialSortBy)
     }
     if (initialGlobal !== undefined) {
       setGlobal(initialGlobal)
@@ -321,10 +320,7 @@ export const ExploreChallengesSearchContextProvider = ({
     initialOsmId,
     initialViewMode,
   ])
-  const keywords = useMemo(
-    () => buildKeywords(selectedCategories, workOn),
-    [selectedCategories, workOn]
-  )
+  const keywords = useMemo(() => buildKeywords(workOn), [workOn])
   const [isLocationLoading, setIsLocationLoading] = useState(false)
 
   const [locationGeojson, setLocationGeojson] = useState<LocationGeojson>(null)
@@ -375,7 +371,10 @@ export const ExploreChallengesSearchContextProvider = ({
       // markers are unfiltered, so a list narrowed by controls this view
       // doesn't even show would just look like missing data. The filter state
       // itself is kept -- leaving the map view brings it back as it was.
-      keywords: isMapView ? undefined : buildKeywords(selectedCategories, workOn),
+      keywords: isMapView ? undefined : buildKeywords(workOn),
+      categorizationKeywords: isMapView
+        ? undefined
+        : buildCategorizationKeywords(selectedCategories),
       difficulty: isMapView ? undefined : difficultyMap[difficulty],
       // Sent explicitly: the toggle renders unset as off, so leaving the
       // param out and inheriting a server-side default would contradict it.
@@ -392,7 +391,7 @@ export const ExploreChallengesSearchContextProvider = ({
   const extendedFindParams = useMemo<ExploreChallengesRequest>(
     () => ({
       ...searchParams,
-      sortBy: sortBy as ExtendedFindParamsSortBy,
+      sortBy,
       limit: 10,
     }),
     [searchParams, sortBy]
@@ -414,7 +413,7 @@ export const ExploreChallengesSearchContextProvider = ({
           ...prev,
           workOn: workOn !== 'Anything' ? workOn : undefined,
           categories: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
-          sortBy: sortBy !== 'name' ? sortBy : undefined,
+          sortBy: sortBy !== 'default' ? sortBy : undefined,
           global: global ? true : undefined,
           osm_type: (locationOsmType as 'N' | 'W' | 'R' | undefined) ?? undefined,
           osm_id: locationOsmId ?? undefined,
@@ -453,7 +452,7 @@ export const ExploreChallengesSearchContextProvider = ({
       difficulty: difficulty !== 'Any' ? difficulty : undefined,
       workOn: workOn !== 'Anything' ? workOn : undefined,
       selectedCategories: selectedCategories.length > 0 ? selectedCategories : undefined,
-      sortBy: sortBy !== 'name' ? sortBy : undefined,
+      sortBy: sortBy !== 'default' ? sortBy : undefined,
       global: global !== undefined ? global : undefined,
       locationOsmType: locationOsmType !== undefined ? locationOsmType : undefined,
       locationOsmId: locationOsmId !== undefined ? locationOsmId : undefined,

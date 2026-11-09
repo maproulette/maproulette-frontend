@@ -7126,8 +7126,10 @@ export interface operations {
         bounds?: string | null
         /** @description Column to sort results by */
         sortBy?:
+          | 'default'
           | 'name'
           | 'created'
+          | 'oldest'
           | 'modified'
           | 'popularity'
           | 'difficulty'
@@ -7140,6 +7142,8 @@ export interface operations {
         offset?: number
         /** @description Comma-separated list of keywords/categories to filter challenges by */
         keywords?: string | null
+        /** @description Comma-separated list of keywords that a challenge must all have */
+        categorizationKeywords?: string | null
         /** @description Filter by difficulty (1=Easy, 2=Normal, 3=Expert) */
         difficulty?: 1 | 2 | 3 | null
       }
@@ -7169,8 +7173,10 @@ export interface operations {
         bounds?: string | null
         /** @description Column to sort results by */
         sortBy?:
+          | 'default'
           | 'name'
           | 'created'
+          | 'oldest'
           | 'modified'
           | 'popularity'
           | 'difficulty'
@@ -7183,6 +7189,8 @@ export interface operations {
         offset?: number
         /** @description Comma-separated list of keywords/categories to filter challenges by */
         keywords?: string | null
+        /** @description Comma-separated list of keywords that a challenge must all have */
+        categorizationKeywords?: string | null
         /** @description Filter by difficulty (1=Easy, 2=Normal, 3=Expert) */
         difficulty?: 1 | 2 | 3 | null
       }

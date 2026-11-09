@@ -33,7 +33,7 @@ import { getApiErrorMessage } from '@/lib/apiError'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { logger } from '@/lib/logger'
 import { getStatusLabel } from '@/lib/taskConstants'
-import { getAppSetting, withAppSetting } from '@/lib/userProperties'
+import { getAppSetting, MR_APP_ID, withAppSetting } from '@/lib/userProperties'
 import type { Task } from '@/types/Task'
 import type { UserProperties } from '@/types/User'
 import { PENDING_BUNDLE_ID, useTaskBundleContext } from './contexts/TaskBundleContext'
@@ -50,15 +50,12 @@ const SUBMIT_BINDINGS: ShortcutBinding[] = [
   { key: 'Enter', ctrlOrCmd: true },
 ]
 
-const LOAD_METHOD_APP_ID = 'mr3Frontend'
 const LOAD_METHOD_KEY = 'loadMethod'
 
 type NextTaskType = 'nearby' | 'random'
 
 const readNextTaskType = (properties: UserProperties | null | undefined): NextTaskType =>
-  getAppSetting(properties, LOAD_METHOD_APP_ID, LOAD_METHOD_KEY) === 'proximity'
-    ? 'nearby'
-    : 'random'
+  getAppSetting(properties, MR_APP_ID, LOAD_METHOD_KEY) === 'proximity' ? 'nearby' : 'random'
 
 interface TaskActionModalProps {
   open: boolean
@@ -353,7 +350,7 @@ export const TaskActionModal = ({
       settings: user.settings ?? {},
       properties: withAppSetting(
         user.properties,
-        LOAD_METHOD_APP_ID,
+        MR_APP_ID,
         LOAD_METHOD_KEY,
         value === 'nearby' ? 'proximity' : 'random'
       ),
