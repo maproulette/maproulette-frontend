@@ -144,7 +144,7 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
           <FormItem>
             <FormLabel>{t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}</FormLabel>
             <Select
-              onValueChange={(value) => value && field.onChange(Number(value))}
+              onValueChange={(value) => field.onChange(Number(value))}
               value={field.value?.toString()}
             >
               <FormControl>
@@ -185,7 +185,7 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
                 defaultMessage: 'How should your Challenge be Categorized?',
               })}
             </FormLabel>
-            <Select onValueChange={(value) => value && field.onChange(value)} value={field.value}>
+            <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue />

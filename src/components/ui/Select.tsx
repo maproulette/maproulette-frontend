@@ -4,8 +4,15 @@ import type * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-export const Select = ({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) => (
-  <SelectPrimitive.Root data-slot="select" {...props} />
+export const Select = ({
+  onValueChange,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Root>) => (
+  <SelectPrimitive.Root
+    data-slot="select"
+    onValueChange={onValueChange && ((value) => value !== '' && onValueChange(value))}
+    {...props}
+  />
 )
 
 export const SelectGroup = ({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) => (

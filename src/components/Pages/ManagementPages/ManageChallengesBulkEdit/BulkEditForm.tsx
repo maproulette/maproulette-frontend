@@ -310,10 +310,7 @@ export const BulkEditForm = () => {
               name="basemap"
               render={({ field }) => (
                 <FormItem>
-                  <Select
-                    onValueChange={(value) => value && field.onChange(value)}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue />
