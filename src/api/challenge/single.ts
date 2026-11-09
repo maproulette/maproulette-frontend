@@ -159,7 +159,38 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   })
 }
 
+const putChallenge = (challengeId: number, updates: Partial<Challenge>) =>
+  apiRequest
+    .put(`api/v2/challenge/${challengeId}`, {
+      json: {
+        id: challengeId,
+        ...updates,
+      },
+    })
+    .json<Challenge>()
+
+const fetchChallengeTagsBatch = (challengeIds: number[]) =>
+  apiRequest
+    .get('api/v2/challenges/tags/batch', {
+      searchParams: { challengeIds: challengeIds.join(',') },
+    })
+    .json<Record<string, Array<{ id: number; name: string }>>>()
+
+const invalidateChallengeListings = (queryClient: QueryClient) => {
+  void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+  void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+  void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
+  void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
+  void queryClient.invalidateQueries({ queryKey: ['challenge', 'tags'] })
+}
+
 export const challengeSingle = {
+  putChallenge,
+
+  fetchChallengeTagsBatch,
+
+  invalidateChallengeListings,
+
   getChallenge: (challengeId: number) =>
     useQuery(
       queryOptions({
@@ -313,11 +344,7 @@ export const challengeSingle = {
             return result
           }
 
-          const fetched = await apiRequest
-            .get('api/v2/challenges/tags/batch', {
-              searchParams: { challengeIds: missingIds.join(',') },
-            })
-            .json<Record<string, Array<{ id: number; name: string }>>>()
+          const fetched = await fetchChallengeTagsBatch(missingIds)
 
           for (const id of missingIds) {
             const tags = fetched[String(id)] ?? []
@@ -468,15 +495,7 @@ export const challengeSingle = {
       }: {
         challengeId: number
         updates: Partial<Challenge>
-      }) =>
-        apiRequest
-          .put(`api/v2/challenge/${challengeId}`, {
-            json: {
-              id: challengeId,
-              ...updates,
-            },
-          })
-          .json<Challenge>(),
+      }) => putChallenge(challengeId, updates),
       // Repaint the edited fields everywhere the challenge is cached before the
       // request goes out; the invalidations below reconcile with the server.
       onMutate: ({ challengeId, updates }) => ({
@@ -488,10 +507,7 @@ export const challengeSingle = {
           ['challenge', updatedChallenge.id],
           updatedChallenge
         )
-        void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
-        void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
-        void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
-        void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
+        invalidateChallengeListings(queryClient)
       },
     })
   },

@@ -81,6 +81,7 @@ import { Route as AppAdminProjectProjectIdEditRouteImport } from './routes/_app/
 import { Route as AppVirtualVirtualChallengeIdTaskTaskIdIndexRouteImport } from './routes/_app/virtual/[$virtualChallengeId]/task/[$taskId]/index'
 import { Route as AppChallengeChallengeIdTaskTaskIdIndexRouteImport } from './routes/_app/challenge/[$challengeId]/task/[$taskId]/index'
 import { Route as AppCChallengeIdTTaskIdIndexRouteImport } from './routes/_app/c/[$challengeId]/t/[$taskId]/index'
+import { Route as AppManageProjectProjectIdChallengesBulkEditRouteImport } from './routes/_app/manage/project/[$projectId]/challenges/bulk-edit'
 import { Route as AppChallengeChallengeIdTaskTaskIdReviewRouteImport } from './routes/_app/challenge/[$challengeId]/task/[$taskId]/review'
 import { Route as AppChallengeChallengeIdTaskTaskIdMetaReviewRouteImport } from './routes/_app/challenge/[$challengeId]/task/[$taskId]/meta-review'
 import { Route as AppChallengeChallengeIdTaskTaskIdInspectRouteImport } from './routes/_app/challenge/[$challengeId]/task/[$taskId]/inspect'
@@ -479,6 +480,12 @@ const AppCChallengeIdTTaskIdIndexRoute =
     path: '/c/$challengeId/t/$taskId/',
     getParentRoute: () => AppRouteRoute,
   } as any)
+const AppManageProjectProjectIdChallengesBulkEditRoute =
+  AppManageProjectProjectIdChallengesBulkEditRouteImport.update({
+    id: '/challenges/bulk-edit',
+    path: '/challenges/bulk-edit',
+    getParentRoute: () => AppManageProjectProjectIdRouteRoute,
+  } as any)
 const AppChallengeChallengeIdTaskTaskIdReviewRoute =
   AppChallengeChallengeIdTaskTaskIdReviewRouteImport.update({
     id: '/challenge/$challengeId/task/$taskId/review',
@@ -629,6 +636,7 @@ export interface FileRoutesByFullPath {
   '/challenge/$challengeId/task/$taskId/inspect': typeof AppChallengeChallengeIdTaskTaskIdInspectRoute
   '/challenge/$challengeId/task/$taskId/meta-review': typeof AppChallengeChallengeIdTaskTaskIdMetaReviewRoute
   '/challenge/$challengeId/task/$taskId/review': typeof AppChallengeChallengeIdTaskTaskIdReviewRoute
+  '/manage/project/$projectId/challenges/bulk-edit': typeof AppManageProjectProjectIdChallengesBulkEditRoute
   '/c/$challengeId/t/$taskId': typeof AppCChallengeIdTTaskIdIndexRoute
   '/challenge/$challengeId/task/$taskId': typeof AppChallengeChallengeIdTaskTaskIdIndexRoute
   '/virtual/$virtualChallengeId/task/$taskId': typeof AppVirtualVirtualChallengeIdTaskTaskIdIndexRoute
@@ -709,6 +717,7 @@ export interface FileRoutesByTo {
   '/challenge/$challengeId/task/$taskId/inspect': typeof AppChallengeChallengeIdTaskTaskIdInspectRoute
   '/challenge/$challengeId/task/$taskId/meta-review': typeof AppChallengeChallengeIdTaskTaskIdMetaReviewRoute
   '/challenge/$challengeId/task/$taskId/review': typeof AppChallengeChallengeIdTaskTaskIdReviewRoute
+  '/manage/project/$projectId/challenges/bulk-edit': typeof AppManageProjectProjectIdChallengesBulkEditRoute
   '/c/$challengeId/t/$taskId': typeof AppCChallengeIdTTaskIdIndexRoute
   '/challenge/$challengeId/task/$taskId': typeof AppChallengeChallengeIdTaskTaskIdIndexRoute
   '/virtual/$virtualChallengeId/task/$taskId': typeof AppVirtualVirtualChallengeIdTaskTaskIdIndexRoute
@@ -796,6 +805,7 @@ export interface FileRoutesById {
   '/_app/challenge/$challengeId/task/$taskId/inspect': typeof AppChallengeChallengeIdTaskTaskIdInspectRoute
   '/_app/challenge/$challengeId/task/$taskId/meta-review': typeof AppChallengeChallengeIdTaskTaskIdMetaReviewRoute
   '/_app/challenge/$challengeId/task/$taskId/review': typeof AppChallengeChallengeIdTaskTaskIdReviewRoute
+  '/_app/manage/project/$projectId/challenges/bulk-edit': typeof AppManageProjectProjectIdChallengesBulkEditRoute
   '/_app/c/$challengeId/t/$taskId/': typeof AppCChallengeIdTTaskIdIndexRoute
   '/_app/challenge/$challengeId/task/$taskId/': typeof AppChallengeChallengeIdTaskTaskIdIndexRoute
   '/_app/virtual/$virtualChallengeId/task/$taskId/': typeof AppVirtualVirtualChallengeIdTaskTaskIdIndexRoute
@@ -883,6 +893,7 @@ export interface FileRouteTypes {
     | '/challenge/$challengeId/task/$taskId/inspect'
     | '/challenge/$challengeId/task/$taskId/meta-review'
     | '/challenge/$challengeId/task/$taskId/review'
+    | '/manage/project/$projectId/challenges/bulk-edit'
     | '/c/$challengeId/t/$taskId'
     | '/challenge/$challengeId/task/$taskId'
     | '/virtual/$virtualChallengeId/task/$taskId'
@@ -963,6 +974,7 @@ export interface FileRouteTypes {
     | '/challenge/$challengeId/task/$taskId/inspect'
     | '/challenge/$challengeId/task/$taskId/meta-review'
     | '/challenge/$challengeId/task/$taskId/review'
+    | '/manage/project/$projectId/challenges/bulk-edit'
     | '/c/$challengeId/t/$taskId'
     | '/challenge/$challengeId/task/$taskId'
     | '/virtual/$virtualChallengeId/task/$taskId'
@@ -1049,6 +1061,7 @@ export interface FileRouteTypes {
     | '/_app/challenge/$challengeId/task/$taskId/inspect'
     | '/_app/challenge/$challengeId/task/$taskId/meta-review'
     | '/_app/challenge/$challengeId/task/$taskId/review'
+    | '/_app/manage/project/$projectId/challenges/bulk-edit'
     | '/_app/c/$challengeId/t/$taskId/'
     | '/_app/challenge/$challengeId/task/$taskId/'
     | '/_app/virtual/$virtualChallengeId/task/$taskId/'
@@ -1570,6 +1583,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCChallengeIdTTaskIdIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/manage/project/$projectId/challenges/bulk-edit': {
+      id: '/_app/manage/project/$projectId/challenges/bulk-edit'
+      path: '/challenges/bulk-edit'
+      fullPath: '/manage/project/$projectId/challenges/bulk-edit'
+      preLoaderRoute: typeof AppManageProjectProjectIdChallengesBulkEditRouteImport
+      parentRoute: typeof AppManageProjectProjectIdRouteRoute
+    }
     '/_app/challenge/$challengeId/task/$taskId/review': {
       id: '/_app/challenge/$challengeId/task/$taskId/review'
       path: '/challenge/$challengeId/task/$taskId/review'
@@ -1681,12 +1701,15 @@ const AppManageChallengeChallengeIdRouteRouteWithChildren =
 interface AppManageProjectProjectIdRouteRouteChildren {
   AppManageProjectProjectIdEditRoute: typeof AppManageProjectProjectIdEditRoute
   AppManageProjectProjectIdIndexRoute: typeof AppManageProjectProjectIdIndexRoute
+  AppManageProjectProjectIdChallengesBulkEditRoute: typeof AppManageProjectProjectIdChallengesBulkEditRoute
 }
 
 const AppManageProjectProjectIdRouteRouteChildren: AppManageProjectProjectIdRouteRouteChildren =
   {
     AppManageProjectProjectIdEditRoute: AppManageProjectProjectIdEditRoute,
     AppManageProjectProjectIdIndexRoute: AppManageProjectProjectIdIndexRoute,
+    AppManageProjectProjectIdChallengesBulkEditRoute:
+      AppManageProjectProjectIdChallengesBulkEditRoute,
   }
 
 const AppManageProjectProjectIdRouteRouteWithChildren =
