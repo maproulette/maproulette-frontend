@@ -7,7 +7,12 @@ import {
   flatToBinary,
   validatePropertyRules,
 } from './propertyRuleConversion'
-import type { BinaryNode, PropertyOperator, PropertyRuleGroup } from './propertyRuleTypes'
+import type {
+  BinaryNode,
+  PropertyOperator,
+  PropertyRuleGroup,
+  RuleValueType,
+} from './propertyRuleTypes'
 import { RuleBuilderProvider } from './RuleBuilderContext'
 import { RuleGroup } from './RuleGroup'
 
@@ -22,6 +27,8 @@ interface Props {
   operatorsFor?: (valueType: 'string' | 'number') => PropertyOperator[]
   /** Property names found on the challenge's tasks, offered as suggestions. */
   propertyKeys?: string[]
+  /** Value types a rule can be given. Defaults to string and number. */
+  valueTypes?: RuleValueType[]
 }
 
 const emptyGroup = (): PropertyRuleGroup => ({
@@ -35,6 +42,7 @@ export const TaskPropertyQueryBuilder = ({
   onChange,
   operatorsFor,
   propertyKeys,
+  valueTypes,
 }: Props) => {
   const [flat, setFlat] = useState<PropertyRuleGroup>(() => {
     if (!value) return emptyGroup()
@@ -60,7 +68,11 @@ export const TaskPropertyQueryBuilder = ({
   }
 
   return (
-    <RuleBuilderProvider operatorsFor={operatorsFor} propertyKeys={propertyKeys}>
+    <RuleBuilderProvider
+      operatorsFor={operatorsFor}
+      propertyKeys={propertyKeys}
+      valueTypes={valueTypes}
+    >
       <div className="space-y-3">
         <RuleGroup group={flat} onChange={handleChange} />
         {errors.length > 0 && (

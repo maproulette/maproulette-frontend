@@ -1,4 +1,5 @@
 import { TaskPropertyQueryBuilder } from '@/components/shared/TaskPropertyQueryBuilder'
+import { PRIORITY_RULE_VALUE_TYPES } from '@/components/shared/TaskPropertyQueryBuilder/backendRuleShape'
 import type { TaskPriorityValue } from '@/types/Priority'
 import { TIER_TO_PRIORITY, type Tier, usePrioritizationContext } from '../PrioritizationContext'
 import { TierMatchCount } from './TierMatchCount'
@@ -22,6 +23,7 @@ export const PriorityTierPanel = ({ tier }: Props) => {
       <TaskPropertyQueryBuilder
         value={tierDraft.rules}
         onChange={(next) => setTierRules(tier, next)}
+        valueTypes={PRIORITY_RULE_VALUE_TYPES}
       />
     </div>
   )

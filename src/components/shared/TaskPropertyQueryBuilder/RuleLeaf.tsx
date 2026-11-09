@@ -12,8 +12,21 @@ import {
 } from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
 import { operatorLabels, operatorTakesValue } from './operators'
-import type { PropertyOperator, PropertyRuleLeaf } from './propertyRuleTypes'
+import {
+  isNumericValueType,
+  type PropertyOperator,
+  type PropertyRuleLeaf,
+  type RuleValueType,
+} from './propertyRuleTypes'
 import { useRuleBuilder } from './RuleBuilderContext'
+
+const valueTypeLabels = (t: ReturnType<typeof useIntl>['t']): Record<RuleValueType, string> => ({
+  string: t({ id: 'taskPropertyQueryBuilder.ruleLeaf.typeString', defaultMessage: 'string' }),
+  number: t({ id: 'taskPropertyQueryBuilder.ruleLeaf.typeNumber', defaultMessage: 'number' }),
+  integer: t({ id: 'taskPropertyQueryBuilder.ruleLeaf.typeInteger', defaultMessage: 'integer' }),
+  double: t({ id: 'taskPropertyQueryBuilder.ruleLeaf.typeDouble', defaultMessage: 'double' }),
+  long: t({ id: 'taskPropertyQueryBuilder.ruleLeaf.typeLong', defaultMessage: 'long' }),
+})
 
 interface Props {
   rule: PropertyRuleLeaf
@@ -22,11 +35,11 @@ interface Props {
 }
 
 export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
-  const { operatorsFor, propertyKeys } = useRuleBuilder()
+  const { operatorsFor, propertyKeys, valueTypes } = useRuleBuilder()
   const { t } = useIntl()
   const listId = useId()
   const commaSeparateId = useId()
-  const valueType = rule.valueType === 'number' ? 'number' : 'string'
+  const valueType = isNumericValueType(rule.valueType) ? 'number' : 'string'
   const ops = operatorsFor(valueType)
 
   return (
@@ -50,18 +63,17 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
       )}
       <Select
         value={rule.valueType ?? 'string'}
-        onValueChange={(v) => onChange({ ...rule, valueType: v as 'string' | 'number' })}
+        onValueChange={(v) => onChange({ ...rule, valueType: v as RuleValueType })}
       >
         <SelectTrigger className="w-28">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="string">
-            {t({ id: 'taskPropertyQueryBuilder.ruleLeaf.typeString', defaultMessage: 'string' })}
-          </SelectItem>
-          <SelectItem value="number">
-            {t({ id: 'taskPropertyQueryBuilder.ruleLeaf.typeNumber', defaultMessage: 'number' })}
-          </SelectItem>
+          {valueTypes.map((type) => (
+            <SelectItem key={type} value={type}>
+              {valueTypeLabels(t)[type]}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
       <Select

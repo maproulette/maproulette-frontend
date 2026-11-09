@@ -115,7 +115,7 @@ describe('parseRulesString', () => {
       valueType: 'compound rule',
       condition: 'and',
       left: { key: 'surface', value: 'paved', operator: 'equals' },
-      right: { key: 'lanes', value: '2', operator: 'equals', valueType: 'number' },
+      right: { key: 'lanes', value: '2', operator: 'equals', valueType: 'double' },
     })
   })
 
