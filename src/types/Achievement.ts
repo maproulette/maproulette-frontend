@@ -3,7 +3,6 @@ import {
   Award,
   Building2,
   CheckCircle2,
-  ClipboardCheck,
   Crown,
   Flag,
   Landmark,
@@ -19,37 +18,31 @@ import {
 } from 'lucide-react'
 
 export const Achievement = {
-  fixedTask: 1,
-  fixedCoopTask: 2,
-  challengeCompleted: 3,
-  fixedFinalTask: 4,
-  mappedRoads: 5,
-  mappedWater: 6,
-  mappedTransit: 7,
-  mappedLanduse: 8,
-  mappedBuildings: 9,
-  mappedPoi: 10,
-  reviewedTask: 11,
-  createdChallenge: 12,
-  points100: 20,
-  points500: 21,
-  points1000: 22,
-  points5000: 23,
-  points10000: 24,
-  points50000: 25,
-  points100k: 26,
-  points500k: 27,
-  points1m: 28,
+  mappedRoads: 1,
+  mappedWater: 2,
+  mappedTransit: 3,
+  mappedLanduse: 4,
+  mappedBuildings: 5,
+  mappedPoi: 6,
+  points100: 7,
+  points500: 8,
+  points1000: 9,
+  points5000: 10,
+  points10000: 11,
+  points50000: 12,
+  points100k: 13,
+  points500k: 14,
+  points1m: 15,
+  fixedTask: 16,
+  createdChallenge: 18,
+  fixedFinalTask: 19,
+  fixedCoopTask: 20,
+  challengeCompleted: 21,
 } as const
 
 type AchievementId = (typeof Achievement)[keyof typeof Achievement]
 
-export type AchievementCategory =
-  | 'taskCompletion'
-  | 'mapping'
-  | 'review'
-  | 'creation'
-  | 'pointsMilestone'
+export type AchievementCategory = 'taskCompletion' | 'mapping' | 'creation' | 'pointsMilestone'
 
 export interface AchievementDefinition {
   id: AchievementId
@@ -130,13 +123,6 @@ export const achievementDefinitions: AchievementDefinition[] = [
     title: 'Landmark Spotter',
     description: 'Contributed to mapping points of interest.',
     icon: Landmark,
-  },
-  {
-    id: Achievement.reviewedTask,
-    category: 'review',
-    title: 'Reviewer',
-    description: 'Reviewed a task submitted by another mapper.',
-    icon: ClipboardCheck,
   },
   {
     id: Achievement.createdChallenge,
@@ -222,7 +208,6 @@ export const achievementDefinitions: AchievementDefinition[] = [
 export const achievementCategoryLabel: Record<AchievementCategory, string> = {
   taskCompletion: 'Task Completion',
   mapping: 'Mapping',
-  review: 'Review',
   creation: 'Creation',
   pointsMilestone: 'Points Milestones',
 }
