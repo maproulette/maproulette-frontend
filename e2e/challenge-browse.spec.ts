@@ -13,13 +13,13 @@ test('a user can start mapping a challenge from its challenge page', async ({
   await expect(page.getByText('E2E test challenge')).toBeVisible({ timeout: 15_000 })
 
   // "Start Challenge" asks the backend for a task to work on and navigates to
-  // it, which is the normal way into the mapping workspace (task-workflow.spec.ts
+  // it, which is the normal way into the mapping workspace (task-edit-status.spec.ts
   // enters by task URL instead).
   await page.getByRole('button', { name: 'Start Challenge' }).click()
 
   await expect(page).toHaveURL(new RegExp(`/tasks/${task.id}`), { timeout: 30_000 })
   await expect(page.getByText(`Task #${task.id}`).first()).toBeVisible({ timeout: 20_000 })
-  await expect(page.getByText('Fix the identified issue.')).toBeVisible({ timeout: 15_000 })
+  await expect(page.getByText('Fix this point.')).toBeVisible({ timeout: 15_000 })
 
   // Deliberately not asserting that the task arrives already locked: this
   // navigation claims the task with `claimTask=true`, and the backend really
@@ -28,7 +28,7 @@ test('a user can start mapping a challenge from its challenge page', async ({
   // so the callbacks that flip the panel into its locked state are dropped
   // and the panel can still offer "Map this task". Asserting locked state
   // here would test a dev-mode remount timing, not the app's behavior — the
-  // lock-driven UI is covered from a task URL in task-workflow.spec.ts.
+  // lock-driven UI is covered from a task URL in task-edit-status.spec.ts.
 })
 
 test('a user can comment on a challenge and see it in the comments modal', async ({
