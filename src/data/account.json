@@ -13,9 +13,6 @@
     { "value": "Bing", "label": "Bing Maps Aerial" },
     { "value": "EsriWorldImagery", "label": "Esri World Imagery" },
     { "value": "EsriWorldImageryClarity", "label": "Esri World Imagery (Clarity) Beta" },
-    { "value": "Mapbox", "label": "Mapbox Satellite" },
-    { "value": "OpenAerialMapMosaic", "label": "OpenAerialMap Mosaic, by Kontur.io" },
-    { "value": "MAPNIK", "label": "OpenStreetMap (Standard)" },
-    { "value": "tf-cycle", "label": "Thunderforest OpenCycleMap" }
+    { "value": "MAPNIK", "label": "OpenStreetMap (Standard)" }
   ]
 }
