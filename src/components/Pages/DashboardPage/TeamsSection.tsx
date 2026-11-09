@@ -46,7 +46,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
           </Link>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-1 pb-4">
+      <div className="flex-1 overflow-y-auto p-3">
         {isLoading && (
           <div className="flex justify-center py-4">
             <Loader />
@@ -80,7 +80,7 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
           <div className="space-y-3">
             {pending.length > 0 && <PendingInvitesSection invites={pending} />}
             {active.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {active.map((membership) => (
                   <TeamCard key={membership.id} membership={membership} />
                 ))}
