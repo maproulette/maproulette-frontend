@@ -51,13 +51,13 @@ describe('getNotificationCategory', () => {
 
   it('returns the mapped category for a known notification type', () => {
     expect(getNotificationCategory(NotificationType.MENTION)).toBe('mention')
-    expect(getNotificationCategory(NotificationType.REVIEW_APPROVED)).toBe('review')
     expect(getNotificationCategory(NotificationType.TEAM)).toBe('team')
     expect(getNotificationCategory(NotificationType.CHALLENGE_COMMENT)).toBe('task_comment')
   })
 
   it('falls back to system for an unmapped notification type', () => {
     expect(getNotificationCategory(9999)).toBe('system')
+    expect(getNotificationCategory(NotificationType.REVIEW_APPROVED)).toBe('system')
   })
 })
 

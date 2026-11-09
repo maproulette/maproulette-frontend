@@ -4,7 +4,7 @@ import { Route } from './notifications.tsx'
 
 type NotificationsSearch = {
   notificationId?: number
-  category?: 'all' | 'task_comment' | 'mention' | 'review' | 'challenge' | 'team' | 'system'
+  category?: 'all' | 'task_comment' | 'mention' | 'challenge' | 'team' | 'system'
   status?: 'all' | 'unread' | 'read'
   task?: string
   type?: string

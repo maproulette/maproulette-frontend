@@ -45,7 +45,6 @@ export type NotificationCategory =
   | 'all'
   | 'task_comment'
   | 'mention'
-  | 'review'
   | 'challenge'
   | 'team'
   | 'system'
@@ -56,7 +55,6 @@ export const NOTIFICATION_CATEGORIES: NotificationCategory[] = [
   'all',
   'task_comment',
   'mention',
-  'review',
   'challenge',
   'team',
   'system',
@@ -69,7 +67,6 @@ export const NOTIFICATION_CATEGORY_MESSAGES: Record<NotificationCategory, Messag
     all: { id: 'notificationsPage.filters.category.all', defaultMessage: 'All' },
     task_comment: { id: 'common.comments', defaultMessage: 'Comments' },
     mention: { id: 'common.mentions', defaultMessage: 'Mentions' },
-    review: { id: 'notificationsPage.filters.category.reviews', defaultMessage: 'Reviews' },
     challenge: {
       id: 'common.challenges',
       defaultMessage: 'Challenges',
@@ -90,14 +87,14 @@ export const NOTIFICATION_STATUS_MESSAGES: Record<NotificationStatus, MessageDes
 export const NOTIFICATION_TYPE_CATEGORY: Record<number, NotificationCategory> = {
   [NotificationType.SYSTEM]: 'system',
   [NotificationType.MENTION]: 'mention',
-  [NotificationType.REVIEW_APPROVED]: 'review',
-  [NotificationType.REVIEW_REJECTED]: 'review',
-  [NotificationType.REVIEW_AGAIN]: 'review',
-  [NotificationType.REVIEW_REVISED]: 'review',
-  [NotificationType.META_REVIEW]: 'review',
-  [NotificationType.META_REVIEW_AGAIN]: 'review',
-  [NotificationType.REVIEW_COUNT]: 'review',
-  [NotificationType.REVISION_COUNT]: 'review',
+  [NotificationType.REVIEW_APPROVED]: 'system',
+  [NotificationType.REVIEW_REJECTED]: 'system',
+  [NotificationType.REVIEW_AGAIN]: 'system',
+  [NotificationType.REVIEW_REVISED]: 'system',
+  [NotificationType.META_REVIEW]: 'system',
+  [NotificationType.META_REVIEW_AGAIN]: 'system',
+  [NotificationType.REVIEW_COUNT]: 'system',
+  [NotificationType.REVISION_COUNT]: 'system',
   [NotificationType.CHALLENGE_COMPLETED]: 'challenge',
   [NotificationType.MAPPER_CHALLENGE_COMPLETED]: 'challenge',
   [NotificationType.CHALLENGE_COMMENT]: 'task_comment',
@@ -117,7 +114,7 @@ export type Notification = components['schemas']['org.maproulette.framework.mode
 
 export const getNotificationThreadKey = (notification: Notification): number | string => {
   // Task-scoped threads group every notification tied to the same task
-  // (mentions, reviews, and task comments land in the same bucket).
+  // (mentions and task comments land in the same bucket).
   if (notification.taskId) return `task:${notification.taskId}`
   // Challenge-level comment thread — when a comment lives on a challenge
   // rather than a specific task.

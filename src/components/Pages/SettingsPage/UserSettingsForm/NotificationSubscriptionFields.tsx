@@ -13,15 +13,11 @@ import {
 } from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
 import {
-  COUNT_FIELDS,
   type NotificationSubscriptions,
   SUBSCRIPTION_FIELDS,
-  subscriptionFrequencyOptions,
   subscriptionLevelOptions,
   withSubscriptionDefaults,
 } from '@/lib/notificationSubscriptions'
-
-const ALL_SUBSCRIPTION_FIELDS = [...SUBSCRIPTION_FIELDS, ...COUNT_FIELDS]
 
 const SUBSCRIPTION_SECTIONS: {
   key: string
@@ -42,19 +38,6 @@ const SUBSCRIPTION_SECTIONS: {
     }),
     fields: SUBSCRIPTION_FIELDS,
     options: subscriptionLevelOptions,
-  },
-  {
-    key: 'summaries',
-    legend: defineMessage({
-      id: 'settings.notifications.periodicSummaries',
-      defaultMessage: 'Periodic summaries',
-    }),
-    description: defineMessage({
-      id: 'settings.notifications.periodicSummariesDescription',
-      defaultMessage: 'These are sent on a schedule rather than when something happens.',
-    }),
-    fields: COUNT_FIELDS,
-    options: subscriptionFrequencyOptions,
   },
 ]
 
@@ -119,7 +102,7 @@ export const useNotificationSubscriptionsDraft = (userId: number): Subscriptions
   }, [saved])
 
   const isDirty = Boolean(
-    draft && saved && ALL_SUBSCRIPTION_FIELDS.some(({ key }) => draft[key] !== saved[key])
+    draft && saved && SUBSCRIPTION_FIELDS.some(({ key }) => draft[key] !== saved[key])
   )
 
   return {
