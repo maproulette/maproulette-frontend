@@ -1,7 +1,5 @@
 import { useId } from 'react'
 import { useIntl } from '@/i18n'
-import { ReviewerStatsBlock } from '../blocks/ReviewerStatsBlock'
-import { ReviewStatsBlock } from '../blocks/ReviewStatsBlock'
 import { TaskStatsBlock } from '../blocks/TaskStatsBlock'
 import { TimeRangeSelector } from '../TimeRangeSelector'
 
@@ -18,8 +16,6 @@ export const MetricsSection = () => {
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <TaskStatsBlock />
-        <ReviewStatsBlock />
-        <ReviewerStatsBlock />
       </div>
     </section>
   )
