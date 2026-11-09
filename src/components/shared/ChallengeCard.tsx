@@ -135,7 +135,7 @@ export const ChallengeCard = ({
               {
                 id: 'challengeCard.progress',
                 defaultMessage:
-                  '<b>{count, number}</b> {count, plural, one {task} other {tasks}} · <b>{percent, number, percent}</b> complete',
+                  '{count, plural, one {<b>{count, number}</b> task · <b>{percent, number, percent}</b> complete} other {<b>{count, number}</b> tasks · <b>{percent, number, percent}</b> complete}}',
               },
               {
                 count: totalTasks,

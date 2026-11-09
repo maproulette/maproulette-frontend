@@ -273,7 +273,7 @@ export const ChallengeComments = () => {
               {
                 id: 'browsedChallengePage.challengeModals.comments.characterCount',
                 defaultMessage:
-                  '{count, number}/{max, plural, one {# character} other {# characters}}',
+                  '{max, plural, one {{count, number}/# character} other {{count, number}/# characters}}',
               },
               { count: commentText.length, max: 5000 }
             )}

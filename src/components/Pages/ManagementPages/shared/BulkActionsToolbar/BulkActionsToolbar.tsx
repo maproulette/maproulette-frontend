@@ -62,7 +62,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
             {
               id: 'managementPages.bulkActionsToolbar.deleteWarning',
               defaultMessage:
-                'Deleted {deleted, plural, one {# task} other {# tasks}}; {denied, number} could not be deleted',
+                '{deleted, plural, one {Deleted # task; {denied, number} could not be deleted} other {Deleted # tasks; {denied, number} could not be deleted}}',
             },
             { deleted: result.deleted, denied: result.requested - result.deleted }
           )
