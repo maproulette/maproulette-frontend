@@ -44,7 +44,7 @@ export const TaskPanel = () => {
   }
 
   return (
-    <div className="relative flex w-full flex-col overflow-hidden md:h-full">
+    <div className="relative flex w-full flex-col overflow-hidden rounded-t-lg rounded-b-2xl bg-white md:h-full dark:bg-slate-900">
       {/* Primary Task Info Header */}
       <TaskInfoHeader task={task} relation="primary" isLocked={isLocked} />
 
