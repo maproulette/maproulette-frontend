@@ -43,3 +43,6 @@ export const buildChallengeTags = (
   ...(CHALLENGE_CATEGORY_KEYWORDS[category] ?? CHALLENGE_CATEGORY_KEYWORDS.other),
   ...(additionalKeywords ?? '').split(/,+/).filter((keyword) => keyword !== ''),
 ]
+
+export const removedKeywords = (existing: readonly string[], kept: readonly string[]): string[] =>
+  existing.filter((keyword) => keyword !== '' && !kept.includes(keyword))
