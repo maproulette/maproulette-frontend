@@ -329,12 +329,15 @@ describe('taskSingle.useLockTaskBundle', () => {
 })
 
 describe('taskSingle.useSkipTask', () => {
-  it('marks a cached task skipped, invalidates aggregates when the status actually changed, and patches the marker', async () => {
+  it('keeps the cached status, releases the lock and leaves the challenge alone', async () => {
     stubFetch(new Response('', { status: 200 }))
     const queryClient = createTestQueryClient()
-    queryClient.setQueryData(['task', 1], makeTask({ id: 1, parent: 10, status: 1 }))
+    queryClient.setQueryData(
+      ['task', 1],
+      makeTask({ id: 1, parent: 10, status: 6, lockedBy: 5, lockBundledTasks: [2] })
+    )
     queryClient.setQueryData(['challenge', 'taskMarkers', 10], {
-      markers: [{ id: 1, status: 1 }],
+      markers: [{ id: 1, status: 6 }],
     })
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
@@ -346,37 +349,25 @@ describe('taskSingle.useSkipTask', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])?.status).toBe(3)
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 1] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 10] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'stats', 10] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'activity', 10] })
-    const markers = queryClient.getQueryData<{ markers: Array<{ id: number; status: number }> }>([
-      'challenge',
-      'taskMarkers',
-      10,
-    ])
-    expect(markers?.markers[0].status).toBe(3)
-  })
-
-  it('does not invalidate aggregates when the cached task was already skipped', async () => {
-    stubFetch(new Response('', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    queryClient.setQueryData(['task', 2], makeTask({ id: 2, parent: 12, status: 3 }))
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskSingle.useSkipTask(), {
-      wrapper: queryClientWrapper(queryClient),
+    expect(queryClient.getQueryData<TaskGetResponse>(['task', 1])).toMatchObject({
+      status: 6,
+      lockedBy: null,
+      lockBundledTasks: [],
     })
-
-    result.current.mutate(2)
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: ['challenge', 12] })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 1] })
+    expect(invalidateSpy).not.toHaveBeenCalledWith(
+      expect.objectContaining({ queryKey: expect.arrayContaining(['challenge']) })
+    )
+    expect(
+      queryClient.getQueryData<{ markers: Array<{ id: number; status: number }> }>([
+        'challenge',
+        'taskMarkers',
+        10,
+      ])?.markers[0].status
+    ).toBe(6)
   })
 
-  it('handles a task with no cache entry, skipping the cache update and marker patch entirely', async () => {
+  it('handles a task with no cache entry', async () => {
     stubFetch(new Response('', { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -391,9 +382,6 @@ describe('taskSingle.useSkipTask', () => {
 
     expect(queryClient.getQueryData(['task', 99])).toBeUndefined()
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 99] })
-    expect(invalidateSpy).not.toHaveBeenCalledWith(
-      expect.objectContaining({ queryKey: expect.arrayContaining(['challenge']) })
-    )
   })
 })
 
