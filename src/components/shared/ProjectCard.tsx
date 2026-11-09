@@ -97,7 +97,7 @@ export const ProjectCard = ({
           <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-slate-300">
             <span className="flex items-center gap-3">
               <span>
-                {totalChallenges
+                {totalChallenges != null
                   ? t(
                       {
                         id: 'shared.projectCard.totalChallenges',
@@ -108,7 +108,7 @@ export const ProjectCard = ({
                   : null}
               </span>
               <span className="text-emerald-500">
-                {completedChallenges
+                {completedChallenges != null
                   ? t(
                       { id: 'shared.projectCard.completed', defaultMessage: 'Completed: {count}' },
                       { count: completedChallenges }
