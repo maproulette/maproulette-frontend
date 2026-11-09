@@ -7,6 +7,7 @@ import {
   getLockConflict,
   getLockConflictInfo,
   isConflictError,
+  isLockedByAnotherUser,
 } from './apiError.ts'
 
 const makeHttpError = (body: unknown, status = 400) => {
@@ -81,6 +82,14 @@ describe('isConflictError', () => {
     expect(isConflictError(makeHttpError({ status: 'Conflict' }, 409))).toBe(true)
     expect(isConflictError(makeHttpError({ status: 'KO' }, 500))).toBe(false)
     expect(isConflictError(new Error('Conflict'))).toBe(false)
+  })
+})
+
+describe('isLockedByAnotherUser', () => {
+  it('is true only for a 403 response', () => {
+    expect(isLockedByAnotherUser(makeHttpError({ status: 'Forbidden' }, 403))).toBe(true)
+    expect(isLockedByAnotherUser(makeHttpError({ status: 'KO' }, 500))).toBe(false)
+    expect(isLockedByAnotherUser(new Error('Forbidden'))).toBe(false)
   })
 })
 

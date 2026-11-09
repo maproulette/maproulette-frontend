@@ -7,7 +7,12 @@ import { api } from '@/api'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
-import { getApiErrorMessage, getLockConflictInfo, type LockConflictInfo } from '@/lib/apiError'
+import {
+  getApiErrorMessage,
+  getLockConflictInfo,
+  isLockedByAnotherUser,
+  type LockConflictInfo,
+} from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
 import { LockConflictDialog } from './LockConflictDialog'
@@ -77,7 +82,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
           return false
         }
         logger.error('Failed to lock task', { taskId, error })
-        setLockFailure({ message: await getApiErrorMessage(error) })
+        setLockFailure({
+          message: await getApiErrorMessage(error),
+          lockedByAnotherUser: isLockedByAnotherUser(error),
+        })
         return false
       }
     },
@@ -116,7 +124,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     const interval = setInterval(() => {
       refreshLockMutation.mutate(taskId, {
         onError: async (error) => {
-          setLockFailure({ message: await getApiErrorMessage(error) })
+          setLockFailure({
+            message: await getApiErrorMessage(error),
+            lockedByAnotherUser: isLockedByAnotherUser(error),
+          })
           void queryClient.invalidateQueries({ queryKey: ['task', taskId], exact: true })
         },
       })

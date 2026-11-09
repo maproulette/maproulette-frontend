@@ -16,6 +16,7 @@ import { logger } from '@/lib/logger'
 
 export interface LockFailure {
   message?: string
+  lockedByAnotherUser: boolean
 }
 
 interface Props {
@@ -90,24 +91,25 @@ export const LockFailedDialog = ({
               defaultMessage: 'Browse Challenge',
             })}
           </Button>
-          {requestedTaskId === taskId ? (
-            <span className="self-center text-sm">
-              {t({
-                id: 'taskEditPage.lockFailedDialog.requestSent',
-                defaultMessage: 'Request Sent!',
-              })}
-            </span>
-          ) : (
-            <Button
-              onClick={handleRequestUnlock}
-              disabled={busy || requestUnlockMutation.isPending}
-            >
-              {t({
-                id: 'taskEditPage.lockFailedDialog.requestUnlock',
-                defaultMessage: 'Request Unlock',
-              })}
-            </Button>
-          )}
+          {failure?.lockedByAnotherUser &&
+            (requestedTaskId === taskId ? (
+              <span className="self-center text-sm">
+                {t({
+                  id: 'taskEditPage.lockFailedDialog.requestSent',
+                  defaultMessage: 'Request Sent!',
+                })}
+              </span>
+            ) : (
+              <Button
+                onClick={handleRequestUnlock}
+                disabled={busy || requestUnlockMutation.isPending}
+              >
+                {t({
+                  id: 'taskEditPage.lockFailedDialog.requestUnlock',
+                  defaultMessage: 'Request Unlock',
+                })}
+              </Button>
+            ))}
         </DialogFooter>
       </DialogContent>
     </Dialog>
