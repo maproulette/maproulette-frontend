@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useMemo } from 'react'
 import { api } from '@/api'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { isChallengeSourceEditable } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeFormSchema'
+import { removedKeywords } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeKeywords'
 import {
   buildCloneFormValues,
   clonedChallengeSettings,
@@ -23,6 +24,19 @@ interface ChallengeFormContextType {
 
 const ChallengeFormContext = createContext<ChallengeFormContextType | undefined>(undefined)
 
+const useChallengeWithKeywords = (challengeId: number) => {
+  const { data, isLoading } = api.challenge.getChallenge(challengeId)
+  const keywords = api.challenge.getChallengeTags(challengeId)
+  const challenge = useMemo<Challenge | undefined>(
+    () =>
+      data && !keywords.isPending
+        ? { ...data, tags: keywords.data?.map(({ name }) => name) ?? [] }
+        : undefined,
+    [data, keywords.isPending, keywords.data]
+  )
+  return { challenge, isLoading: isLoading || keywords.isLoading }
+}
+
 export const CreateChallengeFormProvider = ({
   children,
   projectId,
@@ -34,7 +48,7 @@ export const CreateChallengeFormProvider = ({
 }) => {
   const navigate = useNavigate()
   const { t } = useIntl()
-  const { data: cloneSource, isLoading: isLoadingCloneSource } = api.challenge.getChallenge(
+  const { challenge: cloneSource, isLoading: isLoadingCloneSource } = useChallengeWithKeywords(
     cloneFromChallengeId ?? 0
   )
   const initialValues = useMemo(
@@ -138,7 +152,7 @@ export const EditChallengeFormProvider = ({
   challengeId: number
 }) => {
   const navigate = useNavigate()
-  const { data: challenge, isLoading } = api.challenge.getChallenge(challengeId)
+  const { challenge, isLoading } = useChallengeWithKeywords(challengeId)
   const updateChallengeMutation = api.challenge.useUpdateChallenge()
   const removeKeywordsMutation = api.challenge.useRemoveChallengeKeywords()
   const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
@@ -152,11 +166,9 @@ export const EditChallengeFormProvider = ({
         challenge
       )
 
-      const removedKeywords = ((challenge as Challenge | undefined)?.tags ?? []).filter(
-        (keyword) => keyword !== '' && !(challengeData.tags ?? []).includes(keyword)
-      )
-      if (removedKeywords.length > 0) {
-        await removeKeywordsMutation.mutateAsync({ challengeId, keywords: removedKeywords })
+      const removed = removedKeywords(challenge?.tags ?? [], challengeData.tags ?? [])
+      if (removed.length > 0) {
+        await removeKeywordsMutation.mutateAsync({ challengeId, keywords: removed })
       }
 
       await updateChallengeMutation.mutateAsync({
