@@ -17,7 +17,7 @@ export const ChallengeProgress = () => {
   if (!hasActions) return null
 
   return (
-    <div className="mb-6 flex flex-col gap-3">
+    <div className="mb-4 flex flex-col gap-3 md:mb-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />

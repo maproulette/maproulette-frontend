@@ -154,7 +154,7 @@ export const ChallengeFooter = () => {
   const FooterExtension = challengeFooterExtensions[0]?.component
 
   return (
-    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white px-4 py-4 dark:border-slate-700/50 dark:bg-slate-800">
+    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white p-3 md:p-4 dark:border-slate-700/50 dark:bg-slate-800">
       {FooterExtension ? (
         <FooterExtension challenge={challenge} user={user} mapContent={mapContent} />
       ) : (
