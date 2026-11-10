@@ -16,6 +16,7 @@ import { useMappingAvailability } from '../useTaskShortcuts'
 import { NavigationActions } from './NavigationActions'
 import { StartMappingActions } from './StartMappingActions'
 import { useConfirmDiscardIdEdits } from './useConfirmDiscardIdEdits'
+import { api } from '@/api'
 
 /**
  * The status keys carried over from MapRoulette 3, kept on the left-hand
@@ -48,6 +49,11 @@ export const TaskActions = () => {
     status: number
     label: string
   } | null>(null)
+
+  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
+    task.parent,
+    task.id
+  )
 
   const confirmDiscardIdEdits = useConfirmDiscardIdEdits()
 
@@ -213,6 +219,7 @@ export const TaskActions = () => {
       task={task}
       initialStatus={modalConfig.status}
       onSubmittingChange={setIsSubmitting}
+      nearbyTasks={nearbyTasks}
     />
   )
 

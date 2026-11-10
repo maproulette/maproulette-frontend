@@ -4,7 +4,6 @@ import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
-import { api } from '@/api'
 import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
@@ -18,6 +17,7 @@ interface TaskSelectionMapProps {
   excludeCurrentBundle?: boolean
   /** Show the "Task #N selected" overlay. Default true. */
   showSelectedBadge?: boolean
+  nearbyTasks: Task[]
 }
 
 export const TaskSelectionMap = ({
@@ -73,7 +73,7 @@ export const TaskSelectionMap = ({
       })),
     }
   }, [nearbyTaskLocations, selectedTaskId])
-
+  
   const centerOnTasks = useCallback(() => {
     if (!mapRef.current || !mapLoaded) return
 
@@ -100,15 +100,6 @@ export const TaskSelectionMap = ({
     }
   }, [mapLoaded, nearbyTaskLocations, currentLng, currentLat])
 
-  // Zoom to fit all tasks (current + nearby) on first load
-  useEffect(() => {
-    if (!mapLoaded) return
-    if (hasZoomedRef.current) return
-    centerOnTasks()
-    hasZoomedRef.current = true
-    centeredTaskIdRef.current = currentTask.id
-  }, [mapLoaded, centerOnTasks, currentTask.id])
-
   // Re-center when the current task changes (e.g. preview Prev/Next)
   useEffect(() => {
     if (!mapLoaded) return
@@ -117,11 +108,14 @@ export const TaskSelectionMap = ({
     centeredTaskIdRef.current = currentTask.id
   }, [mapLoaded, currentTask.id, currentLng, currentLat, centerOnTasks])
 
-  const initialViewState = {
-    longitude: currentLng,
-    latitude: currentLat,
-    zoom: 14,
+  const initialViewState = useMemo(() => {
+  if (nearbyTaskLocations.length === 0) {
+    return { longitude: currentLng, latitude: currentLat, zoom: 16 }
   }
+  const bounds = new maplibregl.LngLatBounds([currentLng, currentLat], [currentLng, currentLat])
+    for (const loc of nearbyTaskLocations) bounds.extend([loc.lng, loc.lat])
+    return { bounds, fitBoundsOptions: { padding: 40, maxZoom: 16 } }
+  }, [])
 
   // Reason: stable callback prevents map event listener re-registration
   const handleMapClick = useCallback(
@@ -212,10 +206,6 @@ export const TaskSelectionMap = ({
 type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
 
 export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
-  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(
-    props.currentTask.parent,
-    props.currentTask.id
-  )
 
-  return <TaskSelectionMap {...props} tasks={nearbyTasks} excludeCurrentBundle />
+  return <TaskSelectionMap {...props} tasks={props.nearbyTasks} excludeCurrentBundle />
 }

@@ -68,6 +68,7 @@ interface TaskActionModalProps {
    * now-completed status swap in a different button set.
    */
   onSubmittingChange?: (submitting: boolean) => void
+  nearbyTasks: Task[]
 }
 
 export const TaskActionModal = ({
@@ -76,6 +77,7 @@ export const TaskActionModal = ({
   task,
   initialStatus,
   onSubmittingChange,
+  nearbyTasks,
 }: TaskActionModalProps) => {
   const { t } = useIntl()
   const navigate = useNavigate()
@@ -528,6 +530,7 @@ export const TaskActionModal = ({
                       currentTask={task}
                       selectedTaskId={selectedNearbyTaskId}
                       onTaskSelect={setSelectedNearbyTaskId}
+                      nearbyTasks={nearbyTasks}
                     />
                   ) : (
                     <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
