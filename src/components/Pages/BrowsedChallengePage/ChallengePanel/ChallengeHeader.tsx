@@ -1,11 +1,14 @@
 import { Link } from '@tanstack/react-router'
-import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react'
+import { Bookmark, Heart, Map as MapIcon, MessageSquare, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { SidebarIndicator } from '@/components/shared/SidebarIndicator'
 import { Button } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
+import { DropdownMenuItem } from '@/components/ui/DropdownMenu'
+import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
+import { useMapToggle } from '@/contexts/MapToggleContext'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
@@ -38,6 +41,8 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
   const ownedByTeam = ownerTeamId !== undefined
   const bylineName = ownedByTeam ? ownerTeamName : ownerName
   const { openComments } = useChallengeModals()
+  const isDesktop = useIsDesktopLayoutContext()
+  const { setShowMap } = useMapToggle()
   const { t } = useIntl()
   const needsSignIn = !user?.id
   const likeSignInMsg = t({
@@ -252,11 +257,44 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     })
   }
 
+  const socialMenuItems = isDesktop ? undefined : (
+    <>
+      <DropdownMenuItem
+        onClick={handleLike}
+        disabled={needsSignIn}
+        title={needsSignIn ? likeSignInMsg : undefined}
+      >
+        <Heart className={cn('size-4', isLiked && 'fill-red-500 text-red-500')} />
+        {isLiked
+          ? t({ id: 'browsedChallengePage.header.liked', defaultMessage: 'Liked' })
+          : t({ id: 'browsedChallengePage.header.like', defaultMessage: 'Like' })}
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={openComments}>
+        <MessageSquare className="size-4" />
+        {t({ id: 'common.comments', defaultMessage: 'Comments' })}
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        onClick={handleFavorite}
+        disabled={needsSignIn}
+        title={needsSignIn ? saveSignInMsg : undefined}
+      >
+        <Bookmark className={cn('size-4', isFavorited && 'fill-yellow-500 text-yellow-500')} />
+        {isFavorited
+          ? t({ id: 'browsedChallengePage.header.saved', defaultMessage: 'Saved' })
+          : t({ id: 'common.save', defaultMessage: 'Save' })}
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={handleShare}>
+        <Share2 className="size-4" />
+        {t({ id: 'common.share', defaultMessage: 'Share' })}
+      </DropdownMenuItem>
+    </>
+  )
+
   return (
     <div
       className={cn(
         'transition-all duration-500 ease-in-out',
-        isScrolled ? 'mb-0 min-w-0 flex-1' : 'mb-6 w-full space-y-2.5'
+        isScrolled ? 'mb-0 min-w-0 flex-1' : 'mb-3 w-full space-y-2.5 md:mb-6'
       )}
     >
       {/* Taxonomy and Actions Row */}
@@ -277,7 +315,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onKeyDown={(e) => e.stopPropagation()}
             role="toolbar"
           >
-            <ChallengeActionButtons />
+            <ChallengeActionButtons leadingItems={socialMenuItems} />
           </div>
         </div>
       )}
@@ -291,7 +329,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             onKeyDown={(e) => e.stopPropagation()}
             role="toolbar"
           >
-            <ChallengeActionButtons />
+            <ChallengeActionButtons leadingItems={socialMenuItems} />
           </div>
         </div>
       )}
@@ -316,7 +354,17 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             >
               {name}
             </h1>
-            {isScrolled && (
+            {isScrolled && !isDesktop && (
+              <div
+                className="relative z-10 flex items-center gap-1"
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()}
+                role="toolbar"
+              >
+                <ChallengeActionButtons leadingItems={socialMenuItems} />
+              </div>
+            )}
+            {isScrolled && isDesktop && (
               <div
                 className="relative z-10 flex items-center gap-1"
                 onClick={(e) => e.stopPropagation()}
@@ -508,18 +556,18 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
       </div>
 
       {/* Like, Comments, Save, and Share Buttons - Bottom of Header */}
-      {!isScrolled && (
+      {!isScrolled && isDesktop && (
         <div
-          className="relative z-10 mt-4 grid grid-cols-2 items-center gap-2 sm:flex sm:flex-wrap"
+          className="relative z-10 mt-4 flex flex-wrap items-center gap-2"
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
           role="toolbar"
         >
-          <DisabledTooltip show={needsSignIn} message={likeSignInMsg} className="w-full sm:w-auto">
+          <DisabledTooltip show={needsSignIn} message={likeSignInMsg}>
             <Button
               variant={isLiked ? 'default' : 'outline'}
               size="sm"
-              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+              className="gap-1.5 whitespace-nowrap rounded-full"
               onClick={handleLike}
               disabled={needsSignIn}
             >
@@ -534,17 +582,17 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           <Button
             variant="outline"
             size="sm"
-            className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+            className="gap-1.5 whitespace-nowrap rounded-full"
             onClick={openComments}
           >
             <MessageSquare className="size-3.5" />
             {t({ id: 'common.comments', defaultMessage: 'Comments' })}
           </Button>
-          <DisabledTooltip show={needsSignIn} message={saveSignInMsg} className="w-full sm:w-auto">
+          <DisabledTooltip show={needsSignIn} message={saveSignInMsg}>
             <Button
               variant={isFavorited ? 'default' : 'outline'}
               size="sm"
-              className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+              className="gap-1.5 whitespace-nowrap rounded-full"
               onClick={handleFavorite}
               disabled={needsSignIn}
             >
@@ -562,13 +610,23 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           <Button
             variant="outline"
             size="sm"
-            className="w-full gap-1.5 whitespace-nowrap rounded-full sm:w-auto"
+            className="gap-1.5 whitespace-nowrap rounded-full"
             onClick={handleShare}
           >
             <Share2 className="size-3.5" />
             {t({ id: 'common.share', defaultMessage: 'Share' })}
           </Button>
         </div>
+      )}
+      {!isScrolled && !isDesktop && (
+        <Button
+          variant="outline"
+          className="relative z-10 mt-3 w-full gap-2 rounded-full"
+          onClick={() => setShowMap(true)}
+        >
+          <MapIcon className="size-4" />
+          {t({ id: 'browsedChallengePage.footer.showMap', defaultMessage: 'Show Map' })}
+        </Button>
       )}
     </div>
   )

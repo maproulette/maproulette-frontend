@@ -116,8 +116,10 @@ export const ChallengePanel = () => {
             >
               <div
                 className={cn(
-                  'relative flex w-full min-w-0 border-0 bg-transparent px-6 text-left transition-all duration-500 ease-in-out',
-                  isScrolled ? 'items-center py-3' : 'flex-col items-start pt-6 pb-4'
+                  'relative flex w-full min-w-0 border-0 bg-transparent px-4 text-left transition-all duration-500 ease-in-out md:px-6',
+                  isScrolled
+                    ? 'items-center py-3'
+                    : 'flex-col items-start pt-4 pb-3 md:pt-6 md:pb-4'
                 )}
               >
                 {isScrolled && (
@@ -134,7 +136,7 @@ export const ChallengePanel = () => {
 
             <div className="relative min-h-0 flex-1">
               <ScrollArea ref={scrollAreaRef} className="h-full">
-                <div className="flex flex-col px-6 py-4">
+                <div className="flex flex-col px-4 py-3 md:px-6 md:py-4">
                   <ChallengeDescription />
                 </div>
               </ScrollArea>

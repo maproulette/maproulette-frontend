@@ -58,14 +58,14 @@ export const CategorizeFilter = () => {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
       <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
         {label}
       </Label>
       <Popover>
         <PopoverTrigger
           aria-label={label}
-          className="flex h-9 items-center justify-between gap-2 whitespace-nowrap rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-zinc-950 focus-visible:ring-[3px] focus-visible:ring-zinc-950/50 dark:border-slate-700 dark:bg-slate-800 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50"
+          className="flex h-9 w-full items-center justify-between gap-2 whitespace-nowrap rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-zinc-950 focus-visible:ring-[3px] focus-visible:ring-zinc-950/50 md:w-auto dark:border-slate-700 dark:bg-slate-800 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50"
         >
           {selectedCategories.length > 0
             ? t(

@@ -1,17 +1,19 @@
 import { Link } from '@tanstack/react-router'
 import { Code, Copy, Flag, MoreVertical, Settings } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 
-export const ChallengeActionButtons = () => {
+export const ChallengeActionButtons = ({ leadingItems }: { leadingItems?: ReactNode }) => {
   const { challenge, hasOverpass, canClone, canManage, user, openReport, projectId } =
     useBrowsedChallengeContext()
   const { openReport: openReportModal, openOverpass } = useChallengeModals()
@@ -51,6 +53,12 @@ export const ChallengeActionButtons = () => {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        {leadingItems && (
+          <>
+            {leadingItems}
+            <DropdownMenuSeparator />
+          </>
+        )}
         {hasOverpass && (
           <DropdownMenuItem onClick={openOverpass}>
             <Code className="size-4" />

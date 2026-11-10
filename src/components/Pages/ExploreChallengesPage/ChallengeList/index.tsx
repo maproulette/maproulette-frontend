@@ -86,7 +86,7 @@ export const ChallengeList = () => {
             style={
               viewMode === 'grid-map'
                 ? undefined
-                : { gridTemplateColumns: 'repeat(auto-fill, minmax(485px, 1fr))' }
+                : { gridTemplateColumns: 'repeat(auto-fill, minmax(min(485px, 100%), 1fr))' }
             }
           >
             {challenges.map((c) => (

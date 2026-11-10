@@ -14,12 +14,12 @@ export const WorkOnFilter = () => {
   const { t } = useIntl()
   const { workOn, setWorkOn } = useExploreChallengesSearchContext()
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
       <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
         {t({ id: 'exploreChallenges.filterBar.workOn.label', defaultMessage: 'Work on' })}
       </Label>
       <Select value={workOn} onValueChange={(value) => setWorkOn(value as WorkOnCategory)}>
-        <SelectTrigger className="h-9 w-28">
+        <SelectTrigger className="h-9 w-full md:w-28">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

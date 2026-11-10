@@ -1,4 +1,4 @@
-import { Eye, Flag, Map as MapIcon, Play } from 'lucide-react'
+import { Eye, Flag, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
@@ -10,7 +10,6 @@ import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import { useMapToggle } from '../MapToggleContext'
 import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
 import { ChallengeProgress } from './ChallengeProgress'
 
@@ -18,7 +17,6 @@ export const ChallengeFooter = () => {
   const navigateToTask = useNavigateToTask()
   const { challenge, hasOpenReport, user } = useBrowsedChallengeContext()
   const { challengeFooterExtensions } = usePluginContext()
-  const { showMap, setShowMap } = useMapToggle()
   const { openReportHistory } = useChallengeModals()
   const { t } = useIntl()
 
@@ -154,25 +152,12 @@ export const ChallengeFooter = () => {
   const FooterExtension = challengeFooterExtensions[0]?.component
 
   return (
-    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white px-4 py-4 dark:border-slate-700/50 dark:bg-slate-800">
+    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white p-3 md:p-4 dark:border-slate-700/50 dark:bg-slate-800">
       {FooterExtension ? (
         <FooterExtension challenge={challenge} user={user} mapContent={mapContent} />
       ) : (
         mapContent
       )}
-      <div className="mt-4 md:hidden">
-        <Button
-          onClick={() => setShowMap(!showMap)}
-          variant="outline"
-          size="lg"
-          className="w-full gap-2 rounded-full transition-all hover:bg-zinc-100 dark:hover:bg-slate-800"
-        >
-          <MapIcon className="size-5" />
-          {showMap
-            ? t({ id: 'browsedChallengePage.footer.hideMap', defaultMessage: 'Hide Map' })
-            : t({ id: 'browsedChallengePage.footer.showMap', defaultMessage: 'Show Map' })}
-        </Button>
-      </div>
     </div>
   )
 }

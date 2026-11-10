@@ -1,5 +1,14 @@
 import { Link } from '@tanstack/react-router'
-import { BookOpen, FolderOpen, MoreHorizontal, Pencil, Share2, Star, X } from 'lucide-react'
+import {
+  BookOpen,
+  FolderOpen,
+  Map as MapIcon,
+  MoreHorizontal,
+  Pencil,
+  Share2,
+  Star,
+  X,
+} from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
@@ -18,6 +27,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
+import { useMapToggle } from '@/contexts/MapToggleContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import { canManageChallenge } from '@/lib/challengePermissions'
@@ -60,6 +71,8 @@ export const TaskInfoHeader = ({
   onClose?: () => void
 }) => {
   const { t } = useIntl()
+  const isDesktop = useIsDesktopLayoutContext()
+  const { setShowMap } = useMapToggle()
   const { challenge } = useChallengeContext()
   const { isAuthenticated, user } = useAuthContext()
   const { isTaskEditableByPlugins } = usePluginContext()
@@ -271,6 +284,17 @@ export const TaskInfoHeader = ({
       <div className="pt-3 empty:hidden">
         <BundleActions task={task} />
       </div>
+
+      {relation === 'primary' && !isDesktop && (
+        <Button
+          variant="outline"
+          className="mt-3 w-full gap-2 rounded-full"
+          onClick={() => setShowMap(true)}
+        >
+          <MapIcon className="size-4" />
+          {t({ id: 'browsedChallengePage.footer.showMap', defaultMessage: 'Show Map' })}
+        </Button>
+      )}
     </div>
   )
 }

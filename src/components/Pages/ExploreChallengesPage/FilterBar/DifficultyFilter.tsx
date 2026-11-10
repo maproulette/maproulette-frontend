@@ -16,12 +16,12 @@ export const DifficultyFilter = () => {
   const { t } = useIntl()
   const { difficulty, setDifficulty } = useExploreChallengesSearchContext()
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
       <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
         {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
       </Label>
       <Select value={difficulty} onValueChange={(value) => setDifficulty(value as DifficultyLevel)}>
-        <SelectTrigger className="h-9 w-24">
+        <SelectTrigger className="h-9 w-full md:w-24">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

@@ -14,7 +14,7 @@ export const SortByFilter = () => {
   const { t } = useIntl()
   const { sortBy, setSortBy } = useExploreChallengesSearchContext()
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
       <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
         {t({ id: 'exploreChallenges.filterBar.sortBy.label', defaultMessage: 'Sort by' })}
       </Label>
@@ -22,7 +22,7 @@ export const SortByFilter = () => {
         value={sortBy}
         onValueChange={(value) => setSortBy(value as ExtendedFindParamsSortBy)}
       >
-        <SelectTrigger className="h-9 w-32">
+        <SelectTrigger className="h-9 w-full md:w-32">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
