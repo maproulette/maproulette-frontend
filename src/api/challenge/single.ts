@@ -445,15 +445,19 @@ export const challengeSingle = {
     })
   },
 
-  useRemoveChallengeKeywords: () =>
-    useMutation({
+  useRemoveChallengeKeywords: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
       mutationFn: ({ challengeId, keywords }: { challengeId: number; keywords: string[] }) =>
         apiRequest
           .delete(`api/v2/challenge/${challengeId}/tags`, {
             searchParams: { tags: keywords.join(',') },
           })
           .text(),
-    }),
+      onSuccess: (_data, { challengeId }) =>
+        queryClient.invalidateQueries({ queryKey: ['challenge', 'tags', challengeId] }),
+    })
+  },
 
   useUpdateChallenge: () => {
     const queryClient = useQueryClient()

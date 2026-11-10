@@ -93,7 +93,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                 {
                   id: 'dashboard.levelModal.pointsToNextLevel',
                   defaultMessage:
-                    '{points, plural, one {# more point} other {# more points}} to next level',
+                    '{points, plural, one {# more point to next level} other {# more points to next level}}',
                 },
                 { points: pointsNeededForLevel - pointsIntoLevel }
               )}
@@ -127,7 +127,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                           {
                             id: 'dashboard.levelModal.pointsToUnlock',
                             defaultMessage:
-                              '{points, plural, one {# point} other {# points}} to unlock',
+                              '{points, plural, one {# point to unlock} other {# points to unlock}}',
                           },
                           { points: milestone.requiredScore - currentScore }
                         )}
@@ -184,7 +184,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                         {
                           id: 'dashboard.levelModal.pointsRequired',
                           defaultMessage:
-                            '{points, plural, one {# point} other {# points}} required',
+                            '{points, plural, one {# point required} other {# points required}}',
                         },
                         { points: milestone.requiredScore }
                       )}
@@ -195,7 +195,7 @@ export const LevelModal = ({ open, onOpenChange, currentLevel, currentScore }: L
                           {
                             id: 'dashboard.levelModal.yourScore',
                             defaultMessage:
-                              'Your score: {points, plural, one {# point} other {# points}}',
+                              '{points, plural, one {Your score: # point} other {Your score: # points}}',
                           },
                           { points: currentScore }
                         )}

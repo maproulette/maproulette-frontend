@@ -93,7 +93,7 @@ export const TaskActionModal = ({
     { value: 1, label: t({ id: 'common.fixed', defaultMessage: 'Fixed' }) },
     {
       value: 2,
-      label: t({ id: 'common.falsePositive', defaultMessage: 'False Positive' }),
+      label: t({ id: 'common.notAnIssue', defaultMessage: 'Not an Issue' }),
     },
     { value: 3, label: t({ id: 'common.skipped', defaultMessage: 'Skipped' }) },
     {
@@ -219,13 +219,11 @@ export const TaskActionModal = ({
               bundleId: resolvedBundleId,
               primaryTaskId: task.id,
               commentText: comment.trim(),
-              actionId: newStatus,
             })
           } else {
             await addTaskCommentMutation.mutateAsync({
               taskId: task.id,
               commentText: comment.trim(),
-              actionId: newStatus,
             })
           }
         } catch (error) {
@@ -388,7 +386,7 @@ export const TaskActionModal = ({
             <DialogDescription>
               {t({
                 id: 'taskEditPage.taskActionModal.description',
-                defaultMessage: 'Update the task status and optionally add a comment or tags',
+                defaultMessage: 'Update the task status and optionally add a comment',
               })}
             </DialogDescription>
           </DialogHeader>

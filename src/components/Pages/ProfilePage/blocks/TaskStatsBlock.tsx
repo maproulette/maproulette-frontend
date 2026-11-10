@@ -4,8 +4,10 @@ import { DigitDisplay } from '@/components/shared/DigitDisplay'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useIntl } from '@/i18n'
-import { getStatusLabel } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import { useProfilePageContext } from '../contexts/ProfilePageContext'
+
+const COUNTED_STATUSES = ['fixed', 'falsePositive', 'alreadyFixed', 'tooHard', 'skipped'] as const
 
 export const TaskStatsBlock = () => {
   const { t, formatNumber } = useIntl()
@@ -39,20 +41,28 @@ export const TaskStatsBlock = () => {
                   defaultMessage: 'Total completed',
                 })}
               </div>
-              <DigitDisplay value={data.total ?? 0} size="lg" />
+              <DigitDisplay
+                value={data.tasks?.total ?? 0}
+                size="lg"
+                ariaLabel={t(
+                  {
+                    id: 'profilePage.taskStats.totalCompletedValue',
+                    defaultMessage: '{count, plural, one {# task} other {# tasks}}',
+                  },
+                  { count: data.tasks?.total ?? 0 }
+                )}
+              />
             </div>
-            {data.tasks && Object.keys(data.tasks).length > 0 && (
+            {data.tasks && (
               <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                {Object.entries(data.tasks).map(([status, count]) => (
+                {COUNTED_STATUSES.map((status) => (
                   <div key={status} className="flex justify-between">
                     <dt className="text-zinc-600 dark:text-slate-400">
-                      {getStatusLabel(t, Number(status)) ??
-                        t(
-                          { id: 'common.statusWithStatus', defaultMessage: 'Status {status}' },
-                          { status }
-                        )}
+                      {getStatusLabel(t, STATUS_KEY_TO_ID[status])}
                     </dt>
-                    <dd className="font-medium font-mono tabular-nums">{formatNumber(count)}</dd>
+                    <dd className="font-medium font-mono tabular-nums">
+                      {formatNumber(data.tasks?.[status] ?? 0)}
+                    </dd>
                   </div>
                 ))}
               </dl>

@@ -20,7 +20,7 @@ export const LevelUpContent = ({ level, score }: Props) => {
             {
               id: 'congratulateModal.levelUp.description',
               defaultMessage:
-                "Welcome to level {level}. You've reached {score, plural, one {# point} other {# points}}.",
+                "{score, plural, one {Welcome to level {level}. You've reached # point.} other {Welcome to level {level}. You've reached # points.}}",
             },
             { level, score }
           )}

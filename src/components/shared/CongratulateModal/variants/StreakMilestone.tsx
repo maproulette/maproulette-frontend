@@ -19,7 +19,7 @@ export const StreakMilestoneContent = ({ count }: Props) => {
             {
               id: 'congratulateModal.streak.description',
               defaultMessage:
-                '{count, plural, one {# task} other {# tasks}} in a row — keep it going.',
+                '{count, plural, one {# task in a row — keep it going.} other {# tasks in a row — keep it going.}}',
             },
             { count }
           )}

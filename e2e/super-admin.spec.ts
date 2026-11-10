@@ -29,7 +29,7 @@ test('the super-admin users page lists the real authenticated user from the back
   await expect(userRow.getByText(`ID: ${currentUser.id}`)).toBeVisible()
   await expect(userRow.getByText('super admin')).toBeVisible()
 
-  const searchInput = page.getByPlaceholder('Search users by name or email...')
+  const searchInput = page.getByPlaceholder('Search this page by name or email...')
 
   // Filtering by the real display name keeps the row visible.
   await searchInput.fill(currentUser.osmProfile.displayName)
@@ -38,5 +38,5 @@ test('the super-admin users page lists the real authenticated user from the back
   // An unmatched search filters the row out and shows the empty state.
   await searchInput.fill('no-such-user-xyz-123')
   await expect(userRow).not.toBeVisible()
-  await expect(page.getByText('No users found')).toBeVisible({ timeout: 15_000 })
+  await expect(page.getByText('No matching users on this page')).toBeVisible({ timeout: 15_000 })
 })

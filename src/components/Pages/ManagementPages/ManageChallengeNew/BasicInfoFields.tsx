@@ -145,7 +145,7 @@ export const BasicInfoFields = ({ namePlaceholder }: BasicInfoFieldsProps) => {
             <FormLabel>{t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}</FormLabel>
             <Select
               onValueChange={(value) => field.onChange(Number(value))}
-              defaultValue={field.value?.toString()}
+              value={field.value?.toString()}
             >
               <FormControl>
                 <SelectTrigger>

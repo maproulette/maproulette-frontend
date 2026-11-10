@@ -9,7 +9,7 @@ export const makeTaskFormSchema = (t: TranslateFn) =>
         {
           id: 'manageTaskEdit.form.nameTooShort',
           defaultMessage:
-            'Name must be at least {min, plural, one {# character} other {# characters}}',
+            '{min, plural, one {Name must be at least # character} other {Name must be at least # characters}}',
         },
         { min: 3 }
       )

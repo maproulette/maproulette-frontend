@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useChallengeFormContext } from '@/contexts/ChallengeFormContext'
 import { useIntl } from '@/i18n'
-import { getErrorMessage } from '@/lib/apiError'
+import { getErrorMessage, isConflictError } from '@/lib/apiError'
 import { flattenFieldErrors } from '@/lib/formErrors'
 import { logger } from '@/lib/logger'
 import { AgreementSection } from './AgreementSection'
@@ -30,15 +30,6 @@ import { TaskDataSection } from './TaskDataSection'
 import { TaskFieldsSection } from './TaskFieldsSection'
 
 export type { ChallengeFormValues } from './challengeFormSchema'
-
-// The backend rejects a duplicate challenge name with a 400 whose body reads
-// "Challenge with name X already exists in the database". That one is about a
-// specific field, so it's worth pinning to the name input rather than leaving it
-// as an anonymous form-level failure.
-const isNameConflict = (message: string) => {
-  const lowered = message.toLowerCase()
-  return lowered.includes('already exists') && lowered.includes('name')
-}
 
 export const ChallengeForm = () => {
   const { t } = useIntl()
@@ -108,8 +99,18 @@ export const ChallengeForm = () => {
           defaultMessage: 'Failed to save challenge. Please try again.',
         })
       )
-      if (isNameConflict(errorMessage)) {
-        form.setError('name', { type: 'server', message: errorMessage }, { shouldFocus: true })
+      if (isConflictError(error)) {
+        form.setError(
+          'name',
+          {
+            type: 'server',
+            message: t({
+              id: 'manageChallengeNew.challengeForm.nameTaken',
+              defaultMessage: 'A challenge with this name already exists in this project',
+            }),
+          },
+          { shouldFocus: true }
+        )
       }
       form.setError('root.serverError', { type: 'server', message: errorMessage })
       toast.error(errorMessage)
@@ -199,7 +200,7 @@ export const ChallengeForm = () => {
                     {
                       id: 'manageChallengeNew.challengeForm.fieldErrorsTitle',
                       defaultMessage:
-                        '{count, plural, one {# field needs} other {# fields need}} attention',
+                        '{count, plural, one {# field needs attention} other {# fields need attention}}',
                     },
                     { count: fieldErrors.length }
                   )}

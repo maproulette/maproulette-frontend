@@ -168,30 +168,14 @@ export const taskSingle = {
   useSkipTask: () => {
     const queryClient = useQueryClient()
     return useMutation({
-      mutationFn: async (taskId: number) => {
-        const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
-        await apiRequest.post(`api/v2/task/${taskId}/skip`).text()
-        return { taskId, oldStatus: cached?.status ?? null, parent: cached?.parent }
-      },
-      onSuccess: ({ taskId, oldStatus, parent }) => {
-        // Skip sets status to 3 (Skipped); patch the cached task instead of refetching.
-        const cached = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
-        if (cached) {
-          queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
-            ...cached,
-            status: 3,
-            lockedBy: null,
-            lockBundledTasks: [],
-          })
-        }
+      mutationFn: (taskId: number) => apiRequest.post(`api/v2/task/${taskId}/skip`).text(),
+      onSuccess: (_data, taskId) => {
+        queryClient.setQueryData<TaskGetResponse>(
+          ['task', taskId],
+          (cached) => cached && { ...cached, lockedBy: null, lockBundledTasks: [] }
+        )
         queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
         invalidateLockedTasks(queryClient)
-        if (parent) {
-          patchChallengeTaskMarker(queryClient, parent, taskId, { status: 3 })
-          if (oldStatus !== 3) {
-            invalidateChallengeAggregates(queryClient, parent)
-          }
-        }
       },
     })
   },

@@ -105,6 +105,7 @@ export const MapControls = ({
                         size="icon"
                         disabled={!mapLoaded}
                         className={mapButtonClass}
+                        aria-label={t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
                       >
                         <Layers className="h-4 w-4" />
                       </Button>

@@ -85,7 +85,7 @@ export const ActionsModal = () => {
                     {
                       id: 'browsedChallengePage.challengeModals.actions.completedOf',
                       defaultMessage:
-                        '{completed, number} of {total, plural, one {# task} other {# tasks}}',
+                        '{total, plural, one {{completed, number} of # task} other {{completed, number} of # tasks}}',
                     },
                     { completed, total }
                   )}
