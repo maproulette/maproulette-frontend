@@ -1,6 +1,20 @@
 import { execFileSync } from 'node:child_process'
 import { createHash, createHmac, randomUUID } from 'node:crypto'
-import { type APIRequest, type APIRequestContext, test as base, type Page } from '@playwright/test'
+import {
+  type APIRequest,
+  type APIRequestContext,
+  type APIResponse,
+  type Browser,
+  type BrowserContext,
+  test as base,
+  type Page,
+} from '@playwright/test'
+import type { Challenge } from '@/types/Challenge'
+import type { components } from '@/types/openApiTypes'
+import type { Project } from '@/types/Project'
+import type { Task } from '@/types/Task'
+import type { Team } from '@/types/Team'
+import type { UserWhoamiResponse } from '@/types/User'
 
 // Where the test stack's backend is listening. Overridable so the stack can sit
 // beside a local development backend on 9000 rather than fighting it for the
@@ -69,7 +83,7 @@ function storageStateFor(user: SessionUser) {
   }
 }
 
-function superUser(): SessionUser {
+export function superUser(): SessionUser {
   const id = Number(process.env.E2E_SUPER_USER_ID)
   if (!Number.isInteger(id)) {
     throw new Error('E2E_SUPER_USER_ID is not set; e2e/global-setup.ts should have set it')
@@ -86,8 +100,22 @@ export function newSessionRequest(api: APIRequest, user: SessionUser) {
   })
 }
 
-const uniqueName = (prefix: string) =>
+export const uniqueName = (prefix: string) =>
   `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`
+
+export async function expectOk(response: APIResponse, what: string): Promise<APIResponse> {
+  if (!response.ok()) {
+    throw new Error(`${what} failed: ${response.status()} ${await response.text()}`)
+  }
+  return response
+}
+
+const storedProjectId = (project: Project): number => {
+  if (project.id === undefined) {
+    throw new Error(`The backend returned project ${project.name} without an id`)
+  }
+  return project.id
+}
 
 export interface TestProject {
   id: number
@@ -112,24 +140,21 @@ export interface TestTeam {
   name: string
 }
 
-async function createProject(request: APIRequestContext, name: string): Promise<TestProject> {
-  const response = await request.post(`${BACKEND_URL}/api/v2/project`, {
-    headers: { 'Content-Type': 'application/json' },
-    data: {
-      name,
-      displayName: name,
-      description: 'E2E test project',
-      enabled: true,
-    },
-  })
-  if (!response.ok()) {
-    throw new Error(`Failed to create project: ${response.status()} ${await response.text()}`)
-  }
-  const body = (await response.json()) as { id: number }
-  return { id: body.id, name }
+export async function createProject(
+  request: APIRequestContext,
+  { name = uniqueName('e2e-project'), ...fields }: { name?: string; [field: string]: unknown } = {}
+): Promise<TestProject> {
+  const response = await expectOk(
+    await request.post(`${BACKEND_URL}/api/v2/project`, {
+      data: { name, displayName: name, description: 'E2E test project', enabled: true, ...fields },
+    }),
+    'Creating a project'
+  )
+  const body = (await response.json()) as Project
+  return { id: storedProjectId(body), name }
 }
 
-async function deleteProject(request: APIRequestContext, id: number): Promise<void> {
+export async function deleteProject(request: APIRequestContext, id: number): Promise<void> {
   try {
     const response = await request.delete(`${BACKEND_URL}/api/v2/project/${id}?immediate=true`)
     if (!response.ok()) {
@@ -164,7 +189,7 @@ async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
       console.warn(`Lock teardown could not identify the acting user: ${whoami.status()}`)
       return
     }
-    const { id: userId } = (await whoami.json()) as { id: number }
+    const { id: userId } = (await whoami.json()) as UserWhoamiResponse
 
     const locked = await request.get(`${BACKEND_URL}/api/v2/user/${userId}/lockedTasks`)
     if (!locked.ok()) {
@@ -172,7 +197,7 @@ async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
       return
     }
 
-    for (const task of (await locked.json()) as { id: number }[]) {
+    for (const task of (await locked.json()) as components['schemas']['org.maproulette.framework.model.LockedTaskData'][]) {
       const released = await request.get(`${BACKEND_URL}/api/v2/task/${task.id}/release`)
       if (!released.ok()) {
         console.warn(`Task ${task.id} lock teardown returned ${released.status()}`)
@@ -188,64 +213,92 @@ async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
 // backend image (a server-side Scala collections bug silently fails async
 // task import). Creating the challenge shell and its tasks directly via their
 // own JSON-body endpoints (below) sidesteps that entirely and is immediate.
-async function createChallenge(
+export async function createChallenge(
   request: APIRequestContext,
   projectId: number,
-  name: string
+  {
+    name = uniqueName('e2e-challenge'),
+    ...fields
+  }: { name?: string; [field: string]: unknown } = {}
 ): Promise<TestChallenge> {
-  const response = await request.post(`${BACKEND_URL}/api/v2/challenge`, {
-    headers: { 'Content-Type': 'application/json' },
-    data: {
-      parent: projectId,
-      name,
-      description: 'E2E test challenge',
-      instruction: 'Fix the identified issue.',
-      difficulty: 2,
-      checkinComment: 'E2E test changeset #maproulette',
-      checkinSource: 'Bing',
-      enabled: true,
-      featured: false,
-      overpassQL: '',
-      overpassTargetType: '',
-    },
-  })
-  if (!response.ok()) {
-    throw new Error(`Failed to create challenge: ${response.status()} ${await response.text()}`)
-  }
-  const body = (await response.json()) as { id: number }
-  return { id: body.id, name, projectId }
+  const response = await expectOk(
+    await request.post(`${BACKEND_URL}/api/v2/challenge`, {
+      data: {
+        parent: projectId,
+        name,
+        description: 'E2E test challenge',
+        instruction: 'Fix the identified issue.',
+        difficulty: 2,
+        checkinComment: 'E2E test changeset #maproulette',
+        checkinSource: 'Bing',
+        enabled: true,
+        featured: false,
+        overpassQL: '',
+        overpassTargetType: '',
+        ...fields,
+      },
+    }),
+    'Creating a challenge'
+  )
+  const body = (await response.json()) as Challenge
+  return { id: body.id, name: body.name, projectId }
 }
 
-async function createTask(
+export async function challengeTasks(
+  request: APIRequestContext,
+  challengeId: number
+): Promise<Task[]> {
+  const response = await expectOk(
+    await request.get(`${BACKEND_URL}/api/v2/challenge/${challengeId}/tasks?limit=-1`),
+    `Listing challenge ${challengeId} tasks`
+  )
+  return ((await response.json()) as Task[]).sort((a, b) => a.id - b.id)
+}
+
+export const TASK_POINT: [number, number] = [-95.454772, 37.6866588]
+
+export interface TaskFields {
+  name?: string
+  coordinates?: [number, number]
+  properties?: Record<string, unknown>
+  [field: string]: unknown
+}
+
+export async function createTask(
   request: APIRequestContext,
   challengeId: number,
-  name: string,
-  coordinates: [number, number] = [-95.454772, 37.6866588]
+  {
+    name = uniqueName('e2e-task'),
+    coordinates = TASK_POINT,
+    properties = {},
+    ...fields
+  }: TaskFields = {}
 ): Promise<TestTask> {
-  const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
-    headers: { 'Content-Type': 'application/json' },
-    data: {
-      name,
-      parent: challengeId,
-      instruction: 'Fix this point.',
-      geometries: {
-        type: 'FeatureCollection',
-        features: [{ type: 'Feature', geometry: { type: 'Point', coordinates }, properties: {} }],
+  const response = await expectOk(
+    await request.post(`${BACKEND_URL}/api/v2/task`, {
+      data: {
+        name,
+        parent: challengeId,
+        geometries: {
+          type: 'FeatureCollection',
+          features: [{ type: 'Feature', geometry: { type: 'Point', coordinates }, properties }],
+        },
+        ...fields,
       },
-      priority: 0,
-    },
-  })
-  if (!response.ok()) {
-    throw new Error(`Failed to create task: ${response.status()} ${await response.text()}`)
-  }
-  const body = (await response.json()) as { id: number }
+    }),
+    'Creating a task'
+  )
+  const body = (await response.json()) as Task
   return { id: body.id, name, challengeId, coordinates }
 }
 
 // Teams are their own top-level resource (not owned by a project), so unlike
 // challenges and tasks they don't get cleaned up by a cascading project
 // delete and need their own teardown below.
-async function createTeam(request: APIRequestContext, name: string): Promise<TestTeam> {
+export async function createTeam(
+  request: APIRequestContext,
+  name = uniqueName('e2e-team')
+): Promise<TestTeam> {
   const response = await request.post(`${BACKEND_URL}/api/v2/team`, {
     headers: { 'Content-Type': 'application/json' },
     // `id` and `groupType` are required by the backend's Group writer even on
@@ -256,11 +309,11 @@ async function createTeam(request: APIRequestContext, name: string): Promise<Tes
   if (!response.ok()) {
     throw new Error(`Failed to create team: ${response.status()} ${await response.text()}`)
   }
-  const body = (await response.json()) as { id: number }
+  const body = (await response.json()) as Team
   return { id: body.id, name }
 }
 
-async function deleteTeam(request: APIRequestContext, id: number): Promise<void> {
+export async function deleteTeam(request: APIRequestContext, id: number): Promise<void> {
   try {
     const response = await request.delete(`${BACKEND_URL}/api/v2/team/${id}`)
     if (!response.ok()) {
@@ -287,6 +340,18 @@ export async function grantTeamProjectRole(
   if (!response.ok()) {
     throw new Error(`Failed to add team to project: ${response.status()} ${await response.text()}`)
   }
+}
+
+export async function projectTeamIds(
+  request: APIRequestContext,
+  projectId: number
+): Promise<number[]> {
+  const response = await expectOk(
+    await request.get(`${BACKEND_URL}/api/v2/teams/projectManagers/${projectId}`),
+    `Listing project ${projectId} teams`
+  )
+  const body = (await response.json()) as Array<{ team: { id: number } }>
+  return body.map((entry) => entry.team.id)
 }
 
 /**
@@ -413,37 +478,20 @@ function tagFixWork(elementId: string, setTags: Record<string, string>, unsetTag
   }
 }
 
-async function createTagFixTask(
-  request: APIRequestContext,
-  challengeId: number,
-  name: string
-): Promise<TestTask> {
-  const coordinates: [number, number] = [-111.9003158, 40.7630373]
-  const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
-    headers: { 'Content-Type': 'application/json' },
-    data: {
-      name,
-      parent: challengeId,
-      instruction: 'Confirm this bakery serves vegetarian food.',
-      geometries: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates },
-            properties: TAG_FIX_PROPERTIES,
-          },
-        ],
-      },
-      priority: 0,
-      cooperativeWork: tagFixWork(TAG_FIX_ELEMENT_ID, { 'diet:vegetarian': 'yes' }),
-    },
-  })
-  if (!response.ok()) {
-    throw new Error(`Failed to create tag-fix task: ${response.status()} ${await response.text()}`)
-  }
-  const body = (await response.json()) as { id: number }
-  return { id: body.id, name, challengeId, coordinates }
+export const TAG_FIX_POINT: [number, number] = [-111.9003158, 40.7630373]
+
+const MAP_RESOURCE_HOSTS =
+  /^https:\/\/([a-z0-9-]+\.)*(openstreetmap\.us|openmaptiles\.github\.io|tile\.openstreetmap\.org|arcgisonline\.com|arcgis\.com|virtualearth\.net)\//
+
+async function blockMapResources(context: BrowserContext): Promise<void> {
+  await context.route(MAP_RESOURCE_HOSTS, (route) => route.abort())
+}
+
+/** A page in its own browser context, logged in as `user`. Close it with page.context().close(). */
+export async function pageAs(browser: Browser, user: SessionUser): Promise<Page> {
+  const context = await browser.newContext({ storageState: storageStateFor(user) })
+  await blockMapResources(context)
+  return context.newPage()
 }
 
 export interface TestActor {
@@ -465,6 +513,11 @@ export const test = base.extend<{
   reviewerRequest: APIRequestContext
   reviewerPage: Page
 }>({
+  context: async ({ context }, use) => {
+    await blockMapResources(context)
+    await use(context)
+  },
+
   // Every browser page and request runs as the super user unless a test asks
   // for someone else.
   storageState: async ({ playwright: _playwright }, use) => {
@@ -478,7 +531,7 @@ export const test = base.extend<{
   },
 
   project: async ({ request }, use) => {
-    const project = await createProject(request, uniqueName('e2e-project'))
+    const project = await createProject(request)
     await use(project)
     await releaseHeldLocks(request)
     await deleteProject(request, project.id)
@@ -488,12 +541,15 @@ export const test = base.extend<{
   // Deleting `project` (above) cascades to its challenges and tasks on the
   // backend, so neither fixture below needs its own teardown.
   challenge: async ({ request, project }, use) => {
-    const challenge = await createChallenge(request, project.id, uniqueName('e2e-challenge'))
+    const challenge = await createChallenge(request, project.id)
     await use(challenge)
   },
 
   task: async ({ request, challenge }, use) => {
-    const task = await createTask(request, challenge.id, uniqueName('e2e-task'))
+    const task = await createTask(request, challenge.id, {
+      instruction: 'Fix this point.',
+      priority: 0,
+    })
     await use(task)
   },
 
@@ -501,17 +557,17 @@ export const test = base.extend<{
   // initial bounds-fit keeps both on screen at once (for tests that need more
   // than one task, e.g. bundling).
   secondTask: async ({ request, challenge }, use) => {
-    const secondTask = await createTask(
-      request,
-      challenge.id,
-      uniqueName('e2e-task-2'),
-      [-95.452772, 37.6886588]
-    )
+    const secondTask = await createTask(request, challenge.id, {
+      name: uniqueName('e2e-task-2'),
+      coordinates: [-95.452772, 37.6886588],
+      instruction: 'Fix this point.',
+      priority: 0,
+    })
     await use(secondTask)
   },
 
   team: async ({ request }, use) => {
-    const team = await createTeam(request, uniqueName('e2e-team'))
+    const team = await createTeam(request)
     await use(team)
     await deleteTeam(request, team.id)
   },
@@ -547,14 +603,21 @@ export const test = base.extend<{
   // rather than taking it on the challenge itself. So the task comes first and
   // the challenge fixture is what waits on it.
   tagFixTask: async ({ request, project }, use) => {
-    const challenge = await createChallenge(request, project.id, uniqueName('e2e-tagfix'))
-    const task = await createTagFixTask(request, challenge.id, uniqueName('e2e-tagfix-task'))
+    const challenge = await createChallenge(request, project.id, { name: uniqueName('e2e-tagfix') })
+    const task = await createTask(request, challenge.id, {
+      name: uniqueName('e2e-tagfix-task'),
+      coordinates: TAG_FIX_POINT,
+      properties: TAG_FIX_PROPERTIES,
+      instruction: 'Confirm this bakery serves vegetarian food.',
+      priority: 0,
+      cooperativeWork: tagFixWork(TAG_FIX_ELEMENT_ID, { 'diet:vegetarian': 'yes' }),
+    })
     await use(task)
   },
 
   cooperativeChallenge: async ({ request, tagFixTask }, use) => {
     const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${tagFixTask.challengeId}`)
-    const body = (await response.json()) as { id: number; name: string; parent: number }
+    const body = (await response.json()) as Challenge
     await use({ id: body.id, name: body.name, projectId: body.parent })
   },
 
@@ -576,10 +639,9 @@ export const test = base.extend<{
   },
 
   reviewerPage: async ({ browser, reviewer }, use) => {
-    const context = await browser.newContext({ storageState: storageStateFor(reviewer) })
-    const page = await context.newPage()
+    const page = await pageAs(browser, reviewer)
     await use(page)
-    await context.close()
+    await page.context().close()
   },
 })
 

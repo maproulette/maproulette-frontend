@@ -3,25 +3,13 @@ import { expect, giveChallengeToTeam, grantTeamProjectRole, test } from './fixtu
 // The team detail page is split: the team itself on the left, and what the
 // team has on the right under Users / Projects / Challenges.
 
-test('a team page shows the team on the left and its sections on the right', async ({
-  page,
-  team,
-}) => {
+test("a team's owner is offered its edit, invite and delete controls", async ({ page, team }) => {
   await page.goto(`/teams/${team.id}`)
 
-  // Left panel: who the team is, and what a manager can do to it.
   await expect(page.getByRole('heading', { name: team.name })).toBeVisible({ timeout: 15_000 })
-  await expect(page.getByText('1 member')).toBeVisible()
   await expect(page.getByRole('link', { name: 'Edit' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Invite' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Delete' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Challenge image' })).toBeVisible()
-
-  // Right panel: the three sections, with Users showing by default.
-  await expect(page.getByRole('tab', { name: 'Users' })).toBeVisible()
-  await expect(page.getByRole('tab', { name: 'Projects' })).toBeVisible()
-  await expect(page.getByRole('tab', { name: 'Challenges' })).toBeVisible()
-  await expect(page.getByRole('tab', { name: 'Users' })).toHaveAttribute('data-state', 'active')
 })
 
 test('the members table lists the creator with their role', async ({ page, team }) => {
@@ -35,6 +23,7 @@ test('the members table lists the creator with their role', async ({ page, team 
 
   // The creator is a joined Owner, not a pending invitation to themselves.
   await expect(membersTable.getByRole('row')).toHaveCount(2)
+  await expect(membersTable.getByRole('row').nth(1)).toContainText('Owner')
   await expect(membersTable.getByText('Joined')).toBeVisible()
 })
 

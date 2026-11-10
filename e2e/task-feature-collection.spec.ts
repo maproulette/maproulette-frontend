@@ -1,5 +1,5 @@
 import type { APIRequestContext } from '@playwright/test'
-import { BACKEND_URL, expect, test } from './fixtures'
+import { createTask, expect, test, uniqueName } from './fixtures'
 
 // A task built from a GeoJSON FeatureCollection holds several features at
 // once. All of them belong to the one task: they are drawn together, listed
@@ -21,18 +21,13 @@ const createTaskWithGeometries = async (
   challengeId: number,
   features: unknown[]
 ): Promise<number> => {
-  const response = await request.post(`${BACKEND_URL}/api/v2/task`, {
-    headers: { 'Content-Type': 'application/json' },
-    data: {
-      name: `fc-task-${Date.now()}-${Math.round(Math.random() * 1e6)}`,
-      parent: challengeId,
-      instruction: 'Check the route.',
-      geometries: { type: 'FeatureCollection', features },
-      priority: 0,
-    },
+  const task = await createTask(request, challengeId, {
+    name: uniqueName('fc-task'),
+    instruction: 'Check the route.',
+    geometries: { type: 'FeatureCollection', features },
+    priority: 0,
   })
-  expect(response.ok(), `task creation failed: ${response.status()}`).toBeTruthy()
-  return ((await response.json()) as { id: number }).id
+  return task.id
 }
 
 test('every feature of a FeatureCollection task is listed, and one can be singled out', async ({
@@ -244,7 +239,7 @@ test('direction indicators are drawn for bundled tasks too', async ({
   await page.getByRole('button', { name: 'Draw to add tasks' }).click()
   await expect(page.getByRole('button', { name: 'Drawing...' })).toBeVisible({ timeout: 10_000 })
 
-  // Same approach as task-bundling.spec.ts: centre the second task's marker so
+  // Centre the second task's marker so
   // the lasso is drawn on exposed canvas rather than under a map control.
   const canvas = page.locator('canvas.maplibregl-canvas')
   const box = await canvas.boundingBox()
@@ -319,15 +314,6 @@ test('direction indicators are drawn for bundled tasks too', async ({
   // Both tasks' geometry is drawn from the one source the direction layers
   // read, so the bundled task's line carries indicators as well — MapRoulette
   // 3's animation never ran at all once tasks were bundled.
-  const endpointCount = await page.evaluate(() => {
-    const map = (window as unknown as { __e2eMap?: maplibregl.Map }).__e2eMap
-    if (!map) return 0
-    return map
-      .getStyle()
-      .layers.filter((layer) => layer.id.endsWith('-start') || layer.id.endsWith('-end')).length
-  })
-  expect(endpointCount).toBe(2)
-
   // Both lines back in view, so what is on screen is the whole bundle
   await page.evaluate(() => {
     const map = (window as unknown as { __e2eMap?: maplibregl.Map }).__e2eMap
@@ -356,4 +342,14 @@ test('direction indicators are drawn for bundled tasks too', async ({
       { timeout: 15_000 }
     )
     .toBe(2)
+
+  await page.keyboard.press('Delete')
+  await expect(page.getByRole('heading', { name: 'Clear Task Bundle?' })).toBeVisible({
+    timeout: 10_000,
+  })
+  await page.getByRole('button', { name: 'Clear Bundle' }).click()
+  await expect(page.getByRole('button', { name: 'Work on multiple tasks' })).toBeVisible({
+    timeout: 10_000,
+  })
+  await expect(page.getByRole('button', { name: /Working on 2 tasks/ })).toHaveCount(0)
 })

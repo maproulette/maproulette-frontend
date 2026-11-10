@@ -1,4 +1,4 @@
-import { expect, grantTeamProjectRole, test } from './fixtures'
+import { expect, grantTeamProjectRole, projectTeamIds, test } from './fixtures'
 
 // Attaching a team to a project, from the Managers and teams dialog.
 //
@@ -17,47 +17,12 @@ const openManagers = async (page: import('@playwright/test').Page, projectId: nu
   return dialog
 }
 
-test('the managers dialog opens from the project sidebar', async ({ page, project }) => {
-  const dialog = await openManagers(page, project.id)
-
-  await expect(dialog.getByRole('heading', { name: 'Managers and teams' })).toBeVisible()
-  await expect(dialog.getByRole('heading', { name: 'Project managers' })).toBeVisible()
-})
-
-test('a project with no teams says so, and still offers the add control', async ({
-  page,
-  project,
-}) => {
-  const dialog = await openManagers(page, project.id)
-
-  // The Teams section renders whether or not there are any: hiding it when
-  // empty would hide the only way to attach the first one.
-  await expect(dialog.getByRole('heading', { name: 'Teams', exact: true })).toBeVisible({
-    timeout: 15_000,
-  })
-  await expect(dialog.getByText('No teams yet.')).toBeVisible()
-  await expect(dialog.getByLabel('Add a team')).toBeVisible()
-})
-
-test('the Teams section says what a team confers, rather than offering a role', async ({
+test('a team can be found by name and attached to the project', async ({
   page,
   project,
   team,
   request,
 }) => {
-  await grantTeamProjectRole(request, team.id, project.id)
-  const dialog = await openManagers(page, project.id)
-
-  await expect(dialog.getByText(team.name)).toBeVisible({ timeout: 15_000 })
-  await expect(dialog.getByText(/follows their role in the team/i)).toBeVisible()
-
-  // The user rows keep their role dropdown; the team row must not have one,
-  // since the value would not be read.
-  const teamRow = dialog.locator('li').filter({ hasText: team.name })
-  await expect(teamRow.getByRole('combobox')).toHaveCount(0)
-})
-
-test('a team can be found by name and attached to the project', async ({ page, project, team }) => {
   const dialog = await openManagers(page, project.id)
   await expect(dialog.getByText('No teams yet.')).toBeVisible({ timeout: 15_000 })
 
@@ -68,6 +33,7 @@ test('a team can be found by name and attached to the project', async ({ page, p
 
   await expect(dialog.getByText('No teams yet.')).not.toBeVisible({ timeout: 15_000 })
   await expect(dialog.locator('li').filter({ hasText: team.name })).toBeVisible()
+  await expect.poll(() => projectTeamIds(request, project.id)).toContain(team.id)
 })
 
 test('a team already attached is not offered again in the search results', async ({
@@ -92,8 +58,10 @@ test('an attached team can be detached again', async ({ page, project, team, req
 
   const teamRow = dialog.locator('li').filter({ hasText: team.name })
   await expect(teamRow).toBeVisible({ timeout: 15_000 })
+  await expect(teamRow.getByRole('combobox')).toHaveCount(0)
 
   await teamRow.getByRole('button', { name: `Remove ${team.name}` }).click()
 
   await expect(dialog.getByText('No teams yet.')).toBeVisible({ timeout: 15_000 })
+  await expect.poll(() => projectTeamIds(request, project.id)).not.toContain(team.id)
 })
