@@ -35,8 +35,6 @@ export const TaskSelectionMap = ({
   const sourceId = useId()
   const layerId = useId()
 
-  // Track if we've already zoomed to fit initial tasks
-  const hasZoomedRef = useRef(false)
   const centeredTaskIdRef = useRef<number | null>(null)
 
   const [currentLng, currentLat] = currentTask.location.coordinates
@@ -73,7 +71,7 @@ export const TaskSelectionMap = ({
       })),
     }
   }, [nearbyTaskLocations, selectedTaskId])
-  
+
   const centerOnTasks = useCallback(() => {
     if (!mapRef.current || !mapLoaded) return
 
@@ -109,10 +107,10 @@ export const TaskSelectionMap = ({
   }, [mapLoaded, currentTask.id, currentLng, currentLat, centerOnTasks])
 
   const initialViewState = useMemo(() => {
-  if (nearbyTaskLocations.length === 0) {
-    return { longitude: currentLng, latitude: currentLat, zoom: 16 }
-  }
-  const bounds = new maplibregl.LngLatBounds([currentLng, currentLat], [currentLng, currentLat])
+    if (nearbyTaskLocations.length === 0) {
+      return { longitude: currentLng, latitude: currentLat, zoom: 16 }
+    }
+    const bounds = new maplibregl.LngLatBounds([currentLng, currentLat], [currentLng, currentLat])
     for (const loc of nearbyTaskLocations) bounds.extend([loc.lng, loc.lat])
     return { bounds, fitBoundsOptions: { padding: 40, maxZoom: 16 } }
   }, [])
@@ -206,6 +204,5 @@ export const TaskSelectionMap = ({
 type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
 
 export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
-
   return <TaskSelectionMap {...props} tasks={props.nearbyTasks} excludeCurrentBundle />
 }
