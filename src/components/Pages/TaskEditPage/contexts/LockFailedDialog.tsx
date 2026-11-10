@@ -78,7 +78,7 @@ export const LockFailedDialog = ({
             })}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="sm:flex-wrap sm:gap-2 sm:space-x-0">
+        <DialogFooter className="sm:flex-wrap">
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
             {t({ id: 'taskEditPage.lockFailedDialog.preview', defaultMessage: 'Preview Task' })}
           </Button>

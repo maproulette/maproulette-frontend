@@ -76,7 +76,7 @@ export const LockConflictDialog = ({ conflict, onOpenChange, onConfirm, busy }: 
             )}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="sm:flex-wrap sm:gap-2 sm:space-x-0">
+        <DialogFooter className="sm:flex-wrap">
           <Button variant="outline" onClick={handleGoBack} disabled={busy}>
             {t({
               id: 'taskEditPage.lockConflictDialog.goBack',
