@@ -1,3 +1,4 @@
+import { Map as MapIcon } from 'lucide-react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -18,7 +19,10 @@ import {
 import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
+import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
+import { useMapToggle } from '@/contexts/MapToggleContext'
 import { useIntl } from '@/i18n'
 import type { TaskMarker } from '@/types/Task'
 import { useChallengeContext } from './contexts/ChallengeContext'
@@ -54,6 +58,8 @@ const OsmIcon = ({ className }: { className?: string }) => (
 
 export const TaskMap = () => {
   const { t } = useIntl()
+  const isDesktop = useIsDesktopLayoutContext()
+  const { setShowMap } = useMapToggle()
   const mapId = useId()
   const exploreSourceId = useId()
   const exploreCirclesLayerId = useId()
@@ -222,7 +228,19 @@ export const TaskMap = () => {
 
       {/* Top-left inline controls: cluster toggle + multi-task panel + iD Editor */}
       <div className="absolute top-2 left-2 z-10 flex items-start gap-2">
-        <ClusterToggle clusteringEnabled={isClustered} onToggle={setIsClustered} inline />
+        <div className="flex flex-col items-start gap-2">
+          <ClusterToggle clusteringEnabled={isClustered} onToggle={setIsClustered} inline />
+          {!isDesktop && (
+            <Button
+              variant="outline"
+              onClick={() => setShowMap(false)}
+              className="h-10 gap-2 bg-white/95 shadow-sm backdrop-blur-sm dark:bg-slate-900/95"
+            >
+              <MapIcon className="size-4" />
+              {t({ id: 'browsedChallengePage.footer.hideMap', defaultMessage: 'Hide Map' })}
+            </Button>
+          )}
+        </div>
         {isLocked && !bundleEditsDisabled && isEditableStatus && <MultiTaskPanel />}
         {isLocked && (
           <button
