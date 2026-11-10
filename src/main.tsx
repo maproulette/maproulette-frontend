@@ -3,6 +3,7 @@ import { createRouter, ErrorComponent, RouterProvider } from '@tanstack/react-ro
 import { HTTPError } from 'ky'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
+import { LayoutProvider } from '@/contexts/LayoutContext'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { IntlProvider } from '@/i18n'
 
@@ -62,9 +63,11 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <IntlProvider>
         <ThemeProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-          </QueryClientProvider>
+          <LayoutProvider>
+            <QueryClientProvider client={queryClient}>
+              <RouterProvider router={router} />
+            </QueryClientProvider>
+          </LayoutProvider>
         </ThemeProvider>
       </IntlProvider>
     </StrictMode>
