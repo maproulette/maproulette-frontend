@@ -1,3 +1,8 @@
+import { SlidersHorizontal } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
+import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { useIntl } from '@/i18n'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 import { CategorizeFilter } from './CategorizeFilter'
@@ -28,8 +33,71 @@ import { WorkOnFilter } from './WorkOnFilter'
  */
 export const FilterBar = () => {
   const { t } = useIntl()
-  const { viewMode } = useExploreChallengesSearchContext()
+  const {
+    viewMode,
+    workOn,
+    difficulty,
+    selectedCategories,
+    global,
+    locationOsmType,
+    locationOsmId,
+  } = useExploreChallengesSearchContext()
+  const isDesktop = useIsDesktopLayoutContext()
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const showListFilters = viewMode !== 'grid-map'
+
+  if (!isDesktop) {
+    const hasLocation = locationOsmType !== undefined && locationOsmId !== undefined
+    const activeCount = showListFilters
+      ? [
+          hasLocation,
+          workOn !== 'Anything',
+          difficulty !== 'Any',
+          selectedCategories.length > 0,
+          global !== undefined,
+        ].filter(Boolean).length
+      : Number(hasLocation)
+
+    return (
+      <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" size="sm" aria-expanded={filtersOpen}>
+              <SlidersHorizontal className="size-3.5" />
+              {t(
+                {
+                  id: 'exploreChallenges.filterBar.filtersToggle',
+                  defaultMessage:
+                    '{count, plural, =0 {Filters} one {Filters (#)} other {Filters (#)}}',
+                },
+                { count: activeCount }
+              )}
+            </Button>
+          </CollapsibleTrigger>
+          <div className="ml-auto">
+            <ViewModeToggle />
+          </div>
+        </div>
+        <CollapsibleContent className="grid grid-cols-2 gap-3">
+          <div className="col-span-2">
+            <LocationSearchFilter />
+          </div>
+          <SortByFilter />
+          {showListFilters && (
+            <>
+              <WorkOnFilter />
+              <DifficultyFilter />
+              <CategorizeFilter />
+              <div className="col-span-2 flex items-center justify-between gap-3">
+                <GlobalToggle />
+                <ClearFiltersButton />
+              </div>
+            </>
+          )}
+        </CollapsibleContent>
+      </Collapsible>
+    )
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">

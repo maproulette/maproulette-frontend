@@ -457,6 +457,7 @@
   "exploreChallenges.filterBar.categorize.signIn": "You must sign in to add a keyword.",
   "exploreChallenges.filterBar.clearFilters": "Clear filters",
   "exploreChallenges.filterBar.difficulty.any": "Any",
+  "exploreChallenges.filterBar.filtersToggle": "{count, plural, =0 {Filters} one {Filters (#)} other {Filters (#)}}",
   "exploreChallenges.filterBar.location.clearAriaLabel": "Clear location",
   "exploreChallenges.filterBar.location.geometryLoadFailed": "Failed to load location geometry",
   "exploreChallenges.filterBar.location.loadFailed": "Failed to load location",
