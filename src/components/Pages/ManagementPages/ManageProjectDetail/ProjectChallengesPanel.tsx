@@ -8,6 +8,7 @@ import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { ChallengeCardActions } from './ChallengeCardActions'
+import { SelectAllChallengesCheckbox } from './ChallengeSelection'
 import { ChallengesTableView } from './ChallengesTableView'
 import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 
@@ -42,6 +43,7 @@ export const ProjectChallengesPanel = () => {
     <div className="flex h-full min-h-0 min-w-0 flex-col pl-2">
       <div className="shrink-0 pb-4">
         <div className="flex items-center gap-3 overflow-x-auto">
+          {viewMode === 'grid' && <SelectAllChallengesCheckbox />}
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}

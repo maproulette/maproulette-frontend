@@ -25,6 +25,7 @@ import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
+import { ChallengeSelectCheckbox } from './ChallengeSelection'
 
 interface ChallengeCardActionsProps {
   challenge: Challenge
@@ -56,6 +57,11 @@ export const ChallengeCardActions = ({
 
   return (
     <div className="flex items-center gap-1">
+      {challenge.id != null && (
+        <span className="flex h-8 w-8 items-center justify-center">
+          <ChallengeSelectCheckbox challengeId={challenge.id} challengeName={challenge.name} />
+        </span>
+      )}
       {challenge.id != null && (
         <Button
           variant="ghost"

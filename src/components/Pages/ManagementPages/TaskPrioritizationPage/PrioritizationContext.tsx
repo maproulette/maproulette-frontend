@@ -5,6 +5,8 @@ import { draftsEqual } from './prioritizationParsing'
 
 export type Tier = 'high' | 'medium' | 'low'
 
+export const TIER_ORDER: Tier[] = ['high', 'medium', 'low']
+
 export const TIER_TO_PRIORITY: Record<Tier, TaskPriorityValue> = {
   high: TaskPriority.HIGH,
   medium: TaskPriority.MEDIUM,

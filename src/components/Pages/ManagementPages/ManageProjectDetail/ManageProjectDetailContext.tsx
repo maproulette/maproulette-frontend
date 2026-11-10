@@ -9,6 +9,7 @@ import {
 import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useSetPageTitle } from '@/contexts/ChromeContext'
+import { useRowSelection } from '@/hooks/useRowSelection'
 import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 
@@ -35,6 +36,13 @@ export interface ManageProjectDetailContextType {
   setOnlyPinned: (value: boolean) => void
   viewMode: 'grid' | 'list'
   setViewMode: (mode: 'grid' | 'list') => void
+
+  // Selection state
+  selectedChallengeIds: Set<number>
+  toggleChallengeSelected: (challengeId: number) => void
+  setChallengesSelected: (challengeIds: number[], selected: boolean) => void
+  clearChallengeSelection: () => void
+  editSelectedChallenges: () => void
 
   // Modal state
   cloneChallenge: (challenge: { id: number; name: string } | null) => void
@@ -86,6 +94,12 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const [onlyArchived, setOnlyArchived] = useState(false)
   const [onlyPinned, setOnlyPinned] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const {
+    ids: selectedChallengeIds,
+    toggle: toggleChallengeSelected,
+    setMany: setChallengesSelected,
+    clear: clearChallengeSelection,
+  } = useRowSelection<number>()
 
   // API queries
   const { data: projectData, isLoading: isLoadingProject } = api.project.getProject(
@@ -255,6 +269,15 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
     [challenges]
   )
 
+  const editSelectedChallenges = useCallback(() => {
+    if (selectedChallengeIds.size === 0) return
+    navigate({
+      to: '/manage/project/$projectId/challenges/bulk-edit',
+      params: { projectId },
+      search: { challengeIds: Array.from(selectedChallengeIds) },
+    })
+  }, [navigate, projectId, selectedChallengeIds])
+
   // Reason: context value must be stable to prevent unnecessary consumer re-renders
   const value = useMemo<ManageProjectDetailContextType>(
     () => ({
@@ -277,6 +300,11 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       setOnlyPinned,
       viewMode,
       setViewMode,
+      selectedChallengeIds,
+      toggleChallengeSelected,
+      setChallengesSelected,
+      clearChallengeSelection,
+      editSelectedChallenges,
       cloneChallenge,
       rebuildModalChallenge,
       setRebuildModalChallenge,
@@ -311,6 +339,11 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
       onlyArchived,
       onlyPinned,
       viewMode,
+      selectedChallengeIds,
+      toggleChallengeSelected,
+      setChallengesSelected,
+      clearChallengeSelection,
+      editSelectedChallenges,
       cloneChallenge,
       rebuildModalChallenge,
       deleteChallengeId,
