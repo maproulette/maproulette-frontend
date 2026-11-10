@@ -7,6 +7,7 @@ import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice
 import { Button, type buttonVariants } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
+import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { useIntl } from '@/i18n'
 import { type ShortcutBinding, withBindingHint } from '@/lib/keyboardShortcuts'
 import { allowedStatusProgressions, TASK_STATUS } from '@/lib/taskStatusProgressions'
@@ -40,6 +41,7 @@ export const TaskActions = () => {
   const { challenge } = useChallengeContext()
   const { isAuthenticated, login } = useAuthContext()
   const isPaused = challenge.paused
+  const isDesktop = useIsDesktopLayoutContext()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [modalConfig, setModalConfig] = useState<{
@@ -204,6 +206,35 @@ export const TaskActions = () => {
     }
   }
 
+  const modal = modalConfig && (
+    <TaskActionModal
+      open={isModalOpen}
+      onOpenChange={setIsModalOpen}
+      task={task}
+      initialStatus={modalConfig.status}
+      onSubmittingChange={setIsSubmitting}
+    />
+  )
+
+  if (!isDesktop) {
+    const defaultAction = availableCompletionActions[0]
+    return (
+      <>
+        <Button
+          variant="success"
+          size="lg"
+          className="w-full"
+          onClick={defaultAction?.onClick}
+          disabled={isSubmitting || !defaultAction}
+        >
+          <CheckCircle2 />
+          {t({ id: 'taskEditPage.taskActions.main.submitTask', defaultMessage: 'Submit Task' })}
+        </Button>
+        {modal}
+      </>
+    )
+  }
+
   // Show completion buttons when locked (disabled while a submission is in flight)
   return (
     <>
@@ -236,15 +267,7 @@ export const TaskActions = () => {
         </div>
       </div>
 
-      {modalConfig && (
-        <TaskActionModal
-          open={isModalOpen}
-          onOpenChange={setIsModalOpen}
-          task={task}
-          initialStatus={modalConfig.status}
-          onSubmittingChange={setIsSubmitting}
-        />
-      )}
+      {modal}
     </>
   )
 }

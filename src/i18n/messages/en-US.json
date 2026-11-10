@@ -1261,6 +1261,7 @@
   "taskEditPage.taskActions.main.markFixedTitle": "Mark as Fixed",
   "taskEditPage.taskActions.main.markNotAnIssueTitle": "Mark as Not an Issue",
   "taskEditPage.taskActions.main.pausedMessage": "This challenge is currently paused. Tasks cannot be completed until it is resumed.",
+  "taskEditPage.taskActions.main.submitTask": "Submit Task",
   "taskEditPage.taskActions.navigation.loadNearbyFailed": "Failed to load nearby task",
   "taskEditPage.taskActions.navigation.nearbyTask": "Nearby task",
   "taskEditPage.taskActions.navigation.noNearbyTasks": "No nearby tasks available",
