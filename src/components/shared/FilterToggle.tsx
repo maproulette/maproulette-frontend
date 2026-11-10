@@ -1,6 +1,5 @@
-import { useId } from 'react'
-import { Label } from '@/components/ui/Label'
-import { Switch } from '@/components/ui/Switch'
+import { Toggle } from '@/components/ui/Toggle'
+import { cn } from '@/lib/utils'
 
 interface FilterToggleProps {
   label: string
@@ -14,14 +13,24 @@ export const FilterToggle = ({
   checked,
   onCheckedChange,
   icon: Icon,
-}: FilterToggleProps) => {
-  const id = useId()
-
-  return (
-    <Label htmlFor={id} className="flex cursor-pointer items-center gap-2 whitespace-nowrap">
-      <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
-      {Icon && <Icon className="h-4 w-4 text-zinc-500 dark:text-slate-500" />}
-      <span className="text-sm text-zinc-700 dark:text-slate-300">{label}</span>
-    </Label>
-  )
-}
+}: FilterToggleProps) => (
+  <Toggle
+    variant="outline"
+    size="sm"
+    pressed={checked}
+    onPressedChange={onCheckedChange}
+    className="shrink-0 gap-2 rounded-full px-3 font-normal text-zinc-700 data-[state=on]:border-zinc-900 data-[state=on]:bg-zinc-900 data-[state=on]:text-zinc-50 hover:data-[state=on]:bg-zinc-900/90 hover:data-[state=on]:text-zinc-50 dark:text-slate-300 dark:data-[state=on]:border-slate-50 dark:data-[state=on]:bg-slate-50 dark:data-[state=on]:text-zinc-900 dark:hover:data-[state=on]:bg-slate-50/90 dark:hover:data-[state=on]:text-zinc-900"
+  >
+    {Icon && <Icon className={cn('h-4 w-4', !checked && 'text-zinc-500 dark:text-slate-500')} />}
+    <span>{label}</span>
+    <span
+      aria-hidden="true"
+      className={cn(
+        'h-2 w-2 rounded-full',
+        checked
+          ? 'bg-emerald-500 shadow-[0_0_6px_2px_rgba(16,185,129,0.7)]'
+          : 'bg-zinc-300 dark:bg-slate-600'
+      )}
+    />
+  </Toggle>
+)
