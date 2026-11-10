@@ -1,6 +1,6 @@
 import { Maximize2 } from 'lucide-react'
 import type { StyleSpecification } from 'maplibre-gl'
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -39,6 +39,7 @@ interface ChallengeTasksMapProps {
   selectedTask?: TaskMarker | null
   onSelectTask?: (task: TaskMarker | null) => void
   onBoundsChange?: (bounds: string) => void
+  topLeftControls?: ReactNode
 }
 
 export const ChallengeTasksMap = ({
@@ -52,6 +53,7 @@ export const ChallengeTasksMap = ({
   selectedTask: controlledSelectedTask,
   onSelectTask,
   onBoundsChange,
+  topLeftControls,
 }: ChallengeTasksMapProps) => {
   const { t } = useIntl()
   const mapId = useId()
@@ -158,8 +160,9 @@ export const ChallengeTasksMap = ({
         ]}
       />
 
-      <div className="absolute top-2 left-2 z-10">
+      <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-2">
         <ClusterToggle clusteringEnabled={cluster} onToggle={setCluster} inline />
+        {topLeftControls}
       </div>
 
       {portalTarget &&

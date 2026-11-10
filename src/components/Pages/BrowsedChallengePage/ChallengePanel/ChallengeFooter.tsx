@@ -1,11 +1,10 @@
-import { Eye, Flag, Map as MapIcon, Play } from 'lucide-react'
+import { Eye, Flag, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button } from '@/components/ui/Button'
-import { useMapToggle } from '@/contexts/MapToggleContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useChallengeProgress } from '@/hooks/useChallengeProgress'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
@@ -18,7 +17,6 @@ export const ChallengeFooter = () => {
   const navigateToTask = useNavigateToTask()
   const { challenge, hasOpenReport, user } = useBrowsedChallengeContext()
   const { challengeFooterExtensions } = usePluginContext()
-  const { showMap, setShowMap } = useMapToggle()
   const { openReportHistory } = useChallengeModals()
   const { t } = useIntl()
 
@@ -160,19 +158,6 @@ export const ChallengeFooter = () => {
       ) : (
         mapContent
       )}
-      <div className="mt-4 md:hidden">
-        <Button
-          onClick={() => setShowMap(!showMap)}
-          variant="outline"
-          size="lg"
-          className="w-full gap-2 rounded-full transition-all hover:bg-zinc-100 dark:hover:bg-slate-800"
-        >
-          <MapIcon className="size-5" />
-          {showMap
-            ? t({ id: 'browsedChallengePage.footer.hideMap', defaultMessage: 'Hide Map' })
-            : t({ id: 'browsedChallengePage.footer.showMap', defaultMessage: 'Show Map' })}
-        </Button>
-      </div>
     </div>
   )
 }

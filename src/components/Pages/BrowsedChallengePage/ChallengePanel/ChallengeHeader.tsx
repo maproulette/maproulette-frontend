@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react'
+import { Bookmark, Heart, Map as MapIcon, MessageSquare, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { DropdownMenuItem } from '@/components/ui/DropdownMenu'
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
+import { useMapToggle } from '@/contexts/MapToggleContext'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
@@ -41,6 +42,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
   const bylineName = ownedByTeam ? ownerTeamName : ownerName
   const { openComments } = useChallengeModals()
   const isDesktop = useIsDesktopLayoutContext()
+  const { setShowMap } = useMapToggle()
   const { t } = useIntl()
   const needsSignIn = !user?.id
   const likeSignInMsg = t({
@@ -615,6 +617,16 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             {t({ id: 'common.share', defaultMessage: 'Share' })}
           </Button>
         </div>
+      )}
+      {!isScrolled && !isDesktop && (
+        <Button
+          variant="outline"
+          className="relative z-10 mt-3 w-full gap-2 rounded-full"
+          onClick={() => setShowMap(true)}
+        >
+          <MapIcon className="size-4" />
+          {t({ id: 'browsedChallengePage.footer.showMap', defaultMessage: 'Show Map' })}
+        </Button>
       )}
     </div>
   )
