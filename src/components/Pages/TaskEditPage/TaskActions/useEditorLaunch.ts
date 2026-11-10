@@ -10,6 +10,7 @@ import {
 } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { editorOptions } from '@/data/account.json'
+import { josmNoResponseMessage } from '@/hooks/useJosmShortCodes'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
 import { isTagFixTask } from '@/lib/cooperativeWork'
@@ -18,6 +19,7 @@ import {
   editorImageryForStyle,
   josmImageryCommand,
 } from '@/lib/editorImagery'
+import { EDITOR } from '@/lib/editors'
 import { openEditorWindow } from '@/lib/editorWindow'
 import { JOSM_HOST, sendJosmCommands } from '@/lib/josmRemoteControl'
 import { logger } from '@/lib/logger'
@@ -26,16 +28,6 @@ import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
-
-// Editor option values (mirrors MR3 server-side constants)
-export const EDITOR = {
-  id: 0,
-  josm: 1,
-  josmLayer: 2,
-  level0: 3,
-  josmFeatures: 4,
-  rapid: 5,
-} as const
 
 // JOSM fetches attachment data itself, so it needs an absolute backend URL.
 const apiBaseUrl = window.env.VITE_API_BASE_URL || window.location.origin
@@ -249,13 +241,7 @@ export const useEditorLaunch = (task: Task) => {
             if (opened) {
               notifyOpened()
             } else {
-              toast.error(
-                t({
-                  id: 'taskEditPage.taskActions.editorButton.josmNoResponse',
-                  defaultMessage:
-                    'OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?',
-                })
-              )
+              toast.error(t(josmNoResponseMessage))
             }
           })
         } else if (editorUrl) {

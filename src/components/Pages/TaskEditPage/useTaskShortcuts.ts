@@ -3,10 +3,11 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { editorOptions } from '@/data/account.json'
 import { useIntl } from '@/i18n'
+import { EDITOR } from '@/lib/editors'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { EDITABLE_STATUSES, useTaskContext } from './contexts/TaskContext'
-import { EDITOR, useEditorLaunch } from './TaskActions/useEditorLaunch'
+import { useEditorLaunch } from './TaskActions/useEditorLaunch'
 import { useSkipTask } from './TaskActions/useSkipTask'
 
 export const SKIP_TASK_BINDING: ShortcutBinding = { key: 'w' }

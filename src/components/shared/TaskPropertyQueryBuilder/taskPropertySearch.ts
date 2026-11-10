@@ -1,5 +1,10 @@
 import type { components } from '@/types/openApiTypes'
-import type { BinaryGroup, BinaryNode, PropertyOperator } from './propertyRuleTypes'
+import {
+  type BinaryGroup,
+  type BinaryNode,
+  isNumericValueType,
+  type PropertyOperator,
+} from './propertyRuleTypes'
 
 export type TaskPropertySearch = components['schemas']['org.maproulette.session.TaskPropertySearch']
 
@@ -54,7 +59,7 @@ export const binaryToTaskPropertySearch = (
   const key = node.key.trim()
   if (!key) return null
 
-  const valueType = node.valueType === 'number' ? 'number' : 'string'
+  const valueType = isNumericValueType(node.valueType) ? 'number' : 'string'
   const searchType = (valueType === 'number' ? NUMBER_SEARCH_TYPE : STRING_SEARCH_TYPE)[
     node.operator
   ]

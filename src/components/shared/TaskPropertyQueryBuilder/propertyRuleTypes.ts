@@ -9,12 +9,20 @@ export type PropertyOperator =
   | 'greaterThanOrEqual'
   | 'lessThanOrEqual'
 
+export type NumericValueType = 'number' | 'integer' | 'double' | 'long'
+
+export type RuleValueType = 'string' | NumericValueType
+
+export const isNumericValueType = (
+  valueType: RuleValueType | undefined
+): valueType is NumericValueType => valueType !== undefined && valueType !== 'string'
+
 export interface PropertyRuleLeaf {
   type: 'leaf'
   key: string
   value: string
   operator: PropertyOperator
-  valueType?: 'string' | 'number'
+  valueType?: RuleValueType
   commaSeparate?: boolean
 }
 
@@ -30,7 +38,7 @@ export interface BinaryLeaf {
   key: string
   value: string
   operator: PropertyOperator
-  valueType?: 'string' | 'number'
+  valueType?: RuleValueType
   commaSeparate?: boolean
 }
 

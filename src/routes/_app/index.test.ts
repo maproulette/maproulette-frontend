@@ -14,7 +14,7 @@ type ChallengesSearch = {
     | 'Land Use / Administrative Boundaries'
     | 'Transit'
   categories?: string
-  sortBy?: 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
+  sortBy?: 'default' | 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
   global?: boolean
   osm_type?: 'N' | 'W' | 'R'
   osm_id?: number
@@ -72,7 +72,7 @@ describe('explore challenges route search schema', () => {
     const result = schema.safeParse({ sortBy: 'nonsense' })
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.sortBy).toBe('name')
+      expect(result.data.sortBy).toBe('default')
     }
   })
 

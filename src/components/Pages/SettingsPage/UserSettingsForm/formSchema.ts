@@ -20,7 +20,10 @@ export const makeFormSchema = (t: TranslateFn) =>
       defaultBasemap: z
         .union([z.number(), z.string()])
         .refine(
-          (val) => val === BASEMAP_CURRENT || baseMapOptions.some((option) => option.value === val),
+          (val) =>
+            val === BASEMAP_CURRENT ||
+            val === CHALLENGE_BASEMAP.custom ||
+            baseMapOptions.some((option) => option.value === val),
           {
             message: t({
               id: 'settings.general.invalidBasemap',
@@ -46,6 +49,17 @@ export const makeFormSchema = (t: TranslateFn) =>
     })
     // Allow plugin-contributed settings fields (e.g. from getUserSettingsFields)
     .loose()
+    .refine(
+      (values) =>
+        values.defaultBasemap !== CHALLENGE_BASEMAP.custom || !!values.defaultBasemapId?.trim(),
+      {
+        path: ['defaultBasemapId'],
+        message: t({
+          id: 'settings.general.customBasemapRequired',
+          defaultMessage: 'Enter a tile URL for your custom basemap',
+        }),
+      }
+    )
 
 export type SettingsFormValues = z.infer<ReturnType<typeof makeFormSchema>>
 
@@ -58,6 +72,9 @@ const LAYER_ID_FOR_BASEMAP: Record<number, string> = {
 const basemapSelection = ({ defaultBasemap, defaultBasemapId }: UserSettings): number | string => {
   if (defaultBasemap == null || defaultBasemap === CHALLENGE_BASEMAP.none) {
     return CHALLENGE_BASEMAP.none
+  }
+  if (defaultBasemap === CHALLENGE_BASEMAP.custom && defaultBasemapId) {
+    return CHALLENGE_BASEMAP.custom
   }
   const layerId =
     defaultBasemap === CHALLENGE_BASEMAP.identified
@@ -85,7 +102,10 @@ export const basemapSettings = (
   if (typeof values.defaultBasemap === 'string') {
     return { defaultBasemap: CHALLENGE_BASEMAP.identified, defaultBasemapId: values.defaultBasemap }
   }
-  return { defaultBasemap: values.defaultBasemap, defaultBasemapId: url }
+  return {
+    defaultBasemap: values.defaultBasemap,
+    defaultBasemapId: values.defaultBasemap === CHALLENGE_BASEMAP.custom ? url.trim() : '',
+  }
 }
 
 export const getDefaultValues = (

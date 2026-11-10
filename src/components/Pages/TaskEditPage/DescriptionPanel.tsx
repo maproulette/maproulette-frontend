@@ -64,7 +64,7 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
       <ScrollArea className="min-h-0 flex-1">
         <div className="p-4">
           {description ? (
-            <MarkdownContent>{description}</MarkdownContent>
+            <MarkdownContent shortCodes={isChallenge}>{description}</MarkdownContent>
           ) : (
             <p className="text-sm text-zinc-500 dark:text-slate-400">
               {isChallenge

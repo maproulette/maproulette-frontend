@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
-import { BASEMAP_CURRENT } from '@/components/Map/basemap'
+import { BASEMAP_CURRENT, CHALLENGE_BASEMAP } from '@/components/Map/basemap'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
@@ -165,6 +165,12 @@ export const GeneralSettings = ({
                         {option.label}
                       </SelectItem>
                     ))}
+                    <SelectItem value={String(CHALLENGE_BASEMAP.custom)}>
+                      {t({
+                        id: 'settings.general.basemapCustom',
+                        defaultMessage: 'Custom tile layer…',
+                      })}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
@@ -184,24 +190,26 @@ export const GeneralSettings = ({
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="defaultBasemapId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                {t({
-                  id: 'settings.general.customBasemapLabel',
-                  defaultMessage: 'Custom Basemap URL',
-                })}
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com/tiles/{z}/{x}/{y}.png" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {form.watch('defaultBasemap') === CHALLENGE_BASEMAP.custom && (
+          <FormField
+            control={form.control}
+            name="defaultBasemapId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  {t({
+                    id: 'settings.general.customBasemapLabel',
+                    defaultMessage: 'Custom Basemap URL',
+                  })}
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com/tiles/{z}/{x}/{y}.png" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         {children}
       </FieldGroup>
       <FieldSubmit isSubmitting={form.formState.isSubmitting} isDirty={form.formState.isDirty} />
