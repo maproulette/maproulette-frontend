@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl'
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useCallback, useId, useMemo, useRef } from 'react'
 import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -29,12 +29,9 @@ export const TaskNearbyMap = ({
 }: TaskNearbyMapProps) => {
   const { t } = useIntl()
   const mapRef = useRef<MapRef | null>(null)
-  const [mapLoaded, setMapLoaded] = useState(false)
   const mapId = useId()
   const sourceId = useId()
   const layerId = useId()
-
-  const centeredTaskIdRef = useRef<number | null>(null)
 
   const [currentLng, currentLat] = currentTask.location.coordinates
 
@@ -79,40 +76,6 @@ export const TaskNearbyMap = ({
     }
   }, [nearbyTaskLocations, selectedTaskId])
 
-  const centerOnTasks = useCallback(() => {
-    if (!mapRef.current || !mapLoaded) return
-
-    const points: [number, number][] = [[currentLng, currentLat]]
-    for (const loc of nearbyTaskLocations) {
-      points.push([loc.lng, loc.lat])
-    }
-
-    if (points.length === 1) {
-      mapRef.current.jumpTo({
-        center: points[0],
-        zoom: 16,
-      })
-    } else {
-      const bounds = new maplibregl.LngLatBounds(points[0], points[0])
-      for (const point of points) {
-        bounds.extend(point)
-      }
-      mapRef.current.fitBounds(bounds, {
-        padding: 48,
-        maxZoom: 16,
-        duration: 0,
-      })
-    }
-  }, [mapLoaded, nearbyTaskLocations, currentLng, currentLat])
-
-  // Re-center when the current task changes (e.g. preview Prev/Next)
-  useEffect(() => {
-    if (!mapLoaded) return
-    if (centeredTaskIdRef.current === currentTask.id) return
-    centerOnTasks()
-    centeredTaskIdRef.current = currentTask.id
-  }, [mapLoaded, currentTask.id, currentLng, currentLat, centerOnTasks])
-
   const initialViewState = useMemo(() => {
     if (nearbyTaskLocations.length === 0) {
       return { longitude: currentLng, latitude: currentLat, zoom: 16 }
@@ -122,10 +85,9 @@ export const TaskNearbyMap = ({
     return { bounds, fitBoundsOptions: { padding: 48, maxZoom: 16 } }
   }, [nearbyTaskLocations, currentLng, currentLat])
 
-  // Reason: stable callback prevents map event listener re-registration
   const handleMapClick = useCallback(
     (e: MapMouseEvent) => {
-      if (!mapRef.current || !mapLoaded) return
+      if (!mapRef.current) return
 
       const features = mapRef.current.queryRenderedFeatures(e.point, {
         layers: [layerId],
@@ -136,10 +98,9 @@ export const TaskNearbyMap = ({
         onTaskSelect(taskId === selectedTaskId ? null : taskId)
       }
     },
-    [layerId, mapLoaded, onTaskSelect, selectedTaskId]
+    [layerId, onTaskSelect, selectedTaskId]
   )
 
-  if (isLoading && mapLoaded) setMapLoaded(false)
   if (isLoading) {
     return <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
   }
@@ -148,10 +109,10 @@ export const TaskNearbyMap = ({
     <div className="relative h-64 w-full overflow-hidden rounded-lg">
       <MapGL
         id={mapId}
+        key={currentTask.id}
         ref={mapRef}
         initialViewState={initialViewState}
         mapStyle={getCurrentMapStyle()}
-        onLoad={() => setMapLoaded(true)}
         onClick={handleMapClick}
         interactiveLayerIds={[layerId]}
         cursor="pointer"
