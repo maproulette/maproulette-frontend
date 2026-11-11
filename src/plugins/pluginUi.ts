@@ -1,5 +1,4 @@
-import type { ComponentType } from 'react'
-import { TaskNearbyMap as HostTaskNearbyMap } from '@/components/Pages/TaskEditPage/TaskNearbyMap'
+import { TaskNearbyMap } from '@/components/Pages/TaskEditPage/TaskNearbyMap'
 import { ProgressBar } from '@/components/shared/ProgressBar'
 import { CommentsHistoryTab } from '@/components/TaskInfoPanel/CommentsHistoryTab'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
@@ -58,15 +57,6 @@ import {
 } from '@/components/ui/Table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Textarea } from '@/components/ui/Textarea'
-import type { PluginTaskMapItem } from '@/types/Plugin'
-
-const TaskSelectionMap = HostTaskNearbyMap as unknown as ComponentType<{
-  currentTask: PluginTaskMapItem
-  tasks?: PluginTaskMapItem[]
-  selectedTaskId: number | null
-  onTaskSelect: (taskId: number | null) => void
-  showSelectedBadge?: boolean
-}>
 
 /** Stable UI surface exposed to runtime plugins via PluginApiContext.ui */
 export const pluginUi = {
@@ -98,7 +88,7 @@ export const pluginUi = {
   SelectTrigger,
   SelectContent,
   SelectItem,
-  TaskSelectionMap,
+  TaskNearbyMap,
   CommentsHistoryTab,
   Table,
   TableHeader,

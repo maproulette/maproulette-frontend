@@ -8,48 +8,34 @@ import { api } from '@/api'
 import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
-import type { Task } from '@/types/Task'
+import { useTaskContext } from './contexts/TaskContext'
 
 interface TaskNearbyMapProps {
-  currentTask: Task
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
-  /** Optional override for the tasks to show in the map */
-  tasks?: Task[]
-  /** Show the "Task #N selected" overlay. Default true. */
-  showSelectedBadge?: boolean
 }
 
-export const TaskNearbyMap = ({
-  currentTask,
-  selectedTaskId,
-  onTaskSelect,
-  tasks,
-  showSelectedBadge = true,
-}: TaskNearbyMapProps) => {
+export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapProps) => {
   const { t } = useIntl()
   const mapId = useId()
   const sourceId = useId()
   const layerId = useId()
+  const { task } = useTaskContext()
 
-  const [currentLng, currentLat] = currentTask.location.coordinates
+  const [currentLng, currentLat] = task.location.coordinates
 
-  const { data, isLoading } = api.challenge.getTasksNearby(currentTask.parent, currentTask.id, {
-    enabled: tasks === undefined,
-  })
+  const { data = [], isLoading } = api.challenge.getTasksNearby(task.parent, task.id)
 
   const nearbyTasks = useMemo(() => {
-    const sourceTasks =
-      tasks ??
-      (data ?? []).filter(
-        (task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId
-      )
+    const sourceTasks = data.filter(
+      (nearbyTask) => task.bundleId == null || nearbyTask.bundleId !== task.bundleId
+    )
 
-    return sourceTasks.map((task) => {
-      const [lng, lat] = task.location.coordinates
-      return { id: task.id, lng, lat }
+    return sourceTasks.map((nearbyTask) => {
+      const [lng, lat] = nearbyTask.location.coordinates
+      return { id: nearbyTask.id, lng, lat }
     })
-  }, [tasks, data, currentTask.bundleId])
+  }, [data, task.bundleId])
 
   const nearbyTasksGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     return {
@@ -92,7 +78,7 @@ export const TaskNearbyMap = ({
     <div className="relative h-64 w-full overflow-hidden rounded-lg">
       <MapGL
         id={mapId}
-        key={currentTask.id}
+        key={task.id}
         initialViewState={initialViewState}
         mapStyle={getCurrentMapStyle()}
         onClick={handleMapClick}
@@ -141,7 +127,7 @@ export const TaskNearbyMap = ({
       </div>
 
       {/* Selected task info */}
-      {showSelectedBadge && selectedTaskId && (
+      {selectedTaskId && (
         <div className="absolute top-2 left-2 rounded bg-green-500 px-2 py-1 font-medium text-white text-xs shadow">
           {t(
             {

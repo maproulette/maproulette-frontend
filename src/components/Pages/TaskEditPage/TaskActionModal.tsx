@@ -525,7 +525,6 @@ export const TaskActionModal = ({
                 <div className="mt-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
                   {animationDone ? (
                     <TaskNearbyMap
-                      currentTask={task}
                       selectedTaskId={selectedNearbyTaskId}
                       onTaskSelect={setSelectedNearbyTaskId}
                     />
