@@ -8,6 +8,7 @@ import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
+import { api } from '@/api'
 
 interface TaskSelectionMapProps {
   currentTask: Task
@@ -204,5 +205,14 @@ export const TaskSelectionMap = ({
 type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
 
 export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
-  return <TaskSelectionMap {...props} tasks={props.nearbyTasks} excludeCurrentBundle />
+  const { data: nearbyTasks, isPending } = api.challenge.getTasksNearby(
+    props.currentTask.parent,
+    props.currentTask.id
+  )
+
+  if (isPending) {
+    return <div className='h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800' />
+  }
+  
+  return <TaskSelectionMap {...props} tasks={nearbyTasks ?? []} excludeCurrentBundle />
 }
