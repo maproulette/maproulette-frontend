@@ -418,7 +418,7 @@ export const challengeSingle = {
     return tasks
   },
 
-  getTasksNearby: (challengeId: number, taskId: number, limit = 5) =>
+  getTasksNearby: (challengeId: number, taskId: number, limit = 5, enabled = true) =>
     useQuery(
       queryOptions({
         queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit }],
@@ -428,7 +428,7 @@ export const challengeSingle = {
               searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
             })
             .json<Task[]>(),
-        enabled: !!challengeId && !!taskId,
+        enabled: enabled && !!challengeId && !!taskId,
       })
     ),
 

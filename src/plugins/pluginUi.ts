@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import { TaskSelectionMap as HostTaskSelectionMap } from '@/components/Pages/TaskEditPage/TaskNearbyMap'
+import { TaskNearbyMap as HostTaskNearbyMap } from '@/components/Pages/TaskEditPage/TaskNearbyMap'
 import { ProgressBar } from '@/components/shared/ProgressBar'
 import { CommentsHistoryTab } from '@/components/TaskInfoPanel/CommentsHistoryTab'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
@@ -60,9 +60,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Textarea } from '@/components/ui/Textarea'
 import type { PluginTaskMapItem } from '@/types/Plugin'
 
-const TaskSelectionMap = HostTaskSelectionMap as unknown as ComponentType<{
+const TaskSelectionMap = HostTaskNearbyMap as unknown as ComponentType<{
   currentTask: PluginTaskMapItem
-  tasks: PluginTaskMapItem[]
+  tasks?: PluginTaskMapItem[]
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
   showSelectedBadge?: boolean

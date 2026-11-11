@@ -159,7 +159,7 @@ export interface PluginApiContext {
     }>
     TaskSelectionMap: ComponentType<{
       currentTask: PluginTaskMapItem
-      tasks: PluginTaskMapItem[]
+      tasks?: PluginTaskMapItem[]
       selectedTaskId: number | null
       onTaskSelect: (taskId: number | null) => void
       showSelectedBadge?: boolean

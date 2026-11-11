@@ -10,22 +10,23 @@ import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
 
-interface TaskSelectionMapProps {
+interface TaskNearbyMapProps {
   currentTask: Task
-  tasks: Task[]
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
+  /** Optional override for the tasks to show in the map */
+  tasks?: Task[]
   /** Show the "Task #N selected" overlay. Default true. */
   showSelectedBadge?: boolean
 }
 
-export const TaskSelectionMap = ({
+export const TaskNearbyMap = ({
   currentTask,
-  tasks: nearbyTasks,
   selectedTaskId,
   onTaskSelect,
+  tasks,
   showSelectedBadge = true,
-}: TaskSelectionMapProps) => {
+}: TaskNearbyMapProps) => {
   const { t } = useIntl()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
@@ -36,6 +37,22 @@ export const TaskSelectionMap = ({
   const centeredTaskIdRef = useRef<number | null>(null)
 
   const [currentLng, currentLat] = currentTask.location.coordinates
+
+  const { data, isLoading } = api.challenge.getTasksNearby(
+    currentTask.parent,
+    currentTask.id,
+    undefined,
+    tasks === undefined
+  )
+
+  const nearbyTasks = useMemo(
+    () =>
+      tasks ??
+      (data ?? []).filter(
+        (task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId
+      ),
+    [tasks, data, currentTask.bundleId]
+  )
 
   const nearbyTaskLocations = useMemo(() => {
     return nearbyTasks.map((task) => {
@@ -97,13 +114,13 @@ export const TaskSelectionMap = ({
   }, [mapLoaded, currentTask.id, currentLng, currentLat, centerOnTasks])
 
   const initialViewState = useMemo(() => {
-    if (nearbyTasks.length === 0) {
+    if (nearbyTaskLocations.length === 0) {
       return { longitude: currentLng, latitude: currentLat, zoom: 16 }
     }
     const bounds = new maplibregl.LngLatBounds([currentLng, currentLat], [currentLng, currentLat])
     for (const loc of nearbyTaskLocations) bounds.extend([loc.lng, loc.lat])
     return { bounds, fitBoundsOptions: { padding: 48, maxZoom: 16 } }
-  }, [])
+  }, [nearbyTaskLocations, currentLng, currentLat])
 
   // Reason: stable callback prevents map event listener re-registration
   const handleMapClick = useCallback(
@@ -121,6 +138,11 @@ export const TaskSelectionMap = ({
     },
     [layerId, mapLoaded, onTaskSelect, selectedTaskId]
   )
+
+  if (isLoading && mapLoaded) setMapLoaded(false)
+  if (isLoading) {
+    return <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
+  }
 
   return (
     <div className="relative h-64 w-full overflow-hidden rounded-lg">
@@ -189,27 +211,4 @@ export const TaskSelectionMap = ({
       )}
     </div>
   )
-}
-
-type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
-
-export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
-  const { data, isLoading } = api.challenge.getTasksNearby(
-    props.currentTask.parent,
-    props.currentTask.id
-  )
-
-  const nearbyTasks = useMemo(
-    () =>
-      (data ?? []).filter(
-        (t) => props.currentTask.bundleId == null || t.bundleId !== props.currentTask.bundleId
-      ),
-    [data, props.currentTask.bundleId]
-  )
-
-  if (isLoading) {
-    return <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
-  }
-
-  return <TaskSelectionMap {...props} tasks={nearbyTasks} />
 }
