@@ -57,7 +57,7 @@ const EXPOSED_COMPONENTS = [
   'TabsContent',
   'TabsList',
   'TabsTrigger',
-  'TaskSelectionMap',
+  'TaskNearbyMap',
   'Textarea',
 ]
 

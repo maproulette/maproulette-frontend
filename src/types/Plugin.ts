@@ -7,15 +7,6 @@ export interface RouteParams {
   [key: string]: string
 }
 
-export interface PluginTaskMapItem {
-  id: number
-  parent: number
-  bundleId?: number | null
-  location: {
-    coordinates: [number, number]
-  }
-}
-
 /**
  * API context provided to plugins from MapRoulette
  * All API methods are React hooks that return { data, isLoading, error }
@@ -157,12 +148,9 @@ export interface PluginApiContext {
       value: string
       disabled?: boolean
     }>
-    TaskSelectionMap: ComponentType<{
-      currentTask: PluginTaskMapItem
-      tasks?: PluginTaskMapItem[]
+    TaskNearbyMap: ComponentType<{
       selectedTaskId: number | null
       onTaskSelect: (taskId: number | null) => void
-      showSelectedBadge?: boolean
     }>
     CommentsHistoryTab: ComponentType<{ taskId?: number }>
     Table: ComponentType<Record<string, unknown>>

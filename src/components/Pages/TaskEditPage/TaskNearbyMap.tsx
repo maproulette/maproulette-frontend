@@ -28,12 +28,12 @@ export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapPro
 
   const nearbyTasks = useMemo(() => {
     const sourceTasks = data.filter(
-      (task) => task.bundleId == null || task.bundleId !== task.bundleId
+      (nearby) => task.bundleId == null || nearby.bundleId !== task.bundleId
     )
 
-    return sourceTasks.map((task) => {
-      const [lng, lat] = task.location.coordinates
-      return { id: task.id, lng, lat }
+    return sourceTasks.map((nearby) => {
+      const [lng, lat] = nearby.location.coordinates
+      return { id: nearby.id, lng, lat }
     })
   }, [data, task.bundleId])
 
