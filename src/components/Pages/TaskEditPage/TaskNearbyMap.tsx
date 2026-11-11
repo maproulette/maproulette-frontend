@@ -181,7 +181,7 @@ export const TaskSelectionMap = ({
             id: 'taskEditPage.taskNearbyMap.nearbyCount',
             defaultMessage: '{count, plural, one {# nearby task} other {# nearby tasks}}',
           },
-          { count: nearbyTasks.length }
+          { count: nearbyTaskLocations.length }
         )}
       </div>
 
