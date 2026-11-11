@@ -418,8 +418,13 @@ export const challengeSingle = {
     return tasks
   },
 
-  getTasksNearby: (challengeId: number, taskId: number, limit = 5, enabled = true) =>
-    useQuery(
+  getTasksNearby: (
+    challengeId: number,
+    taskId: number,
+    options?: { limit?: number; enabled?: boolean }
+  ) => {
+    const { limit = 5, enabled = true } = options ?? {}
+    return useQuery(
       queryOptions({
         queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit }],
         queryFn: () =>
@@ -430,7 +435,8 @@ export const challengeSingle = {
             .json<Task[]>(),
         enabled: enabled && !!challengeId && !!taskId,
       })
-    ),
+    )
+  },
 
   // Mutation hook
   useCreateChallenge: () => {

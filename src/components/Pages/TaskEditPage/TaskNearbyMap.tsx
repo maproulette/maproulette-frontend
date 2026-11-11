@@ -34,12 +34,9 @@ export const TaskNearbyMap = ({
 
   const [currentLng, currentLat] = currentTask.location.coordinates
 
-  const { data, isLoading } = api.challenge.getTasksNearby(
-    currentTask.parent,
-    currentTask.id,
-    undefined,
-    tasks === undefined
-  )
+  const { data, isLoading } = api.challenge.getTasksNearby(currentTask.parent, currentTask.id, {
+    enabled: tasks === undefined,
+  })
 
   const nearbyTasks = useMemo(() => {
     const sourceTasks =
