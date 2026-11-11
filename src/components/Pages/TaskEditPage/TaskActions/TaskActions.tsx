@@ -1,7 +1,6 @@
 import type { VariantProps } from 'class-variance-authority'
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
 import { type ReactNode, useMemo, useState } from 'react'
-import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
@@ -49,8 +48,6 @@ export const TaskActions = () => {
     status: number
     label: string
   } | null>(null)
-
-  const { data: nearbyTasks = [] } = api.challenge.getTasksNearby(task.parent, task.id)
 
   const confirmDiscardIdEdits = useConfirmDiscardIdEdits()
 
@@ -216,7 +213,6 @@ export const TaskActions = () => {
       task={task}
       initialStatus={modalConfig.status}
       onSubmittingChange={setIsSubmitting}
-      nearbyTasks={nearbyTasks}
     />
   )
 

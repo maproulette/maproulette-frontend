@@ -4,11 +4,11 @@ import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
+import { api } from '@/api'
 import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
-import { api } from '@/api'
 
 interface TaskSelectionMapProps {
   currentTask: Task
@@ -18,7 +18,6 @@ interface TaskSelectionMapProps {
   excludeCurrentBundle?: boolean
   /** Show the "Task #N selected" overlay. Default true. */
   showSelectedBadge?: boolean
-  nearbyTasks: Task[]
 }
 
 export const TaskSelectionMap = ({
@@ -113,7 +112,7 @@ export const TaskSelectionMap = ({
     }
     const bounds = new maplibregl.LngLatBounds([currentLng, currentLat], [currentLng, currentLat])
     for (const loc of nearbyTaskLocations) bounds.extend([loc.lng, loc.lat])
-    return { bounds, fitBoundsOptions: { padding: 40, maxZoom: 16 } }
+    return { bounds, fitBoundsOptions: { padding: 48, maxZoom: 16 } }
   }, [])
 
   // Reason: stable callback prevents map event listener re-registration
@@ -211,8 +210,8 @@ export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
   )
 
   if (isPending) {
-    return <div className='h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800' />
+    return <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
   }
-  
+
   return <TaskSelectionMap {...props} tasks={nearbyTasks ?? []} excludeCurrentBundle />
 }
