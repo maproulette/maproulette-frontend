@@ -58,14 +58,10 @@ import {
 } from '@/components/ui/Table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { Textarea } from '@/components/ui/Textarea'
-import type { PluginTaskMapItem } from '@/types/Plugin'
 
 const TaskSelectionMap = HostTaskNearbyMap as unknown as ComponentType<{
-  currentTask: PluginTaskMapItem
-  tasks?: PluginTaskMapItem[]
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
-  showSelectedBadge?: boolean
 }>
 
 /** Stable UI surface exposed to runtime plugins via PluginApiContext.ui */
