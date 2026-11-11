@@ -87,18 +87,10 @@ export const TaskNearbyMap = ({
 
   const handleMapClick = useCallback(
     (e: MapMouseEvent) => {
-      if (!mapRef.current) return
-
-      const features = mapRef.current.queryRenderedFeatures(e.point, {
-        layers: [layerId],
-      })
-
-      if (features.length > 0) {
-        const taskId = features[0].properties?.id as number
-        onTaskSelect(taskId === selectedTaskId ? null : taskId)
-      }
+      const id = e.features?.[0]?.properties?.id as number | undefined
+      if (id != null) onTaskSelect(id === selectedTaskId ? null : id)
     },
-    [layerId, onTaskSelect, selectedTaskId]
+    [onTaskSelect, selectedTaskId]
   )
 
   if (isLoading) {
