@@ -204,12 +204,12 @@ export const TaskSelectionMap = ({
 type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
 
 export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
-  const { data: nearbyTasks, isPending } = api.challenge.getTasksNearby(
+  const { data: nearbyTasks, isLoading } = api.challenge.getTasksNearby(
     props.currentTask.parent,
     props.currentTask.id
   )
 
-  if (isPending) {
+  if (isLoading) {
     return <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
   }
 
