@@ -65,11 +65,10 @@ export const TaskNearbyMap = ({
         },
         properties: {
           id: task.id,
-          isSelected: task.id === selectedTaskId,
         },
       })),
     }
-  }, [nearbyTasks, selectedTaskId])
+  }, [nearbyTasks])
 
   const initialViewState = useMemo(() => {
     if (nearbyTasks.length === 0) {
@@ -112,7 +111,7 @@ export const TaskNearbyMap = ({
               'circle-radius': 8,
               'circle-color': [
                 'case',
-                ['get', 'isSelected'],
+                ['==', ['get', 'id'], selectedTaskId ?? -1],
                 '#f59e0b', // Amber for selected
                 '#3b82f6', // Blue for unselected
               ],
