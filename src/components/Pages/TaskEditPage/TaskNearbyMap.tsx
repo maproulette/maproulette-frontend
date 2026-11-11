@@ -92,7 +92,7 @@ export const TaskSelectionMap = ({
         bounds.extend(point)
       }
       mapRef.current.fitBounds(bounds, {
-        padding: 40,
+        padding: 48,
         maxZoom: 16,
         duration: 0,
       })
