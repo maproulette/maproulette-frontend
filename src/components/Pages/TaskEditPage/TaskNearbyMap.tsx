@@ -15,10 +15,7 @@ interface TaskNearbyMapProps {
   onTaskSelect: (taskId: number | null) => void
 }
 
-export const TaskNearbyMap = ({
-  selectedTaskId,
-  onTaskSelect,
-}: TaskNearbyMapProps) => {
+export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapProps) => {
   const { t } = useIntl()
   const mapId = useId()
   const sourceId = useId()
@@ -27,12 +24,12 @@ export const TaskNearbyMap = ({
 
   const [currentLng, currentLat] = task.location.coordinates
 
-  const { data = [], isLoading } = api.challenge.getTasksNearby(task.parent, task.id) 
+  const { data = [], isLoading } = api.challenge.getTasksNearby(task.parent, task.id)
 
   const nearbyTasks = useMemo(() => {
     const sourceTasks = data.filter(
-        (task) => task.bundleId == null || task.bundleId !== task.bundleId)
-      
+      (task) => task.bundleId == null || task.bundleId !== task.bundleId
+    )
 
     return sourceTasks.map((task) => {
       const [lng, lat] = task.location.coordinates
