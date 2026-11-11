@@ -1,6 +1,6 @@
 import maplibregl from 'maplibre-gl'
-import { useCallback, useId, useMemo, useRef } from 'react'
-import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre'
+import { useCallback, useId, useMemo } from 'react'
+import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { MapPin } from 'lucide-react'
@@ -28,7 +28,6 @@ export const TaskNearbyMap = ({
   showSelectedBadge = true,
 }: TaskNearbyMapProps) => {
   const { t } = useIntl()
-  const mapRef = useRef<MapRef | null>(null)
   const mapId = useId()
   const sourceId = useId()
   const layerId = useId()
@@ -42,48 +41,44 @@ export const TaskNearbyMap = ({
     tasks === undefined
   )
 
-  const nearbyTasks = useMemo(
-    () =>
+  const nearbyTasks = useMemo(() => {
+    const sourceTasks =
       tasks ??
       (data ?? []).filter(
         (task) => currentTask.bundleId == null || task.bundleId !== currentTask.bundleId
-      ),
-    [tasks, data, currentTask.bundleId]
-  )
+      )
 
-  const nearbyTaskLocations = useMemo(() => {
-    return nearbyTasks.map((task) => {
+    return sourceTasks.map((task) => {
       const [lng, lat] = task.location.coordinates
       return { id: task.id, lng, lat }
     })
-  }, [nearbyTasks])
+  }, [tasks, data, currentTask.bundleId])
 
-  // Reason: GeoJSON processing — builds FeatureCollection from parsed locations
   const nearbyTasksGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
     return {
       type: 'FeatureCollection',
-      features: nearbyTaskLocations.map((loc) => ({
+      features: nearbyTasks.map((task) => ({
         type: 'Feature' as const,
         geometry: {
           type: 'Point' as const,
-          coordinates: [loc.lng, loc.lat],
+          coordinates: [task.lng, task.lat],
         },
         properties: {
-          id: loc.id,
-          isSelected: loc.id === selectedTaskId,
+          id: task.id,
+          isSelected: task.id === selectedTaskId,
         },
       })),
     }
-  }, [nearbyTaskLocations, selectedTaskId])
+  }, [nearbyTasks, selectedTaskId])
 
   const initialViewState = useMemo(() => {
-    if (nearbyTaskLocations.length === 0) {
+    if (nearbyTasks.length === 0) {
       return { longitude: currentLng, latitude: currentLat, zoom: 16 }
     }
     const bounds = new maplibregl.LngLatBounds([currentLng, currentLat], [currentLng, currentLat])
-    for (const loc of nearbyTaskLocations) bounds.extend([loc.lng, loc.lat])
+    for (const task of nearbyTasks) bounds.extend([task.lng, task.lat])
     return { bounds, fitBoundsOptions: { padding: 48, maxZoom: 16 } }
-  }, [nearbyTaskLocations, currentLng, currentLat])
+  }, [nearbyTasks, currentLng, currentLat])
 
   const handleMapClick = useCallback(
     (e: MapMouseEvent) => {
@@ -102,7 +97,6 @@ export const TaskNearbyMap = ({
       <MapGL
         id={mapId}
         key={currentTask.id}
-        ref={mapRef}
         initialViewState={initialViewState}
         mapStyle={getCurrentMapStyle()}
         onClick={handleMapClick}
