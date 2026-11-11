@@ -15,7 +15,6 @@ interface TaskSelectionMapProps {
   tasks: Task[]
   selectedTaskId: number | null
   onTaskSelect: (taskId: number | null) => void
-  excludeCurrentBundle?: boolean
   /** Show the "Task #N selected" overlay. Default true. */
   showSelectedBadge?: boolean
 }
@@ -25,7 +24,6 @@ export const TaskSelectionMap = ({
   tasks: nearbyTasks,
   selectedTaskId,
   onTaskSelect,
-  excludeCurrentBundle = false,
   showSelectedBadge = true,
 }: TaskSelectionMapProps) => {
   const { t } = useIntl()
@@ -39,20 +37,12 @@ export const TaskSelectionMap = ({
 
   const [currentLng, currentLat] = currentTask.location.coordinates
 
-  // Reason: GeoJSON processing — parses nearby task locations and drops bundle members
   const nearbyTaskLocations = useMemo(() => {
-    return nearbyTasks
-      .filter(
-        (task) =>
-          !excludeCurrentBundle ||
-          currentTask.bundleId == null ||
-          task.bundleId !== currentTask.bundleId
-      )
-      .map((task) => {
-        const [lng, lat] = task.location.coordinates
-        return { id: task.id, lng, lat }
-      })
-  }, [nearbyTasks, currentTask.bundleId, excludeCurrentBundle])
+    return nearbyTasks.map((task) => {
+      const [lng, lat] = task.location.coordinates
+      return { id: task.id, lng, lat }
+    })
+  }, [nearbyTasks])
 
   // Reason: GeoJSON processing — builds FeatureCollection from parsed locations
   const nearbyTasksGeoJSON = useMemo((): GeoJSON.FeatureCollection => {
@@ -107,7 +97,7 @@ export const TaskSelectionMap = ({
   }, [mapLoaded, currentTask.id, currentLng, currentLat, centerOnTasks])
 
   const initialViewState = useMemo(() => {
-    if (nearbyTaskLocations.length === 0) {
+    if (nearbyTasks.length === 0) {
       return { longitude: currentLng, latitude: currentLat, zoom: 16 }
     }
     const bounds = new maplibregl.LngLatBounds([currentLng, currentLat], [currentLng, currentLat])
@@ -181,7 +171,7 @@ export const TaskSelectionMap = ({
             id: 'taskEditPage.taskNearbyMap.nearbyCount',
             defaultMessage: '{count, plural, one {# nearby task} other {# nearby tasks}}',
           },
-          { count: nearbyTaskLocations.length }
+          { count: nearbyTasks.length }
         )}
       </div>
 
@@ -204,14 +194,22 @@ export const TaskSelectionMap = ({
 type TaskNearbyMapProps = Omit<TaskSelectionMapProps, 'tasks'>
 
 export const TaskNearbyMap = (props: TaskNearbyMapProps) => {
-  const { data: nearbyTasks, isLoading } = api.challenge.getTasksNearby(
+  const { data, isLoading } = api.challenge.getTasksNearby(
     props.currentTask.parent,
     props.currentTask.id
+  )
+
+  const nearbyTasks = useMemo(
+    () =>
+      (data ?? []).filter(
+        (t) => props.currentTask.bundleId == null || t.bundleId !== props.currentTask.bundleId
+      ),
+    [data, props.currentTask.bundleId]
   )
 
   if (isLoading) {
     return <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
   }
 
-  return <TaskSelectionMap {...props} tasks={nearbyTasks ?? []} excludeCurrentBundle />
+  return <TaskSelectionMap {...props} tasks={nearbyTasks} />
 }
