@@ -52,17 +52,12 @@ const mockCongratulate = (enqueue = vi.fn()) => {
   return enqueue
 }
 
-const mockWebSocket = (
-  lastMessage: WebSocketMessageTypes | null,
-  subscribe: (name: string) => void = vi.fn()
-) => {
+const mockWebSocket = (lastMessage: WebSocketMessageTypes | null) => {
   vi.mocked(useWebSocketContext).mockReturnValue({
     lastMessage,
     readyState: 1,
-    sendMessage: vi.fn(),
-    subscribe,
+    subscribe: vi.fn(),
   } as unknown as ReturnType<typeof useWebSocketContext>)
-  return subscribe
 }
 
 const mount = (queryClient: QueryClient = createTestQueryClient()) => {
@@ -75,16 +70,6 @@ const mount = (queryClient: QueryClient = createTestQueryClient()) => {
 describe('useWebSocketEvents', () => {
   afterEach(() => {
     vi.clearAllMocks()
-  })
-
-  it('subscribes to the tasks stream on mount', () => {
-    mockAuth(undefined)
-    mockCongratulate()
-    const subscribe = mockWebSocket(null)
-
-    mount()
-
-    expect(subscribe).toHaveBeenCalledWith('tasks')
   })
 
   it('does nothing when there is no lastMessage', () => {

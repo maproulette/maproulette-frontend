@@ -9,6 +9,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { useSetPageTitle } from '@/contexts/ChromeContext'
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { MapToggleContext } from '@/contexts/MapToggleContext'
+import { useChallengeSubscription } from '@/contexts/WebSocketContext'
 import { EditorProvider, useEditorContext } from './contexts/EditorContext'
 import { useTaskBundleContext } from './contexts/TaskBundleContext'
 import { useTaskContext } from './contexts/TaskContext'
@@ -22,6 +23,7 @@ const viewPanelClass = (isActive: boolean) =>
 const TaskContent = () => {
   const { activeView, idEditorMounted, showMap } = useEditorContext()
   const { task } = useTaskContext()
+  useChallengeSubscription(task.parent)
   const { drawerOpen } = useTaskBundleContext()
   const isDesktop = useIsDesktopLayoutContext()
   const [mapOpen, setMapOpen] = useState(false)

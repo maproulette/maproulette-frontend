@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useCallback, useContext, useEffect, useMemo } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import useWebSocketHook, { ReadyState } from 'react-use-websocket'
 import { apiBaseUrl } from '@/api/client'
 import { wsLogger } from '@/lib/logger'
@@ -9,8 +9,8 @@ import { useAuthContext } from './AuthContext'
 interface WebSocketContextType {
   lastMessage: WebSocketMessageTypes | null
   readyState: ReadyState
-  sendMessage: (message: string) => void
-  subscribe: (subscriptionName: string) => void
+  /** Subscribe to a backend topic. Returns a function that releases the subscription. */
+  subscribe: (subscriptionName: string) => () => void
 }
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined)
@@ -52,30 +52,52 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     [lastMessage?.data]
   )
 
-  // Reason: stored in context value and used as dependency in useEffect below
+  // Active subscriptions, ref-counted because the backend's unsubscribe is not:
+  // one consumer unmounting must not cancel a topic another consumer still needs.
+  const subscriptions = useRef(new Map<string, number>())
+  const socket = useRef({ readyState, sendMessage })
+  socket.current = { readyState, sendMessage }
+
+  const send = useCallback((messageType: 'subscribe' | 'unsubscribe', subscriptionName: string) => {
+    if (socket.current.readyState !== ReadyState.OPEN) return
+    socket.current.sendMessage(JSON.stringify({ messageType, data: { subscriptionName } }))
+  }, [])
+
   const subscribe = useCallback(
     (subscriptionName: string) => {
-      if (readyState === ReadyState.OPEN) {
-        const subscribeMessage = {
-          messageType: 'subscribe',
-          data: { subscriptionName },
+      const count = subscriptions.current.get(subscriptionName) ?? 0
+      subscriptions.current.set(subscriptionName, count + 1)
+      if (count === 0) send('subscribe', subscriptionName)
+
+      return () => {
+        const remaining = (subscriptions.current.get(subscriptionName) ?? 1) - 1
+        if (remaining > 0) {
+          subscriptions.current.set(subscriptionName, remaining)
+        } else {
+          subscriptions.current.delete(subscriptionName)
+          send('unsubscribe', subscriptionName)
         }
-        sendMessage(JSON.stringify(subscribeMessage))
       }
     },
-    [readyState, sendMessage]
+    [send]
   )
 
+  // Server-side subscriptions belong to the connection, so (re)send them all
+  // whenever a connection opens.
   useEffect(() => {
-    if (readyState === ReadyState.OPEN && user?.id) {
-      subscribe(`user_${user.id}`)
+    if (readyState !== ReadyState.OPEN) return
+    for (const subscriptionName of subscriptions.current.keys()) {
+      send('subscribe', subscriptionName)
     }
-  }, [readyState, user?.id, subscribe])
+  }, [readyState, send])
+
+  const userId = user?.id
+  useEffect(() => (userId ? subscribe(`user_${userId}`) : undefined), [userId, subscribe])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo<WebSocketContextType>(
-    () => ({ lastMessage: parsedMessage, readyState, sendMessage, subscribe }),
-    [parsedMessage, readyState, sendMessage, subscribe]
+    () => ({ lastMessage: parsedMessage, readyState, subscribe }),
+    [parsedMessage, readyState, subscribe]
   )
 
   return <WebSocketContext.Provider value={value}>{children}</WebSocketContext.Provider>
@@ -87,4 +109,13 @@ export const useWebSocketContext = () => {
     throw new Error('useWebSocketContext must be used within a WebSocketProvider')
   }
   return context
+}
+
+/**
+ * Receive live task events (claims, releases, status changes) for one challenge
+ * while the calling component is mounted. They are handled by useWebSocketEvents.
+ */
+export const useChallengeSubscription = (challengeId: number) => {
+  const { subscribe } = useWebSocketContext()
+  useEffect(() => subscribe(`challengeTasks_${challengeId}`), [challengeId, subscribe])
 }

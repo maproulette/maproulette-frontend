@@ -61,16 +61,11 @@ const invalidateOwnUserQueries = (
  * Mount once at the app root (AppLayout).
  */
 export const useWebSocketEvents = () => {
-  const { lastMessage, subscribe } = useWebSocketContext()
+  const { lastMessage } = useWebSocketContext()
   const { user } = useAuthContext()
   const { enqueue } = useCongratulate()
   const queryClient = useQueryClient()
   const seenRef = useRef<WeakSet<object>>(new WeakSet())
-
-  // Subscribe to the task stream so we can listen for task-completed on our own tasks
-  useEffect(() => {
-    subscribe('tasks')
-  }, [subscribe])
 
   useEffect(() => {
     if (!lastMessage || typeof lastMessage !== 'object') return
