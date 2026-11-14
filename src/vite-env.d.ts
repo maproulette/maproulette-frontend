@@ -20,6 +20,7 @@ interface AppEnv {
   readonly VITE_ID_EDITOR_SERVER_URL: string | undefined
   readonly VITE_RAPID_EDITOR_SERVER_URL: string | undefined
   readonly VITE_LEVEL0_EDITOR_SERVER_URL: string | undefined
+  readonly VITE_ENABLE_WEBSOCKET: string | undefined
   /** Root URL of the documentation site linked to from the app */
   readonly VITE_DOCS_BASE_URL: string | undefined
   /**
