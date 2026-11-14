@@ -1,14 +1,17 @@
 // @vitest-environment happy-dom
 import { type QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useLocation, useSearch } from '@tanstack/react-router'
+import { HTTPError, type NormalizedOptions } from 'ky'
 import { act, createElement, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { api, apiRequest } from '@/api'
+import { apiRequest as realApiRequest } from '@/api/client'
 import { Loader } from '@/components/ui/Loader'
 import { logger } from '@/lib/logger'
 import { createTestQueryClient } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
+import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
 import type { User } from '@/types/User'
 import {
@@ -80,15 +83,24 @@ describe('validateOAuthState', () => {
   })
 })
 
-describe('isSecurityError', () => {
-  const baseError = { name: 'ApiError', message: 'failed', statusText: 'error' }
+const httpError = (status: number) =>
+  new HTTPError(
+    new Response(null, { status }),
+    new Request('http://example.test/api'),
+    {} as NormalizedOptions
+  )
 
-  it.each([401, 403])('returns true for status %i', (status) => {
-    expect(isSecurityError({ ...baseError, status })).toBe(true)
+describe('isSecurityError', () => {
+  it.each([401, 403])('returns true for an HTTP %i', (status) => {
+    expect(isSecurityError(httpError(status))).toBe(true)
   })
 
-  it.each([200, 404, 500])('returns false for status %i', (status) => {
-    expect(isSecurityError({ ...baseError, status })).toBe(false)
+  it.each([404, 500])('returns false for an HTTP %i', (status) => {
+    expect(isSecurityError(httpError(status))).toBe(false)
+  })
+
+  it('returns false for errors that are not HTTP responses', () => {
+    expect(isSecurityError(new TypeError('Failed to fetch'))).toBe(false)
   })
 })
 
@@ -153,6 +165,7 @@ const mount = (queryClient: QueryClient = createTestQueryClient()) => {
 describe('useAuthContext', () => {
   afterEach(() => {
     vi.clearAllMocks()
+    vi.unstubAllGlobals()
     localStorage.clear()
     window.history.pushState({}, '', '/')
   })
@@ -315,47 +328,75 @@ describe('useAuthContext', () => {
     })
   })
 
-  describe('401 handling on the whoAmI query', () => {
-    it('clears the cached user and logs the session out on a 401', async () => {
+  describe('security errors on the whoAmI query', () => {
+    it.each([401, 403])(
+      'marks the session logged out and drops the stored token on a %i',
+      async (status) => {
+        mockSearch({})
+        mockLocation({ pathname: '/', searchStr: '' })
+        localStorage.setItem('osm_token', 'stale')
+        mockWhoAmI({ error: httpError(status) })
+
+        mount()
+
+        await waitFor(() => {
+          expect(
+            vi.mocked(api.user.whoAmI).mock.calls.some(([loggedOut]) => loggedOut === true)
+          ).toBe(true)
+        })
+        expect(localStorage.getItem('osm_token')).toBeNull()
+      }
+    )
+
+    it('leaves the session alone on a non-security error, e.g. a 500', () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
-      const queryClient = createTestQueryClient()
-      mockWhoAmI({ error: { status: 401 } })
-
-      mount(queryClient)
-
-      await waitFor(() => {
-        expect(api.user.clearAuth).toHaveBeenCalledWith(queryClient)
-      })
-      expect(vi.mocked(api.user.whoAmI).mock.calls.some(([loggedOut]) => loggedOut === true)).toBe(
-        true
-      )
-    })
-
-    it('clears the cached user and logs the session out on a 403, same as a 401', async () => {
-      mockSearch({})
-      mockLocation({ pathname: '/', searchStr: '' })
-      const queryClient = createTestQueryClient()
-      mockWhoAmI({ error: { status: 403 } })
-
-      mount(queryClient)
-
-      await waitFor(() => {
-        expect(api.user.clearAuth).toHaveBeenCalledWith(queryClient)
-      })
-      expect(vi.mocked(api.user.whoAmI).mock.calls.some(([loggedOut]) => loggedOut === true)).toBe(
-        true
-      )
-    })
-
-    it('does not clear the cached user on a non-security error, e.g. a 500', () => {
-      mockSearch({})
-      mockLocation({ pathname: '/', searchStr: '' })
-      mockWhoAmI({ error: { status: 500 } })
+      mockWhoAmI({ error: httpError(500) })
 
       mount()
 
+      expect(vi.mocked(api.user.whoAmI).mock.calls.every(([loggedOut]) => !loggedOut)).toBe(true)
+    })
+  })
+
+  describe('401 responses from any API request', () => {
+    const respondWith401 = async () => {
+      stubFetch(new Response(null, { status: 401 }))
+      await act(async () => {
+        await realApiRequest.get('api/v2/anything').catch(() => {})
+      })
+    }
+
+    it('signs out and offers to sign in again when a signed-in user gets a 401', async () => {
+      mockSearch({})
+      mockLocation({ pathname: '/', searchStr: '' })
+      localStorage.setItem('osm_token', 'abc123')
+      const queryClient = createTestQueryClient()
+      queryClient.setQueryData(['user', 'whoami'], fakeUser())
+      mockWhoAmIDynamic(fakeUser())
+
+      const { result } = mount(queryClient)
+      await respondWith401()
+
+      expect(api.user.clearAuth).toHaveBeenCalledWith(queryClient)
+      expect(localStorage.getItem('osm_token')).toBeNull()
+      expect(result.current.isAuthenticated).toBe(false)
+      expect(toast.error).toHaveBeenCalledWith(
+        'Your session has expired.',
+        expect.objectContaining({ action: expect.objectContaining({ label: 'Sign in again' }) })
+      )
+    })
+
+    it('ignores 401s when no user is signed in', async () => {
+      mockSearch({})
+      mockLocation({ pathname: '/', searchStr: '' })
+      mockWhoAmI({})
+
+      mount()
+      await respondWith401()
+
       expect(api.user.clearAuth).not.toHaveBeenCalled()
+      expect(toast.error).not.toHaveBeenCalled()
     })
   })
 
@@ -475,7 +516,7 @@ describe('useAuthContext', () => {
       mockSearch({ code: 'the-code', state: 'matching-state' })
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
-      vi.mocked(api.user.callback).mockRejectedValue({ status: 401 })
+      vi.mocked(api.user.callback).mockRejectedValue(httpError(401))
 
       const { result } = mount()
 

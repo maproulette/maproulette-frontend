@@ -3,6 +3,13 @@ import ky from 'ky'
 export const apiKey = window.env.VITE_SERVER_API_KEY
 export const apiBaseUrl = window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 
+let unauthorizedHandler: (() => void) | undefined
+
+/** Set a function to be called whenever an API request is rejected with HTTP 401. */
+export const setUnauthorizedHandler = (handler: (() => void) | undefined) => {
+  unauthorizedHandler = handler
+}
+
 export const apiRequest = ky.extend({
   prefixUrl: apiBaseUrl,
   credentials: 'include',
@@ -22,6 +29,11 @@ export const apiRequest = ky.extend({
         if (apiKey) {
           request.headers.set('apiKey', apiKey)
         }
+      },
+    ],
+    afterResponse: [
+      (_request, _options, response) => {
+        if (response.status === 401) unauthorizedHandler?.()
       },
     ],
   },

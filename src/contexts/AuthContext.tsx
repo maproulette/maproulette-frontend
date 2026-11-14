@@ -1,21 +1,15 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocation, useSearch } from '@tanstack/react-router'
+import { HTTPError } from 'ky'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api, apiRequest } from '@/api'
+import { setUnauthorizedHandler } from '@/api/client'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import type { OAuthLoginResponse } from '@/types/Oauth'
 import type { User } from '@/types/User'
-
-interface ApiError {
-  name: string
-  message: string
-  status: number
-  statusText: string
-  data?: unknown
-}
 
 type AuthParams = {
   code: string
@@ -33,9 +27,8 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
-export const isSecurityError = (error: ApiError): boolean => {
-  return error.status === 401 || error.status === 403
-}
+export const isSecurityError = (error: unknown): boolean =>
+  error instanceof HTTPError && (error.response.status === 401 || error.response.status === 403)
 
 export const validateOAuthState = (state: string | null): boolean => {
   const storedState = localStorage.getItem('state')
@@ -120,8 +113,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     } catch (error: unknown) {
-      const apiError = error as ApiError
-      if (isSecurityError(apiError)) {
+      if (isSecurityError(error)) {
         api.user.refreshAuth(queryClient)
       } else {
         logger.error('OAuth callback error', { error })
@@ -179,15 +171,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [osmToken])
 
+  const clearSession = useCallback(() => {
+    localStorage.removeItem('osm_token')
+    api.user.clearAuth(queryClient)
+    setIsLoggedOut(true)
+  }, [queryClient])
+
   useEffect(() => {
-    if (error) {
-      const apiError = error as ApiError
-      if (isSecurityError(apiError)) {
-        api.user.clearAuth(queryClient)
-        setIsLoggedOut(true)
-      }
+    if (isSecurityError(error)) {
+      localStorage.removeItem('osm_token')
+      setIsLoggedOut(true)
     }
-  }, [error, queryClient])
+  }, [error])
 
   const login = useCallback(async (): Promise<void> => {
     const currentUrl = location.pathname + location.searchStr
@@ -213,17 +208,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = useCallback(async (): Promise<void> => {
     clearOAuthState()
-    localStorage.removeItem('osm_token')
 
     try {
       await api.user.signOut()
     } catch (error) {
       logger.error('Logout error', { error })
     } finally {
-      api.user.clearAuth(queryClient)
-      setIsLoggedOut(true)
+      clearSession()
     }
-  }, [queryClient])
+  }, [clearSession])
+
+  // Handle HTTP 401 errors from whoami, which means the session has expired
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      if (!queryClient.getQueryData(['user', 'whoami'])) return
+      clearSession()
+      toast.error(t({ id: 'auth.sessionExpired', defaultMessage: 'Your session has expired.' }), {
+        id: 'session-expired',
+        duration: Number.POSITIVE_INFINITY,
+        action: {
+          label: t({ id: 'auth.signInAgain', defaultMessage: 'Sign in again' }),
+          onClick: () => login(),
+        },
+      })
+    })
+    return () => setUnauthorizedHandler(undefined)
+  }, [queryClient, clearSession, login, t])
 
   const value: AuthContextType = useMemo(
     () => ({

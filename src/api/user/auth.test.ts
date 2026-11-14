@@ -95,12 +95,16 @@ describe('userAuth.refreshAuth', () => {
 })
 
 describe('userAuth.clearAuth', () => {
-  it('removes the whoami query from the cache', () => {
+  it('clears all cached data', () => {
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(['user', 'whoami'], { id: 1 })
+    queryClient.setQueryData(['user', 1, 'lockedTasks'], [{ id: 7 }])
+    queryClient.setQueryData(['challenge', 5], { id: 5, isFavorite: true })
 
     userAuth.clearAuth(queryClient)
 
     expect(queryClient.getQueryData(['user', 'whoami'])).toBeUndefined()
+    expect(queryClient.getQueryData(['user', 1, 'lockedTasks'])).toBeUndefined()
+    expect(queryClient.getQueryData(['challenge', 5])).toBeUndefined()
   })
 })

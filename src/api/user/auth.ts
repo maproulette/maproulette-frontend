@@ -38,5 +38,6 @@ export const userAuth = {
 
   clearAuth: (queryClient: QueryClient) => {
     queryClient.removeQueries({ queryKey: ['user', 'whoami'] })
+    queryClient.resetQueries()
   },
 }
