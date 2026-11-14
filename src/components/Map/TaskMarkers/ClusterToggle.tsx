@@ -2,6 +2,7 @@ import { Network } from 'lucide-react'
 import type React from 'react'
 import { useId } from 'react'
 import { Badge } from '@/components/ui/Badge'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
 import { useIntl } from '@/i18n'
@@ -70,61 +71,70 @@ export const ClusterToggle = ({
   }
 
   return (
-    <div
-      className={cn(
-        inline
-          ? 'max-w-none'
-          : 'absolute top-3 left-3 z-20 max-w-[calc(100%-6rem)] md:top-4 md:left-4 md:max-w-none',
-        className
-      )}
+    <DisabledTooltip
+      show={disabled}
+      message={t({
+        id: 'map.taskMarkers.clusterToggle.forcedTooltip',
+        defaultMessage: 'You cannot disable clustering at this zoom level.',
+      })}
+      side="bottom"
     >
       <div
         className={cn(
-          'flex flex-col justify-center rounded-lg border border-zinc-200 bg-white/95 shadow-sm backdrop-blur-sm md:bg-white dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900',
-          inline ? 'h-10 px-3' : 'p-2.5 md:p-3'
+          inline
+            ? 'max-w-none'
+            : 'absolute top-3 left-3 z-20 max-w-[calc(100%-6rem)] md:top-4 md:left-4 md:max-w-none',
+          className
         )}
       >
-        <Label
-          htmlFor={switchId}
-          onClick={handleLabelClick}
+        <div
           className={cn(
-            'flex items-center gap-1.5 md:gap-2',
-            enforceDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+            'flex flex-col justify-center rounded-lg border border-zinc-200 bg-white/95 shadow-sm backdrop-blur-sm md:bg-white dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900',
+            inline ? 'h-10 px-3' : 'p-2.5 md:p-3'
           )}
         >
-          <Switch
-            id={switchId}
-            checked={clusteringEnabled}
-            onCheckedChange={handleToggle}
-            disabled={enforceDisabled}
-          />
-          <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
-          <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
-            {t({ id: 'map.taskMarkers.clusterToggle.label', defaultMessage: 'Cluster Markers' })}
-          </span>
-        </Label>
+          <Label
+            htmlFor={switchId}
+            onClick={handleLabelClick}
+            className={cn(
+              'flex items-center gap-1.5 md:gap-2',
+              enforceDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+            )}
+          >
+            <Switch
+              id={switchId}
+              checked={clusteringEnabled}
+              onCheckedChange={handleToggle}
+              disabled={enforceDisabled}
+            />
+            <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
+            <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
+              {t({ id: 'map.taskMarkers.clusterToggle.label', defaultMessage: 'Cluster Markers' })}
+            </span>
+          </Label>
 
-        {((taskCount !== undefined && taskCount > 0) || warningMessage) && (
-          <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
-            {taskCount !== undefined && taskCount > 0 && (
-              <Badge variant="secondary" className="text-xs">
-                {t(
-                  {
-                    id: 'common.tasksWithCount',
-                    defaultMessage: '{count, plural, one {# task} other {# tasks}}',
-                  },
-                  { count: taskCount }
-                )}
-              </Badge>
-            )}
-            {warningMessage && (
-              <p className="text-orange-500 text-xs leading-tight dark:text-orange-400">
-                {warningMessage}
-              </p>
-            )}
-          </div>
-        )}
+          {((taskCount !== undefined && taskCount > 0) || warningMessage) && (
+            <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
+              {taskCount !== undefined && taskCount > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {t(
+                    {
+                      id: 'common.tasksWithCount',
+                      defaultMessage: '{count, plural, one {# task} other {# tasks}}',
+                    },
+                    { count: taskCount }
+                  )}
+                </Badge>
+              )}
+              {warningMessage && (
+                <p className="text-orange-500 text-xs leading-tight dark:text-orange-400">
+                  {warningMessage}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </DisabledTooltip>
   )
 }

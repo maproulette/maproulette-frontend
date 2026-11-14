@@ -845,6 +845,7 @@
   "map.styleSwitcher.wmsUrlLabel": "WMS endpoint",
   "map.styleSwitcher.xyzUrlLabel": "Tile URL",
   "map.taskMarkers.clusterToggle.enforcedWarning": "Clustering is enforced for 500+ tasks",
+  "map.taskMarkers.clusterToggle.forcedTooltip": "You cannot disable clustering at this zoom level.",
   "map.taskMarkers.clusterToggle.label": "Cluster Markers",
   "map.taskMarkers.clusterToggle.tooLargeWarning": "Data is too large to cluster, zoom in to view tasks",
   "map.taskPicker.heading": "{count, plural, one {# task here} other {# tasks here}}",

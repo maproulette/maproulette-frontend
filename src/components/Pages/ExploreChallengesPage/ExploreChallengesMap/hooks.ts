@@ -626,6 +626,8 @@ export const useExploreChallengesMap = () => {
     }
   }, [])
 
+  const isForcedClustering = backendClusterFeatures.length > 0
+
   return {
     mapRef,
     mapLoaded,
@@ -647,5 +649,6 @@ export const useExploreChallengesMap = () => {
     selectPickedTask,
     closePicker,
     zoom,
+    isForcedClustering,
   }
 }

@@ -42,6 +42,7 @@ export const ExploreChallengesMap = () => {
     picker,
     selectPickedTask,
     closePicker,
+    isForcedClustering,
   } = useExploreChallengesMap()
   const { showDirections, directionsButton } = useDirectionsToggle(mapLoaded)
 
@@ -49,6 +50,8 @@ export const ExploreChallengesMap = () => {
   const mvtLayerId = 'mvt-hidden'
 
   const { portalTarget } = useDrawerPortal()
+
+  const isClustering = isForcedClustering ? true : cluster
 
   return (
     <div className="relative isolate h-full w-full">
@@ -119,7 +122,12 @@ export const ExploreChallengesMap = () => {
         )}
 
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
-        <ClusterToggle clusteringEnabled={cluster} onToggle={setCluster} inline />
+        <ClusterToggle
+          clusteringEnabled={isClustering}
+          onToggle={setCluster}
+          inline
+          disabled={isForcedClustering}
+        />
         <LocationIndicator />
       </div>
 
