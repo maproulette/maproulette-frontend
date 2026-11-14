@@ -22,6 +22,11 @@ interface AppEnv {
   readonly VITE_LEVEL0_EDITOR_SERVER_URL: string | undefined
   /** Root URL of the documentation site linked to from the app */
   readonly VITE_DOCS_BASE_URL: string | undefined
+  /**
+   * Set to "true" to enable the plugin system. When off, no plugins load (including
+   * VITE_DEPLOYMENT_PLUGIN_URLS) and the plugin settings are hidden.
+   */
+  readonly VITE_ENABLE_PLUGINS: string | undefined
   /** Comma-separated URLs of deployment plugin bundles to auto-load at login */
   readonly VITE_DEPLOYMENT_PLUGIN_URLS: string | undefined
 }

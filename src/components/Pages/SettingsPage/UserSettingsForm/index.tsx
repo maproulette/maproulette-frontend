@@ -5,6 +5,7 @@ import { api } from '@/api'
 import { FieldGroup } from '@/components/ui/Field'
 import { Form } from '@/components/ui/Form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { pluginsEnabled } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import type { User, UserSettings } from '@/types/User'
 import { ApiSettings } from './ApiSettings'
@@ -74,9 +75,11 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
             <TabsTrigger value="notifications">
               {t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
             </TabsTrigger>
-            <TabsTrigger value="plugins">
-              {t({ id: 'common.plugins', defaultMessage: 'Plugins' })}
-            </TabsTrigger>
+            {pluginsEnabled() && (
+              <TabsTrigger value="plugins">
+                {t({ id: 'common.plugins', defaultMessage: 'Plugins' })}
+              </TabsTrigger>
+            )}
             <TabsTrigger value="api">API</TabsTrigger>
           </TabsList>
           <div className="flex max-h-full min-h-0 flex-initial flex-col overflow-hidden rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
@@ -89,9 +92,11 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
               <TabsContent value="notifications" fill>
                 <NotificationsSettings form={form} subscriptions={subscriptions} />
               </TabsContent>
-              <TabsContent value="plugins" fill>
-                <PluginSettings />
-              </TabsContent>
+              {pluginsEnabled() && (
+                <TabsContent value="plugins" fill>
+                  <PluginSettings />
+                </TabsContent>
+              )}
               <TabsContent value="api" fill>
                 <ApiSettings />
               </TabsContent>

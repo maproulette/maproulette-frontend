@@ -33,6 +33,8 @@ const resolvePluginUrl = (url: string): string => {
   return url
 }
 
+export const pluginsEnabled = (): boolean => window.env.VITE_ENABLE_PLUGINS === 'true'
+
 const getDeploymentPluginUrls = (): string[] => {
   const rawUrls = window.env.VITE_DEPLOYMENT_PLUGIN_URLS
   if (!rawUrls || typeof rawUrls !== 'string') {
@@ -107,7 +109,7 @@ export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
     [t]
   )
 
-  if (!user) {
+  if (!user || !pluginsEnabled()) {
     return <PluginContext.Provider value={defaultPluginContext}>{children}</PluginContext.Provider>
   }
 

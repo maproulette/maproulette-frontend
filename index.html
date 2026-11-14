@@ -18,9 +18,11 @@
         import React from 'react';
         import ReactDOM from 'react-dom';
         import * as jsxRuntime from 'react/jsx-runtime';
-        window.React = React;
-        window.ReactDOM = ReactDOM;
-        window.jsxRuntime = jsxRuntime;
+        if (window.env.VITE_ENABLE_PLUGINS === 'true') {
+            window.React = React;
+            window.ReactDOM = ReactDOM;
+            window.jsxRuntime = jsxRuntime;
+        }
         await import('/src/main.tsx');
     </script>
 </body>
