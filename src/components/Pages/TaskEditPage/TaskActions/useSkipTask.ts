@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
+import { getErrorMessage } from '@/lib/apiError'
 import { logger } from '@/lib/logger'
 import type { Task } from '@/types/Task'
 import { useConfirmDiscardIdEdits } from './useConfirmDiscardIdEdits'
@@ -30,9 +31,7 @@ export const useSkipTask = (task: Task) => {
     if (!confirmDiscardIdEdits()) return
     setIsSkipping(true)
     try {
-      await skipMutation(task.id).catch((error) => {
-        logger.warn('Skip endpoint failed, falling back to client-side unlock', { error })
-      })
+      await skipMutation(task.id)
 
       const randomTasks = await api.challenge.getRandomTask(task.parent)
       if (randomTasks && randomTasks.length > 0) {
@@ -52,10 +51,13 @@ export const useSkipTask = (task: Task) => {
     } catch (error) {
       logger.error('Skip failed', { error })
       toast.error(
-        t({
-          id: 'taskEditPage.taskActions.skipButton.skipFailed',
-          defaultMessage: 'Could not skip this task',
-        })
+        await getErrorMessage(
+          error,
+          t({
+            id: 'taskEditPage.taskActions.skipButton.skipFailed',
+            defaultMessage: 'Could not skip this task',
+          })
+        )
       )
     } finally {
       setIsSkipping(false)
