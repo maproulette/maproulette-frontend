@@ -179,17 +179,3 @@ export const boundsAreEqual = (
     Math.abs(north1 - north2) < tolerance
   )
 }
-
-/**
- * Reset map to default view
- */
-export const resetMapView = (
-  map: maplibregl.Map,
-  center: [number, number] = [0, 0],
-  zoom: number = 2
-) => {
-  map.jumpTo({
-    center,
-    zoom,
-  })
-}

@@ -1,7 +1,6 @@
 import { useLoaderData, useParams } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { BrowsedChallengeProvider } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
-import { BrowsedChallengeSearchContextProvider } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeSearchContext'
 import { DrawerPortalProvider } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { useSetPageTitle } from '@/contexts/ChromeContext'
 import { useChallengeSubscription } from '@/contexts/WebSocketContext'
@@ -21,12 +20,10 @@ export const BrowsedChallengePage = () => {
   }, [challenge?.id])
 
   return (
-    <BrowsedChallengeSearchContextProvider>
-      <BrowsedChallengeProvider>
-        <DrawerPortalProvider>
-          <BrowsedChallengePageContent />
-        </DrawerPortalProvider>
-      </BrowsedChallengeProvider>
-    </BrowsedChallengeSearchContextProvider>
+    <BrowsedChallengeProvider>
+      <DrawerPortalProvider>
+        <BrowsedChallengePageContent />
+      </DrawerPortalProvider>
+    </BrowsedChallengeProvider>
   )
 }

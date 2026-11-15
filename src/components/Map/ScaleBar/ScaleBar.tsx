@@ -126,7 +126,7 @@ export const ScaleBar = ({ mapRef, mapLoaded, maxWidth = 100, className }: Props
   return (
     <div
       className={cn(
-        'flex flex-col rounded-md bg-white/95 px-2 py-1 shadow-md backdrop-blur dark:bg-slate-900/95',
+        'flex flex-col rounded-md border border-zinc-200 bg-white px-2 py-1 shadow-md dark:border-slate-700 dark:bg-slate-900',
         className
       )}
     >

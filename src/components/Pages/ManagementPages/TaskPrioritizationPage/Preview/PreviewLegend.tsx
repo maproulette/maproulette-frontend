@@ -7,7 +7,7 @@ export const PreviewLegend = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-3 rounded-md border border-zinc-200 bg-white/90 px-3 py-1.5 text-xs shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/90',
+        'inline-flex items-center gap-3 rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs shadow-sm dark:border-slate-700 dark:bg-slate-900',
         className
       )}
     >

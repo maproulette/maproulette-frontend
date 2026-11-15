@@ -15,7 +15,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
   const statusLegendEntries = getStatusLegendEntries(t)
 
   return (
-    <div className="flex flex-col-reverse rounded-md bg-white/95 shadow-md backdrop-blur dark:bg-slate-900/95">
+    <div className="flex flex-col-reverse rounded-md border border-zinc-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
       <Button
         type="button"
         variant="ghost"

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { DIRECTIONS_BINDING } from '@/components/Map/directionsControlButton'
+import { DIRECTIONS_BINDING } from '@/components/Map/directions'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { useIntl } from '@/i18n'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'

@@ -2,6 +2,7 @@ import bbox from '@turf/bbox'
 import type { Feature } from 'geojson'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useStoredDirections } from '@/components/Map/directions'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import type { Bbox2D } from '@/types/Map'
 import { useTaskContext } from './TaskContext'
@@ -49,7 +50,7 @@ export const TaskFeatureProvider = ({ children }: { children: ReactNode }) => {
   const { task } = useTaskContext()
   const [focusedFeature, setFocusedFeature] = useState<FeatureSelection | null>(null)
   const [highlightedFeature, setHighlightedFeature] = useState<FeatureSelection | null>(null)
-  const [showDirectionIndicators, setShowDirectionIndicators] = useState(true)
+  const [showDirectionIndicators, setShowDirectionIndicators] = useStoredDirections()
 
   // Feature keys are scoped to a task, so both selections are meaningless once
   // the mapper moves on to the next one.

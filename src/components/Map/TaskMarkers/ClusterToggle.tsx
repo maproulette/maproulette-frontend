@@ -1,7 +1,6 @@
 import { Network } from 'lucide-react'
 import type React from 'react'
-import { useId } from 'react'
-import { Badge } from '@/components/ui/Badge'
+import { useId, useState } from 'react'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { Label } from '@/components/ui/Label'
 import { Switch } from '@/components/ui/Switch'
@@ -11,18 +10,26 @@ import { cn } from '@/lib/utils'
 export interface ClusterToggleProps {
   /** Whether the toggle is disabled */
   disabled?: boolean
-  /** Current task count to display */
-  taskCount?: number
   /** Current clustering enabled state */
-  clusteringEnabled?: boolean
+  clusteringEnabled: boolean
   /** Callback when clustering is toggled */
   onToggle?: (enabled: boolean) => void
   /** Custom className for the container */
   className?: string
-  /** Show warning messages for large datasets */
-  showWarnings?: boolean
   /** Render without absolute positioning so it can sit inside a flex layout */
   inline?: boolean
+}
+
+const AUTO_CLUSTER_THRESHOLD = 5000
+
+/**
+ * Client-side clustering state for a task map. Clustering is enabled by
+ * default for large challenges and disabled for small ones, but the user
+ * can toggle a control on the map to override this.
+ */
+export const useClustering = (taskCount: number) => {
+  const [override, setOverride] = useState<boolean | null>(null)
+  return [override ?? taskCount > AUTO_CLUSTER_THRESHOLD, setOverride] as const
 }
 
 /**
@@ -31,11 +38,9 @@ export interface ClusterToggleProps {
  */
 export const ClusterToggle = ({
   disabled = false,
-  taskCount,
-  clusteringEnabled = true,
+  clusteringEnabled,
   onToggle,
   className = '',
-  showWarnings = false,
   inline = false,
 }: ClusterToggleProps) => {
   const switchId = useId()
@@ -47,24 +52,8 @@ export const ClusterToggle = ({
     }
   }
 
-  const warningMessage = showWarnings
-    ? taskCount && taskCount > 5000
-      ? t({
-          id: 'map.taskMarkers.clusterToggle.tooLargeWarning',
-          defaultMessage: 'Data is too large to cluster, zoom in to view tasks',
-        })
-      : taskCount && taskCount > 500
-        ? t({
-            id: 'map.taskMarkers.clusterToggle.enforcedWarning',
-            defaultMessage: 'Clustering is enforced for 500+ tasks',
-          })
-        : null
-    : null
-
-  const enforceDisabled = !!warningMessage || disabled
-
   const handleLabelClick = (e: React.MouseEvent) => {
-    if (!enforceDisabled && onToggle) {
+    if (!disabled && onToggle) {
       e.preventDefault()
       handleToggle(!clusteringEnabled)
     }
@@ -89,7 +78,7 @@ export const ClusterToggle = ({
       >
         <div
           className={cn(
-            'flex flex-col justify-center rounded-lg border border-zinc-200 bg-white/95 shadow-sm backdrop-blur-sm md:bg-white dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900',
+            'flex flex-col justify-center rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900',
             inline ? 'h-10 px-3' : 'p-2.5 md:p-3'
           )}
         >
@@ -98,41 +87,20 @@ export const ClusterToggle = ({
             onClick={handleLabelClick}
             className={cn(
               'flex items-center gap-1.5 md:gap-2',
-              enforceDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+              disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
             )}
           >
             <Switch
               id={switchId}
               checked={clusteringEnabled}
               onCheckedChange={handleToggle}
-              disabled={enforceDisabled}
+              disabled={disabled}
             />
             <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
             <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
               {t({ id: 'map.taskMarkers.clusterToggle.label', defaultMessage: 'Cluster Markers' })}
             </span>
           </Label>
-
-          {((taskCount !== undefined && taskCount > 0) || warningMessage) && (
-            <div className="mt-2 space-y-1.5 md:mt-3 md:space-y-2">
-              {taskCount !== undefined && taskCount > 0 && (
-                <Badge variant="secondary" className="text-xs">
-                  {t(
-                    {
-                      id: 'common.tasksWithCount',
-                      defaultMessage: '{count, plural, one {# task} other {# tasks}}',
-                    },
-                    { count: taskCount }
-                  )}
-                </Badge>
-              )}
-              {warningMessage && (
-                <p className="text-orange-500 text-xs leading-tight dark:text-orange-400">
-                  {warningMessage}
-                </p>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </DisabledTooltip>

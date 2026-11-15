@@ -1,12 +1,10 @@
-import { ChevronDown, ChevronUp, Globe, Layers, ZoomIn, ZoomOut } from 'lucide-react'
-import { useState } from 'react'
+import { Layers, Settings2, ZoomIn, ZoomOut } from 'lucide-react'
+import type { ReactNode } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { MapStyleSwitcher } from '@/components/Map/MapStyleSwitcher'
-import { resetMapView } from '@/components/Map/mapUtils'
 import { Button } from '@/components/ui/Button'
 import { KbdBinding } from '@/components/ui/Kbd'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
-import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
 import { useIntl } from '@/i18n'
 import type { ShortcutBinding } from '@/lib/keyboardShortcuts'
@@ -18,7 +16,6 @@ export interface MapControlButton {
   tooltip?: string
   disabled?: boolean
   id?: string
-  isActive?: boolean
   /** Shortcut that does the same thing, shown as a key cap in the tooltip. */
   binding?: ShortcutBinding
 }
@@ -28,10 +25,11 @@ export interface MapControlsProps {
   mapLoaded: boolean
   customButtons?: MapControlButton[]
   showZoom?: boolean
-  showReset?: boolean
   showLayers?: boolean
-  collapsible?: boolean
-  defaultOpen?: boolean
+  /** Content of the Map settings panel, built from the parts in MapSettings. */
+  settings?: ReactNode
+  /** Marks the settings button when a setting is away from its default. */
+  settingsModified?: boolean
   className?: string
   /** Shortcuts for the built-in zoom buttons, shown as key caps in their tooltips. */
   zoomBindings?: { zoomIn?: ShortcutBinding; zoomOut?: ShortcutBinding }
@@ -53,15 +51,13 @@ export const MapControls = ({
   mapLoaded,
   customButtons = [],
   showZoom = true,
-  showReset = true,
   showLayers = true,
-  collapsible = false,
-  defaultOpen = true,
+  settings,
+  settingsModified = false,
   className,
   zoomBindings,
 }: MapControlsProps) => {
   const { t } = useIntl()
-  const [isOpen, setIsOpen] = useState(defaultOpen)
 
   const handleZoomIn = () => {
     if (map.current && mapLoaded) {
@@ -77,177 +73,151 @@ export const MapControls = ({
     }
   }
 
-  const handleResetView = () => {
-    if (map.current && mapLoaded) {
-      const maplibreMap = map.current.getMap()
-      resetMapView(maplibreMap)
-    }
-  }
-
   return (
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex flex-col items-end', className)}>
-        <div className="mt-2 mr-2 flex flex-col items-center rounded-xl bg-white/95 p-1.5 shadow-sm dark:bg-slate-900/95 dark:shadow-none">
-          {/* Collapsible icons section */}
-          <div
-            className={cn(
-              'flex flex-col items-center gap-1 overflow-hidden transition-all duration-300 ease-in-out',
-              collapsible && !isOpen ? 'max-h-0 opacity-0' : 'max-h-96 opacity-100'
-            )}
-          >
-            {showLayers && (
-              <Popover>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        disabled={!mapLoaded}
-                        className={mapButtonClass}
-                        aria-label={t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
-                      >
-                        <Layers className="h-4 w-4" />
-                      </Button>
-                    </PopoverTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    {t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
-                  </TooltipContent>
-                </Tooltip>
-                <PopoverContent
-                  side="left"
-                  align="start"
-                  sideOffset={8}
-                  aria-label={t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
-                  className="w-72"
-                >
-                  <MapStyleSwitcher map={map} mapLoaded={mapLoaded} />
-                </PopoverContent>
-              </Popover>
-            )}
-
-            {showReset && (
+        <div className="mt-2 mr-2 flex flex-col items-center gap-1 rounded-xl border border-zinc-200 bg-white p-1.5 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:shadow-none">
+          {showLayers && (
+            <Popover>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleResetView}
-                    disabled={!mapLoaded}
-                    className={mapButtonClass}
-                  >
-                    <Globe className="h-4 w-4" />
-                  </Button>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={!mapLoaded}
+                      className={mapButtonClass}
+                      aria-label={t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
+                    >
+                      <Layers className="h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  {t({ id: 'map.controls.resetView', defaultMessage: 'Reset view' })}
+                  {t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
                 </TooltipContent>
               </Tooltip>
-            )}
+              <PopoverContent
+                side="left"
+                align="start"
+                sideOffset={8}
+                aria-label={t({ id: 'map.controls.mapStyle', defaultMessage: 'Map style' })}
+                className="w-72"
+              >
+                <MapStyleSwitcher map={map} mapLoaded={mapLoaded} />
+              </PopoverContent>
+            </Popover>
+          )}
 
-            {showZoom && (
-              <>
-                <Tooltip>
-                  <TooltipTrigger asChild>
+          {settings && (
+            <Popover>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <PopoverTrigger asChild>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={handleZoomIn}
                       disabled={!mapLoaded}
-                      className={mapButtonClass}
+                      className={cn(mapButtonClass, 'relative')}
+                      aria-label={t({
+                        id: 'map.controls.mapSettings',
+                        defaultMessage: 'Map settings',
+                      })}
                     >
-                      <ZoomIn className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <TooltipLabel
-                      text={t({ id: 'map.controls.zoomIn', defaultMessage: 'Zoom in' })}
-                      binding={zoomBindings?.zoomIn}
-                    />
-                  </TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleZoomOut}
-                      disabled={!mapLoaded}
-                      className={mapButtonClass}
-                    >
-                      <ZoomOut className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <TooltipLabel
-                      text={t({ id: 'map.controls.zoomOut', defaultMessage: 'Zoom out' })}
-                      binding={zoomBindings?.zoomOut}
-                    />
-                  </TooltipContent>
-                </Tooltip>
-              </>
-            )}
-
-            {customButtons.map((button, index) => {
-              const Icon = button.icon
-              const key = button.id || button.tooltip || `custom-button-${index}`
-              return (
-                <Tooltip key={key}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={button.onClick}
-                      disabled={button.disabled}
-                      aria-label={button.tooltip}
-                      aria-pressed={button.isActive}
-                      className={cn(
-                        mapButtonClass,
-                        button.isActive && 'text-blue-400 hover:text-blue-300'
+                      <Settings2 className="h-4 w-4" />
+                      {settingsModified && (
+                        <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-blue-500" />
                       )}
-                    >
-                      <Icon className="h-4 w-4" />
                     </Button>
-                  </TooltipTrigger>
-                  {button.tooltip && (
-                    <TooltipContent>
-                      <TooltipLabel text={button.tooltip} binding={button.binding} />
-                    </TooltipContent>
-                  )}
-                </Tooltip>
-              )
-            })}
-          </div>
+                  </PopoverTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  {t({ id: 'map.controls.mapSettings', defaultMessage: 'Map settings' })}
+                </TooltipContent>
+              </Tooltip>
+              <PopoverContent
+                side="left"
+                align="start"
+                sideOffset={8}
+                aria-label={t({ id: 'map.controls.mapSettings', defaultMessage: 'Map settings' })}
+                className="w-72"
+              >
+                {settings}
+              </PopoverContent>
+            </Popover>
+          )}
 
-          {/* Divider + collapse toggle */}
-          {collapsible && (
+          {showZoom && (
             <>
-              <Separator className="my-1 w-6 bg-zinc-200 dark:bg-slate-600" />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={handleZoomIn}
+                    disabled={!mapLoaded}
                     className={mapButtonClass}
+                    aria-label={t({ id: 'map.controls.zoomIn', defaultMessage: 'Zoom in' })}
                   >
-                    {isOpen ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronUp className="h-4 w-4" />
-                    )}
+                    <ZoomIn className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  {isOpen
-                    ? t({ id: 'map.controls.hideControls', defaultMessage: 'Hide controls' })
-                    : t({ id: 'map.controls.showControls', defaultMessage: 'Show controls' })}
+                  <TooltipLabel
+                    text={t({ id: 'map.controls.zoomIn', defaultMessage: 'Zoom in' })}
+                    binding={zoomBindings?.zoomIn}
+                  />
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleZoomOut}
+                    disabled={!mapLoaded}
+                    className={mapButtonClass}
+                    aria-label={t({ id: 'map.controls.zoomOut', defaultMessage: 'Zoom out' })}
+                  >
+                    <ZoomOut className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <TooltipLabel
+                    text={t({ id: 'map.controls.zoomOut', defaultMessage: 'Zoom out' })}
+                    binding={zoomBindings?.zoomOut}
+                  />
                 </TooltipContent>
               </Tooltip>
             </>
           )}
+
+          {customButtons.map((button, index) => {
+            const Icon = button.icon
+            const key = button.id || button.tooltip || `custom-button-${index}`
+            return (
+              <Tooltip key={key}>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={button.onClick}
+                    disabled={button.disabled}
+                    aria-label={button.tooltip}
+                    className={mapButtonClass}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                {button.tooltip && (
+                  <TooltipContent side="left">
+                    <TooltipLabel text={button.tooltip} binding={button.binding} />
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            )
+          })}
         </div>
       </div>
     </TooltipProvider>

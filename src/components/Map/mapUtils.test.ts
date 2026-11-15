@@ -1,5 +1,5 @@
 import type maplibregl from 'maplibre-gl'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import type { Bbox2D } from '@/types/Map'
 import {
   boundsAreEqual,
@@ -11,7 +11,6 @@ import {
   intersectBoundsStrings,
   isWorldBounds,
   parseBoundsString,
-  resetMapView,
 } from './mapUtils.ts'
 
 const BBOX: Bbox2D = [-100, 30, -90, 40]
@@ -219,23 +218,5 @@ describe('getMapBoundsString', () => {
   it('clamps out-of-range map bounds to the valid geographic ranges', () => {
     const map = createMockMap({ west: -200, south: -100, east: 200, north: 100 })
     expect(getMapBoundsString(map)).toBe('-180,-85,180,85')
-  })
-})
-
-describe('resetMapView', () => {
-  const createMockMap = (): { jumpTo: ReturnType<typeof vi.fn> } => ({
-    jumpTo: vi.fn(),
-  })
-
-  it('jumps to the world center at zoom 2 by default', () => {
-    const map = createMockMap()
-    resetMapView(map as unknown as maplibregl.Map)
-    expect(map.jumpTo).toHaveBeenCalledWith({ center: [0, 0], zoom: 2 })
-  })
-
-  it('jumps to a given center and zoom', () => {
-    const map = createMockMap()
-    resetMapView(map as unknown as maplibregl.Map, [-100, 40], 8)
-    expect(map.jumpTo).toHaveBeenCalledWith({ center: [-100, 40], zoom: 8 })
   })
 })

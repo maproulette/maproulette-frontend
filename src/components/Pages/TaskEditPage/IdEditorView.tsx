@@ -618,7 +618,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         {/* Drag handle, which doubles as the collapse toggle */}
         <div
           {...handleProps}
-          className={`flex items-center bg-slate-900/95 pl-1.5 ${
+          className={`flex items-center bg-slate-900 pl-1.5 ${
             dragging ? 'cursor-grabbing' : 'cursor-grab'
           }`}
           title={t({
@@ -631,7 +631,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         <button
           type="button"
           onClick={() => setDrawerOpen(!drawerOpen)}
-          className="flex h-10 items-center gap-1.5 bg-slate-900/95 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
+          className="flex h-10 items-center gap-1.5 bg-slate-900 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
           title={
             drawerOpen
               ? t({ id: 'taskEditPage.idEditor.collapsePanel', defaultMessage: 'Collapse panel' })
@@ -650,7 +650,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         <div
           className={`flex items-center overflow-hidden transition-all duration-200 ${drawerOpen ? 'max-w-[600px] opacity-100' : 'max-w-0 opacity-0'}`}
         >
-          <div className="flex items-center gap-1 bg-slate-900/95 py-1.5 pr-2 pl-1 shadow-md">
+          <div className="flex items-center gap-1 bg-slate-900 py-1.5 pr-2 pl-1 shadow-md">
             {/* Unsaved changes */}
             {hasUnsavedChanges && (
               <button

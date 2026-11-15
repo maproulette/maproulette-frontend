@@ -32,6 +32,7 @@ import { LassoLayer } from './TaskMap/LassoLayer'
 import { MultiTaskPanel } from './TaskMap/MultiTaskPanel'
 import { useTaskEditMapContext } from './TaskMap/TaskEditMapContext'
 import { TaskGeometryLayer } from './TaskMap/TaskGeometryLayer'
+import { TaskMapSettings, useTaskMapSettingsModified } from './TaskMap/TaskMapSettings'
 import { useLassoBundleSync } from './TaskMap/useLassoBundleSync'
 import { useMapControlButtons } from './TaskMap/useMapControlButtons'
 import { useMapNavigation } from './TaskMap/useMapNavigation'
@@ -155,6 +156,7 @@ export const TaskMap = () => {
   useTaskMapShortcuts(handleCenterToTask)
 
   const mapControlButtons = useMapControlButtons(mapLoaded, handleCenterToTask)
+  const settingsModified = useTaskMapSettingsModified()
 
   const [initialViewState] = useState(() => {
     const [lng, lat] = task.location.coordinates
@@ -234,7 +236,7 @@ export const TaskMap = () => {
             <Button
               variant="outline"
               onClick={() => setShowMap(false)}
-              className="h-10 gap-2 bg-white/95 shadow-sm backdrop-blur-sm dark:bg-slate-900/95"
+              className="h-10 gap-2 border-zinc-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
             >
               <MapIcon className="size-4" />
               {t({ id: 'browsedChallengePage.footer.hideMap', defaultMessage: 'Hide Map' })}
@@ -246,7 +248,7 @@ export const TaskMap = () => {
           <button
             type="button"
             onClick={openIdEditor}
-            className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800/90 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
+            className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
             title={t({
               id: 'taskEditPage.taskMap.editInId',
               defaultMessage: 'Edit in iD (inline)',
@@ -300,11 +302,10 @@ export const TaskMap = () => {
         mapLoaded={mapLoaded}
         zoomBindings={{ zoomIn: MAP_BINDINGS.zoomIn, zoomOut: MAP_BINDINGS.zoomOut }}
         showZoom={true}
-        showReset={true}
         showLayers={true}
-        collapsible={true}
-        defaultOpen={true}
         customButtons={mapControlButtons}
+        settings={<TaskMapSettings />}
+        settingsModified={settingsModified}
       />
 
       <ClearBundleDialog />

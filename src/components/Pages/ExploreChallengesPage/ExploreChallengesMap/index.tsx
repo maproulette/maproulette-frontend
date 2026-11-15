@@ -2,9 +2,10 @@ import { useId } from 'react'
 import { createPortal } from 'react-dom'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { useDirectionsToggle } from '@/components/Map/directionsControlButton'
+import { DirectionsSetting, useDirectionsToggle } from '@/components/Map/directions'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapGL } from '@/components/Map/MapGL'
+import { MapSettingsSection } from '@/components/Map/MapSettings'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
@@ -16,11 +17,13 @@ import { TaskPickerMenu } from '@/components/Map/TaskMarkers/TaskPickerMenu'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { TaskInfoDrawer } from '@/components/TaskInfoPanel/TaskInfoDrawer'
+import { useIntl } from '@/i18n'
 import { useExploreChallengesMap } from './hooks'
 import { LocationIndicator } from './LocationIndicator'
 import { LocationPolygonLayer } from './LocationPolygonLayer'
 
 export const ExploreChallengesMap = () => {
+  const { t } = useIntl()
   const mapId = useId()
   const {
     mapRef,
@@ -44,7 +47,7 @@ export const ExploreChallengesMap = () => {
     closePicker,
     isForcedClustering,
   } = useExploreChallengesMap()
-  const { showDirections, directionsButton } = useDirectionsToggle(mapLoaded)
+  const { showDirections, setShowDirections } = useDirectionsToggle(mapLoaded)
 
   const mvtSourceId = 'mvt-data'
   const mvtLayerId = 'mvt-hidden'
@@ -135,11 +138,15 @@ export const ExploreChallengesMap = () => {
         map={mapRef}
         mapLoaded={mapLoaded}
         showZoom={true}
-        showReset={true}
         showLayers={true}
-        collapsible={true}
-        defaultOpen={true}
-        customButtons={[directionsButton]}
+        settings={
+          <MapSettingsSection
+            title={t({ id: 'map.settings.overlays', defaultMessage: 'Overlays' })}
+          >
+            <DirectionsSetting checked={showDirections} onCheckedChange={setShowDirections} />
+          </MapSettingsSection>
+        }
+        settingsModified={!showDirections}
       />
     </div>
   )

@@ -4,6 +4,7 @@ import { MapControls } from '@/components/Map/MapControls'
 import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { ScaleBar } from '@/components/Map/ScaleBar'
+import { useClustering } from '@/components/Map/TaskMarkers/ClusterToggle'
 import type { HighlightedMarker, MarkerStyle } from '@/components/Map/TaskMarkers/markerStyle'
 import { TaskMarkersLayer } from '@/components/Map/TaskMarkers/TaskMarkersLayer'
 import { useFitToMarkers } from '@/components/Map/TaskMarkers/useFitToMarkers'
@@ -59,7 +60,7 @@ export const PreviewMap = ({
   const [mapLoaded, setMapLoaded] = useState(false)
   const { markers, preview } = useTaskPreview()
   const { draft } = usePrioritizationContext()
-  const [cluster, setCluster] = useState(true)
+  const [cluster, setCluster] = useClustering(markers.length)
 
   useEffect(() => {
     onMapLoaded?.(mapLoaded)
@@ -149,15 +150,7 @@ export const PreviewMap = ({
         )}
       </MapGL>
 
-      <MapControls
-        map={mapRef}
-        mapLoaded={mapLoaded}
-        showZoom
-        showReset
-        showLayers={false}
-        collapsible
-        defaultOpen
-      />
+      <MapControls map={mapRef} mapLoaded={mapLoaded} showZoom showLayers={false} />
 
       <div className="pointer-events-none absolute bottom-2 left-2 z-10">
         <ScaleBar mapRef={mapRef} mapLoaded={mapLoaded} />
@@ -165,7 +158,7 @@ export const PreviewMap = ({
 
       {preview.isEvaluating && (
         <div
-          className="pointer-events-none absolute top-3 right-3 z-10 inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white/95 px-2.5 py-1.5 font-medium text-xs text-zinc-700 shadow-sm dark:border-slate-700 dark:bg-slate-900/95 dark:text-slate-200"
+          className="pointer-events-none absolute top-3 right-3 z-10 inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-2.5 py-1.5 font-medium text-xs text-zinc-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
           aria-live="polite"
         >
           <Spinner size="sm" />

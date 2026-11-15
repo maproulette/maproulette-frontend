@@ -42,7 +42,7 @@ export const LocationIndicator = () => {
       onClick={recenter}
       title={label}
       aria-label={label}
-      className="flex h-10 max-w-[16rem] cursor-pointer items-center gap-1.5 rounded-lg border border-zinc-200 bg-white/95 px-3 shadow-sm backdrop-blur-sm transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 md:bg-white dark:border-slate-700 dark:bg-slate-900/95 dark:md:bg-slate-900 dark:hover:bg-slate-800"
+      className="flex h-10 max-w-[16rem] cursor-pointer items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 shadow-sm transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
     >
       <MapPin className="h-3.5 w-3.5 shrink-0 text-emerald-600 md:h-4 md:w-4 dark:text-emerald-400" />
       {/* The button's accessible name carries the full phrase, so the visible

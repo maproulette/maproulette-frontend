@@ -3,10 +3,12 @@ import { HTTPError } from 'ky'
 import { z } from 'zod'
 import { api } from '@/api'
 import { BrowsedChallengePage } from '@/components/Pages/BrowsedChallengePage'
+import { TASK_FILTERS } from '@/components/Pages/BrowsedChallengePage/taskFilter'
 import { logger } from '@/lib/logger'
 
 const challengeSearchSchema = z.object({
   comments: z.coerce.number().optional(), // 1 → auto-open comments modal
+  tasks: z.enum(TASK_FILTERS).optional().catch(undefined),
 })
 
 export const Route = createFileRoute('/_app/challenge/$challengeId/')({

@@ -1,9 +1,11 @@
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useClustering } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
+import { useStoredFlag } from '@/lib/useStoredFlag'
 import type { TaskEditMapContextType } from './taskEditMapTypes'
 import { useInitialMapBounds } from './useInitialMapBounds'
 import { useMapViewport } from './useMapViewport'
@@ -16,13 +18,13 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const { showBundleOnly, activeBundle } = useTaskBundleContext()
 
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [isClustered, setIsClustered] = useState<boolean>(true)
-  const [showExploreLayer, setShowExploreLayer] = useState<boolean>(false)
+  const [showExploreLayer, setShowExploreLayer] = useStoredFlag('map.showOtherChallenges', false)
 
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(task.parent)
 
   const allMarkers = useMemo(() => flattenTaskMarkers(taskMarkersData), [taskMarkersData])
+  const [isClustered, setIsClustered] = useClustering(allMarkers.length)
 
   const markers = useMemo(() => {
     if (!showBundleOnly) return allMarkers

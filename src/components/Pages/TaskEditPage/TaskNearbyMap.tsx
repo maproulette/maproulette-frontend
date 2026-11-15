@@ -116,7 +116,7 @@ export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapPro
       </MapGL>
 
       {/* Task count indicator */}
-      <div className="absolute top-2 right-2 rounded bg-white/90 px-2 py-1 text-xs shadow dark:bg-slate-800/90">
+      <div className="absolute top-2 right-2 rounded border border-zinc-200 bg-white px-2 py-1 text-xs shadow dark:border-slate-700 dark:bg-slate-900">
         {t(
           {
             id: 'taskEditPage.taskNearbyMap.nearbyCount',

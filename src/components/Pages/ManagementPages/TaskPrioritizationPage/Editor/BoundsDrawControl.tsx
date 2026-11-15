@@ -272,7 +272,7 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
   return (
     <div
       className={cn(
-        'inline-flex flex-col gap-1 rounded-md border border-zinc-200 bg-white/95 p-1 shadow-sm dark:border-slate-700 dark:bg-slate-900/95',
+        'inline-flex flex-col gap-1 rounded-md border border-zinc-200 bg-white p-1 shadow-sm dark:border-slate-700 dark:bg-slate-900',
         className
       )}
     >

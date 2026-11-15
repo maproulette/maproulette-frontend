@@ -4,14 +4,15 @@ import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useStat
 import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { useDirectionsToggle } from '@/components/Map/directionsControlButton'
+import { DirectionsSetting, useDirectionsToggle } from '@/components/Map/directions'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapGL } from '@/components/Map/MapGL'
+import { MapSettingsSection } from '@/components/Map/MapSettings'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { getMapBoundsString } from '@/components/Map/mapUtils'
 import { ScaleBar } from '@/components/Map/ScaleBar'
 import { StatusLegend } from '@/components/Map/StatusLegend'
-import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
+import { ClusterToggle, useClustering } from '@/components/Map/TaskMarkers/ClusterToggle'
 import {
   emphasizedPinStyle,
   type HighlightedMarker,
@@ -40,6 +41,9 @@ interface ChallengeTasksMapProps {
   onSelectTask?: (task: TaskMarker | null) => void
   onBoundsChange?: (bounds: string) => void
   topLeftControls?: ReactNode
+  /** Sections shown above the shared ones in the Map settings panel. */
+  settings?: ReactNode
+  settingsModified?: boolean
 }
 
 export const ChallengeTasksMap = ({
@@ -54,14 +58,16 @@ export const ChallengeTasksMap = ({
   onSelectTask,
   onBoundsChange,
   topLeftControls,
+  settings,
+  settingsModified,
 }: ChallengeTasksMapProps) => {
   const { t } = useIntl()
   const mapId = useId()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [cluster, setCluster] = useState(true)
+  const [cluster, setCluster] = useClustering(markers.length)
   const [initialStyle] = useState(() => mapStyle ?? getCurrentMapStyle())
-  const { showDirections, directionsButton } = useDirectionsToggle(mapLoaded)
+  const { showDirections, setShowDirections } = useDirectionsToggle(mapLoaded)
   const { portalTarget } = useDrawerPortal()
 
   const [ownSelectedTask, setOwnSelectedTask] = useState<TaskMarker | null>(null)
@@ -138,13 +144,20 @@ export const ChallengeTasksMap = ({
         map={mapRef}
         mapLoaded={mapLoaded}
         showZoom
-        showReset
         showLayers
-        collapsible
-        defaultOpen
-        customButtons={[
-          directionsButton,
-          ...(zoomToAll
+        settings={
+          <>
+            {settings}
+            <MapSettingsSection
+              title={t({ id: 'map.settings.overlays', defaultMessage: 'Overlays' })}
+            >
+              <DirectionsSetting checked={showDirections} onCheckedChange={setShowDirections} />
+            </MapSettingsSection>
+          </>
+        }
+        settingsModified={settingsModified || !showDirections}
+        customButtons={
+          zoomToAll
             ? [
                 {
                   icon: Maximize2,
@@ -156,8 +169,8 @@ export const ChallengeTasksMap = ({
                   disabled: !mapLoaded,
                 },
               ]
-            : []),
-        ]}
+            : []
+        }
       />
 
       <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-2">

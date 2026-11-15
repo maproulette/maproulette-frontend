@@ -25,7 +25,7 @@ export const MultiTaskPanel = () => {
     <Collapsible
       open={multiTaskPanelOpen}
       onOpenChange={setMultiTaskPanelOpen}
-      className="rounded-lg bg-white/90 shadow-sm backdrop-blur-sm dark:bg-slate-800/90"
+      className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
     >
       {/* Header - always visible, clickable to expand/collapse */}
       <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
