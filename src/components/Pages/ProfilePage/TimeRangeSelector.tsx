@@ -37,6 +37,7 @@ export const TimeRangeSelector = () => {
   return (
     <ToggleGroup
       type="single"
+      variant="outline"
       value={String(timeRange.monthDuration)}
       onValueChange={(value) => {
         if (!value) return

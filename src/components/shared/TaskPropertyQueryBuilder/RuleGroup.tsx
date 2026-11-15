@@ -46,6 +46,9 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
       <div className="flex items-center justify-between gap-2">
         <ToggleGroup
           type="single"
+          variant="outline"
+          size="sm"
+          className="bg-white dark:bg-slate-900"
           value={group.condition}
           onValueChange={(v) => v && onChange({ ...group, condition: v as 'and' | 'or' })}
         >

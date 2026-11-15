@@ -69,10 +69,10 @@ test('the property filter shows only tasks whose feature matches', async ({
   await expect(page.getByText('Showing 3 of 3 tasks')).toBeVisible({ timeout: 20_000 })
 
   await page.getByRole('button', { name: 'Filter by property' }).click()
-  const popover = page.getByRole('dialog', { name: 'Filter by property' })
-  await popover.getByPlaceholder('property').fill('kind')
-  await popover.getByPlaceholder('value').fill('road')
-  await popover.getByRole('button', { name: 'Apply' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Filter tasks by feature property' })
+  await dialog.getByPlaceholder('property').fill('kind')
+  await dialog.getByPlaceholder('value').fill('road')
+  await dialog.getByRole('button', { name: 'Apply' }).click()
 
   await expect(page.getByText('Showing 2 of 2 tasks')).toBeVisible({ timeout: 15_000 })
   await expect(taskRow(page, road.id)).toBeVisible()
@@ -80,7 +80,7 @@ test('the property filter shows only tasks whose feature matches', async ({
   await expect(taskRow(page, river.id)).not.toBeVisible()
 
   await page.getByRole('button', { name: /Filter by property/ }).click()
-  await popover.getByRole('button', { name: 'Clear' }).click()
+  await dialog.getByRole('button', { name: 'Clear' }).click()
   await expect(page.getByText('Showing 3 of 3 tasks')).toBeVisible({ timeout: 15_000 })
 })
 

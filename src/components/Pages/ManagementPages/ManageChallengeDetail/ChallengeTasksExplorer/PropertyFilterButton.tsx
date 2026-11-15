@@ -1,4 +1,4 @@
-import { ChevronDown, SlidersHorizontal } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
 import { DocsLink } from '@/components/shared/DocsLink'
@@ -6,7 +6,14 @@ import { TaskPropertyQueryBuilder } from '@/components/shared/TaskPropertyQueryB
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
 import { searchableOperators } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
 import { Button } from '@/components/ui/Button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
@@ -32,101 +39,87 @@ export const PropertyFilterButton = () => {
   const [draft, setDraft] = useState<BinaryNode | null>(propertyRule)
 
   return (
-    <Popover
-      open={open}
-      onOpenChange={(next) => {
-        if (next) setDraft(propertyRule)
-        setOpen(next)
-      }}
-    >
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className={cn(
-            'h-9 justify-between gap-1 font-normal',
-            propertyFilterActive &&
-              'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
-          )}
-        >
-          <SlidersHorizontal className="h-4 w-4 shrink-0 opacity-60" />
-          <span>
-            {t({
-              id: 'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
-              defaultMessage: 'Filter by property',
-            })}
-            {propertyFilterActive ? ' •' : ''}
-          </span>
-          <ChevronDown className="h-4 w-4 shrink-0 opacity-60" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="start"
-        className="w-[32rem] max-w-[90vw] space-y-3"
-        aria-label={t({
-          id: 'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
-          defaultMessage: 'Filter by property',
-        })}
+    <>
+      <Button
+        variant="outline"
+        size="sm"
+        className={cn(
+          'h-9 gap-1 font-normal',
+          propertyFilterActive &&
+            'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
+        )}
+        onClick={() => {
+          setDraft(propertyRule)
+          setOpen(true)
+        }}
       >
-        <div>
-          <p className="font-medium text-sm text-zinc-900 dark:text-zinc-50">
-            {t({
-              id: 'manageChallengeDetail.tasksExplorer.propertyFilterTitle',
-              defaultMessage: 'Filter tasks by feature property',
-            })}
-          </p>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            {t({
-              id: 'manageChallengeDetail.tasksExplorer.propertyFilterHelp',
-              defaultMessage:
-                'Combine property comparisons with AND/OR. Tasks matching the rule are shown in the table and on the map.',
-            })}{' '}
-            <DocsLink page="filteringTasksByProperties" icon={null}>
+        <SlidersHorizontal className="h-4 w-4 shrink-0 opacity-60" />
+        <span>
+          {t({
+            id: 'manageChallengeDetail.tasksExplorer.propertyFilterLabel',
+            defaultMessage: 'Filter by property',
+          })}
+          {propertyFilterActive ? ' •' : ''}
+        </span>
+      </Button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent size="xl">
+          <DialogHeader>
+            <DialogTitle>
               {t({
-                id: 'manageChallengeDetail.tasksExplorer.propertyFilterDocsLink',
-                defaultMessage: 'Learn more',
+                id: 'manageChallengeDetail.tasksExplorer.propertyFilterTitle',
+                defaultMessage: 'Filter tasks by feature property',
               })}
-            </DocsLink>
-          </p>
-        </div>
+            </DialogTitle>
+            <DialogDescription>
+              {t({
+                id: 'manageChallengeDetail.tasksExplorer.propertyFilterHelp',
+                defaultMessage:
+                  'Combine property comparisons with AND/OR. Tasks matching the rule are shown in the table and on the map.',
+              })}{' '}
+              <DocsLink page="filteringTasksByProperties" icon={null}>
+                {t({
+                  id: 'manageChallengeDetail.tasksExplorer.propertyFilterDocsLink',
+                  defaultMessage: 'Learn more',
+                })}
+              </DocsLink>
+            </DialogDescription>
+          </DialogHeader>
 
-        <TaskPropertyQueryBuilder
-          value={propertyRule}
-          onChange={setDraft}
-          operatorsFor={searchableOperators}
-          propertyKeys={propertyKeys}
-        />
+          <TaskPropertyQueryBuilder
+            value={propertyRule}
+            onChange={setDraft}
+            operatorsFor={searchableOperators}
+            propertyKeys={propertyKeys}
+          />
 
-        <div className="flex items-center justify-end gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            disabled={!propertyFilterActive}
-            onClick={() => {
-              setDraft(null)
-              setPropertyRule(null)
-              setOpen(false)
-            }}
-          >
-            {t({ id: 'common.clear', defaultMessage: 'Clear' })}
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            disabled={propertyMatchesLoading}
-            onClick={() => {
-              setPropertyRule(draft)
-              setOpen(false)
-            }}
-          >
-            {t({
-              id: 'common.apply',
-              defaultMessage: 'Apply',
-            })}
-          </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={!propertyFilterActive}
+              onClick={() => {
+                setDraft(null)
+                setPropertyRule(null)
+                setOpen(false)
+              }}
+            >
+              {t({ id: 'common.clear', defaultMessage: 'Clear' })}
+            </Button>
+            <Button
+              type="button"
+              disabled={propertyMatchesLoading || !draft}
+              onClick={() => {
+                setPropertyRule(draft)
+                setOpen(false)
+              }}
+            >
+              {t({ id: 'common.apply', defaultMessage: 'Apply' })}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
