@@ -83,20 +83,6 @@ export const STATUS_COLORS: Record<number, string> = {
   9: 'bg-zinc-500',
 }
 
-/** Text color class per status, used for colored icons and numerals. */
-export const STATUS_TEXT_COLORS: Record<number, string> = {
-  0: 'text-cyan-500',
-  1: 'text-green-500',
-  2: 'text-yellow-500',
-  3: 'text-cyan-500',
-  4: 'text-red-500',
-  5: 'text-orange-500',
-  6: 'text-red-500',
-  7: 'text-purple-500',
-  8: 'text-emerald-500',
-  9: 'text-zinc-500',
-}
-
 /** Soft pill classes (bg + text + ring, with dark mode) per status — used for inline badges. */
 export const STATUS_PILL_COLORS: Record<number, string> = {
   0: 'bg-cyan-100 text-cyan-700 ring-cyan-300/60 dark:bg-cyan-900/40 dark:text-cyan-300 dark:ring-cyan-700/40',
