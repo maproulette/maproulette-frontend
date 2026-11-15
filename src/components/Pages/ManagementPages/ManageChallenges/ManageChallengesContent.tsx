@@ -298,56 +298,14 @@ export const ManageChallengesContent = () => {
 
   return (
     <div className="h-full">
-      <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-3' : '')}>
+      <div
+        className={cn(
+          'grid h-full grid-cols-1 gap-6',
+          showPanel && 'lg:grid-cols-[16rem_minmax(0,1fr)]'
+        )}
+      >
         {showPanel && (
           <ManageInfoPanel
-            title={t({
-              id: 'manageChallenges.content.aboutChallengesTitle',
-              defaultMessage: 'About Challenges',
-            })}
-            description={t({
-              id: 'manageChallenges.content.aboutChallengesBody',
-              defaultMessage:
-                'Challenges contain tasks that mappers work through to improve OpenStreetMap data.',
-            })}
-            sections={[
-              {
-                id: 'manageChallenges.content.tipWriteClearInstructionsTitle',
-                title: t({
-                  id: 'manageChallenges.content.tipWriteClearInstructionsTitle',
-                  defaultMessage: 'Write clear instructions',
-                }),
-                description: t({
-                  id: 'manageChallenges.content.tipWriteClearInstructionsBody',
-                  defaultMessage:
-                    'Good task instructions help mappers understand what to fix and how. Include examples and link to relevant wiki pages.',
-                }),
-              },
-              {
-                id: 'manageChallenges.content.tipSetDifficultyTitle',
-                title: t({
-                  id: 'manageChallenges.content.tipSetDifficultyTitle',
-                  defaultMessage: 'Set appropriate difficulty',
-                }),
-                description: t({
-                  id: 'manageChallenges.content.tipSetDifficultyBody',
-                  defaultMessage:
-                    'Match difficulty to the skill required. Easy tasks attract new mappers, while expert tasks get routed to experienced contributors.',
-                }),
-              },
-              {
-                id: 'manageChallenges.content.tipMonitorProgressTitle',
-                title: t({
-                  id: 'manageChallenges.content.tipMonitorProgressTitle',
-                  defaultMessage: 'Monitor progress',
-                }),
-                description: t({
-                  id: 'manageChallenges.content.tipMonitorProgressBody',
-                  defaultMessage:
-                    'Check completion rates and mapper comments. Archive challenges once all tasks are resolved.',
-                }),
-              },
-            ]}
             docs={[
               {
                 page: 'creatingAChallenge',
@@ -375,9 +333,7 @@ export const ManageChallengesContent = () => {
           />
         )}
 
-        <div
-          className={cn('flex h-full min-h-0 min-w-0 flex-col', showPanel ? 'lg:col-span-2' : '')}
-        >
+        <div className="flex h-full min-h-0 min-w-0 flex-col">
           <div className="shrink-0 pb-4">
             <div className="flex items-center gap-3 overflow-x-auto">
               {!showPanel && (
@@ -463,10 +419,6 @@ export const ManageChallengesContent = () => {
                     title: t({
                       id: 'common.noChallengesFound',
                       defaultMessage: 'No challenges found',
-                    }),
-                    description: t({
-                      id: 'manageChallenges.content.emptyDescription',
-                      defaultMessage: "You haven't created any challenges yet",
                     }),
                     actionLabel: t({
                       id: 'common.createChallenge',

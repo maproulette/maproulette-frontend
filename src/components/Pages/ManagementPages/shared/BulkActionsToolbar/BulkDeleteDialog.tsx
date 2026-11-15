@@ -38,7 +38,7 @@ export const BulkDeleteDialog = ({ open, onOpenChange, onConfirm, count, busy }:
             {t({
               id: 'managementPages.bulkActionsToolbar.deleteDialog.description',
               defaultMessage:
-                'This cannot be undone. Tasks and their comments, reviews, and tags are permanently removed.',
+                'This cannot be undone. Tasks and their comments and tags are permanently removed.',
             })}
           </DialogDescription>
         </DialogHeader>

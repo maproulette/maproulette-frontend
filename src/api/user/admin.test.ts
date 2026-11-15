@@ -48,16 +48,3 @@ describe('userAdmin.getAllUsers', () => {
     expect(url.searchParams.get('page')).toBe('2')
   })
 })
-
-describe('userAdmin.getSuperUsers', () => {
-  it('fetches the list of super user ids', async () => {
-    stubFetch(new Response(JSON.stringify([1, 2, 3]), { status: 200 }))
-
-    const { result } = renderHook(() => userAdmin.getSuperUsers(), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([1, 2, 3])
-  })
-})

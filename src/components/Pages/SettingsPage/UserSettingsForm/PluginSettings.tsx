@@ -238,7 +238,7 @@ export const PluginSettings = () => {
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
                   {t({
                     id: 'settings.plugins.allAddedDescription',
-                    defaultMessage: "You've added all available workshop plugins!",
+                    defaultMessage: "You've added all available workshop plugins.",
                   })}
                 </p>
               </div>

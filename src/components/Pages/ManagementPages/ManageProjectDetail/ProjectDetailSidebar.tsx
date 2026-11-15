@@ -9,7 +9,7 @@ import { useIntl } from '@/i18n'
 import { EditSelectedChallengesButton } from './ChallengeSelection'
 import { useManageProjectDetailContext } from './ManageProjectDetailContext'
 
-/** Left-hand panel of the project detail page: project info, quick actions, stats and playbook tips. */
+/** Left-hand panel of the project detail page: project info, quick actions, stats and a docs link. */
 export const ProjectDetailSidebar = () => {
   const { t } = useIntl()
   const {
@@ -29,7 +29,7 @@ export const ProjectDetailSidebar = () => {
 
   return (
     // Scrolls rather than clips: the panel grows with the project's managers and
-    // teams, and the playbook footer below them would otherwise be cut off.
+    // teams, and the docs footer below them would otherwise be cut off.
     <div className="flex h-full flex-col overflow-y-auto rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
       {/* Header */}
       <div className="shrink-0 space-y-2.5 px-6 pt-6 pb-4">
@@ -209,43 +209,11 @@ export const ProjectDetailSidebar = () => {
         </div>
       </div>
 
-      {/* Playbook footer */}
       <div className="mt-auto shrink-0 border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
-        <p className="mb-1 font-medium text-sm text-zinc-700 dark:text-zinc-300">
-          {t({
-            id: 'manageProjectDetail.content.playbookTitle',
-            defaultMessage: 'Project Playbook',
-          })}
-        </p>
-        <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
-          <p>
-            {t({
-              id: 'manageProjectDetail.content.playbookTip1',
-              defaultMessage:
-                'Confirm challenge instructions and QA expectations are specific and testable.',
-            })}
-          </p>
-          <p>
-            {t({
-              id: 'manageProjectDetail.content.playbookTip2',
-              defaultMessage:
-                'Review challenge ordering so mappers can move from easier to harder tasks.',
-            })}
-          </p>
-          <p>
-            {t({
-              id: 'manageProjectDetail.content.playbookTip3',
-              defaultMessage:
-                'Assign at least one co-manager for triage, support, and archival continuity.',
-            })}
-          </p>
-        </div>
-        <Separator className="my-4" />
-
         <DocsLink
           page="projectsAndProjectManagers"
           icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
-          className="mt-3 gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
+          className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
         >
           {t({
             id: 'manageProjectDetail.content.playbookDocsLink',

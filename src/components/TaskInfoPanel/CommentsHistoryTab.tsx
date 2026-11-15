@@ -325,15 +325,7 @@ export const CommentsHistoryTab = ({
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
               <p className="text-sm text-zinc-500 dark:text-slate-400">
-                {readOnly
-                  ? t({
-                      id: 'taskInfoPanel.comments.emptyStateReadOnly',
-                      defaultMessage: 'No activity yet.',
-                    })
-                  : t({
-                      id: 'taskInfoPanel.comments.emptyState',
-                      defaultMessage: 'No activity yet. Be the first to comment!',
-                    })}
+                {t({ id: 'taskInfoPanel.comments.emptyState', defaultMessage: 'No activity' })}
               </p>
             </div>
           ) : (

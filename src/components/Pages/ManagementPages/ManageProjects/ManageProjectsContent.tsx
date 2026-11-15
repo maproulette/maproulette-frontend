@@ -9,14 +9,7 @@ import { type ChallengeMeta, ProjectCard } from '@/components/shared/ProjectCard
 import { SearchBar } from '@/components/shared/SearchBar'
 import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import { Button } from '@/components/ui/Button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/Empty'
+import { Empty, EmptyContent, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
 import { useSetHeaderActions } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
@@ -64,53 +57,14 @@ export const ManageProjectsContent = () => {
 
   return (
     <div className="h-full">
-      <div className={cn('grid h-full grid-cols-1 gap-6', showPanel ? 'lg:grid-cols-4' : '')}>
+      <div
+        className={cn(
+          'grid h-full grid-cols-1 gap-6',
+          showPanel && 'lg:grid-cols-[16rem_minmax(0,1fr)]'
+        )}
+      >
         {showPanel && (
           <ManageInfoPanel
-            title={t({ id: 'manageProjects.content.aboutTitle', defaultMessage: 'About Projects' })}
-            description={t({
-              id: 'manageProjects.content.aboutDescription',
-              defaultMessage:
-                'Good project structure improves mapper clarity, QA consistency, and long-term maintenance.',
-            })}
-            sections={[
-              {
-                id: 'manageProjects.content.tipScopeTitle',
-                title: t({
-                  id: 'manageProjects.content.tipScopeTitle',
-                  defaultMessage: 'Define scope early',
-                }),
-                description: t({
-                  id: 'manageProjects.content.tipScopeBody',
-                  defaultMessage:
-                    'Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective.',
-                }),
-              },
-              {
-                id: 'manageProjects.content.tipPublishTitle',
-                title: t({
-                  id: 'manageProjects.content.tipPublishTitle',
-                  defaultMessage: 'Publish intentionally',
-                }),
-                description: t({
-                  id: 'manageProjects.content.tipPublishBody',
-                  defaultMessage:
-                    'Keep projects non-discoverable while iterating. Turn discoverable on only after instructions and QA checks are validated.',
-                }),
-              },
-              {
-                id: 'manageProjects.content.tipOwnershipTitle',
-                title: t({
-                  id: 'manageProjects.content.tipOwnershipTitle',
-                  defaultMessage: 'Share ownership',
-                }),
-                description: t({
-                  id: 'manageProjects.content.tipOwnershipBody',
-                  defaultMessage:
-                    'Add co-managers before launch so triage, support, and archival responsibilities are covered.',
-                }),
-              },
-            ]}
             docs={[
               {
                 page: 'projectsAndProjectManagers',
@@ -124,9 +78,7 @@ export const ManageProjectsContent = () => {
           />
         )}
 
-        <div
-          className={cn('flex h-full min-h-0 min-w-0 flex-col', showPanel ? 'lg:col-span-3' : '')}
-        >
+        <div className="flex h-full min-h-0 min-w-0 flex-col">
           <div className="shrink-0 pb-4">
             <div className="flex items-center gap-3 overflow-x-auto">
               {!showPanel && (
@@ -206,12 +158,6 @@ export const ManageProjectsContent = () => {
                     <EmptyTitle>
                       {t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' })}
                     </EmptyTitle>
-                    <EmptyDescription>
-                      {t({
-                        id: 'manageProjects.content.noProjectsDescription',
-                        defaultMessage: 'Get started by creating your first project.',
-                      })}
-                    </EmptyDescription>
                   </EmptyHeader>
                   <EmptyContent>
                     <Button asChild>
@@ -256,10 +202,6 @@ export const ManageProjectsContent = () => {
                   emptyState={{
                     icon: FolderKanban,
                     title: t({ id: 'common.noProjectsFound', defaultMessage: 'No projects found' }),
-                    description: t({
-                      id: 'manageProjects.content.noProjectsDescriptionShort',
-                      defaultMessage: 'Get started by creating your first project',
-                    }),
                     actionLabel: t({
                       id: 'common.createProject',
                       defaultMessage: 'Create Project',

@@ -15,7 +15,7 @@ interface EntityGridProps<T> {
   emptyState: {
     icon: LucideIcon
     title: string
-    description: string
+    description?: string
     actionLabel?: string
     actionTo?: string
     actionSearch?: Record<string, unknown>
@@ -39,7 +39,7 @@ export const EntityGrid = <T,>({
         </EmptyMedia>
         <EmptyContent>
           <EmptyTitle>{emptyState.title}</EmptyTitle>
-          <EmptyDescription>{emptyState.description}</EmptyDescription>
+          {emptyState.description && <EmptyDescription>{emptyState.description}</EmptyDescription>}
           {emptyState.actionLabel && emptyState.actionTo && (
             <Button asChild>
               <Link to={emptyState.actionTo} search={emptyState.actionSearch}>

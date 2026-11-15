@@ -142,7 +142,7 @@ export const ChallengeComments = () => {
               <p className="text-sm text-zinc-500 dark:text-slate-400">
                 {t({
                   id: 'browsedChallengePage.challengeModals.comments.empty',
-                  defaultMessage: 'No comments yet. Be the first to comment!',
+                  defaultMessage: 'No comments',
                 })}
               </p>
             </div>

@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { api } from '@/api'
 import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useIntl } from '@/i18n'
 import type { ChallengeActivityEntry } from '@/types/Challenge'
 
@@ -73,13 +73,6 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
           <History className="h-5 w-5" />
           {t({ id: 'common.recentActivity', defaultMessage: 'Recent Activity' })}
         </CardTitle>
-        <CardDescription>
-          {t({
-            id: 'manageChallengeDetail.recentActivity.description',
-            defaultMessage:
-              'Task completions by status, grouped by day (same data as the legacy admin dashboard widget).',
-          })}
-        </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
         {isError ? (

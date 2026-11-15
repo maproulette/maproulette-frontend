@@ -4,13 +4,7 @@ import { toast } from 'sonner'
 import { api } from '@/api'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Button } from '@/components/ui/Button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/Empty'
+import { Empty, EmptyContent, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
 import { Input } from '@/components/ui/Input'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
@@ -126,18 +120,9 @@ export const SuperAdminTeamImages = () => {
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 px-4">
-      <div>
-        <h1 className="font-bold text-xl text-zinc-900 dark:text-zinc-50">
-          {t({ id: 'superAdminTeamImages.title', defaultMessage: 'Team challenge images' })}
-        </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t({
-            id: 'superAdminTeamImages.subtitle',
-            defaultMessage:
-              'Images teams have requested for their challenges. A team carries a single image, so approving a request replaces the one that team is using, including on the challenges already showing it.',
-          })}
-        </p>
-      </div>
+      <h1 className="font-bold text-xl text-zinc-900 dark:text-zinc-50">
+        {t({ id: 'superAdminTeamImages.title', defaultMessage: 'Team challenge images' })}
+      </h1>
 
       {isLoading ? (
         <Loader />
@@ -163,12 +148,6 @@ export const SuperAdminTeamImages = () => {
             <EmptyTitle>
               {t({ id: 'superAdminReview.emptyTitle', defaultMessage: 'Nothing to review' })}
             </EmptyTitle>
-            <EmptyDescription>
-              {t({
-                id: 'superAdminTeamImages.emptyDescription',
-                defaultMessage: 'No team has an image awaiting approval right now.',
-              })}
-            </EmptyDescription>
           </EmptyContent>
         </Empty>
       )}

@@ -197,13 +197,6 @@ export const RemotePluginManager = () => {
             {validationError}
           </p>
         )}
-        <p className="text-xs text-zinc-500">
-          {t({
-            id: 'settings.remotePlugins.urlDescription',
-            defaultMessage:
-              'Enter the full URL to a plugin module (ESM format). The plugin will be searched and added to your plugins.',
-          })}
-        </p>
       </div>
 
       {pluginPreview && (

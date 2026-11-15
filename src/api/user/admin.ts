@@ -21,12 +21,4 @@ export const userAdmin = {
       })
     )
   },
-
-  getSuperUsers: () =>
-    useQuery(
-      queryOptions({
-        queryKey: ['user', 'superusers'],
-        queryFn: () => apiRequest.get('api/v2/superusers').json<number[]>(),
-      })
-    ),
 }

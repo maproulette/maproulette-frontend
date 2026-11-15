@@ -7,13 +7,7 @@ import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/Empty'
+import { Empty, EmptyContent, EmptyMedia, EmptyTitle } from '@/components/ui/Empty'
 import { Input } from '@/components/ui/Input'
 import { Loader } from '@/components/ui/Loader'
 import {
@@ -220,18 +214,9 @@ export const SuperAdminChallengeReports = () => {
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 px-4">
-      <div>
-        <h1 className="font-bold text-xl text-zinc-900 dark:text-zinc-50">
-          {t({ id: 'superAdminChallengeReports.title', defaultMessage: 'Challenge reports' })}
-        </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t({
-            id: 'superAdminChallengeReports.subtitle',
-            defaultMessage:
-              'Reports that a challenge is poorly designed and is causing incorrect edits. Mark one actioned once you have dealt with it — by archiving the challenge, say — or dismiss it.',
-          })}
-        </p>
-      </div>
+      <h1 className="font-bold text-xl text-zinc-900 dark:text-zinc-50">
+        {t({ id: 'superAdminChallengeReports.title', defaultMessage: 'Challenge reports' })}
+      </h1>
 
       <div className="flex flex-wrap items-center gap-4">
         <Select
@@ -292,12 +277,6 @@ export const SuperAdminChallengeReports = () => {
                 defaultMessage: 'Nothing to review',
               })}
             </EmptyTitle>
-            <EmptyDescription>
-              {t({
-                id: 'superAdminChallengeReports.emptyDescription',
-                defaultMessage: 'No challenge reports match these filters right now.',
-              })}
-            </EmptyDescription>
           </EmptyContent>
         </Empty>
       )}

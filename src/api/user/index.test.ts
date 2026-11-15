@@ -32,7 +32,6 @@ describe('user barrel export', () => {
 
   it('re-exports the admin API', () => {
     expect(typeof user.getAllUsers).toBe('function')
-    expect(typeof user.getSuperUsers).toBe('function')
   })
 
   it('re-exports the search API', () => {

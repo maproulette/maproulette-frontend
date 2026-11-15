@@ -268,7 +268,7 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
         {t({
           id: 'managers.teamsDescription',
           defaultMessage:
-            'What each person can do here follows their role in the team: owners and admins manage it, managers can edit, and plain members get nothing.',
+            'Team owners and admins get admin access, and team managers get write access. Other team members get no access.',
         })}
       </p>
       <ul className="space-y-2">

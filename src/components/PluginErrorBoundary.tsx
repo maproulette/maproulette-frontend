@@ -133,8 +133,7 @@ const PluginErrorFallback = ({
           <p className="text-xs opacity-80">
             {t({
               id: 'pluginErrorBoundary.consoleDetails',
-              defaultMessage:
-                'Details were written to the browser console (message, stack, component stack).',
+              defaultMessage: 'Details were written to the browser console.',
             })}
           </p>
           <Button type="button" size="sm" variant="outline" onClick={onRetry}>
