@@ -21,7 +21,6 @@ describe('user barrel export', () => {
     expect(typeof user.lockedTasks).toBe('function')
     expect(typeof user.teamMemberships).toBe('function')
     expect(typeof user.useUpdateUserSettings).toBe('function')
-    expect(typeof user.useRegenerateApiKey).toBe('function')
   })
 
   it('re-exports the notifications API', () => {

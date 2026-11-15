@@ -205,15 +205,4 @@ export const userProfile = {
       },
     })
   },
-
-  useRegenerateApiKey: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: (userId: number) => apiRequest.put(`api/v2/user/${userId}/apikey`).json<User>(),
-      onSuccess: (updatedUser) => {
-        queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
-        queryClient.invalidateQueries({ queryKey: ['user', updatedUser.id] })
-      },
-    })
-  },
 }

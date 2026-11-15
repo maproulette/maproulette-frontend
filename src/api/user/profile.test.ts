@@ -525,26 +525,3 @@ describe('userProfile.useUnsaveChallenge', () => {
     })
   })
 })
-
-describe('userProfile.useRegenerateApiKey', () => {
-  it('regenerates the api key and updates/invalidates the whoami and user caches', async () => {
-    const updatedUser = { id: 9, apiKey: 'new-key' }
-    const fetchMock = stubFetch(new Response(JSON.stringify(updatedUser), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => userProfile.useRegenerateApiKey(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate(9)
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(updatedUser)
-    expect(queryClient.getQueryData(['user', 'whoami'])).toEqual(updatedUser)
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['user', 9] })
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).pathname).toBe('/api/v2/user/9/apikey')
-  })
-})
