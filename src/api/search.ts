@@ -1,29 +1,6 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
 import { apiRequest } from './client'
 
-export interface SearchResult {
-  projects: Array<{
-    id: number
-    name: string
-    displayName?: string
-    description?: string
-    [key: string]: unknown
-  }>
-  challenges: Array<{
-    id: number
-    name: string
-    description?: string
-    [key: string]: unknown
-  }>
-  tasks: Array<{
-    id: number
-    name: string
-    status: number | null
-    parent: number
-    challengeName: string
-  }>
-}
-
 export interface SearchByIdResult {
   project: {
     id: number
@@ -41,26 +18,10 @@ export interface SearchByIdResult {
     name: string
     status: number | null
     parent: number
-    challengeName?: string
   } | null
 }
 
 export const search = {
-  unifiedSearch: ({ q, limit = 10 }: { q: string; limit?: number }) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['search', 'unified', { q, limit }],
-        queryFn: () =>
-          apiRequest
-            .get('api/v2/search', {
-              searchParams: { q, limit },
-            })
-            .json<SearchResult>(),
-        enabled: q.length > 0,
-        placeholderData: (previousData) => previousData,
-      })
-    ),
-
   searchById: ({ id }: { id: number }) =>
     useQuery(
       queryOptions({

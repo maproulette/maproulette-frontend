@@ -20,7 +20,6 @@ export const DOCS_PAGES = {
   // Getting started
   yourDashboard: 'documentation/your-dashboard',
   discoveringChallenges: 'documentation/discovering-challenges',
-  searchboxShortCommands: 'documentation/searchbox-short-commands',
   pointScoring: 'documentation/point-scoring',
   // Mapping
   idEditor: 'documentation/id-editor',

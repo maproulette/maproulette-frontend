@@ -12,18 +12,15 @@ test('a user can search for a project and browse to its challenge list', async (
 
   await page.goto('/')
 
-  const searchInput = page.getByRole('searchbox', {
-    name: /search for challenges, tasks or projects/i,
-  })
+  const searchInput = page.getByRole('combobox', { name: /search challenges and projects/i })
   await searchInput.click()
   await searchInput.fill(project.name)
 
-  // Each result carries a "Go to project" / "Go to challenge" badge, which is
-  // what distinguishes an actual result row from the "Find a Project"-style
-  // search-type suggestions the dropdown also lists.
-  const projectResult = page.getByRole('link').filter({ hasText: project.name })
-  await expect(projectResult.first()).toBeVisible({ timeout: 15_000 })
-  await projectResult.first().click()
+  const projectResult = page
+    .getByRole('group', { name: 'Projects' })
+    .getByRole('option', { name: project.name })
+  await expect(projectResult).toBeVisible({ timeout: 15_000 })
+  await projectResult.click()
 
   await expect(page).toHaveURL(new RegExp(`/project/${project.id}`), { timeout: 20_000 })
   await expect(page.getByRole('heading', { name: project.name })).toBeVisible({ timeout: 20_000 })

@@ -103,14 +103,6 @@ export interface ChallengeManager {
 }
 
 /* Custom Types */
-/**
- * Sort orders the explore-challenges endpoint accepts. `featured`, `tag_fix`
- * and `cooperative` are taxonomy sorts: they group a kind of challenge to the
- * front rather than ordering by a column, and fall back to name inside the
- * group.
- */
-export type ExtendedFindParamsSortBy = NonNullable<NonNullable<ExploreChallengesParams>['sortBy']>
-
 /** Daily task status counts from `GET /data/challenge/{id}/activity` (legacy admin Recent Activity). */
 export type ChallengeActivityEntry = {
   date: string | number

@@ -155,24 +155,20 @@ export const project = {
   getProjectChallenges: (projectId: number | undefined, limit = 100, page = 0) =>
     useQuery(project.getProjectChallengesOptions(projectId ?? 0, limit, page)),
 
-  searchProjects: ({ search = '' }: { search?: string } = {}) => {
-    return useQuery(
+  searchProjects: ({ search = '', limit = 25 }: { search?: string; limit?: number } = {}) =>
+    useQuery(
       queryOptions({
-        queryKey: ['project', 'search', { search }],
-        queryFn: async () => {
-          const projects = await apiRequest
+        queryKey: ['project', 'search', { search, limit }],
+        queryFn: () =>
+          apiRequest
             .get('api/v2/projects/search', {
-              searchParams: {
-                search,
-              },
+              searchParams: { search, limit, onlyEnabled: true },
             })
-            .json<Project[]>()
-          return projects
-        },
+            .json<Project[]>(),
         enabled: search.length > 0,
+        placeholderData: keepPreviousData,
       })
-    )
-  },
+    ),
 
   exportProjectTasksCsv: async (projectId: number, filename?: string): Promise<void> => {
     const text = await apiRequest.get(`api/v2/project/${projectId}/tasks/extract`).text()

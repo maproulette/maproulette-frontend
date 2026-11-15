@@ -1,108 +1,122 @@
-import { Search } from 'lucide-react'
-import type { RefObject } from 'react'
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { DocsLink } from '@/components/shared/DocsLink'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { FolderOpen, ListTodo, Search, Target } from 'lucide-react'
+import { useId, useMemo, useRef, useState } from 'react'
+import { api } from '@/api'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
 import { KbdBinding } from '@/components/ui/Kbd'
+import { Popover, PopoverAnchor, PopoverContent } from '@/components/ui/Popover'
+import { Spinner } from '@/components/ui/Spinner'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
-import type { SearchType } from '@/types/GlobalSearch'
-
-const useEventListener = <
-  KW extends keyof WindowEventMap,
-  KH extends keyof HTMLElementEventMap & keyof SVGElementEventMap,
-  T extends HTMLElement | SVGAElement = HTMLElement,
->(
-  eventName: KW | KH,
-  handler: (
-    event: WindowEventMap[KW] | HTMLElementEventMap[KH] | SVGElementEventMap[KH] | Event
-  ) => void,
-  element?: RefObject<T>,
-  options?: boolean | AddEventListenerOptions
-) => {
-  const savedHandler = useRef(handler)
-
-  useEffect(() => {
-    savedHandler.current = handler
-  }, [handler])
-
-  useEffect(() => {
-    const targetElement: T | Window = element?.current ?? window
-    if (!targetElement?.addEventListener) return
-
-    const listener: typeof handler = (event) => {
-      savedHandler.current(event)
-    }
-
-    targetElement.addEventListener(eventName, listener, options)
-    return () => {
-      targetElement.removeEventListener(eventName, listener, options)
-    }
-  }, [eventName, element, options])
-}
-
-const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
-  ref: RefObject<T> | RefObject<T>[],
-  handler: (event: MouseEvent | TouchEvent | FocusEvent) => void,
-  eventType:
-    | 'mousedown'
-    | 'mouseup'
-    | 'touchstart'
-    | 'touchend'
-    | 'focusin'
-    | 'focusout' = 'mousedown',
-  eventListenerOptions: AddEventListenerOptions = {}
-): void => {
-  useEventListener(
-    eventType,
-    (event) => {
-      const target = event.target as Node
-      if (!target || !target.isConnected) return
-
-      const isOutside = Array.isArray(ref)
-        ? ref
-            .filter((r) => Boolean(r.current))
-            .every((r) => r.current && !r.current.contains(target))
-        : ref.current && !ref.current.contains(target)
-
-      if (isOutside) {
-        handler(event as MouseEvent | TouchEvent | FocusEvent)
-      }
-    },
-    undefined,
-    eventListenerOptions
-  )
-}
-
-import { GlobalSearchProvider } from '@/contexts/GlobalSearchContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
-import { SearchTypeFilters } from './GlobalSearchDropdown/SearchTypeFilters'
-import { UnifiedSearchList } from './GlobalSearchDropdown/UnifiedSearchList'
-import { parseSearchInput, SEARCH_TYPE_PREFIXES } from './shared/searchTypes'
 
-export const GlobalSearch = ({
-  className,
-  placeholder,
-  ...props
-}: React.ComponentProps<'search'> & {
-  placeholder?: string
-}) => {
+const CHALLENGE_LIMIT = 6
+const PROJECT_LIMIT = 4
+
+type Result = { kind: 'project' | 'challenge' | 'task'; id: number; name: string }
+
+const resultLink = ({ kind, id }: Result) => {
+  switch (kind) {
+    case 'project':
+      return { to: '/project/$projectId', params: { projectId: String(id) } } as const
+    case 'challenge':
+      return { to: '/challenge/$challengeId', params: { challengeId: String(id) } } as const
+    case 'task':
+      return { to: '/tasks/$taskId', params: { taskId: String(id) } } as const
+  }
+}
+
+const resultIcons = { project: FolderOpen, challenge: Target, task: ListTodo }
+
+const useResults = (query: string) => {
   const { t } = useIntl()
-  const resolvedPlaceholder =
-    placeholder ??
-    t({
-      id: 'appLayout.header.globalSearch.placeholder',
-      defaultMessage: 'Search for challenges, tasks or projects...',
-    })
+  const id = /^\d+$/.test(query) ? Number(query) : 0
+  const name = id ? '' : query
+
+  const challenges = api.challenge.searchChallenges({ search: name, limit: CHALLENGE_LIMIT })
+  const projects = api.project.searchProjects({ search: name, limit: PROJECT_LIMIT })
+  const byId = api.search.searchById({ id })
+  const taskChallenge = api.challenge.getChallenge(byId.data?.task?.parent ?? 0)
+
+  const groups = useMemo(() => {
+    if (id) {
+      const { project, challenge, task } = byId.data ?? {}
+      const results: Result[] = []
+      if (project) {
+        results.push({ kind: 'project', id, name: project.displayName || project.name })
+      }
+      if (challenge) results.push({ kind: 'challenge', id, name: challenge.name })
+      // Task names are mostly generated IDs, so label tasks by their challenge instead.
+      if (task && taskChallenge.data) {
+        results.push({
+          kind: 'task',
+          id,
+          name: t(
+            {
+              id: 'appLayout.header.globalSearch.taskInChallenge',
+              defaultMessage: 'Task {id} in Challenge "{challenge}"',
+            },
+            { id: String(id), challenge: taskChallenge.data.name }
+          ),
+        })
+      }
+      return [
+        {
+          label: t(
+            { id: 'appLayout.header.globalSearch.idHeading', defaultMessage: 'ID {id}' },
+            { id: String(id) }
+          ),
+          results,
+        },
+      ]
+    }
+    return [
+      {
+        label: t({ id: 'common.challenges', defaultMessage: 'Challenges' }),
+        results: (challenges.data ?? []).map(
+          (c): Result => ({ kind: 'challenge', id: c.id, name: c.name })
+        ),
+      },
+      {
+        label: t({ id: 'common.projects', defaultMessage: 'Projects' }),
+        results: (projects.data ?? []).map(
+          (p): Result => ({ kind: 'project', id: p.id, name: p.displayName || p.name })
+        ),
+      },
+    ]
+  }, [id, byId.data, taskChallenge.data, challenges.data, projects.data, t])
+
+  const isFetching = id
+    ? byId.isFetching || taskChallenge.isFetching
+    : challenges.isFetching || projects.isFetching
+  return { groups: groups.filter((g) => g.results.length > 0), isFetching }
+}
+
+export const GlobalSearch = ({ className, ...props }: React.ComponentProps<'search'>) => {
+  const { t } = useIntl()
+  const navigate = useNavigate()
   const id = useId()
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [selectedSearchTypeLabel, setSelectedSearchTypeLabel] = useState<SearchType | null>(null)
-  const [inputValue, setInputValue] = useState<string>('')
+  const listId = `${id}-results`
+  const inputRef = useRef<HTMLInputElement>(null)
+  const anchorRef = useRef<HTMLDivElement>(null)
+  const [input, setInput] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
 
-  const searchInputRef = useRef<HTMLInputElement>(null)
-  const searchContainerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>
+  const query = input.trim()
+  const debouncedQuery = useDebouncedValue(query)
+  const { groups, isFetching } = useResults(debouncedQuery)
+  const results = groups.flatMap((g) => g.results)
+  const active = Math.min(activeIndex, results.length - 1)
+  const isPending = isFetching || query !== debouncedQuery
+  const optionId = (index: number) => `${id}-option-${index}`
 
-  // Reason: stable shortcut definition for keyboard handler registration
+  const placeholder = t({
+    id: 'appLayout.header.globalSearch.placeholder',
+    defaultMessage: 'Search challenges and projects, or enter an ID',
+  })
+
   const searchShortcuts: KeyboardShortcut[] = useMemo(
     () => [
       {
@@ -117,8 +131,8 @@ export const GlobalSearch = ({
         // typing, which is the point of it: search is always one key away.
         allowWhileTyping: true,
         handler: () => {
-          setIsOpen(true)
-          searchInputRef.current?.focus()
+          inputRef.current?.focus()
+          inputRef.current?.select()
         },
       },
     ],
@@ -126,129 +140,67 @@ export const GlobalSearch = ({
   )
   useRegisterShortcuts('global-search', searchShortcuts)
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
-
-  useOnClickOutside(searchContainerRef, (event) => {
-    const target = event.target as HTMLElement
-    const isSelectPortal = target.closest('[data-radix-popper-content-wrapper]')
-    if (!isSelectPortal) {
-      setIsOpen(false)
-    }
-  })
-
-  // Reason: parses search input into type and query - avoids re-parsing on every render
-  const { searchType: parsedSearchType, query: searchQuery } = useMemo(
-    () => parseSearchInput(inputValue),
-    [inputValue]
-  )
-  const activeSearchType = selectedSearchTypeLabel || parsedSearchType
-
-  const handleSelectSearchType = (searchType: {
-    id: SearchType
-    label: string
-    description: string
-    prefix: string
-  }) => {
-    setSelectedSearchTypeLabel(searchType.id)
-    const newValue = searchQuery ? `${searchType.prefix} ${searchQuery}` : searchType.prefix
-    setInputValue(newValue)
-    setTimeout(() => {
-      searchInputRef.current?.focus()
-      searchInputRef.current?.setSelectionRange(newValue.length, newValue.length)
-    }, 0)
-  }
-
-  const handleClearSearchType = () => {
-    setSelectedSearchTypeLabel(null)
-    setInputValue('')
-  }
-
-  const handleResultSelect = () => {
+  const close = () => {
     setIsOpen(false)
-    setInputValue('')
-    setSelectedSearchTypeLabel(null)
-    searchInputRef.current?.blur()
+    setInput('')
+    inputRef.current?.blur()
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    setInputValue(newValue)
-
-    if (selectedSearchTypeLabel) {
-      const prefix = SEARCH_TYPE_PREFIXES[selectedSearchTypeLabel]
-      if (!newValue.startsWith(prefix)) {
-        setSelectedSearchTypeLabel(null)
-      }
-    } else {
-      const parsed = parseSearchInput(newValue)
-      setSelectedSearchTypeLabel(parsed.searchType)
-    }
+  const moveActive = (delta: number) => {
+    if (results.length === 0) return
+    const next = Math.max(0, Math.min(active + delta, results.length - 1))
+    setActiveIndex(next)
+    document.getElementById(optionId(next))?.scrollIntoView({ block: 'nearest' })
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape' && isOpen) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setIsOpen(true)
+      moveActive(1)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      moveActive(-1)
+    } else if (e.key === 'Enter' && isOpen && results[active]) {
+      e.preventDefault()
+      navigate(resultLink(results[active]))
+      close()
+    } else if (e.key === 'Escape' && isOpen) {
       e.preventDefault()
       setIsOpen(false)
-      return
-    }
-
-    if (activeSearchType && searchInputRef.current) {
-      const prefix = SEARCH_TYPE_PREFIXES[activeSearchType]
-      const cursorPos = searchInputRef.current.selectionStart || 0
-
-      if (e.key === 'Backspace' && cursorPos <= prefix.length) {
-        e.preventDefault()
-        handleClearSearchType()
-      }
     }
   }
 
-  const handleInputClick = () => {
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }
+  const showPopover = isOpen && query.length > 0
+  let index = 0
 
   return (
-    <>
-      <div
-        aria-hidden
-        className={cn(
-          'fixed inset-0 z-[9998] bg-black/20 transition-opacity duration-200',
-          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
-        )}
-        onClick={() => setIsOpen(false)}
-      />
-      <search className={cn('relative z-[9999]', className)} {...props}>
-        <div ref={searchContainerRef} className="relative">
-          <div className="relative z-10">
+    <search className={className} {...props}>
+      <Popover open={showPopover} onOpenChange={setIsOpen}>
+        <PopoverAnchor asChild>
+          <div ref={anchorRef}>
             <InputGroup className="rounded-[20px] py-5 dark:border-slate-700 dark:bg-slate-800">
               <label htmlFor={id} className="sr-only">
-                {resolvedPlaceholder}
+                {placeholder}
               </label>
               <InputGroupInput
-                ref={searchInputRef}
+                ref={inputRef}
                 id={id}
                 type="search"
-                placeholder={resolvedPlaceholder}
-                value={inputValue}
-                onChange={handleInputChange}
-                onClick={handleInputClick}
+                role="combobox"
+                placeholder={placeholder}
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value)
+                  setActiveIndex(0)
+                  setIsOpen(true)
+                }}
                 onFocus={() => setIsOpen(true)}
                 onKeyDown={handleKeyDown}
-                readOnly={!isOpen}
-                aria-haspopup="listbox"
-                aria-controls={`${id}-results`}
-                aria-expanded={isOpen}
+                aria-autocomplete="list"
+                aria-controls={listId}
+                aria-expanded={showPopover}
+                aria-activedescendant={showPopover && active >= 0 ? optionId(active) : undefined}
                 autoComplete="off"
               />
               <InputGroupAddon>
@@ -261,37 +213,61 @@ export const GlobalSearch = ({
               </InputGroupAddon>
             </InputGroup>
           </div>
-          <div
-            id={`${id}-results`}
-            className={cn(
-              'fixed top-[88px] right-0 left-0 z-[9999] mx-2 max-h-[calc(100vh-100px)] overflow-y-auto rounded-xl border border-zinc-200 bg-white px-3 py-3 shadow-xl transition-[opacity,visibility] duration-200 md:absolute md:top-full md:right-auto md:left-0 md:mx-0 md:mt-2 md:w-full md:max-w-[600px] dark:border-slate-800 dark:bg-slate-900',
-              isOpen ? 'visible opacity-100' : 'invisible opacity-0'
-            )}
-            role="listbox"
-          >
-            <GlobalSearchProvider
-              searchQuery={activeSearchType ? searchQuery : inputValue}
-              isOpen={isOpen}
-              onResultSelect={handleResultSelect}
-              onSelectSearchType={handleSelectSearchType}
-            >
-              {!activeSearchType ? (
-                <UnifiedSearchList />
-              ) : (
-                <SearchTypeFilters searchType={activeSearchType} />
-              )}
-            </GlobalSearchProvider>
-            <div className="mt-2 border-zinc-200 border-t pt-2 dark:border-slate-800">
-              <DocsLink page="searchboxShortCommands" className="text-xs">
-                {t({
-                  id: 'appLayout.header.globalSearch.docsLink',
-                  defaultMessage: 'Search shortcuts and short commands',
+        </PopoverAnchor>
+        <PopoverContent
+          align="start"
+          className="w-(--radix-popover-trigger-width) min-w-72 max-w-[720px] p-1.5"
+          aria-label={placeholder}
+          // Focus stays in the input; the options are driven by aria-activedescendant.
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onInteractOutside={(e) => {
+            if (anchorRef.current?.contains(e.target as Node)) e.preventDefault()
+          }}
+        >
+          <div id={listId} role="listbox" aria-busy={isPending}>
+            {groups.map((group) => (
+              // biome-ignore lint/a11y/useSemanticElements: a fieldset isn't valid inside a listbox
+              <div key={group.label} role="group" aria-label={group.label}>
+                <div className="px-2 pt-2 pb-1 font-medium text-xs text-zinc-500 dark:text-slate-400">
+                  {group.label}
+                </div>
+                {group.results.map((result) => {
+                  const i = index++
+                  const Icon = resultIcons[result.kind]
+                  return (
+                    <Link
+                      key={`${result.kind}-${result.id}`}
+                      {...resultLink(result)}
+                      id={optionId(i)}
+                      role="option"
+                      aria-selected={i === active}
+                      tabIndex={-1}
+                      onClick={close}
+                      onMouseMove={() => setActiveIndex(i)}
+                      className={cn(
+                        'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-zinc-900 dark:text-slate-100',
+                        i === active && 'bg-zinc-100 dark:bg-slate-800'
+                      )}
+                    >
+                      <Icon className="size-4 shrink-0 text-zinc-500 dark:text-slate-400" />
+                      <span className="truncate">{result.name}</span>
+                    </Link>
+                  )
                 })}
-              </DocsLink>
-            </div>
+              </div>
+            ))}
           </div>
-        </div>
-      </search>
-    </>
+          {results.length === 0 && (
+            <div className="flex justify-center px-2 py-4 text-sm text-zinc-500 dark:text-slate-400">
+              {isPending ? (
+                <Spinner />
+              ) : (
+                t({ id: 'common.noResultsFound', defaultMessage: 'No results found' })
+              )}
+            </div>
+          )}
+        </PopoverContent>
+      </Popover>
+    </search>
   )
 }

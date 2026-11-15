@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs'
 import type { APIRequestContext, Page } from '@playwright/test'
 import type { UserWhoamiResponse } from '@/types/User'
-import { BACKEND_URL, createProject, deleteProject, type TestUser } from './fixtures'
+import {
+  BACKEND_URL,
+  createChallenge,
+  createProject,
+  deleteProject,
+  type TestUser,
+} from './fixtures'
 import { expect, test } from './helpers/misc'
 import { getProject } from './helpers/project'
 
@@ -96,40 +102,35 @@ test('each language translates the interface, falls back to English where untran
 })
 
 test('counted words take the plural form each language uses for one and for several', async ({
-  request,
   member,
   memberPage: page,
   memberRequest,
 }) => {
-  const token = (prefix: string) => `${prefix}${Math.random().toString(36).slice(2, 10)}`
-  const solo = token('Solo')
-  const pair = token('Pair')
-  const created = await Promise.all(
-    [solo, `${pair}a`, `${pair}b`].map((name) =>
-      createProject(request, { name, description: 'Localization test project' })
-    )
-  )
-  const id = 'appLayout.header.globalSearch.findProject.resultCount'
+  const project = await createProject(memberRequest, { description: 'Localization test project' })
+  const id = 'manageProjectDetail.challengeSelection.editSelected'
 
   try {
+    const challenges = await Promise.all([
+      createChallenge(memberRequest, project.id),
+      createChallenge(memberRequest, project.id),
+    ])
     for (const locale of ['de', 'es', 'en-US'] as const) {
       await saveLocaleThroughApi(memberRequest, member, locale)
-      await page.goto('/')
-      const search = page.getByRole('searchbox')
-      for (const [query, count] of [
-        [`p: ${solo}`, 1],
-        [`p: ${pair}`, 2],
-      ] as const) {
-        await search.click({ timeout: 20_000 })
-        await search.fill(query)
-        await expect(page.getByRole('listbox')).toContainText(
-          pluralBranch(locale, id, count === 1 ? 'one' : 'other', count),
-          { timeout: 15_000 }
-        )
+      await page.goto(`/manage/project/${project.id}`)
+      // The checkbox labels are translated too, so match on the name alone.
+      for (const [i, challenge] of challenges.entries()) {
+        await page.getByRole('checkbox', { name: new RegExp(challenge.name) }).click({
+          timeout: 20_000,
+        })
+        await expect(
+          page.getByRole('button', {
+            name: pluralBranch(locale, id, i === 0 ? 'one' : 'other', i + 1),
+          })
+        ).toBeVisible()
       }
     }
   } finally {
-    await Promise.all(created.map((project) => deleteProject(request, project.id)))
+    await deleteProject(memberRequest, project.id)
   }
 })
 

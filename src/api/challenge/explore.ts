@@ -186,19 +186,18 @@ export const challengeExplore = {
       })
     ),
 
-  searchChallenges: ({ search = '' }: { search?: string } = {}) =>
+  searchChallenges: ({ search = '', limit = 25 }: { search?: string; limit?: number } = {}) =>
     useQuery(
       queryOptions({
-        queryKey: ['challenge', 'search', { search }],
+        queryKey: ['challenge', 'search', { search, limit }],
         queryFn: () =>
           apiRequest
             .get('api/v2/challenges/search', {
-              searchParams: {
-                search,
-              },
+              searchParams: { search, limit, onlyEnabled: true },
             })
             .json<ChallengeGetResponse[]>(),
         enabled: search.length > 0,
+        placeholderData: keepPreviousData,
       })
     ),
 }
