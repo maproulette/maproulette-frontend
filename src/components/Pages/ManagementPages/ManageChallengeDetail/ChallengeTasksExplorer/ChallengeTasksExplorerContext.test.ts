@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
 import type { TaskMarker } from '@/types/Task'
-import { sortTaskMarkers, toggleFilterWithMinimumOne } from './ChallengeTasksExplorerContext'
+import {
+  nextSort,
+  sortTaskMarkers,
+  toggleFilterWithMinimumOne,
+} from './ChallengeTasksExplorerContext'
 
 const marker = (overrides: Partial<TaskMarker> = {}): TaskMarker => ({
   id: 1,
@@ -120,5 +124,28 @@ describe('toggleFilterWithMinimumOne', () => {
     )
 
     expect(next).toBe(prev)
+  })
+})
+
+describe('nextSort', () => {
+  it('cycles a column through ascending, descending, and back to the default', () => {
+    const asc = nextSort({ field: 'id', desc: true }, 'status')
+    expect(asc).toEqual({ field: 'status', desc: false })
+    const desc = nextSort(asc, 'status')
+    expect(desc).toEqual({ field: 'status', desc: true })
+    expect(nextSort(desc, 'status')).toEqual({ field: 'id', desc: true })
+  })
+
+  it('starts a different column at ascending', () => {
+    expect(nextSort({ field: 'status', desc: true }, 'priority')).toEqual({
+      field: 'priority',
+      desc: false,
+    })
+  })
+
+  it('toggles the id column between ascending and its default descending', () => {
+    const asc = nextSort({ field: 'id', desc: true }, 'id')
+    expect(asc).toEqual({ field: 'id', desc: false })
+    expect(nextSort(asc, 'id')).toEqual({ field: 'id', desc: true })
   })
 })

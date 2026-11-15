@@ -68,8 +68,7 @@ test('editing every field saves each one and the form reloads with them', async 
     'public_transport',
     'railway',
   ])
-  await page.getByRole('button', { name: 'Description' }).click()
-  await expect(page.getByRole('dialog')).toContainText('Edited description.')
+  await expect(page.getByRole('complementary')).toContainText('Edited description.')
 
   await openEditForm(page, challenge.id, name)
   await expect(page.getByLabel('Description')).toHaveValue('Edited description.')

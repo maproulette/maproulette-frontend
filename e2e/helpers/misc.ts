@@ -11,7 +11,9 @@ import {
 } from '../fixtures'
 
 export const taskRow = (page: Page, id: number) =>
-  page.getByRole('row').filter({ has: page.getByRole('cell', { name: String(id), exact: true }) })
+  page
+    .getByRole('row')
+    .filter({ has: page.getByRole('button', { name: `Show task ${id} on map`, exact: true }) })
 
 export const test = base.extend<{
   taskSet: TestTask[]

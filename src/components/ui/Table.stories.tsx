@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useState } from 'react'
 
 import { Badge } from './Badge'
 import {
+  SortableTableHead,
   Table,
   TableBody,
   TableCaption,
@@ -81,6 +83,82 @@ export const WithCaption: Story = {
       </TableHeader>
       <TableBody>
         {CHALLENGES.slice(0, 3).map((challenge) => (
+          <TableRow key={challenge.id}>
+            <TableCell>{challenge.name}</TableCell>
+            <TableCell className="text-zinc-600 dark:text-slate-400">{challenge.owner}</TableCell>
+            <TableCell className="text-center">
+              <Badge variant={challenge.status === 'Completed' ? 'success' : 'outline'}>
+                {challenge.status}
+              </Badge>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+}
+
+type SortKey = 'name' | 'percentMapped'
+
+const SortableTable = () => {
+  const [sort, setSort] = useState<{ key: SortKey; dir: 'asc' | 'desc' } | null>(null)
+  const cycle = (key: SortKey) =>
+    setSort((prev) =>
+      prev?.key !== key ? { key, dir: 'asc' } : prev.dir === 'asc' ? { key, dir: 'desc' } : null
+    )
+  const rows = sort
+    ? [...CHALLENGES].sort((a, b) => {
+        const cmp =
+          sort.key === 'name' ? a.name.localeCompare(b.name) : a.percentMapped - b.percentMapped
+        return sort.dir === 'asc' ? cmp : -cmp
+      })
+    : CHALLENGES
+  const dirFor = (key: SortKey) => (sort?.key === key ? sort.dir : false)
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <SortableTableHead sort={dirFor('name')} onSort={() => cycle('name')}>
+            Name
+          </SortableTableHead>
+          <TableHead>Author</TableHead>
+          <SortableTableHead sort={dirFor('percentMapped')} onSort={() => cycle('percentMapped')}>
+            Percent mapped
+          </SortableTableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {rows.map((challenge) => (
+          <TableRow key={challenge.id}>
+            <TableCell>{challenge.name}</TableCell>
+            <TableCell className="text-zinc-600 dark:text-slate-400">{challenge.owner}</TableCell>
+            <TableCell className="text-zinc-600 dark:text-slate-400">
+              {challenge.percentMapped}%
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
+export const Sortable: Story = {
+  render: () => <SortableTable />,
+}
+
+export const Compact: Story = {
+  render: () => (
+    <Table density="compact">
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Author</TableHead>
+          <TableHead className="text-center">Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {CHALLENGES.map((challenge) => (
           <TableRow key={challenge.id}>
             <TableCell>{challenge.name}</TableCell>
             <TableCell className="text-zinc-600 dark:text-slate-400">{challenge.owner}</TableCell>

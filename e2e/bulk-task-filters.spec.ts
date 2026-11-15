@@ -3,8 +3,16 @@ import type { Page } from '@playwright/test'
 import { setTaskStatus as setStatus } from './helpers/challengeSources'
 import { expect, taskRow, test } from './helpers/misc'
 
+const filterBar = (page: Page) => page.getByRole('group', { name: 'Task filters' })
+
+const sortBy = (page: Page, column: string) =>
+  page
+    .getByRole('columnheader', { name: column })
+    .getByRole('button', { name: column, exact: true })
+    .click()
+
 const idColumn = async (page: Page) =>
-  (await page.locator('tbody tr td:nth-child(3)').allInnerTexts()).map(Number)
+  (await page.locator('tbody tr td:nth-child(2)').allInnerTexts()).map(Number)
 
 test('the status filter narrows the table and Clear brings every task back', async ({
   page,
@@ -19,11 +27,11 @@ test('the status filter narrows the table and Clear brings every task back', asy
   await expect(page.getByText('Showing 3 of 3 tasks')).toBeVisible({ timeout: 20_000 })
   await expect(taskRow(page, fixed.id)).toContainText('Fixed')
 
-  await page.getByRole('button', { name: 'Status' }).click()
+  await filterBar(page).getByRole('button', { name: 'Status' }).click()
   await page.getByRole('menuitemcheckbox', { name: 'Created' }).click()
   await page.keyboard.press('Escape')
 
-  await expect(page.getByText('Showing 1 of 1 task')).toBeVisible()
+  await expect(page.getByText('Showing 1 of 3 tasks')).toBeVisible()
   await expect(taskRow(page, fixed.id)).toBeVisible()
   await expect(taskRow(page, created.id)).not.toBeVisible()
   await expect(taskRow(page, alsoCreated.id)).not.toBeVisible()
@@ -33,7 +41,7 @@ test('the status filter narrows the table and Clear brings every task back', asy
   await expect(taskRow(page, created.id)).toBeVisible()
 })
 
-test('the task table sorts by id and status in either direction', async ({
+test('clicking a column header cycles its sort through ascending, descending and back to the default', async ({
   page,
   request,
   challenge,
@@ -48,15 +56,17 @@ test('the task table sorts by id and status in either direction', async ({
 
   await expect.poll(() => idColumn(page)).toEqual([...ids].sort((a, b) => b - a))
 
-  await page.getByRole('button', { name: 'Desc', exact: true }).click()
+  await sortBy(page, 'ID')
   await expect.poll(() => idColumn(page)).toEqual([...ids].sort((a, b) => a - b))
 
-  await page.getByRole('combobox').filter({ hasText: 'ID' }).click()
-  await page.getByRole('option', { name: 'Status' }).click()
+  await sortBy(page, 'Status')
   await expect.poll(() => idColumn(page)).toEqual([taskSet[1].id, taskSet[2].id, taskSet[0].id])
 
-  await page.getByRole('button', { name: 'Asc', exact: true }).click()
+  await sortBy(page, 'Status')
   await expect.poll(() => idColumn(page)).toEqual([taskSet[0].id, taskSet[2].id, taskSet[1].id])
+
+  await sortBy(page, 'Status')
+  await expect.poll(() => idColumn(page)).toEqual([...ids].sort((a, b) => b - a))
 })
 
 test('the property filter shows only tasks whose feature matches', async ({
@@ -74,7 +84,9 @@ test('the property filter shows only tasks whose feature matches', async ({
   await dialog.getByPlaceholder('value').fill('road')
   await dialog.getByRole('button', { name: 'Apply' }).click()
 
-  await expect(page.getByText('Showing 2 of 2 tasks')).toBeVisible({ timeout: 15_000 })
+  await expect(page.getByText('Showing 2 of 3 tasks')).toBeVisible({
+    timeout: 15_000,
+  })
   await expect(taskRow(page, road.id)).toBeVisible()
   await expect(taskRow(page, otherRoad.id)).toBeVisible()
   await expect(taskRow(page, river.id)).not.toBeVisible()
@@ -96,10 +108,10 @@ test('exporting tasks downloads a CSV holding only the filtered tasks', async ({
   await page.goto(`/manage/challenge/${challenge.id}`)
   await expect(page.getByText('Showing 3 of 3 tasks')).toBeVisible({ timeout: 20_000 })
 
-  await page.getByRole('button', { name: 'Status' }).click()
+  await filterBar(page).getByRole('button', { name: 'Status' }).click()
   await page.getByRole('menuitemcheckbox', { name: 'Created' }).click()
   await page.keyboard.press('Escape')
-  await expect(page.getByText('Showing 1 of 1 task')).toBeVisible()
+  await expect(page.getByText('Showing 1 of 3 tasks')).toBeVisible()
 
   await page.getByRole('button', { name: 'Export' }).click()
   const dialog = page.getByRole('dialog', { name: 'Export tasks' })

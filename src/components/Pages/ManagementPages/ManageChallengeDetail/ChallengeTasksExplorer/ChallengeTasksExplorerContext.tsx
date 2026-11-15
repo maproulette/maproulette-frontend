@@ -33,6 +33,22 @@ export const sortTaskMarkers = (
   })
 }
 
+type Sort = { field: SortField; desc: boolean }
+
+const DEFAULT_SORT: Sort = { field: 'id', desc: true }
+
+/**
+ * The sort after clicking `field`'s column header: ascending, then descending,
+ * then back to the default. The default (id descending) counts as unsorted, so
+ * clicking ID from there goes to ascending rather than "resetting" in place.
+ */
+export const nextSort = (current: Sort, field: SortField): Sort => {
+  const isDefault = current.field === DEFAULT_SORT.field && current.desc === DEFAULT_SORT.desc
+  if (isDefault || current.field !== field) return { field, desc: false }
+  if (!current.desc) return { field, desc: true }
+  return DEFAULT_SORT
+}
+
 /**
  * Toggles whether `key` is enabled within a filter's enabled-state record, refusing to
  * disable the last remaining enabled value out of `allValues` (at least one must stay on).
@@ -61,9 +77,9 @@ type ExplorerContextValue = {
   propertyFilterActive: boolean
   propertyMatchesLoading: boolean
   sortField: SortField
-  setSortField: (f: SortField) => void
   sortDesc: boolean
-  setSortDesc: React.Dispatch<React.SetStateAction<boolean>>
+  /** Advances `field`'s header-click sort cycle (see `nextSort`). */
+  cycleSort: (field: SortField) => void
   clearFilters: () => void
   filtersDirty: boolean
   markers: TaskMarker[]
@@ -103,8 +119,8 @@ export const ChallengeTasksExplorerProvider = ({
     initialEnabledRecord(DEFAULT_PRIORITY_FILTER)
   )
   const [propertyRule, setPropertyRule] = useState<BinaryNode | null>(null)
-  const [sortField, setSortField] = useState<SortField>('id')
-  const [sortDesc, setSortDesc] = useState(true)
+  const [sortField, setSortField] = useState<SortField>(DEFAULT_SORT.field)
+  const [sortDesc, setSortDesc] = useState(DEFAULT_SORT.desc)
   const [viewportBounds, setViewportBoundsRaw] = useState<Bbox2D | null>(null)
   const [selectedTask, setSelectedTask] = useState<TaskMarker | null>(null)
 
@@ -158,16 +174,21 @@ export const ChallengeTasksExplorerProvider = ({
     setPropertyRule(null)
     setStatusEnabled(initialEnabledRecord(DEFAULT_TASK_STATUS_FILTER))
     setPriorityEnabled(initialEnabledRecord(DEFAULT_PRIORITY_FILTER))
-    setSortField('id')
-    setSortDesc(true)
   }, [])
+
+  const cycleSort = useCallback(
+    (field: SortField) => {
+      const next = nextSort({ field: sortField, desc: sortDesc }, field)
+      setSortField(next.field)
+      setSortDesc(next.desc)
+    },
+    [sortField, sortDesc]
+  )
 
   const filtersDirty =
     DEFAULT_TASK_STATUS_FILTER.some((s) => !statusEnabled[s]) ||
     DEFAULT_PRIORITY_FILTER.some((p) => !priorityEnabled[p]) ||
-    propertyFilterActive ||
-    sortField !== 'id' ||
-    sortDesc !== true
+    propertyFilterActive
 
   const value = useMemo(
     (): ExplorerContextValue => ({
@@ -183,9 +204,8 @@ export const ChallengeTasksExplorerProvider = ({
       propertyFilterActive,
       propertyMatchesLoading,
       sortField,
-      setSortField,
       sortDesc,
-      setSortDesc,
+      cycleSort,
       clearFilters,
       filtersDirty,
       markers,
@@ -207,6 +227,7 @@ export const ChallengeTasksExplorerProvider = ({
       propertyMatchesLoading,
       sortField,
       sortDesc,
+      cycleSort,
       clearFilters,
       filtersDirty,
       markers,

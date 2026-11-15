@@ -71,7 +71,7 @@ export const ExportTasksButton = () => {
 
   return (
     <>
-      <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={() => setOpen(true)}>
+      <Button variant="outline" className="gap-1.5" onClick={() => setOpen(true)}>
         <Download className="h-4 w-4" />
         {t({ id: 'manageChallengeDetail.export.button', defaultMessage: 'Export' })}
       </Button>

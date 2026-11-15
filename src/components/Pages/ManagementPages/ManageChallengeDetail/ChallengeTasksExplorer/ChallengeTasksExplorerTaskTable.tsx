@@ -4,6 +4,7 @@ import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskSta
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import {
+  SortableTableHead,
   Table,
   TableBody,
   TableCell,
@@ -17,6 +18,7 @@ import { cn } from '@/lib/utils'
 import { isTaskPriority, PRIORITY_MESSAGES } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
+import type { SortField } from './constants'
 
 /** Scrollable, infinitely-loading table of the currently filtered/sorted tasks. */
 export const ChallengeTasksExplorerTaskTable = ({
@@ -31,7 +33,9 @@ export const ChallengeTasksExplorerTaskTable = ({
   rowSelection: UseRowSelectionReturn<number>
 }) => {
   const { t } = useIntl()
-  const { selectedTask, setSelectedTask } = useExplorerContext()
+  const { selectedTask, setSelectedTask, sortField, sortDesc, cycleSort } = useExplorerContext()
+  const sortFor = (field: SortField) =>
+    sortField === field ? (sortDesc ? 'desc' : 'asc') : (false as const)
 
   const visibleIds = useMemo(() => visibleMarkers.map((m) => m.id), [visibleMarkers])
   const { allVisibleSelected, someVisibleSelected } = useMemo(() => {
@@ -48,8 +52,8 @@ export const ChallengeTasksExplorerTaskTable = ({
   const priorityLabel = (p: number) => (isTaskPriority(p) ? t(PRIORITY_MESSAGES[p]) : String(p))
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 dark:border-slate-700">
-      <Table>
+    <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 bg-white text-zinc-900 dark:border-slate-700 dark:bg-slate-900 dark:text-zinc-50">
+      <Table density="compact">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[36px] px-2">
@@ -74,16 +78,27 @@ export const ChallengeTasksExplorerTaskTable = ({
                 })}
               />
             </TableHead>
-            <TableHead className="w-[44px]" />
-            <TableHead className="w-[88px]">
+            <SortableTableHead
+              className="w-[88px]"
+              sort={sortFor('id')}
+              onSort={() => cycleSort('id')}
+            >
               {t({ id: 'common.id', defaultMessage: 'ID' })}
-            </TableHead>
-            <TableHead className="w-[120px]">
+            </SortableTableHead>
+            <SortableTableHead
+              className="w-[120px]"
+              sort={sortFor('status')}
+              onSort={() => cycleSort('status')}
+            >
               {t({ id: 'common.status', defaultMessage: 'Status' })}
-            </TableHead>
-            <TableHead className="w-[100px]">
+            </SortableTableHead>
+            <SortableTableHead
+              className="w-[100px]"
+              sort={sortFor('priority')}
+              onSort={() => cycleSort('priority')}
+            >
               {t({ id: 'common.priority', defaultMessage: 'Priority' })}
-            </TableHead>
+            </SortableTableHead>
             <TableHead className="w-[88px]">
               {t({
                 id: 'manageChallengeDetail.tasksExplorer.columnBundle',
@@ -98,7 +113,7 @@ export const ChallengeTasksExplorerTaskTable = ({
         <TableBody>
           {visibleMarkers.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="h-24 text-center text-zinc-500">
+              <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
                 {t({
                   id: 'manageChallengeDetail.tasksExplorer.noTasksMatch',
                   defaultMessage: 'No tasks match the current filters.',
@@ -109,10 +124,21 @@ export const ChallengeTasksExplorerTaskTable = ({
             visibleMarkers.map((marker) => {
               const isSelected = selectedTask?.id === marker.id
               const isRowSelected = rowSelection.has(marker.id)
+              const toggleSelected = () => setSelectedTask(isSelected ? null : marker)
               return (
                 <TableRow
                   key={marker.id}
-                  className={isSelected ? 'bg-purple-50 dark:bg-purple-950/30' : undefined}
+                  data-state={isRowSelected ? 'selected' : undefined}
+                  className={cn(
+                    'cursor-pointer',
+                    isSelected &&
+                      'bg-purple-50 data-[state=selected]:bg-purple-50 dark:bg-purple-950/30 dark:data-[state=selected]:bg-purple-950/30 [&>td:first-child]:shadow-[inset_3px_0_0_var(--color-purple-500)]'
+                  )}
+                  onClick={(e) => {
+                    if ((e.target as HTMLElement).closest('a, button')) return
+                    if (window.getSelection()?.toString()) return
+                    toggleSelected()
+                  }}
                 >
                   <TableCell className="px-2">
                     <Checkbox
@@ -131,38 +157,23 @@ export const ChallengeTasksExplorerTaskTable = ({
                       }
                     />
                   </TableCell>
-                  <TableCell className="px-2">
+                  <TableCell className="font-mono text-xs">
                     <button
                       type="button"
-                      onClick={() => setSelectedTask(isSelected ? null : marker)}
-                      className="flex h-5 w-5 items-center justify-center"
-                      aria-label={
-                        isSelected
-                          ? t({
-                              id: 'manageChallengeDetail.tasksExplorer.deselectTaskLabel',
-                              defaultMessage: 'Deselect task',
-                            })
-                          : t({
-                              id: 'manageChallengeDetail.tasksExplorer.selectTaskLabel',
-                              defaultMessage: 'Select task',
-                            })
-                      }
+                      onClick={toggleSelected}
+                      aria-pressed={isSelected}
+                      aria-label={t(
+                        {
+                          id: 'manageChallengeDetail.tasksExplorer.showTaskOnMapLabel',
+                          defaultMessage: 'Show task {id} on map',
+                        },
+                        { id: marker.id }
+                      )}
+                      className="rounded-sm hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50"
                     >
-                      <span
-                        className={cn(
-                          'block h-3.5 w-3.5 rounded-full border-2 transition-colors',
-                          isSelected
-                            ? 'border-purple-500 bg-purple-500'
-                            : 'border-zinc-400 dark:border-slate-600'
-                        )}
-                      >
-                        {isSelected && (
-                          <span className="block h-full w-full rounded-full border-2 border-white dark:border-slate-950" />
-                        )}
-                      </span>
+                      {marker.id}
                     </button>
                   </TableCell>
-                  <TableCell className="font-mono text-xs">{marker.id}</TableCell>
                   <TableCell className="text-sm">{statusLabel(marker.status)}</TableCell>
                   <TableCell className="text-sm">{priorityLabel(marker.priority)}</TableCell>
                   <TableCell className="font-mono text-xs">
@@ -170,12 +181,12 @@ export const ChallengeTasksExplorerTaskTable = ({
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="sm" className="h-8 px-2" asChild>
+                      <Button variant="ghost" size="sm" className="h-7 px-2" asChild>
                         <Link to="/tasks/$taskId" params={{ taskId: String(marker.id) }}>
                           {t({ id: 'common.view', defaultMessage: 'View' })}
                         </Link>
                       </Button>
-                      <Button variant="outline" size="sm" className="h-8 px-2" asChild>
+                      <Button variant="outline" size="sm" className="h-7 px-2" asChild>
                         <Link to="/manage/task/$taskId/edit" params={{ taskId: String(marker.id) }}>
                           {t({ id: 'common.edit', defaultMessage: 'Edit' })}
                         </Link>

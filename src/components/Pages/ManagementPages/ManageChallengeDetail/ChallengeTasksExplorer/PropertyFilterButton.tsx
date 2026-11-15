@@ -42,9 +42,8 @@ export const PropertyFilterButton = () => {
     <>
       <Button
         variant="outline"
-        size="sm"
         className={cn(
-          'h-9 gap-1 font-normal',
+          'gap-1 font-normal',
           propertyFilterActive &&
             'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
         )}

@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Archive, BookOpen, Eye, EyeOff, Pencil, Plus, Trash2, Users } from 'lucide-react'
 import { DocsLink } from '@/components/shared/DocsLink'
+import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
@@ -71,9 +72,9 @@ export const ProjectDetailSidebar = () => {
 
       {projectData?.description && (
         <div className="shrink-0 px-6 py-4">
-          <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
+          <MarkdownContent className="text-pretty text-zinc-700 dark:text-zinc-300">
             {projectData.description}
-          </p>
+          </MarkdownContent>
         </div>
       )}
 

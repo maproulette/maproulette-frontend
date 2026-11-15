@@ -136,13 +136,14 @@ test('working through every task of a challenge records the results everywhere',
 
   await test.step('the manage page statistics match', async () => {
     await page.goto(`/manage/challenge/${challenge.id}`)
-    await page.getByRole('button', { name: 'Statistics' }).first().click()
-    const stats = page.getByRole('dialog', { name: 'Statistics' })
-    await expect(stats).toContainText('Task counts by status', { timeout: 20_000 })
-    await expect(stats.getByRole('progressbar')).toHaveAccessibleName('75% complete')
-    await expect(
-      stats.getByText('Tasks remaining', { exact: true }).locator('xpath=..')
-    ).toHaveText('Tasks remaining1 / 4')
+    const sidebar = page.getByRole('complementary')
+    await expect(sidebar.getByRole('progressbar')).toHaveAccessibleName('75% complete', {
+      timeout: 20_000,
+    })
+    const remaining = sidebar.getByRole('button', { name: /Tasks remaining/ })
+    await expect(remaining).toHaveText('Tasks remaining1 / 4')
+    await remaining.click()
+    const stats = sidebar.getByRole('group', { name: 'Task counts by status' })
     for (const [label, count] of [
       ['Available', 0],
       ['Fixed', 1],
@@ -150,21 +151,18 @@ test('working through every task of a challenge records the results everywhere',
       ['Skipped', 0],
       ['Already Fixed', 1],
       ["Can't Complete", 1],
-      ['Total', 4],
     ] as const) {
       await expect(stats.getByText(label, { exact: true }).locator('xpath=..')).toContainText(
         String(count)
       )
     }
-    await page.keyboard.press('Escape')
   })
 
   await test.step('the manage task table lists each task with its status', async () => {
     for (const [id, status] of statusById) {
-      await expect(page.getByRole('row', { name: new RegExp(`Select task ${id} `) })).toContainText(
-        TABLE_LABEL[status],
-        { timeout: 20_000 }
-      )
+      await expect(
+        page.getByRole('row', { name: new RegExp(`Show task ${id} on map`) })
+      ).toContainText(TABLE_LABEL[status], { timeout: 20_000 })
     }
   })
 })

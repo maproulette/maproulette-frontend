@@ -13,7 +13,7 @@ import { useVisibleTaskMarkers } from './useVisibleTaskMarkers'
 /** Map and infinite-scroll task table. */
 export const ChallengeTasksExplorerMain = () => {
   const { t } = useIntl()
-  const { enabled, filteredMarkers, isLoading } = useExplorerContext()
+  const { enabled, filteredMarkers } = useExplorerContext()
 
   const { visibleMarkers, hasMore, sentinelRef } = useVisibleTaskMarkers(filteredMarkers)
   const { topRef, showScrollTop, scrollToTop } = useScrollToTopVisibility()
@@ -24,37 +24,29 @@ export const ChallengeTasksExplorerMain = () => {
   }
 
   return (
-    <div className="relative h-full">
+    <div className="relative flex h-full flex-col">
       <div ref={topRef} />
-      <ResizablePanelGroup direction="vertical" className="h-full" style={{ overflow: 'visible' }}>
+      <div className="shrink-0 pb-2">
+        <ChallengeTasksExplorerControls />
+      </div>
+      <ResizablePanelGroup
+        direction="vertical"
+        className="h-auto min-h-0 flex-1"
+        style={{ overflow: 'visible' }}
+      >
         <ResizablePanel defaultSize={50} minSize={20} style={{ overflow: 'visible' }}>
           <ChallengeTasksExplorerMapPanel />
         </ResizablePanel>
 
-        <ResizableHandle withHandle />
+        {/* The default vertical handle has zero net height; this gives it an
+            8px gutter to match the gap under the filter bar. */}
+        <ResizableHandle
+          withHandle
+          className="data-[panel-group-direction=vertical]:my-0 data-[panel-group-direction=vertical]:h-2"
+        />
 
         <ResizablePanel defaultSize={50} minSize={15}>
           <div className="flex h-full flex-col">
-            <div className="shrink-0 pb-2">
-              <ChallengeTasksExplorerControls
-                countLabel={
-                  isLoading
-                    ? t({
-                        id: 'manageChallengeDetail.tasksExplorer.loadingTasks',
-                        defaultMessage: 'Loading tasks…',
-                      })
-                    : t(
-                        {
-                          id: 'manageChallengeDetail.tasksExplorer.showingCount',
-                          defaultMessage:
-                            '{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}',
-                        },
-                        { shown: visibleMarkers.length, total: filteredMarkers.length }
-                      )
-                }
-              />
-            </div>
-
             <ChallengeTasksExplorerTaskTable
               visibleMarkers={visibleMarkers}
               hasMore={hasMore}

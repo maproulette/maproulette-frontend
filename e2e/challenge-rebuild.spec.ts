@@ -94,10 +94,10 @@ test('rebuilding from a new upload updates matched tasks, adds new ones and keep
 
   await page.goto(`/manage/challenge/${id}`)
   const row = (task: Task | undefined) =>
-    page.getByRole('row', { name: new RegExp(`Select task ${task?.id} `) })
+    page.getByRole('row', { name: new RegExp(`Show task ${task?.id} on map`) })
   await expect(row(byName(after, 'Willow pond'))).toContainText('Created', { timeout: 20_000 })
   await expect(row(byName(after, 'Cedar pond'))).toContainText('Fixed')
-  await expect(page.getByRole('row', { name: /Select task \d+/ })).toHaveCount(4)
+  await expect(page.getByRole('row', { name: /Show task \d+ on map/ })).toHaveCount(4)
 })
 
 test('rebuilding with incomplete tasks removed first drops the ones missing from the new data', async ({

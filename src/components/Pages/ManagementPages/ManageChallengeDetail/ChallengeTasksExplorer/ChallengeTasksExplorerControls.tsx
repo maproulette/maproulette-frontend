@@ -1,4 +1,4 @@
-import { ArrowDownAZ, ArrowUpAZ, ChevronDown, X } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Button } from '@/components/ui/Button'
 import {
@@ -9,24 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/Select'
 import { useIntl } from '@/i18n'
 import { DEFAULT_PRIORITY_FILTER, DEFAULT_TASK_STATUS_FILTER } from '@/lib/challengeTaskTableSearch'
 import { cn } from '@/lib/utils'
 import { PRIORITY_MESSAGES } from '@/types/Priority'
 import { useExplorerContext } from './ChallengeTasksExplorerContext'
-import { SORT_FIELD_MESSAGES, SORT_FIELDS, type SortField } from './constants'
 import { ExportTasksButton } from './ExportTasksButton'
 import { PropertyFilterButton } from './PropertyFilterButton'
 
-/** Horizontal filter & sort controls rendered above the task table. */
-export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: string }) => {
+/** Filter controls for both the map and the task table, with the matching task count. */
+export const ChallengeTasksExplorerControls = () => {
   const { t } = useIntl()
   const {
     enabled,
@@ -34,12 +26,11 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
     setStatusChecked,
     priorityEnabled,
     setPriorityChecked,
-    sortField,
-    setSortField,
-    sortDesc,
-    setSortDesc,
     clearFilters,
     filtersDirty,
+    markers,
+    filteredMarkers,
+    isLoading,
   } = useExplorerContext()
 
   if (!enabled) {
@@ -50,7 +41,13 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
   const priorityDirty = DEFAULT_PRIORITY_FILTER.some((p) => !priorityEnabled[p])
 
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-white p-2 shadow-xs dark:border-slate-700 dark:bg-slate-800">
+    <fieldset
+      aria-label={t({
+        id: 'manageChallengeDetail.tasksExplorer.filterBarLabel',
+        defaultMessage: 'Task filters',
+      })}
+      className="flex min-w-0 flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-white p-2 shadow-xs dark:border-slate-700 dark:bg-slate-800"
+    >
       <div className="flex items-center gap-2">
         <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
           {t({ id: 'manageChallengeDetail.tasksExplorer.filtersLabel', defaultMessage: 'Filters' })}
@@ -59,9 +56,8 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              size="sm"
               className={cn(
-                'h-9 w-32 justify-between gap-1 font-normal',
+                'w-32 justify-between gap-1 font-normal',
                 statusDirty &&
                   'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
               )}
@@ -98,9 +94,8 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              size="sm"
               className={cn(
-                'h-9 w-32 justify-between gap-1 font-normal',
+                'w-32 justify-between gap-1 font-normal',
                 priorityDirty &&
                   'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
               )}
@@ -132,18 +127,15 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
 
         <PropertyFilterButton />
 
-        <ExportTasksButton />
-
         <Button
           type="button"
           variant="ghost"
-          size="sm"
-          className="h-9 gap-1 text-zinc-600 hover:text-zinc-900 disabled:opacity-40 dark:text-zinc-400 dark:hover:text-zinc-100"
+          className="gap-1 text-zinc-600 hover:text-zinc-900 disabled:opacity-40 dark:text-zinc-400 dark:hover:text-zinc-100"
           disabled={!filtersDirty}
           onClick={clearFilters}
           title={t({
-            id: 'manageChallengeDetail.tasksExplorer.clearFiltersTitle',
-            defaultMessage: 'Clear all filters and reset sort',
+            id: 'manageChallengeDetail.tasksExplorer.clearAllFiltersTitle',
+            defaultMessage: 'Clear all filters',
           })}
         >
           <X className="h-4 w-4" />
@@ -151,65 +143,24 @@ export const ChallengeTasksExplorerControls = ({ countLabel }: { countLabel: str
         </Button>
       </div>
 
-      <div className="h-6 w-px bg-zinc-200 dark:bg-slate-700" />
-
-      <div className="flex items-center gap-2">
-        <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
-          {t({ id: 'manageChallengeDetail.tasksExplorer.sortLabel', defaultMessage: 'Sort' })}
+      <div className="ml-auto flex items-center gap-3">
+        <span className="whitespace-nowrap text-sm text-zinc-600 dark:text-zinc-400">
+          {isLoading
+            ? t({
+                id: 'manageChallengeDetail.tasksExplorer.loadingTasks',
+                defaultMessage: 'Loading tasks…',
+              })
+            : t(
+                {
+                  id: 'manageChallengeDetail.tasksExplorer.showingCount',
+                  defaultMessage:
+                    '{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}',
+                },
+                { shown: filteredMarkers.length, total: markers.length }
+              )}
         </span>
-        <Select value={sortField} onValueChange={(v) => setSortField(v as SortField)}>
-          <SelectTrigger size="sm" className="h-9 w-28">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {SORT_FIELDS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {t(SORT_FIELD_MESSAGES[opt.value])}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="h-9 gap-1 font-normal"
-          onClick={() => setSortDesc((d) => !d)}
-          title={
-            sortDesc
-              ? t({
-                  id: 'manageChallengeDetail.tasksExplorer.sortDescTitle',
-                  defaultMessage: 'Descending — click for ascending',
-                })
-              : t({
-                  id: 'manageChallengeDetail.tasksExplorer.sortAscTitle',
-                  defaultMessage: 'Ascending — click for descending',
-                })
-          }
-        >
-          {sortDesc ? (
-            <>
-              <ArrowDownAZ className="h-4 w-4" />
-              {t({
-                id: 'manageChallengeDetail.tasksExplorer.sortDescButton',
-                defaultMessage: 'Desc',
-              })}
-            </>
-          ) : (
-            <>
-              <ArrowUpAZ className="h-4 w-4" />
-              {t({
-                id: 'manageChallengeDetail.tasksExplorer.sortAscButton',
-                defaultMessage: 'Asc',
-              })}
-            </>
-          )}
-        </Button>
+        <ExportTasksButton />
       </div>
-
-      <div className="ml-auto whitespace-nowrap text-sm text-zinc-600 dark:text-zinc-400">
-        {countLabel}
-      </div>
-    </div>
+    </fieldset>
   )
 }

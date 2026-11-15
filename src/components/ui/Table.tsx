@@ -1,12 +1,27 @@
+import { ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-react'
 import type * as React from 'react'
 import { useRef } from 'react'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { useColumnResize } from './useColumnResize'
 
-export const Table = ({ className, ref, ...props }: React.ComponentProps<'table'>) => (
+type TableProps = {
+  density?: 'default' | 'compact'
+}
+
+export const Table = ({
+  className,
+  ref,
+  density = 'default',
+  ...props
+}: React.ComponentProps<'table'> & TableProps) => (
   <div className="relative w-full overflow-x-auto">
-    <table ref={ref} className={cn('w-full border-collapse text-sm', className)} {...props} />
+    <table
+      ref={ref}
+      data-density={density}
+      className={cn('group/table w-full border-collapse text-sm', className)}
+      {...props}
+    />
   </div>
 )
 
@@ -60,7 +75,7 @@ export const TableHead = ({ className, children, ref, ...props }: React.Componen
     <th
       ref={setRef}
       className={cn(
-        'relative min-w-[40px] px-4 py-3 text-left align-middle font-medium text-xs text-zinc-600 dark:text-slate-400 [&:has([role=checkbox])]:pr-0',
+        'relative min-w-[40px] px-4 py-3 text-left align-middle font-medium text-xs text-zinc-600 group-data-[density=compact]/table:py-2 dark:text-slate-400 [&:has([role=checkbox])]:pr-0',
         className
       )}
       {...props}
@@ -76,10 +91,45 @@ export const TableHead = ({ className, children, ref, ...props }: React.Componen
   )
 }
 
+/**
+ * Header cell whose label is a button that asks for the column to be sorted.
+ * `sort` is the column's current direction, or false when the table isn't
+ * sorted by it; the caller decides what each click does.
+ */
+export const SortableTableHead = ({
+  sort,
+  onSort,
+  children,
+  ...props
+}: React.ComponentProps<typeof TableHead> & {
+  sort: 'asc' | 'desc' | false
+  onSort: () => void
+}) => {
+  const Icon = sort === 'asc' ? ArrowUp : sort === 'desc' ? ArrowDown : ChevronsUpDown
+  return (
+    <TableHead
+      aria-sort={sort === 'asc' ? 'ascending' : sort === 'desc' ? 'descending' : 'none'}
+      {...props}
+    >
+      <button
+        type="button"
+        onClick={onSort}
+        className="-mx-1 inline-flex items-center gap-1 rounded px-1 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50 dark:hover:text-zinc-100"
+      >
+        {children}
+        <Icon className={cn('size-3.5 shrink-0', !sort && 'opacity-40')} aria-hidden="true" />
+      </button>
+    </TableHead>
+  )
+}
+
 export const TableCell = ({ className, children, ref, ...props }: React.ComponentProps<'td'>) => (
   <td
     ref={ref}
-    className={cn('px-4 py-3 align-middle [&:has([role=checkbox])]:pr-0', className)}
+    className={cn(
+      'px-4 py-3 align-middle group-data-[density=compact]/table:py-1.5 [&:has([role=checkbox])]:pr-0',
+      className
+    )}
     {...props}
   >
     <div className="overflow-hidden text-ellipsis whitespace-nowrap">{children}</div>
