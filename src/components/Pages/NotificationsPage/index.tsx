@@ -1,13 +1,8 @@
-import { NotificationsPageProvider } from '@/contexts/NotificationsPageContext'
-import { AuthGuard } from '@/lib/AuthGuard'
+import { SignIn } from '@/components/shared/SignIn'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { NotificationsPageContent } from './NotificationsPageContent'
 
 export const NotificationsPage = () => {
-  return (
-    <AuthGuard>
-      <NotificationsPageProvider>
-        <NotificationsPageContent />
-      </NotificationsPageProvider>
-    </AuthGuard>
-  )
+  const { user } = useAuthContext()
+  return user ? <NotificationsPageContent userId={user.id} /> : <SignIn />
 }

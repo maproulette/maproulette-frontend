@@ -1,36 +1,39 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
 import { useState } from 'react'
 import { NotificationItem } from '@/components/Pages/NotificationsPage/NotificationItem'
-import { NotificationThreadDialog } from '@/components/Pages/NotificationsPage/NotificationThreadDialog'
 import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover'
+import { Spinner } from '@/components/ui/Spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { useNotificationsContext } from '@/contexts/NotificationsContext'
+import { useNotifications } from '@/hooks/useNotifications'
 import { useIntl } from '@/i18n'
+import type { Notification } from '@/types/Notification'
 import type { User } from '@/types/User'
 
 export const DropdownMenuNotifications = ({ user }: { user: User }) => {
-  const { notifications, isLoading, markAllAsRead, closeThread } = useNotificationsContext()
-  const navigate = useNavigate()
-  const [open, setOpen] = useState(false)
   const { t } = useIntl()
+  const [open, setOpen] = useState(false)
+  const { notifications, isLoading, markAsRead, markAsUnread } = useNotifications(user.id)
+  const unread = notifications.filter((n) => !n.isRead)
 
-  const unreadNotifications = notifications.filter((n) => !n.isRead)
-  const unreadCount = unreadNotifications.length
-
-  const handleMarkAllAsRead = () => {
-    if (unreadCount > 0) {
-      markAllAsRead(unreadNotifications.map((n) => n.id))
-    }
-  }
-
-  const handleViewAllNotifications = () => {
-    closeThread()
-    setOpen(false)
-    navigate({ to: '/notifications' })
-  }
+  const list = (items: Notification[], empty: string) =>
+    items.length === 0 ? (
+      <p className="py-8 text-center text-sm text-zinc-500 dark:text-slate-400">{empty}</p>
+    ) : (
+      <ul className="divide-y divide-zinc-200 dark:divide-slate-800">
+        {items.map((n) => (
+          <li key={n.id}>
+            <NotificationItem
+              notification={n}
+              onMarkRead={() => markAsRead([n.id])}
+              onMarkUnread={() => markAsUnread([n.id])}
+              onNavigate={() => setOpen(false)}
+            />
+          </li>
+        ))}
+      </ul>
+    )
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -45,10 +48,10 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
         className="relative flex"
       >
         <Bell className="size-5" aria-hidden="true" />
-        {unreadCount > 0 && (
+        {unread.length > 0 && (
           <span
             aria-live="polite"
-            className="-right-0.75 -top-0.75 absolute size-1.25 rounded-full bg-red-400 motion-safe:animate-pulse"
+            className="-right-0.75 -top-0.75 absolute size-1.25 rounded-full bg-red-400"
           >
             <span className="sr-only">
               {t({
@@ -62,19 +65,16 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
       <PopoverContent
         align="end"
         sideOffset={10}
-        aria-label={t({
-          id: 'common.notifications',
-          defaultMessage: 'Notifications',
-        })}
-        className="flex w-96 max-w-[calc(100vw-2rem)] flex-col p-4"
+        aria-label={t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
+        className="flex w-96 max-w-[calc(100vw-2rem)] flex-col"
       >
-        <Tabs defaultValue="unread" className="flex min-h-0 flex-1 flex-col">
-          <div className="mb-4 flex items-center justify-between gap-2">
+        <Tabs defaultValue="unread" className="flex min-h-0 flex-1 flex-col gap-0">
+          <div className="flex items-center justify-between gap-2 border-zinc-200 border-b p-3 dark:border-slate-800">
             <TabsList>
               <TabsTrigger value="unread">
                 {t(
                   { id: 'common.unread', defaultMessage: 'Unread ({count})' },
-                  { count: unreadCount }
+                  { count: unread.length }
                 )}
               </TabsTrigger>
               <TabsTrigger value="all">
@@ -87,63 +87,37 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={handleMarkAllAsRead}
-              disabled={unreadCount === 0}
+              onClick={() => markAsRead(unread.map((n) => n.id))}
+              disabled={unread.length === 0}
             >
               {t({ id: 'common.markAllAsRead', defaultMessage: 'Mark all as read' })}
             </Button>
           </div>
-
           {isLoading ? (
-            <Card className="p-6">
-              <div className="text-center text-sm text-zinc-500 dark:text-slate-500">
-                {t({
-                  id: 'common.loadingNotifications',
-                  defaultMessage: 'Loading notifications...',
-                })}
-              </div>
-            </Card>
+            <div className="flex justify-center py-8">
+              <Spinner />
+            </div>
           ) : (
             <>
-              <TabsContent
-                value="unread"
-                className="-mx-1 mt-0 max-h-[60vh] min-h-0 flex-1 overflow-y-auto px-1"
-              >
-                <NotificationList
-                  notifications={unreadNotifications}
-                  emptyTitle={t({
-                    id: 'common.youreAllUpToDate',
-                    defaultMessage: "You're all up to date",
-                  })}
-                  emptyDescription={t({
-                    id: 'common.noUnreadNotificationsYet',
-                    defaultMessage: 'You have no unread notifications at the moment.',
-                  })}
-                  onLinkClick={() => setOpen(false)}
-                />
+              <TabsContent value="unread" className="mt-0 max-h-[60vh] overflow-y-auto">
+                {list(
+                  unread,
+                  t({
+                    id: 'notifications.empty.unread',
+                    defaultMessage: 'No unread notifications',
+                  })
+                )}
               </TabsContent>
-              <TabsContent
-                value="all"
-                className="-mx-1 mt-0 max-h-[60vh] min-h-0 flex-1 overflow-y-auto px-1"
-              >
-                <NotificationList
-                  notifications={notifications}
-                  emptyTitle={t({
-                    id: 'common.youreAllUpToDate',
-                    defaultMessage: "You're all up to date",
-                  })}
-                  emptyDescription={t({
-                    id: 'common.noNotificationsYet',
-                    defaultMessage: 'You have no notifications.',
-                  })}
-                  onLinkClick={() => setOpen(false)}
-                />
+              <TabsContent value="all" className="mt-0 max-h-[60vh] overflow-y-auto">
+                {list(
+                  notifications,
+                  t({ id: 'notifications.empty.all', defaultMessage: 'No notifications yet' })
+                )}
               </TabsContent>
             </>
           )}
         </Tabs>
-
-        <div className="mt-4 border-zinc-200 border-t pt-3 dark:border-slate-800">
+        <div className="border-zinc-200 border-t p-3 dark:border-slate-800">
           <Link
             to="/notifications"
             onClick={() => setOpen(false)}
@@ -153,50 +127,6 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
           </Link>
         </div>
       </PopoverContent>
-
-      <NotificationThreadDialog onViewAll={handleViewAllNotifications} />
     </Popover>
-  )
-}
-
-const NotificationList = ({
-  notifications,
-  emptyTitle,
-  emptyDescription,
-  onLinkClick,
-}: {
-  notifications: ReturnType<typeof useNotificationsContext>['notifications']
-  emptyTitle: string
-  emptyDescription: string
-  onLinkClick?: () => void
-}) => {
-  if (notifications.length === 0) {
-    return (
-      <Card className="p-6">
-        <div className="space-y-2 text-center">
-          <p className="font-semibold text-sm">{emptyTitle}</p>
-          <p className="text-xs text-zinc-500 dark:text-slate-500">{emptyDescription}</p>
-        </div>
-      </Card>
-    )
-  }
-
-  return (
-    <div className="rounded-xl bg-zinc-100 p-3 dark:bg-slate-950">
-      <ul className="space-y-2">
-        {notifications.map((notification) => (
-          <li
-            key={notification.id}
-            className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110"
-          >
-            <NotificationItem
-              notification={notification}
-              alwaysShowActions={false}
-              onLinkClick={onLinkClick}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
   )
 }

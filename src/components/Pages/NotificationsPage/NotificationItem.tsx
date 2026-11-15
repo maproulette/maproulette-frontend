@@ -1,355 +1,292 @@
 import { Link } from '@tanstack/react-router'
-import { Check, RotateCcw, Trash2 } from 'lucide-react'
-import { OsmUserLink } from '@/components/shared/OsmUserLink'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
+import { Bell, Check, CircleCheckBig, RotateCcw, Trash2 } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { Avatar, AvatarFallback } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
-import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import { useIntl } from '@/i18n'
+import { type TranslateFn, useIntl } from '@/i18n'
 import { formatTimeAgo } from '@/lib/date'
 import { cn, initials } from '@/lib/utils'
-import type { Notification } from '@/types/Notification'
-import { NOTIFICATION_TYPE_NAMES } from '@/types/Notification'
+import { type Notification, NotificationType } from '@/types/Notification'
 
-interface NotificationItemProps {
-  notification: Notification
-  thread?: Notification[]
-  threadCount?: number
-  alwaysShowActions?: boolean
-  showDelete?: boolean
-  showCheckbox?: boolean
-  isSelected?: boolean
-  isIndeterminate?: boolean
-  onSelectChange?: (checked: boolean) => void
-  /** Called whenever a deep-link inside the item is clicked. Lets a parent dialog/popover close itself. */
-  onLinkClick?: () => void
+const bold = (chunks: ReactNode) => <span className="font-semibold">{chunks}</span>
+
+const taskLink = (taskId: number) =>
+  ({
+    to: '/tasks/$taskId',
+    params: { taskId: String(taskId) },
+    search: { tab: 'comments' },
+  }) as const
+
+const challengeLink = (challengeId: number) =>
+  ({
+    to: '/challenge/$challengeId',
+    params: { challengeId: String(challengeId) },
+    search: { comments: 1 },
+  }) as const
+
+const describe = (n: Notification, t: TranslateFn) => {
+  const user = n.fromUsername || t({ id: 'notifications.item.someone', defaultMessage: 'Someone' })
+  const challenge = n.challengeName || n.description || ''
+  const taskId = n.taskId ? String(n.taskId) : ''
+
+  switch (n.notificationType) {
+    case NotificationType.MENTION:
+      return n.taskId
+        ? {
+            text: t(
+              {
+                id: 'notifications.item.mentionOnTask',
+                defaultMessage: '<b>{user}</b> mentioned you on task {taskId}',
+              },
+              { user, taskId, b: bold }
+            ),
+            snippet: n.extra,
+            link: taskLink(n.taskId),
+          }
+        : {
+            text: t(
+              {
+                id: 'notifications.item.mentionOnChallenge',
+                defaultMessage: '<b>{user}</b> mentioned you on <b>{challenge}</b>',
+              },
+              { user, challenge, b: bold }
+            ),
+            snippet: n.extra,
+            link: n.challengeId ? challengeLink(n.challengeId) : undefined,
+          }
+    case NotificationType.CHALLENGE_COMMENT:
+      return {
+        text: t(
+          {
+            id: 'notifications.item.challengeComment',
+            defaultMessage: '<b>{user}</b> commented on <b>{challenge}</b>',
+          },
+          { user, challenge, b: bold }
+        ),
+        snippet: n.extra,
+        link: n.challengeId ? challengeLink(n.challengeId) : undefined,
+      }
+    case NotificationType.CHALLENGE_COMPLETED:
+      return {
+        text: t(
+          {
+            id: 'notifications.item.challengeCompleted',
+            defaultMessage: 'Your challenge <b>{challenge}</b> is complete',
+          },
+          { challenge, b: bold }
+        ),
+        link: n.challengeId
+          ? ({
+              to: '/manage/challenge/$challengeId',
+              params: { challengeId: String(n.challengeId) },
+            } as const)
+          : undefined,
+      }
+    case NotificationType.MAPPER_CHALLENGE_COMPLETED:
+      return {
+        text: t(
+          {
+            id: 'notifications.item.mapperChallengeCompleted',
+            defaultMessage: 'A challenge you worked on is complete: <b>{challenge}</b>',
+          },
+          { challenge, b: bold }
+        ),
+        link: n.challengeId
+          ? ({
+              to: '/challenge/$challengeId',
+              params: { challengeId: String(n.challengeId) },
+            } as const)
+          : undefined,
+      }
+    case NotificationType.TEAM:
+      return {
+        text: t(
+          {
+            id: 'notifications.item.teamInvite',
+            defaultMessage: '<b>{user}</b> invited you to join <b>{team}</b>',
+          },
+          { user, team: n.extra ?? '', b: bold }
+        ),
+        // Invitations are accepted from the dashboard
+        link: { to: '/dashboard' } as const,
+      }
+    case NotificationType.CHALLENGE_UNLOCK_REQUESTED:
+      return {
+        text: t(
+          {
+            id: 'notifications.item.unlockRequested',
+            defaultMessage: '<b>{user}</b> asked you to unlock task {taskId}',
+          },
+          { user, taskId, b: bold }
+        ),
+        link: n.taskId ? taskLink(n.taskId) : undefined,
+      }
+    case NotificationType.SYSTEM:
+      return { text: n.description ?? '' }
+    default:
+      // Review notifications, left over from before the review workflow was removed
+      return n.taskId
+        ? {
+            text: t(
+              {
+                id: 'notifications.item.reviewed',
+                defaultMessage: '<b>{user}</b> reviewed task {taskId}',
+              },
+              { user, taskId, b: bold }
+            ),
+            snippet: n.extra,
+            link: taskLink(n.taskId),
+          }
+        : { text: n.description ?? '' }
+  }
 }
 
 export const NotificationItem = ({
   notification,
-  thread,
-  threadCount,
-  alwaysShowActions = false,
-  showDelete = false,
-  showCheckbox = false,
-  isSelected = false,
-  isIndeterminate = false,
-  onSelectChange,
-  onLinkClick,
-}: NotificationItemProps) => {
+  onMarkRead,
+  onMarkUnread,
+  onDelete,
+  onNavigate,
+  selected,
+  onSelectedChange,
+}: {
+  notification: Notification
+  onMarkRead: () => void
+  onMarkUnread: () => void
+  onDelete?: () => void
+  onNavigate?: () => void
+  selected?: boolean
+  onSelectedChange?: (selected: boolean) => void
+}) => {
   const { t, locale } = useIntl()
-  const {
-    markAsRead,
-    markAsUnread,
-    deleteNotification,
-    markingReadId,
-    markingUnreadId,
-    deletingId,
-    openThread,
-  } = useNotificationsContext()
+  const { text, snippet, link } = describe(notification, t)
+  const created = new Date(notification.created)
+  const sender = notification.fromUsername
+  const Icon = notification.notificationType === NotificationType.SYSTEM ? Bell : CircleCheckBig
 
-  const isMarkingRead = thread
-    ? thread.some((n) => markingReadId === n.id)
-    : markingReadId === notification.id
-  const isMarkingUnread = thread
-    ? thread.some((n) => markingUnreadId === n.id)
-    : markingUnreadId === notification.id
-  const isDeleting = thread
-    ? thread.some((n) => deletingId === n.id)
-    : deletingId === notification.id
-
-  const notificationTypeName =
-    NOTIFICATION_TYPE_NAMES[notification.notificationType] ||
-    t({ id: 'common.notification', defaultMessage: 'Notification' })
-  const createdDate = new Date(notification.created)
-  const timeAgo = formatTimeAgo(createdDate, locale)
-
-  const handleMarkAsUnread = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (notification.isRead) {
-      markAsUnread(notification.id, thread)
-    }
-  }
-
-  const handleMarkAsRead = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (!notification.isRead) {
-      markAsRead(notification.id, thread)
-    }
-  }
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    deleteNotification(notification.id, thread)
-  }
-
-  const handleCheckboxChange = (checked: boolean) => {
-    onSelectChange?.(checked)
-  }
-
-  const handleLinkClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onLinkClick?.()
-  }
-
-  const actionClasses = cn(
-    'pointer-events-auto size-7 shrink-0 transition-opacity',
-    alwaysShowActions
-      ? 'opacity-100'
-      : 'opacity-0 focus-visible:opacity-100 group-hover:opacity-100'
+  const body = (
+    <>
+      {sender ? (
+        <Avatar className="mt-0.5 size-8">
+          <AvatarFallback className="text-xs">{initials(sender).slice(0, 2)}</AvatarFallback>
+        </Avatar>
+      ) : (
+        <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-slate-800 dark:text-slate-400">
+          <Icon className="size-4" aria-hidden="true" />
+        </span>
+      )}
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span
+          className={cn(
+            'text-sm',
+            notification.isRead ? 'text-zinc-700 dark:text-slate-300' : 'text-black dark:text-white'
+          )}
+        >
+          {text}
+        </span>
+        {snippet && (
+          <span className="line-clamp-2 text-sm text-zinc-600 dark:text-slate-400">{snippet}</span>
+        )}
+        <time
+          dateTime={created.toISOString()}
+          className="text-xs text-zinc-500 dark:text-slate-500"
+        >
+          {formatTimeAgo(created, locale)}
+        </time>
+      </span>
+    </>
   )
-  const linkClasses =
-    'pointer-events-auto truncate font-medium hover:text-blue-600 hover:underline dark:hover:text-blue-400'
 
-  const taskLabel = notification.taskId
-    ? t(
-        { id: 'common.taskWithTaskId', defaultMessage: 'Task #{taskId}' },
-        { taskId: notification.taskId }
-      )
-    : null
-  const challengeRefLabel =
-    notification.challengeId && !notification.challengeName
-      ? t(
-          { id: 'common.challengeWithChallengeId', defaultMessage: 'Challenge #{challengeId}' },
-          { challengeId: notification.challengeId }
-        )
-      : null
-  const projectRefLabel = notification.projectId
-    ? t(
-        { id: 'notificationsPage.item.projectRef', defaultMessage: 'Project #{projectId}' },
-        { projectId: notification.projectId }
-      )
-    : null
+  const actionClass = 'md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100'
+  const markReadLabel = t({
+    id: 'notificationsPage.item.markAsRead',
+    defaultMessage: 'Mark as read',
+  })
+  const markUnreadLabel = t({
+    id: 'notificationsPage.item.markAsUnread',
+    defaultMessage: 'Mark as unread',
+  })
+  const deleteLabel = t({
+    id: 'notificationsPage.item.deleteNotification',
+    defaultMessage: 'Delete notification',
+  })
 
   return (
     <div
       className={cn(
-        'group relative transition-colors focus-within:bg-zinc-50 hover:bg-zinc-50 dark:hover:bg-slate-800/70 dark:focus-within:bg-slate-800/70',
-        !notification.isRead && 'bg-blue-50/40 dark:bg-blue-950/20'
+        'group flex items-start gap-3 px-3 py-3',
+        notification.isRead ? 'bg-zinc-100 dark:bg-slate-950' : 'bg-white dark:bg-slate-900'
       )}
     >
-      {/* Stretched hit target: covers the whole row for both mouse and keyboard,
-          so clicking/activating any non-interactive part opens the thread. Real
-          interactive descendants below sit above it (z-10 + pointer-events-auto)
-          so they keep handling their own clicks/keyboard activation independently
-          — a real <button> can't contain nested interactive children, so this row
-          can't itself be role="button". */}
-      <button
-        type="button"
-        className="absolute inset-0 z-0 cursor-pointer"
-        onClick={() => openThread(notification)}
-        aria-label={t({
-          id: 'notificationsPage.item.openThread',
-          defaultMessage: 'Open notification',
-        })}
-      />
-
-      <div className="pointer-events-none relative z-10 flex items-start gap-3 px-4 py-3">
-        {showCheckbox && (
-          <Checkbox
-            checked={isSelected}
-            indeterminate={isIndeterminate}
-            onCheckedChange={handleCheckboxChange}
-            className="pointer-events-auto mt-1.5 shrink-0"
-            aria-label={t(
-              {
-                id: 'notificationsPage.item.selectFrom',
-                defaultMessage: 'Select notification from {from}',
-              },
-              {
-                from:
-                  notification.fromUsername ||
-                  t({ id: 'notificationsPage.item.unknownSender', defaultMessage: 'unknown' }),
-              }
-            )}
+      {onSelectedChange && (
+        <Checkbox
+          checked={selected}
+          onCheckedChange={(checked) => onSelectedChange(checked === true)}
+          className="mt-2"
+          aria-label={t({
+            id: 'notificationsPage.item.select',
+            defaultMessage: 'Select notification',
+          })}
+        />
+      )}
+      {link ? (
+        <Link
+          {...link}
+          onClick={() => {
+            if (!notification.isRead) onMarkRead()
+            onNavigate?.()
+          }}
+          className="flex min-w-0 flex-1 items-start gap-3 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50"
+        >
+          {body}
+        </Link>
+      ) : (
+        <div className="flex min-w-0 flex-1 items-start gap-3">{body}</div>
+      )}
+      <div className="flex shrink-0 items-center gap-0.5">
+        {notification.isRead ? (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className={actionClass}
+            onClick={onMarkUnread}
+            title={markUnreadLabel}
+            aria-label={markUnreadLabel}
+          >
+            <RotateCcw />
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className={actionClass}
+            onClick={onMarkRead}
+            title={markReadLabel}
+            aria-label={markReadLabel}
+          >
+            <Check />
+          </Button>
+        )}
+        {onDelete && (
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className={actionClass}
+            onClick={onDelete}
+            title={deleteLabel}
+            aria-label={deleteLabel}
+          >
+            <Trash2 />
+          </Button>
+        )}
+        {!notification.isRead && (
+          <span
+            className="ml-1 size-2 rounded-full bg-blue-500 dark:bg-blue-400"
+            role="img"
+            aria-label={t({ id: 'notificationsPage.item.unread', defaultMessage: 'Unread' })}
           />
         )}
-
-        <Avatar className="mt-0.5 size-9 shrink-0">
-          <AvatarImage src={undefined} />
-          <AvatarFallback className="text-xs">
-            {notification.fromUsername ? initials(notification.fromUsername).slice(0, 2) : 'N'}
-          </AvatarFallback>
-        </Avatar>
-
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          {/* Row 1: sender · type */}
-          <div className="flex min-w-0 items-center gap-1.5">
-            {notification.fromUsername && (
-              <OsmUserLink
-                username={notification.fromUsername}
-                className="pointer-events-auto truncate font-semibold text-sm text-zinc-900 hover:underline dark:text-white"
-              />
-            )}
-            <span aria-hidden="true" className="shrink-0 text-xs text-zinc-400 dark:text-slate-500">
-              ·
-            </span>
-            <span className="truncate text-sm text-zinc-500 dark:text-slate-400">
-              {notificationTypeName}
-            </span>
-          </div>
-
-          {/* Row 2: primary context — description, challenge, or extra */}
-          {notification.description ? (
-            <p className="truncate text-sm text-zinc-700 dark:text-slate-300">
-              {notification.description}
-            </p>
-          ) : notification.challengeName ? (
-            <p className="flex min-w-0 items-baseline gap-1 text-sm text-zinc-700 dark:text-slate-300">
-              <span className="shrink-0 text-zinc-500 dark:text-slate-500">
-                {t({ id: 'notificationsPage.item.challengeLabel', defaultMessage: 'Challenge:' })}
-              </span>
-              {notification.challengeId ? (
-                <Link
-                  to="/challenge/$challengeId"
-                  params={{ challengeId: String(notification.challengeId) }}
-                  search={{ comments: 1 }}
-                  onClick={handleLinkClick}
-                  className="link pointer-events-auto min-w-0 truncate font-medium"
-                  title={notification.challengeName}
-                >
-                  {notification.challengeName}
-                </Link>
-              ) : (
-                <span className="min-w-0 truncate font-medium" title={notification.challengeName}>
-                  {notification.challengeName}
-                </span>
-              )}
-            </p>
-          ) : null}
-
-          {/* Row 3: meta — time + entity refs */}
-          <div className="flex min-w-0 items-center gap-2 text-xs text-zinc-500 dark:text-slate-500">
-            <time dateTime={createdDate.toISOString()} className="shrink-0">
-              {timeAgo}
-            </time>
-            {taskLabel && (
-              <>
-                <span aria-hidden="true" className="shrink-0">
-                  ·
-                </span>
-                <Link
-                  to="/tasks/$taskId"
-                  params={{ taskId: String(notification.taskId) }}
-                  search={{ tab: 'comments' }}
-                  onClick={handleLinkClick}
-                  className={linkClasses}
-                  title={taskLabel}
-                >
-                  {taskLabel}
-                </Link>
-              </>
-            )}
-            {challengeRefLabel && (
-              <>
-                <span aria-hidden="true" className="shrink-0">
-                  ·
-                </span>
-                <Link
-                  to="/challenge/$challengeId"
-                  params={{ challengeId: String(notification.challengeId) }}
-                  search={{ comments: 1 }}
-                  onClick={handleLinkClick}
-                  className={linkClasses}
-                  title={challengeRefLabel}
-                >
-                  {challengeRefLabel}
-                </Link>
-              </>
-            )}
-            {projectRefLabel && (
-              <>
-                <span aria-hidden="true" className="shrink-0">
-                  ·
-                </span>
-                <Link
-                  to="/manage/project/$projectId"
-                  params={{ projectId: String(notification.projectId) }}
-                  onClick={handleLinkClick}
-                  className={linkClasses}
-                  title={projectRefLabel}
-                >
-                  {projectRefLabel}
-                </Link>
-              </>
-            )}
-            {threadCount && threadCount > 1 && (
-              <span className="ml-auto inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-teal-500 font-medium text-[10px] text-white">
-                {threadCount}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Right side: unread dot + actions */}
-        <div className="flex shrink-0 items-center gap-0.5">
-          {!notification.isRead && (
-            <span
-              aria-hidden="true"
-              className="mr-1 size-2 shrink-0 rounded-full bg-blue-500 dark:bg-blue-400"
-              title={t({
-                id: 'notificationsPage.item.unreadTitle',
-                defaultMessage: 'Unread notification',
-              })}
-            />
-          )}
-          {!notification.isRead ? (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className={actionClasses}
-              disabled={isMarkingRead}
-              onClick={handleMarkAsRead}
-              title={t({ id: 'notificationsPage.item.markAsRead', defaultMessage: 'Mark as read' })}
-              aria-label={t({
-                id: 'notificationsPage.item.markAsRead',
-                defaultMessage: 'Mark as read',
-              })}
-            >
-              <Check />
-            </Button>
-          ) : (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className={actionClasses}
-              disabled={isMarkingUnread}
-              onClick={handleMarkAsUnread}
-              title={t({
-                id: 'notificationsPage.item.markAsUnread',
-                defaultMessage: 'Mark as unread',
-              })}
-              aria-label={t({
-                id: 'notificationsPage.item.markAsUnread',
-                defaultMessage: 'Mark as unread',
-              })}
-            >
-              <RotateCcw />
-            </Button>
-          )}
-          {showDelete && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className={cn(
-                actionClasses,
-                'text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300'
-              )}
-              disabled={isDeleting}
-              onClick={handleDelete}
-              title={t({
-                id: 'notificationsPage.item.deleteNotification',
-                defaultMessage: 'Delete notification',
-              })}
-              aria-label={t({
-                id: 'notificationsPage.item.deleteNotification',
-                defaultMessage: 'Delete notification',
-              })}
-            >
-              <Trash2 />
-            </Button>
-          )}
-        </div>
       </div>
     </div>
   )

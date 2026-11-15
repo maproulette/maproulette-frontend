@@ -3,8 +3,6 @@ import type { components, operations, paths } from './openApiTypes'
 /* Responses */
 export type UserWhoamiResponse =
   paths['/user/whoami']['get']['responses']['200']['content']['application/json']
-export type UserNotificationsResponse =
-  paths['/user/{userId}/notifications']['get']['responses']['200']['content']['application/json']
 
 interface UserTaskMetrics {
   total: number
@@ -24,9 +22,6 @@ export type UserSettings = components['schemas']['org.maproulette.framework.mode
 export type UserProperties = Record<string, unknown>
 
 /*  Parameters  */
-export type UserNotificationsParams =
-  operations['notification_retrieves_users_notifications']['parameters']['query']
-
 export type GetAllUsersParams = operations['superadmin_get_all_users']['parameters']['query']
 
 /* Types From API */

@@ -69,6 +69,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       try {
         await lockTaskMutation.mutateAsync(taskId)
         navigate({
+          from: '/tasks/$taskId',
           to: '/tasks/$taskId',
           params: { taskId: String(taskId) },
           search: (prev) => ({ ...prev, claimTask: undefined }),

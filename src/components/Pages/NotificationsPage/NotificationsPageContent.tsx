@@ -1,207 +1,196 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useEffect, useId, useRef, useState } from 'react'
-import { Card } from '@/components/ui/Card'
+import { useState } from 'react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/AlertDialog'
+import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
-import { useNotificationsContext } from '@/contexts/NotificationsContext'
-import { useNotificationsPageContext } from '@/contexts/NotificationsPageContext'
+import { Spinner } from '@/components/ui/Spinner'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { useNotifications } from '@/hooks/useNotifications'
 import { useIntl } from '@/i18n'
-import { cn } from '@/lib/utils'
-import { NotificationFilters } from './NotificationFilters'
 import { NotificationItem } from './NotificationItem'
-import { NotificationSelectAll } from './NotificationSelectAll'
-import { NotificationThreadDialog } from './NotificationThreadDialog'
-import { NotificationToolbar } from './NotificationToolbar'
-import { PageHeader } from './PageHeader'
 
-export const NotificationsPageContent = () => {
+export const NotificationsPageContent = ({ userId }: { userId: number }) => {
   const { t } = useIntl()
-  const { notifications, isLoading } = useNotificationsContext()
-  const {
-    activeTab,
-    setActiveTab,
-    groupByTask,
-    setGroupByTask,
-    displayNotifications,
-    selectedNotificationIds,
-    onSelectChange,
-  } = useNotificationsPageContext()
-
   const navigate = useNavigate()
-  const search = useSearch({ from: '/_app/notifications' })
-  const notificationId = search.notificationId
-  const notificationRefs = useRef<Map<number, HTMLLIElement>>(new Map())
-  const [glowingNotificationId, setGlowingNotificationId] = useState<number | null>(null)
-  const groupByTaskCheckboxId = useId()
+  const { tab = 'unread' } = useSearch({ from: '/_app/notifications' })
+  const { notifications, isLoading, markAsRead, markAsUnread, deleteNotifications } =
+    useNotifications(userId)
+  const [selected, setSelected] = useState<Set<number>>(new Set())
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
 
-  // Deep-link: switch to correct tab
-  useEffect(() => {
-    if (notificationId && notifications.length > 0 && !isLoading) {
-      const target = notifications.find((n) => n.id === notificationId)
-      if (target) {
-        setActiveTab(target.isRead ? 'all' : 'unread')
-      }
-    }
-  }, [notificationId, notifications, isLoading, setActiveTab])
+  const unread = notifications.filter((n) => !n.isRead)
+  const shown = tab === 'unread' ? unread : notifications
+  // Only what's on screen counts as selected so rows that leave the tab (eg. by being
+  // marked read) are dropped from the selection
+  const selectedIds = shown.filter((n) => selected.has(n.id)).map((n) => n.id)
 
-  // Deep-link: scroll to notification
-  useEffect(() => {
-    if (notificationId && !isLoading && notifications.length > 0) {
-      const target = notifications.find((n) => n.id === notificationId)
-      if (!target) return
-      const targetTab = target.isRead ? 'all' : 'unread'
-      if (activeTab !== targetTab) return
+  const setTab = (value: string) => {
+    navigate({
+      to: '/notifications',
+      search: { tab: value === 'all' ? 'all' : undefined },
+      replace: true,
+    })
+    setSelected(new Set())
+  }
 
-      const isInDisplayList = displayNotifications.some((n) => {
-        if (n.id === notificationId) return true
-        return groupByTask && (n.thread?.some((notif) => notif.id === notificationId) ?? false)
-      })
+  const toggle = (id: number, on: boolean) =>
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (on) next.add(id)
+      else next.delete(id)
+      return next
+    })
 
-      if (isInDisplayList) {
-        let glowTimeoutId: ReturnType<typeof setTimeout> | undefined
-        const timeoutId = setTimeout(() => {
-          const element = notificationRefs.current.get(notificationId)
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            element.focus()
-            setGlowingNotificationId(notificationId)
-            glowTimeoutId = setTimeout(() => setGlowingNotificationId(null), 3000)
-            navigate({
-              to: '/notifications',
-              search: (prev) => ({ ...prev, notificationId: undefined }),
-              replace: true,
-            })
-          }
-        }, 500)
-        return () => {
-          clearTimeout(timeoutId)
-          clearTimeout(glowTimeoutId)
-        }
-      }
-    }
-    return
-  }, [
-    notificationId,
-    activeTab,
-    notifications,
-    isLoading,
-    displayNotifications,
-    groupByTask,
-    navigate,
-  ])
+  const bulk = (action: (ids: number[]) => void) => () => {
+    action(selectedIds)
+    setSelected(new Set())
+  }
 
   return (
     <div className="h-full overflow-auto">
-      <div className="container mx-auto max-w-4xl px-4 py-6">
-        <PageHeader
-          title={t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
-          description={t({
-            id: 'notificationsPage.content.description',
-            defaultMessage: 'View and manage your notifications',
-          })}
-        />
-        <div className="mb-4 flex flex-wrap items-center gap-4">
+      <div className="mx-auto max-w-4xl px-4 py-6">
+        <h1 className="mb-4 font-bold text-base text-zinc-900 dark:text-white">
+          {t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
+        </h1>
+
+        <div className="mb-3 flex flex-wrap items-center gap-3">
           <Checkbox
-            id={groupByTaskCheckboxId}
-            checked={groupByTask}
-            onCheckedChange={(checked) => setGroupByTask(checked === true)}
+            checked={selectedIds.length > 0 && selectedIds.length === shown.length}
+            indeterminate={selectedIds.length > 0 && selectedIds.length < shown.length}
+            onCheckedChange={(checked) =>
+              setSelected(checked === true ? new Set(shown.map((n) => n.id)) : new Set())
+            }
+            disabled={shown.length === 0}
+            className="ml-3"
+            aria-label={t({
+              id: 'notificationsPage.selectAll',
+              defaultMessage: 'Select all notifications',
+            })}
           />
-          <label
-            htmlFor={groupByTaskCheckboxId}
-            className="cursor-pointer text-sm text-zinc-600 dark:text-slate-400"
-          >
-            {t({ id: 'notificationsPage.content.groupByTask', defaultMessage: 'Group by Task' })}
-          </label>
-          {groupByTask && (
-            <span className="text-xs text-zinc-500 dark:text-slate-500">
-              {t({
-                id: 'notificationsPage.content.groupByTaskHint',
-                defaultMessage: 'Notifications for the same task are grouped together',
-              })}
-            </span>
-          )}
+          <Tabs value={tab} onValueChange={setTab}>
+            <TabsList>
+              <TabsTrigger value="unread">
+                {t(
+                  { id: 'common.unread', defaultMessage: 'Unread ({count})' },
+                  { count: unread.length }
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="all">
+                {t(
+                  { id: 'common.all', defaultMessage: 'All ({count})' },
+                  { count: notifications.length }
+                )}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <div className="ml-auto flex flex-wrap items-center gap-2">
+            {selectedIds.length > 0 ? (
+              <>
+                <span className="text-sm text-zinc-600 dark:text-slate-400">
+                  {t(
+                    {
+                      id: 'notificationsPage.selectedCount',
+                      defaultMessage: '{count, plural, one {# selected} other {# selected}}',
+                    },
+                    { count: selectedIds.length }
+                  )}
+                </span>
+                <Button variant="outline" size="sm" onClick={bulk(markAsRead)}>
+                  {t({
+                    id: 'notificationsPage.item.markAsRead',
+                    defaultMessage: 'Mark as read',
+                  })}
+                </Button>
+                <Button variant="outline" size="sm" onClick={bulk(markAsUnread)}>
+                  {t({
+                    id: 'notificationsPage.item.markAsUnread',
+                    defaultMessage: 'Mark as unread',
+                  })}
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setConfirmingDelete(true)}>
+                  {t({ id: 'common.delete', defaultMessage: 'Delete' })}
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => markAsRead(unread.map((n) => n.id))}
+                disabled={unread.length === 0}
+              >
+                {t({ id: 'common.markAllAsRead', defaultMessage: 'Mark all as read' })}
+              </Button>
+            )}
+          </div>
         </div>
-        <NotificationFilters />
-        <NotificationToolbar />
 
         {isLoading ? (
-          <Card className="p-6">
-            <div className="text-center text-zinc-500 dark:text-slate-500">
-              {t({ id: 'common.loadingNotifications', defaultMessage: 'Loading notifications...' })}
-            </div>
-          </Card>
-        ) : displayNotifications.length > 0 ? (
-          <div className="space-y-3">
-            <NotificationSelectAll />
-            <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-              <ul className="divide-y divide-zinc-200 dark:divide-slate-700">
-                {displayNotifications.map((notification) => {
-                  const thread = notification.thread
-                  const isSelected = thread
-                    ? thread.some((n) => selectedNotificationIds.has(n.id))
-                    : selectedNotificationIds.has(notification.id)
-                  const isIndeterminate = thread
-                    ? thread.some((n) => selectedNotificationIds.has(n.id)) &&
-                      !thread.every((n) => selectedNotificationIds.has(n.id))
-                    : false
-
-                  return (
-                    <li
-                      key={notification.id}
-                      ref={(el) => {
-                        if (el) {
-                          notificationRefs.current.set(notification.id, el)
-                        } else {
-                          notificationRefs.current.delete(notification.id)
-                        }
-                      }}
-                      tabIndex={-1}
-                      className={cn(
-                        'transition-all duration-300 focus:outline-none',
-                        glowingNotificationId === notification.id &&
-                          'animate-pulse bg-blue-100/60 dark:bg-blue-950/40'
-                      )}
-                    >
-                      <NotificationItem
-                        notification={notification}
-                        showDelete={true}
-                        showCheckbox={true}
-                        thread={thread}
-                        threadCount={notification.threadCount}
-                        isSelected={isSelected}
-                        isIndeterminate={isIndeterminate}
-                        onSelectChange={(checked) =>
-                          onSelectChange(notification.id, checked, thread)
-                        }
-                      />
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
+          <div className="flex justify-center py-12">
+            <Spinner />
           </div>
+        ) : shown.length === 0 ? (
+          <p className="py-12 text-center text-sm text-zinc-500 dark:text-slate-400">
+            {tab === 'unread'
+              ? t({ id: 'notifications.empty.unread', defaultMessage: 'No unread notifications' })
+              : t({ id: 'notifications.empty.all', defaultMessage: 'No notifications yet' })}
+          </p>
         ) : (
-          <Card className="p-6">
-            <div className="space-y-2 text-center">
-              <p className="font-semibold text-base">
-                {t({ id: 'common.youreAllUpToDate', defaultMessage: "You're all up to date" })}
-              </p>
-              <p className="text-sm text-zinc-500 dark:text-slate-500">
-                {activeTab === 'unread'
-                  ? t({
-                      id: 'common.noUnreadNotificationsYet',
-                      defaultMessage: 'You have no unread notifications at the moment.',
-                    })
-                  : t({
-                      id: 'common.noNotificationsYet',
-                      defaultMessage: 'You have no notifications.',
-                    })}
-              </p>
-            </div>
-          </Card>
+          <ul className="divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-slate-800 dark:border-slate-800">
+            {shown.map((n) => (
+              <li key={n.id}>
+                <NotificationItem
+                  notification={n}
+                  onMarkRead={() => markAsRead([n.id])}
+                  onMarkUnread={() => markAsUnread([n.id])}
+                  onDelete={() => deleteNotifications([n.id])}
+                  selected={selected.has(n.id)}
+                  onSelectedChange={(on) => toggle(n.id, on)}
+                />
+              </li>
+            ))}
+          </ul>
         )}
-
-        <NotificationThreadDialog />
       </div>
+
+      <AlertDialog open={confirmingDelete} onOpenChange={setConfirmingDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t(
+                {
+                  id: 'notificationsPage.deleteConfirm.title',
+                  defaultMessage:
+                    '{count, plural, one {Delete # notification?} other {Delete # notifications?}}',
+                },
+                { count: selectedIds.length }
+              )}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t({
+                id: 'notificationsPage.deleteConfirm.description',
+                defaultMessage: "This can't be undone.",
+              })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={bulk(deleteNotifications)}>
+              {t({ id: 'common.delete', defaultMessage: 'Delete' })}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
