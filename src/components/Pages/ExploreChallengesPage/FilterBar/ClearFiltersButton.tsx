@@ -8,7 +8,6 @@ export const ClearFiltersButton = () => {
   const {
     difficulty,
     workOn,
-    selectedCategories,
     global,
     locationOsmType,
     locationOsmId,
@@ -19,8 +18,7 @@ export const ClearFiltersButton = () => {
   const hasActiveFilters =
     difficulty !== 'Any' ||
     workOn !== 'Anything' ||
-    selectedCategories.length > 0 ||
-    global !== undefined ||
+    !global ||
     (locationOsmType !== undefined && locationOsmId !== undefined) ||
     keywords !== undefined
 

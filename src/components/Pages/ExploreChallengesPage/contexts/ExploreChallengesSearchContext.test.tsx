@@ -37,27 +37,36 @@ describe('ExploreChallengesSearchContext filters by view mode', () => {
   })
 
   it('applies the list filters in a list-only view', () => {
-    mockSearch({ viewMode: 'grid', difficulty: 'Expert', workOn: 'Water', global: true })
+    mockSearch({ viewMode: 'grid', difficulty: 'Expert', workOn: 'Water', global: false })
 
     const { result } = renderContext()
 
     expect(result.current.extendedFindParams.difficulty).toBe(3)
     expect(result.current.extendedFindParams.keywords).toBe('water,waterway')
-    expect(result.current.extendedFindParams.global).toBe(true)
+    expect(result.current.extendedFindParams.global).toBe(false)
   })
 
   it('leaves them out beside the map, where the markers are unfiltered', () => {
-    mockSearch({ viewMode: 'grid-map', difficulty: 'Expert', workOn: 'Water', global: true })
+    mockSearch({ viewMode: 'grid-map', difficulty: 'Expert', workOn: 'Water', global: false })
 
     const { result } = renderContext()
 
     expect(result.current.extendedFindParams.difficulty).toBeUndefined()
     expect(result.current.extendedFindParams.keywords).toBeUndefined()
-    expect(result.current.extendedFindParams.global).toBe(false)
+    expect(result.current.extendedFindParams.global).toBe(true)
+  })
+
+  it('includes global challenges by default', () => {
+    mockSearch({ viewMode: 'grid' })
+
+    const { result } = renderContext()
+
+    expect(result.current.global).toBe(true)
+    expect(result.current.extendedFindParams.global).toBe(true)
   })
 
   it('keeps the filter state, so leaving the map view brings it back', () => {
-    mockSearch({ viewMode: 'grid-map', difficulty: 'Expert', workOn: 'Water', global: true })
+    mockSearch({ viewMode: 'grid-map', difficulty: 'Expert', workOn: 'Water', global: false })
 
     const { result } = renderContext()
     expect(result.current.difficulty).toBe('Expert')
@@ -68,6 +77,6 @@ describe('ExploreChallengesSearchContext filters by view mode', () => {
 
     expect(result.current.extendedFindParams.difficulty).toBe(3)
     expect(result.current.extendedFindParams.keywords).toBe('water,waterway')
-    expect(result.current.extendedFindParams.global).toBe(true)
+    expect(result.current.extendedFindParams.global).toBe(false)
   })
 })

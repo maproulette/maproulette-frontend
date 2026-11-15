@@ -41,7 +41,6 @@ const buildKeywords = (workOn: string): string | undefined => {
 type ChallengeExploreSearchParams = {
   difficulty?: DifficultyLevel
   workOn?: WorkOnCategory
-  categories?: string
   sortBy?: ExtendedFindParamsSortBy
   global?: boolean
 }
@@ -56,29 +55,25 @@ export const FindChallenge = () => {
   const {
     difficulty: urlDifficulty,
     workOn: urlWorkOn,
-    categories: urlCategories,
     sortBy: urlSortBy,
     global: urlGlobal,
   } = useSearch({ from: '/_app' }) as ChallengeExploreSearchParams
 
   // Reason: stable reference prevents unnecessary API refetch when unrelated state changes
   const filters = useMemo<ExploreChallengesParams>(() => {
-    const selectedCategories = urlCategories ? urlCategories.split(',').filter(Boolean) : []
     const workOn = urlWorkOn || 'Anything'
     const difficulty = urlDifficulty ? difficultyMap[urlDifficulty] : undefined
 
     const result: NonNullable<ExploreChallengesParams> = {
-      global: urlGlobal ?? false,
+      global: urlGlobal ?? true,
       bounds: DEFAULT_WORLD_BOUNDS,
       keywords: buildKeywords(workOn),
-      categorizationKeywords:
-        selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
       difficulty,
       limit: limit,
       sortBy: urlSortBy ?? 'default',
     }
     return result
-  }, [urlDifficulty, urlWorkOn, urlCategories, urlSortBy, urlGlobal, limit])
+  }, [urlDifficulty, urlWorkOn, urlSortBy, urlGlobal, limit])
 
   const trimmedSearchQuery = useDebouncedValue(searchQuery.trim())
   const hasSearchQuery = trimmedSearchQuery.length > 0

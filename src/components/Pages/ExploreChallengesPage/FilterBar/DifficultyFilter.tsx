@@ -21,7 +21,7 @@ export const DifficultyFilter = () => {
         {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
       </Label>
       <Select value={difficulty} onValueChange={(value) => setDifficulty(value as DifficultyLevel)}>
-        <SelectTrigger className="h-9 w-full md:w-24">
+        <SelectTrigger className="h-9 w-full md:w-auto">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

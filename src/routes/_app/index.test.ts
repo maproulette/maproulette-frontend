@@ -13,8 +13,7 @@ type ChallengesSearch = {
     | 'Buildings'
     | 'Land Use / Administrative Boundaries'
     | 'Transit'
-  categories?: string
-  sortBy?: 'default' | 'name' | 'created' | 'modified' | 'popularity' | 'difficulty'
+  sortBy?: 'default' | 'popularity' | 'created' | 'oldest' | 'name' | 'difficulty'
   global?: boolean
   osm_type?: 'N' | 'W' | 'R'
   osm_id?: number
@@ -35,7 +34,6 @@ describe('explore challenges route search schema', () => {
       viewMode: 'list',
       difficulty: 'Easy',
       workOn: 'Water',
-      categories: 'water,buildings',
       sortBy: 'popularity',
       global: true,
       osm_type: 'W',
@@ -76,11 +74,19 @@ describe('explore challenges route search schema', () => {
     }
   })
 
+  it('falls back to the default sort for a retired sort order', () => {
+    const result = schema.safeParse({ sortBy: 'tag_fix' })
+    expect(result.success).toBe(true)
+    if (result.success) {
+      expect(result.data.sortBy).toBe('default')
+    }
+  })
+
   it('falls back to the catch default for a non-boolean global', () => {
     const result = schema.safeParse({ global: 'yes' })
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.global).toBe(false)
+      expect(result.data.global).toBeUndefined()
     }
   })
 

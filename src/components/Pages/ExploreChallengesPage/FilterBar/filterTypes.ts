@@ -10,3 +10,15 @@ export type WorkOnCategory =
   | 'Transit'
 
 export type ViewMode = 'grid' | 'list' | 'grid-map'
+
+/** Sort orders offered on the explore page; the endpoint accepts a few more. */
+export const SORT_BY_VALUES = [
+  'default',
+  'popularity',
+  'created',
+  'oldest',
+  'name',
+  'difficulty',
+] as const
+
+export type SortBy = (typeof SORT_BY_VALUES)[number]

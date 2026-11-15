@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/Table'
 import { useIntl } from '@/i18n'
 import { getParentInfo } from '@/lib/challengeParent'
-import { isChallengeComplete } from '@/lib/challengeStatus'
 import { getChallengeTaxonomy } from '@/lib/challengeTaxonomy'
 import { formatDate } from '@/lib/date'
 import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
@@ -28,31 +27,11 @@ export const ChallengesTableView = () => {
         <TableHeader>
           <TableRow>
             <TableHead>{t({ id: 'common.name', defaultMessage: 'Name' })}</TableHead>
-            <TableHead>
-              {t({ id: 'exploreChallenges.challengeList.table.author', defaultMessage: 'Author' })}
-            </TableHead>
-            <TableHead>
-              {t({
-                id: 'exploreChallenges.challengeList.table.organisation',
-                defaultMessage: 'Organisation',
-              })}
-            </TableHead>
+            <TableHead>{t({ id: 'common.project', defaultMessage: 'Project' })}</TableHead>
             <TableHead className="text-center">
               {t({
                 id: 'exploreChallenges.challengeList.table.percentMapped',
                 defaultMessage: 'Percent mapped',
-              })}
-            </TableHead>
-            <TableHead className="text-center">
-              {t({
-                id: 'exploreChallenges.challengeList.table.percentValidated',
-                defaultMessage: 'Percent validated',
-              })}
-            </TableHead>
-            <TableHead className="text-center">
-              {t({
-                id: 'exploreChallenges.challengeList.table.contributors',
-                defaultMessage: 'Contributors',
               })}
             </TableHead>
             <TableHead className="text-center">
@@ -61,25 +40,10 @@ export const ChallengesTableView = () => {
             <TableHead className="text-center">
               {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
             </TableHead>
-            <TableHead className="text-center">
-              {t({ id: 'common.status', defaultMessage: 'Status' })}
-            </TableHead>
-            <TableHead>
-              {t({
-                id: 'exploreChallenges.challengeList.table.location',
-                defaultMessage: 'Location',
-              })}
-            </TableHead>
             <TableHead>
               {t({
                 id: 'exploreChallenges.challengeList.table.lastUpdated',
                 defaultMessage: 'Last updated',
-              })}
-            </TableHead>
-            <TableHead>
-              {t({
-                id: 'exploreChallenges.challengeList.table.dueDate',
-                defaultMessage: 'Due date',
               })}
             </TableHead>
           </TableRow>
@@ -100,32 +64,11 @@ export const ChallengesTableView = () => {
                   </Link>
                 </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
-                  {challenge.owner
-                    ? t(
-                        {
-                          id: 'exploreChallenges.challengeList.table.userLabel',
-                          defaultMessage: 'User {owner}',
-                        },
-                        { owner: challenge.owner }
-                      )
-                    : '--'}
-                </TableCell>
-                <TableCell className="text-zinc-600 dark:text-slate-400">
-                  {challenge.parent
-                    ? t(
-                        {
-                          id: 'exploreChallenges.challengeList.table.projectLabel',
-                          defaultMessage: 'Project {name}',
-                        },
-                        { name: parentName }
-                      )
-                    : '--'}
+                  {challenge.parent ? parentName : '--'}
                 </TableCell>
                 <TableCell className="text-center text-zinc-600 dark:text-slate-400">
                   {challenge.completionPercentage ?? 0}%
                 </TableCell>
-                <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
-                <TableCell className="text-center text-zinc-600 dark:text-slate-400">--</TableCell>
                 <TableCell className="text-center">
                   {taxonomy.length > 0 ? (
                     <ChallengeTaxonomy challenge={challenge} className="justify-center" />
@@ -141,31 +84,9 @@ export const ChallengesTableView = () => {
                     {getDifficultyLabel(t, challenge.difficulty)}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-center">
-                  <Badge
-                    variant={isChallengeComplete(challenge) ? 'success' : 'outline'}
-                    className="text-xs"
-                  >
-                    {!challenge.enabled
-                      ? t({
-                          id: 'exploreChallenges.challengeList.table.disabled',
-                          defaultMessage: 'Disabled',
-                        })
-                      : isChallengeComplete(challenge)
-                        ? t({ id: 'common.completed', defaultMessage: 'Completed' })
-                        : t({
-                            id: 'exploreChallenges.challengeList.table.published',
-                            defaultMessage: 'Published',
-                          })}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-zinc-600 dark:text-slate-400">
-                  {typeof challenge.location === 'string' ? challenge.location : '--'}
-                </TableCell>
                 <TableCell className="text-zinc-600 dark:text-slate-400">
                   {challenge.modified ? formatDate(new Date(challenge.modified), locale) : '--'}
                 </TableCell>
-                <TableCell className="text-zinc-600 dark:text-slate-400">--</TableCell>
               </TableRow>
             )
           })}

@@ -5,7 +5,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { useIntl } from '@/i18n'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
-import { CategorizeFilter } from './CategorizeFilter'
 import { ClearFiltersButton } from './ClearFiltersButton'
 import { DifficultyFilter } from './DifficultyFilter'
 import { GlobalToggle } from './GlobalMapToggles'
@@ -33,15 +32,8 @@ import { WorkOnFilter } from './WorkOnFilter'
  */
 export const FilterBar = () => {
   const { t } = useIntl()
-  const {
-    viewMode,
-    workOn,
-    difficulty,
-    selectedCategories,
-    global,
-    locationOsmType,
-    locationOsmId,
-  } = useExploreChallengesSearchContext()
+  const { viewMode, workOn, difficulty, global, locationOsmType, locationOsmId } =
+    useExploreChallengesSearchContext()
   const isDesktop = useIsDesktopLayoutContext()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const showListFilters = viewMode !== 'grid-map'
@@ -49,13 +41,7 @@ export const FilterBar = () => {
   if (!isDesktop) {
     const hasLocation = locationOsmType !== undefined && locationOsmId !== undefined
     const activeCount = showListFilters
-      ? [
-          hasLocation,
-          workOn !== 'Anything',
-          difficulty !== 'Any',
-          selectedCategories.length > 0,
-          global !== undefined,
-        ].filter(Boolean).length
+      ? [hasLocation, workOn !== 'Anything', difficulty !== 'Any', !global].filter(Boolean).length
       : Number(hasLocation)
 
     return (
@@ -87,7 +73,6 @@ export const FilterBar = () => {
             <>
               <WorkOnFilter />
               <DifficultyFilter />
-              <CategorizeFilter />
               <div className="col-span-2 flex items-center justify-between gap-3">
                 <GlobalToggle />
                 <ClearFiltersButton />
@@ -112,7 +97,6 @@ export const FilterBar = () => {
         <>
           <WorkOnFilter />
           <DifficultyFilter />
-          <CategorizeFilter />
           <GlobalToggle />
           <ClearFiltersButton />
         </>

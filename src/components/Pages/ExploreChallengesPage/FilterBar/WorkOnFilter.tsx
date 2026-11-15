@@ -19,7 +19,7 @@ export const WorkOnFilter = () => {
         {t({ id: 'exploreChallenges.filterBar.workOn.label', defaultMessage: 'Work on' })}
       </Label>
       <Select value={workOn} onValueChange={(value) => setWorkOn(value as WorkOnCategory)}>
-        <SelectTrigger className="h-9 w-full md:w-28">
+        <SelectTrigger className="h-9 w-full md:w-auto">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
