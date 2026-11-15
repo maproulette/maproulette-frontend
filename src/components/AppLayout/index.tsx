@@ -1,6 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
-import { BetaBanner } from '@/components/AppLayout/BetaBanner'
 import { Header } from '@/components/AppLayout/Header'
 import { SystemNotices } from '@/components/AppLayout/SystemNotices'
 import { UserLocaleSync } from '@/components/AppLayout/UserLocaleSync'
@@ -38,7 +37,6 @@ export const AppLayout = () => {
                       <WebSocketEventsListener />
                       <main className="mx-auto flex h-screen w-full max-w-[2560px] flex-col overflow-hidden">
                         <SystemNotices />
-                        <BetaBanner />
                         <Header />
                         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
                           <Outlet />
