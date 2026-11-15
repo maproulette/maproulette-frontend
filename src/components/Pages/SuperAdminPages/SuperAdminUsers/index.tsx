@@ -1,7 +1,7 @@
-import { Link } from '@tanstack/react-router'
 import { Calendar, ChevronLeft, ChevronRight, Mail, Search, Users } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '@/api'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { SearchBar } from '@/components/shared/SearchBar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
@@ -189,7 +189,6 @@ export const SuperAdminUsers = () => {
                       {t({ id: 'superAdminUsers.table.columns.score', defaultMessage: 'Score' })}
                     </TableHead>
                     <TableHead>{t({ id: 'common.joined', defaultMessage: 'Joined' })}</TableHead>
-                    <TableHead>{t({ id: 'common.actions', defaultMessage: 'Actions' })}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -209,23 +208,17 @@ export const SuperAdminUsers = () => {
                               </AvatarFallback>
                             </Avatar>
                             <div>
-                              <div>{user.osmProfile.displayName}</div>
+                              <OsmUserLink
+                                username={user.osmProfile.displayName}
+                                className="block text-blue-600 hover:underline dark:text-blue-400"
+                              />
                               <div className="text-xs text-zinc-500 dark:text-zinc-400">
                                 ID: {user.id}
                               </div>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <a
-                            href={`https://www.openstreetmap.org/user/${user.osmProfile.displayName}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline dark:text-blue-400"
-                          >
-                            {user.osmProfile.id}
-                          </a>
-                        </TableCell>
+                        <TableCell>{user.osmProfile.id}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Mail className="h-4 w-4 text-zinc-400" />
@@ -248,15 +241,6 @@ export const SuperAdminUsers = () => {
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-zinc-400" />
                             {user.created ? formatDate(new Date(user.created), locale) : '—'}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button asChild variant="outline" size="sm">
-                              <Link to="/profile/$userId" params={{ userId: String(user.id) }}>
-                                {t({ id: 'common.view', defaultMessage: 'View' })}
-                              </Link>
-                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>

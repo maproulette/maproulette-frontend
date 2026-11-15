@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { BookOpen, CircleUser, LayoutDashboard, LogOut, Shield, SwatchBook } from 'lucide-react'
 import { api } from '@/api'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import {
   DropdownMenu,
@@ -46,14 +47,15 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
             <div>
               <span className="font-medium">{user.osmProfile.displayName}</span>
               <br />
-              <Link to="/profile">
-                <span className="text-xs text-zinc-500 hover:text-zinc-400 dark:text-slate-500 dark:hover:text-slate-400">
-                  {t({
-                    id: 'appLayout.header.userMenu.viewPublicProfile',
-                    defaultMessage: 'View public profile',
-                  })}
-                </span>
-              </Link>
+              <OsmUserLink
+                username={user.osmProfile.displayName}
+                className="text-xs text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-slate-200"
+              >
+                {t({
+                  id: 'appLayout.header.userMenu.osmProfile',
+                  defaultMessage: 'OpenStreetMap profile',
+                })}
+              </OsmUserLink>
             </div>
           </DropdownMenuLabel>
         </DropdownMenuGroup>

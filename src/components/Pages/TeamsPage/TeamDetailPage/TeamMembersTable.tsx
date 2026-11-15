@@ -1,6 +1,7 @@
 import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -75,7 +76,7 @@ const MemberRow = ({ member }: { member: TeamUser }) => {
           <Avatar className="size-8 shrink-0">
             <AvatarFallback>{initials(member.name)}</AvatarFallback>
           </Avatar>
-          <span className="truncate font-medium">{member.name}</span>
+          <OsmUserLink username={member.name} className="truncate font-medium hover:underline" />
         </div>
       </TableCell>
       <TableCell>{TeamDisplayRoleLabel[teamDisplayRole(member)]}</TableCell>

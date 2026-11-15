@@ -3,6 +3,7 @@ import { ProfileSummary } from './ProfileSummary'
 import { RecentActivitySection } from './RecentActivitySection'
 import { SavedChallengesSection } from './SavedChallengesSection'
 import { TeamsSection } from './TeamsSection'
+import { TopChallengesSection } from './TopChallengesSection'
 
 export const DashboardContent = () => {
   const { user } = useAuthContext()
@@ -17,7 +18,10 @@ export const DashboardContent = () => {
       <div className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-3 lg:grid-rows-1">
         <SavedChallengesSection userId={user.id} />
         <RecentActivitySection userId={user.id} />
-        <TeamsSection userId={user.id} />
+        <div className="flex min-h-0 flex-col gap-4">
+          <TopChallengesSection userId={user.id} />
+          <TeamsSection userId={user.id} />
+        </div>
       </div>
     </div>
   )

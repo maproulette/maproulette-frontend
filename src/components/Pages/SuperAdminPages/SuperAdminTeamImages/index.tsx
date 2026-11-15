@@ -2,6 +2,7 @@ import { Check, ImageIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Button } from '@/components/ui/Button'
 import {
   Empty,
@@ -71,11 +72,19 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
           {t(
             {
               id: 'superAdminTeamImages.requestMeta',
-              defaultMessage: '{team} · requested by {user} on {date}',
+              defaultMessage: '{team} · requested by <link>{user}</link> on {date}',
             },
             {
               team: image.teamName ?? String(image.teamId),
               user: image.requestedByName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
+              link: (chunks) =>
+                image.requestedByName ? (
+                  <OsmUserLink username={image.requestedByName} className="hover:underline">
+                    {chunks}
+                  </OsmUserLink>
+                ) : (
+                  chunks
+                ),
               date: formatDate(new Date(image.created), locale),
             }
           )}

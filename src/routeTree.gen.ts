@@ -22,7 +22,6 @@ import { Route as AppManageRouteRouteImport } from './routes/_app/manage/route'
 import { Route as AppTeamsIndexRouteImport } from './routes/_app/teams/index'
 import { Route as AppSuperadminIndexRouteImport } from './routes/_app/superadmin/index'
 import { Route as AppSuperAdminIndexRouteImport } from './routes/_app/super-admin/index'
-import { Route as AppProfileIndexRouteImport } from './routes/_app/profile/index'
 import { Route as AppManageIndexRouteImport } from './routes/_app/manage/index'
 import { Route as AppDashboardIndexRouteImport } from './routes/_app/dashboard/index'
 import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
@@ -47,7 +46,6 @@ import { Route as AppTasksTaskIdIndexRouteImport } from './routes/_app/tasks/[$t
 import { Route as AppTaskTaskIdIndexRouteImport } from './routes/_app/task/[$taskId]/index'
 import { Route as AppTTaskIdIndexRouteImport } from './routes/_app/t/[$taskId]/index'
 import { Route as AppProjectProjectIdIndexRouteImport } from './routes/_app/project/[$projectId]/index'
-import { Route as AppProfileUserIdIndexRouteImport } from './routes/_app/profile/[$userId]/index'
 import { Route as AppPProjectIdIndexRouteImport } from './routes/_app/p/[$projectId]/index'
 import { Route as AppChallengeChallengeIdIndexRouteImport } from './routes/_app/challenge/[$challengeId]/index'
 import { Route as AppCChallengeIdIndexRouteImport } from './routes/_app/c/[$challengeId]/index'
@@ -64,9 +62,6 @@ import { Route as AppAdminProjectsNewRouteImport } from './routes/_app/admin/pro
 import { Route as AppManageTaskTaskIdRouteRouteImport } from './routes/_app/manage/task/[$taskId]/route'
 import { Route as AppManageProjectProjectIdRouteRouteImport } from './routes/_app/manage/project/[$projectId]/route'
 import { Route as AppManageChallengeChallengeIdRouteRouteImport } from './routes/_app/manage/challenge/[$challengeId]/route'
-import { Route as AppUserProfileUserIdIndexRouteImport } from './routes/_app/user/profile/[$userId]/index'
-import { Route as AppUserMetricsUserIdIndexRouteImport } from './routes/_app/user/metrics/[$userId]/index'
-import { Route as AppUserAchievementsUserIdIndexRouteImport } from './routes/_app/user/achievements/[$userId]/index'
 import { Route as AppManageTaskTaskIdIndexRouteImport } from './routes/_app/manage/task/[$taskId]/index'
 import { Route as AppManageProjectProjectIdIndexRouteImport } from './routes/_app/manage/project/[$projectId]/index'
 import { Route as AppManageChallengeChallengeIdIndexRouteImport } from './routes/_app/manage/challenge/[$challengeId]/index'
@@ -158,11 +153,6 @@ const AppSuperAdminIndexRoute = AppSuperAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppSuperAdminRouteRoute,
-} as any)
-const AppProfileIndexRoute = AppProfileIndexRouteImport.update({
-  id: '/profile/',
-  path: '/profile/',
-  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppManageIndexRoute = AppManageIndexRouteImport.update({
   id: '/',
@@ -287,11 +277,6 @@ const AppProjectProjectIdIndexRoute =
     path: '/project/$projectId/',
     getParentRoute: () => AppRouteRoute,
   } as any)
-const AppProfileUserIdIndexRoute = AppProfileUserIdIndexRouteImport.update({
-  id: '/profile/$userId/',
-  path: '/profile/$userId/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const AppPProjectIdIndexRoute = AppPProjectIdIndexRouteImport.update({
   id: '/p/$projectId/',
   path: '/p/$projectId/',
@@ -378,24 +363,6 @@ const AppManageChallengeChallengeIdRouteRoute =
     id: '/challenge/$challengeId',
     path: '/challenge/$challengeId',
     getParentRoute: () => AppManageRouteRoute,
-  } as any)
-const AppUserProfileUserIdIndexRoute =
-  AppUserProfileUserIdIndexRouteImport.update({
-    id: '/user/profile/$userId/',
-    path: '/user/profile/$userId/',
-    getParentRoute: () => AppRouteRoute,
-  } as any)
-const AppUserMetricsUserIdIndexRoute =
-  AppUserMetricsUserIdIndexRouteImport.update({
-    id: '/user/metrics/$userId/',
-    path: '/user/metrics/$userId/',
-    getParentRoute: () => AppRouteRoute,
-  } as any)
-const AppUserAchievementsUserIdIndexRoute =
-  AppUserAchievementsUserIdIndexRouteImport.update({
-    id: '/user/achievements/$userId/',
-    path: '/user/achievements/$userId/',
-    getParentRoute: () => AppRouteRoute,
   } as any)
 const AppManageTaskTaskIdIndexRoute =
   AppManageTaskTaskIdIndexRouteImport.update({
@@ -587,7 +554,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AppAdminIndexRoute
   '/dashboard': typeof AppDashboardIndexRoute
   '/manage/': typeof AppManageIndexRoute
-  '/profile': typeof AppProfileIndexRoute
   '/super-admin/': typeof AppSuperAdminIndexRoute
   '/superadmin': typeof AppSuperadminIndexRoute
   '/teams': typeof AppTeamsIndexRoute
@@ -607,7 +573,6 @@ export interface FileRoutesByFullPath {
   '/c/$challengeId': typeof AppCChallengeIdIndexRoute
   '/challenge/$challengeId': typeof AppChallengeChallengeIdIndexRoute
   '/p/$projectId': typeof AppPProjectIdIndexRoute
-  '/profile/$userId': typeof AppProfileUserIdIndexRoute
   '/project/$projectId': typeof AppProjectProjectIdIndexRoute
   '/t/$taskId': typeof AppTTaskIdIndexRoute
   '/task/$taskId': typeof AppTaskTaskIdIndexRoute
@@ -627,9 +592,6 @@ export interface FileRoutesByFullPath {
   '/manage/challenge/$challengeId/': typeof AppManageChallengeChallengeIdIndexRoute
   '/manage/project/$projectId/': typeof AppManageProjectProjectIdIndexRoute
   '/manage/task/$taskId/': typeof AppManageTaskTaskIdIndexRoute
-  '/user/achievements/$userId': typeof AppUserAchievementsUserIdIndexRoute
-  '/user/metrics/$userId': typeof AppUserMetricsUserIdIndexRoute
-  '/user/profile/$userId': typeof AppUserProfileUserIdIndexRoute
   '/admin/project/$projectId/challenges/edit': typeof AppAdminProjectProjectIdChallengesEditRoute
   '/admin/project/$projectId/challenges/manage': typeof AppAdminProjectProjectIdChallengesManageRoute
   '/admin/project/$projectId/challenges/new': typeof AppAdminProjectProjectIdChallengesNewRoute
@@ -671,7 +633,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AppAdminIndexRoute
   '/dashboard': typeof AppDashboardIndexRoute
   '/manage': typeof AppManageIndexRoute
-  '/profile': typeof AppProfileIndexRoute
   '/super-admin': typeof AppSuperAdminIndexRoute
   '/superadmin': typeof AppSuperadminIndexRoute
   '/teams': typeof AppTeamsIndexRoute
@@ -688,7 +649,6 @@ export interface FileRoutesByTo {
   '/c/$challengeId': typeof AppCChallengeIdIndexRoute
   '/challenge/$challengeId': typeof AppChallengeChallengeIdIndexRoute
   '/p/$projectId': typeof AppPProjectIdIndexRoute
-  '/profile/$userId': typeof AppProfileUserIdIndexRoute
   '/project/$projectId': typeof AppProjectProjectIdIndexRoute
   '/t/$taskId': typeof AppTTaskIdIndexRoute
   '/task/$taskId': typeof AppTaskTaskIdIndexRoute
@@ -708,9 +668,6 @@ export interface FileRoutesByTo {
   '/manage/challenge/$challengeId': typeof AppManageChallengeChallengeIdIndexRoute
   '/manage/project/$projectId': typeof AppManageProjectProjectIdIndexRoute
   '/manage/task/$taskId': typeof AppManageTaskTaskIdIndexRoute
-  '/user/achievements/$userId': typeof AppUserAchievementsUserIdIndexRoute
-  '/user/metrics/$userId': typeof AppUserMetricsUserIdIndexRoute
-  '/user/profile/$userId': typeof AppUserProfileUserIdIndexRoute
   '/admin/project/$projectId/challenges/edit': typeof AppAdminProjectProjectIdChallengesEditRoute
   '/admin/project/$projectId/challenges/manage': typeof AppAdminProjectProjectIdChallengesManageRoute
   '/admin/project/$projectId/challenges/new': typeof AppAdminProjectProjectIdChallengesNewRoute
@@ -756,7 +713,6 @@ export interface FileRoutesById {
   '/_app/admin/': typeof AppAdminIndexRoute
   '/_app/dashboard/': typeof AppDashboardIndexRoute
   '/_app/manage/': typeof AppManageIndexRoute
-  '/_app/profile/': typeof AppProfileIndexRoute
   '/_app/super-admin/': typeof AppSuperAdminIndexRoute
   '/_app/superadmin/': typeof AppSuperadminIndexRoute
   '/_app/teams/': typeof AppTeamsIndexRoute
@@ -776,7 +732,6 @@ export interface FileRoutesById {
   '/_app/c/$challengeId/': typeof AppCChallengeIdIndexRoute
   '/_app/challenge/$challengeId/': typeof AppChallengeChallengeIdIndexRoute
   '/_app/p/$projectId/': typeof AppPProjectIdIndexRoute
-  '/_app/profile/$userId/': typeof AppProfileUserIdIndexRoute
   '/_app/project/$projectId/': typeof AppProjectProjectIdIndexRoute
   '/_app/t/$taskId/': typeof AppTTaskIdIndexRoute
   '/_app/task/$taskId/': typeof AppTaskTaskIdIndexRoute
@@ -796,9 +751,6 @@ export interface FileRoutesById {
   '/_app/manage/challenge/$challengeId/': typeof AppManageChallengeChallengeIdIndexRoute
   '/_app/manage/project/$projectId/': typeof AppManageProjectProjectIdIndexRoute
   '/_app/manage/task/$taskId/': typeof AppManageTaskTaskIdIndexRoute
-  '/_app/user/achievements/$userId/': typeof AppUserAchievementsUserIdIndexRoute
-  '/_app/user/metrics/$userId/': typeof AppUserMetricsUserIdIndexRoute
-  '/_app/user/profile/$userId/': typeof AppUserProfileUserIdIndexRoute
   '/_app/admin/project/$projectId/challenges/edit': typeof AppAdminProjectProjectIdChallengesEditRoute
   '/_app/admin/project/$projectId/challenges/manage': typeof AppAdminProjectProjectIdChallengesManageRoute
   '/_app/admin/project/$projectId/challenges/new': typeof AppAdminProjectProjectIdChallengesNewRoute
@@ -844,7 +796,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/manage/'
-    | '/profile'
     | '/super-admin/'
     | '/superadmin'
     | '/teams'
@@ -864,7 +815,6 @@ export interface FileRouteTypes {
     | '/c/$challengeId'
     | '/challenge/$challengeId'
     | '/p/$projectId'
-    | '/profile/$userId'
     | '/project/$projectId'
     | '/t/$taskId'
     | '/task/$taskId'
@@ -884,9 +834,6 @@ export interface FileRouteTypes {
     | '/manage/challenge/$challengeId/'
     | '/manage/project/$projectId/'
     | '/manage/task/$taskId/'
-    | '/user/achievements/$userId'
-    | '/user/metrics/$userId'
-    | '/user/profile/$userId'
     | '/admin/project/$projectId/challenges/edit'
     | '/admin/project/$projectId/challenges/manage'
     | '/admin/project/$projectId/challenges/new'
@@ -928,7 +875,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/manage'
-    | '/profile'
     | '/super-admin'
     | '/superadmin'
     | '/teams'
@@ -945,7 +891,6 @@ export interface FileRouteTypes {
     | '/c/$challengeId'
     | '/challenge/$challengeId'
     | '/p/$projectId'
-    | '/profile/$userId'
     | '/project/$projectId'
     | '/t/$taskId'
     | '/task/$taskId'
@@ -965,9 +910,6 @@ export interface FileRouteTypes {
     | '/manage/challenge/$challengeId'
     | '/manage/project/$projectId'
     | '/manage/task/$taskId'
-    | '/user/achievements/$userId'
-    | '/user/metrics/$userId'
-    | '/user/profile/$userId'
     | '/admin/project/$projectId/challenges/edit'
     | '/admin/project/$projectId/challenges/manage'
     | '/admin/project/$projectId/challenges/new'
@@ -1012,7 +954,6 @@ export interface FileRouteTypes {
     | '/_app/admin/'
     | '/_app/dashboard/'
     | '/_app/manage/'
-    | '/_app/profile/'
     | '/_app/super-admin/'
     | '/_app/superadmin/'
     | '/_app/teams/'
@@ -1032,7 +973,6 @@ export interface FileRouteTypes {
     | '/_app/c/$challengeId/'
     | '/_app/challenge/$challengeId/'
     | '/_app/p/$projectId/'
-    | '/_app/profile/$userId/'
     | '/_app/project/$projectId/'
     | '/_app/t/$taskId/'
     | '/_app/task/$taskId/'
@@ -1052,9 +992,6 @@ export interface FileRouteTypes {
     | '/_app/manage/challenge/$challengeId/'
     | '/_app/manage/project/$projectId/'
     | '/_app/manage/task/$taskId/'
-    | '/_app/user/achievements/$userId/'
-    | '/_app/user/metrics/$userId/'
-    | '/_app/user/profile/$userId/'
     | '/_app/admin/project/$projectId/challenges/edit'
     | '/_app/admin/project/$projectId/challenges/manage'
     | '/_app/admin/project/$projectId/challenges/new'
@@ -1169,13 +1106,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/super-admin/'
       preLoaderRoute: typeof AppSuperAdminIndexRouteImport
       parentRoute: typeof AppSuperAdminRouteRoute
-    }
-    '/_app/profile/': {
-      id: '/_app/profile/'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AppProfileIndexRouteImport
-      parentRoute: typeof AppRouteRoute
     }
     '/_app/manage/': {
       id: '/_app/manage/'
@@ -1345,13 +1275,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectProjectIdIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/profile/$userId/': {
-      id: '/_app/profile/$userId/'
-      path: '/profile/$userId'
-      fullPath: '/profile/$userId'
-      preLoaderRoute: typeof AppProfileUserIdIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
     '/_app/p/$projectId/': {
       id: '/_app/p/$projectId/'
       path: '/p/$projectId'
@@ -1463,27 +1386,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/manage/challenge/$challengeId'
       preLoaderRoute: typeof AppManageChallengeChallengeIdRouteRouteImport
       parentRoute: typeof AppManageRouteRoute
-    }
-    '/_app/user/profile/$userId/': {
-      id: '/_app/user/profile/$userId/'
-      path: '/user/profile/$userId'
-      fullPath: '/user/profile/$userId'
-      preLoaderRoute: typeof AppUserProfileUserIdIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/_app/user/metrics/$userId/': {
-      id: '/_app/user/metrics/$userId/'
-      path: '/user/metrics/$userId'
-      fullPath: '/user/metrics/$userId'
-      preLoaderRoute: typeof AppUserMetricsUserIdIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/_app/user/achievements/$userId/': {
-      id: '/_app/user/achievements/$userId/'
-      path: '/user/achievements/$userId'
-      fullPath: '/user/achievements/$userId'
-      preLoaderRoute: typeof AppUserAchievementsUserIdIndexRouteImport
-      parentRoute: typeof AppRouteRoute
     }
     '/_app/manage/task/$taskId/': {
       id: '/_app/manage/task/$taskId/'
@@ -1818,7 +1720,6 @@ interface AppRouteRouteChildren {
   AppTeamsNewRoute: typeof AppTeamsNewRoute
   AppAdminIndexRoute: typeof AppAdminIndexRoute
   AppDashboardIndexRoute: typeof AppDashboardIndexRoute
-  AppProfileIndexRoute: typeof AppProfileIndexRoute
   AppSuperadminIndexRoute: typeof AppSuperadminIndexRoute
   AppTeamsIndexRoute: typeof AppTeamsIndexRoute
   AppAdminProjectsNewRoute: typeof AppAdminProjectsNewRoute
@@ -1831,7 +1732,6 @@ interface AppRouteRouteChildren {
   AppCChallengeIdIndexRoute: typeof AppCChallengeIdIndexRoute
   AppChallengeChallengeIdIndexRoute: typeof AppChallengeChallengeIdIndexRoute
   AppPProjectIdIndexRoute: typeof AppPProjectIdIndexRoute
-  AppProfileUserIdIndexRoute: typeof AppProfileUserIdIndexRoute
   AppProjectProjectIdIndexRoute: typeof AppProjectProjectIdIndexRoute
   AppTTaskIdIndexRoute: typeof AppTTaskIdIndexRoute
   AppTaskTaskIdIndexRoute: typeof AppTaskTaskIdIndexRoute
@@ -1843,9 +1743,6 @@ interface AppRouteRouteChildren {
   AppAdminProjectProjectIdIndexRoute: typeof AppAdminProjectProjectIdIndexRoute
   AppBrowseChallengesChallengeIdIndexRoute: typeof AppBrowseChallengesChallengeIdIndexRoute
   AppBrowseProjectsProjectIdIndexRoute: typeof AppBrowseProjectsProjectIdIndexRoute
-  AppUserAchievementsUserIdIndexRoute: typeof AppUserAchievementsUserIdIndexRoute
-  AppUserMetricsUserIdIndexRoute: typeof AppUserMetricsUserIdIndexRoute
-  AppUserProfileUserIdIndexRoute: typeof AppUserProfileUserIdIndexRoute
   AppAdminProjectProjectIdChallengesEditRoute: typeof AppAdminProjectProjectIdChallengesEditRoute
   AppAdminProjectProjectIdChallengesManageRoute: typeof AppAdminProjectProjectIdChallengesManageRoute
   AppAdminProjectProjectIdChallengesNewRoute: typeof AppAdminProjectProjectIdChallengesNewRoute
@@ -1877,7 +1774,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppTeamsNewRoute: AppTeamsNewRoute,
   AppAdminIndexRoute: AppAdminIndexRoute,
   AppDashboardIndexRoute: AppDashboardIndexRoute,
-  AppProfileIndexRoute: AppProfileIndexRoute,
   AppSuperadminIndexRoute: AppSuperadminIndexRoute,
   AppTeamsIndexRoute: AppTeamsIndexRoute,
   AppAdminProjectsNewRoute: AppAdminProjectsNewRoute,
@@ -1891,7 +1787,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppCChallengeIdIndexRoute: AppCChallengeIdIndexRoute,
   AppChallengeChallengeIdIndexRoute: AppChallengeChallengeIdIndexRoute,
   AppPProjectIdIndexRoute: AppPProjectIdIndexRoute,
-  AppProfileUserIdIndexRoute: AppProfileUserIdIndexRoute,
   AppProjectProjectIdIndexRoute: AppProjectProjectIdIndexRoute,
   AppTTaskIdIndexRoute: AppTTaskIdIndexRoute,
   AppTaskTaskIdIndexRoute: AppTaskTaskIdIndexRoute,
@@ -1904,9 +1799,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppBrowseChallengesChallengeIdIndexRoute:
     AppBrowseChallengesChallengeIdIndexRoute,
   AppBrowseProjectsProjectIdIndexRoute: AppBrowseProjectsProjectIdIndexRoute,
-  AppUserAchievementsUserIdIndexRoute: AppUserAchievementsUserIdIndexRoute,
-  AppUserMetricsUserIdIndexRoute: AppUserMetricsUserIdIndexRoute,
-  AppUserProfileUserIdIndexRoute: AppUserProfileUserIdIndexRoute,
   AppAdminProjectProjectIdChallengesEditRoute:
     AppAdminProjectProjectIdChallengesEditRoute,
   AppAdminProjectProjectIdChallengesManageRoute:

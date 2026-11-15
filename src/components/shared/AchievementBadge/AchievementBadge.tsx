@@ -3,7 +3,9 @@ import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { type AchievementDefinition, getAchievement } from '@/types/Achievement'
 
+// The overlay (e.g. a points threshold) is unreadable at xs, so that size omits it.
 const sizeClasses = {
+  xs: { box: 'h-7 w-7 border', icon: 'size-4', overlay: null },
   sm: { box: 'h-12 w-12', icon: 'size-6', overlay: 'text-[0.6rem]' },
   md: { box: 'h-20 w-20', icon: 'size-10', overlay: 'text-xs' },
   lg: { box: 'h-32 w-32', icon: 'size-16', overlay: 'text-base' },
@@ -60,7 +62,7 @@ export const AchievementBadge = ({
       )}
     >
       <Icon className={sz.icon} aria-hidden="true" />
-      {overlay && (
+      {overlay && sz.overlay && (
         <span
           aria-hidden="true"
           className={cn(

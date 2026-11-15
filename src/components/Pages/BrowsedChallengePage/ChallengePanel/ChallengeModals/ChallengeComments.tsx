@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
@@ -172,14 +173,10 @@ export const ChallengeComments = () => {
                     )}
                   >
                     <div className="flex items-center gap-2">
-                      <a
-                        href={`https://www.openstreetmap.org/user/${encodeURIComponent(comment.osm_username)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <OsmUserLink
+                        username={comment.osm_username}
                         className="font-semibold text-blue-600 text-sm hover:underline dark:text-blue-400"
-                      >
-                        {comment.osm_username}
-                      </a>
+                      />
                       {isOwner && (
                         <span className="rounded bg-yellow-100 px-2 py-0.5 font-medium text-xs text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
                           {t({

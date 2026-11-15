@@ -20,6 +20,7 @@ import ReactMarkdown, { type Components } from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { TaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { ShortCodeLink } from '@/components/shared/ShortCodeLink'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
@@ -220,14 +221,10 @@ export const CommentsHistoryTab = ({
             )}
           >
             <div className="flex items-center gap-2">
-              <a
-                href={`https://www.openstreetmap.org/user/${encodeURIComponent(commentUserName)}`}
-                target="_blank"
-                rel="noopener noreferrer"
+              <OsmUserLink
+                username={commentUserName}
                 className="font-semibold text-blue-600 text-xs hover:underline dark:text-blue-400"
-              >
-                {commentUserName}
-              </a>
+              />
             </div>
 
             <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
@@ -264,7 +261,14 @@ export const CommentsHistoryTab = ({
           )}
         >
           <div className={cn('absolute top-0 bottom-0 left-0 w-1', newVisual.bar)} />
-          <span className="font-medium text-zinc-700 dark:text-slate-200">{userName}</span>
+          {item.user?.username ? (
+            <OsmUserLink
+              username={item.user.username}
+              className="font-medium text-zinc-700 hover:underline dark:text-slate-200"
+            />
+          ) : (
+            <span className="font-medium text-zinc-700 dark:text-slate-200">{userName}</span>
+          )}
           {item.oldStatus !== undefined && item.status !== undefined ? (
             <>
               <StatusPill status={item.oldStatus} muted />

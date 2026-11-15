@@ -25,7 +25,6 @@ const PARAMS = {
   challengeId: '7',
   taskId: '9',
   projectId: '3',
-  userId: '5',
   virtualChallengeId: '11',
 }
 
@@ -116,24 +115,9 @@ const EXPECTATIONS: Record<string, Expectation> = {
     to: '/project/$projectId',
     params: { projectId: '3' },
   },
-  './_app/user/profile/index.tsx': { legacyPath: '/user/profile', to: '/profile' },
-  './_app/user/profile/[$userId]/index.tsx': {
-    legacyPath: '/user/profile/5',
-    to: '/profile/$userId',
-    params: { userId: '5' },
-  },
-  './_app/user/metrics/index.tsx': { legacyPath: '/user/metrics', to: '/profile' },
-  './_app/user/metrics/[$userId]/index.tsx': {
-    legacyPath: '/user/metrics/5',
-    to: '/profile/$userId',
-    params: { userId: '5' },
-  },
-  './_app/user/achievements/index.tsx': { legacyPath: '/user/achievements', to: '/profile' },
-  './_app/user/achievements/[$userId]/index.tsx': {
-    legacyPath: '/user/achievements/5',
-    to: '/profile/$userId',
-    params: { userId: '5' },
-  },
+  './_app/user/profile/index.tsx': { legacyPath: '/user/profile', to: '/dashboard' },
+  './_app/user/metrics/index.tsx': { legacyPath: '/user/metrics', to: '/dashboard' },
+  './_app/user/achievements/index.tsx': { legacyPath: '/user/achievements', to: '/dashboard' },
   './_app/inbox.tsx': { legacyPath: '/inbox', to: '/notifications' },
   './_app/sent.tsx': { legacyPath: '/sent', to: '/notifications' },
   './_app/teams/index.tsx': { legacyPath: '/teams', to: '/dashboard' },

@@ -2,6 +2,7 @@ import { useId } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
+import { cn } from '@/lib/utils'
 
 interface DashboardSectionProps {
   icon: React.ReactNode
@@ -11,6 +12,7 @@ interface DashboardSectionProps {
   actions?: React.ReactNode
   isLoading?: boolean
   error?: unknown
+  className?: string
   children: React.ReactNode
 }
 
@@ -25,6 +27,7 @@ export const DashboardSection = ({
   actions,
   isLoading,
   error,
+  className,
   children,
 }: DashboardSectionProps) => {
   const { t, formatNumber } = useIntl()
@@ -33,7 +36,10 @@ export const DashboardSection = ({
   return (
     <section
       aria-labelledby={headingId}
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900"
+      className={cn(
+        'flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900',
+        className
+      )}
     >
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
         <span className="text-zinc-500 dark:text-slate-400 [&_svg]:size-4">{icon}</span>

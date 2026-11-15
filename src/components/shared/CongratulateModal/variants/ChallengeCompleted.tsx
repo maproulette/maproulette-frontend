@@ -32,7 +32,7 @@ export const ChallengeCompletedContent = ({ challengeName, onDismiss }: Props) =
       </div>
       <div className="flex gap-2">
         <Button variant="outline" asChild onClick={onDismiss}>
-          <Link to="/profile">
+          <Link to="/dashboard">
             {t({
               id: 'congratulateModal.challengeCompleted.reviewStats',
               defaultMessage: 'Review your stats',

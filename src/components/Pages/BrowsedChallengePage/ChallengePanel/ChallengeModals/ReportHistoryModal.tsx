@@ -3,6 +3,7 @@ import { defineMessages } from 'react-intl'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Badge } from '@/components/ui/Badge'
 import {
   Dialog,
@@ -65,7 +66,7 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
           {t(
             {
               id: 'browsedChallengePage.challengeModals.reportHistory.reportedBy',
-              defaultMessage: 'Reported by {user} on {date}',
+              defaultMessage: 'Reported by <link>{user}</link> on {date}',
             },
             {
               user: isOwnReport
@@ -74,6 +75,14 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
                     defaultMessage: 'you',
                   })
                 : (report.reporterName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' })),
+              link: (chunks) =>
+                !isOwnReport && report.reporterName ? (
+                  <OsmUserLink username={report.reporterName} className="hover:underline">
+                    {chunks}
+                  </OsmUserLink>
+                ) : (
+                  chunks
+                ),
               date: formatDateTime(new Date(report.reportedAt), locale),
             }
           )}

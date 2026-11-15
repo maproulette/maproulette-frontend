@@ -2,6 +2,7 @@ import { ImagePlus, Trash2 } from 'lucide-react'
 import { useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { TeamImageStatusBadge } from '@/components/shared/TeamImageStatusBadge'
 import { Button } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
@@ -53,8 +54,18 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
         <p className="truncate text-xs text-zinc-500 dark:text-slate-400">
           {image.requestedByName
             ? t(
-                { id: 'teamImages.requestedBy', defaultMessage: 'Requested by {name}' },
-                { name: image.requestedByName }
+                {
+                  id: 'teamImages.requestedBy',
+                  defaultMessage: 'Requested by <link>{name}</link>',
+                },
+                {
+                  name: image.requestedByName,
+                  link: (chunks) => (
+                    <OsmUserLink username={image.requestedByName ?? ''} className="hover:underline">
+                      {chunks}
+                    </OsmUserLink>
+                  ),
+                }
               )
             : t({
                 id: 'teamImages.requestedByUnknown',

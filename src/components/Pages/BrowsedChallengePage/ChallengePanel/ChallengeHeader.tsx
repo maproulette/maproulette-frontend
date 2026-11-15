@@ -3,6 +3,7 @@ import { Bookmark, Heart, Map as MapIcon, MessageSquare, Share2 } from 'lucide-r
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { SidebarIndicator } from '@/components/shared/SidebarIndicator'
 import { Button } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
@@ -506,15 +507,13 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
                                   {chunks}
                                 </Link>
                               ) : (
-                                <a
-                                  href={`https://www.openstreetmap.org/user/${encodeURIComponent(bylineName)}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                <OsmUserLink
+                                  username={bylineName}
                                   className="font-medium transition-colors hover:text-zinc-900 dark:hover:text-slate-200"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   {chunks}
-                                </a>
+                                </OsmUserLink>
                               ),
                           }
                         )}

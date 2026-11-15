@@ -3,6 +3,7 @@ import { Ban, Check, Flag } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
@@ -106,11 +107,19 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
             {t(
               {
                 id: 'superAdminChallengeReports.reportMeta',
-                defaultMessage: '{project} · reported by {user} on {date}',
+                defaultMessage: '{project} · reported by <link>{user}</link> on {date}',
               },
               {
                 project: report.projectName ?? String(report.projectId ?? ''),
                 user: report.reporterName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
+                link: (chunks) =>
+                  report.reporterName ? (
+                    <OsmUserLink username={report.reporterName} className="hover:underline">
+                      {chunks}
+                    </OsmUserLink>
+                  ) : (
+                    chunks
+                  ),
                 date: formatDate(new Date(report.reportedAt), locale),
               }
             )}
@@ -173,11 +182,19 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
           {t(
             {
               id: 'superAdminChallengeReports.resolvedMeta',
-              defaultMessage: '{status} by {user} on {date}',
+              defaultMessage: '{status} by <link>{user}</link> on {date}',
             },
             {
               status: report.statusName,
               user: report.reviewedByName ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
+              link: (chunks) =>
+                report.reviewedByName ? (
+                  <OsmUserLink username={report.reviewedByName} className="hover:underline">
+                    {chunks}
+                  </OsmUserLink>
+                ) : (
+                  chunks
+                ),
               date: report.reviewedAt ? formatDate(new Date(report.reviewedAt), locale) : '',
             }
           )}

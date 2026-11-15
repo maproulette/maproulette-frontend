@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Check, RotateCcw, Trash2 } from 'lucide-react'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
@@ -175,9 +176,10 @@ export const NotificationItem = ({
           {/* Row 1: sender · type */}
           <div className="flex min-w-0 items-center gap-1.5">
             {notification.fromUsername && (
-              <span className="truncate font-semibold text-sm text-zinc-900 dark:text-white">
-                {notification.fromUsername}
-              </span>
+              <OsmUserLink
+                username={notification.fromUsername}
+                className="pointer-events-auto truncate font-semibold text-sm text-zinc-900 hover:underline dark:text-white"
+              />
             )}
             <span aria-hidden="true" className="shrink-0 text-xs text-zinc-400 dark:text-slate-500">
               ·

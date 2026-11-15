@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Reply } from 'lucide-react'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
@@ -41,7 +42,7 @@ export const CommentItem = ({
       </Avatar>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-2 text-sm">
-          <span className="font-semibold">{comment.osm_username}</span>
+          <OsmUserLink username={comment.osm_username} className="font-semibold hover:underline" />
           <span className="text-xs text-zinc-500 dark:text-slate-400">
             {comment.created ? formatTimeAgo(new Date(comment.created), locale) : ''}
           </span>

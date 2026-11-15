@@ -2,6 +2,7 @@ import { Trash2, UserPlus, Users } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
@@ -186,7 +187,9 @@ export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number })
               <Avatar className="size-7">
                 <AvatarFallback>{initials(manager.name)}</AvatarFallback>
               </Avatar>
-              <span className="min-w-0 flex-1 truncate text-sm">{manager.name}</span>
+              <span className="min-w-0 flex-1 truncate text-sm">
+                <OsmUserLink username={manager.name} className="hover:underline" />
+              </span>
               <RoleSelect
                 value={manager.role}
                 disabled={setUserRole.isPending}

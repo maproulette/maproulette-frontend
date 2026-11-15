@@ -3,6 +3,7 @@ import { useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { DocsLink } from '@/components/shared/DocsLink'
+import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
@@ -175,7 +176,9 @@ export const ProjectManagersPanel = () => {
                   <AvatarImage src={manager.avatarURL} alt={manager.displayName} />
                   <AvatarFallback>{initials(manager.displayName)}</AvatarFallback>
                 </Avatar>
-                <span className="min-w-0 flex-1 truncate text-sm">{manager.displayName}</span>
+                <span className="min-w-0 flex-1 truncate text-sm">
+                  <OsmUserLink username={manager.displayName} className="hover:underline" />
+                </span>
                 <RoleSelect
                   value={role}
                   disabled={setUserRole.isPending}
