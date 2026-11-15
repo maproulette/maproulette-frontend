@@ -2,15 +2,20 @@ import { useMemo } from 'react'
 import { api } from '@/api'
 import { resolveTaskTypeFromTags, type TaskTypeKey } from './taskTypes'
 
-export const useChallengeTypes = (challengeIds: number[]): Map<number, TaskTypeKey> => {
-  const validIds = useMemo(() => challengeIds.filter((id) => id > 0), [challengeIds])
-  const { data: tagsByChallenge } = api.challenge.getChallengeTagsBatch(validIds)
+/**
+ * Task type of each challenge whose tags have loaded. A task's value in the Map is null
+ * if it is not of a known type, and is absent from the map completely if its challenge's
+ * data is still loading.
+ */
+export const useChallengeTypes = (challengeIds: number[]): Map<number, TaskTypeKey | null> => {
+  const { data: tagsByChallenge } = api.challenge.getChallengeTagsBatch(
+    challengeIds.filter((id) => id > 0)
+  )
 
   return useMemo(() => {
-    const result = new Map<number, TaskTypeKey>()
+    const result = new Map<number, TaskTypeKey | null>()
     tagsByChallenge?.forEach((tags, id) => {
-      const typeKey = resolveTaskTypeFromTags(tags.map((t) => t.name))
-      if (typeKey) result.set(id, typeKey)
+      result.set(id, resolveTaskTypeFromTags(tags.map((t) => t.name)))
     })
     return result
   }, [tagsByChallenge])

@@ -30,15 +30,15 @@ const PICKER_LIMIT = 100
 const SAME_SPOT_DEGREES = 1e-6
 const EXPAND_DURATION_MS = 600
 
-const NO_HIGHLIGHTS: HighlightedMarker[] = []
+const NO_HIGHLIGHTS: never[] = []
 
-interface TaskMarkersLayerProps {
-  markers: TaskMarker[]
+interface TaskMarkersLayerProps<M extends TaskMarker> {
+  markers: M[]
   cluster: boolean
-  markerStyle?: (marker: TaskMarker) => MarkerStyle
-  highlighted?: HighlightedMarker[]
+  markerStyle?: (marker: M) => MarkerStyle
+  highlighted?: HighlightedMarker<M>[]
   interactive?: boolean
-  onSelectTask: (marker: TaskMarker) => void
+  onSelectTask: (marker: M) => void
   onEmptyClick?: () => void
 }
 
@@ -85,7 +85,7 @@ const allAtOneSpot = (features: GeoJSON.Feature[]): boolean => {
   )
 }
 
-export const TaskMarkersLayer = ({
+export const TaskMarkersLayer = <M extends TaskMarker>({
   markers,
   cluster,
   markerStyle = statusPinStyle,
@@ -93,7 +93,7 @@ export const TaskMarkersLayer = ({
   interactive = true,
   onSelectTask,
   onEmptyClick,
-}: TaskMarkersLayerProps) => {
+}: TaskMarkersLayerProps<M>) => {
   useTaskMarkerResources()
   const { current: mapRef } = useMap()
   const sourceId = useId()
@@ -104,7 +104,7 @@ export const TaskMarkersLayer = ({
   const createdLayerId = `${sourceId}-points-created`
   const highlightLayerId = `${highlightSourceId}-pins`
 
-  const [picker, setPicker] = useState<TaskPickerState | null>(null)
+  const [picker, setPicker] = useState<TaskPickerState<M> | null>(null)
 
   const data = useMemo(
     () => toFeatures(markers.map((marker) => ({ marker, style: markerStyle(marker) }))),
@@ -113,7 +113,7 @@ export const TaskMarkersLayer = ({
   const highlightData = useMemo(() => toFeatures(highlighted), [highlighted])
 
   const markersById = useMemo(() => {
-    const byId = new Map<number, TaskMarker>()
+    const byId = new Map<number, M>()
     for (const marker of markers) byId.set(marker.id, marker)
     for (const { marker } of highlighted) byId.set(marker.id, marker)
     return byId
@@ -144,7 +144,7 @@ export const TaskMarkersLayer = ({
 
   const closePicker = useCallback(() => setPicker(null), [])
 
-  const selectFromPicker = useCallback((marker: TaskMarker) => {
+  const selectFromPicker = useCallback((marker: M) => {
     setPicker(null)
     latest.current.onSelectTask(marker)
   }, [])
@@ -173,7 +173,7 @@ export const TaskMarkersLayer = ({
           const { markersById } = latest.current
           const stacked = leaves
             .map((leaf) => markersById.get(leaf.properties?.id as number))
-            .filter((m): m is TaskMarker => m !== undefined)
+            .filter((m): m is M => m !== undefined)
           setPicker({
             lngLat: center,
             extent: circleExtent(clusterRadiusForCount(total)),
@@ -196,7 +196,7 @@ export const TaskMarkersLayer = ({
         ),
       ]
         .map((id) => markersById.get(id))
-        .filter((m): m is TaskMarker => m !== undefined)
+        .filter((m): m is M => m !== undefined)
 
       if (pinned.length === 1) {
         setPicker(null)

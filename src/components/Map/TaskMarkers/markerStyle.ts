@@ -15,8 +15,8 @@ export type MarkerEmphasis =
   | 'lasso-selected'
   | 'hovered'
 
-export interface HighlightedMarker {
-  marker: TaskMarker
+export interface HighlightedMarker<M extends TaskMarker = TaskMarker> {
+  marker: M
   style: MarkerStyle
 }
 

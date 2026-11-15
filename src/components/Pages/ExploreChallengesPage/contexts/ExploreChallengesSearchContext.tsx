@@ -93,8 +93,6 @@ export interface ExploreChallengesSearchContextType {
 
   bounds: string
   setBounds: Dispatch<SetStateAction<string>>
-  zoom: number
-  setZoom: Dispatch<SetStateAction<number>>
   locationOsmType: string | undefined
   locationOsmId: number | undefined
   setLocationOsm: (osmType: string | undefined, osmId: number | undefined) => void
@@ -210,7 +208,6 @@ export const ExploreChallengesSearchContextProvider = ({
   )
 
   const [bounds, setBounds] = useState(DEFAULT_WORLD_BOUNDS)
-  const [zoom, setZoom] = useState(2)
   const [locationOsmType, setLocationOsmType] = useState<string | undefined>(
     initialOsmType ?? persistedFilters?.locationOsmType
   )
@@ -504,8 +501,6 @@ export const ExploreChallengesSearchContextProvider = ({
       extendedFindParams,
       bounds,
       setBounds,
-      zoom,
-      setZoom,
       locationOsmType,
       locationOsmId,
       setLocationOsm,
@@ -542,7 +537,6 @@ export const ExploreChallengesSearchContextProvider = ({
     [
       extendedFindParams,
       bounds,
-      zoom,
       locationOsmType,
       locationOsmId,
       setLocationOsm,

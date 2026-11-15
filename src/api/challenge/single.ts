@@ -1,4 +1,5 @@
 import {
+  keepPreviousData,
   type QueryClient,
   type QueryKey,
   queryOptions,
@@ -356,6 +357,9 @@ export const challengeSingle = {
         },
         staleTime: 5 * 60 * 1000,
         enabled: challengeIds.length > 0,
+        // The id list changes whenever a challenge enters or leaves the view;
+        // keep the last answer meanwhile so known challenges don't drop out.
+        placeholderData: keepPreviousData,
       })
     )
   },

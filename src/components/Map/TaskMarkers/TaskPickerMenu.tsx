@@ -14,10 +14,10 @@ export interface MarkerExtent {
   halfWidth: number
 }
 
-export interface TaskPickerState {
+export interface TaskPickerState<M extends TaskMarker = TaskMarker> {
   lngLat: [number, number]
   extent: MarkerExtent
-  markers: TaskMarker[]
+  markers: M[]
   total: number
 }
 
@@ -53,13 +53,17 @@ const popupOffset = ({ above, below, halfWidth }: MarkerExtent): Offset => {
   }
 }
 
-interface TaskPickerMenuProps {
-  picker: TaskPickerState
-  onSelect: (marker: TaskMarker) => void
+interface TaskPickerMenuProps<M extends TaskMarker> {
+  picker: TaskPickerState<M>
+  onSelect: (marker: M) => void
   onClose: () => void
 }
 
-export const TaskPickerMenu = ({ picker, onSelect, onClose }: TaskPickerMenuProps) => {
+export const TaskPickerMenu = <M extends TaskMarker>({
+  picker,
+  onSelect,
+  onClose,
+}: TaskPickerMenuProps<M>) => {
   const { t } = useIntl()
   const offset = useMemo(() => popupOffset(picker.extent), [picker.extent])
 
