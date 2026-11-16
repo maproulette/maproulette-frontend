@@ -252,7 +252,5 @@ test('a disabled challenge leaves the short link out of the changeset comment', 
   await startMapping(page, task.id)
 
   const url = await launchInNewTab(page, 'Edit in iD')
-  expect(hashParams(url).get('comment')).toBe(
-    'Checked Spring & Well (ref 42) #maproulette #maproulette-beta'
-  )
+  expect(hashParams(url).get('comment')).toBe('Checked Spring & Well (ref 42) #maproulette')
 })

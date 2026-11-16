@@ -115,7 +115,7 @@ test('working a tag-fix task opens the embedded iD on the element with the chang
   const link = env.shortUrl
     ? ` ${env.shortUrl}/c/${cooperativeChallenge.id}/t/${tagFixTask.id}`
     : ''
-  expect(hash.get('comment')).toBe(`E2E test changeset #maproulette${link} #maproulette-beta`)
+  expect(hash.get('comment')).toBe(`E2E test changeset #maproulette${link}`)
   expect(hash.get('maproulette_task')).toBe(String(tagFixTask.id))
   expect(hash.get('id')).toBe('n2344998584')
   const [, lat, lng] = (hash.get('map') ?? '').split('/').map(Number)

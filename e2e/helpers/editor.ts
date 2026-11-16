@@ -68,7 +68,7 @@ export async function runtimeEnv(page: Page): Promise<RuntimeEnv> {
 
 export function expectedComment(env: RuntimeEnv, challengeId: number, taskId: number) {
   const link = env.shortUrl ? ` ${env.shortUrl}/c/${challengeId}/t/${taskId}` : ''
-  return `Checked Spring & Well (ref 42) #maproulette${link} #maproulette-beta`
+  return `Checked Spring & Well (ref 42) #maproulette${link}`
 }
 
 async function stubExternalEditors(context: BrowserContext) {

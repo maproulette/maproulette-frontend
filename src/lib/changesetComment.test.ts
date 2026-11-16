@@ -44,24 +44,6 @@ describe('taskShortLink', () => {
 })
 
 describe('buildChangesetComment', () => {
-  it('appends the beta hashtag when absent', async () => {
-    setShortUrl(undefined)
-    const { buildChangesetComment } = await loadModule()
-    const challenge = makeChallenge({ checkinComment: 'Fixed via MapRoulette' })
-    expect(buildChangesetComment(challenge, makeTask(1))).toBe(
-      'Fixed via MapRoulette #maproulette-beta'
-    )
-  })
-
-  it('does not duplicate the beta hashtag when already present', async () => {
-    setShortUrl(undefined)
-    const { buildChangesetComment } = await loadModule()
-    const challenge = makeChallenge({ checkinComment: 'Fixed via MapRoulette #maproulette-beta' })
-    expect(buildChangesetComment(challenge, makeTask(1))).toBe(
-      'Fixed via MapRoulette #maproulette-beta'
-    )
-  })
-
   it('includes the short link when the challenge is enabled and a short URL host is configured', async () => {
     setShortUrl('https://mpr.lt')
     const { buildChangesetComment } = await loadModule()
@@ -71,7 +53,7 @@ describe('buildChangesetComment', () => {
       checkinComment: 'Fixed via MapRoulette',
     })
     expect(buildChangesetComment(challenge, makeTask(248076410))).toBe(
-      'Fixed via MapRoulette https://mpr.lt/c/49104/t/248076410 #maproulette-beta'
+      'Fixed via MapRoulette https://mpr.lt/c/49104/t/248076410'
     )
   })
 
@@ -79,27 +61,21 @@ describe('buildChangesetComment', () => {
     setShortUrl('https://mpr.lt')
     const { buildChangesetComment } = await loadModule()
     const challenge = makeChallenge({ enabled: false, checkinComment: 'Fixed via MapRoulette' })
-    expect(buildChangesetComment(challenge, makeTask(1))).toBe(
-      'Fixed via MapRoulette #maproulette-beta'
-    )
+    expect(buildChangesetComment(challenge, makeTask(1))).toBe('Fixed via MapRoulette')
   })
 
   it('omits the short link when VITE_SHORT_URL is not configured, even if enabled', async () => {
     setShortUrl(undefined)
     const { buildChangesetComment } = await loadModule()
     const challenge = makeChallenge({ enabled: true, checkinComment: 'Fixed via MapRoulette' })
-    expect(buildChangesetComment(challenge, makeTask(1))).toBe(
-      'Fixed via MapRoulette #maproulette-beta'
-    )
+    expect(buildChangesetComment(challenge, makeTask(1))).toBe('Fixed via MapRoulette')
   })
 
   it('trims whitespace from the resulting comment', async () => {
     setShortUrl(undefined)
     const { buildChangesetComment } = await loadModule()
     const challenge = makeChallenge({ checkinComment: '  Fixed via MapRoulette  ' })
-    expect(buildChangesetComment(challenge, makeTask(1))).toBe(
-      'Fixed via MapRoulette #maproulette-beta'
-    )
+    expect(buildChangesetComment(challenge, makeTask(1))).toBe('Fixed via MapRoulette')
   })
 
   it('fills in mustache tags from the task properties', async () => {
@@ -109,7 +85,7 @@ describe('buildChangesetComment', () => {
       checkinComment: 'Expanded abbreviations in street name "{{name}}" #maproulette',
     })
     expect(buildChangesetComment(challenge, makeTask(1, { name: 'NE 14th St' }))).toBe(
-      'Expanded abbreviations in street name "NE 14th St" #maproulette #maproulette-beta'
+      'Expanded abbreviations in street name "NE 14th St" #maproulette'
     )
   })
 })
