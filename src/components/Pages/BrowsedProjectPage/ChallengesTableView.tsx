@@ -21,7 +21,7 @@ interface ChallengesTableViewProps {
 /**
  * Browse-only list/table rendering of challenges: no edit/delete/enable/rebuild
  * affordances, just the read-only columns a visitor cares about plus whatever
- * per-row actions the caller supplies (pin, start, view, copy URL).
+ * per-row actions the caller supplies (start, view, copy URL).
  */
 export const ChallengesTableView = ({ challenges, renderActions }: ChallengesTableViewProps) => {
   const { t } = useIntl()

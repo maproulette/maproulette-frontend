@@ -1,13 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { Copy, Eye, ListChecks, MoreHorizontal, Pin, Play } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { Copy, Eye, ListChecks, MoreHorizontal, Play } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { api } from '@/api'
 import { ChallengesTableView } from '@/components/Pages/BrowsedProjectPage/ChallengesTableView'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
-import {
-  buildPropertiesWithPinnedChallenges,
-  getPinnedChallengeIds,
-} from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
 import { EntityGrid } from '@/components/shared/EntityGrid'
@@ -21,7 +17,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
@@ -31,30 +26,9 @@ export const ChallengesList = () => {
   const { project } = useBrowsedProjectContext()
   const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
 
-  const { user } = useAuthContext()
-  const updateSettingsMutation = api.user.useUpdateUserSettings()
-  const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])
-
   const [searchQuery, setSearchQuery] = useState('')
-  const [onlyPinned, setOnlyPinned] = useState(false)
   const [showCompleted, setShowCompleted] = useState(true)
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid')
-
-  const toggleChallengePin = useCallback(
-    (challengeId: number) => {
-      if (!user?.id) return
-      const next = pinnedChallengeIds.includes(challengeId)
-        ? pinnedChallengeIds.filter((id) => id !== challengeId)
-        : [...pinnedChallengeIds, challengeId]
-      const properties = buildPropertiesWithPinnedChallenges(user, next)
-      updateSettingsMutation.mutate({
-        userId: user.id,
-        settings: user.settings ?? {},
-        properties,
-      })
-    },
-    [user, pinnedChallengeIds, updateSettingsMutation]
-  )
 
   const filteredChallenges = useMemo(() => {
     let result = challenges
@@ -63,58 +37,18 @@ export const ChallengesList = () => {
       result = result.filter((c) => (c.completionMetrics?.tasksRemaining ?? 0) > 0)
     }
 
-    if (onlyPinned) {
-      result = result.filter((c) => c.id != null && pinnedChallengeIds.includes(c.id))
-    }
-
     const query = searchQuery.trim().toLowerCase()
     if (query) {
       result = result.filter((c) => c.name.toLowerCase().includes(query))
     }
 
-    const pinned = new Set(pinnedChallengeIds)
-    return [...result].sort((a, b) => {
-      const aPinned = a.id != null && pinned.has(a.id) ? 1 : 0
-      const bPinned = b.id != null && pinned.has(b.id) ? 1 : 0
-      return bPinned - aPinned
-    })
-  }, [challenges, showCompleted, onlyPinned, searchQuery, pinnedChallengeIds])
+    return result
+  }, [challenges, showCompleted, searchQuery])
 
   const buildChallengeActions = (challenge: Challenge) => {
-    const isPinned = challenge.id != null && pinnedChallengeIds.includes(challenge.id)
     const canStart = (challenge.completionMetrics?.tasksRemaining ?? 0) > 0
     return (
       <div className="flex items-center gap-1">
-        {user && challenge.id != null && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={(e) => {
-              e.preventDefault()
-              toggleChallengePin(challenge.id)
-            }}
-            title={
-              isPinned
-                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
-                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
-            }
-            aria-label={
-              isPinned
-                ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
-                : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
-            }
-          >
-            <Pin
-              className={cn(
-                'h-4 w-4',
-                isPinned
-                  ? 'text-amber-600 dark:text-amber-400'
-                  : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-slate-400'
-              )}
-            />
-          </Button>
-        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -163,7 +97,7 @@ export const ChallengesList = () => {
     )
   }
 
-  const hasActiveFilters = onlyPinned || !showCompleted || searchQuery.length > 0
+  const hasActiveFilters = !showCompleted || searchQuery.length > 0
 
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-col">
@@ -175,14 +109,6 @@ export const ChallengesList = () => {
             placeholder={t({ id: 'common.searchChallenges', defaultMessage: 'Search challenges…' })}
             className="w-full sm:max-w-xs"
           />
-          {user && (
-            <FilterToggle
-              label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
-              icon={Pin}
-              checked={onlyPinned}
-              onCheckedChange={setOnlyPinned}
-            />
-          )}
           <FilterToggle
             label={t({
               id: 'browsedProjectPage.challengesList.showCompletedFilter',
@@ -195,7 +121,6 @@ export const ChallengesList = () => {
           <ClearManageFiltersButton
             hasActiveFilters={hasActiveFilters}
             onClear={() => {
-              setOnlyPinned(false)
               setShowCompleted(true)
               setSearchQuery('')
             }}

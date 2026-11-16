@@ -200,7 +200,11 @@ export const userProfile = {
     return useMutation({
       mutationFn: ({ userId, challengeId }: { userId: number; challengeId: number }) =>
         apiRequest.delete(`api/v2/user/${userId}/unsave/${challengeId}`).text(),
-      onSuccess: (_data, { userId }) => {
+      onSuccess: (_data, { userId, challengeId }) => {
+        queryClient.setQueryData<{ isFavorited: boolean }>(
+          ['challenge', challengeId, 'isFavorited'],
+          { isFavorited: false }
+        )
         queryClient.invalidateQueries({ queryKey: ['user', userId, 'savedChallenges'] })
       },
     })
