@@ -1,6 +1,6 @@
 # Transifex Integration
 
-MR4's source of truth for UI copy is `src/i18n/messages/en-US.json`. Translated locales live next to it as `<locale>.json` and are lazy-loaded from `IntlContext`.
+MapRoulette's source of truth for UI copy is `src/i18n/messages/en-US.json`. Translated locales live next to it as `<locale>.json` and are lazy-loaded from `IntlContext`.
 
 ## One-time setup
 

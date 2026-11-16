@@ -24,4 +24,4 @@ Tests must not depend on external services, like the openstreetmap.org API, Nomi
 
 `npm test` runs the unit tests. These are run by Vitest, and are fast and don't have any dependencies on external services.
 
-`npm run test:e2e` runs the E2E suite in Playwright. The Playwright config starts the backend stack (PostGIS + the pinned `maproulette-backend` image) via `docker-compose.test.yaml` and the frontend dev server before the tests run, so it should work from a fresh clone with no further setup, apart from `npm install`. You will need either Docker or Podman installed to run them.
+`npm run test:e2e` runs the E2E suite in Playwright. The Playwright config starts the backend stack (PostGIS + the `maproulette-backend` image, `main` by default) via `docker-compose.test.yaml` and the frontend dev server before the tests run, so it should work from a fresh clone with no further setup, apart from `npm install`. You will need either Docker or Podman installed to run them.
