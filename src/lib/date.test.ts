@@ -3,6 +3,7 @@ import {
   daysSince,
   formatDate,
   formatDateTime,
+  formatDurationMs,
   formatDurationSeconds,
   formatLongDate,
   formatTimeAgo,
@@ -137,5 +138,12 @@ describe('formatDurationSeconds', () => {
 
   it('clamps negative input to zero', () => {
     expect(formatDurationSeconds(-5, LOCALE)).toBe('0 sec')
+  })
+})
+
+describe('formatDurationMs', () => {
+  it('converts milliseconds to seconds before formatting', () => {
+    expect(formatDurationMs(5 * 60 * 1000, LOCALE)).toBe('5 min')
+    expect(formatDurationMs(750_000, LOCALE)).toBe('12 min 30 sec')
   })
 })

@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Separator } from '@/components/ui/Separator'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
-import { formatDurationSeconds } from '@/lib/date'
+import { formatDurationMs } from '@/lib/date'
 import { useChallengeModals } from './ChallengeModalsContext'
 
 /** Percentages under 1% still deserve to read as "some", not "0%". */
@@ -133,7 +133,7 @@ export const ActionsModal = () => {
                         id: 'browsedChallengePage.challengeModals.actions.avgTimeSpent',
                         defaultMessage: 'Average Time Spent',
                       })}
-                      value={formatDurationSeconds(avgTimeSpent / 60, locale)}
+                      value={formatDurationMs(avgTimeSpent, locale)}
                     />
                   )}
                   {validated !== undefined && validated > 0 && (

@@ -71,3 +71,8 @@ export function formatDurationSeconds(totalSeconds: number, locale: string): str
   const minutes = Math.floor((seconds % 3600) / 60)
   return minutes === 0 ? unit(hours, 'hour') : `${unit(hours, 'hour')} ${unit(minutes, 'minute')}`
 }
+
+/** Same as `formatDurationSeconds`, for spans the backend reports in milliseconds. */
+export function formatDurationMs(totalMs: number, locale: string): string {
+  return formatDurationSeconds(totalMs / 1000, locale)
+}
