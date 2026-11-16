@@ -1,8 +1,37 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
-The format is based on
-[Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [v4.0.0] - 2026-11-15
+
+MapRoulette v4 is a complete rewrite of the frontend. It uses TypeScript, React,
+Vite, TanStack Router and Query, Tailwind and MapLibre GL.
+
+The new user interface is easier to use in many ways. It has more consistent look
+and feel, better performance, better keyboard and screen reader accessibility,
+light and dark modes, and lots of other small improvements.
+
+### Removed
+
+We've also removed some features that we felt did not belong in MapRoulette:
+
+* The task review workflow
+* The global leaderboard, as well as challenge and project leaderboards
+* Public user profile pages
+* Task completion tags
+* Task style rules
+* Challenge snapshots
+* Virtual challenges and virtual projects
+
+### Breaking changes for deployers and developers
+
+* Requires maproulette-backend v4.13.0 or newer
+* Local development against a production backend now uses OSM OAuth rather than API keys
+* Requires Node 24
+* Builds are written to `dist/` instead of `build/`
+* `.env` is no longer checked in. Pulling v4 into an existing checkout deletes it; run `npm install` to create a new one from `.env.example`
 
 ## [v3.18.8] - 2026-11-01
 
