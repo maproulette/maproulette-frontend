@@ -188,9 +188,7 @@ test('a mapper is told when JOSM is not running', async ({ mapper, editorTask })
   await openEditorMenu(page)
   await menuItem(page, 'Edit in JOSM').first().click()
   await expect(
-    page.getByText(
-      'OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?'
-    )
+    page.getByText("JOSM didn't respond. Is it running with Remote Control enabled?")
   ).toBeVisible({ timeout: 15_000 })
 })
 

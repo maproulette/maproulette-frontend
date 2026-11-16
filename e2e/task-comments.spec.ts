@@ -16,7 +16,7 @@ test('a user can comment on a task and see it in the task activity feed', async 
   await expect(commentsTab).toBeVisible({ timeout: 15_000 })
   await commentsTab.click()
 
-  await expect(page.getByText('No activity yet. Be the first to comment!')).toBeVisible({
+  await expect(page.getByText('No activity', { exact: true })).toBeVisible({
     timeout: 15_000,
   })
 
@@ -30,7 +30,7 @@ test('a user can comment on a task and see it in the task activity feed', async 
   // count reflects the refetched comment list rather than a local guess.
   await expect(page.getByText(commentText)).toBeVisible({ timeout: 15_000 })
   await expect(page.getByRole('tab', { name: /Comments \(1\)/ })).toBeVisible({ timeout: 15_000 })
-  await expect(page.getByText('No activity yet. Be the first to comment!')).not.toBeVisible()
+  await expect(page.getByText('No activity', { exact: true })).not.toBeVisible()
 
   // The comment box is cleared for the next comment, and the comment survives
   // a reload (i.e. it was persisted, not just rendered optimistically).

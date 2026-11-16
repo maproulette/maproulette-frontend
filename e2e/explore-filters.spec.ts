@@ -26,64 +26,18 @@ async function listedOrder(page: Page, names: string[]): Promise<string[]> {
   return rows.flatMap((row) => names.filter((name) => row.includes(name)))
 }
 
-test('the Categorize filter saves keywords on the account and lists only challenges with every selected one', async ({
-  mapper,
-  request,
-  project,
-}) => {
-  const shared = keyword('e2eshared')
-  const extra = keyword('e2eextra')
-  const [both, one] = await Promise.all([
-    createWithTask(request, project.id, [shared, extra]),
-    createWithTask(request, project.id, [shared]),
-  ])
-  listInExplore([both.id, one.id])
-
-  const { page } = mapper
-  await page.goto('/?viewMode=list')
-  await page.getByRole('button', { name: 'Categorize' }).click()
-  const menu = page.getByRole('dialog', { name: 'Categorize' })
-  await expect(menu.getByText('You have not set any categories.')).toBeVisible({ timeout: 15_000 })
-
-  const add = menu.getByLabel('Add:')
-  await add.fill(shared)
-  await add.press('Enter')
-  await expect(menu.getByRole('button', { name: shared, exact: true })).toBeVisible()
-  await add.fill(extra)
-  await add.press('Enter')
-  await expect(menu.getByRole('button', { name: extra, exact: true })).toBeVisible()
-
-  await expect
-    .poll(async () => {
-      const user = await mapper.request.get(`${BACKEND_URL}/api/v2/user/${mapper.user.id}`)
-      return JSON.stringify(((await user.json()) as { properties?: unknown }).properties ?? {})
-    })
-    .toContain(extra)
-
-  await menu.getByRole('button', { name: shared, exact: true }).click()
-  await expect(page.getByRole('button', { name: 'Categorize' })).toHaveText(/1 Filter/)
-  await expect(page.getByText(both.name)).toBeVisible({ timeout: 15_000 })
-  await expect(page.getByText(one.name)).toBeVisible()
-
-  await menu.getByRole('button', { name: extra, exact: true }).click()
-  await expect(page.getByRole('button', { name: 'Categorize' })).toHaveText(/2 Filters/)
-  await expect(page.getByText(both.name)).toBeVisible({ timeout: 15_000 })
-  await expect(page.getByText(one.name)).not.toBeVisible()
-
-  await menu.getByRole('button', { name: `Remove ${extra}` }).click()
-  await expect(menu.getByRole('button', { name: extra, exact: true })).not.toBeVisible()
-  await expect(page.getByText(one.name)).toBeVisible({ timeout: 15_000 })
-})
-
 test('the default sort lists saved challenges first, then featured ones, then the rest', async ({
   mapper,
   request,
   project,
 }) => {
+  // Narrowed with the Transit filter rather than a unique tag (the explore page
+  // has no tag filter), so keep 'railway' out of other specs' challenges.
   const tag = keyword('e2esort')
-  const featured = await createWithTask(request, project.id, [tag], { name: `${tag}-b` })
-  const saved = await createWithTask(request, project.id, [tag], { name: `${tag}-c` })
-  const plain = await createWithTask(request, project.id, [tag], { name: `${tag}-a` })
+  const tags = ['railway', tag]
+  const featured = await createWithTask(request, project.id, tags, { name: `${tag}-b` })
+  const saved = await createWithTask(request, project.id, tags, { name: `${tag}-c` })
+  const plain = await createWithTask(request, project.id, tags, { name: `${tag}-a` })
   listInExplore([featured.id, saved.id, plain.id], [featured.id])
   const save = await mapper.request.post(
     `${BACKEND_URL}/api/v2/user/${mapper.user.id}/save/${saved.id}`
@@ -91,8 +45,8 @@ test('the default sort lists saved challenges first, then featured ones, then th
   expect(save.ok()).toBe(true)
 
   const { page } = mapper
-  await page.goto(`/?viewMode=list&categories=${tag}`)
-  await expect(page.getByRole('combobox').filter({ hasText: 'Default' })).toBeVisible({
+  await page.goto('/?viewMode=list&workOn=Transit')
+  await expect(page.getByRole('combobox').filter({ hasText: 'Recommended' })).toBeVisible({
     timeout: 15_000,
   })
   const names = [plain.name, featured.name, saved.name]
@@ -100,7 +54,7 @@ test('the default sort lists saved challenges first, then featured ones, then th
     .poll(() => listedOrder(page, names), { timeout: 15_000 })
     .toEqual([saved.name, featured.name, plain.name])
 
-  await page.getByRole('combobox').filter({ hasText: 'Default' }).click()
+  await page.getByRole('combobox').filter({ hasText: 'Recommended' }).click()
   await page.getByRole('option', { name: 'Name', exact: true }).click()
   await expect
     .poll(() => listedOrder(page, names), { timeout: 15_000 })

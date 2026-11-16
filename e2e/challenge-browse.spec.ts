@@ -47,13 +47,13 @@ test('a user can comment on a challenge and see it in the comments modal', async
   await expect(dialog.getByRole('heading', { name: 'Challenge Comments' })).toBeVisible({
     timeout: 15_000,
   })
-  await expect(dialog.getByText('No comments yet. Be the first to comment!')).toBeVisible()
+  await expect(dialog.getByText('No comments', { exact: true })).toBeVisible()
 
   await dialog.getByPlaceholder('Add a comment...').fill(commentText)
   await dialog.getByRole('button', { name: 'Send' }).click()
 
   await expect(dialog.getByText(commentText)).toBeVisible({ timeout: 15_000 })
-  await expect(dialog.getByText('No comments yet. Be the first to comment!')).not.toBeVisible()
+  await expect(dialog.getByText('No comments', { exact: true })).not.toBeVisible()
 
   // Reopening the modal on a freshly loaded page reads the comment back from
   // the server rather than from the mutation's own cache update.

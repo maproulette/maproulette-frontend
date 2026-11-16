@@ -271,7 +271,6 @@ picks them up from `MR_SUPER_ACCOUNTS`, which it reads only at boot.
 - Picking a location moves the map to it
 
 **Filters and sort** — [`explore-filters.spec.ts`](e2e/explore-filters.spec.ts)
-- The Categorize filter saves keywords on the account and lists only challenges with every selected one
 - The default sort lists saved challenges first, then featured ones, then the rest
 
 ---

@@ -144,7 +144,7 @@ test('ignoring mentions is saved and stops mention notifications arriving', asyn
   expect(await notifications.json()).toEqual([])
 
   await page.goto('/notifications')
-  await expect(page.getByText("You're all up to date")).toBeVisible({ timeout: 20_000 })
+  await expect(page.getByText('No unread notifications')).toBeVisible({ timeout: 20_000 })
   await expect(page.getByRole('tab', { name: 'Unread (0)' })).toBeVisible()
   await expect(page.getByRole('tab', { name: 'All (0)' })).toBeVisible()
 })
