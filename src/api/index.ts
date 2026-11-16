@@ -30,4 +30,4 @@ export const api = {
 // file imports every feature module to build `api` above), which can leave
 // an aggregator like challenge/index.ts's spread-merge silently missing a
 // submodule's exports depending on module load order.
-export { apiKey, apiRequest, convertParamsToSearchParams } from './client'
+export { apiRequest, convertParamsToSearchParams } from './client'

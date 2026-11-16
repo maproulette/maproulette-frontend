@@ -63,7 +63,6 @@ const TESTED_TSX_FILES = [
   'components/shared/SectionHeader.tsx',
   'components/Pages/ManagementPages/ManageChallengeDetail/ChallengeRecentActivity.tsx',
   'components/Pages/ManagementPages/ManageChallengeDetail/ChallengeTasksExplorer/ChallengeTasksExplorerContext.tsx',
-  'components/Pages/SettingsPage/UserSettingsForm/FieldApiKey.tsx',
   'components/AppLayout/UserLocaleSync.tsx',
 ]
 

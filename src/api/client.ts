@@ -1,6 +1,5 @@
 import ky from 'ky'
 
-export const apiKey = window.env.VITE_SERVER_API_KEY
 export const apiBaseUrl = window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 
 let unauthorizedHandler: (() => void) | undefined
@@ -25,9 +24,6 @@ export const apiRequest = ky.extend({
         // the multipart boundary). Overwriting either breaks the body.
         if (!request.headers.has('content-type')) {
           request.headers.set('Content-Type', 'application/json')
-        }
-        if (apiKey) {
-          request.headers.set('apiKey', apiKey)
         }
       },
     ],

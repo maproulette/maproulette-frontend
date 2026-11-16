@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { stubFetch } from '@/test/stubFetch'
-import { apiKey, apiRequest, convertParamsToSearchParams } from './index'
+import { apiRequest, convertParamsToSearchParams } from './index'
 
 describe('convertParamsToSearchParams', () => {
   it('passes through string values unchanged', () => {
@@ -83,17 +83,11 @@ describe('convertParamsToSearchParams', () => {
   })
 })
 
-describe('apiKey', () => {
-  it('is read from window.env.VITE_SERVER_API_KEY', () => {
-    expect(apiKey).toBe(window.env.VITE_SERVER_API_KEY)
-  })
-})
-
 // window.env's fields are declared read-only (they're meant to be set once at
 // app boot from env.json), but this test needs to simulate a deployment with
-// no configured API key, so it writes through a narrow mutable view instead
-// of widening with `as any`.
-type MutableEnv = { VITE_SERVER_API_KEY?: string; VITE_API_BASE_URL?: string }
+// no configured API base URL, so it writes through a narrow mutable view
+// instead of widening with `as any`.
+type MutableEnv = { VITE_API_BASE_URL?: string }
 
 describe('apiRequest beforeRequest hook', () => {
   afterEach(() => {
@@ -110,26 +104,6 @@ describe('apiRequest beforeRequest hook', () => {
     expect(request.headers.get('content-type')).toBe('application/json')
   })
 
-  it('sets the apiKey header when an API key is configured', async () => {
-    const mutableEnv = window.env as MutableEnv
-    const originalKey = mutableEnv.VITE_SERVER_API_KEY
-    mutableEnv.VITE_SERVER_API_KEY = 'configured-key'
-    vi.resetModules()
-
-    try {
-      const { apiRequest: freshApiRequest } = await import('./index')
-      const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
-
-      await freshApiRequest.get('some/path').json()
-
-      const [request] = fetchMock.mock.calls[0]
-      expect(request.headers.get('apikey')).toBe('configured-key')
-    } finally {
-      mutableEnv.VITE_SERVER_API_KEY = originalKey
-      vi.resetModules()
-    }
-  })
-
   it('does not overwrite a content-type header already set on the request', async () => {
     const fetchMock = stubFetch(new Response(null, { status: 200 }))
 
@@ -137,26 +111,6 @@ describe('apiRequest beforeRequest hook', () => {
 
     const [request] = fetchMock.mock.calls[0]
     expect(request.headers.get('content-type')).toBe('text/plain')
-  })
-
-  it('omits the apiKey header when no API key is configured', async () => {
-    const mutableEnv = window.env as MutableEnv
-    const originalKey = mutableEnv.VITE_SERVER_API_KEY
-    mutableEnv.VITE_SERVER_API_KEY = undefined
-    vi.resetModules()
-
-    try {
-      const { apiRequest: freshApiRequest } = await import('./index')
-      const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
-
-      await freshApiRequest.get('some/path').json()
-
-      const [request] = fetchMock.mock.calls[0]
-      expect(request.headers.has('apikey')).toBe(false)
-    } finally {
-      mutableEnv.VITE_SERVER_API_KEY = originalKey
-      vi.resetModules()
-    }
   })
 
   it('falls back to the default local server URL when no API base URL is configured', async () => {

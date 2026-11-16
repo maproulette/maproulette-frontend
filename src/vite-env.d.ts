@@ -11,7 +11,6 @@ interface AppEnv {
   readonly VITE_APP_NAME: string
   readonly VITE_APP_DESCRIPTION: string
   readonly VITE_API_BASE_URL: string | undefined
-  readonly VITE_SERVER_API_KEY: string | undefined
   readonly VITE_APP_URL: string | undefined
   readonly VITE_OSM_SERVER: string | undefined
   readonly VITE_OSM_API_SERVER: string | undefined
