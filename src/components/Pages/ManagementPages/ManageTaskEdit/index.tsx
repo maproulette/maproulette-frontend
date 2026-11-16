@@ -56,6 +56,20 @@ export const ManageTaskEdit = () => {
     navigate({ to: '/tasks/$taskId', params: { taskId } })
   }
 
+  if (isError) {
+    return (
+      <ManageFormLayout>
+        <FormCard
+          title={t({ id: 'manageTaskEdit.index.loadErrorTitle', defaultMessage: 'Task not found' })}
+          description={t({
+            id: 'manageTaskEdit.index.loadErrorDescription',
+            defaultMessage: 'This task could not be loaded. It may have been deleted.',
+          })}
+        />
+      </ManageFormLayout>
+    )
+  }
+
   if (isLoading || !task || (task && challengeId && challengeLoading)) {
     return (
       <ManageFormLayout>
@@ -70,23 +84,16 @@ export const ManageTaskEdit = () => {
     )
   }
 
-  if (showAccessDenied || isError) {
+  if (showAccessDenied) {
     return (
       <ManageFormLayout>
         <FormCard
           title={t({ id: 'common.accessDenied', defaultMessage: 'Access denied' })}
           description={t({
             id: 'manageTaskEdit.index.accessDeniedDescription',
-            defaultMessage: 'Only challenge owners and admins can edit tasks.',
+            defaultMessage: "Only this challenge's managers can edit its tasks.",
           })}
-        >
-          <p className="text-zinc-600 dark:text-zinc-400">
-            {t({
-              id: 'manageTaskEdit.index.noPermission',
-              defaultMessage: 'You do not have permission to edit this task.',
-            })}
-          </p>
-        </FormCard>
+        />
       </ManageFormLayout>
     )
   }

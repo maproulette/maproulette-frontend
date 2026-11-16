@@ -16,8 +16,7 @@ type OsmElement = OsmElementsToken['elements'][number]
 
 export const josmNoResponseMessage = defineMessage({
   id: 'taskEditPage.taskActions.editorButton.josmNoResponse',
-  defaultMessage:
-    'OSM remote control did not respond. Do you have JOSM running with Remote Control enabled?',
+  defaultMessage: "JOSM didn't respond. Is it running with Remote Control enabled?",
 })
 
 interface JosmShortCodes {

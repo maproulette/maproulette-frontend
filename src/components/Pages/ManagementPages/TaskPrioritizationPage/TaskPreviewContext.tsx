@@ -82,7 +82,6 @@ export const TaskPreviewProvider = ({
     }
 
     const warnings = analyzeWarnings({
-      defaultPriority: debouncedDraft.defaultPriority,
       tierCounts: counts,
       tierHasAnyConfig,
       totalTasks: markers.length,

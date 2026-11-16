@@ -36,7 +36,7 @@ export const Header = () => {
           </>
         ) : authLoading ? (
           <Loader
-            message={t({ id: 'appLayout.header.signingIn', defaultMessage: 'signing in...' })}
+            message={t({ id: 'appLayout.header.signingIn', defaultMessage: 'Signing in...' })}
           />
         ) : (
           <Button size="lg" onClick={login} className="rounded-full">

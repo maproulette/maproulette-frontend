@@ -119,7 +119,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
                   <FormDescription>
                     {t({
                       id: 'manageProjectNew.projectForm.nameDescription',
-                      defaultMessage: 'A unique identifier for the project (lowercase, no spaces)',
+                      defaultMessage: 'A unique identifier for the project',
                     })}
                   </FormDescription>
                   <FormMessage />
@@ -234,7 +234,7 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
                       <FormDescription>
                         {t({
                           id: 'manageProjectNew.projectForm.featuredDescription',
-                          defaultMessage: 'Feature this project on the homepage',
+                          defaultMessage: 'Mark this project as featured',
                         })}
                       </FormDescription>
                     </div>

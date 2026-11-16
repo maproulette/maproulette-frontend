@@ -38,7 +38,7 @@ test('a mapper sees the points, tasks and achievements they earn on their dashbo
     })
   }).toPass({ timeout: 30_000 })
   await expect(
-    memberPage.getByRole('button', { name: 'Challenge Champion', exact: true })
+    memberPage.getByRole('button', { name: 'Finished Together', exact: true })
   ).toBeVisible()
   await expect(memberPage.getByRole('button', { name: '100 Points (locked)' })).toBeVisible()
   await expect(memberPage.getByRole('button', { name: '500 Points (locked)' })).toBeVisible()

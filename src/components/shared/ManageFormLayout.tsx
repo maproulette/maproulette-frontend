@@ -24,7 +24,7 @@ export const FormCard = ({
   title: string
   description: string
   isLoading?: boolean
-  children: ReactNode
+  children?: ReactNode
 }) => (
   <div className="mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col rounded-lg bg-zinc-50 p-4 dark:bg-slate-900">
     <div className="mb-4 shrink-0 space-y-1">

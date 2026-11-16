@@ -30,7 +30,8 @@ import { useExplorerContext } from './ChallengeTasksExplorerContext'
 
 /**
  * Downloads this challenge's tasks, in CSV or GeoJSON, with the task table's
- * current filters applied and timestamps rendered in a chosen timezone.
+ * status, priority and property filters applied and timestamps rendered in a
+ * chosen timezone.
  */
 export const ExportTasksButton = () => {
   const { t } = useIntl()
@@ -86,7 +87,7 @@ export const ExportTasksButton = () => {
               {t({
                 id: 'manageChallengeDetail.export.description',
                 defaultMessage:
-                  'The filters currently applied to the task table are applied to the export as well.',
+                  "The export applies the table's status, priority and property filters, but covers the whole challenge rather than the current map view.",
               })}{' '}
               <DocsLink page="exportingChallengeData" icon={null}>
                 {t({

@@ -12,7 +12,7 @@ export interface PrioritizationWarnings {
 
 type TierWarning = { kind: 'dead-rule' | 'all-match'; message: MessageDescriptor }
 
-type GlobalWarning = { kind: 'swallowed-default' | 'no-rules'; message: MessageDescriptor }
+type GlobalWarning = { kind: 'no-rules'; message: MessageDescriptor }
 
 const WARNING_MESSAGES = defineMessages({
   'dead-rule': {
@@ -27,14 +27,9 @@ const WARNING_MESSAGES = defineMessages({
     id: 'taskPrioritizationPage.warnings.noRules',
     defaultMessage: 'No rules configured — every task will use the default priority.',
   },
-  'swallowed-default': {
-    id: 'taskPrioritizationPage.warnings.swallowedDefault',
-    defaultMessage: 'Default is High with no High rules — medium/low rules may never apply.',
-  },
 })
 
 export interface AnalyzeInput {
-  defaultPriority: TaskPriorityValue
   tierCounts: Record<TaskPriorityValue, number>
   tierHasAnyConfig: Record<TaskPriorityValue, boolean>
   totalTasks: number
@@ -64,9 +59,6 @@ export const analyzeWarnings = (input: AnalyzeInput): PrioritizationWarnings => 
   const anyRules = ([0, 1, 2] as TaskPriorityValue[]).some((p) => input.tierHasAnyConfig[p])
   if (!anyRules) {
     global.push({ kind: 'no-rules', message: WARNING_MESSAGES['no-rules'] })
-  }
-  if (anyRules && !input.tierHasAnyConfig[0] && input.defaultPriority === 0) {
-    global.push({ kind: 'swallowed-default', message: WARNING_MESSAGES['swallowed-default'] })
   }
 
   return { tier, global }

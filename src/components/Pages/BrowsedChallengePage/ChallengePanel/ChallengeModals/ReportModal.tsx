@@ -289,7 +289,7 @@ export const ReportModal = () => {
             <div className="mt-2 text-red-600 text-sm dark:text-red-400">
               {t({
                 id: 'browsedChallengePage.challengeModals.reportModal.checkboxError',
-                defaultMessage: 'Please ensure that checkbox is checked before continue',
+                defaultMessage: "Confirm that you've tried contacting the challenge creator.",
               })}
             </div>
           )}

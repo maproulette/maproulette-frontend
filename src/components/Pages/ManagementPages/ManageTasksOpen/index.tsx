@@ -58,8 +58,7 @@ export const ManageTasksOpen = () => {
             <CardDescription>
               {t({
                 id: 'manageTasksOpen.cardDescription',
-                defaultMessage:
-                  'Enter a task ID below. You can find task IDs when working on a task (URL or header) or from your saved/locked tasks on the dashboard.',
+                defaultMessage: 'You can find a task ID in the URL or header while working on it.',
               })}
             </CardDescription>
           </CardHeader>

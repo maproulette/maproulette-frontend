@@ -67,15 +67,19 @@ export const LockFailedDialog = ({
             })}
           </DialogTitle>
           <DialogDescription>
-            {failure?.message ??
-              t({
-                id: 'taskEditPage.lockFailedDialog.genericLockFailure',
-                defaultMessage: 'Task lock could not be acquired',
+            <span className="block">
+              {failure?.message ??
+                t({
+                  id: 'taskEditPage.lockFailedDialog.genericLockFailure',
+                  defaultMessage: 'Task lock could not be acquired',
+                })}
+            </span>
+            <span className="mt-1 block">
+              {t({
+                id: 'taskEditPage.lockFailedDialog.previewAvailable',
+                defaultMessage: 'You can still preview it read-only.',
               })}
-            {t({
-              id: 'taskEditPage.lockFailedDialog.previewAvailable',
-              defaultMessage: '. A read-only preview is available.',
-            })}
+            </span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:flex-wrap">

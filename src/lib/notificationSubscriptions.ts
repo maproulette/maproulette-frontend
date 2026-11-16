@@ -78,7 +78,7 @@ export const SUBSCRIPTION_FIELDS = [
     }),
     description: defineMessage({
       id: 'notificationSubscriptions.field.challengeCompleted.description',
-      defaultMessage: 'When a challenge you manage finishes',
+      defaultMessage: 'When a challenge you manage or worked on is completed',
     }),
   },
   {
