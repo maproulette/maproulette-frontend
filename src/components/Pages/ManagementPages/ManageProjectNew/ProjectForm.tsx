@@ -91,10 +91,6 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
               id: 'manageProjectNew.projectForm.detailsSectionTitle',
               defaultMessage: 'Project details',
             })}
-            description={t({
-              id: 'manageProjectNew.projectForm.detailsSectionDescription',
-              defaultMessage: 'Basic identifying information for this project.',
-            })}
           >
             <FormField
               control={form.control}
@@ -192,10 +188,6 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
             title={t({
               id: 'manageProjectNew.projectForm.visibilitySectionTitle',
               defaultMessage: 'Visibility',
-            })}
-            description={t({
-              id: 'manageProjectNew.projectForm.visibilitySectionDescription',
-              defaultMessage: 'Control how this project appears across MapRoulette.',
             })}
           >
             <FormField

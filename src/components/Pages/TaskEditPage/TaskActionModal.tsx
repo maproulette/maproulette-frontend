@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/Button'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -372,6 +371,8 @@ export const TaskActionModal = ({
           onAnimationEnd={(event) => {
             if (event.target === event.currentTarget && open) setAnimationDone(true)
           }}
+          // No description, so keep Radix from looking for one.
+          aria-describedby={undefined}
         >
           <DialogHeader>
             <DialogTitle>
@@ -380,12 +381,6 @@ export const TaskActionModal = ({
                 defaultMessage: 'Complete Task Action',
               })}
             </DialogTitle>
-            <DialogDescription>
-              {t({
-                id: 'taskEditPage.taskActionModal.description',
-                defaultMessage: 'Update the task status and optionally add a comment',
-              })}
-            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-6 py-4">

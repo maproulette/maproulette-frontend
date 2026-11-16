@@ -158,10 +158,6 @@ export const TeamForm = ({ team }: Props) => {
         <div className="min-h-0 flex-1 overflow-y-auto pr-1">
           <FormSection
             title={t({ id: 'teams.form.detailsSectionTitle', defaultMessage: 'Team details' })}
-            description={t({
-              id: 'teams.form.detailsSectionDescription',
-              defaultMessage: 'Basic identifying information for this team.',
-            })}
           >
             <FormField
               control={form.control}

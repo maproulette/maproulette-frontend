@@ -199,7 +199,7 @@ export const RebuildTasksDialog = ({
                 {t({
                   id: 'managementPages.rebuildTasksDialog.warning',
                   defaultMessage:
-                    'Warning: Rebuilding can lead to task duplication if your feature ids are not setup properly or if matching up old data with new data is unsuccessful. This operation cannot be undone!',
+                    "Rebuilding can duplicate tasks if your feature IDs don't line up, or if old and new data can't be matched.",
                 })}
               </p>
               <DocsLink

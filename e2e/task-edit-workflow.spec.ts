@@ -125,7 +125,7 @@ test('another mapper is told who holds the lock and can only preview the task', 
   await expect(dialog).toContainText(`locked by user ${mapper.user.name}`, { timeout: 20_000 })
 
   await dialog.getByRole('button', { name: 'Request Unlock' }).click()
-  await expect(dialog.getByText('Request Sent!')).toBeVisible({ timeout: 15_000 })
+  await expect(dialog.getByText('Unlock requested')).toBeVisible({ timeout: 15_000 })
 
   await dialog.getByRole('button', { name: 'Preview Task' }).click()
   await expect(dialog).toBeHidden()

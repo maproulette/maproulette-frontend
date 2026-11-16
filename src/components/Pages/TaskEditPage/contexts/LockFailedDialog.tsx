@@ -100,7 +100,7 @@ export const LockFailedDialog = ({
               <span className="self-center text-sm">
                 {t({
                   id: 'taskEditPage.lockFailedDialog.requestSent',
-                  defaultMessage: 'Request Sent!',
+                  defaultMessage: 'Unlock requested',
                 })}
               </span>
             ) : (

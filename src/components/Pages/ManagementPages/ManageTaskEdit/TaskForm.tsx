@@ -90,12 +90,6 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  {t({
-                    id: 'manageTaskEdit.form.nameDescription',
-                    defaultMessage: 'Name of the task',
-                  })}
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -184,12 +178,6 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>
-                  {t({
-                    id: 'manageTaskEdit.form.statusDescription',
-                    defaultMessage: 'Current status of the task',
-                  })}
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

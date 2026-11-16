@@ -23,10 +23,6 @@ export const ManageChallengeNew = ({
               ? t({ id: 'common.cloneChallenge', defaultMessage: 'Clone Challenge' })
               : t({ id: 'common.createNewChallenge', defaultMessage: 'Create New Challenge' })
           }
-          description={t({
-            id: 'manageChallengeNew.pageDescription',
-            defaultMessage: 'Fill in the information below to create your new challenge',
-          })}
         >
           <ChallengeForm />
         </FormCard>

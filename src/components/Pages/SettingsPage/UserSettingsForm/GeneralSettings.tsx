@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { BASEMAP_CURRENT, CHALLENGE_BASEMAP } from '@/components/Map/basemap'
 import { DocsLink } from '@/components/shared/DocsLink'
-import { FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
+import { FieldGroup, FieldLegend, FieldSet } from '@/components/ui/Field'
 import {
   FormControl,
   FormDescription,
@@ -35,12 +35,6 @@ export const GeneralSettings = ({
   return (
     <FieldSet className="min-h-0 flex-auto">
       <FieldLegend>{t({ id: 'settings.general.title', defaultMessage: 'General' })}</FieldLegend>
-      <FieldDescription>
-        {t({
-          id: 'settings.general.description',
-          defaultMessage: 'Update your general account settings and preferences.',
-        })}
-      </FieldDescription>
       <FieldGroup className="min-h-0 flex-auto overflow-y-auto px-1">
         <FormField
           control={form.control}

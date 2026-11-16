@@ -75,7 +75,6 @@ export const ManageTaskEdit = () => {
       <ManageFormLayout>
         <FormCard
           title={t({ id: 'manageTaskEdit.index.taskDetailsTitle', defaultMessage: 'Task Details' })}
-          description=""
           isLoading
         >
           <div className="h-40" />
@@ -102,10 +101,6 @@ export const ManageTaskEdit = () => {
     <ManageFormLayout>
       <FormCard
         title={t({ id: 'manageTaskEdit.index.taskDetailsTitle', defaultMessage: 'Task Details' })}
-        description={t({
-          id: 'manageTaskEdit.index.taskDetailsDescription',
-          defaultMessage: 'Modify the fields below and save to update the task',
-        })}
       >
         <TaskForm task={task} onSubmit={handleSubmit} onCancel={handleCancel} />
       </FormCard>

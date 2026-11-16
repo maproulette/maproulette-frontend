@@ -22,13 +22,7 @@ export const EditTeamPage = ({ teamId }: Props) => {
 
   return (
     <ManageFormLayout>
-      <FormCard
-        title={t({ id: 'teams.editTeam.title', defaultMessage: 'Edit team' })}
-        description={t({
-          id: 'teams.editTeam.description',
-          defaultMessage: 'Update the information for this team',
-        })}
-      >
+      <FormCard title={t({ id: 'teams.editTeam.title', defaultMessage: 'Edit team' })}>
         <TeamForm team={team} />
       </FormCard>
     </ManageFormLayout>

@@ -84,7 +84,7 @@ export const NavigationActions = ({
       <p className="mb-2 text-center font-medium text-sm text-zinc-700 dark:text-slate-300">
         {t({
           id: 'taskEditPage.taskActions.navigation.wantToMap',
-          defaultMessage: 'Want to map this challenge?',
+          defaultMessage: 'Map this challenge',
         })}
       </p>
       <div className="grid grid-cols-2 gap-1.5">

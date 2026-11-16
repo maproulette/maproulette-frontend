@@ -26,7 +26,7 @@ test('marking a task Not an Issue stores it and leaves the task read-only', asyn
   expect(stored.actionId ?? null).toBeNull()
 
   await mapper.page.goto(`/tasks/${task.id}`)
-  await expect(mapper.page.getByText('Want to map this challenge?')).toBeVisible({
+  await expect(mapper.page.getByText('Map this challenge')).toBeVisible({
     timeout: 20_000,
   })
   await expect(mapper.page.getByRole('button', { name: 'Map this task' })).toHaveCount(0)
@@ -51,7 +51,7 @@ test("a task marked Can't Complete stays open and can then be fixed", async ({
   })
 
   await mapper.page.goto(`/tasks/${task.id}`)
-  await expect(mapper.page.getByText('Want to map this challenge?')).toBeVisible({
+  await expect(mapper.page.getByText('Map this challenge')).toBeVisible({
     timeout: 20_000,
   })
   await expect(mapper.page.getByRole('button', { name: 'Fixed', exact: true })).toHaveCount(0)

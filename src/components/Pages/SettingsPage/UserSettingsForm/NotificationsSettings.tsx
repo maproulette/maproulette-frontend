@@ -35,7 +35,7 @@ export const NotificationsSettings = ({
         {t({
           id: 'settings.notifications.description',
           defaultMessage:
-            'Decide which MapRoulette notifications you would like to receive, along with whether you would like to be sent an email informing you of the notification (either immediately or as a daily digest).',
+            "Choose which notifications you receive, and whether they're also emailed to you (immediately or as a daily digest).",
         })}{' '}
         <DocsLink page="notificationsAndEmail" icon={null}>
           {t({

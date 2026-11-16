@@ -1,12 +1,6 @@
 import { Keyboard } from 'lucide-react'
 import { DocsLink } from '@/components/shared/DocsLink'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/Dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/Dialog'
 import { KbdBinding } from '@/components/ui/Kbd'
 import {
   type KeyboardShortcut,
@@ -45,18 +39,12 @@ export const KeyboardShortcutsModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
-      <DialogContent size="md">
+      <DialogContent size="md" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Keyboard className="h-5 w-5" />
             {t({ id: 'keyboardShortcuts.title', defaultMessage: 'Keyboard Shortcuts' })}
           </DialogTitle>
-          <DialogDescription>
-            {t({
-              id: 'keyboardShortcuts.description',
-              defaultMessage: 'Use these shortcuts to speed up your workflow',
-            })}
-          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 pt-2">

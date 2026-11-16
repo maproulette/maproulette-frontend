@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { CheckSquare, FolderKanban, ListChecks } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
@@ -24,12 +24,6 @@ export const ManageHome = () => {
                 {t({ id: 'common.projects', defaultMessage: 'Projects' })}
               </Link>
             </CardTitle>
-            <CardDescription>
-              {t({
-                id: 'manageHome.projectsDescription',
-                defaultMessage: 'Create and manage your MapRoulette projects',
-              })}
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
@@ -48,12 +42,6 @@ export const ManageHome = () => {
                 {t({ id: 'common.challenges', defaultMessage: 'Challenges' })}
               </Link>
             </CardTitle>
-            <CardDescription>
-              {t({
-                id: 'manageHome.challengesDescription',
-                defaultMessage: 'Browse and manage all your challenges',
-              })}
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild variant="outline" className="w-full">
@@ -73,12 +61,6 @@ export const ManageHome = () => {
                   {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
                 </Link>
               </CardTitle>
-              <CardDescription>
-                {t({
-                  id: 'manageHome.tasksDescription',
-                  defaultMessage: 'Open a task by ID to view or edit it',
-                })}
-              </CardDescription>
             </CardHeader>
             <CardContent>
               <Button asChild variant="outline" className="w-full">
