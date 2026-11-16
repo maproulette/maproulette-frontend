@@ -2,8 +2,8 @@ name: Build Docker image and push to GHCR
 
 on:
   push:
-    # Run whenever the v4 branch changes (images are deployed to beta.maproulette.org)
-    branches: [ "v4" ]
+    # Run whenever main changes
+    branches: [ "main" ]
     # ...or whenever a new semver release tag is published
     tags: [ 'v*.*.*' ]
 
