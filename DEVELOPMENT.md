@@ -1,56 +1,78 @@
 # MapRoulette Development
 
-This is the repository that holds the front-end code. The back-end and API
+This is the repository that holds the frontend code. The backend and API
 are developed in parallel in a separate repo: [maproulette-backend](https://github.com/maproulette/maproulette-backend).
-Both need to be deployed together for a working setup. We advise you use Docker
-for production deployments. [This repo](https://github.com/maproulette/maproulette2-docker)
-will help you set that up easily.
 
-### Basic Dependencies:
+The frontend needs a backend server to talk to. By default it uses the
+production server at maproulette.org, so you can work on the frontend without
+setting up a backend of your own.
 
-* [Node 20 or 22](https://nodejs.org/)
-* [jq](https://jqlang.org/)
-* [curl](https://curl.haxx.se/)
+### Basic Dependencies
+
+* [Node 24](https://nodejs.org/) (see `.nvmrc`)
 
 ### Initial Setup
 
-1. Create a `.env.local` file and then look through `.env` at the
-   available configuration options and override any desired settings in your
-   new `.env.local`
+1. `npm install` to fetch and install NPM modules. This also creates a `.env`
+   file from `.env.example` if you don't have one yet.
 
-2. `npm install` to fetch and install NPM modules
+2. `npm run start` to fire up the frontend development server at
+   http://127.0.0.1:3001
 
-3. `npm run start` to fire up the front-end development server
+Configuration lives in `.env`, which is gitignored. This file gets transformed
+into `env.json` at build time, and sent to the browser so it can be read at
+runtime from `window.env`. This means everything in the file is public, so don't
+put secrets in there.
 
-A back-end server from the [maproulette-backend](https://github.com/maproulette/maproulette-backend)
-project is also required. You can either install and configure it locally or, if
-you have access to a pre-existing server, connect directly to it by using your API
-key for that server.
+#### Developing against the production backend
 
-#### Run the UI from Docker
+In the default setup, the local frontend dev server talks to the production
+backend (`VITE_API_BASE_URL` is set to `https://maproulette.org` in `.env.example`).
 
-To avoid platform specific issues, the UI can be built and run within a docker container.
-Note that this will create the development build and not the 'production' build.
+In dev mode, the dev server proxies the backend (this is needed because the
+backend's session cookies are restricted to its own Origin). This means clicking
+"Sign in" will just work and you'll see a normal OSM OAuth flow, then be sent
+back to your local dev server once you click "Authorize".
 
-1. First make the required `.env.local` file. A few overrides are required, like these:
+Keep in mind that you're working with real data and your real OSM account.
+Anything you create, edit or complete is done for real on maproulette.org,
+and edits through the built-in editor will be saved to OpenStreetMap.
 
-   ```
-   REACT_APP_URL='http://127.0.0.1:3000'
-   REACT_APP_MAP_ROULETTE_SERVER_URL='http://127.0.0.1:9000'
-   ```
+#### Developing with a local backend server
 
-2. Build the image using `docker build --pull -t maproulette-ui .`
-3. Start a container from the image using `docker run -d -p 127.0.0.1:3000:80 maproulette-ui`
+Alternatively, you can run a local copy of the backend server.
 
-Note that if you make changes to the code, you'll need to rebuild the image and restart
-the container to see them reflected in the application.
+1. Set up and run the backend. There are two ways to do this:
 
-#### Developing with a local back-end server
+   * **From source:** clone [maproulette-backend](https://github.com/maproulette/maproulette-backend)
+     and follow its README to set up a PostGIS database and `conf/dev.conf`,
+     then start it with `sbt run`.
+   * **From a Docker image:** pull the published image (or build your own from
+     a backend checkout with `docker build -t maproulette-backend:local .`)
+     and run it against a PostGIS database. The backend is configured with
+     `MR_*` environment variables; see `docker-compose.test.yaml` in this repo
+     for a working example. For instance, with PostGIS running on the host:
 
-1. Install the back-end server using the instructions from the maproulette-backend
-   project, if you haven't already
+     ```sh
+     docker run --rm -p 9000:80 \
+       -e MR_DATABASE_URL=jdbc:postgresql://host.docker.internal:5432/maproulette-db \
+       -e MR_DATABASE_USERNAME=maproulette-db-user \
+       -e MR_DATABASE_PASSWORD=maproulette-db-pass \
+       -e APPLICATION_SECRET=some-secret-at-least-32-characters-long \
+       -e MAPROULETTE_SECRET_KEY=another-secret-at-least-32-characters \
+       -e MR_OSM_SERVER=https://master.apis.dev.openstreetmap.org \
+       -e MR_OAUTH_CONSUMER_KEY=your-client-id \
+       -e MR_OAUTH_CONSUMER_SECRET=your-client-secret \
+       ghcr.io/maproulette/maproulette-backend:main
+     ```
 
-2. Create an account on [master.apis.dev.openstreetmap.org](https://master.apis.dev.openstreetmap.org),
+     On Linux, add `--add-host=host.docker.internal:host-gateway` so the
+     container can reach the database on the host.
+
+   With either method, the backend listens on port 9000.
+
+2. To be able to log in, the backend needs to be registered as an OpenStreetMap OAuth
+   application. Create an account on [master.apis.dev.openstreetmap.org](https://master.apis.dev.openstreetmap.org),
    or sign in if you already have one. This server runs a full copy of the OpenStreetMap
    website stack and is intended for development purposes. It has its own database, so
    your regular openstreetmap.org credentials won't work here.
@@ -59,159 +81,82 @@ the container to see them reflected in the application.
    Then go to the "OAuth 2 applications" tab and choose "Register new application" to
    create a new application for development. Choose a name for the application that will
    help you remember what it's for, e.g. "My MapRoulette local dev environment". Set the
-   `Redirect URL` to `http://127.0.0.1:9000` (assuming your back-end server is running
-   on the default port 9000).
+   `Redirect URL` to `http://127.0.0.1:3001` (the frontend dev server). The backend
+   sends OSM back to whichever frontend origin the login started from, so if you also
+   open the dev server as `http://localhost:3001`, register that too.
 
    The required app permissions are:
    - "Read user preferences" (`read_prefs`)
-   - "Modify user preferences" (`write_prefs`)
    - "Modify the map" (`write_api`)
 
    Copy your new app's Client ID and Client Secret. They will only be shown once!
 
-4. In your back-end server project, setup a .conf file that overrides properties
-   as needed from `conf/application.conf` (unless you'd prefer to set explicit
-   system properties on the command line when starting up the server). Refer
-   to the `conf/application.conf` file, `conf/dev.conf` file and maproulette-backend
-   docs for explanations of the various server configuration settings. At the
-   very least, you'll want to make sure your JDBC url is correct and set
-   `osm.consumerKey` to the Client ID and `osm.consumerSecret` to the Client Secret
-   from the previous step.
+4. Give the Client ID and Client Secret to the backend: set `osm.consumerKey`
+   and `osm.consumerSecret` in `conf/dev.conf` if you're running from source, or
+   `MR_OAUTH_CONSUMER_KEY` and `MR_OAUTH_CONSUMER_SECRET` if you're running the
+   Docker image. Restart the backend.
 
-5. Fire up your back-end server, specifying the path to your .conf file with
-   `-Dconfig.resource` or explicitly specifying the various system properties
-   on the command line. See the maproulette-backend docs for details on starting up
-   the server
-
-6. Edit your `.env.local` file in your front-end project and set:
+5. Edit your `.env` file in your frontend project and set:
    ```
-   REACT_APP_MAP_ROULETTE_SERVER_URL='http://127.0.0.1:9000'
+   VITE_API_BASE_URL="http://127.0.0.1:9000"
    ```
-   (assuming your back-end server is on port 9000 and front-end is on port 3000).
-   The OAuth sign-in flow is served from this back-end URL; the redirect target is
-   derived from the request's Origin header, so no separate OAuth URL is needed.
-   Restart or startup your front-end server, and then navigate to the front-end
-   at http://127.0.0.1:3000
+   Restart your frontend dev server (the proxy target is read at startup), and
+   then navigate to the frontend at http://127.0.0.1:3001
 
-#### Developing with a pre-existing back-end server
+## Building for production
 
-These instructions are for connecting to an existing back-end server, rather than
-a local one you have installed. **Please do not use the production API for development purposes.**
+To create a production bundle, you can run these commands:
 
-1. Open MapRoulette on that server normally in your browser, visit your user
-   profile, and take note of your API key at the bottom of the page.
-   Alternatively, you can use the server's `super.key` if it has been setup
-   with one and you have access to it
+1. `npm install` to install and update NPM packages.
 
-2. Edit your `.env.local` file and override the following config
-   variables:
-  ```
-  REACT_APP_MAP_ROULETTE_SERVER_URL='https://yourserver.com'
-  REACT_APP_MAP_ROULETTE_SERVER_WEBSOCKET_URL='wss://yourserver.com/ws'
-  REACT_APP_SERVER_API_KEY='your-api-key-for-that-server'
-  ```
-
-3. Restart your front-end dev server if it's already running (ctrl-c then `npm
-   run start` again)
-
-4. Point your browser directly at the front-end server, http://127.0.0.1:3000
-   by default. Once the page finishes loading, you should show up as signed-in
-   if all is working correctly
-
-### Updating to the Latest Code
-
-> Note that the [maproulette-backend](https://github.com/maproulette/maproulette-backend)
-> back-end server must be updated separately.
-
-1. Stop your front-end server (ctrl-c) if it's running.
-2. Pull the latest code
-3. `npm install` to install new or updated NPM packages
-4. `npm run start` to restart the front-end server.
-
-## Staging/Production build:
-
-1. Setup a `.env.production` file with the desired production setting overrides.
- * set `REACT_APP_URL='https://example.com'`
-   (substituting your domain, of course)
- * set `REACT_APP_MAP_ROULETTE_SERVER_URL='https://example.com'`
- * if you wish to use [Matomo/PIWIK](https://github.com/matomo-org/matomo) for
-   analytics, set `REACT_APP_MATOMO_URL` and `REACT_APP_MATOMO_SITE_ID` to your
-   tracking url and site id, respectively (see `.env` file for example).
- * set feature flags to `enabled` or `disabled` as desired.
- * override any other settings from the `.env` file as needed or desired.
-
-2. `npm install` to install and update NPM packages.
-
-3. `npm run build` to create a minified front-end build in the `build/`
+2. `npm run build` to create a minified frontend build in the `dist/`
    directory.
 
-## Adding Additional and Custom Map Layers
+The build includes an `env.json` holding the defaults from `.env.example`.
+Settings are read from it at runtime, so the artifact can be reconfigured
+at deployment time without rebuilding.
 
-Default map layers are determined by pulling in data from the [OSM Editor Layer
-Index](https://github.com/osmlab/editor-layer-index) at build time and
-extracting layers marked as default layers with global coverage. These are
-stored in the `src/defaultLayers.json` file. Modifying this file is not
-recommended as it will be overwritten automatically by the build process.
+## Using the production container image
 
-Layer ids of additional desired layers from the Layer Index can be specified in
-the `REACT_APP_ADDITIONAL_INDEX_LAYERS` .env config variable (see the .env file
-for documentation), and these will also be included in the `defaultLayers.json`
-file. The default .env file includes the OpenCycleMap layer this way.
+We also publish a Docker image to `ghcr.io/maproulette/maproulette-frontend`
+for every commit to `main` and every release tag. It serves the build with
+nginx, and any `VITE_*` environment variables set on the container override
+the defaults in `env.json` when it starts (see `docker/90-write-env-to-json.sh`).
+For example:
 
-Custom and 3rd-party layers that aren't included in the Layer Index can be
-manually added to `src/customLayers.json` following the same structure as the
-default layers. The build process does not modify this file other than creating
-a stub if it doesn't exist.
+```sh
+docker run -p 8080:80 \
+  -e VITE_API_BASE_URL=https://maproulette.example.com \
+  ghcr.io/maproulette/maproulette-frontend:main
+```
 
-### Setting API Keys for Map Layers
-
-API keys for any layers -- default or custom -- can be set through the
-`REACT_APP_MAP_LAYER_API_KEYS` .env file configuration variable (see the .env
-file for documentation). For custom layers, an API key can also simply be
-included in the specified layer url in `src/customLayers.json` if that is
-simpler.
-
-### Enabling the Mapillary Map Layer
-
-MapRoulette has built-in support for a Mapillary map layer during task
-completion, allowing the mapper to make of use of available street-level
-imagery. To enable the layer, simply set the `REACT_APP_MAPILLARY_CLIENT_TOKEN` .env
-key to your Mapillary client id and restart your dev server (or rebuild your
-dev front-end for staging/production). If you don't have a client token, you can
-set one up through the [Mapillary Developer Tools](https://www.mapillary.com/developer)
-
+To build the image yourself, run `docker build -t maproulette-frontend .`
 
 # Development Notes
 
-The project was bootstrapped with
-[Create React App](https://github.com/facebookincubator/create-react-app).
+The project is built with [Vite](https://vite.dev/), React and TypeScript.
 
-Release versions follow [Semantic Versioning](https://semver.org/).
+## Tests
 
-## Unit Tests
-
-Unit tests are built with [Vitest](https://vitest.dev/),
-[React Testing Library](https://testing-library.com/docs/react-testing-library/intro),
-and [Enzyme](https://github.com/airbnb/enzyme).
-
-Use `npm run test` to run them in watch mode.
+Unit tests are built with [Vitest](https://vitest.dev/), and end-to-end tests
+with [Playwright](https://playwright.dev/). See [TESTING.md](TESTING.md) for
+how to run them and advice about how to add new tests.
 
 ## Linting and formatting
 
-Run `npm run format` to format your code. Run `npm run lint` to check for lint
-errors (`npm run lint -- --fix` will fix any lint errors that can be corrected
+We use [Biome](https://biomejs.dev/) for both linting and formatting. Run
+`npm run format` to format your code, and `npm run lint` to check for lint
+errors (`npm run lint:fix` will fix any lint errors that can be corrected
 automatically).
 
 Pull requests are run through a CI (Continuous Integration) process that checks
-to make sure that code is formatted correctly and that there are no linting
-errors. You can run `npm run check` to apply these same checks locally. This
-will check to make sure your code is formatted correctly and passes the linter,
-but won't make any changes in the event that it isn't (it will just report an
-error).
+formatting, linting, types, dead code and the translation catalog. You can run
+`npm run check` to apply these same checks locally. This will report any
+problems but won't make any changes (`npm run check:fix` fixes what it can).
 
-If you want, you can enable a pre-commit hook to check for linting and formatting
-issues automatically when you run `git commit`. To enable the check, run this
-command in the root of the repository:
+If you want, you can enable a pre-commit hook to run these checks automatically
+when you run `git commit`. To enable the check, run this command in the root of
+the repository:
 
 ```
 git config core.hooksPath hooks
@@ -219,43 +164,34 @@ git config core.hooksPath hooks
 
 This configures Git to use the hook scripts in the `hooks/` directory. The
 `pre-commit` script there is run when Git prepares a commit. That script runs
-`npm run check` to ensure there are no linting or formatting errors.
+`npm run check`.
 
 If you want to skip the check for a particular commit (for work-in-progress commits
 for example), run `git commit --no-verify`.
 
 ## CSS Styling and Naming
 
-We are using SASS and [Tailwind CSS](https://tailwindcss.com) with PostCSS.
-
-Tailwind configuration is controlled with the `src/tailwind.config.js` file.
-New CSS classes can be found in `src/styles/`
+We are using [Tailwind CSS](https://tailwindcss.com) v4, configured in CSS
+(see `src/main.css`). UI primitives such as buttons, dialogs and menus live in
+`src/components/ui/`; use those rather than styling raw elements. Design tokens
+are generated into `src/styles/tokens.gen.*` from `design-tokens/` by
+`npm run tokens:build`.
 
 ## Internationalization, Localization, and Translation
 
 Internationalization and localization is performed via
-[react-intl](https://github.com/yahoo/react-intl/wiki). Most components feature
-co-located Messages.js files that contain messages intended for display,
-along with default (U.S. English) versions of each message.
+[react-intl](https://formatjs.github.io/docs/react-intl). Every user-visible
+string is given an id and a default (U.S. English) message where it's used.
 
-A fresh en-US.json file can be built from the latest messages using `npm run
-build-intl`, which is also run automatically as part of the `npm run build` script
-used for creating production builds.
+`npm run i18n:extract` rebuilds `src/i18n/messages/en-US.json` from the
+messages in the source. Run it after adding or removing strings; `npm run
+check` fails if the committed file is out of date.
 
 Translations for other locales are managed through
-[transifex](https://www.transifex.com/maproulette/maproulette3), who kindly provides
+[Transifex](https://app.transifex.com/osmlab/maproulette3/), who kindly provides
 us with free service through their Open Source program. Translation files are
-pulled into the code repository from time to time and stored in the `lang/`
-directory.
+pulled into the code repository automatically and stored in the
+`src/i18n/messages/` directory.
 
-Adding support for additional locales is quick and straight-forward: edit
-`src/services/User/Locale/Locale.js` and follow the directions at the top of
-the file.
-
-By default, the en-US locale will be used for users who have not set a locale in
-their MapRoulette user settings. This default locale can be changed with the
-`REACT_APP_DEFAULT_LOCALE` .env setting. Users who have set a locale will
-always have their locale honored regardless of the default locale.
-
-> Note that MapRoulette makes use of its own locale setting and does not use
-> the setting from the user's OpenStreetMap account at this time.
+See [src/i18n/TRANSIFEX.md](src/i18n/TRANSIFEX.md) for details, including how
+to add support for a new locale.
