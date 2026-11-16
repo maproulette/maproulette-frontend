@@ -33,6 +33,7 @@ import { Route as AppManageTasksRouteImport } from './routes/_app/manage/tasks'
 import { Route as AppManageProjectsRouteImport } from './routes/_app/manage/projects'
 import { Route as AppManageChallengesRouteImport } from './routes/_app/manage/challenges'
 import { Route as AppAdminSplatRouteImport } from './routes/_app/admin/$'
+import { Route as AppTeamsTeamIdRouteRouteImport } from './routes/_app/teams/[$teamId]/route'
 import { Route as AppUserProfileIndexRouteImport } from './routes/_app/user/profile/index'
 import { Route as AppUserMetricsIndexRouteImport } from './routes/_app/user/metrics/index'
 import { Route as AppUserAchievementsIndexRouteImport } from './routes/_app/user/achievements/index'
@@ -204,6 +205,11 @@ const AppAdminSplatRoute = AppAdminSplatRouteImport.update({
   path: '/admin/$',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppTeamsTeamIdRouteRoute = AppTeamsTeamIdRouteRouteImport.update({
+  id: '/teams/$teamId',
+  path: '/teams/$teamId',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppUserProfileIndexRoute = AppUserProfileIndexRouteImport.update({
   id: '/user/profile/',
   path: '/user/profile/',
@@ -221,9 +227,9 @@ const AppUserAchievementsIndexRoute =
     getParentRoute: () => AppRouteRoute,
   } as any)
 const AppTeamsTeamIdIndexRoute = AppTeamsTeamIdIndexRouteImport.update({
-  id: '/teams/$teamId/',
-  path: '/teams/$teamId/',
-  getParentRoute: () => AppRouteRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppTeamsTeamIdRouteRoute,
 } as any)
 const AppTasksTaskIdIndexRoute = AppTasksTaskIdIndexRouteImport.update({
   id: '/$taskId/',
@@ -274,9 +280,9 @@ const AppAdminProjectsIndexRoute = AppAdminProjectsIndexRouteImport.update({
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppTeamsTeamIdEditRoute = AppTeamsTeamIdEditRouteImport.update({
-  id: '/teams/$teamId/edit',
-  path: '/teams/$teamId/edit',
-  getParentRoute: () => AppRouteRoute,
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AppTeamsTeamIdRouteRoute,
 } as any)
 const AppTaskTaskIdReviewRoute = AppTaskTaskIdReviewRouteImport.update({
   id: '/task/$taskId/review',
@@ -502,6 +508,7 @@ export interface FileRoutesByFullPath {
   '/sent': typeof AppSentRoute
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
+  '/teams/$teamId': typeof AppTeamsTeamIdRouteRouteWithChildren
   '/admin/$': typeof AppAdminSplatRoute
   '/manage/challenges': typeof AppManageChallengesRoute
   '/manage/projects': typeof AppManageProjectsRoute
@@ -535,7 +542,7 @@ export interface FileRoutesByFullPath {
   '/t/$taskId': typeof AppTTaskIdIndexRoute
   '/task/$taskId': typeof AppTaskTaskIdIndexRoute
   '/tasks/$taskId': typeof AppTasksTaskIdIndexRoute
-  '/teams/$teamId': typeof AppTeamsTeamIdIndexRoute
+  '/teams/$teamId/': typeof AppTeamsTeamIdIndexRoute
   '/user/achievements': typeof AppUserAchievementsIndexRoute
   '/user/metrics': typeof AppUserMetricsIndexRoute
   '/user/profile': typeof AppUserProfileIndexRoute
@@ -649,6 +656,7 @@ export interface FileRoutesById {
   '/_app/sent': typeof AppSentRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/teams/$teamId': typeof AppTeamsTeamIdRouteRouteWithChildren
   '/_app/admin/$': typeof AppAdminSplatRoute
   '/_app/manage/challenges': typeof AppManageChallengesRoute
   '/_app/manage/projects': typeof AppManageProjectsRoute
@@ -726,6 +734,7 @@ export interface FileRouteTypes {
     | '/sent'
     | '/settings'
     | '/'
+    | '/teams/$teamId'
     | '/admin/$'
     | '/manage/challenges'
     | '/manage/projects'
@@ -759,7 +768,7 @@ export interface FileRouteTypes {
     | '/t/$taskId'
     | '/task/$taskId'
     | '/tasks/$taskId'
-    | '/teams/$teamId'
+    | '/teams/$teamId/'
     | '/user/achievements'
     | '/user/metrics'
     | '/user/profile'
@@ -872,6 +881,7 @@ export interface FileRouteTypes {
     | '/_app/sent'
     | '/_app/settings'
     | '/_app/'
+    | '/_app/teams/$teamId'
     | '/_app/admin/$'
     | '/_app/manage/challenges'
     | '/_app/manage/projects'
@@ -1112,6 +1122,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminSplatRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/teams/$teamId': {
+      id: '/_app/teams/$teamId'
+      path: '/teams/$teamId'
+      fullPath: '/teams/$teamId'
+      preLoaderRoute: typeof AppTeamsTeamIdRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/user/profile/': {
       id: '/_app/user/profile/'
       path: '/user/profile'
@@ -1135,10 +1152,10 @@ declare module '@tanstack/react-router' {
     }
     '/_app/teams/$teamId/': {
       id: '/_app/teams/$teamId/'
-      path: '/teams/$teamId'
-      fullPath: '/teams/$teamId'
+      path: '/'
+      fullPath: '/teams/$teamId/'
       preLoaderRoute: typeof AppTeamsTeamIdIndexRouteImport
-      parentRoute: typeof AppRouteRoute
+      parentRoute: typeof AppTeamsTeamIdRouteRoute
     }
     '/_app/tasks/$taskId/': {
       id: '/_app/tasks/$taskId/'
@@ -1205,10 +1222,10 @@ declare module '@tanstack/react-router' {
     }
     '/_app/teams/$teamId/edit': {
       id: '/_app/teams/$teamId/edit'
-      path: '/teams/$teamId/edit'
+      path: '/edit'
       fullPath: '/teams/$teamId/edit'
       preLoaderRoute: typeof AppTeamsTeamIdEditRouteImport
-      parentRoute: typeof AppRouteRoute
+      parentRoute: typeof AppTeamsTeamIdRouteRoute
     }
     '/_app/task/$taskId/review': {
       id: '/_app/task/$taskId/review'
@@ -1580,6 +1597,19 @@ const AppTasksRouteRouteWithChildren = AppTasksRouteRoute._addFileChildren(
   AppTasksRouteRouteChildren,
 )
 
+interface AppTeamsTeamIdRouteRouteChildren {
+  AppTeamsTeamIdEditRoute: typeof AppTeamsTeamIdEditRoute
+  AppTeamsTeamIdIndexRoute: typeof AppTeamsTeamIdIndexRoute
+}
+
+const AppTeamsTeamIdRouteRouteChildren: AppTeamsTeamIdRouteRouteChildren = {
+  AppTeamsTeamIdEditRoute: AppTeamsTeamIdEditRoute,
+  AppTeamsTeamIdIndexRoute: AppTeamsTeamIdIndexRoute,
+}
+
+const AppTeamsTeamIdRouteRouteWithChildren =
+  AppTeamsTeamIdRouteRoute._addFileChildren(AppTeamsTeamIdRouteRouteChildren)
+
 interface AppRouteRouteChildren {
   AppManageRouteRoute: typeof AppManageRouteRouteWithChildren
   AppSuperAdminRouteRoute: typeof AppSuperAdminRouteRouteWithChildren
@@ -1590,6 +1620,7 @@ interface AppRouteRouteChildren {
   AppSentRoute: typeof AppSentRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppTeamsTeamIdRouteRoute: typeof AppTeamsTeamIdRouteRouteWithChildren
   AppAdminSplatRoute: typeof AppAdminSplatRoute
   AppTeamsNewRoute: typeof AppTeamsNewRoute
   AppAdminIndexRoute: typeof AppAdminIndexRoute
@@ -1600,7 +1631,6 @@ interface AppRouteRouteChildren {
   AppChallengeChallengeIdLeaderboardRoute: typeof AppChallengeChallengeIdLeaderboardRoute
   AppProjectProjectIdLeaderboardRoute: typeof AppProjectProjectIdLeaderboardRoute
   AppTaskTaskIdReviewRoute: typeof AppTaskTaskIdReviewRoute
-  AppTeamsTeamIdEditRoute: typeof AppTeamsTeamIdEditRoute
   AppAdminProjectsIndexRoute: typeof AppAdminProjectsIndexRoute
   AppBrowseChallengesIndexRoute: typeof AppBrowseChallengesIndexRoute
   AppCChallengeIdIndexRoute: typeof AppCChallengeIdIndexRoute
@@ -1609,7 +1639,6 @@ interface AppRouteRouteChildren {
   AppProjectProjectIdIndexRoute: typeof AppProjectProjectIdIndexRoute
   AppTTaskIdIndexRoute: typeof AppTTaskIdIndexRoute
   AppTaskTaskIdIndexRoute: typeof AppTaskTaskIdIndexRoute
-  AppTeamsTeamIdIndexRoute: typeof AppTeamsTeamIdIndexRoute
   AppUserAchievementsIndexRoute: typeof AppUserAchievementsIndexRoute
   AppUserMetricsIndexRoute: typeof AppUserMetricsIndexRoute
   AppUserProfileIndexRoute: typeof AppUserProfileIndexRoute
@@ -1644,6 +1673,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppSentRoute: AppSentRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
+  AppTeamsTeamIdRouteRoute: AppTeamsTeamIdRouteRouteWithChildren,
   AppAdminSplatRoute: AppAdminSplatRoute,
   AppTeamsNewRoute: AppTeamsNewRoute,
   AppAdminIndexRoute: AppAdminIndexRoute,
@@ -1655,7 +1685,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
     AppChallengeChallengeIdLeaderboardRoute,
   AppProjectProjectIdLeaderboardRoute: AppProjectProjectIdLeaderboardRoute,
   AppTaskTaskIdReviewRoute: AppTaskTaskIdReviewRoute,
-  AppTeamsTeamIdEditRoute: AppTeamsTeamIdEditRoute,
   AppAdminProjectsIndexRoute: AppAdminProjectsIndexRoute,
   AppBrowseChallengesIndexRoute: AppBrowseChallengesIndexRoute,
   AppCChallengeIdIndexRoute: AppCChallengeIdIndexRoute,
@@ -1664,7 +1693,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppProjectProjectIdIndexRoute: AppProjectProjectIdIndexRoute,
   AppTTaskIdIndexRoute: AppTTaskIdIndexRoute,
   AppTaskTaskIdIndexRoute: AppTaskTaskIdIndexRoute,
-  AppTeamsTeamIdIndexRoute: AppTeamsTeamIdIndexRoute,
   AppUserAchievementsIndexRoute: AppUserAchievementsIndexRoute,
   AppUserMetricsIndexRoute: AppUserMetricsIndexRoute,
   AppUserProfileIndexRoute: AppUserProfileIndexRoute,

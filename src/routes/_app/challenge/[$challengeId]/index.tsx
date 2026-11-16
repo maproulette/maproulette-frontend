@@ -5,6 +5,7 @@ import { api } from '@/api'
 import { BrowsedChallengePage } from '@/components/Pages/BrowsedChallengePage'
 import { TASK_FILTERS } from '@/components/Pages/BrowsedChallengePage/taskFilter'
 import { logger } from '@/lib/logger'
+import { requireIds } from '@/lib/routeParams'
 
 const challengeSearchSchema = z.object({
   comments: z.coerce.number().optional(), // 1 → auto-open comments modal
@@ -14,7 +15,9 @@ const challengeSearchSchema = z.object({
 export const Route = createFileRoute('/_app/challenge/$challengeId/')({
   validateSearch: challengeSearchSchema,
   staticData: { pageTitle: 'Browse Challenge' },
-  loader: async ({ params: { challengeId }, context: { queryClient }, preload }) => {
+  loader: async ({ params, context: { queryClient }, preload }) => {
+    requireIds(params)
+    const { challengeId } = params
     const id = Number(challengeId)
 
     // Kick off the (often large, slow) task-marker fetch but DON'T await it —

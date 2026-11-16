@@ -1,5 +1,3 @@
-import { isCoreAppPath } from '@/lib/pluginRoutes'
-
 interface AppRouter {
   navigate: (options: Record<string, unknown>) => unknown
 }
@@ -44,16 +42,6 @@ export const navigateInApp = (path: string): void => {
     void routerInstance.navigate({
       to: '/tasks/$taskId',
       params: { taskId: taskMatch[1] },
-      search,
-    })
-    return
-  }
-
-  const splatMatch = url.pathname.match(/^\/([^/]+)\/?$/)
-  if (splatMatch && !isCoreAppPath(url.pathname)) {
-    void routerInstance.navigate({
-      to: '/$',
-      params: { _splat: splatMatch[1] },
       search,
     })
     return

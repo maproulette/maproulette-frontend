@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { api } from '@/api'
 import { Task } from '@/components/Pages/TaskEditPage'
 import { logger } from '@/lib/logger'
+import { requireIds } from '@/lib/routeParams'
 
 const taskSearchSchema = z.object({
   tab: z.enum(['task', 'features', 'data', 'comments']).optional(),
@@ -13,7 +14,9 @@ const taskSearchSchema = z.object({
 export const Route = createFileRoute('/_app/tasks/$taskId/')({
   validateSearch: taskSearchSchema,
   staticData: { pageTitle: 'Task' },
-  loader: async ({ params: { taskId }, context: { queryClient } }) => {
+  loader: async ({ params, context: { queryClient } }) => {
+    requireIds(params)
+    const { taskId } = params
     try {
       const task = await queryClient.ensureQueryData(api.task.getTaskOptions(Number(taskId)))
       const challenge = await queryClient.ensureQueryData(

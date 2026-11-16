@@ -3,10 +3,13 @@ import { HTTPError } from 'ky'
 import { api } from '@/api'
 import { BrowsedProjectPage } from '@/components/Pages/BrowsedProjectPage'
 import { logger } from '@/lib/logger'
+import { requireIds } from '@/lib/routeParams'
 
 export const Route = createFileRoute('/_app/project/$projectId/')({
   staticData: { pageTitle: 'Browse Project' },
-  loader: async ({ params: { projectId }, context: { queryClient } }) => {
+  loader: async ({ params, context: { queryClient } }) => {
+    requireIds(params)
+    const { projectId } = params
     try {
       const project = await queryClient.ensureQueryData(
         api.project.getProjectOptions(Number(projectId))

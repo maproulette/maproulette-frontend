@@ -1,27 +1,20 @@
 import { createFileRoute, useLocation } from '@tanstack/react-router'
-import { AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
+import { NotFound } from '@/components/shared/ErrorPages'
 import { Loader } from '@/components/ui/Loader'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
-import { isCoreAppPath } from '@/lib/pluginRoutes'
 
 /**
- * Catch-all route that handles plugin-defined custom routes
- * This allows plugins to register their own paths like:
- * - /example
- * - /challenge/:challengeId/tasks/:taskId
+ * Anything the route tree doesn't match lands here. Plugins can register their
+ * own pages (like /example or /challenge/:challengeId/tasks/:taskId), so check
+ * those before giving up. This renders NotFound itself rather than throwing
+ * notFound() from a loader, since plugin pages aren't known until the plugins
+ * have loaded.
  */
-const DynamicPluginRoute = () => {
+const CatchAllRoute = () => {
   const { t } = useIntl()
   const location = useLocation()
   const { getPluginPageByPath, loading } = usePluginContext()
-  const isCorePath = isCoreAppPath(location.pathname)
-  const pageMatch = isCorePath ? null : getPluginPageByPath(location.pathname)
-
-  if (isCorePath) {
-    return null
-  }
 
   if (loading) {
     return (
@@ -32,27 +25,10 @@ const DynamicPluginRoute = () => {
     )
   }
 
-  if (!pageMatch) {
-    return (
-      <div className="mx-auto max-w-4xl px-4 py-8">
-        <Alert>
-          <AlertCircle className="size-4" />
-          <AlertTitle>
-            {t({ id: 'common.pageNotFound', defaultMessage: 'Page Not Found' })}
-          </AlertTitle>
-          <AlertDescription>
-            {t({
-              id: 'dynamicPluginRoute.notFoundDescription',
-              defaultMessage: 'The requested plugin page could not be found.',
-            })}
-          </AlertDescription>
-        </Alert>
-      </div>
-    )
-  }
+  const pageMatch = getPluginPageByPath(location.pathname)
+  if (!pageMatch) return <NotFound />
 
   const PageComponent = pageMatch.page.component
-
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <PageComponent params={pageMatch.params} />
@@ -61,5 +37,5 @@ const DynamicPluginRoute = () => {
 }
 
 export const Route = createFileRoute('/_app/$')({
-  component: DynamicPluginRoute,
+  component: CatchAllRoute,
 })

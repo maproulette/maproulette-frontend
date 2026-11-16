@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createRouter, ErrorComponent, RouterProvider } from '@tanstack/react-router'
+import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
@@ -10,7 +10,7 @@ import { IntlProvider } from '@/i18n'
 import { routeTree } from './routeTree.gen'
 
 import './main.css'
-import { NotFound } from '@/components/shared/NotFound'
+import { NotFound, RouteErrorBoundary } from '@/components/shared/ErrorPages'
 import { Loader } from '@/components/ui/Loader'
 import { setAppRouter } from '@/lib/routerRef'
 
@@ -41,10 +41,8 @@ export const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
-  defaultNotFoundComponent: () => {
-    return <NotFound />
-  },
-  defaultErrorComponent: ErrorComponent,
+  defaultNotFoundComponent: NotFound,
+  defaultErrorComponent: RouteErrorBoundary,
   defaultPendingComponent: () => <Loader isFullScreen />,
 })
 

@@ -64,23 +64,7 @@ describe('navigateInApp', () => {
     )
   })
 
-  it('routes an unknown single-segment path to the plugin splat route', () => {
-    routerRef.setAppRouter({ navigate })
-    routerRef.navigateInApp('/my-plugin?tab=stats')
-    expect(navigate).toHaveBeenCalledWith({
-      to: '/$',
-      params: { _splat: 'my-plugin' },
-      search: { tab: 'stats' },
-    })
-  })
-
-  it('does not send a core app path to the plugin splat route', () => {
-    routerRef.setAppRouter({ navigate })
-    routerRef.navigateInApp('/teams')
-    expect(navigate).toHaveBeenCalledWith({ href: '/teams' })
-  })
-
-  it('navigates by href for anything deeper than one segment', () => {
+  it('navigates by href for any other path', () => {
     routerRef.setAppRouter({ navigate })
     routerRef.navigateInApp('/challenge/7/leaderboard?page=2')
     expect(navigate).toHaveBeenCalledWith({ href: '/challenge/7/leaderboard?page=2' })

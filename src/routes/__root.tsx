@@ -3,14 +3,15 @@ import type { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { RouteErrorBoundary } from '@/components/Pages/ErrorBoundary/RouteErrorBoundary'
+import { FullPageNotFound, FullPageRouteError } from '@/components/shared/ErrorPages'
 
 interface RouterContext {
   queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  errorComponent: RouteErrorBoundary,
+  errorComponent: FullPageRouteError,
+  notFoundComponent: FullPageNotFound,
   head: () => ({
     meta: [
       {
