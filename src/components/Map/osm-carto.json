@@ -1,0 +1,14 @@
+{
+  "version": 8,
+  "name": "OSM Carto",
+  "sources": {
+    "osm": {
+      "type": "raster",
+      "tiles": ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      "tileSize": 256,
+      "maxzoom": 19,
+      "attribution": "<a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">© OpenStreetMap contributors</a>"
+    }
+  },
+  "layers": [{ "id": "osm", "type": "raster", "source": "osm" }]
+}

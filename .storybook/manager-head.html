@@ -1,0 +1,30 @@
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<style>
+  /* storybook-dark-mode toggles these classes on the manager's own <html>
+     (classTarget: 'html'). Without this, native UI (scrollbars, etc.) in
+     the manager chrome stays light-styled even when the dark theme is on. */
+  html.dark {
+    color-scheme: dark;
+    scrollbar-color: rgb(82 82 91) transparent;
+  }
+  html.light {
+    color-scheme: light;
+    scrollbar-color: rgb(212 212 216) transparent;
+  }
+
+  /* color-scheme alone isn't reliably honored for scrollbars across
+     browsers, so set the webkit thumb/track colors explicitly too. */
+  html.dark ::-webkit-scrollbar-thumb {
+    background-color: rgb(82 82 91);
+  }
+  html.light ::-webkit-scrollbar-thumb {
+    background-color: rgb(212 212 216);
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+</style>

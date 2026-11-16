@@ -1,0 +1,38 @@
+import { z } from 'zod'
+import type { useIntl } from '@/i18n'
+
+type T = ReturnType<typeof useIntl>['t']
+
+// Building the schema requires translated validation messages, so it's built
+// from a function (called from within the component, where `t` is available)
+// rather than as a static module-level constant.
+export const makeProjectFormSchema = (t: T) =>
+  z.object({
+    name: z
+      .string()
+      .min(
+        1,
+        t({
+          id: 'manageProjectNew.projectForm.validation.nameRequired',
+          defaultMessage: 'Project name is required',
+        })
+      )
+      .max(255),
+    displayName: z
+      .string()
+      .min(
+        1,
+        t({
+          id: 'manageProjectNew.projectForm.validation.displayNameRequired',
+          defaultMessage: 'Display name is required',
+        })
+      )
+      .max(255),
+    description: z.string().optional().or(z.literal('')),
+    enabled: z.boolean(),
+    featured: z.boolean(),
+    /** The team that owns the project, or null when nobody does. */
+    ownerTeamId: z.number().nullable(),
+  })
+
+export type ProjectFormValues = z.infer<ReturnType<typeof makeProjectFormSchema>>

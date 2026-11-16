@@ -1,0 +1,121 @@
+import { LockOpen } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { api } from '@/api'
+import { Button } from '@/components/ui/Button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
+import { useIntl } from '@/i18n'
+import { logger } from '@/lib/logger'
+
+export interface LockFailure {
+  message?: string
+  lockedByAnotherUser: boolean
+}
+
+interface Props {
+  taskId: number
+  failure: LockFailure | null
+  onOpenChange: (open: boolean) => void
+  onRetry: () => void
+  onBrowseChallenge: () => void
+  busy?: boolean
+}
+
+export const LockFailedDialog = ({
+  taskId,
+  failure,
+  onOpenChange,
+  onRetry,
+  onBrowseChallenge,
+  busy,
+}: Props) => {
+  const { t } = useIntl()
+  const requestUnlockMutation = api.task.useRequestUnlock()
+  const [requestedTaskId, setRequestedTaskId] = useState<number | null>(null)
+
+  const handleRequestUnlock = async () => {
+    try {
+      await requestUnlockMutation.mutateAsync(taskId)
+      setRequestedTaskId(taskId)
+    } catch (error) {
+      logger.error('Failed to request unlock', { taskId, error })
+      toast.error(
+        t({
+          id: 'taskEditPage.lockFailedDialog.requestUnlockFailed',
+          defaultMessage: 'Could not request unlock',
+        })
+      )
+    }
+  }
+
+  return (
+    <Dialog open={failure != null} onOpenChange={onOpenChange}>
+      <DialogContent size="lg">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <LockOpen className="size-5 text-amber-500" aria-hidden="true" />
+            {t({
+              id: 'taskEditPage.lockFailedDialog.title',
+              defaultMessage: 'Unable to Lock Task',
+            })}
+          </DialogTitle>
+          <DialogDescription>
+            <span className="block">
+              {failure?.message ??
+                t({
+                  id: 'taskEditPage.lockFailedDialog.genericLockFailure',
+                  defaultMessage: 'Task lock could not be acquired',
+                })}
+            </span>
+            <span className="mt-1 block">
+              {t({
+                id: 'taskEditPage.lockFailedDialog.previewAvailable',
+                defaultMessage: 'You can still preview it read-only.',
+              })}
+            </span>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="sm:flex-wrap">
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
+            {t({ id: 'taskEditPage.lockFailedDialog.preview', defaultMessage: 'Preview Task' })}
+          </Button>
+          <Button variant="outline" onClick={onRetry} disabled={busy}>
+            {t({ id: 'taskEditPage.lockFailedDialog.retryLock', defaultMessage: 'Retry Lock' })}
+          </Button>
+          <Button variant="outline" onClick={onBrowseChallenge} disabled={busy}>
+            {t({
+              id: 'common.browseChallengeButton',
+              defaultMessage: 'Browse Challenge',
+            })}
+          </Button>
+          {failure?.lockedByAnotherUser &&
+            (requestedTaskId === taskId ? (
+              <span className="self-center text-sm">
+                {t({
+                  id: 'taskEditPage.lockFailedDialog.requestSent',
+                  defaultMessage: 'Unlock requested',
+                })}
+              </span>
+            ) : (
+              <Button
+                onClick={handleRequestUnlock}
+                disabled={busy || requestUnlockMutation.isPending}
+              >
+                {t({
+                  id: 'taskEditPage.lockFailedDialog.requestUnlock',
+                  defaultMessage: 'Request Unlock',
+                })}
+              </Button>
+            ))}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}

@@ -1,9 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`mapStateToProps provides an editor prop with the current open editor 1`] = `
-{
-  "configuredEditor": 0,
-  "editor": 1,
-  "rapidEditorState": undefined,
-}
-`;

@@ -1,0 +1,60 @@
+import { useExploreChallengesSearchContext } from '@/components/Pages/ExploreChallengesPage/contexts/ExploreChallengesSearchContext'
+import { Label } from '@/components/ui/Label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/Select'
+import { useIntl } from '@/i18n'
+import type { WorkOnCategory } from './filterTypes'
+
+export const WorkOnFilter = () => {
+  const { t } = useIntl()
+  const { workOn, setWorkOn } = useExploreChallengesSearchContext()
+  return (
+    <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
+      <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
+        {t({ id: 'exploreChallenges.filterBar.workOn.label', defaultMessage: 'Work on' })}
+      </Label>
+      <Select value={workOn} onValueChange={(value) => setWorkOn(value as WorkOnCategory)}>
+        <SelectTrigger className="h-9 w-full md:w-auto">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="Anything">
+            {t({ id: 'exploreChallenges.filterBar.workOn.anything', defaultMessage: 'Anything' })}
+          </SelectItem>
+          <SelectItem value="Roads / Pedestrian / Cycleways">
+            {t({
+              id: 'common.category.navigation',
+              defaultMessage: 'Roads / Pedestrian / Cycleways',
+            })}
+          </SelectItem>
+          <SelectItem value="Water">
+            {t({ id: 'common.category.water', defaultMessage: 'Water' })}
+          </SelectItem>
+          <SelectItem value="Points / Areas of Interest">
+            {t({
+              id: 'common.category.pointsOfInterest',
+              defaultMessage: 'Points / Areas of Interest',
+            })}
+          </SelectItem>
+          <SelectItem value="Buildings">
+            {t({ id: 'common.category.buildings', defaultMessage: 'Buildings' })}
+          </SelectItem>
+          <SelectItem value="Land Use / Administrative Boundaries">
+            {t({
+              id: 'common.category.landUse',
+              defaultMessage: 'Land Use / Administrative Boundaries',
+            })}
+          </SelectItem>
+          <SelectItem value="Transit">
+            {t({ id: 'common.category.transit', defaultMessage: 'Transit' })}
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}

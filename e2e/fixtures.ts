@@ -1,0 +1,648 @@
+import { execFileSync } from 'node:child_process'
+import { createHash, createHmac, randomUUID } from 'node:crypto'
+import {
+  type APIRequest,
+  type APIRequestContext,
+  type APIResponse,
+  type Browser,
+  type BrowserContext,
+  test as base,
+  type Page,
+} from '@playwright/test'
+import type { Challenge } from '@/types/Challenge'
+import type { components } from '@/types/openApiTypes'
+import type { Project } from '@/types/Project'
+import type { Task } from '@/types/Task'
+import type { Team } from '@/types/Team'
+import type { UserWhoamiResponse } from '@/types/User'
+
+// Where the test stack's backend is listening. Overridable so the stack can sit
+// beside a local development backend on 9000 rather than fighting it for the
+// port — set E2E_BACKEND_URL to match .env.test.local's VITE_API_BASE_URL, so
+// the browser and these fixtures talk to the same server.
+export const BACKEND_URL = process.env.E2E_BACKEND_URL ?? 'http://localhost:9000'
+
+// The user every request runs as unless a test picks someone else.
+// docker-compose.test.yaml lists this OSM id in MR_SUPER_ACCOUNTS, which the
+// backend reads only at boot, so e2e/global-setup.ts seeds the user and
+// restarts the backend once to have them promoted to super user.
+export const SUPER_USER_OSM_ID = 800_000_000
+export const SUPER_USER_TOKEN = 'e2e-super-user-token'
+
+// Must match APPLICATION_SECRET in docker-compose.test.yaml.
+const APPLICATION_SECRET = 'test-application-secret-at-least-32-chars'
+
+export interface SessionUser {
+  id: number
+  osmId: number
+  token: string
+}
+
+/**
+ * Logs in as a user the way the backend does after an OSM login.
+ *
+ * The backend no longer accepts API keys (maproulette-backend 7a8cdb17), and a
+ * real login needs OSM itself. What a login leaves behind, though, is just a
+ * Play session cookie: a JWT signed with the application secret, naming the
+ * user and carrying a hash of their stored OSM token (see AuthController's
+ * callback and SessionManager.sessionUser). The test stack's secret is known,
+ * so the harness signs the same cookie itself for any user it has seeded.
+ */
+export function sessionCookie(user: SessionUser): string {
+  const encode = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url')
+  const now = Math.floor(Date.now() / 1000)
+  const unsigned = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({
+    data: {
+      tokenHash: createHash('sha256').update(user.token).digest('hex'),
+      userId: String(user.id),
+      osmId: String(user.osmId),
+      userTick: String(Date.now()),
+    },
+    nbf: now,
+    iat: now,
+  })}`
+  const signature = createHmac('sha256', APPLICATION_SECRET).update(unsigned).digest('base64url')
+  return `${unsigned}.${signature}`
+}
+
+function storageStateFor(user: SessionUser) {
+  return {
+    cookies: [
+      {
+        name: 'PLAY_SESSION',
+        value: sessionCookie(user),
+        domain: new URL(BACKEND_URL).hostname,
+        path: '/',
+        expires: -1,
+        httpOnly: true,
+        secure: false,
+        sameSite: 'Lax' as const,
+      },
+    ],
+    origins: [],
+  }
+}
+
+export function superUser(): SessionUser {
+  const id = Number(process.env.E2E_SUPER_USER_ID)
+  if (!Number.isInteger(id)) {
+    throw new Error('E2E_SUPER_USER_ID is not set; e2e/global-setup.ts should have set it')
+  }
+  return { id, osmId: SUPER_USER_OSM_ID, token: SUPER_USER_TOKEN }
+}
+
+/** A request context that acts as `user`, for tests that need someone other than the super user. */
+export function newSessionRequest(api: APIRequest, user: SessionUser) {
+  return api.newContext({
+    baseURL: BACKEND_URL,
+    storageState: storageStateFor(user),
+    extraHTTPHeaders: { 'Content-Type': 'application/json' },
+  })
+}
+
+export const uniqueName = (prefix: string) =>
+  `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`
+
+export async function expectOk(response: APIResponse, what: string): Promise<APIResponse> {
+  if (!response.ok()) {
+    throw new Error(`${what} failed: ${response.status()} ${await response.text()}`)
+  }
+  return response
+}
+
+const storedProjectId = (project: Project): number => {
+  if (project.id === undefined) {
+    throw new Error(`The backend returned project ${project.name} without an id`)
+  }
+  return project.id
+}
+
+export interface TestProject {
+  id: number
+  name: string
+}
+
+export interface TestChallenge {
+  id: number
+  name: string
+  projectId: number
+}
+
+export interface TestTask {
+  id: number
+  name: string
+  challengeId: number
+  coordinates: [number, number]
+}
+
+export interface TestTeam {
+  id: number
+  name: string
+}
+
+export async function createProject(
+  request: APIRequestContext,
+  { name = uniqueName('e2e-project'), ...fields }: { name?: string; [field: string]: unknown } = {}
+): Promise<TestProject> {
+  const response = await expectOk(
+    await request.post(`${BACKEND_URL}/api/v2/project`, {
+      data: { name, displayName: name, description: 'E2E test project', enabled: true, ...fields },
+    }),
+    'Creating a project'
+  )
+  const body = (await response.json()) as Project
+  return { id: storedProjectId(body), name }
+}
+
+export async function deleteProject(request: APIRequestContext, id: number): Promise<void> {
+  try {
+    const response = await request.delete(`${BACKEND_URL}/api/v2/project/${id}?immediate=true`)
+    if (!response.ok()) {
+      console.warn(`Project ${id} teardown returned ${response.status()}: ${await response.text()}`)
+    }
+  } catch (error) {
+    console.warn(`Project ${id} teardown threw:`, error)
+  }
+}
+
+/**
+ * Drops locks left behind on tasks that no longer exist.
+ *
+ * A lock can land after releaseHeldLocks has run (Start Challenge claims its
+ * task in the background, and a test may finish before it does). Deleting the
+ * project then deletes the task but not its lock, and the backend goes on
+ * counting it against the user, who cannot lock anything else for the next
+ * hour.
+ */
+function clearOrphanedLocks(): void {
+  try {
+    runSql('DELETE FROM locked WHERE item_type = 2 AND item_id NOT IN (SELECT id FROM tasks);')
+  } catch (error) {
+    console.warn('Orphaned lock teardown threw:', error)
+  }
+}
+
+async function releaseHeldLocks(request: APIRequestContext): Promise<void> {
+  try {
+    const whoami = await request.get(`${BACKEND_URL}/api/v2/user/whoami`)
+    if (!whoami.ok()) {
+      console.warn(`Lock teardown could not identify the acting user: ${whoami.status()}`)
+      return
+    }
+    const { id: userId } = (await whoami.json()) as UserWhoamiResponse
+
+    const locked = await request.get(`${BACKEND_URL}/api/v2/user/${userId}/lockedTasks`)
+    if (!locked.ok()) {
+      console.warn(`Lock teardown could not list held locks: ${locked.status()}`)
+      return
+    }
+
+    for (const task of (await locked.json()) as components['schemas']['org.maproulette.framework.model.LockedTaskData'][]) {
+      const released = await request.get(`${BACKEND_URL}/api/v2/task/${task.id}/release`)
+      if (!released.ok()) {
+        console.warn(`Task ${task.id} lock teardown returned ${released.status()}`)
+      }
+    }
+  } catch (error) {
+    console.warn('Lock teardown threw:', error)
+  }
+}
+
+// Note: creating a challenge with `localGeoJSON`, or uploading tasks via the
+// addFileTasks endpoint, does not reliably produce tasks against the pinned
+// backend image (a server-side Scala collections bug silently fails async
+// task import). Creating the challenge shell and its tasks directly via their
+// own JSON-body endpoints (below) sidesteps that entirely and is immediate.
+export async function createChallenge(
+  request: APIRequestContext,
+  projectId: number,
+  {
+    name = uniqueName('e2e-challenge'),
+    ...fields
+  }: { name?: string; [field: string]: unknown } = {}
+): Promise<TestChallenge> {
+  const response = await expectOk(
+    await request.post(`${BACKEND_URL}/api/v2/challenge`, {
+      data: {
+        parent: projectId,
+        name,
+        description: 'E2E test challenge',
+        instruction: 'Fix the identified issue.',
+        difficulty: 2,
+        checkinComment: 'E2E test changeset #maproulette',
+        checkinSource: 'Bing',
+        enabled: true,
+        featured: false,
+        overpassQL: '',
+        overpassTargetType: '',
+        ...fields,
+      },
+    }),
+    'Creating a challenge'
+  )
+  const body = (await response.json()) as Challenge
+  return { id: body.id, name: body.name, projectId }
+}
+
+export async function challengeTasks(
+  request: APIRequestContext,
+  challengeId: number
+): Promise<Task[]> {
+  const response = await expectOk(
+    await request.get(`${BACKEND_URL}/api/v2/challenge/${challengeId}/tasks?limit=-1`),
+    `Listing challenge ${challengeId} tasks`
+  )
+  return ((await response.json()) as Task[]).sort((a, b) => a.id - b.id)
+}
+
+export const TASK_POINT: [number, number] = [-95.454772, 37.6866588]
+
+export interface TaskFields {
+  name?: string
+  coordinates?: [number, number]
+  properties?: Record<string, unknown>
+  [field: string]: unknown
+}
+
+export async function createTask(
+  request: APIRequestContext,
+  challengeId: number,
+  {
+    name = uniqueName('e2e-task'),
+    coordinates = TASK_POINT,
+    properties = {},
+    ...fields
+  }: TaskFields = {}
+): Promise<TestTask> {
+  const response = await expectOk(
+    await request.post(`${BACKEND_URL}/api/v2/task`, {
+      data: {
+        name,
+        parent: challengeId,
+        geometries: {
+          type: 'FeatureCollection',
+          features: [{ type: 'Feature', geometry: { type: 'Point', coordinates }, properties }],
+        },
+        ...fields,
+      },
+    }),
+    'Creating a task'
+  )
+  const body = (await response.json()) as Task
+  return { id: body.id, name, challengeId, coordinates }
+}
+
+// Teams are their own top-level resource (not owned by a project), so unlike
+// challenges and tasks they don't get cleaned up by a cascading project
+// delete and need their own teardown below.
+export async function createTeam(
+  request: APIRequestContext,
+  name = uniqueName('e2e-team')
+): Promise<TestTeam> {
+  const response = await request.post(`${BACKEND_URL}/api/v2/team`, {
+    headers: { 'Content-Type': 'application/json' },
+    // `id` and `groupType` are required by the backend's Group writer even on
+    // a create, and the frontend sends the same two placeholders (see
+    // api.team.useCreateTeam).
+    data: { id: 0, groupType: 0, name, description: 'E2E test team' },
+  })
+  if (!response.ok()) {
+    throw new Error(`Failed to create team: ${response.status()} ${await response.text()}`)
+  }
+  const body = (await response.json()) as Team
+  return { id: body.id, name }
+}
+
+export async function deleteTeam(request: APIRequestContext, id: number): Promise<void> {
+  try {
+    const response = await request.delete(`${BACKEND_URL}/api/v2/team/${id}`)
+    if (!response.ok()) {
+      console.warn(`Team ${id} teardown returned ${response.status()}: ${await response.text()}`)
+    }
+  } catch (error) {
+    console.warn(`Team ${id} teardown threw:`, error)
+  }
+}
+
+/**
+ * Grants a team a role on a project, which is what the team detail page's
+ * Projects section lists. Mirrors the frontend's api.project.useSetTeamProjectRole.
+ */
+export async function grantTeamProjectRole(
+  request: APIRequestContext,
+  teamId: number,
+  projectId: number,
+  role = 1
+): Promise<void> {
+  const response = await request.post(
+    `${BACKEND_URL}/api/v2/team/${teamId}/project/${projectId}/${role}`
+  )
+  if (!response.ok()) {
+    throw new Error(`Failed to add team to project: ${response.status()} ${await response.text()}`)
+  }
+}
+
+export async function projectTeamIds(
+  request: APIRequestContext,
+  projectId: number
+): Promise<number[]> {
+  const response = await expectOk(
+    await request.get(`${BACKEND_URL}/api/v2/teams/projectManagers/${projectId}`),
+    `Listing project ${projectId} teams`
+  )
+  const body = (await response.json()) as Array<{ team: { id: number } }>
+  return body.map((entry) => entry.team.id)
+}
+
+/**
+ * Hands a challenge to a team, which is what puts it in that team's Challenges
+ * section and its image on the challenge's card.
+ */
+export async function giveChallengeToTeam(
+  request: APIRequestContext,
+  challengeId: number,
+  teamId: number | null
+): Promise<void> {
+  const response = await request.put(`${BACKEND_URL}/api/v2/challenge/${challengeId}`, {
+    headers: { 'Content-Type': 'application/json' },
+    data: { ownerTeamId: teamId },
+  })
+  if (!response.ok()) {
+    throw new Error(`Failed to set challenge team: ${response.status()} ${await response.text()}`)
+  }
+}
+
+export interface TestUser extends SessionUser {
+  name: string
+}
+
+/**
+ * Runs SQL against the test stack's database.
+ *
+ * The backend has no endpoint that creates a user -- real ones only ever
+ * arrive through the OSM OAuth callback -- so a test needing a second person
+ * to act on has to put one in the database itself. This reaches into the
+ * compose stack to do it, which is why it is confined to this file.
+ */
+export function runSql(sql: string): string {
+  return compose([
+    'exec',
+    '-T',
+    'db',
+    'psql',
+    '-U',
+    'maproulette',
+    '-d',
+    'maproulette',
+    '-t',
+    '-A',
+    '-c',
+    sql,
+  ])
+}
+
+export function compose(args: string[]): string {
+  return execFileSync(
+    process.env.MR_COMPOSE_COMMAND ?? 'docker',
+    ['compose', '-f', 'docker-compose.test.yaml', ...args],
+    { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'] }
+  ).trim()
+}
+
+/**
+ * A real user row, for tests that need somebody other than the super user to
+ * grant something to, or to act as (see sessionCookie).
+ */
+export function seedUser(name: string, osmId: number): TestUser {
+  const token = randomUUID()
+  const output = runSql(
+    `INSERT INTO users (osm_id, osm_created, name, oauth_token, oauth_secret)
+     VALUES (${osmId}, now(), '${name}', '${token}', '') RETURNING id;`
+  )
+  // psql prints the returned row and then its own "INSERT 0 1" status line.
+  const id = Number(output.split('\n')[0]?.trim())
+  if (!Number.isInteger(id)) {
+    // Throwing matters: a NaN id makes every later assertion vacuously pass.
+    throw new Error(`Could not seed a user -- psql returned: ${JSON.stringify(output)}`)
+  }
+  return { id, name, osmId, token }
+}
+
+export function deleteSeededUser(user: TestUser): void {
+  try {
+    runSql(`DELETE FROM users WHERE id = ${user.id};`)
+  } catch (error) {
+    console.warn(`Seeded user ${user.id} teardown threw:`, error)
+  }
+}
+
+/**
+ * A tag-fix task modelled on a real cooperative challenge: a bakery in Salt
+ * Lake City that MapRoulette proposes adding `diet:vegetarian=yes` to.
+ *
+ * Real tag-fix challenges are uploaded as line-by-line GeoJSON, where each
+ * line is a FeatureCollection carrying `cooperativeWork` alongside its
+ * `features`, and the feature's own properties hold the element's tags with an
+ * `@id` naming it. Tasks here are created through the task endpoint instead
+ * (the upload path imports asynchronously and is not reliable to wait on), so
+ * the same two halves are passed separately -- but the shape of each is what a
+ * real challenge ships.
+ */
+export const TAG_FIX_ELEMENT_ID = 'node/2344998584'
+
+const TAG_FIX_PROPERTIES = {
+  amenity: 'cafe',
+  'diet:vegetarian': 'yes',
+  name: "Carlucci's",
+  shop: 'bakery',
+  wheelchair: 'yes',
+  '@id': TAG_FIX_ELEMENT_ID,
+}
+
+/** The tag changes a tag-fix task proposes for one OSM element. */
+function tagFixWork(elementId: string, setTags: Record<string, string>, unsetTags: string[] = []) {
+  return {
+    meta: { version: 2, type: 1 },
+    operations: [
+      {
+        operationType: 'modifyElement',
+        data: {
+          id: elementId,
+          operations: [
+            { operation: 'setTags', data: setTags },
+            ...(unsetTags.length > 0 ? [{ operation: 'unsetTags', data: unsetTags }] : []),
+          ],
+        },
+      },
+    ],
+  }
+}
+
+export const TAG_FIX_POINT: [number, number] = [-111.9003158, 40.7630373]
+
+const MAP_RESOURCE_HOSTS =
+  /^https:\/\/([a-z0-9-]+\.)*(openstreetmap\.us|openmaptiles\.github\.io|tile\.openstreetmap\.org|arcgisonline\.com|arcgis\.com|virtualearth\.net)\//
+
+async function blockMapResources(context: BrowserContext): Promise<void> {
+  await context.route(MAP_RESOURCE_HOSTS, (route) => route.abort())
+}
+
+/** A page in its own browser context, logged in as `user`. Close it with page.context().close(). */
+export async function pageAs(browser: Browser, user: SessionUser): Promise<Page> {
+  const context = await browser.newContext({ storageState: storageStateFor(user) })
+  await blockMapResources(context)
+  return context.newPage()
+}
+
+export interface TestActor {
+  request: APIRequestContext
+  user: TestUser
+}
+
+export const test = base.extend<{
+  mapperRequest: TestActor
+  project: TestProject
+  challenge: TestChallenge
+  task: TestTask
+  secondTask: TestTask
+  team: TestTeam
+  seededUser: TestUser
+  cooperativeChallenge: TestChallenge
+  tagFixTask: TestTask
+  reviewer: TestUser
+  reviewerRequest: APIRequestContext
+  reviewerPage: Page
+}>({
+  context: async ({ context }, use) => {
+    await blockMapResources(context)
+    await use(context)
+  },
+
+  // Every browser page and request runs as the super user unless a test asks
+  // for someone else.
+  storageState: async ({ playwright: _playwright }, use) => {
+    await use(storageStateFor(superUser()))
+  },
+
+  request: async ({ playwright, storageState }, use) => {
+    const request = await playwright.request.newContext({ storageState })
+    await use(request)
+    await request.dispose()
+  },
+
+  project: async ({ request }, use) => {
+    const project = await createProject(request)
+    await use(project)
+    await releaseHeldLocks(request)
+    await deleteProject(request, project.id)
+    clearOrphanedLocks()
+  },
+
+  // Deleting `project` (above) cascades to its challenges and tasks on the
+  // backend, so neither fixture below needs its own teardown.
+  challenge: async ({ request, project }, use) => {
+    const challenge = await createChallenge(request, project.id)
+    await use(challenge)
+  },
+
+  task: async ({ request, challenge }, use) => {
+    const task = await createTask(request, challenge.id, {
+      instruction: 'Fix this point.',
+      priority: 0,
+    })
+    await use(task)
+  },
+
+  // A second task in the same challenge, close enough to `task` that the map's
+  // initial bounds-fit keeps both on screen at once (for tests that need more
+  // than one task, e.g. bundling).
+  secondTask: async ({ request, challenge }, use) => {
+    const secondTask = await createTask(request, challenge.id, {
+      name: uniqueName('e2e-task-2'),
+      coordinates: [-95.452772, 37.6886588],
+      instruction: 'Fix this point.',
+      priority: 0,
+    })
+    await use(secondTask)
+  },
+
+  team: async ({ request }, use) => {
+    const team = await createTeam(request)
+    await use(team)
+    await deleteTeam(request, team.id)
+  },
+
+  // A real second person to grant things to. OSM ids are namespaced well away
+  // from anything the other fixtures use so parallel-ish runs cannot collide.
+  seededUser: async ({ request: _request }, use) => {
+    const user = seedUser(
+      uniqueName('e2e-mapper').replace(/[^a-zA-Z0-9-]/g, ''),
+      900_000_000 + Math.floor(Math.random() * 90_000_000)
+    )
+    await use(user)
+    deleteSeededUser(user)
+  },
+
+  // A real person who is not a superuser, logged in as themselves, so a test
+  // can act as someone with ordinary rights and see what they are refused.
+  mapperRequest: async ({ playwright }, use) => {
+    const user = seedUser(
+      uniqueName('e2e-actor').replace(/[^a-zA-Z0-9-]/g, ''),
+      910_000_000 + Math.floor(Math.random() * 80_000_000)
+    )
+    const context = await newSessionRequest(playwright.request, user)
+
+    await use({ request: context, user })
+
+    await context.dispose()
+    deleteSeededUser(user)
+  },
+
+  // A challenge becomes a tag-fix one by containing tag-fix work: the backend
+  // sets its cooperative type when a task carrying cooperativeWork is created,
+  // rather than taking it on the challenge itself. So the task comes first and
+  // the challenge fixture is what waits on it.
+  tagFixTask: async ({ request, project }, use) => {
+    const challenge = await createChallenge(request, project.id, { name: uniqueName('e2e-tagfix') })
+    const task = await createTask(request, challenge.id, {
+      name: uniqueName('e2e-tagfix-task'),
+      coordinates: TAG_FIX_POINT,
+      properties: TAG_FIX_PROPERTIES,
+      instruction: 'Confirm this bakery serves vegetarian food.',
+      priority: 0,
+      cooperativeWork: tagFixWork(TAG_FIX_ELEMENT_ID, { 'diet:vegetarian': 'yes' }),
+    })
+    await use(task)
+  },
+
+  cooperativeChallenge: async ({ request, tagFixTask }, use) => {
+    const response = await request.get(`${BACKEND_URL}/api/v2/challenge/${tagFixTask.challengeId}`)
+    const body = (await response.json()) as Challenge
+    await use({ id: body.id, name: body.name, projectId: body.parent })
+  },
+
+  // A second person, for tests that need two separate users at once (e.g. a
+  // mapper who locks a task and another who finds it locked).
+  reviewer: async ({ request: _request }, use) => {
+    const user = seedUser(
+      uniqueName('e2e-reviewer').replace(/[^a-zA-Z0-9-]/g, ''),
+      990_000_000 + Math.floor(Math.random() * 9_000_000)
+    )
+    await use(user)
+    deleteSeededUser(user)
+  },
+
+  reviewerRequest: async ({ playwright, reviewer }, use) => {
+    const context = await newSessionRequest(playwright.request, reviewer)
+    await use(context)
+    await context.dispose()
+  },
+
+  reviewerPage: async ({ browser, reviewer }, use) => {
+    const page = await pageAs(browser, reviewer)
+    await use(page)
+    await page.context().close()
+  },
+})
+
+export { expect } from '@playwright/test'

@@ -1,0 +1,245 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./styles/tokens.gen.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --shadow-lg: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+@theme inline {
+  --color-primary: var(--color-brand-primary);
+  --color-secondary: var(--color-brand-secondary);
+  --font-sans: var(--font-brand-sans);
+}
+
+@layer base {
+  /* Lets the browser render native UI (scrollbars, form controls) with
+     dark-appropriate colors. `color-scheme` alone isn't reliably honored
+     for scrollbars across browsers, so the thumb/track colors below are
+     set explicitly too — applied globally (not opt-in like .scrollbar-thin)
+     so no scrollable element is left with a browser-default, low-contrast
+     scrollbar against a dark page. */
+  html {
+    color-scheme: light;
+    scrollbar-color: rgb(212 212 216) transparent; /* zinc-300 thumb */
+  }
+
+  .dark {
+    color-scheme: dark;
+    scrollbar-color: rgb(82 82 91) transparent; /* zinc-600 thumb */
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full;
+    background-color: rgb(212 212 216); /* zinc-300 */
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: rgb(82 82 91); /* zinc-600 */
+  }
+
+  * {
+    @apply border-zinc-200 outline-current/50 dark:border-slate-700;
+  }
+
+  body {
+    @apply antialiased bg-zinc-100 text-zinc-700 dark:bg-slate-950 dark:text-zinc-50;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="menuitem"]:not([aria-disabled="true"]),
+  [role="menuitemcheckbox"]:not([aria-disabled="true"]),
+  [role="menuitemradio"]:not([aria-disabled="true"]),
+  [role="option"]:not([aria-disabled="true"]),
+  [role="switch"]:not([aria-disabled="true"]),
+  [role="checkbox"]:not([aria-disabled="true"]),
+  [role="radio"]:not([aria-disabled="true"]),
+  [role="combobox"]:not([aria-disabled="true"]),
+  summary,
+  label[for],
+  select:not(:disabled) {
+    @apply cursor-pointer;
+  }
+
+  [type="search"]::-webkit-search-cancel-button {
+    @apply appearance-none cursor-pointer w-6 h-6 bg-zinc-500;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg class='w-6 h-6' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z'/%3E%3C/svg%3E%0A");
+  }
+}
+
+@utility link {
+  @apply cursor-pointer text-current underline underline-offset-4 dark:hover:text-green-400 hover:text-green-600 transition-colors [&.active]:text-green-600 dark:[&.active]:text-green-400;
+}
+
+@utility stretched-link {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  @apply outline-none;
+}
+
+@utility stretched-link-container {
+  @apply relative has-[.stretched-link:focus-visible]:ring-[3px] has-[.stretched-link:focus-visible]:ring-zinc-950/50 dark:has-[.stretched-link:focus-visible]:ring-zinc-300/50;
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 4rem;
+}
+
+@layer utilities {
+  .link-nav {
+    @apply link no-underline hover:underline;
+  }
+
+  /* Custom scrollbar styles */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full;
+    background-color: rgb(212 212 216); /* zinc-300 */
+  }
+
+  .scrollbar-thin:hover::-webkit-scrollbar-thumb {
+    background-color: rgb(161 161 170); /* zinc-400 */
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(63 63 70); /* zinc-700 */
+  }
+
+  .dark .scrollbar-thin:hover::-webkit-scrollbar-thumb {
+    background-color: rgb(82 82 91); /* zinc-600 */
+  }
+
+  /* Task marker popup styles */
+  .task-marker-popup .maplibregl-popup-content {
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+    border: none;
+  }
+
+  .task-marker-popup .maplibregl-popup-tip {
+    border-top-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+    border-top-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+    border-bottom-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+    border-right-color: white;
+  }
+
+  .task-marker-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+    border-left-color: white;
+  }
+}
+
+.task-picker-popup .maplibregl-popup-content {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.task-picker-popup {
+  --picker-bg: #ffffff;
+  --picker-border: #e4e4e7;
+}
+
+.dark .task-picker-popup {
+  --picker-bg: #0f172a;
+  --picker-border: #334155;
+}
+
+.task-picker-popup .maplibregl-popup-tip {
+  display: none;
+}
+
+.task-picker-popup .maplibregl-popup-content::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--picker-bg);
+  border: 1px solid var(--picker-border);
+  transform: rotate(45deg);
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-content::after {
+  bottom: -6px;
+  border-top: none;
+  border-left: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-top .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-content::after {
+  top: -6px;
+  border-bottom: none;
+  border-right: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top .maplibregl-popup-content::after {
+  left: calc(50% - 6px);
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-content::after {
+  left: 12px;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-content::after,
+.task-picker-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-content::after {
+  right: 12px;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-left .maplibregl-popup-content::after {
+  left: -6px;
+  top: calc(50% - 6px);
+  border-top: none;
+  border-right: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-right .maplibregl-popup-content::after {
+  right: -6px;
+  top: calc(50% - 6px);
+  border-bottom: none;
+  border-left: none;
+}
+
+.task-picker-popup.maplibregl-popup-anchor-center .maplibregl-popup-content::after {
+  display: none;
+}

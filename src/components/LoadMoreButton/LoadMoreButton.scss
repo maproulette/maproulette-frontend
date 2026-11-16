@@ -1,6 +1,0 @@
-@use '../../mixins.scss';
-@use "../../variables";
-
-button.load-more-button {
-  @include mixins.invert-on-hover(variables.$green, variables.$white);
-}

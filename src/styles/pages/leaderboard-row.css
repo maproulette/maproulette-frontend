@@ -1,9 +1,0 @@
-.mr-leaderboard-row {
-  @apply mr-bg-black-10 mr-text-white mr-rounded mr-p-4 mr-shadow mr-border-transparent mr-border-2;
-
-  @apply md:mr-p-6;
-
-  &--active {
-    @apply mr-border-green-lighter mr-bg-black-10 mr-shadow-inner;
-  }
-}

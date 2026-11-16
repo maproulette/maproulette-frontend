@@ -1,0 +1,212 @@
+import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { Challenge } from '@/types/Challenge'
+import type { components } from '@/types/openApiTypes'
+import type { Task } from '@/types/Task'
+import type {
+  PublicUser,
+  User,
+  UserContribution,
+  UserMetricsResponse,
+  UserProperties,
+  UserSettings,
+} from '@/types/User'
+import { apiRequest } from '../client'
+
+/**
+ * The spec marks `bundledTasks` required, but the API leaves it out entirely
+ * for a task that isn't bundled, so it is optional here.
+ */
+type RawLockedTaskData = components['schemas']['org.maproulette.framework.model.LockedTaskData']
+export type LockedTaskData = Omit<RawLockedTaskData, 'bundledTasks'> & {
+  bundledTasks?: number[]
+}
+export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
+export type LeaderboardChallenge =
+  components['schemas']['org.maproulette.framework.model.LeaderboardChallenge']
+
+export const userProfile = {
+  getUser: (userId: number) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId],
+        queryFn: () => apiRequest.get(`api/v2/user/${userId}`).json<User>(),
+        enabled: !!userId,
+      })
+    ),
+
+  getPublicUser: (userId: number) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'public'],
+        queryFn: () => apiRequest.get(`api/v2/user/${userId}/public`).json<PublicUser>(),
+        enabled: !!userId,
+      })
+    ),
+
+  activity: () =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', 'activity'],
+        queryFn: () => apiRequest.get('api/v2/user/contributions').json<UserContribution[]>(),
+      })
+    ),
+
+  metrics: (userId: number | undefined, monthDuration: number = -1) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', 'metrics', userId, monthDuration],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/data/user/${userId}/metrics`, {
+              searchParams: {
+                monthDuration,
+                reviewDuration: monthDuration,
+                reviewerDuration: monthDuration,
+                start: '',
+                end: '',
+                reviewStart: '',
+                reviewEnd: '',
+                reviewerStart: '',
+                reviewerEnd: '',
+              },
+            })
+            .json<UserMetricsResponse>(),
+        enabled: !!userId,
+      })
+    ),
+
+  topChallenges: (
+    userId: number | undefined,
+    params: { monthDuration?: number; limit?: number; offset?: number } = {}
+  ) => {
+    const { monthDuration = -1, limit = 10, offset = 0 } = params
+    return useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'topChallenges', { monthDuration, limit, offset }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/data/user/${userId}/topChallenges`, {
+              searchParams: { monthDuration, limit, offset },
+            })
+            .json<LeaderboardChallenge[]>(),
+        enabled: !!userId,
+      })
+    )
+  },
+
+  savedChallenges: (userId: number | undefined, limit: number = 10, page: number = 0) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'savedChallenges', { limit, page }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/user/${userId}/saved`, {
+              searchParams: { limit, page },
+            })
+            .json<Challenge[]>(),
+        enabled: !!userId,
+      })
+    ),
+
+  savedTasks: (userId: number | undefined, limit: number = 10, page: number = 0) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'savedTasks', { limit, page }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/user/${userId}/savedTasks`, {
+              searchParams: { limit, page },
+            })
+            .json<Task[]>(),
+        enabled: !!userId,
+      })
+    ),
+
+  lockedTasks: (
+    userId: number | undefined,
+    limit: number = 50,
+    { enabled = true }: { enabled?: boolean } = {}
+  ) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'lockedTasks', { limit }],
+        queryFn: () =>
+          apiRequest
+            .get(`api/v2/user/${userId}/lockedTasks`, {
+              searchParams: { limit },
+            })
+            .json<LockedTaskData[]>(),
+        enabled: enabled && !!userId,
+      })
+    ),
+
+  teamMemberships: (userId: number | undefined) =>
+    useQuery(
+      queryOptions({
+        queryKey: ['user', userId, 'teamMemberships'],
+        queryFn: () =>
+          apiRequest.get(`api/v2/team/all/user/${userId}/memberships`).json<TeamUser[]>(),
+        enabled: !!userId,
+      })
+    ),
+
+  useUpdateUserSettings: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({
+        userId,
+        settings,
+        properties,
+      }: {
+        userId: number
+        settings: UserSettings
+        properties?: UserProperties
+      }) => {
+        // `properties` must be sent as a JSON object, not a stringified string: the
+        // backend reads it with `(value \ "properties").asOpt[JsObject]` and silently
+        // falls back to the stored properties when it isn't an object.
+        const payload = {
+          ...settings,
+          ...(properties && { properties }),
+        }
+        return apiRequest.put(`api/v2/user/${userId}`, { json: payload }).json<User>()
+      },
+      // Settings drive UI that should react on click — pinned challenge/project
+      // stars in particular — so patch the cached user before the round trip and
+      // let `onSuccess` replace it with the server's copy.
+      onMutate: ({ settings, properties }) => {
+        const previous = queryClient.getQueryData<User>(['user', 'whoami'])
+        if (!previous) return { previous }
+        queryClient.setQueryData<User>(['user', 'whoami'], {
+          ...previous,
+          settings: { ...previous.settings, ...settings },
+          ...(properties && { properties }),
+        })
+        return { previous }
+      },
+      onError: (_error, _variables, context) => {
+        if (context?.previous) {
+          queryClient.setQueryData<User>(['user', 'whoami'], context.previous)
+        }
+      },
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData<User>(['user', 'whoami'], updatedUser)
+      },
+    })
+  },
+
+  useUnsaveChallenge: () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+      mutationFn: ({ userId, challengeId }: { userId: number; challengeId: number }) =>
+        apiRequest.delete(`api/v2/user/${userId}/unsave/${challengeId}`).text(),
+      onSuccess: (_data, { userId, challengeId }) => {
+        queryClient.setQueryData<{ isFavorited: boolean }>(
+          ['challenge', challengeId, 'isFavorited'],
+          { isFavorited: false }
+        )
+        queryClient.invalidateQueries({ queryKey: ['user', userId, 'savedChallenges'] })
+      },
+    })
+  },
+}

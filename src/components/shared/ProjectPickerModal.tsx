@@ -1,0 +1,224 @@
+import { Archive, Eye, Pin, User } from 'lucide-react'
+import { type ReactNode, useMemo, useState } from 'react'
+import { api } from '@/api'
+import { ProjectsTableView } from '@/components/Pages/ManagementPages/ManageProjects/ProjectsTableView'
+import { getPinnedProjectIds } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
+import { useProjectChallengeCounts } from '@/components/Pages/ManagementPages/ManageProjects/useProjectChallengeCounts'
+import { ClearManageFiltersButton } from '@/components/shared/ClearManageFiltersButton'
+import { FilterToggle } from '@/components/shared/FilterToggle'
+import { LoadMoreFooter } from '@/components/shared/LoadMoreFooter'
+import { ProjectCard } from '@/components/shared/ProjectCard'
+import { SearchBar } from '@/components/shared/SearchBar'
+import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/Dialog'
+import { Spinner } from '@/components/ui/Spinner'
+import { useAuthContext } from '@/contexts/AuthContext'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
+import { useIntl } from '@/i18n'
+import type { Project } from '@/types/Project'
+
+const PAGE_SIZE = 20
+
+interface ProjectPickerModalProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  selectedProjectId?: number
+  onSelectProject: (project: Project) => void
+  title?: string
+  description?: string
+  excludeProjectIds?: number[]
+  closeOnSelect?: boolean
+  disabled?: boolean
+  children?: ReactNode
+}
+
+export const ProjectPickerModal = ({
+  open,
+  onOpenChange,
+  selectedProjectId,
+  onSelectProject,
+  title,
+  description,
+  excludeProjectIds,
+  closeOnSelect = true,
+  disabled = false,
+  children,
+}: ProjectPickerModalProps) => {
+  const { t } = useIntl()
+  const resolvedTitle =
+    title ?? t({ id: 'common.selectAProject', defaultMessage: 'Select a project' })
+  const resolvedDescription =
+    description ??
+    t({
+      id: 'shared.projectPickerModal.description',
+      defaultMessage: 'Choose the project this challenge belongs to.',
+    })
+  const [searchQuery, setSearchQuery] = useState('')
+  const [onlyEnabled, setOnlyEnabled] = useState(false)
+  const [onlyOwned, setOnlyOwned] = useState(false)
+  const [onlyShowArchived, setOnlyShowArchived] = useState(false)
+  const [onlyShowPinned, setOnlyShowPinned] = useState(false)
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+
+  const debouncedSearchQuery = useDebouncedValue(searchQuery)
+
+  const { user } = useAuthContext()
+  const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
+  const excluded = useMemo(() => new Set(excludeProjectIds ?? []), [excludeProjectIds])
+  const canList = open && (!onlyShowPinned || pinnedProjectIds.length > 0)
+
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
+    api.project.managedProjectsInfinite(
+      {
+        searchString: debouncedSearchQuery,
+        onlyEnabled,
+        onlyOwned,
+        isArchived: onlyShowArchived,
+        projectIds: onlyShowPinned ? pinnedProjectIds.join(',') : '',
+      },
+      { limit: PAGE_SIZE, enabled: canList }
+    )
+  const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
+  const challengeCountsByProjectId = useProjectChallengeCounts(projects)
+
+  const projectsToShow = useMemo(() => {
+    const set = new Set(pinnedProjectIds)
+    return projects
+      .filter((p) => !(p.id != null && excluded.has(p.id)))
+      .sort((a, b) => {
+        const aPinned = a.id != null && set.has(a.id) ? 1 : 0
+        const bPinned = b.id != null && set.has(b.id) ? 1 : 0
+        return bPinned - aPinned
+      })
+  }, [projects, pinnedProjectIds, excluded])
+
+  const handleSelect = (project: Project) => {
+    onSelectProject(project)
+    if (closeOnSelect) onOpenChange(false)
+  }
+
+  const hasActiveFilters = onlyEnabled || onlyOwned || onlyShowPinned || onlyShowArchived
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="2xl" className="flex max-h-[85vh] flex-col">
+        <DialogHeader>
+          <DialogTitle>{resolvedTitle}</DialogTitle>
+          <DialogDescription>{resolvedDescription}</DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={t({ id: 'common.searchProjects', defaultMessage: 'Search projects...' })}
+          />
+          <FilterToggle
+            label={t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
+            icon={Eye}
+            checked={onlyEnabled}
+            onCheckedChange={setOnlyEnabled}
+          />
+          <FilterToggle
+            label={t({ id: 'common.owned', defaultMessage: 'Owned' })}
+            icon={User}
+            checked={onlyOwned}
+            onCheckedChange={setOnlyOwned}
+          />
+          <FilterToggle
+            label={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
+            icon={Pin}
+            checked={onlyShowPinned}
+            onCheckedChange={setOnlyShowPinned}
+          />
+          <FilterToggle
+            label={t({ id: 'common.archived', defaultMessage: 'Archived' })}
+            icon={Archive}
+            checked={onlyShowArchived}
+            onCheckedChange={setOnlyShowArchived}
+          />
+          <ClearManageFiltersButton
+            hasActiveFilters={hasActiveFilters}
+            onClear={() => {
+              setOnlyEnabled(false)
+              setOnlyOwned(false)
+              setOnlyShowPinned(false)
+              setOnlyShowArchived(false)
+            }}
+          />
+          <div className="ml-auto">
+            <ViewModeToggle value={viewMode} onValueChange={setViewMode} />
+          </div>
+        </div>
+
+        <fieldset
+          disabled={disabled}
+          className="m-0 min-h-0 min-w-0 flex-1 overflow-y-auto border-0 p-0 disabled:opacity-50"
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center p-6">
+              <Spinner size="lg" className="text-zinc-400" />
+            </div>
+          ) : projectsToShow.length === 0 ? (
+            <div className="rounded-lg border border-zinc-200 p-6 text-center text-sm text-zinc-500 dark:border-slate-700 dark:text-zinc-400">
+              {t({
+                id: 'shared.projectPickerModal.noProjectsFound',
+                defaultMessage: 'No projects found.',
+              })}
+            </div>
+          ) : viewMode === 'list' ? (
+            <ProjectsTableView
+              projects={projectsToShow}
+              challengeCountsByProjectId={challengeCountsByProjectId}
+              pinnedProjectIds={pinnedProjectIds}
+              onSelectProject={handleSelect}
+              selectedProjectId={selectedProjectId}
+            />
+          ) : (
+            <div
+              className="grid gap-4 p-1"
+              style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
+            >
+              {projectsToShow.map((project) => {
+                const totalTasks = project.completionMetrics?.total ?? 0
+                const challengeStats = challengeCountsByProjectId[project.id]
+                return (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    challengeMeta={{
+                      totalTasks,
+                      completed: totalTasks - (project.completionMetrics?.tasksRemaining ?? 0),
+                    }}
+                    totalChallenges={challengeStats?.total}
+                    completedChallenges={challengeStats?.completed}
+                    onSelect={() => handleSelect(project)}
+                    selected={project.id === selectedProjectId}
+                  />
+                )
+              })}
+            </div>
+          )}
+
+          {!isLoading && projectsToShow.length > 0 && (
+            <LoadMoreFooter
+              hasNextPage={hasNextPage}
+              isFetching={isFetching}
+              onLoadMore={() => void fetchNextPage()}
+              showEndOfList={false}
+              size="sm"
+              className="p-3"
+            />
+          )}
+        </fieldset>
+        {children}
+      </DialogContent>
+    </Dialog>
+  )
+}

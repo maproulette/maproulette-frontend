@@ -1,0 +1,18 @@
+{
+  "editorOptions": [
+    { "value": -1, "label": "None" },
+    { "value": 0, "label": "Edit in iD" },
+    { "value": 1, "label": "Edit in JOSM" },
+    { "value": 2, "label": "Edit in new JOSM layer" },
+    { "value": 3, "label": "Edit in level0" },
+    { "value": 4, "label": "Edit just features in JOSM" },
+    { "value": 5, "label": "Edit in Rapid" }
+  ],
+  "baseMapOptions": [
+    { "value": -1, "label": "None" },
+    { "value": "Bing", "label": "Bing Maps Aerial" },
+    { "value": "EsriWorldImagery", "label": "Esri World Imagery" },
+    { "value": "EsriWorldImageryClarity", "label": "Esri World Imagery (Clarity) Beta" },
+    { "value": "MAPNIK", "label": "OpenStreetMap (Standard)" }
+  ]
+}

@@ -1,45 +1,24 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-
-# Imagery
-src/imagery.json
-src/defaultLayers.json
-src/customLayers.json
-
-# testing
-/coverage
-chimp.js
-error.png
-
-# production
-/build
-/dist
-/MR3React.tgz
-
-# misc
+node_modules
 .DS_Store
-.env.local
-.env.*.local
-/public/env.json
+dist
+dist-ssr
+*.local
+count.txt
+.env
+.nitro
+.tanstack
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Plugin builds
+dist/plugins/
 
-*.swp
-
-#scala plugin
-/.bsp
-/project
-/target
-/.metals
-
-#vscode
-/.vscode
-
-# playwright
+# Playwright
 /test-results/
 /playwright-report/
-playwright/.auth/
+
+/coverage/
+
+# Storybook
+/storybook-static/
+
+# Local MCP server config
+.mcp.json

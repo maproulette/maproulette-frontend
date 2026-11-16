@@ -1,0 +1,15 @@
+{
+  "version": 8,
+  "name": "Esri World Imagery (Clarity)",
+  "sources": {
+    "esri-clarity": {
+      "type": "raster",
+      "tiles": [
+        "https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+      ],
+      "tileSize": 256,
+      "attribution": "Imagery © Esri"
+    }
+  },
+  "layers": [{ "id": "esri-clarity", "type": "raster", "source": "esri-clarity" }]
+}

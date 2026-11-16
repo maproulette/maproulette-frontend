@@ -1,9 +1,10 @@
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
-WORKDIR /maproulette3
-RUN apk update && apk add curl git jq
+WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Install dependencies first for layer caching. .env.example is required because
+# the postinstall hook seeds .env from it.
+COPY package.json package-lock.json .env.example ./
 RUN npm ci
 
 COPY . .
@@ -11,12 +12,14 @@ COPY . .
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 RUN npm run build
 
-FROM nginx:1.25-alpine
+FROM nginx:1.27-alpine
 
-RUN apk update && apk add jq
+# jq is used by the entrypoint to merge runtime env vars into env.json.
+RUN apk add --no-cache jq
 
-COPY --from=builder /maproulette3/dist /srv/www
-COPY docker/nginx.conf /etc/nginx/templates/default.conf.template
-COPY docker/90-write-env-to-json.sh /docker-entrypoint.d
+COPY --from=builder /app/dist /srv/www
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/90-write-env-to-json.sh /docker-entrypoint.d/90-write-env-to-json.sh
+RUN chmod +x /docker-entrypoint.d/90-write-env-to-json.sh
 
 EXPOSE 80

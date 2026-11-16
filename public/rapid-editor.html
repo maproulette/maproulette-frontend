@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Rapid Editor</title>
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #rapid-container {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="rapid-container"></div>
+
+  <script type="module">
+    const RAPID_CDN_URL = 'https://cdn.jsdelivr.net/npm/@rapideditor/rapid@2.4.2/dist/'
+
+
+    let stylesheet = document.createElement('link')
+    stylesheet.rel = 'stylesheet'
+    stylesheet.href = RAPID_CDN_URL + 'rapid.min.css'
+    document.head.append(stylesheet)
+
+    async function setupRapid(container) {
+
+      await import(RAPID_CDN_URL + 'rapid.min.js')
+
+      if (typeof Rapid === 'undefined') {
+        throw new Error(`The bundle loaded from ${RAPID_CDN_URL} did not set window.Rapid`)
+      }
+
+      if (!Rapid.utilDetect().support) {
+        throw new Error('Sorry, the Rapid editor does not support your web browser.')
+      }
+
+
+      const params = new URLSearchParams(document.location.hash.slice(1))
+      const token = params.get('token')
+
+
+      const context = new Rapid.Context()
+      context.containerNode = container
+      context.assetPath = RAPID_CDN_URL
+
+      if (token) {
+        context.preauth = {
+          url: 'https://www.openstreetmap.org',
+          apiUrl: 'https://api.openstreetmap.org',
+          access_token: token,
+        }
+        context.apiConnections = [context.preauth]
+      } else {
+        console.warn(
+          'MapRoulette has initialized the Rapid iframe without an OSM API access token; ' +
+          'this should only happen in dev mode.'
+        )
+      }
+
+      await context.initAsync()
+      return context
+    }
+
+    window.setupRapid = () => setupRapid(document.getElementById('rapid-container'))
+  </script>
+</body>
+
+</html>

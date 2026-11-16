@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>iD Editor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@openstreetmap/id@2.39.6/dist/iD.css" />
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #id-container {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="id-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@openstreetmap/id@2.39.6/dist/iD.min.js"></script>
+  <script>
+    var ID_CDN_URL = 'https://cdn.jsdelivr.net/npm/@openstreetmap/id@2.39.6/dist/';
+
+    window.setupiD = function () {
+      if (typeof iD === 'undefined') {
+        throw new Error('iD editor failed to load from CDN');
+      }
+
+
+      var params = new URLSearchParams(document.location.hash.slice(1));
+      var token = params.get('token');
+      var mapParam = params.get('map');
+      var comment = params.get('comment') || '';
+
+
+      var zoom = 18, lat = 0, lng = 0;
+      if (mapParam) {
+        var parts = mapParam.split('/');
+        if (parts.length === 3) {
+          zoom = parseFloat(parts[0]);
+          lat = parseFloat(parts[1]);
+          lng = parseFloat(parts[2]);
+        }
+      }
+
+      var container = document.getElementById('id-container');
+
+
+      var context = iD.coreContext()
+        .assetPath(ID_CDN_URL)
+        .containerNode(container)
+        .init();
+
+
+      if (token) {
+        context.preauth({
+          url: 'https://www.openstreetmap.org',
+          apiUrl: 'https://api.openstreetmap.org',
+          access_token: token,
+        });
+      }
+
+
+      context.map().centerZoom([lng, lat], zoom);
+
+
+      if (comment) {
+        context.defaultChangesetComment(comment);
+      }
+
+      return context;
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "version": 8,
+  "name": "Bing Aerial",
+  "sources": {
+    "bing-aerial": {
+      "type": "raster",
+      "tiles": [
+        "https://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=587",
+        "https://ecn.t1.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=587",
+        "https://ecn.t2.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=587",
+        "https://ecn.t3.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=587"
+      ],
+      "tileSize": 256,
+      "maxzoom": 19,
+      "attribution": "Imagery © Microsoft"
+    }
+  },
+  "layers": [{ "id": "bing-aerial", "type": "raster", "source": "bing-aerial" }]
+}

@@ -1,0 +1,78 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
+import { useCallback, useState } from 'react'
+import { toast } from 'sonner'
+import { api } from '@/api'
+import { useNavigateToTask } from '@/hooks/useNavigateToTask'
+import { useIntl } from '@/i18n'
+import { getErrorMessage } from '@/lib/apiError'
+import { logger } from '@/lib/logger'
+import type { Task } from '@/types/Task'
+import { useConfirmDiscardIdEdits } from './useConfirmDiscardIdEdits'
+
+/**
+ * Skipping the current task and moving on, shared by the skip button and the
+ * skip keyboard shortcut.
+ */
+export const useSkipTask = (task: Task) => {
+  const { t } = useIntl()
+  const navigate = useNavigate()
+  const navigateToTask = useNavigateToTask()
+  const queryClient = useQueryClient()
+  // Only mutateAsync is pulled out: react-query hands back a fresh result
+  // object every render, and `skipTask` has to stay referentially stable for
+  // the shortcut registration that depends on it.
+  const { mutateAsync: skipMutation } = api.task.useSkipTask()
+  const [isSkipping, setIsSkipping] = useState(false)
+  const confirmDiscardIdEdits = useConfirmDiscardIdEdits()
+
+  const skipTask = useCallback(async () => {
+    if (isSkipping) return
+    if (!confirmDiscardIdEdits()) return
+    setIsSkipping(true)
+    try {
+      await skipMutation(task.id)
+
+      const randomTasks = await api.challenge.getRandomTask(task.parent)
+      if (randomTasks && randomTasks.length > 0) {
+        await navigateToTask(randomTasks[0].id)
+      } else {
+        toast.info(
+          t({
+            id: 'common.noMoreTasksInChallenge',
+            defaultMessage: 'No more tasks available in this challenge',
+          })
+        )
+        await navigate({
+          to: '/challenge/$challengeId',
+          params: { challengeId: String(task.parent) },
+        })
+      }
+    } catch (error) {
+      logger.error('Skip failed', { error })
+      toast.error(
+        await getErrorMessage(
+          error,
+          t({
+            id: 'taskEditPage.taskActions.skipButton.skipFailed',
+            defaultMessage: 'Could not skip this task',
+          })
+        )
+      )
+    } finally {
+      setIsSkipping(false)
+    }
+  }, [
+    isSkipping,
+    confirmDiscardIdEdits,
+    skipMutation,
+    task.id,
+    task.parent,
+    queryClient,
+    navigateToTask,
+    navigate,
+    t,
+  ])
+
+  return { skipTask, isSkipping }
+}

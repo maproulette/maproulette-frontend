@@ -1,0 +1,95 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/AlertDialog'
+import { Loader } from '@/components/ui/Loader'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/Resizable'
+import { useIntl } from '@/i18n'
+import { InviteMemberDialog } from '../InviteMemberDialog'
+import { TeamContentPanel } from './TeamContentPanel'
+import { TeamDetailProvider, useTeamDetailContext } from './TeamDetailContext'
+import { TeamDetailSidebar } from './TeamDetailSidebar'
+
+const TeamDetailLayout = () => {
+  const { t } = useIntl()
+  const {
+    teamId,
+    team,
+    isLoading,
+    iAmOwner,
+    inviteOpen,
+    setInviteOpen,
+    confirmDelete,
+    setConfirmDelete,
+    handleDelete,
+  } = useTeamDetailContext()
+
+  if (isLoading) return <Loader />
+  if (!team) {
+    return (
+      <div className="py-12 text-center text-zinc-500">
+        {t({ id: 'common.teamNotFound', defaultMessage: 'Team not found.' })}
+      </div>
+    )
+  }
+
+  return (
+    <div className="h-full p-4">
+      <ResizablePanelGroup direction="horizontal" className="h-full">
+        <ResizablePanel defaultSize={30} minSize={20} maxSize={45}>
+          <aside className="h-full min-h-0 overflow-hidden pr-2">
+            <TeamDetailSidebar />
+          </aside>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel defaultSize={70} minSize={40}>
+          <TeamContentPanel />
+        </ResizablePanel>
+      </ResizablePanelGroup>
+
+      <InviteMemberDialog
+        teamId={teamId}
+        open={inviteOpen}
+        onOpenChange={setInviteOpen}
+        canAssignOwner={iAmOwner}
+      />
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t({ id: 'teams.detail.deleteConfirmTitle', defaultMessage: 'Delete this team?' })}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t({
+                id: 'teams.detail.deleteConfirmDescription',
+                defaultMessage: 'This cannot be undone. All members will lose access.',
+              })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>
+              {t({ id: 'teams.detail.deleteConfirmAction', defaultMessage: 'Delete team' })}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  )
+}
+
+export const TeamDetailPage = ({ teamId }: { teamId: number }) => (
+  <TeamDetailProvider teamId={teamId}>
+    <TeamDetailLayout />
+  </TeamDetailProvider>
+)

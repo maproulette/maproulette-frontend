@@ -1,44 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#23395B">
-    <meta name="title" content="MapRoulette" />
-    <meta name="description" content="Be an instant contributor to the world’s maps." />
-    <meta property="og:image" content="https://openstreetmap.us/img/pages/maproulette/sign.png" />
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <meta name="theme-color" content="#000000" />
+    <title>MapRoulette</title>
+    <meta name="description" content="Be an instant contributor to the world's maps." />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="MapRoulette" />
-    <meta property="og:description" content="Be an instant contributor to the world’s maps." />
-    <!--
-      manifest.json provides metadata used when your web app is added to the
-      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-    -->
-    <link rel="manifest" href="/manifest.json">
+    <meta property="og:description" content="Be an instant contributor to the world's maps." />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+</head>
 
-    <link rel="preload" href="/env.json" as="fetch" type="application/json"/>
-
-    <!-- App Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-
-    <title>MapRoulette</title>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <div id="external-root"></div>
-    <div id="dropdown"></div>
-
+<body>
+    <div id="app" tabindex="-1"></div>
     <script type="module">
-      fetch("/env.json")
-        .then(res => res.json())
-        .then(env => { window.env = env; })
-        .then(() => import("/src/index.jsx"));
+        // Load runtime config, expose host React for plugins, then boot the app
+        window.env = await fetch('/env.json').then((res) => res.json());
+        import React from 'react';
+        import ReactDOM from 'react-dom';
+        import * as jsxRuntime from 'react/jsx-runtime';
+        if (window.env.VITE_ENABLE_PLUGINS === 'true') {
+            window.React = React;
+            window.ReactDOM = ReactDOM;
+            window.jsxRuntime = jsxRuntime;
+        }
+        await import('/src/main.tsx');
     </script>
-  </body>
+</body>
+
 </html>

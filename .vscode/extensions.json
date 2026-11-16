@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "mikestead.dotenv",
+    "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "vscode.html-language-features"
+  ]
+}

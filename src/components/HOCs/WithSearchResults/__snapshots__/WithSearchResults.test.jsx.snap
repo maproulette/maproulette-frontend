@@ -1,7 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`Search Results are passed back as the 'outputProp' if provided 1`] = `ShallowWrapper {}`;
-
-exports[`Search Results with tags are passed first in search results 1`] = `ShallowWrapper {}`;
-
-exports[`Search query is passed to wrapped component 1`] = `ShallowWrapper {}`;

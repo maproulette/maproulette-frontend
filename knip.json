@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["style-dictionary.config.mjs"],
+  "ignoreBinaries": ["tx"],
+  "ignoreIssues": {
+    "src/types/openApiTypes.ts": ["exports", "types"],
+    "src/components/ui/**": ["exports", "types"]
+  }
+}

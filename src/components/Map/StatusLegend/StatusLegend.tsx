@@ -1,0 +1,79 @@
+import { ChevronDown, ChevronUp, MapIcon } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
+import { useIntl } from '@/i18n'
+import { LegendRow } from './LegendRow'
+import { getPriorityLegendEntries, getStatusLegendEntries } from './taskStatusCatalog'
+
+interface Props {
+  defaultOpen?: boolean
+}
+
+export const StatusLegend = ({ defaultOpen = false }: Props) => {
+  const [open, setOpen] = useState(defaultOpen)
+  const { t } = useIntl()
+  const statusLegendEntries = getStatusLegendEntries(t)
+
+  return (
+    <div className="flex flex-col-reverse rounded-md border border-zinc-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className="flex w-full items-center justify-between gap-2 px-2 py-1 text-xs"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+      >
+        <span className="flex items-center gap-1.5">
+          <MapIcon className="size-3.5" aria-hidden="true" />{' '}
+          {t({ id: 'statusLegend.legend', defaultMessage: 'Legend' })}
+        </span>
+        {open ? (
+          <ChevronDown className="size-3.5" aria-hidden="true" />
+        ) : (
+          <ChevronUp className="size-3.5" aria-hidden="true" />
+        )}
+      </Button>
+      <div
+        className={
+          open ? 'border-zinc-200 border-b dark:border-slate-700' : 'invisible h-0 overflow-hidden'
+        }
+        aria-hidden={!open}
+      >
+        <div className="space-y-2 p-2">
+          <div>
+            <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+              {t({ id: 'common.status', defaultMessage: 'Status' })}
+            </div>
+            <ul className="space-y-1">
+              {statusLegendEntries.map((entry) => (
+                <LegendRow
+                  key={entry.status}
+                  variant="status"
+                  color={entry.color}
+                  icon={entry.icon}
+                  label={entry.label}
+                />
+              ))}
+            </ul>
+          </div>
+          <div>
+            <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+              {t({ id: 'common.priority', defaultMessage: 'Priority' })}
+            </div>
+            <ul className="space-y-1">
+              {getPriorityLegendEntries(t).map((entry) => (
+                <LegendRow
+                  key={entry.priority}
+                  variant="priority"
+                  color={entry.color}
+                  label={entry.label}
+                />
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

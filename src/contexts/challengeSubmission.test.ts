@@ -1,0 +1,585 @@
+// This unit test runs in Vitest's `node` environment (see TESTING.md), which
+// unlike a browser doesn't define a global `File` on Node 18. The form values
+// use a real `File` instance for the localGeoJSON upload, so polyfill it from
+// `node:buffer` (available since Node 18.13) before any test runs.
+import { File as NodeFile } from 'node:buffer'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
+import { buildChallengeSubmission } from './challengeSubmission'
+
+globalThis.File ??= NodeFile as unknown as typeof File
+
+// RFC 7464 record separator byte that marks a line-by-line ("sequence") GeoJSON
+// upload, mirroring src/lib/localGeoJSON.ts's detection logic.
+const RECORD_SEPARATOR = '\x1e'
+
+const baseValues: ChallengeFormValues = {
+  projectId: 1,
+  name: 'A challenge',
+  description: 'A description',
+  instruction: 'Some instructions',
+  difficulty: 2,
+  category: 'other',
+  additionalKeywords: '',
+  checkinComment: 'Fixed roads #maproulette',
+  checkinSource: 'Bing',
+  dataSource: 'overpass',
+  overpassQL: 'way[highway=primary];',
+  localGeoJSON: null,
+  remoteGeoJSON: '',
+  dataOriginDate: '',
+  osmIdProperty: '',
+  taskBundleIdProperty: '',
+  basemap: 'none',
+  basemapUrl: '',
+  ownerTeamId: null,
+  automatedEditsCodeAgreement: true,
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
+
+describe('buildChallengeSubmission', () => {
+  describe('create mode (isCreate = true)', () => {
+    it('builds an overpass submission', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'overpass', overpassQL: 'way[highway=primary];' },
+        true
+      )
+
+      expect(result).toEqual({
+        challengeData: {
+          name: 'A challenge',
+          description: 'A description',
+          instruction: 'Some instructions',
+          difficulty: 2,
+          tags: [],
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
+          ownerTeamId: null,
+          osmIdProperty: null,
+          taskBundleIdProperty: null,
+          defaultBasemap: -1,
+          defaultBasemapId: null,
+          customBasemap: null,
+          overpassQL: 'way[highway=primary];',
+        },
+        localGeoJSONUpload: undefined,
+      })
+    })
+
+    it('defaults overpassQL to an empty string when the overpass source has none entered yet', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'overpass', overpassQL: '' },
+        true
+      )
+
+      expect(result.challengeData.overpassQL).toBe('')
+    })
+
+    it('builds a remoteGeoJSON submission, clearing overpassQL and setting remoteGeoJson', async () => {
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'remoteGeoJSON',
+          overpassQL: '',
+          remoteGeoJSON: 'https://example.com/data.geojson',
+        },
+        true
+      )
+
+      expect(result).toEqual({
+        challengeData: {
+          name: 'A challenge',
+          description: 'A description',
+          instruction: 'Some instructions',
+          difficulty: 2,
+          tags: [],
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
+          ownerTeamId: null,
+          osmIdProperty: null,
+          taskBundleIdProperty: null,
+          defaultBasemap: -1,
+          defaultBasemapId: null,
+          customBasemap: null,
+          overpassQL: '',
+          remoteGeoJson: 'https://example.com/data.geojson',
+        },
+        localGeoJSONUpload: undefined,
+      })
+    })
+
+    it('builds a localGeoJSON submission for a plain (non line-by-line) GeoJSON file, parsing its contents inline', async () => {
+      const geoJSON = { type: 'FeatureCollection', features: [] }
+      const file = new File([JSON.stringify(geoJSON)], 'data.geojson', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          dataOriginDate: '2024-01-15',
+        },
+        true
+      )
+
+      expect(result).toEqual({
+        challengeData: {
+          name: 'A challenge',
+          description: 'A description',
+          instruction: 'Some instructions',
+          difficulty: 2,
+          tags: [],
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
+          ownerTeamId: null,
+          osmIdProperty: null,
+          taskBundleIdProperty: null,
+          defaultBasemap: -1,
+          defaultBasemapId: null,
+          customBasemap: null,
+          overpassQL: '',
+          localGeoJSON: geoJSON,
+          dataOriginDate: '2024-01-15',
+        },
+        localGeoJSONUpload: undefined,
+      })
+    })
+
+    it('omits dataOriginDate for a plain localGeoJSON file when none is provided', async () => {
+      const geoJSON = { type: 'FeatureCollection', features: [] }
+      const file = new File([JSON.stringify(geoJSON)], 'data.geojson', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          dataOriginDate: '',
+        },
+        true
+      )
+
+      expect(result.challengeData).not.toHaveProperty('dataOriginDate')
+    })
+
+    it('resolves asynchronously to a line-by-line submission for a record-separator-framed GeoJSON file, deferring the upload instead of parsing it inline', async () => {
+      const lineByLineContent = `${RECORD_SEPARATOR}{"type":"Feature"}\n${RECORD_SEPARATOR}{"type":"Feature"}\n`
+      const file = new File([lineByLineContent], 'sequence.geojsonl', {
+        type: 'application/json',
+      })
+
+      const promise = buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          dataOriginDate: '2024-02-01',
+        },
+        true
+      )
+
+      // The lineByLine branch awaits detectLocalGeoJSONSubmission internally,
+      // so the overall call is genuinely asynchronous.
+      expect(promise).toBeInstanceOf(Promise)
+
+      const result = await promise
+
+      expect(result.challengeData).not.toHaveProperty('localGeoJSON')
+      expect(result.localGeoJSONUpload).toEqual({
+        file,
+        lineByLine: true,
+        dataOriginDate: '2024-02-01',
+      })
+    })
+
+    it('defers a newline-delimited file too, the shape MapRoulette 3 uploads and the backend accepts', async () => {
+      // One FeatureCollection per line, no record separators — a plain
+      // newline-delimited file. Parsing it inline is what produced
+      // "Unexpected non-whitespace character after JSON".
+      const collection = (name: string) =>
+        JSON.stringify({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: { type: 'Point', coordinates: [0, 0] },
+              properties: { name },
+            },
+          ],
+        })
+      const file = new File([`${collection('one')}\n${collection('two')}\n`], 'tasks.geojson', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+        },
+        true
+      )
+
+      expect(result.challengeData).not.toHaveProperty('localGeoJSON')
+      expect(result.localGeoJSONUpload).toEqual({
+        file,
+        lineByLine: true,
+        dataOriginDate: undefined,
+      })
+    })
+
+    it('omits dataOriginDate on the deferred upload when none is provided', async () => {
+      const lineByLineContent = `${RECORD_SEPARATOR}{"type":"Feature"}\n`
+      const file = new File([lineByLineContent], 'sequence.geojsonl', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          dataOriginDate: '',
+        },
+        true
+      )
+
+      expect(result.localGeoJSONUpload).toEqual({
+        file,
+        lineByLine: true,
+        dataOriginDate: undefined,
+      })
+    })
+
+    it('groups a local file by the bundle id property and defers it as a line-by-line upload', async () => {
+      const bundleFeature = (bundle: string, name: string) => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [0, 0] },
+        properties: { bundle, name },
+      })
+      const file = new File(
+        [
+          JSON.stringify({
+            type: 'FeatureCollection',
+            features: [
+              bundleFeature('a', 'one'),
+              bundleFeature('b', 'two'),
+              bundleFeature('a', 'three'),
+            ],
+          }),
+        ],
+        'tasks.geojson',
+        { type: 'application/json' }
+      )
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          taskBundleIdProperty: 'bundle',
+          dataOriginDate: '2024-03-01',
+        },
+        true
+      )
+
+      expect(result.challengeData.taskBundleIdProperty).toBe('bundle')
+      expect(result.challengeData).not.toHaveProperty('localGeoJSON')
+      const upload = result.localGeoJSONUpload
+      if (!upload) throw new Error('expected a deferred line-by-line upload')
+      expect(upload.lineByLine).toBe(true)
+      expect(upload.dataOriginDate).toBe('2024-03-01')
+
+      const lines = (await upload.file.text()).split('\n')
+      expect(lines).toHaveLength(2)
+      expect(JSON.parse(lines[0]).features).toHaveLength(2)
+      expect(JSON.parse(lines[1]).features).toHaveLength(1)
+    })
+
+    it('leaves a local file alone when no bundle id property is set', async () => {
+      const geoJSON = { type: 'FeatureCollection', features: [] }
+      const file = new File([JSON.stringify(geoJSON)], 'data.geojson', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'localGeoJSON',
+          overpassQL: '',
+          localGeoJSON: file,
+          taskBundleIdProperty: '   ',
+        },
+        true
+      )
+
+      expect(result.challengeData.taskBundleIdProperty).toBeNull()
+      expect(result.challengeData.localGeoJSON).toEqual(geoJSON)
+      expect(result.localGeoJSONUpload).toBeUndefined()
+    })
+
+    it('downloads and groups a remote source, uploading it instead of leaving it remote', async () => {
+      const body = JSON.stringify({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [0, 0] },
+            properties: { bundle: 'a' },
+          },
+          {
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [1, 1] },
+            properties: { bundle: 'a' },
+          },
+        ],
+      })
+      const fetchMock = vi.fn().mockResolvedValue(new Response(body, { status: 200 }))
+      vi.stubGlobal('fetch', fetchMock)
+
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'remoteGeoJSON',
+          overpassQL: '',
+          remoteGeoJSON: 'https://example.com/data.geojson',
+          taskBundleIdProperty: 'bundle',
+        },
+        true
+      )
+
+      expect(fetchMock).toHaveBeenCalledWith('https://example.com/data.geojson')
+      expect(result.challengeData).not.toHaveProperty('remoteGeoJson')
+      const upload = result.localGeoJSONUpload
+      if (!upload) throw new Error('expected a deferred line-by-line upload')
+      expect(upload.lineByLine).toBe(true)
+
+      const lines = (await upload.file.text()).split('\n')
+      expect(lines).toHaveLength(1)
+      expect(JSON.parse(lines[0]).features).toHaveLength(2)
+    })
+
+    it('fails loudly when a remote source cannot be downloaded for grouping', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('nope', { status: 404 })))
+
+      await expect(
+        buildChallengeSubmission(
+          {
+            ...baseValues,
+            dataSource: 'remoteGeoJSON',
+            overpassQL: '',
+            remoteGeoJSON: 'https://example.com/missing.geojson',
+            taskBundleIdProperty: 'bundle',
+          },
+          true
+        )
+      ).rejects.toThrow(/HTTP 404/)
+    })
+
+    it('defaults description and instruction to empty strings when blank', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, description: '', instruction: '' },
+        true
+      )
+
+      expect(result.challengeData.description).toBe('')
+      expect(result.challengeData.instruction).toBe('')
+    })
+
+    it('appends the #maproulette hashtag to the changeset comment when it is missing', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinComment: '  Fixed roads  ' },
+        true
+      )
+
+      expect(result.challengeData.checkinComment).toBe('Fixed roads #maproulette')
+    })
+
+    it('does not treat a longer hashtag like #maproulette-beta as the #maproulette hashtag', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinComment: 'Fixed roads #maproulette-beta' },
+        true
+      )
+
+      expect(result.challengeData.checkinComment).toBe('Fixed roads #maproulette-beta #maproulette')
+    })
+
+    it('trims surrounding whitespace from the changeset source', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinSource: '  Bing; survey  ' },
+        true
+      )
+
+      expect(result.challengeData.checkinSource).toBe('Bing; survey')
+    })
+  })
+
+  describe('edit mode (isCreate = false)', () => {
+    it('omits all data-source fields regardless of dataSource, since editing only changes metadata', async () => {
+      const result = await buildChallengeSubmission(
+        {
+          ...baseValues,
+          dataSource: 'overpass',
+          overpassQL: 'should not appear',
+          remoteGeoJSON: 'https://example.com/should-not-appear.geojson',
+        },
+        false
+      )
+
+      expect(result).toEqual({
+        challengeData: {
+          name: 'A challenge',
+          description: 'A description',
+          instruction: 'Some instructions',
+          difficulty: 2,
+          tags: [],
+          checkinComment: 'Fixed roads #maproulette',
+          checkinSource: 'Bing',
+          ownerTeamId: null,
+          osmIdProperty: null,
+          taskBundleIdProperty: null,
+          defaultBasemap: -1,
+          defaultBasemapId: null,
+          customBasemap: null,
+        },
+        localGeoJSONUpload: undefined,
+      })
+    })
+
+    it('never produces a localGeoJSONUpload, even with a line-by-line file selected', async () => {
+      const lineByLineContent = `${RECORD_SEPARATOR}{"type":"Feature"}\n`
+      const file = new File([lineByLineContent], 'sequence.geojsonl', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'localGeoJSON', localGeoJSON: file },
+        false
+      )
+
+      expect(result.localGeoJSONUpload).toBeUndefined()
+      expect(result.challengeData).not.toHaveProperty('localGeoJSON')
+    })
+
+    it('sends the new source when the challenge has no tasks yet', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'overpass', overpassQL: 'way[building];' },
+        false,
+        true
+      )
+
+      expect(result.challengeData.overpassQL).toBe('way[building];')
+      expect(result.challengeData.checkinComment).toBe('Fixed roads #maproulette')
+    })
+
+    it('uploads a line-by-line file for a challenge with no tasks yet', async () => {
+      const file = new File([`${RECORD_SEPARATOR}{"type":"Feature"}\n`], 'sequence.geojsonl', {
+        type: 'application/json',
+      })
+
+      const result = await buildChallengeSubmission(
+        { ...baseValues, dataSource: 'localGeoJSON', localGeoJSON: file },
+        false,
+        true
+      )
+
+      expect(result.localGeoJSONUpload?.lineByLine).toBe(true)
+    })
+
+    it('sets description and instruction to undefined (not empty string) when blank', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, description: '', instruction: '' },
+        false
+      )
+
+      expect(result.challengeData.description).toBeUndefined()
+      expect(result.challengeData.instruction).toBeUndefined()
+    })
+
+    it('leaves the changeset comment as entered, without appending the hashtag', async () => {
+      const result = await buildChallengeSubmission(
+        { ...baseValues, checkinComment: 'Fixed roads' },
+        false
+      )
+
+      expect(result.challengeData.checkinComment).toBe('Fixed roads')
+    })
+  })
+})
+
+describe('buildChallengeSubmission team image handling', () => {
+  it('sends the chosen team image id', async () => {
+    const result = await buildChallengeSubmission({ ...baseValues, ownerTeamId: 7 }, false)
+    expect(result.challengeData.ownerTeamId).toBe(7)
+  })
+
+  it('sends an explicit null to clear the image', async () => {
+    const result = await buildChallengeSubmission({ ...baseValues, ownerTeamId: null }, false)
+    // Omitting the key would mean "leave it alone" server-side, so clearing
+    // has to be an explicit null rather than an absent field.
+    expect('ownerTeamId' in result.challengeData).toBe(true)
+    expect(result.challengeData.ownerTeamId).toBeNull()
+  })
+
+  it('sends the image id when creating too', async () => {
+    const result = await buildChallengeSubmission({ ...baseValues, ownerTeamId: 3 }, true)
+    expect(result.challengeData.ownerTeamId).toBe(3)
+  })
+
+  it('leaves an edited challenge basemap alone when the basemap field was not changed', async () => {
+    const { challengeData } = await buildChallengeSubmission(
+      { ...baseValues, basemap: 'Esri World Imagery' },
+      false,
+      false,
+      { defaultBasemap: 4, defaultBasemapId: 'EsriWorldImagery' }
+    )
+
+    expect(challengeData).not.toHaveProperty('defaultBasemap')
+    expect(challengeData).not.toHaveProperty('defaultBasemapId')
+    expect(challengeData).not.toHaveProperty('customBasemap')
+  })
+
+  it('treats a missing custom basemap url as no custom basemap', async () => {
+    const { challengeData } = await buildChallengeSubmission(
+      { ...baseValues, basemap: 'custom', basemapUrl: undefined },
+      true
+    )
+
+    expect(challengeData).toMatchObject({
+      defaultBasemap: -1,
+      defaultBasemapId: null,
+      customBasemap: null,
+    })
+  })
+})
+
+describe('buildChallengeSubmission keywords', () => {
+  it.each([true, false])(
+    'sends the category keywords plus the additional keywords as tags (isCreate=%s)',
+    async (isCreate) => {
+      const { challengeData } = await buildChallengeSubmission(
+        { ...baseValues, category: 'water', additionalKeywords: 'lakes,,rivers' },
+        isCreate
+      )
+      expect(challengeData.tags).toEqual(['natural', 'water', 'lakes', 'rivers'])
+    }
+  )
+
+  it('sends no keywords for the Other category without additional keywords', async () => {
+    const { challengeData } = await buildChallengeSubmission(baseValues, true)
+    expect(challengeData.tags).toEqual([])
+  })
+})

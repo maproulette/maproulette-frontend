@@ -1,0 +1,16 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+export const ColorBrandPrimary = "#2281c2"; // Primary interactive color (links, primary actions). From the v3 frontend's $blue (cornflower-blue).
+export const ColorBrandSecondary = "#00a592"; // Brand mark color (logo, navbar). From the v3 frontend's $green (persian green).
+export const FontBrandSans = [
+  "system-ui",
+  "-apple-system",
+  "BlinkMacSystemFont",
+  "Segoe UI",
+  "Roboto",
+  "Helvetica Neue",
+  "Arial",
+  "sans-serif",
+]; // Primary UI font stack — the v4 frontend's system-font stack, used for both the app (via Tailwind's font-sans) and this Storybook's own manager chrome.
