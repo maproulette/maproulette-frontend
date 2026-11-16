@@ -18,9 +18,23 @@ const jsonResponse = (body: unknown) =>
 const requestedUrl = (fetchMock: ReturnType<typeof stubFetch>) =>
   new URL(fetchMock.mock.calls[0][0] as unknown as string)
 
+const square = {
+  type: 'Polygon',
+  coordinates: [
+    [
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 0],
+    ],
+  ],
+}
+
 describe('nominatim', () => {
   it('searches the configured Nominatim server', async () => {
-    const fetchMock = stubFetch(jsonResponse([{ display_name: 'Bonn', place_id: '1' }]))
+    const fetchMock = stubFetch(
+      jsonResponse([{ display_name: 'Bonn', place_id: '1', geojson: square }])
+    )
 
     expect(await nominatim.search('Bonn & Köln')).toEqual([{ display_name: 'Bonn', place_id: '1' }])
 
@@ -28,6 +42,23 @@ describe('nominatim', () => {
     expect(`${url.origin}${url.pathname}`).toBe(`${NOMINATIM_BASE_URL}/search`)
     expect(url.searchParams.get('q')).toBe('Bonn & Köln')
     expect(url.searchParams.get('format')).toBe('json')
+  })
+
+  it('only returns places that are areas', async () => {
+    stubFetch(
+      jsonResponse([
+        { display_name: 'Bonn', place_id: '1', geojson: square },
+        { display_name: 'Bonner Talweg', place_id: '2', geojson: { type: 'LineString' } },
+        { display_name: 'Bonn Hbf', place_id: '3', geojson: { type: 'Point' } },
+        {
+          display_name: 'Rhein-Sieg-Kreis',
+          place_id: '4',
+          geojson: { type: 'MultiPolygon', coordinates: [square.coordinates] },
+        },
+      ])
+    )
+
+    expect((await nominatim.search('Bonn')).map((place) => place.place_id)).toEqual(['1', '4'])
   })
 
   it('does not try to set a User-Agent header', async () => {

@@ -13,18 +13,25 @@ export interface PlaceSuggestion {
   boundingbox?: string[]
 }
 
+export type AreaGeometry =
+  | {
+      type: 'Polygon'
+      coordinates: number[][][]
+    }
+  | {
+      type: 'MultiPolygon'
+      coordinates: number[][][][]
+    }
+
+type Geometry = AreaGeometry | { type: 'Point' | 'LineString' | 'MultiLineString' }
+
+export const isAreaGeometry = (geometry: Geometry | undefined): geometry is AreaGeometry =>
+  geometry?.type === 'Polygon' || geometry?.type === 'MultiPolygon'
+
 export interface PlaceDetail {
   display_name: string
   boundingbox?: string[]
-  geojson?:
-    | {
-        type: 'Polygon'
-        coordinates: number[][][]
-      }
-    | {
-        type: 'MultiPolygon'
-        coordinates: number[][][][]
-      }
+  geojson?: Geometry
 }
 
 export interface ReverseGeocodeResult {
@@ -41,8 +48,29 @@ const fetchJSON = async <T>(path: string, params: Record<string, string>, signal
 }
 
 export const nominatim = {
-  search: (query: string, signal?: AbortSignal): Promise<PlaceSuggestion[]> =>
-    fetchJSON('/search', { format: 'json', q: query, limit: '8', addressdetails: '1' }, signal),
+  /**
+   * Places matching the query that are areas, since only an area can be used to
+   * filter challenges by location. Nominatim can't filter by geometry type, so
+   * this asks for (heavily simplified) geometries and filters them here.
+   */
+  search: async (query: string, signal?: AbortSignal): Promise<PlaceSuggestion[]> => {
+    const places = await fetchJSON<Array<PlaceSuggestion & { geojson?: Geometry }>>(
+      '/search',
+      {
+        format: 'json',
+        q: query,
+        limit: '20',
+        addressdetails: '1',
+        polygon_geojson: '1',
+        polygon_threshold: '0.1',
+      },
+      signal
+    )
+    return places
+      .filter((place) => isAreaGeometry(place.geojson))
+      .slice(0, 8)
+      .map(({ geojson: _, ...place }) => place)
+  },
 
   lookup: async (osmId: string, signal?: AbortSignal): Promise<PlaceDetail | null> => {
     const places = await fetchJSON<PlaceDetail[]>(

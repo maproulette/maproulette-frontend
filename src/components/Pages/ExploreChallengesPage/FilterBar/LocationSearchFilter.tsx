@@ -1,6 +1,6 @@
 import { AlertCircle, MapPin, X } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { nominatim, type PlaceDetail, type PlaceSuggestion } from '@/api/nominatim'
+import { isAreaGeometry, nominatim, type PlaceDetail, type PlaceSuggestion } from '@/api/nominatim'
 import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/Map/mapUtils'
 import type {
   LocationGeojson,
@@ -59,8 +59,8 @@ const applyLocation = (
     }
   }
 
-  if (place.geojson) {
-    setLocationGeojson(place.geojson as LocationGeojson)
+  if (isAreaGeometry(place.geojson)) {
+    setLocationGeojson(place.geojson)
     const geometryJson = JSON.stringify(place.geojson)
     setResolvedPlaceFilter(
       geometryJson.length <= MAX_PLACE_GEOMETRY_BYTES
@@ -68,8 +68,7 @@ const applyLocation = (
         : null
     )
   } else {
-    // Nominatim has no boundary for some places (a node, a POI); the bounding
-    // box set above is then all there is to filter by.
+    setLocationGeojson(null)
     setResolvedPlaceFilter(null)
   }
 }
@@ -335,7 +334,7 @@ export const LocationSearchFilter = () => {
     setError('')
     setLocationOsm(undefined, undefined)
     setBounds(DEFAULT_WORLD_BOUNDS)
-    setLocationGeojson(null as LocationGeojson)
+    setLocationGeojson(null)
     setLocationName(undefined)
     // The place's bounding box and boundary both have to go, or `placeFilter`
     // keeps narrowing the challenge list to a location that is no longer shown.

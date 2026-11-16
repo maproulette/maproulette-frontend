@@ -1,6 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import type { AreaGeometry } from '@/api/nominatim'
 import {
   boundsStringToPolygon,
   clampBoundsString,
@@ -69,16 +70,7 @@ const getJSONCookie = <T,>(name: string): T | null => {
   }
 }
 
-export type LocationGeojson =
-  | {
-      type: 'Polygon'
-      coordinates: number[][][]
-    }
-  | {
-      type: 'MultiPolygon'
-      coordinates: number[][][][]
-    }
-  | null
+export type LocationGeojson = AreaGeometry | null
 
 /**
  * The boundary of the selected place, ready to send. Held pre-serialized
