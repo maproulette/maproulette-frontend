@@ -1,10 +1,11 @@
 import { Box, MapPin } from 'lucide-react'
 import { useIntl } from '@/i18n'
+import type { Task } from '@/types/Task'
 import { DataSection } from './DataSection'
 import { GeoJsonSection } from './GeoJsonSection'
 import { OsmFeatureSection } from './OsmFeatureSection'
 
-export const DataTab = () => {
+export const DataTab = ({ task }: { task: Task }) => {
   const { t } = useIntl()
 
   return (
@@ -14,11 +15,11 @@ export const DataTab = () => {
         title={t({ id: 'taskInfoPanel.data.osmFeature', defaultMessage: 'OSM feature' })}
         defaultOpen
       >
-        <OsmFeatureSection />
+        <OsmFeatureSection task={task} />
       </DataSection>
 
       <DataSection icon={MapPin} title={t({ id: 'common.geojson', defaultMessage: 'GeoJSON' })}>
-        <GeoJsonSection />
+        <GeoJsonSection task={task} />
       </DataSection>
     </div>
   )

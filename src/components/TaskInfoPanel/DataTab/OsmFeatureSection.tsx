@@ -1,7 +1,7 @@
 import { ExternalLink, MapPin } from 'lucide-react'
 import { api } from '@/api'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useIntl } from '@/i18n'
+import type { Task } from '@/types/Task'
 import { parseOsmFeatureFromTask } from '../taskUtils/osmUtils'
 
 /** Zoom the OSM history map opens at: wide enough to cover the task's surroundings. */
@@ -15,9 +15,8 @@ const linkCardClass =
  * someone has already touched the area. Location-based rather than element
  * based, so it shows even when the task references no OSM element.
  */
-const AreaHistory = () => {
+const AreaHistory = ({ task }: { task: Task }) => {
   const { t } = useIntl()
-  const { task } = useTaskContext()
 
   const coordinates = task.location?.coordinates
   if (!coordinates) return null
@@ -70,9 +69,8 @@ const AreaHistory = () => {
   )
 }
 
-export const OsmFeatureSection = () => {
+export const OsmFeatureSection = ({ task }: { task: Task }) => {
   const { t } = useIntl()
-  const { task } = useTaskContext()
   const osmFeature = parseOsmFeatureFromTask(task)
   const osmServer = api.osm.getOSMServerUrl()
 
@@ -113,7 +111,7 @@ export const OsmFeatureSection = () => {
         </p>
       )}
 
-      <AreaHistory />
+      <AreaHistory task={task} />
     </div>
   )
 }

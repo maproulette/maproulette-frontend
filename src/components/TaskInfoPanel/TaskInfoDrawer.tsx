@@ -1,10 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { ExternalLink, Package, Play, Share2, X, ZoomIn } from 'lucide-react'
-import { useMemo } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
-import { TaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
 import {
   getOsmServerUrl,
@@ -22,8 +20,6 @@ import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
 import { TaskTabs } from './TaskTabs'
-
-const notLocked = async () => false
 
 interface TaskInfoDrawerProps {
   selectedTask: TaskMarker | null
@@ -76,26 +72,6 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
         : task?.name && /^\d+$/.test(String(task.name))
           ? `${osmServer}/way/${task.name}`
           : null
-
-  // Provide a TaskContext so tab descendants (DataTab, CommentsHistoryTab,
-  // TaskTab) work outside the task-edit route. Lock-related
-  // methods are no-ops here — the drawer is read-only on browse/explore/
-  // prioritization pages.
-  const taskContextValue = useMemo(
-    () =>
-      task
-        ? {
-            task,
-            isEditable: false,
-            isLocked: false,
-            isLocking: false,
-            lockedTasks: [],
-            lockTask: notLocked,
-            unlockTask: notLocked,
-          }
-        : undefined,
-    [task]
-  )
 
   return (
     <Drawer open={isOpen} onClose={onClose}>
@@ -234,78 +210,76 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
       </div>
 
       {/* Tabs */}
-      {isOpen && task && taskContextValue && (
-        <TaskContext.Provider value={taskContextValue}>
-          <TaskTabs
-            task={task}
-            taskTabContent={
-              <div className="space-y-3">
-                {/* Bundle Info */}
-                {bundleData && bundleData.taskIds.length > 1 && (
-                  <div>
-                    <div className="flex items-center gap-2 pb-2">
-                      <Package className="h-3.5 w-3.5 text-zinc-400" />
-                      <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                        {t(
-                          { id: 'common.bundledTasks', defaultMessage: 'Bundled Tasks ({count})' },
-                          { count: bundleData.taskIds.length - 1 }
-                        )}
-                      </span>
-                    </div>
-                    <div className="max-h-48 space-y-1 overflow-y-auto">
-                      {bundleData.taskIds
-                        .filter((id) => id !== task.id)
-                        .map((taskId) => (
-                          <Link
-                            key={taskId}
-                            to="/tasks/$taskId"
-                            params={{ taskId: taskId.toString() }}
-                            className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
-                          >
-                            <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
-                              {t(
-                                { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
-                                { id: taskId }
-                              )}
-                            </span>
-                          </Link>
-                        ))}
-                    </div>
+      {isOpen && task && (
+        <TaskTabs
+          task={task}
+          taskTabContent={
+            <div className="space-y-3">
+              {/* Bundle Info */}
+              {bundleData && bundleData.taskIds.length > 1 && (
+                <div>
+                  <div className="flex items-center gap-2 pb-2">
+                    <Package className="h-3.5 w-3.5 text-zinc-400" />
+                    <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+                      {t(
+                        { id: 'common.bundledTasks', defaultMessage: 'Bundled Tasks ({count})' },
+                        { count: bundleData.taskIds.length - 1 }
+                      )}
+                    </span>
                   </div>
-                )}
+                  <div className="max-h-48 space-y-1 overflow-y-auto">
+                    {bundleData.taskIds
+                      .filter((id) => id !== task.id)
+                      .map((taskId) => (
+                        <Link
+                          key={taskId}
+                          to="/tasks/$taskId"
+                          params={{ taskId: taskId.toString() }}
+                          className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
+                        >
+                          <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
+                            {t(
+                              { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
+                              { id: taskId }
+                            )}
+                          </span>
+                        </Link>
+                      ))}
+                  </div>
+                </div>
+              )}
 
-                {/* Challenge Instructions */}
-                {(task?.instruction || challenge?.instruction) && task && (
-                  <div>
-                    <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
-                      {t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
-                    </h3>
-                    <div className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300 [&_:is(h1,h2,h3,h4,h5,h6)]:mt-4 [&_:is(h1,h2,h3,h4,h5,h6)]:mb-2 [&_:is(h1,h2,h3,h4,h5,h6)]:font-bold [&_:is(h1,h2,h3,h4,h5,h6)]:text-base [&_:is(h1,h2,h3,h4,h5,h6)]:text-zinc-900 [&_:is(h1,h2,h3,h4,h5,h6)]:leading-snug [&_:is(h1,h2,h3,h4,h5,h6)]:first:mt-0 [&_:is(h1,h2,h3,h4,h5,h6)]:dark:text-white [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-slate-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-slate-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
-                      <ReactMarkdown
-                        remarkPlugins={markdownRemarkPlugins}
-                        components={{
-                          a: (props) => (
-                            <a
-                              {...props}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline dark:text-blue-400"
-                            />
-                          ),
-                        }}
-                      >
-                        {substituteMarkdownTaskProperties(
-                          task.instruction || challenge?.instruction || '',
-                          task
-                        )}
-                      </ReactMarkdown>
-                    </div>
+              {/* Challenge Instructions */}
+              {(task?.instruction || challenge?.instruction) && task && (
+                <div>
+                  <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+                    {t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
+                  </h3>
+                  <div className="text-sm text-zinc-700 leading-relaxed dark:text-slate-300 [&_:is(h1,h2,h3,h4,h5,h6)]:mt-4 [&_:is(h1,h2,h3,h4,h5,h6)]:mb-2 [&_:is(h1,h2,h3,h4,h5,h6)]:font-bold [&_:is(h1,h2,h3,h4,h5,h6)]:text-base [&_:is(h1,h2,h3,h4,h5,h6)]:text-zinc-900 [&_:is(h1,h2,h3,h4,h5,h6)]:leading-snug [&_:is(h1,h2,h3,h4,h5,h6)]:first:mt-0 [&_:is(h1,h2,h3,h4,h5,h6)]:dark:text-white [&_a]:text-blue-600 [&_a]:hover:underline [&_a]:dark:text-blue-400 [&_blockquote]:my-2 [&_blockquote]:border-zinc-300 [&_blockquote]:border-l-2 [&_blockquote]:pl-2 [&_blockquote]:italic [&_blockquote]:dark:border-slate-600 [&_code]:rounded [&_code]:bg-zinc-200 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs [&_code]:dark:bg-slate-800 [&_li]:my-0.5 [&_ol]:my-1 [&_ol]:ml-4 [&_ol]:list-decimal [&_p]:my-1 [&_p]:first:mt-0 [&_ul]:my-1 [&_ul]:ml-4 [&_ul]:list-disc">
+                    <ReactMarkdown
+                      remarkPlugins={markdownRemarkPlugins}
+                      components={{
+                        a: (props) => (
+                          <a
+                            {...props}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline dark:text-blue-400"
+                          />
+                        ),
+                      }}
+                    >
+                      {substituteMarkdownTaskProperties(
+                        task.instruction || challenge?.instruction || '',
+                        task
+                      )}
+                    </ReactMarkdown>
                   </div>
-                )}
-              </div>
-            }
-          />
-        </TaskContext.Provider>
+                </div>
+              )}
+            </div>
+          }
+        />
       )}
     </Drawer>
   )

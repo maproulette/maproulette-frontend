@@ -15,11 +15,10 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react'
-import { useContext, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { TaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { ShortCodeLink } from '@/components/shared/ShortCodeLink'
 import { Button } from '@/components/ui/Button'
@@ -117,23 +116,14 @@ const commentComponents: Components = {
   ),
 }
 
-export const CommentsHistoryTab = ({
-  taskId: taskIdProp,
-  readOnly = false,
-}: {
-  taskId?: number
-  readOnly?: boolean
-} = {}) => {
+export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
   const { t, locale } = useIntl()
-  const taskContext = useContext(TaskContext)
-  const taskId = taskIdProp ?? taskContext?.task.id
-  const resolvedTaskId = taskId ?? 0
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
   const { handleImageError, getImageSrc } = useAvatarContext()
   const { taskHistoryItemRenderers } = usePluginContext()
 
-  const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(resolvedTaskId)
+  const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(taskId)
   const addCommentMutation = api.task.useAddTaskComment()
   const userOsmId = user?.osmProfile?.id
 
@@ -145,7 +135,6 @@ export const CommentsHistoryTab = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (readOnly || !resolvedTaskId) return
     if (!commentText.trim()) {
       toast.error(t({ id: 'common.pleaseEnterAComment', defaultMessage: 'Please enter a comment' }))
       return
@@ -160,7 +149,7 @@ export const CommentsHistoryTab = ({
       return
     }
     addCommentMutation.mutate(
-      { taskId: resolvedTaskId, commentText: commentText.trim() },
+      { taskId, commentText: commentText.trim() },
       {
         onSuccess: () => {
           setCommentText('')
@@ -176,10 +165,6 @@ export const CommentsHistoryTab = ({
         },
       }
     )
-  }
-
-  if (!resolvedTaskId) {
-    return null
   }
 
   const renderHistoryItem = (item: TaskHistoryAction, index: number) => {
@@ -336,40 +321,39 @@ export const CommentsHistoryTab = ({
         </div>
       </ScrollArea>
 
-      {!readOnly &&
-        (user ? (
-          <form onSubmit={handleSubmit} className="mt-3">
-            <div className="flex gap-2">
-              <Textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                placeholder={t({ id: 'common.addAComment', defaultMessage: 'Add a comment...' })}
-                rows={2}
-                className="flex-1 resize-none border-transparent bg-white text-sm shadow-sm dark:border-transparent dark:bg-slate-800"
-                maxLength={5000}
-              />
-              <Button
-                type="submit"
-                size="sm"
-                disabled={!commentText.trim() || addCommentMutation.isPending}
-                className="self-end"
-                aria-label={t({
-                  id: 'taskInfoPanel.comments.send',
-                  defaultMessage: 'Send comment',
-                })}
-              >
-                <Send className="size-3.5" aria-hidden="true" />
-              </Button>
-            </div>
-          </form>
-        ) : (
-          <div className="mt-3 rounded-lg bg-white p-3 text-center text-xs text-zinc-600 shadow-sm dark:bg-slate-800 dark:text-slate-400">
-            {t({
-              id: 'taskInfoPanel.comments.signInPrompt',
-              defaultMessage: 'Sign in to add comments',
-            })}
+      {user ? (
+        <form onSubmit={handleSubmit} className="mt-3">
+          <div className="flex gap-2">
+            <Textarea
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              placeholder={t({ id: 'common.addAComment', defaultMessage: 'Add a comment...' })}
+              rows={2}
+              className="flex-1 resize-none border-transparent bg-white text-sm shadow-sm dark:border-transparent dark:bg-slate-800"
+              maxLength={5000}
+            />
+            <Button
+              type="submit"
+              size="sm"
+              disabled={!commentText.trim() || addCommentMutation.isPending}
+              className="self-end"
+              aria-label={t({
+                id: 'taskInfoPanel.comments.send',
+                defaultMessage: 'Send comment',
+              })}
+            >
+              <Send className="size-3.5" aria-hidden="true" />
+            </Button>
           </div>
-        ))}
+        </form>
+      ) : (
+        <div className="mt-3 rounded-lg bg-white p-3 text-center text-xs text-zinc-600 shadow-sm dark:bg-slate-800 dark:text-slate-400">
+          {t({
+            id: 'taskInfoPanel.comments.signInPrompt',
+            defaultMessage: 'Sign in to add comments',
+          })}
+        </div>
+      )}
     </div>
   )
 }

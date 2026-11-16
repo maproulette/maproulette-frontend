@@ -53,10 +53,10 @@ export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsPro
             <FeaturesTab task={task} />
           </TabsContent>
           <TabsContent value="data" className="mt-0">
-            <DataTab />
+            <DataTab task={task} />
           </TabsContent>
           <TabsContent value="comments" className="mt-0">
-            <CommentsHistoryTab />
+            <CommentsHistoryTab key={task.id} taskId={task.id} />
           </TabsContent>
         </div>
       </ScrollArea>

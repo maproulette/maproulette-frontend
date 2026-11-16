@@ -152,7 +152,7 @@ export interface PluginApiContext {
       selectedTaskId: number | null
       onTaskSelect: (taskId: number | null) => void
     }>
-    CommentsHistoryTab: ComponentType<{ taskId?: number }>
+    CommentsHistoryTab: ComponentType<{ taskId: number }>
     Table: ComponentType<Record<string, unknown>>
     TableHeader: ComponentType<Record<string, unknown>>
     TableBody: ComponentType<Record<string, unknown>>

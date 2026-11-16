@@ -1,12 +1,11 @@
 import { Check, Copy } from 'lucide-react'
-import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { Button } from '@/components/ui/Button'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import { useIntl } from '@/i18n'
+import type { Task } from '@/types/Task'
 
-export const GeoJsonSection = () => {
+export const GeoJsonSection = ({ task }: { task: Task }) => {
   const { t } = useIntl()
-  const { task } = useTaskContext()
   const { copy, isCopied } = useCopyToClipboard()
   const geoJson = JSON.stringify(task.geometries, null, 2)
 
