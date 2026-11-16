@@ -1,1 +1,0 @@
-export { CongratulateModal } from './CongratulateModal'

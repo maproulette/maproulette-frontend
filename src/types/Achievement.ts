@@ -16,6 +16,7 @@ import {
   Waves,
   Wrench,
 } from 'lucide-react'
+import { defineMessage, type MessageDescriptor } from 'react-intl'
 
 export const Achievement = {
   mappedRoads: 1,
@@ -42,13 +43,10 @@ export const Achievement = {
 
 type AchievementId = (typeof Achievement)[keyof typeof Achievement]
 
-export type AchievementCategory = 'taskCompletion' | 'mapping' | 'creation' | 'pointsMilestone'
-
 export interface AchievementDefinition {
   id: AchievementId
-  category: AchievementCategory
-  title: string
-  description: string
+  title: MessageDescriptor
+  description: MessageDescriptor
   icon: LucideIcon
   overlay?: string
 }
@@ -56,161 +54,212 @@ export interface AchievementDefinition {
 export const achievementDefinitions: AchievementDefinition[] = [
   {
     id: Achievement.fixedTask,
-    category: 'taskCompletion',
-    title: 'First Fix',
-    description: 'Fixed your first task.',
+    title: defineMessage({ id: 'achievement.fixedTask.title', defaultMessage: 'First Fix' }),
+    description: defineMessage({
+      id: 'achievement.fixedTask.description',
+      defaultMessage: 'Fixed your first task.',
+    }),
     icon: Wrench,
   },
   {
     id: Achievement.fixedCoopTask,
-    category: 'taskCompletion',
-    title: 'Cooperative Fixer',
-    description: 'Fixed a cooperative task.',
+    title: defineMessage({
+      id: 'achievement.fixedCoopTask.title',
+      defaultMessage: 'Cooperative Fixer',
+    }),
+    description: defineMessage({
+      id: 'achievement.fixedCoopTask.description',
+      defaultMessage: 'Fixed a cooperative task.',
+    }),
     icon: Wrench,
   },
   {
     id: Achievement.challengeCompleted,
-    category: 'taskCompletion',
-    title: 'Finished Together',
-    description: 'Fixed a task in a challenge that was completed.',
+    title: defineMessage({
+      id: 'achievement.challengeCompleted.title',
+      defaultMessage: 'Finished Together',
+    }),
+    description: defineMessage({
+      id: 'achievement.challengeCompleted.description',
+      defaultMessage: 'Fixed a task in a challenge that was completed.',
+    }),
     icon: Flag,
   },
   {
     id: Achievement.fixedFinalTask,
-    category: 'taskCompletion',
-    title: 'Closer',
-    description: 'Finished the final task in a challenge.',
+    title: defineMessage({ id: 'achievement.fixedFinalTask.title', defaultMessage: 'Closer' }),
+    description: defineMessage({
+      id: 'achievement.fixedFinalTask.description',
+      defaultMessage: 'Finished the final task in a challenge.',
+    }),
     icon: CheckCircle2,
   },
   {
     id: Achievement.mappedRoads,
-    category: 'mapping',
-    title: 'Road Warrior',
-    description: 'Contributed to mapping roads.',
+    title: defineMessage({ id: 'achievement.mappedRoads.title', defaultMessage: 'Road Warrior' }),
+    description: defineMessage({
+      id: 'achievement.mappedRoads.description',
+      defaultMessage: 'Contributed to mapping roads.',
+    }),
     icon: Route,
   },
   {
     id: Achievement.mappedWater,
-    category: 'mapping',
-    title: 'Waterways',
-    description: 'Contributed to mapping water features.',
+    title: defineMessage({ id: 'achievement.mappedWater.title', defaultMessage: 'Waterways' }),
+    description: defineMessage({
+      id: 'achievement.mappedWater.description',
+      defaultMessage: 'Contributed to mapping water features.',
+    }),
     icon: Waves,
   },
   {
     id: Achievement.mappedTransit,
-    category: 'mapping',
-    title: 'Transit Mapper',
-    description: 'Contributed to mapping transit.',
+    title: defineMessage({
+      id: 'achievement.mappedTransit.title',
+      defaultMessage: 'Transit Mapper',
+    }),
+    description: defineMessage({
+      id: 'achievement.mappedTransit.description',
+      defaultMessage: 'Contributed to mapping transit.',
+    }),
     icon: Ship,
   },
   {
     id: Achievement.mappedLanduse,
-    category: 'mapping',
-    title: 'Land Use',
-    description: 'Contributed to mapping land use.',
+    title: defineMessage({ id: 'achievement.mappedLanduse.title', defaultMessage: 'Land Use' }),
+    description: defineMessage({
+      id: 'achievement.mappedLanduse.description',
+      defaultMessage: 'Contributed to mapping land use.',
+    }),
     icon: Leaf,
   },
   {
     id: Achievement.mappedBuildings,
-    category: 'mapping',
-    title: 'Building Blocks',
-    description: 'Contributed to mapping buildings.',
+    title: defineMessage({
+      id: 'achievement.mappedBuildings.title',
+      defaultMessage: 'Building Blocks',
+    }),
+    description: defineMessage({
+      id: 'achievement.mappedBuildings.description',
+      defaultMessage: 'Contributed to mapping buildings.',
+    }),
     icon: Building2,
   },
   {
     id: Achievement.mappedPoi,
-    category: 'mapping',
-    title: 'Landmark Spotter',
-    description: 'Contributed to mapping points of interest.',
+    title: defineMessage({
+      id: 'achievement.mappedPoi.title',
+      defaultMessage: 'Landmark Spotter',
+    }),
+    description: defineMessage({
+      id: 'achievement.mappedPoi.description',
+      defaultMessage: 'Contributed to mapping points of interest.',
+    }),
     icon: Landmark,
   },
   {
     id: Achievement.createdChallenge,
-    category: 'creation',
-    title: 'Challenge Creator',
-    description: 'Created a challenge.',
+    title: defineMessage({
+      id: 'achievement.createdChallenge.title',
+      defaultMessage: 'Challenge Creator',
+    }),
+    description: defineMessage({
+      id: 'achievement.createdChallenge.description',
+      defaultMessage: 'Created a challenge.',
+    }),
     icon: PenTool,
   },
   {
     id: Achievement.points100,
-    category: 'pointsMilestone',
-    title: '100 Points',
-    description: 'Earned 100 points.',
+    title: defineMessage({ id: 'achievement.points100.title', defaultMessage: '100 Points' }),
+    description: defineMessage({
+      id: 'achievement.points100.description',
+      defaultMessage: 'Earned 100 points.',
+    }),
     icon: Star,
     overlay: '100',
   },
   {
     id: Achievement.points500,
-    category: 'pointsMilestone',
-    title: '500 Points',
-    description: 'Earned 500 points.',
+    title: defineMessage({ id: 'achievement.points500.title', defaultMessage: '500 Points' }),
+    description: defineMessage({
+      id: 'achievement.points500.description',
+      defaultMessage: 'Earned 500 points.',
+    }),
     icon: Star,
     overlay: '500',
   },
   {
     id: Achievement.points1000,
-    category: 'pointsMilestone',
-    title: '1,000 Points',
-    description: 'Earned 1,000 points.',
+    title: defineMessage({ id: 'achievement.points1000.title', defaultMessage: '1,000 Points' }),
+    description: defineMessage({
+      id: 'achievement.points1000.description',
+      defaultMessage: 'Earned 1,000 points.',
+    }),
     icon: Award,
     overlay: '1K',
   },
   {
     id: Achievement.points5000,
-    category: 'pointsMilestone',
-    title: '5,000 Points',
-    description: 'Earned 5,000 points.',
+    title: defineMessage({ id: 'achievement.points5000.title', defaultMessage: '5,000 Points' }),
+    description: defineMessage({
+      id: 'achievement.points5000.description',
+      defaultMessage: 'Earned 5,000 points.',
+    }),
     icon: Award,
     overlay: '5K',
   },
   {
     id: Achievement.points10000,
-    category: 'pointsMilestone',
-    title: '10,000 Points',
-    description: 'Earned 10,000 points.',
+    title: defineMessage({ id: 'achievement.points10000.title', defaultMessage: '10,000 Points' }),
+    description: defineMessage({
+      id: 'achievement.points10000.description',
+      defaultMessage: 'Earned 10,000 points.',
+    }),
     icon: Trophy,
     overlay: '10K',
   },
   {
     id: Achievement.points50000,
-    category: 'pointsMilestone',
-    title: '50,000 Points',
-    description: 'Earned 50,000 points.',
+    title: defineMessage({ id: 'achievement.points50000.title', defaultMessage: '50,000 Points' }),
+    description: defineMessage({
+      id: 'achievement.points50000.description',
+      defaultMessage: 'Earned 50,000 points.',
+    }),
     icon: Trophy,
     overlay: '50K',
   },
   {
     id: Achievement.points100k,
-    category: 'pointsMilestone',
-    title: '100,000 Points',
-    description: 'Earned 100,000 points.',
+    title: defineMessage({ id: 'achievement.points100k.title', defaultMessage: '100,000 Points' }),
+    description: defineMessage({
+      id: 'achievement.points100k.description',
+      defaultMessage: 'Earned 100,000 points.',
+    }),
     icon: Mountain,
     overlay: '100K',
   },
   {
     id: Achievement.points500k,
-    category: 'pointsMilestone',
-    title: '500,000 Points',
-    description: 'Earned 500,000 points.',
+    title: defineMessage({ id: 'achievement.points500k.title', defaultMessage: '500,000 Points' }),
+    description: defineMessage({
+      id: 'achievement.points500k.description',
+      defaultMessage: 'Earned 500,000 points.',
+    }),
     icon: Mountain,
     overlay: '500K',
   },
   {
     id: Achievement.points1m,
-    category: 'pointsMilestone',
-    title: '1,000,000 Points',
-    description: 'Earned a million points.',
+    title: defineMessage({ id: 'achievement.points1m.title', defaultMessage: '1,000,000 Points' }),
+    description: defineMessage({
+      id: 'achievement.points1m.description',
+      defaultMessage: 'Earned a million points.',
+    }),
     icon: Crown,
     overlay: '1M',
   },
 ]
-
-export const achievementCategoryLabel: Record<AchievementCategory, string> = {
-  taskCompletion: 'Task Completion',
-  mapping: 'Mapping',
-  creation: 'Creation',
-  pointsMilestone: 'Points Milestones',
-}
 
 export const getAchievement = (id: number): AchievementDefinition | undefined =>
   achievementDefinitions.find((a) => a.id === id)

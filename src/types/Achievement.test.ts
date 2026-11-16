@@ -1,19 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import {
-  Achievement,
-  achievementCategoryLabel,
-  achievementDefinitions,
-  getAchievement,
-} from './Achievement.ts'
+import { Achievement, achievementDefinitions, getAchievement } from './Achievement.ts'
 
 describe('achievementDefinitions', () => {
   it('has one definition per achievement id', () => {
     expect(achievementDefinitions).toHaveLength(Object.keys(Achievement).length)
   })
 
-  it('assigns every definition a label from achievementCategoryLabel', () => {
+  it('gives every definition a translatable title and description', () => {
     for (const definition of achievementDefinitions) {
-      expect(achievementCategoryLabel[definition.category]).toBeTruthy()
+      expect(definition.title.id).toMatch(/^achievement\..+\.title$/)
+      expect(definition.description.id).toMatch(/^achievement\..+\.description$/)
     }
   })
 })
@@ -35,23 +31,12 @@ describe('Achievement', () => {
   })
 })
 
-describe('achievementCategoryLabel', () => {
-  it('provides a human-readable label for every category', () => {
-    expect(achievementCategoryLabel).toEqual({
-      taskCompletion: 'Task Completion',
-      mapping: 'Mapping',
-      creation: 'Creation',
-      pointsMilestone: 'Points Milestones',
-    })
-  })
-})
-
 describe('getAchievement', () => {
   it('returns the matching definition for a known id', () => {
     const result = getAchievement(Achievement.fixedTask)
 
     expect(result).toBeDefined()
-    expect(result?.title).toBe('First Fix')
+    expect(result?.title.id).toBe('achievement.fixedTask.title')
   })
 
   it('has no badge for reviewing a task', () => {

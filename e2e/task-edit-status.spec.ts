@@ -45,6 +45,11 @@ test("a task marked Can't Complete stays open and can then be fixed", async ({
   await completeTask(mapper.page, 'Fixed', { toast: 'Fixed' })
   expect((await getTask(request, task.id)).status).toBe(TASK_STATUS.fixed)
 
+  // Fixing a first task earns the First Fix badge, which the app announces.
+  await expect(mapper.page.getByText('First Fix', { exact: true })).toBeVisible({
+    timeout: 10_000,
+  })
+
   await mapper.page.goto(`/tasks/${task.id}`)
   await expect(mapper.page.getByText('Want to map this challenge?')).toBeVisible({
     timeout: 20_000,

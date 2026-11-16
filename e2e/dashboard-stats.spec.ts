@@ -33,13 +33,13 @@ test('a mapper sees the points, tasks and achievements they earn on their dashbo
 
   await expect(async () => {
     await memberPage.reload()
-    await expect(memberPage.getByRole('button', { name: 'First Fix', exact: true })).toBeVisible({
+    await expect(memberPage.getByRole('img', { name: 'First Fix', exact: true })).toBeVisible({
       timeout: 5_000,
     })
   }).toPass({ timeout: 30_000 })
   await expect(
-    memberPage.getByRole('button', { name: 'Finished Together', exact: true })
+    memberPage.getByRole('img', { name: 'Finished Together', exact: true })
   ).toBeVisible()
-  await expect(memberPage.getByRole('button', { name: '100 Points (locked)' })).toBeVisible()
-  await expect(memberPage.getByRole('button', { name: '500 Points (locked)' })).toBeVisible()
+  await expect(memberPage.getByRole('img', { name: '100 Points (locked)' })).toBeVisible()
+  await expect(memberPage.getByRole('img', { name: '500 Points (locked)' })).toBeVisible()
 })

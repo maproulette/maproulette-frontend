@@ -3,7 +3,6 @@ import type { QueryClient } from '@tanstack/react-query'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import { type AuthContextType, useAuthContext } from '@/contexts/AuthContext'
-import { useCongratulate } from '@/contexts/CongratulateContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import { wsLogger } from '@/lib/logger'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
@@ -21,7 +20,6 @@ import type {
 import { useWebSocketEvents } from './useWebSocketEvents'
 
 vi.mock('@/contexts/AuthContext', () => ({ useAuthContext: vi.fn() }))
-vi.mock('@/contexts/CongratulateContext', () => ({ useCongratulate: vi.fn() }))
 vi.mock('@/contexts/WebSocketContext', () => ({ useWebSocketContext: vi.fn() }))
 vi.mock('@/api/challenge/single', () => ({
   invalidateChallengeAggregates: vi.fn(),
@@ -41,15 +39,6 @@ const mockAuth = (user: AuthContextType['user']) => {
     login: vi.fn(),
     logout: vi.fn(),
   })
-}
-
-const mockCongratulate = (enqueue = vi.fn()) => {
-  vi.mocked(useCongratulate).mockReturnValue({
-    current: null,
-    enqueue,
-    dismiss: vi.fn(),
-  })
-  return enqueue
 }
 
 const mockWebSocket = (lastMessage: WebSocketMessageTypes | null) => {
@@ -74,7 +63,6 @@ describe('useWebSocketEvents', () => {
 
   it('does nothing when there is no lastMessage', () => {
     mockAuth(undefined)
-    mockCongratulate()
     mockWebSocket(null)
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -86,7 +74,6 @@ describe('useWebSocketEvents', () => {
 
   it('ignores a non-object lastMessage', () => {
     mockAuth(undefined)
-    mockCongratulate()
     mockWebSocket('not-an-object' as unknown as WebSocketMessageTypes)
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -101,44 +88,37 @@ describe('useWebSocketEvents', () => {
       data: { userId, achievement: [1, 2] },
     })
 
-    it('enqueues each achievement and invalidates user queries when it is for the current user', () => {
+    it('invalidates the current user queries when the award is for them', () => {
       mockAuth(fakeUser(7))
-      const enqueue = mockCongratulate()
       mockWebSocket(message(7))
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
       mount(queryClient)
 
-      expect(enqueue).toHaveBeenCalledWith({ kind: 'achievement', achievementId: 1 })
-      expect(enqueue).toHaveBeenCalledWith({ kind: 'achievement', achievementId: 2 })
       expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['user', 'whoami'] })
       expect(invalidateSpy).toHaveBeenCalledWith(expect.objectContaining({ queryKey: ['user', 7] }))
     })
 
     it('does nothing when the achievement is for a different user', () => {
       mockAuth(fakeUser(7))
-      const enqueue = mockCongratulate()
       mockWebSocket(message(99))
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
       mount(queryClient)
 
-      expect(enqueue).not.toHaveBeenCalled()
       expect(invalidateSpy).not.toHaveBeenCalled()
     })
 
     it('does nothing when there is no current user', () => {
       mockAuth(undefined)
-      const enqueue = mockCongratulate()
       mockWebSocket(message(7))
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
       mount(queryClient)
 
-      expect(enqueue).not.toHaveBeenCalled()
       expect(invalidateSpy).not.toHaveBeenCalled()
     })
   })
@@ -157,7 +137,6 @@ describe('useWebSocketEvents', () => {
 
     it('locks the marker on task-claimed without touching status (lock events carry a stale status snapshot)', () => {
       mockAuth(undefined)
-      mockCongratulate()
       const msg = taskEvent()
       mockWebSocket(msg)
       const queryClient = createTestQueryClient()
@@ -183,7 +162,6 @@ describe('useWebSocketEvents', () => {
 
     it('does not let a stale task-released status snapshot clobber a newer cached status', () => {
       mockAuth(undefined)
-      mockCongratulate()
       // Backend snapshots the task before the status change, so the release carries the old
       // status (0). The cache already holds the fresh status (1) from the mutation response.
       mockWebSocket({
@@ -210,7 +188,6 @@ describe('useWebSocketEvents', () => {
 
     it('locks with null when task-claimed has no byUser', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(taskEvent({ byUser: null }))
       const queryClient = createTestQueryClient()
 
@@ -226,7 +203,6 @@ describe('useWebSocketEvents', () => {
 
     it('unlocks on task-released', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         ...taskEvent(),
         messageType: 'task-released',
@@ -245,7 +221,6 @@ describe('useWebSocketEvents', () => {
 
     it('derives the challenge id from data.challenge when present', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(taskEvent({ challenge: { id: 55, parentId: 1, name: 'c', enabled: true } }))
       const queryClient = createTestQueryClient()
 
@@ -256,7 +231,6 @@ describe('useWebSocketEvents', () => {
 
     it('does not patch the marker on task-update when status is unchanged and no lock info applies', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         messageType: 'task-update',
         data: {
@@ -275,7 +249,6 @@ describe('useWebSocketEvents', () => {
 
     it('invalidates task history regardless of status change', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(taskEvent())
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -287,7 +260,6 @@ describe('useWebSocketEvents', () => {
 
     it('invalidates challenge aggregates only when the status actually changed', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(taskEvent({ task: { id: 1, parent: 10, status: 2 } }))
       const queryClient = createTestQueryClient()
       queryClient.setQueryData<TaskGetResponse>(['task', 1], {
@@ -303,7 +275,6 @@ describe('useWebSocketEvents', () => {
 
     it('invalidates challenge aggregates when the status changed', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         ...taskEvent({ task: { id: 1, parent: 10, status: 2 } }),
         messageType: 'task-update',
@@ -322,7 +293,6 @@ describe('useWebSocketEvents', () => {
 
     it('does not invalidate challenge aggregates when newStatus is undefined', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(taskEvent({ task: { id: 1, parent: 10, status: undefined } }))
       const queryClient = createTestQueryClient()
 
@@ -333,7 +303,6 @@ describe('useWebSocketEvents', () => {
 
     it('invalidates whoami/user on task-completed by the current user', () => {
       mockAuth(fakeUser(5))
-      mockCongratulate()
       mockWebSocket({
         ...taskEvent({ byUser: { userId: 5, osmId: 1, displayName: 'x', avatarURL: '' } }),
         messageType: 'task-completed',
@@ -349,7 +318,6 @@ describe('useWebSocketEvents', () => {
 
     it('does not invalidate whoami/user on task-completed by a different user', () => {
       mockAuth(fakeUser(5))
-      mockCongratulate()
       mockWebSocket({
         ...taskEvent({ byUser: { userId: 99, osmId: 1, displayName: 'x', avatarURL: '' } }),
         messageType: 'task-completed',
@@ -377,7 +345,6 @@ describe('useWebSocketEvents', () => {
 
     it('patches each cached bundled task status, patches its marker, invalidates history for all of them, and dedupes aggregate invalidation within the same challenge', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         ...tasksEvent({
           tasks: [
@@ -445,7 +412,6 @@ describe('useWebSocketEvents', () => {
 
     it('clears lockedBy on tasks-released and skips aggregate invalidation when status is unchanged', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         ...tasksEvent({ tasks: [{ id: 1, parent: 10, status: 2 }] }),
         messageType: 'tasks-released',
@@ -470,7 +436,6 @@ describe('useWebSocketEvents', () => {
 
     it('skips the cache patch for a bundled task with no cache entry', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(tasksEvent({ tasks: [{ id: 42, parent: 10, status: 2 }] }))
       const queryClient = createTestQueryClient()
 
@@ -484,7 +449,6 @@ describe('useWebSocketEvents', () => {
 
     it('leaves lockedBy unset on tasks-update, only patching status', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         ...tasksEvent({ tasks: [{ id: 1, parent: 10, status: 2 }] }),
         messageType: 'tasks-update',
@@ -498,7 +462,6 @@ describe('useWebSocketEvents', () => {
 
     it('falls back to the cached status and skips the status key on the marker patch when the bundled task has no status', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(tasksEvent({ tasks: [{ id: 1, parent: 10, status: undefined }] }))
       const queryClient = createTestQueryClient()
       queryClient.setQueryData<TaskGetResponse>(['task', 1], {
@@ -520,7 +483,6 @@ describe('useWebSocketEvents', () => {
 
     it('locks with null when tasks-claimed has no byUser', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(tasksEvent({ tasks: [{ id: 1, parent: 10, status: 2 }], byUser: null }))
       const queryClient = createTestQueryClient()
 
@@ -536,7 +498,6 @@ describe('useWebSocketEvents', () => {
 
     it('skips the marker patch entirely when tasks-update leaves an empty patch', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         ...tasksEvent({ tasks: [{ id: 1, parent: 10, status: undefined }] }),
         messageType: 'tasks-update',
@@ -550,7 +511,6 @@ describe('useWebSocketEvents', () => {
 
     it('skips the history invalidation and marker patches entirely for an empty bundle', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(tasksEvent({ tasks: [] }))
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -563,7 +523,6 @@ describe('useWebSocketEvents', () => {
 
     it('derives the challenge id from data.challenge, taking priority over each task.parent', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket({
         ...tasksEvent({
           challenge: { id: 77, parentId: 1, name: 'c', enabled: true },
@@ -581,7 +540,6 @@ describe('useWebSocketEvents', () => {
 
     it('invalidates own user queries on tasks-completed by the current user, not by another user', () => {
       mockAuth(fakeUser(5))
-      mockCongratulate()
       mockWebSocket({
         ...tasksEvent({ byUser: { userId: 5, osmId: 1, displayName: 'x', avatarURL: '' } }),
         messageType: 'tasks-completed',
@@ -597,7 +555,6 @@ describe('useWebSocketEvents', () => {
 
     it('does not invalidate own user queries on tasks-completed by a different user', () => {
       mockAuth(fakeUser(5))
-      mockCongratulate()
       mockWebSocket({
         ...tasksEvent({ byUser: { userId: 99, osmId: 1, displayName: 'x', avatarURL: '' } }),
         messageType: 'tasks-completed',
@@ -621,7 +578,6 @@ describe('useWebSocketEvents', () => {
       'invalidates task and challenge aggregates on %s',
       (messageType) => {
         mockAuth(undefined)
-        mockCongratulate()
         mockWebSocket(reviewMsg(messageType))
         const queryClient = createTestQueryClient()
         const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -643,7 +599,6 @@ describe('useWebSocketEvents', () => {
 
     it('invalidates the team and the current user membership query', () => {
       mockAuth(fakeUser(4))
-      mockCongratulate()
       mockWebSocket(teamMsg)
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -656,7 +611,6 @@ describe('useWebSocketEvents', () => {
 
     it('invalidates with an undefined user id when there is no current user', () => {
       mockAuth(undefined)
-      mockCongratulate()
       mockWebSocket(teamMsg)
       const queryClient = createTestQueryClient()
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -672,7 +626,6 @@ describe('useWebSocketEvents', () => {
   describe('notification-new', () => {
     it('invalidates the notifications query', () => {
       mockAuth(undefined)
-      mockCongratulate()
       const msg: NotificationNewMessage = {
         messageType: 'notification-new',
         data: { userId: 1 },
@@ -689,7 +642,6 @@ describe('useWebSocketEvents', () => {
 
   it('ignores message types with no matching dispatcher, such as pong', () => {
     mockAuth(undefined)
-    mockCongratulate()
     mockWebSocket({ messageType: 'pong', data: null })
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -700,17 +652,13 @@ describe('useWebSocketEvents', () => {
 
   it('swallows errors thrown while dispatching and logs them', () => {
     mockAuth(fakeUser(1))
-    mockCongratulate(
-      vi.fn(() => {
-        throw new Error('boom')
-      })
-    )
-    mockWebSocket({
-      messageType: 'achievement-awarded',
-      data: { userId: 1, achievement: [1] },
+    mockWebSocket({ messageType: 'notification-new', data: { userId: 1 } })
+    const queryClient = createTestQueryClient()
+    vi.spyOn(queryClient, 'invalidateQueries').mockImplementation(() => {
+      throw new Error('boom')
     })
 
-    expect(() => mount()).not.toThrow()
+    expect(() => mount(queryClient)).not.toThrow()
     expect(wsLogger.warn).toHaveBeenCalledWith(
       'WebSocket dispatch error',
       expect.objectContaining({ error: expect.any(Error) })
@@ -723,7 +671,6 @@ describe('useWebSocketEvents', () => {
       data: { userId: 1 },
     }
     mockAuth(fakeUser(1))
-    mockCongratulate()
     mockWebSocket(msg)
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
@@ -754,7 +701,6 @@ describe('useWebSocketEvents lock state in the cache', () => {
 
   beforeEach(() => {
     mockAuth(fakeUser(5))
-    mockCongratulate()
   })
 
   it('clears the lock on the cached task on task-released', () => {

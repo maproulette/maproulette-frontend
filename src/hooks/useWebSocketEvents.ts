@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import { invalidateLockedTasks } from '@/api/task/single'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useCongratulate } from '@/contexts/CongratulateContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import { wsLogger } from '@/lib/logger'
 import type { TaskGetResponse } from '@/types/Task'
@@ -63,7 +62,6 @@ const invalidateOwnUserQueries = (
 export const useWebSocketEvents = () => {
   const { lastMessage } = useWebSocketContext()
   const { user } = useAuthContext()
-  const { enqueue } = useCongratulate()
   const queryClient = useQueryClient()
   const seenRef = useRef<WeakSet<object>>(new WeakSet())
 
@@ -74,10 +72,9 @@ export const useWebSocketEvents = () => {
 
     try {
       if (isAchievementMessage(lastMessage)) {
+        // Refreshing the user is what surfaces the new badge, both on the
+        // dashboard and in the achievement toast.
         if (user && lastMessage.data.userId === user.id) {
-          lastMessage.data.achievement.forEach((id) => {
-            enqueue({ kind: 'achievement', achievementId: id })
-          })
           invalidateOwnUserQueries(queryClient, user.id)
         }
         return
@@ -255,5 +252,5 @@ export const useWebSocketEvents = () => {
     } catch (error) {
       wsLogger.warn('WebSocket dispatch error', { error })
     }
-  }, [lastMessage, user, enqueue, queryClient])
+  }, [lastMessage, user, queryClient])
 }

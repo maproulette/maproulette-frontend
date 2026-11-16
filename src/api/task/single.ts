@@ -287,6 +287,9 @@ export const taskSingle = {
         queryClient.setQueryData<TaskGetResponse>(['task', variables.taskId], updatedTask)
         queryClient.invalidateQueries({ queryKey: ['task', 'history', variables.taskId] })
         invalidateLockedTasks(queryClient)
+        // The backend awards score and achievements on status change, and
+        // reports them nowhere in the response, so refresh the current user.
+        queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
         if (variables.options?.comment) {
           queryClient.invalidateQueries({ queryKey: ['task', 'comments', variables.taskId] })
         }
