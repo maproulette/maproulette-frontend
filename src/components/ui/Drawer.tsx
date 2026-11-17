@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useDialogFocus } from '@/hooks/useDialogFocus'
 import { cn } from '@/lib/utils'
 
 interface DrawerProps {
@@ -9,6 +10,7 @@ interface DrawerProps {
   className?: string
   /** Use fixed positioning to overlay the entire viewport (default: absolute within parent) */
   fixed?: boolean
+  'aria-label': string
 }
 
 export const Drawer = ({
@@ -18,8 +20,10 @@ export const Drawer = ({
   children,
   className,
   fixed = false,
+  'aria-label': ariaLabel,
 }: DrawerProps) => {
-  const drawerRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+  useDialogFocus(panelRef, open)
 
   // Close on Escape key
   useEffect(() => {
@@ -48,8 +52,14 @@ export const Drawer = ({
       />
       {/* Drawer sliding up from bottom */}
       <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={ariaLabel}
+        tabIndex={-1}
+        inert={!open}
         className={cn(
-          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-t-lg border-zinc-200 border-t bg-white shadow-2xl transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950`,
+          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-t-lg border-zinc-200 border-t bg-white shadow-2xl outline-none transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950`,
           open ? 'translate-y-0' : 'translate-y-full',
           className
         )}
@@ -62,9 +72,7 @@ export const Drawer = ({
           <div className="h-1 w-10 rounded-full bg-zinc-300 dark:bg-slate-600" />
         </div>
         {/* Drawer content */}
-        <div ref={drawerRef} className="flex min-h-0 flex-1 flex-col">
-          {children}
-        </div>
+        <div className="flex min-h-0 flex-1 flex-col">{children}</div>
       </div>
     </>
   )
