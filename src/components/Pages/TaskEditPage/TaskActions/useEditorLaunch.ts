@@ -13,7 +13,12 @@ import { editorOptions } from '@/data/account.json'
 import { josmNoResponseMessage } from '@/hooks/useJosmShortCodes'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
-import { isTagFixTask } from '@/lib/cooperativeWork'
+import {
+  CHANGE_FILE_EDITORS,
+  isChangeFileTask,
+  isTagFixTask,
+  josmChangeFileImportUrl,
+} from '@/lib/cooperativeWork'
 import {
   editorBackgroundParam,
   editorImageryForStyle,
@@ -68,6 +73,7 @@ export const useEditorLaunch = (task: Task) => {
   const taskMapRef = useRef(taskMap)
   taskMapRef.current = taskMap
   const isTagFix = isTagFixTask(task)
+  const isChangeFile = isChangeFileTask(task)
 
   // Get current default editor (default to iD if not set)
   const defaultEditor = user?.settings?.defaultEditor ?? EDITOR.id
@@ -133,19 +139,30 @@ export const useEditorLaunch = (task: Task) => {
             }
             const [west, south, east, north] = bounds
             const selection = formatOsmEntities(tasks, { abbreviated: false })
+            const changesInOwnLayer = editorValue === EDITOR.josmLayer
+            const dataLayerName = !isChangeFile
+              ? layerName
+              : changesInOwnLayer
+                ? `${layerName} OSM Data`
+                : `${layerName} Changes`
             const parts = [
               `left=${west}`,
               `right=${east}`,
               `top=${north}`,
               `bottom=${south}`,
-              `new_layer=${editorValue === EDITOR.josmLayer ? 'true' : 'false'}`,
-              `layer_name=${encodeURIComponent(layerName)}`,
+              `new_layer=${changesInOwnLayer ? 'true' : 'false'}`,
+              `layer_name=${encodeURIComponent(dataLayerName)}`,
               `changeset_comment=${encodeURIComponent(checkinComment)}`,
               `changeset_source=${encodeURIComponent(checkinSource)}`,
             ]
             if (selection) parts.push(`select=${selection}`)
             josmCommands = [
               `${JOSM_HOST}load_and_zoom?${parts.join('&')}`,
+              ...(isChangeFile
+                ? tasks.map((t) =>
+                    josmChangeFileImportUrl(JOSM_HOST, apiBaseUrl, t.id, changesInOwnLayer)
+                  )
+                : []),
               ...tasks.flatMap((t) =>
                 referenceLayers(t).map((attachment) =>
                   josmImportUrl(JOSM_HOST, apiBaseUrl, t.id, attachment)
@@ -237,11 +254,26 @@ export const useEditorLaunch = (task: Task) => {
 
         if (josmCommands.length > 0) {
           if (imagery) josmCommands.push(josmImageryCommand(JOSM_HOST, imagery))
+          const toastId = toast.loading(
+            t(
+              {
+                id: 'taskEditPage.taskActions.editorButton.sendingTaskTo',
+                defaultMessage: 'Sending task to {editor}…',
+              },
+              { editor: editorLabel }
+            )
+          )
           void sendJosmCommands(josmCommands).then((opened) => {
             if (opened) {
-              notifyOpened()
+              toast.success(
+                t({
+                  id: 'taskEditPage.taskActions.editorButton.checkJosm',
+                  defaultMessage: 'Task sent to JOSM. Check your JOSM editor.',
+                }),
+                { id: toastId }
+              )
             } else {
-              toast.error(t(josmNoResponseMessage))
+              toast.error(t(josmNoResponseMessage), { id: toastId })
             }
           })
         } else if (editorUrl) {
@@ -258,8 +290,22 @@ export const useEditorLaunch = (task: Task) => {
         )
       }
     },
-    [task, bundledTasks, challenge, activeBundle, t]
+    [task, bundledTasks, challenge, activeBundle, isChangeFile, t]
   )
+
+  const unavailableReason = useCallback(
+    (editorValue: number): string | undefined =>
+      isChangeFile && !CHANGE_FILE_EDITORS.includes(editorValue)
+        ? t({
+            id: 'taskEditPage.taskActions.editorButton.changeFileJosmOnly',
+            defaultMessage: "This task's changes can only be opened in JOSM",
+          })
+        : undefined,
+    [isChangeFile, t]
+  )
+
+  const usualEditor = defaultEditor === -1 ? EDITOR.id : defaultEditor
+  const primaryEditor = unavailableReason(usualEditor) ? CHANGE_FILE_EDITORS[0] : usualEditor
 
   const openDefaultEditor = useCallback(() => {
     // A tag-fix challenge proposes tag changes that MapRoulette can only apply
@@ -270,8 +316,15 @@ export const useEditorLaunch = (task: Task) => {
       openIdEditor()
       return
     }
-    openEditor(defaultEditor === -1 ? EDITOR.id : defaultEditor)
-  }, [isTagFix, openIdEditor, openEditor, defaultEditor])
+    openEditor(primaryEditor)
+  }, [isTagFix, openIdEditor, openEditor, primaryEditor])
 
-  return { openEditor, openDefaultEditor, defaultEditor, isTagFix }
+  return {
+    openEditor,
+    openDefaultEditor,
+    defaultEditor,
+    primaryEditor,
+    isTagFix,
+    unavailableReason,
+  }
 }

@@ -20,10 +20,12 @@ import { useTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { MapLoadingIndicator } from '@/components/shared/MapLoadingIndicator'
 import { Button } from '@/components/ui/Button'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { useMapToggle } from '@/contexts/MapToggleContext'
 import { useIntl } from '@/i18n'
+import { isChangeFileTask } from '@/lib/cooperativeWork'
 import type { TaskMarker } from '@/types/Task'
 import { useChallengeContext } from './contexts/ChallengeContext'
 import { useEditorContext } from './contexts/EditorContext'
@@ -66,6 +68,7 @@ export const TaskMap = () => {
   const exploreCirclesLayerId = useId()
   const { bundleEditsDisabled } = useTaskBundleContext()
   const { task, isLocked } = useTaskContext()
+  const isChangeFile = isChangeFileTask(task)
   const { challenge } = useChallengeContext()
   const { user } = useAuthContext()
   // The challenge's basemap wins over the mapper's own default, which in turn
@@ -245,28 +248,42 @@ export const TaskMap = () => {
         </div>
         {isLocked && !bundleEditsDisabled && isEditableStatus && <MultiTaskPanel />}
         {isLocked && (
-          <button
-            type="button"
-            onClick={openIdEditor}
-            className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700"
-            title={t({
-              id: 'taskEditPage.taskMap.editInId',
-              defaultMessage: 'Edit in iD (inline)',
+          <DisabledTooltip
+            show={isChangeFile}
+            message={t({
+              id: 'taskEditPage.taskActions.editorButton.changeFileJosmOnly',
+              defaultMessage: "This task's changes can only be opened in JOSM",
             })}
+            side="bottom"
           >
-            <OsmIcon className="h-4 w-4" />
-            {t({ id: 'taskEditPage.taskMap.editInIdShort', defaultMessage: 'Edit in iD' })}
-            {idEditorMounted && (
-              <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-green-400" />
-                {idUnsavedCount > 0 && (
-                  <span className="rounded-full bg-yellow-500 px-1.5 py-0.5 font-bold text-[10px] text-white leading-none">
-                    {idUnsavedCount}
-                  </span>
-                )}
-              </span>
-            )}
-          </button>
+            <button
+              type="button"
+              onClick={openIdEditor}
+              disabled={isChangeFile}
+              className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-zinc-800"
+              title={
+                isChangeFile
+                  ? undefined
+                  : t({
+                      id: 'taskEditPage.taskMap.editInId',
+                      defaultMessage: 'Edit in iD (inline)',
+                    })
+              }
+            >
+              <OsmIcon className="h-4 w-4" />
+              {t({ id: 'taskEditPage.taskMap.editInIdShort', defaultMessage: 'Edit in iD' })}
+              {idEditorMounted && (
+                <span className="flex items-center gap-1">
+                  <span className="h-2 w-2 rounded-full bg-green-400" />
+                  {idUnsavedCount > 0 && (
+                    <span className="rounded-full bg-yellow-500 px-1.5 py-0.5 font-bold text-[10px] text-white leading-none">
+                      {idUnsavedCount}
+                    </span>
+                  )}
+                </span>
+              )}
+            </button>
+          </DisabledTooltip>
         )}
       </div>
 

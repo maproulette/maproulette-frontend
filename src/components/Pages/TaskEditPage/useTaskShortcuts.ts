@@ -70,7 +70,7 @@ export const useMappingAvailability = () => {
 export const useTaskShortcuts = () => {
   const { t } = useIntl()
   const { task } = useTaskContext()
-  const { openEditor } = useEditorLaunch(task)
+  const { openEditor, unavailableReason } = useEditorLaunch(task)
   const { skipTask } = useSkipTask(task)
   const { canEdit, disabledReason } = useMappingAvailability()
 
@@ -86,8 +86,8 @@ export const useTaskShortcuts = () => {
           description: option.label,
           category: 'editors' as const,
           handler: () => openEditor(option.value),
-          enabled: canEdit,
-          disabledReason,
+          enabled: canEdit && !unavailableReason(option.value),
+          disabledReason: disabledReason ?? unavailableReason(option.value),
         })),
       {
         ...SKIP_TASK_BINDING,
@@ -101,7 +101,7 @@ export const useTaskShortcuts = () => {
         disabledReason,
       },
     ],
-    [openEditor, skipTask, canEdit, canSkip, disabledReason, t]
+    [openEditor, unavailableReason, skipTask, canEdit, canSkip, disabledReason, t]
   )
 
   useRegisterShortcuts('task-editors', shortcuts)
