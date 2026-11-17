@@ -3,8 +3,11 @@ import type { Task } from '@/types/Task'
 import {
   applyTagFix,
   COOPERATIVE_TYPE,
+  changeFileUrl,
   cooperativeWorkType,
+  isChangeFileTask,
   isTagFixTask,
+  josmChangeFileImportUrl,
   tagFixes,
   toIdEntityId,
 } from './cooperativeWork.ts'
@@ -173,5 +176,39 @@ describe('applyTagFix', () => {
     const current = { a: '1' }
     applyTagFix(current, { elementId: 'w', entityId: 'w1', setTags: { b: '2' }, unsetTags: ['a'] })
     expect(current).toEqual({ a: '1' })
+  })
+})
+
+describe('isChangeFileTask', () => {
+  it('is true only for change-file cooperative work', () => {
+    expect(isChangeFileTask(tagFixTask([], { version: 2, type: 2 }))).toBe(true)
+    expect(isChangeFileTask(tagFixTask([]))).toBe(false)
+    expect(isChangeFileTask({ id: 1 } as Task)).toBe(false)
+  })
+})
+
+describe('changeFileUrl', () => {
+  it('points at the backend change XML with an .osc name JOSM recognises', () => {
+    expect(changeFileUrl('https://api.example.org/', 7)).toBe(
+      'https://api.example.org/api/v2/task/7/cooperative/change/task_7_change.osc'
+    )
+  })
+})
+
+describe('josmChangeFileImportUrl', () => {
+  const url = (newLayer: boolean) =>
+    josmChangeFileImportUrl('http://127.0.0.1:8111/', 'https://api.example.org', 7, newLayer)
+
+  it('imports the change file under a changes layer name', () => {
+    expect(url(true)).toMatch(/^http:\/\/127\.0\.0\.1:8111\/import\?/)
+    expect(url(true)).toContain('layer_name=MR%20Task%207%20Changes')
+    expect(url(true)).toContain(
+      `url=${encodeURIComponent('https://api.example.org/api/v2/task/7/cooperative/change/task_7_change.osc')}`
+    )
+  })
+
+  it('keeps the changes in their own layer only when asked', () => {
+    expect(url(true)).toContain('new_layer=true')
+    expect(url(false)).toContain('new_layer=false')
   })
 })
