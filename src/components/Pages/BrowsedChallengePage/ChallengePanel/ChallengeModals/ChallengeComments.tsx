@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { MessageSquare, Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
@@ -14,7 +14,6 @@ import { useAvatarContext } from '@/contexts/AvatarContext'
 import { useIntl } from '@/i18n'
 import { formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
-import { markdownRemarkPlugins } from '@/lib/markdown'
 import { cn } from '@/lib/utils'
 
 interface ChallengeComment {
@@ -202,23 +201,7 @@ export const ChallengeComments = () => {
                       )}
                     </div>
 
-                    <div className="prose prose-sm dark:prose-invert max-w-none break-words [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
-                      <ReactMarkdown
-                        remarkPlugins={markdownRemarkPlugins}
-                        components={{
-                          a: ({ ...props }) => (
-                            <a
-                              {...props}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline dark:text-blue-400"
-                            />
-                          ),
-                        }}
-                      >
-                        {comment.comment}
-                      </ReactMarkdown>
-                    </div>
+                    <MarkdownContent autoLink={false}>{comment.comment}</MarkdownContent>
 
                     <div className="text-xs text-zinc-500 dark:text-slate-400">
                       {formatDateTime(new Date(comment.created), locale)}
