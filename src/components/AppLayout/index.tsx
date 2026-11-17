@@ -1,6 +1,7 @@
 import { Outlet } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
 import { AchievementToasts } from '@/components/AppLayout/AchievementToasts'
+import { Footer } from '@/components/AppLayout/Footer'
 import { Header } from '@/components/AppLayout/Header'
 import { SystemNotices } from '@/components/AppLayout/SystemNotices'
 import { UserLocaleSync } from '@/components/AppLayout/UserLocaleSync'
@@ -35,6 +36,7 @@ export const AppLayout = () => {
                     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
                       <Outlet />
                     </div>
+                    <Footer />
                   </main>
                   <KeyboardShortcutsModal />
                 </KeyboardShortcutsProvider>

@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import { BookOpen, CircleUser, LayoutDashboard, LogOut, Shield, SwatchBook } from 'lucide-react'
-import { api } from '@/api'
 import { ThemeSwitcher } from '@/components/AppLayout/Header/ThemeSwitcher'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
@@ -18,14 +17,11 @@ import { useIntl } from '@/i18n'
 import { docsUrl } from '@/lib/documentationLinks'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import { initials } from '@/lib/utils'
-import { frontendVersion } from '@/lib/version'
 import type { User } from '@/types/User'
 
 export const DropdownMenuUser = ({ user }: { user: User }) => {
   const { logout } = useAuthContext()
   const { t } = useIntl()
-  const { data: serviceInfo, isError: serviceInfoError } = api.service.info()
-  const backendVersion = serviceInfoError ? 'unknown' : (serviceInfo?.compiletime.version ?? null)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex cursor-pointer">
@@ -108,35 +104,6 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
             <ThemeSwitcher />
           </div>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 px-2 py-1.5 text-[10px] text-zinc-400 leading-tight dark:text-slate-500">
-          <dt>{t({ id: 'appLayout.header.userMenu.frontend', defaultMessage: 'Frontend' })}</dt>
-          <dd>
-            <a
-              href={`https://github.com/maproulette/maproulette3/releases/tag/v${frontendVersion}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-zinc-300 hover:underline dark:hover:text-slate-400"
-            >
-              v{frontendVersion}
-            </a>
-          </dd>
-          <dt>{t({ id: 'appLayout.header.userMenu.backend', defaultMessage: 'Backend' })}</dt>
-          <dd>
-            {backendVersion && backendVersion !== 'unknown' ? (
-              <a
-                href={`https://github.com/maproulette/maproulette-backend/releases/tag/v${backendVersion}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-zinc-300 hover:underline dark:hover:text-slate-400"
-              >
-                v{backendVersion}
-              </a>
-            ) : (
-              <span className="opacity-60">—</span>
-            )}
-          </dd>
-        </dl>
       </DropdownMenuContent>
     </DropdownMenu>
   )
