@@ -62,19 +62,11 @@ export const DescriptionBreadcrumbButton = ({
     </button>
   )
 
-  // Unread: glowing button plus a callout the mapper has to dismiss themselves.
+  // Unread: highlighted button plus a callout the mapper has to dismiss themselves.
   if (recommended && !disabled) {
     return (
       <Popover open={calloutOpen}>
-        <PopoverAnchor asChild>
-          <span className="relative inline-flex">
-            <span
-              aria-hidden="true"
-              className="-inset-2 pointer-events-none absolute animate-pulse rounded-full bg-white/90 blur-[7px]"
-            />
-            {button}
-          </span>
-        </PopoverAnchor>
+        <PopoverAnchor asChild>{button}</PopoverAnchor>
         <PopoverContent
           side="bottom"
           align="start"

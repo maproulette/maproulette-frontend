@@ -105,7 +105,7 @@ export const ChallengeFooter = () => {
               })}
               className="flex w-full items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50/50 px-3 py-2 text-center transition-colors hover:bg-red-50 dark:border-red-800 dark:bg-red-900/10 dark:hover:bg-red-900/20"
             >
-              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 drop-shadow-[0_0_4px_rgba(220,38,38,0.6)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.6)]" />
+              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 dark:fill-red-500 dark:text-red-500" />
               <span className="text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400">
                 {t({
                   id: 'browsedChallengePage.footer.reportedIssueMessage',

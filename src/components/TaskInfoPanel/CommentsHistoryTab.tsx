@@ -288,7 +288,7 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
         <div className="space-y-3 pr-2">
           {isLoading ? (
             <div className="flex items-center justify-center py-6">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600" />
+              <div className="h-6 w-6 rounded-full border-2 border-zinc-300 border-t-zinc-600 motion-safe:animate-spin" />
             </div>
           ) : sortedHistory.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-6 text-center">

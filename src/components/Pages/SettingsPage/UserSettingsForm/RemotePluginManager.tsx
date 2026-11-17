@@ -178,7 +178,7 @@ export const RemotePluginManager = () => {
           >
             {isLoading ? (
               <>
-                <Download className="mr-2 size-4 animate-pulse" />
+                <Download className="mr-2 size-4" />
 
                 {t({ id: 'common.loading2', defaultMessage: 'Loading...' })}
               </>

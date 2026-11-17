@@ -4,7 +4,7 @@ import { Loader2Icon } from 'lucide-react'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 
-const spinnerVariants = cva('animate-spin', {
+const spinnerVariants = cva('motion-safe:animate-spin', {
   variants: {
     size: {
       sm: 'size-3.5',

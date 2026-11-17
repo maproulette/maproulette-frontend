@@ -101,8 +101,7 @@ export const ChallengeActionButtons = ({ leadingItems }: { leadingItems?: ReactN
           <Flag
             className={cn(
               'size-4 transition-all',
-              openReport &&
-                'fill-red-600 text-red-600 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] dark:fill-red-500 dark:text-red-500 dark:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'
+              openReport && 'fill-red-600 text-red-600 dark:fill-red-500 dark:text-red-500'
             )}
           />
           {openReport
