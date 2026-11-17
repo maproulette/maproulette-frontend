@@ -27,9 +27,7 @@ export const FilterToggle = ({
       aria-hidden="true"
       className={cn(
         'h-2 w-2 rounded-full',
-        checked
-          ? 'bg-emerald-500 shadow-[0_0_6px_2px_rgba(16,185,129,0.7)]'
-          : 'bg-zinc-300 dark:bg-slate-600'
+        checked ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-slate-600'
       )}
     />
   </Toggle>

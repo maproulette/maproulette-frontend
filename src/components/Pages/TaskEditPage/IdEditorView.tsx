@@ -662,7 +662,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                   defaultMessage: 'Review the unsaved changes',
                 })}
               >
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+                <span className="h-1.5 w-1.5 rounded-full bg-white" />
                 <span className="whitespace-nowrap font-semibold text-[11px] text-white">
                   {t(
                     {
@@ -754,7 +754,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
       {isLoading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-slate-950/80">
           <div className="text-center">
-            <div className="mx-auto mb-4 size-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
+            <div className="mx-auto mb-4 size-10 rounded-full border-4 border-purple-200 border-t-purple-600 motion-safe:animate-spin" />
             <div className="text-zinc-700 dark:text-zinc-300">
               {t({ id: 'taskEditPage.idEditor.loading', defaultMessage: 'Loading iD Editor...' })}
             </div>
