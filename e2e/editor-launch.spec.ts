@@ -141,7 +141,7 @@ for (const { label, newLayer } of [
         type: 'bing',
       })
     }).toPass({ timeout: 40_000 })
-    await expect(page.getByText(`Opening task in ${label}`).first()).toBeVisible()
+    await expect(page.getByText('Task sent to JOSM. Check your JOSM editor.').first()).toBeVisible()
   })
 }
 

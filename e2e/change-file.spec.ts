@@ -103,6 +103,10 @@ test('only JOSM can be chosen, and the main button falls back to it', async ({
 
   const primary = page.getByRole('button', { name: 'Edit in new JOSM layer', exact: true })
   await primary.click()
+  await expect(page.getByText('Sending task to Edit in new JOSM layer…')).toBeVisible()
+  await expect(page.getByText('Task sent to JOSM. Check your JOSM editor.')).toBeVisible({
+    timeout: 10_000,
+  })
   await expect
     .poll(() => commands.map((command) => command.pathname), { timeout: 10_000 })
     .toEqual(expect.arrayContaining(['/load_and_zoom', '/import']))

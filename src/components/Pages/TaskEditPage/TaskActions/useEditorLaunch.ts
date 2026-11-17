@@ -254,11 +254,26 @@ export const useEditorLaunch = (task: Task) => {
 
         if (josmCommands.length > 0) {
           if (imagery) josmCommands.push(josmImageryCommand(JOSM_HOST, imagery))
+          const toastId = toast.loading(
+            t(
+              {
+                id: 'taskEditPage.taskActions.editorButton.sendingTaskTo',
+                defaultMessage: 'Sending task to {editor}…',
+              },
+              { editor: editorLabel }
+            )
+          )
           void sendJosmCommands(josmCommands).then((opened) => {
             if (opened) {
-              notifyOpened()
+              toast.success(
+                t({
+                  id: 'taskEditPage.taskActions.editorButton.checkJosm',
+                  defaultMessage: 'Task sent to JOSM. Check your JOSM editor.',
+                }),
+                { id: toastId }
+              )
             } else {
-              toast.error(t(josmNoResponseMessage))
+              toast.error(t(josmNoResponseMessage), { id: toastId })
             }
           })
         } else if (editorUrl) {
