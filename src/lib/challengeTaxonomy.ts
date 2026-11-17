@@ -3,8 +3,7 @@ import type { Challenge } from '@/types/Challenge'
 
 /**
  * Cooperative types a challenge can carry, mirroring the backend's
- * `challenges.cooperative_type` column. MR4 does not run cooperative task
- * workflows, but it still labels these challenges so mappers know what they
+ * `challenges.cooperative_type` column, labelled so mappers know what they
  * are picking up before they open one.
  */
 export const COOPERATIVE_TYPE_NONE = 0

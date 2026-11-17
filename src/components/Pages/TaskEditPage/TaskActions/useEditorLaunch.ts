@@ -13,7 +13,7 @@ import { editorOptions } from '@/data/account.json'
 import { josmNoResponseMessage } from '@/hooks/useJosmShortCodes'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
-import { isTagFixTask } from '@/lib/cooperativeWork'
+import { isChangeFileTask, isTagFixTask, josmChangeFileImportUrl } from '@/lib/cooperativeWork'
 import {
   editorBackgroundParam,
   editorImageryForStyle,
@@ -68,6 +68,7 @@ export const useEditorLaunch = (task: Task) => {
   const taskMapRef = useRef(taskMap)
   taskMapRef.current = taskMap
   const isTagFix = isTagFixTask(task)
+  const isChangeFile = isChangeFileTask(task)
 
   // Get current default editor (default to iD if not set)
   const defaultEditor = user?.settings?.defaultEditor ?? EDITOR.id
@@ -133,19 +134,30 @@ export const useEditorLaunch = (task: Task) => {
             }
             const [west, south, east, north] = bounds
             const selection = formatOsmEntities(tasks, { abbreviated: false })
+            const changesInOwnLayer = editorValue === EDITOR.josmLayer
+            const dataLayerName = !isChangeFile
+              ? layerName
+              : changesInOwnLayer
+                ? `${layerName} OSM Data`
+                : `${layerName} Changes`
             const parts = [
               `left=${west}`,
               `right=${east}`,
               `top=${north}`,
               `bottom=${south}`,
-              `new_layer=${editorValue === EDITOR.josmLayer ? 'true' : 'false'}`,
-              `layer_name=${encodeURIComponent(layerName)}`,
+              `new_layer=${changesInOwnLayer ? 'true' : 'false'}`,
+              `layer_name=${encodeURIComponent(dataLayerName)}`,
               `changeset_comment=${encodeURIComponent(checkinComment)}`,
               `changeset_source=${encodeURIComponent(checkinSource)}`,
             ]
             if (selection) parts.push(`select=${selection}`)
             josmCommands = [
               `${JOSM_HOST}load_and_zoom?${parts.join('&')}`,
+              ...(isChangeFile
+                ? tasks.map((t) =>
+                    josmChangeFileImportUrl(JOSM_HOST, apiBaseUrl, t.id, changesInOwnLayer)
+                  )
+                : []),
               ...tasks.flatMap((t) =>
                 referenceLayers(t).map((attachment) =>
                   josmImportUrl(JOSM_HOST, apiBaseUrl, t.id, attachment)
@@ -258,7 +270,7 @@ export const useEditorLaunch = (task: Task) => {
         )
       }
     },
-    [task, bundledTasks, challenge, activeBundle, t]
+    [task, bundledTasks, challenge, activeBundle, isChangeFile, t]
   )
 
   const openDefaultEditor = useCallback(() => {
