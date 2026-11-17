@@ -22,7 +22,7 @@ type Story = StoryObj<typeof Drawer>
 export const Default: Story = {
   render: () => (
     <div className="relative h-[480px] overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
-      <Drawer open onClose={() => {}}>
+      <Drawer open onClose={() => {}} aria-label="Fix broken sidewalk connection">
         <div className="flex items-center justify-between border-zinc-200 border-b px-4 py-3 dark:border-slate-700">
           <h2 className="font-semibold text-lg text-zinc-900 dark:text-white">
             Fix broken sidewalk connection

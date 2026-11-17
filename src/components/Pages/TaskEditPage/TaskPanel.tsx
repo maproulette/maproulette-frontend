@@ -8,6 +8,7 @@ import { TaskTab } from '@/components/TaskInfoPanel/TaskTab/TaskTab'
 import { TaskTabs } from '@/components/TaskInfoPanel/TaskTabs'
 import { Drawer } from '@/components/ui/Drawer'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { useIntl } from '@/i18n'
 import { DescriptionPanel } from './DescriptionPanel'
 import { TaskActions } from './TaskActions/TaskActions'
 import { TaskInfoHeader } from './TaskInfoHeader'
@@ -15,6 +16,7 @@ import { useTaskShortcuts } from './useTaskShortcuts'
 
 export const TaskPanel = () => {
   const location = useLocation()
+  const { t } = useIntl()
   const { task, isLocked } = useTaskContext()
   const { taskActionPanels } = usePluginContext()
   const { setSelectedMarker } = useTaskMapContext()
@@ -84,7 +86,14 @@ export const TaskPanel = () => {
       </div>
 
       {/* Drawer overlay for non-primary tasks */}
-      <Drawer open={drawerOpen} onClose={handleCloseDrawer}>
+      <Drawer
+        open={drawerOpen}
+        onClose={handleCloseDrawer}
+        aria-label={t(
+          { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
+          { id: viewedTask.id }
+        )}
+      >
         {/* Drawer Task Info Header */}
         <TaskInfoHeader
           task={viewedTask}

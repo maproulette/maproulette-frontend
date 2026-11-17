@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { useDialogFocus } from '@/hooks/useDialogFocus'
 import { cn } from '@/lib/utils'
 
 interface SidePanelProps {
@@ -24,6 +25,9 @@ export const SidePanel = ({
   widthClassName = 'w-full max-w-md',
   'aria-label': ariaLabel = 'Detail panel',
 }: SidePanelProps) => {
+  const panelRef = useRef<HTMLDivElement>(null)
+  useDialogFocus(panelRef, open)
+
   useEffect(() => {
     if (!open) return
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -55,11 +59,14 @@ export const SidePanel = ({
       {/* A plain div, not <aside> — <aside>'s implicit "complementary" role
           doesn't permit overriding to "dialog" (axe: aria-allowed-role). */}
       <div
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel}
+        tabIndex={-1}
+        inert={!open}
         className={cn(
-          'fixed inset-y-0 right-0 z-50 flex flex-col border-zinc-200 border-l bg-white shadow-2xl transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950',
+          'fixed inset-y-0 right-0 z-50 flex flex-col border-zinc-200 border-l bg-white shadow-2xl outline-none transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950',
           widthClassName,
           open ? 'translate-x-0' : 'translate-x-full',
           className
