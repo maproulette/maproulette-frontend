@@ -844,6 +844,7 @@
   "shareLink.popover.title": "Share this link",
   "shared.achievementBadge.lockedLabel": "{title} (locked)",
   "shared.achievementBadge.notYetEarned": "Not yet earned",
+  "shared.challengeCard.actionsLabel": "Actions for {name}",
   "shared.challengeCard.project": "{name}",
   "shared.clearManageFiltersButton.label": "Clear filters",
   "shared.mapLoadingIndicator.loading": "Loading task markers...",

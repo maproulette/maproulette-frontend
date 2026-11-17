@@ -92,9 +92,6 @@ export const ChallengeCard = ({
         className
       )}
     >
-      {actions && (
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
-      )}
       <SidebarIndicator
         avatarUrl={challenge.avatarUrl}
         onLoadFailure={() => setImageFailed(true)}
@@ -174,6 +171,9 @@ export const ChallengeCard = ({
           </div>
         </div>
       </div>
+      {actions && (
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">{actions}</div>
+      )}
     </div>
   )
 }

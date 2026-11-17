@@ -54,7 +54,10 @@ export const ChallengesList = () => {
             <Button variant="ghost" size="icon" className="h-8 w-8">
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">
-                {t({ id: 'common.openMenu', defaultMessage: 'Open menu' })}
+                {t(
+                  { id: 'shared.challengeCard.actionsLabel', defaultMessage: 'Actions for {name}' },
+                  { name: challenge.name }
+                )}
               </span>
             </Button>
           </DropdownMenuTrigger>

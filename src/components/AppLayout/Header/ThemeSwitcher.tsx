@@ -21,6 +21,7 @@ export const ThemeSwitcher = () => {
         return (
           <button
             aria-label={label}
+            aria-pressed={isActive}
             className="relative flex size-6 cursor-pointer items-center justify-center rounded-full"
             key={key}
             onClick={() => handleSetTheme(key)}
