@@ -13,7 +13,12 @@ import { editorOptions } from '@/data/account.json'
 import { josmNoResponseMessage } from '@/hooks/useJosmShortCodes'
 import { useIntl } from '@/i18n'
 import { buildChangesetComment } from '@/lib/changesetComment'
-import { isChangeFileTask, isTagFixTask, josmChangeFileImportUrl } from '@/lib/cooperativeWork'
+import {
+  CHANGE_FILE_EDITORS,
+  isChangeFileTask,
+  isTagFixTask,
+  josmChangeFileImportUrl,
+} from '@/lib/cooperativeWork'
 import {
   editorBackgroundParam,
   editorImageryForStyle,
@@ -273,6 +278,20 @@ export const useEditorLaunch = (task: Task) => {
     [task, bundledTasks, challenge, activeBundle, isChangeFile, t]
   )
 
+  const unavailableReason = useCallback(
+    (editorValue: number): string | undefined =>
+      isChangeFile && !CHANGE_FILE_EDITORS.includes(editorValue)
+        ? t({
+            id: 'taskEditPage.taskActions.editorButton.changeFileJosmOnly',
+            defaultMessage: "This task's changes can only be opened in JOSM",
+          })
+        : undefined,
+    [isChangeFile, t]
+  )
+
+  const usualEditor = defaultEditor === -1 ? EDITOR.id : defaultEditor
+  const primaryEditor = unavailableReason(usualEditor) ? CHANGE_FILE_EDITORS[0] : usualEditor
+
   const openDefaultEditor = useCallback(() => {
     // A tag-fix challenge proposes tag changes that MapRoulette can only apply
     // for the mapper inside the embedded iD editor, so those tasks open there
@@ -282,8 +301,15 @@ export const useEditorLaunch = (task: Task) => {
       openIdEditor()
       return
     }
-    openEditor(defaultEditor === -1 ? EDITOR.id : defaultEditor)
-  }, [isTagFix, openIdEditor, openEditor, defaultEditor])
+    openEditor(primaryEditor)
+  }, [isTagFix, openIdEditor, openEditor, primaryEditor])
 
-  return { openEditor, openDefaultEditor, defaultEditor, isTagFix }
+  return {
+    openEditor,
+    openDefaultEditor,
+    defaultEditor,
+    primaryEditor,
+    isTagFix,
+    unavailableReason,
+  }
 }

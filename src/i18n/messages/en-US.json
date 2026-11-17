@@ -966,6 +966,7 @@
   "taskEditPage.taskActionModal.toast.loadingNext": "Loading next task...",
   "taskEditPage.taskActionModal.toast.markedAs": "Task marked as {status}",
   "taskEditPage.taskActionModal.toast.updateFailed": "Failed to update task. Please try again.",
+  "taskEditPage.taskActions.editorButton.changeFileJosmOnly": "This task's changes can only be opened in JOSM",
   "taskEditPage.taskActions.editorButton.chooseEditor": "Open in another editor, or change the default",
   "taskEditPage.taskActions.editorButton.defaultUpdateFailed": "Failed to update default editor",
   "taskEditPage.taskActions.editorButton.defaultUpdated": "Default editor updated",

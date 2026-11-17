@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { Button } from '@/components/ui/Button'
+import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,10 +33,17 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   const { user } = useAuthContext()
   const [isSaving, setIsSaving] = useState(false)
   const updateEditorMutation = api.user.useUpdateUserSettings()
-  const { openEditor, openDefaultEditor, defaultEditor, isTagFix } = useEditorLaunch(task)
+  const {
+    openEditor,
+    openDefaultEditor,
+    defaultEditor,
+    primaryEditor,
+    isTagFix,
+    unavailableReason,
+  } = useEditorLaunch(task)
 
   const currentEditorOption =
-    selectableEditors.find((opt) => opt.value === defaultEditor) || selectableEditors[0] // Default to iD
+    selectableEditors.find((opt) => opt.value === primaryEditor) || selectableEditors[0] // Default to iD
 
   // The primary button opens embedded iD for a tag fix, so it must say so
   // rather than advertising the mapper's usual editor.
@@ -156,18 +164,29 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
                 defaultMessage: 'Open this task in:',
               })}
             </DropdownMenuLabel>
-            {selectableEditors.map((option) => (
-              <DropdownMenuItem
-                key={`open-${option.value}`}
-                onClick={() => openEditor(option.value)}
-                disabled={busy}
-              >
-                <span className="flex-1">{option.label}</span>
-                {EDITOR_BINDINGS[option.value] && (
-                  <KbdBinding binding={EDITOR_BINDINGS[option.value]} />
-                )}
-              </DropdownMenuItem>
-            ))}
+            {selectableEditors.map((option) => {
+              const reason = unavailableReason(option.value)
+              return (
+                <DisabledTooltip
+                  key={`open-${option.value}`}
+                  show={!!reason}
+                  message={reason ?? ''}
+                  className="flex w-full"
+                  side="left"
+                >
+                  <DropdownMenuItem
+                    className="w-full"
+                    onClick={() => openEditor(option.value)}
+                    disabled={busy || !!reason}
+                  >
+                    <span className="flex-1">{option.label}</span>
+                    {EDITOR_BINDINGS[option.value] && (
+                      <KbdBinding binding={EDITOR_BINDINGS[option.value]} />
+                    )}
+                  </DropdownMenuItem>
+                </DisabledTooltip>
+              )
+            })}
             <DropdownMenuSeparator />
             <DropdownMenuLabel>
               {t({
