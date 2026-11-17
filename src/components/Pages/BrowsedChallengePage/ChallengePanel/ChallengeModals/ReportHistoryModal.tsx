@@ -1,8 +1,8 @@
 import { Flag } from 'lucide-react'
 import { defineMessages } from 'react-intl'
-import ReactMarkdown from 'react-markdown'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
+import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Badge } from '@/components/ui/Badge'
 import {
@@ -16,7 +16,6 @@ import { Loader } from '@/components/ui/Loader'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { formatDateTime } from '@/lib/date'
-import { markdownRemarkPlugins } from '@/lib/markdown'
 import type { ChallengeReport, ChallengeReportStatusName } from '@/types/ChallengeReport'
 import { useChallengeModals } from './ChallengeModalsContext'
 
@@ -90,23 +89,7 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
         <Badge variant={statusBadgeVariant(report.statusName)}>{statusLabel}</Badge>
       </div>
 
-      <div className="prose prose-sm dark:prose-invert max-w-none break-words text-zinc-700 dark:text-slate-300 [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
-        <ReactMarkdown
-          remarkPlugins={markdownRemarkPlugins}
-          components={{
-            a: ({ ...props }) => (
-              <a
-                {...props}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline dark:text-blue-400"
-              />
-            ),
-          }}
-        >
-          {report.comment}
-        </ReactMarkdown>
-      </div>
+      <MarkdownContent autoLink={false}>{report.comment}</MarkdownContent>
 
       <p className="text-xs text-zinc-500 dark:text-slate-400">
         {report.statusName === 'open'

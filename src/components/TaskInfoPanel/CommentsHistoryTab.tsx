@@ -16,11 +16,10 @@ import {
   XCircle,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import ReactMarkdown, { type Components } from 'react-markdown'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
-import { ShortCodeLink } from '@/components/shared/ShortCodeLink'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
@@ -30,8 +29,6 @@ import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import { formatDate, formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
-import { markdownRemarkPlugins } from '@/lib/markdown'
-import { linkifyShortCodes } from '@/lib/shortCodes'
 import {
   getStatusLabel,
   STATUS_BAR_COLORS,
@@ -103,17 +100,6 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
       {label}
     </span>
   )
-}
-
-const commentComponents: Components = {
-  a: (props) => (
-    <ShortCodeLink
-      {...props}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-600 hover:underline dark:text-blue-400"
-    />
-  ),
 }
 
 export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
@@ -212,11 +198,9 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
               />
             </div>
 
-            <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
-              <ReactMarkdown remarkPlugins={markdownRemarkPlugins} components={commentComponents}>
-                {linkifyShortCodes(commentText)}
-              </ReactMarkdown>
-            </div>
+            <MarkdownContent autoLink={false} shortCodes className="text-xs">
+              {commentText}
+            </MarkdownContent>
 
             <div className="text-xs text-zinc-500 dark:text-slate-400">
               {formatDateTime(timestamp, locale)}
