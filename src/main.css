@@ -33,8 +33,9 @@
 
   --line: var(--color-steel-200);
   --line-strong: var(--color-steel-300);
-  --line-gradient: linear-gradient(to right, oklch(0.87 0.1 168), oklch(0.81 0.1 252));
-  --line-gradient-strong: linear-gradient(to right, oklch(0.78 0.13 168), oklch(0.7 0.13 252));
+  --line-gradient: linear-gradient(to bottom right, oklch(0.935 0.05 168), oklch(0.905 0.05 252));
+  --line-gradient-strong: linear-gradient(to bottom right, oklch(0.87 0.1 168), oklch(0.81 0.1 252));
+  --line-gradient-width: 1.5px;
   --ring: var(--color-mint-500);
 
   --primary: var(--color-steel-800);
@@ -83,6 +84,7 @@
   --line-strong: var(--color-steel-600);
   --line-gradient: linear-gradient(var(--line), var(--line));
   --line-gradient-strong: linear-gradient(var(--line-strong), var(--line-strong));
+  --line-gradient-width: 1px;
   --ring: var(--color-mint-300);
 
   --primary: var(--color-mint-300);
@@ -143,21 +145,16 @@
   --font-sans: var(--font-brand-sans);
 }
 
-/* a one pixel gradient outline for cards and panels */
+/* a thin gradient outline for cards and panels */
 @utility border-gradient {
-  position: relative;
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    padding: 1px;
-    border-radius: inherit;
-    background: var(--line-gradient);
-    mask:
-      linear-gradient(#000 0 0) content-box exclude,
-      linear-gradient(#000 0 0);
-    pointer-events: none;
+  border: var(--line-gradient-width) solid transparent;
+  background-image: linear-gradient(var(--panel), var(--panel)), var(--line-gradient);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-attachment: scroll, fixed;
+  @variant dark {
+    border-color: var(--line);
+    background-image: none;
   }
 }
 
@@ -166,8 +163,9 @@
 }
 
 @utility border-gradient-strong {
-  &::after {
-    background: var(--line-gradient-strong);
+  --line-gradient: var(--line-gradient-strong);
+  @variant dark {
+    border-color: var(--line-strong);
   }
 }
 

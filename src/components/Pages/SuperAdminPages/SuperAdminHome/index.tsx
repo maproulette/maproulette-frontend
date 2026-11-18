@@ -42,7 +42,7 @@ export const SuperAdminHome = () => {
         {pages.map((p) => (
           <Card
             key={p.to}
-            className="stretched-link-container transition-colors hover:border-line-strong"
+            className="stretched-link-container transition-colors hover:border-gradient-strong"
           >
             <CardHeader className="flex flex-row items-center gap-4">
               <div
