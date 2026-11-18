@@ -17,7 +17,7 @@ export const DesktopNav = () => {
           key={item.to}
           to={item.to}
           target={item.openInNewTab ? '_blank' : ''}
-          className="link-nav flex items-center gap-1.5 rounded-sm"
+          className="link-nav after:-bottom-1.5 after:bg-(image:--accent-gradient) relative flex items-center gap-1.5 rounded-sm after:absolute after:inset-x-0 after:h-0.5 after:rounded-full after:opacity-0 after:transition-opacity dark:after:hidden [&.active]:after:opacity-100"
         >
           {item.icon && <span className="inline-flex">{item.icon}</span>}
           {item.label}

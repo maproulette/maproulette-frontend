@@ -2,15 +2,15 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import type * as React from 'react'
 import { cn } from '@/lib/utils'
 
-const panelVariants = cva('rounded-lg border', {
+const panelVariants = cva('rounded-lg', {
   variants: {
     tone: {
-      neutral: 'border-line bg-card',
-      muted: 'border-line bg-inset',
-      info: 'border-ocean-500/40 bg-ocean-500/10',
-      success: 'border-success/40 bg-success/10',
-      warning: 'border-warning/40 bg-warning/10',
-      danger: 'border-danger/40 bg-danger/10',
+      neutral: 'border-gradient bg-card',
+      muted: 'border border-line bg-inset',
+      info: 'border border-ocean-500/40 bg-ocean-500/10',
+      success: 'border border-success/40 bg-success/10',
+      warning: 'border border-warning/40 bg-warning/10',
+      danger: 'border border-danger/40 bg-danger/10',
     },
     padding: {
       none: '',

@@ -20,7 +20,7 @@ export const TeamCard = ({ membership }: Props) => {
     t({ id: 'common.team', defaultMessage: 'Team #{teamId}' }, { teamId: membership.teamId })
   const role = teamDisplayRole(membership)
   return (
-    <div className="group stretched-link-container block overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-line-strong">
+    <div className="group stretched-link-container block overflow-hidden rounded-xl border-gradient bg-card transition-colors hover:border-gradient-strong">
       <div className="flex items-center gap-3 p-4">
         <Avatar className="size-10">
           <AvatarImage src={resolveTeamImageUrl(team?.avatarURL) ?? ''} alt={name} />

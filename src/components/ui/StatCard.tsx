@@ -2,15 +2,15 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import type * as React from 'react'
 import { cn } from '@/lib/utils'
 
-const statCardVariants = cva('flex flex-col gap-1 rounded-lg border p-4 transition-colors', {
+const statCardVariants = cva('flex flex-col gap-1 rounded-lg p-4 transition-colors', {
   variants: {
     tone: {
-      neutral: 'border-line bg-card',
-      muted: 'border-line bg-inset',
-      info: 'border-ocean-500/40 bg-ocean-500/10',
-      success: 'border-success/40 bg-success/10',
-      warning: 'border-warning/40 bg-warning/10',
-      danger: 'border-danger/40 bg-danger/10',
+      neutral: 'border-gradient bg-card',
+      muted: 'border border-line bg-inset',
+      info: 'border border-ocean-500/40 bg-ocean-500/10',
+      success: 'border border-success/40 bg-success/10',
+      warning: 'border border-warning/40 bg-warning/10',
+      danger: 'border border-danger/40 bg-danger/10',
     },
     size: {
       sm: 'p-3',

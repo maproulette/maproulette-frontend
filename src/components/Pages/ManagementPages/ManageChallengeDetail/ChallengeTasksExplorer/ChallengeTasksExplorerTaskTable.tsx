@@ -52,7 +52,7 @@ export const ChallengeTasksExplorerTaskTable = ({
   const priorityLabel = (p: number) => (isTaskPriority(p) ? t(PRIORITY_MESSAGES[p]) : String(p))
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-line bg-panel text-fg">
+    <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border-gradient bg-panel text-fg">
       <Table density="compact">
         <TableHeader>
           <TableRow>

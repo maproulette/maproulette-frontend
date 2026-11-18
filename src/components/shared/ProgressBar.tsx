@@ -32,8 +32,8 @@ export const ProgressBar = ({ percentage, segments, className }: ProgressBarProp
         </div>
       ) : percentage !== undefined ? (
         <div
-          className="h-full bg-accent transition-all duration-300"
-          style={{ width: `${percentage}%` }}
+          className="bg-(image:--accent-gradient) h-full transition-all duration-300"
+          style={{ clipPath: `inset(0 ${100 - percentage}% 0 0)` }}
         />
       ) : null}
     </div>

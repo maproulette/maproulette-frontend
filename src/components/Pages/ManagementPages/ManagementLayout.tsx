@@ -10,7 +10,7 @@ export const ManagementLayout = () => {
     <AuthGuard>
       <div className="flex min-h-0 flex-1 flex-col">
         <SectionHeader
-          accentClass="border-l-accent"
+          accentClass="border-l-transparent bg-[linear-gradient(var(--accent-from),var(--accent-to))] bg-size-[4px_100%] bg-origin-border bg-no-repeat"
           basePath="/manage"
           breadcrumbRoot={t({ id: 'common.createManage', defaultMessage: 'create & manage' })}
         />

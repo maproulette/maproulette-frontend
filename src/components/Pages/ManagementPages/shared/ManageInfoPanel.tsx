@@ -14,7 +14,7 @@ export const ManageInfoPanel = ({ docs, onClose }: ManageInfoPanelProps) => {
   const { t } = useIntl()
   return (
     <aside className="h-full min-h-0 overflow-hidden">
-      <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-panel p-6">
+      <div className="flex h-full flex-col overflow-hidden rounded-lg border-gradient bg-panel p-6">
         <div className="flex items-start justify-between">
           <h2 className="font-bold text-base text-fg leading-tight tracking-tight">
             {t({

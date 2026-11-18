@@ -33,6 +33,8 @@
 
   --line: var(--color-steel-200);
   --line-strong: var(--color-steel-300);
+  --line-gradient: linear-gradient(to right, oklch(0.87 0.1 168), oklch(0.81 0.1 252));
+  --line-gradient-strong: linear-gradient(to right, oklch(0.78 0.13 168), oklch(0.7 0.13 252));
   --ring: var(--color-mint-500);
 
   --primary: var(--color-steel-800);
@@ -41,6 +43,9 @@
   --link: var(--color-mint-700);
   --accent: var(--color-mint-400);
   --accent-fg: var(--color-steel-950);
+  --accent-from: var(--color-mint-400);
+  --accent-to: var(--color-ocean-400);
+  --accent-gradient: linear-gradient(to right, var(--accent-from), var(--accent-to));
   --highlight: var(--color-mango-700);
   --success: var(--color-mint-700);
   --warning: var(--color-mango-700);
@@ -76,6 +81,8 @@
 
   --line: var(--color-steel-700);
   --line-strong: var(--color-steel-600);
+  --line-gradient: linear-gradient(var(--line), var(--line));
+  --line-gradient-strong: linear-gradient(var(--line-strong), var(--line-strong));
   --ring: var(--color-mint-300);
 
   --primary: var(--color-mint-300);
@@ -84,6 +91,8 @@
   --link: var(--color-mint-300);
   --accent: var(--color-mint-300);
   --accent-fg: var(--color-steel-900);
+  --accent-from: var(--color-mint-300);
+  --accent-to: var(--color-ocean-300);
   --highlight: var(--color-mango-300);
   --success: var(--color-mint-400);
   --warning: var(--color-mango-400);
@@ -132,6 +141,34 @@
   --color-status-validated: var(--status-validated);
   --color-status-disabled: var(--status-disabled);
   --font-sans: var(--font-brand-sans);
+}
+
+/* a one pixel gradient outline for cards and panels */
+@utility border-gradient {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--line-gradient);
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+}
+
+@utility border-line-gradient {
+  border-image: var(--line-gradient) 1;
+}
+
+@utility border-gradient-strong {
+  &::after {
+    background: var(--line-gradient-strong);
+  }
 }
 
 @layer base {

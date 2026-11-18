@@ -46,7 +46,7 @@ export const ChallengeTasksExplorerControls = () => {
         id: 'manageChallengeDetail.tasksExplorer.filterBarLabel',
         defaultMessage: 'Task filters',
       })}
-      className="flex min-w-0 flex-wrap items-center gap-3 rounded-lg border border-line bg-card p-2"
+      className="flex min-w-0 flex-wrap items-center gap-3 rounded-lg border-gradient bg-card p-2"
     >
       <div className="flex items-center gap-2">
         <span className="whitespace-nowrap font-medium text-fg text-sm">
