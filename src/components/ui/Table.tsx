@@ -7,23 +7,27 @@ import { useColumnResize } from './useColumnResize'
 
 type TableProps = {
   density?: 'default' | 'compact'
+  /** Set to false when an outer element scrolls the table, so the header can stick to it. */
+  scroll?: boolean
 }
 
 export const Table = ({
   className,
   ref,
   density = 'default',
+  scroll = true,
   ...props
-}: React.ComponentProps<'table'> & TableProps) => (
-  <div className="relative w-full overflow-x-auto">
+}: React.ComponentProps<'table'> & TableProps) => {
+  const table = (
     <table
       ref={ref}
       data-density={density}
       className={cn('group/table w-full border-collapse text-sm', className)}
       {...props}
     />
-  </div>
-)
+  )
+  return scroll ? <div className="relative w-full overflow-x-auto">{table}</div> : table
+}
 
 export const TableHeader = ({ className, ref, ...props }: React.ComponentProps<'thead'>) => (
   <thead

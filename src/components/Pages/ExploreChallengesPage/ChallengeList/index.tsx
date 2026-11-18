@@ -70,10 +70,7 @@ export const ChallengeList = () => {
           </Empty>
         </ScrollArea>
       ) : challenges.length > 0 && viewMode === 'list' ? (
-        <>
-          <ChallengesTableView />
-          <ListFooter />
-        </>
+        <ChallengesTableView />
       ) : challenges.length > 0 ? (
         <ScrollArea className="h-full w-full [&_[data-slot=scroll-area-scrollbar]]:hidden">
           <div
