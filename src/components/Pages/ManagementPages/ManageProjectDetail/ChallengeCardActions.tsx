@@ -3,16 +3,18 @@ import {
   Archive,
   ArrowRightLeft,
   Copy,
-  Eye,
-  EyeOff,
   Hammer,
   MoreHorizontal,
-  Pause,
   Pencil,
-  Pin,
   Play,
   Trash2,
 } from 'lucide-react'
+import {
+  ArchiveButton,
+  DiscoverableButton,
+  PauseButton,
+  PinButton,
+} from '@/components/Pages/ManagementPages/shared/QuickActionButtons'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -23,7 +25,6 @@ import {
 } from '@/components/ui/DropdownMenu'
 import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
 import { useIntl } from '@/i18n'
-import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { ChallengeSelectCheckbox } from './ChallengeSelection'
 
@@ -63,121 +64,25 @@ export const ChallengeCardActions = ({
         </span>
       )}
       {challenge.id != null && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={(e) => {
-            e.preventDefault()
-            onTogglePaused(challenge.id, challenge.paused ?? false)
-          }}
-          title={
-            challenge.paused
-              ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
-              : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
-          }
-          aria-label={
-            challenge.paused
-              ? t({ id: 'common.resumeChallenge', defaultMessage: 'Resume challenge' })
-              : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
-          }
-        >
-          <Pause
-            className={cn(
-              'h-4 w-4',
-              challenge.paused
-                ? 'text-amber-500 dark:text-amber-400'
-                : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-            )}
-          />
-        </Button>
+        <PauseButton
+          paused={challenge.paused ?? false}
+          onClick={() => onTogglePaused(challenge.id, challenge.paused ?? false)}
+        />
       )}
       {challenge.id != null && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={(e) => {
-            e.preventDefault()
-            onArchive(challenge.id, challenge.isArchived ?? false)
-          }}
-          title={
-            challenge.isArchived
-              ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
-              : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
-          }
-          aria-label={
-            challenge.isArchived
-              ? t({ id: 'common.unarchiveChallenge', defaultMessage: 'Unarchive challenge' })
-              : t({ id: 'common.archiveChallenge', defaultMessage: 'Archive challenge' })
-          }
-        >
-          <Archive
-            className={cn(
-              'h-4 w-4',
-              challenge.isArchived
-                ? 'text-amber-600 dark:text-amber-400'
-                : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-            )}
-          />
-        </Button>
+        <ArchiveButton
+          archived={challenge.isArchived ?? false}
+          onClick={() => onArchive(challenge.id, challenge.isArchived ?? false)}
+        />
       )}
       {challenge.id != null && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={(e) => {
-            e.preventDefault()
-            onTogglePin(challenge.id)
-          }}
-          title={
-            isPinned
-              ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
-              : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
-          }
-          aria-label={
-            isPinned
-              ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
-              : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
-          }
-        >
-          <Pin
-            className={cn(
-              'h-4 w-4',
-              isPinned
-                ? 'text-amber-600 dark:text-amber-400'
-                : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-            )}
-          />
-        </Button>
+        <PinButton pinned={isPinned} entity="challenge" onClick={() => onTogglePin(challenge.id)} />
       )}
       {challenge.id != null && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={(e) => {
-            e.preventDefault()
-            onToggleEnabled(challenge)
-          }}
-          title={
-            challenge.enabled
-              ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
-              : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
-          }
-          aria-label={
-            challenge.enabled
-              ? t({ id: 'common.makeNotDiscoverable', defaultMessage: 'Make not discoverable' })
-              : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
-          }
-        >
-          {challenge.enabled ? (
-            <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-          ) : (
-            <EyeOff className="h-4 w-4 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400" />
-          )}
-        </Button>
+        <DiscoverableButton
+          enabled={challenge.enabled ?? false}
+          onClick={() => onToggleEnabled(challenge)}
+        />
       )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
