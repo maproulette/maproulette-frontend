@@ -14,7 +14,7 @@ export const ManageHome = () => {
   return (
     <div className="mx-auto h-full overflow-auto p-4">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <Card className="stretched-link-container transition-colors hover:border-line-strong">
+        <Card className="stretched-link-container transition-colors hover:border-gradient-strong">
           <CardHeader>
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
               <FolderKanban className="h-6 w-6 text-link" />
@@ -32,7 +32,7 @@ export const ManageHome = () => {
           </CardContent>
         </Card>
 
-        <Card className="stretched-link-container transition-colors hover:border-line-strong">
+        <Card className="stretched-link-container transition-colors hover:border-gradient-strong">
           <CardHeader>
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
               <ListChecks className="h-6 w-6 text-link" />
@@ -51,7 +51,7 @@ export const ManageHome = () => {
         </Card>
 
         {showTasksCard && (
-          <Card className="stretched-link-container transition-colors hover:border-line-strong">
+          <Card className="stretched-link-container transition-colors hover:border-gradient-strong">
             <CardHeader>
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
                 <CheckSquare className="h-6 w-6 text-link" />
