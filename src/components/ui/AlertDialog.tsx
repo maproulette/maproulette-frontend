@@ -1,5 +1,8 @@
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
+import type { VariantProps } from 'class-variance-authority'
 import * as React from 'react'
+
+import { buttonVariants } from '@/components/ui/Button'
 
 import { useSuspendShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { cn } from '@/lib/utils'
@@ -110,15 +113,14 @@ export const AlertDialogDescription = ({
 
 export const AlertDialogAction = ({
   className,
+  variant,
   ref,
   ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Action>) => (
+}: React.ComponentProps<typeof AlertDialogPrimitive.Action> &
+  Pick<VariantProps<typeof buttonVariants>, 'variant'>) => (
   <AlertDialogPrimitive.Action
     ref={ref}
-    className={cn(
-      'inline-flex h-10 items-center justify-center rounded-lg bg-zinc-900 px-4 py-2 font-semibold text-sm text-zinc-50 ring-offset-white transition-colors hover:bg-zinc-900/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:bg-slate-50 dark:text-zinc-900 dark:ring-offset-slate-950 dark:focus-visible:ring-zinc-300 dark:hover:bg-slate-50/90',
-      className
-    )}
+    className={cn(buttonVariants({ variant, size: 'lg' }), className)}
     {...props}
   />
 )
@@ -130,10 +132,7 @@ export const AlertDialogCancel = ({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) => (
   <AlertDialogPrimitive.Cancel
     ref={ref}
-    className={cn(
-      'mt-2 inline-flex h-10 items-center justify-center rounded-lg border border-zinc-200 bg-transparent px-4 py-2 font-semibold text-sm ring-offset-white transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 sm:mt-0 dark:border-slate-800 dark:ring-offset-slate-950 dark:focus-visible:ring-zinc-300 dark:hover:bg-slate-800 dark:hover:text-zinc-50',
-      className
-    )}
+    className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'mt-2 sm:mt-0', className)}
     {...props}
   />
 )

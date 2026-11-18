@@ -370,10 +370,7 @@ export const ManageChallengesContent = () => {
             <AlertDialogCancel>
               {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
             </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteChallenge}
-              className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
-            >
+            <AlertDialogAction onClick={confirmDeleteChallenge} variant="destructive">
               {t({ id: 'common.delete', defaultMessage: 'Delete' })}
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -38,9 +38,7 @@ export const Default: Story = {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600">
-            Delete
-          </AlertDialogAction>
+          <AlertDialogAction variant="destructive">Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

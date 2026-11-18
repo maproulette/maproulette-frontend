@@ -42,10 +42,7 @@ export const DeleteProjectDialog = () => {
           <AlertDialogCancel>
             {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={confirmDeleteProject}
-            className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
-          >
+          <AlertDialogAction onClick={confirmDeleteProject} variant="destructive">
             {t({ id: 'common.delete', defaultMessage: 'Delete' })}
           </AlertDialogAction>
         </AlertDialogFooter>
