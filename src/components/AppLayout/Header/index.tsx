@@ -5,10 +5,12 @@ import { Logomark } from '@/components/ui/Logomark'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { DesktopNav } from './DesktopNav'
+import { DropdownMenuLanguage } from './DropdownMenuLanguage'
 import { DropdownMenuNotifications } from './DropdownMenuNotifications'
 import { DropdownMenuUser } from './DropdownMenuUser'
 import { GlobalSearch } from './GlobalSearch'
 import { MobileNav } from './MobileNav'
+import { ThemeToggle } from './ThemeToggle'
 
 export const Header = () => {
   const { user, login, authLoading } = useAuthContext()
@@ -29,6 +31,7 @@ export const Header = () => {
       <DesktopNav />
       <div className="flex items-center gap-4">
         <MobileNav />
+        <DropdownMenuLanguage user={user} />
         {user ? (
           <>
             <DropdownMenuNotifications user={user} />
@@ -39,9 +42,12 @@ export const Header = () => {
             message={t({ id: 'appLayout.header.signingIn', defaultMessage: 'Signing in...' })}
           />
         ) : (
-          <Button size="lg" onClick={login} className="rounded-full">
-            {t({ id: 'common.signIn', defaultMessage: 'Sign in' })}
-          </Button>
+          <>
+            <ThemeToggle />
+            <Button size="lg" onClick={login} className="rounded-full">
+              {t({ id: 'common.signIn', defaultMessage: 'Sign in' })}
+            </Button>
+          </>
         )}
       </div>
     </header>
