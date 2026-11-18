@@ -32,7 +32,7 @@ export const TeamDetailSidebar = () => {
   if (!team) return null
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto rounded-lg border border-line bg-panel">
+    <div className="flex h-full flex-col overflow-y-auto rounded-lg border-gradient bg-panel">
       <div className="space-y-4 px-6 pt-6 pb-4">
         <div className="flex gap-4">
           <Avatar className="size-16 shrink-0">

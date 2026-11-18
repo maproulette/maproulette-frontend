@@ -88,7 +88,7 @@ export const ChallengeCard = ({
   return (
     <div
       className={cn(
-        'group stretched-link-container block overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-line-strong',
+        'group stretched-link-container block overflow-hidden rounded-xl border-gradient bg-card transition-colors hover:border-gradient-strong',
         className
       )}
     >

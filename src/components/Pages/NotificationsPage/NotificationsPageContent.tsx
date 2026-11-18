@@ -144,7 +144,7 @@ export const NotificationsPageContent = ({ userId }: { userId: number }) => {
               : t({ id: 'notifications.empty.all', defaultMessage: 'No notifications yet' })}
           </p>
         ) : (
-          <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-panel">
+          <ul className="divide-y divide-line overflow-hidden rounded-xl border-gradient bg-panel">
             {shown.map((n) => (
               <li key={n.id}>
                 <NotificationItem

@@ -61,7 +61,7 @@ export const ProjectDetail = () => {
 
   return (
     <aside className="h-full min-h-0 overflow-hidden pr-2">
-      <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-panel">
+      <div className="flex h-full flex-col overflow-hidden rounded-lg border-gradient bg-panel">
         {/* Header */}
         <div className="space-y-2.5 px-6 pt-6 pb-4">
           {(project.featured || project.isArchived) && (

@@ -23,7 +23,7 @@ export const ChallengesTableView = () => {
   const { challenges } = useChallengeResultsContext()
   return (
     <div className="min-h-0 w-full flex-1 overflow-auto">
-      <div className="w-fit min-w-full overflow-clip rounded-lg border border-line bg-panel">
+      <div className="w-fit min-w-full overflow-clip rounded-lg border-gradient bg-panel">
         <Table scroll={false}>
           <TableHeader className="[&_th]:shadow-[inset_0_-1px_0_var(--line)] [&_tr]:border-b-0">
             <TableRow>

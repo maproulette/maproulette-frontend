@@ -29,8 +29,8 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
     : projectDescriptionText(project)
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-lg border border-line bg-panel md:h-full">
-      <div className="shrink-0 border-line border-b p-4">
+    <div className="flex w-full flex-col overflow-hidden rounded-lg border-gradient bg-panel md:h-full">
+      <div className="shrink-0 border-line-gradient border-b p-4">
         <Button
           variant="ghost"
           size="sm"

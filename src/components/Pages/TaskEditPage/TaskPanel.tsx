@@ -46,7 +46,7 @@ export const TaskPanel = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col overflow-hidden rounded-lg border border-line bg-panel">
+    <div className="relative flex h-full w-full flex-col overflow-hidden rounded-lg border-gradient bg-panel">
       {/* Primary Task Info Header */}
       <TaskInfoHeader task={task} relation="primary" isLocked={isLocked} />
 
@@ -54,7 +54,7 @@ export const TaskPanel = () => {
       <TaskTabs task={task} taskTabContent={<TaskTab task={task} />} />
 
       {/* Task Actions Footer */}
-      <div className="shrink-0 border-line border-t p-4">
+      <div className="shrink-0 border-line-gradient border-t p-4">
         {replacePanels.length > 0 ? (
           replacePanels.map((panel) => {
             const PanelComponent = panel.component

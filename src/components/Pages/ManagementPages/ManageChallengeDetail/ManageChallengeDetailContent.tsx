@@ -271,7 +271,7 @@ export const ManageChallengeDetailContent = () => {
     <ResizablePanelGroup direction="horizontal" className="h-full">
       <ResizablePanel defaultSize={30} minSize={20} maxSize={45}>
         <aside className="h-full min-h-0 overflow-hidden pr-4">
-          <div className="relative flex h-full flex-col overflow-hidden rounded-lg border border-line bg-panel">
+          <div className="relative flex h-full flex-col overflow-hidden rounded-lg border-gradient bg-panel">
             {/* Scrolls as a whole; the card itself stays put because the task
                 drawer is portalled into it. */}
             <div className="min-h-0 flex-1 overflow-y-auto">

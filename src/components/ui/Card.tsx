@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 export const Card = ({ className, ref, ...props }: React.ComponentProps<'div'>) => (
   <div
     ref={ref}
-    className={cn('rounded-xl border border-line bg-card text-fg', className)}
+    className={cn('rounded-xl border-gradient bg-card text-fg', className)}
     {...props}
   />
 )

@@ -37,7 +37,7 @@ export const DashboardSection = ({
     <section
       aria-labelledby={headingId}
       className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-line bg-panel',
+        'flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border-gradient bg-panel',
         className
       )}
     >

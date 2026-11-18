@@ -102,10 +102,10 @@ export const ChallengePanel = () => {
   return (
     <>
       <CommentsAutoOpener shouldOpen={shouldAutoOpenComments} />
-      <div className="flex h-full w-full flex-col overflow-hidden rounded-lg border border-line bg-panel">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-lg border-gradient bg-panel">
         <div className="flex h-full flex-col overflow-hidden">
           <div className="relative flex min-h-0 flex-1 flex-col">
-            <div ref={headerRef} className="w-full shrink-0 border-line border-b">
+            <div ref={headerRef} className="w-full shrink-0 border-line-gradient border-b">
               <div
                 className={cn(
                   'relative flex w-full min-w-0 border-0 bg-transparent px-4 text-left transition-all duration-500 ease-in-out md:px-6',

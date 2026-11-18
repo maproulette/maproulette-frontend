@@ -30,7 +30,7 @@ export const ProjectDetailSidebar = () => {
   return (
     // Scrolls rather than clips: the panel grows with the project's managers and
     // teams, and the docs footer below them would otherwise be cut off.
-    <div className="flex h-full flex-col overflow-y-auto rounded-lg border border-line bg-panel">
+    <div className="flex h-full flex-col overflow-y-auto rounded-lg border-gradient bg-panel">
       {/* Header */}
       <div className="shrink-0 space-y-2.5 px-6 pt-6 pb-4">
         {/* Taxonomy badges */}

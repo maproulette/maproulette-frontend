@@ -19,8 +19,8 @@ export const Progress = ({
   >
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
-      className="h-full w-full flex-1 bg-accent transition-all"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+      className="bg-(image:--accent-gradient) h-full w-full flex-1 transition-all"
+      style={{ clipPath: `inset(0 ${100 - (value || 0)}% 0 0)` }}
     />
   </ProgressPrimitive.Root>
 )

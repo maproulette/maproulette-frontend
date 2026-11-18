@@ -43,7 +43,7 @@ export const ProjectCard = ({
       : undefined
   const lastUpdated = project.modified
   const cardClassName = cn(
-    'group stretched-link-container block overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-line-strong',
+    'group stretched-link-container block overflow-hidden rounded-xl border-gradient bg-card transition-colors hover:border-gradient-strong',
     selected && 'ring-2 ring-accent',
     className
   )

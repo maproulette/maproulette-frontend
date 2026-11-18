@@ -40,7 +40,7 @@ export const ProfileSummary = ({ user }: ProfileSummaryProps) => {
   ]
 
   return (
-    <div className="flex shrink-0 flex-col gap-3 rounded-xl border border-line bg-panel px-4 py-3">
+    <div className="flex shrink-0 flex-col gap-3 rounded-xl border-gradient bg-panel px-4 py-3">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
         <div className="flex min-w-0 items-center gap-3">
           <Avatar className="size-10">

@@ -100,4 +100,4 @@ export const STATUS_TINT_COLORS: Record<number, string> = {
 }
 
 export const tabTriggerClass =
-  'gap-1.5 rounded-none border-transparent border-b-2 bg-transparent px-3 py-2 data-[state=active]:border-accent data-[state=active]:bg-transparent data-[state=active]:text-link'
+  'gap-1.5 rounded-none border-transparent border-b-2 bg-transparent px-3 py-2 data-[state=active]:bg-transparent data-[state=active]:[border-image:var(--accent-gradient)_1] data-[state=active]:text-link dark:data-[state=active]:border-accent dark:data-[state=active]:[border-image:none]'
