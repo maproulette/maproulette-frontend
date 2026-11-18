@@ -1,5 +1,6 @@
 import { SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
+import { ViewModeToggle } from '@/components/shared/ViewModeToggle'
 import { Button } from '@/components/ui/Button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
@@ -10,8 +11,9 @@ import { DifficultyFilter } from './DifficultyFilter'
 import { GlobalToggle } from './GlobalMapToggles'
 import { LocationSearchFilter } from './LocationSearchFilter'
 import { SortByFilter } from './SortByFilter'
-import { ViewModeToggle } from './ViewModeToggle'
 import { WorkOnFilter } from './WorkOnFilter'
+
+const VIEW_MODES = ['grid-map', 'grid', 'list'] as const
 
 /**
  * Filter controls for the explore page, sitting above the results.
@@ -32,8 +34,11 @@ import { WorkOnFilter } from './WorkOnFilter'
  */
 export const FilterBar = () => {
   const { t } = useIntl()
-  const { viewMode, workOn, difficulty, global, locationOsmType, locationOsmId } =
+  const { viewMode, setViewMode, workOn, difficulty, global, locationOsmType, locationOsmId } =
     useExploreChallengesSearchContext()
+  const viewModeToggle = (
+    <ViewModeToggle value={viewMode} onValueChange={setViewMode} modes={VIEW_MODES} />
+  )
   const isDesktop = useIsDesktopLayoutContext()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const showListFilters = viewMode !== 'grid-map'
@@ -60,9 +65,7 @@ export const FilterBar = () => {
               )}
             </Button>
           </CollapsibleTrigger>
-          <div className="ml-auto">
-            <ViewModeToggle />
-          </div>
+          <div className="ml-auto">{viewModeToggle}</div>
         </div>
         <CollapsibleContent className="grid grid-cols-2 gap-3">
           <div className="col-span-2">
@@ -101,9 +104,7 @@ export const FilterBar = () => {
           <ClearFiltersButton />
         </>
       )}
-      <div className="ml-auto">
-        <ViewModeToggle />
-      </div>
+      <div className="ml-auto">{viewModeToggle}</div>
     </div>
   )
 }
