@@ -3,6 +3,7 @@ import { CircleAlert } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { OwnerTeamSection } from '@/components/Pages/ManagementPages/shared/OwnerTeamSection'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
 import { Form, FormField, formSubmitDisabled } from '@/components/ui/Form'
@@ -17,7 +18,6 @@ import { logger } from '@/lib/logger'
 import { AgreementSection } from './AgreementSection'
 import { BasemapFields } from './BasemapFields'
 import { BasicInfoFields } from './BasicInfoFields'
-import { ChallengeTeamSection } from './ChallengeTeamSection'
 import { ChangesetFieldsSection } from './ChangesetFieldsSection'
 import {
   buildFormValues,
@@ -161,7 +161,18 @@ export const ChallengeForm = () => {
             sourceReadOnly={sourceReadOnly}
           />
 
-          <ChallengeTeamSection />
+          <OwnerTeamSection
+            description={t({
+              id: 'manageChallengeNew.challengeForm.teamDescription',
+              defaultMessage:
+                "An optional team to own this challenge. Everyone who manages that team can edit it, and the team's image becomes the picture on its card.",
+            })}
+            noneAvailable={t({
+              id: 'manageChallengeNew.challengeForm.teamNoneAvailable',
+              defaultMessage:
+                "You don't manage any teams yet. Only a team's owners, admins and managers can give it a challenge.",
+            })}
+          />
 
           <BasemapFields />
 
