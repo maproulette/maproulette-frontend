@@ -16,12 +16,23 @@ export const getDifficultyLabel = (t: TranslateFn, difficulty: number) => {
 export const getDifficultyColor = (difficulty: number) => {
   switch (difficulty) {
     case 1:
-      return 'text-green-600'
+      return 'text-success'
     case 2:
-      return 'text-yellow-600'
+      return 'text-warning'
     case 3:
-      return 'text-red-600'
+      return 'text-danger'
     default:
-      return 'text-yellow-600'
+      return 'text-warning'
+  }
+}
+
+export const getDifficultyBadgeColor = (difficulty: number) => {
+  switch (difficulty) {
+    case 1:
+      return 'border-transparent bg-mint-200 text-mint-800 dark:border-mint-400/50 dark:bg-transparent dark:text-mint-400'
+    case 3:
+      return 'border-transparent bg-coral-200 text-coral-800 dark:border-coral-400/50 dark:bg-transparent dark:text-coral-400'
+    default:
+      return 'border-transparent bg-mango-200 text-mango-800 dark:border-mango-400/50 dark:bg-transparent dark:text-mango-400'
   }
 }

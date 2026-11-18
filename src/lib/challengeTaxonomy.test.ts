@@ -52,13 +52,13 @@ describe('getChallengeTaxonomy', () => {
   it('labels a featured challenge', () => {
     const [entry] = getChallengeTaxonomy(challenge({ featured: true }), t)
     expect(entry).toMatchObject({ key: 'featured', label: 'Featured' })
-    expect(entry.className).toContain('teal')
+    expect(entry.className).toContain('highlight')
   })
 
   it('labels a tag fix challenge', () => {
     const [entry] = getChallengeTaxonomy(challenge({ cooperativeType: COOPERATIVE_TYPE_TAGS }), t)
     expect(entry).toMatchObject({ key: 'tagFix', label: 'Tag Fix' })
-    expect(entry.className).toContain('rose')
+    expect(entry.className).toContain('link')
   })
 
   it('labels a changefile challenge as cooperative', () => {
@@ -67,13 +67,13 @@ describe('getChallengeTaxonomy', () => {
       t
     )
     expect(entry).toMatchObject({ key: 'cooperative', label: 'Cooperative' })
-    expect(entry.className).toContain('rose')
+    expect(entry.className).toContain('link')
   })
 
   it('labels a global challenge', () => {
     const [entry] = getChallengeTaxonomy(challenge({ isGlobal: true }), t)
     expect(entry).toMatchObject({ key: 'global', label: 'Global' })
-    expect(entry.className).toContain('violet')
+    expect(entry.className).toContain('ocean')
   })
 
   it('orders featured, cooperative, then global', () => {

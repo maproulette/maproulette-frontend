@@ -14,7 +14,7 @@ import { useIntl } from '@/i18n'
 import { getParentInfo } from '@/lib/challengeParent'
 import { getChallengeTaxonomy } from '@/lib/challengeTaxonomy'
 import { formatDate } from '@/lib/date'
-import { getDifficultyColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
+import { getDifficultyBadgeColor, getDifficultyLabel } from '@/lib/difficultyLevelData'
 import { cn } from '@/lib/utils'
 import { useChallengeResultsContext } from '../contexts/ChallengeResultsContext'
 
@@ -79,7 +79,7 @@ export const ChallengesTableView = () => {
                 <TableCell className="text-center">
                   <Badge
                     variant="outline"
-                    className={cn(getDifficultyColor(challenge.difficulty), 'text-xs')}
+                    className={cn(getDifficultyBadgeColor(challenge.difficulty), 'text-xs')}
                   >
                     {getDifficultyLabel(t, challenge.difficulty)}
                   </Badge>

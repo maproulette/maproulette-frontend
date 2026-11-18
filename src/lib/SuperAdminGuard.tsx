@@ -39,11 +39,11 @@ export const getUserRole = (user: User): string => {
 export const getRoleBadgeColor = (role: string) => {
   switch (role) {
     case 'super_admin':
-      return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+      return 'bg-danger/10 text-danger'
     case 'admin':
-      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+      return 'bg-accent/10 text-link'
     default:
-      return 'bg-zinc-100 text-zinc-800 dark:bg-slate-800 dark:text-zinc-200'
+      return 'bg-muted text-fg'
   }
 }
 
@@ -59,10 +59,10 @@ export const SuperAdminGuard = ({ children, fallback }: SuperAdminGuardProps) =>
     return (
       fallback || (
         <div className="mx-auto px-4 py-16 text-center">
-          <h1 className="mb-4 font-bold text-3xl text-zinc-900 dark:text-zinc-50">
+          <h1 className="mb-4 font-bold text-3xl text-fg">
             {t({ id: 'superAdminGuard.accessDenied.title', defaultMessage: 'Access Denied' })}
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-fg-muted">
             {t({
               id: 'superAdminGuard.accessDenied.message',
               defaultMessage:
