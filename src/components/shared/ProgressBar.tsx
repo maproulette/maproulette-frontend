@@ -11,7 +11,6 @@ export interface ProgressSegment {
   percentage: number
   color: string
   title?: string
-  opacity?: number
 }
 
 interface ProgressBarProps {
@@ -37,7 +36,6 @@ export const ProgressBar = ({ percentage, segments, className }: ProgressBarProp
               style={{
                 width: `${segment.percentage}%`,
                 backgroundColor: segment.color,
-                opacity: segment.opacity ?? 1,
               }}
               title={segment.title}
             />

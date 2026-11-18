@@ -146,7 +146,6 @@
   "browsedProjectPage.projectDetail.shareError": "Failed to share project",
   "challengeCard.progress": "{count, plural, one {<b>{count, number}</b> task · <b>{percent, number, percent}</b> complete} other {<b>{count, number}</b> tasks · <b>{percent, number, percent}</b> complete}}",
   "challengeForm.errors.projectIdRequired": "Project ID is required to create a challenge",
-  "challengeProgress.remaining": "Remaining",
   "challengeProgress.segmentTitle": "{status}: {count, number}",
   "common.accessDenied": "Access denied",
   "common.actions": "Actions",
