@@ -88,7 +88,7 @@ export const ChallengeCard = ({
   return (
     <div
       className={cn(
-        'group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
+        'group stretched-link-container block overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-line-strong',
         className
       )}
     >
@@ -97,9 +97,7 @@ export const ChallengeCard = ({
         onLoadFailure={() => setImageFailed(true)}
       />
       <div className="p-4">
-        <div
-          className={cn('mb-2 text-xs text-zinc-500 dark:text-slate-300', showsImage && 'mr-16')}
-        >
+        <div className={cn('mb-2 text-fg-muted text-xs', showsImage && 'mr-16')}>
           {t(
             { id: 'shared.challengeCard.project', defaultMessage: '{name}' },
             { name: displayParentName }
@@ -108,7 +106,7 @@ export const ChallengeCard = ({
 
         <h3
           className={cn(
-            'mb-3 flex h-10 items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white',
+            'mb-3 flex h-10 items-center font-semibold text-base text-fg leading-tight',
             showsImage && 'mr-16'
           )}
         >
@@ -127,7 +125,7 @@ export const ChallengeCard = ({
         </h3>
 
         <div>
-          <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
+          <div className="mb-1 text-fg-muted text-xs">
             {t(
               {
                 id: 'challengeCard.progress',
@@ -137,9 +135,7 @@ export const ChallengeCard = ({
               {
                 count: totalTasks,
                 percent: pct / 100,
-                b: (chunks) => (
-                  <span className="font-semibold text-zinc-900 dark:text-white">{chunks}</span>
-                ),
+                b: (chunks) => <span className="font-semibold text-fg">{chunks}</span>,
               }
             )}
           </div>
@@ -151,7 +147,7 @@ export const ChallengeCard = ({
           />
 
           <div className="flex items-center justify-between gap-2">
-            <span className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-slate-300">
+            <span className="flex flex-wrap items-center gap-2 text-fg-muted text-xs">
               {challenge.difficulty != null && getDifficultyLabel(t, challenge.difficulty)}
               {isComplete && (
                 <Badge variant="success" className="text-xs">
@@ -161,7 +157,7 @@ export const ChallengeCard = ({
               <ChallengeTaxonomy challenge={challenge} />
             </span>
             {lastUpdated ? (
-              <span className="text-xs text-zinc-500 dark:text-slate-300">
+              <span className="text-fg-muted text-xs">
                 {t(
                   { id: 'common.lastUpdated', defaultMessage: 'Last updated {date}' },
                   { date: formatDate(new Date(lastUpdated), locale) }

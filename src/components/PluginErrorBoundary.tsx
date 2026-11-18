@@ -100,7 +100,7 @@ const PluginErrorFallback = ({
   if (compact) {
     return (
       <div className={className ?? 'space-y-2 py-1'}>
-        <p className="text-red-600 text-xs dark:text-red-400">
+        <p className="text-danger text-xs">
           {title}
           {contributionId ? ` (${contributionId})` : ''}: {error.message}
         </p>

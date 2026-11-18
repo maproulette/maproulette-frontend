@@ -26,10 +26,10 @@ export const FormCard = ({
   isLoading?: boolean
   children?: ReactNode
 }) => (
-  <div className="mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col rounded-lg bg-zinc-50 p-4 dark:bg-slate-900">
+  <div className="mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col rounded-lg bg-inset p-4">
     <div className="mb-4 shrink-0 space-y-1">
       <h2 className="font-semibold text-base">{title}</h2>
-      {description && <p className="text-sm text-zinc-500 dark:text-slate-400">{description}</p>}
+      {description && <p className="text-fg-muted text-sm">{description}</p>}
     </div>
     {isLoading ? (
       <div className="space-y-6">

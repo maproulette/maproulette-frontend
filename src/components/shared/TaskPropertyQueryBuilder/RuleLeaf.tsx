@@ -43,7 +43,7 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
   const ops = operatorsFor(valueType)
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-md border border-zinc-200 p-2 dark:border-slate-700">
+    <div className="flex flex-wrap items-center gap-2 rounded-md border border-line p-2">
       <Input
         value={rule.key}
         list={propertyKeys.length ? listId : undefined}
@@ -105,7 +105,7 @@ export const RuleLeaf = ({ rule, onChange, onRemove }: Props) => {
       {operatorTakesValue(rule.operator) && (
         <label
           htmlFor={commaSeparateId}
-          className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400"
+          className="flex items-center gap-1.5 text-fg-muted text-xs"
         >
           <Checkbox
             id={commaSeparateId}

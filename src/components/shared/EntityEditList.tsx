@@ -11,15 +11,15 @@ const KIND_ICON: Record<EditKind, typeof PencilLine> = {
 }
 
 const KIND_STYLE: Record<EditKind, string> = {
-  created: 'text-green-600 dark:text-green-400',
-  modified: 'text-amber-600 dark:text-amber-400',
-  deleted: 'text-red-600 dark:text-red-400',
+  created: 'text-success',
+  modified: 'text-warning',
+  deleted: 'text-danger',
 }
 
 const TAG_STYLE: Record<TagChange['status'], string> = {
-  added: 'border-green-500/40 bg-green-500/10',
-  changed: 'border-amber-500/40 bg-amber-500/10',
-  removed: 'border-red-500/40 bg-red-500/10',
+  added: 'border-success/40 bg-success/10',
+  changed: 'border-warning/40 bg-warning/10',
+  removed: 'border-danger/40 bg-danger/10',
 }
 
 /**
@@ -47,14 +47,14 @@ export const EntityEditList = ({ edits }: { edits: EntityEdit[] }) => {
               <span className={cn('font-medium text-sm', KIND_STYLE[edit.kind])}>
                 {kindLabel[edit.kind]}
               </span>
-              <code className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
+              <code className="font-mono text-fg-muted text-xs">
                 {edit.type ? `${edit.type} ` : ''}
                 {edit.id}
               </code>
             </div>
 
             {edit.geometryOnly ? (
-              <p className="pl-6 text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="pl-6 text-fg-muted text-xs">
                 {t({
                   id: 'taskEditPage.pendingEdits.geometryOnly',
                   defaultMessage: 'Geometry changed; no tags were altered.',
@@ -72,14 +72,12 @@ export const EntityEditList = ({ edits }: { edits: EntityEdit[] }) => {
                   >
                     <code className="font-mono text-xs">{tag.key}</code>
                     {tag.from !== null && (
-                      <code className="font-mono text-xs text-zinc-500 line-through dark:text-zinc-400">
+                      <code className="font-mono text-fg-muted text-xs line-through">
                         {tag.from}
                       </code>
                     )}
                     {tag.to !== null && (
-                      <code className="font-mono text-green-700 text-xs dark:text-green-400">
-                        {tag.to}
-                      </code>
+                      <code className="font-mono text-success text-xs">{tag.to}</code>
                     )}
                   </li>
                 ))}

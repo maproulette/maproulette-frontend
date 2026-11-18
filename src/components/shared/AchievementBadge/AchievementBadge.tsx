@@ -52,8 +52,8 @@ export const AchievementBadge = ({
             'relative inline-flex items-center justify-center rounded-full border-2 transition-all',
             sz.box,
             locked
-              ? 'border-zinc-200 bg-zinc-50 opacity-40 grayscale dark:border-slate-700 dark:bg-slate-900'
-              : 'border-amber-300 bg-gradient-to-br from-amber-100 to-amber-300 text-amber-900 shadow-sm dark:border-amber-700 dark:from-amber-900 dark:to-amber-700 dark:text-amber-100',
+              ? 'border-line bg-inset opacity-40 grayscale'
+              : 'border-mango-300 bg-gradient-to-br from-mango-100 to-mango-300 text-mango-900 dark:border-mango-700 dark:from-mango-900 dark:to-mango-700 dark:text-mango-100',
             className
           )}
         >
@@ -65,8 +65,8 @@ export const AchievementBadge = ({
                 'absolute right-1 bottom-1 rounded px-1 font-bold font-mono tracking-tight',
                 sz.overlay,
                 locked
-                  ? 'bg-zinc-200/80 text-zinc-500 dark:bg-slate-700 dark:text-slate-400'
-                  : 'bg-white/80 text-amber-900 dark:bg-slate-900/80 dark:text-amber-100'
+                  ? 'bg-muted-strong text-fg-muted'
+                  : 'bg-panel/80 text-mango-900 dark:text-mango-100'
               )}
             >
               {overlay}

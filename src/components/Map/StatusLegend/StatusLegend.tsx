@@ -15,7 +15,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
   const statusLegendEntries = getStatusLegendEntries(t)
 
   return (
-    <div className="flex flex-col-reverse rounded-md border border-zinc-200 bg-white shadow-md dark:border-slate-700 dark:bg-slate-900">
+    <div className="flex flex-col-reverse rounded-md border border-line bg-popover shadow-md">
       <Button
         type="button"
         variant="ghost"
@@ -35,14 +35,12 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
         )}
       </Button>
       <div
-        className={
-          open ? 'border-zinc-200 border-b dark:border-slate-700' : 'invisible h-0 overflow-hidden'
-        }
+        className={open ? 'border-line border-b' : 'invisible h-0 overflow-hidden'}
         aria-hidden={!open}
       >
         <div className="space-y-2 p-2">
           <div>
-            <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+            <div className="mb-1 text-[10px] text-fg-muted uppercase tracking-wide">
               {t({ id: 'common.status', defaultMessage: 'Status' })}
             </div>
             <ul className="space-y-1">
@@ -58,7 +56,7 @@ export const StatusLegend = ({ defaultOpen = false }: Props) => {
             </ul>
           </div>
           <div>
-            <div className="mb-1 text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+            <div className="mb-1 text-[10px] text-fg-muted uppercase tracking-wide">
               {t({ id: 'common.priority', defaultMessage: 'Priority' })}
             </div>
             <ul className="space-y-1">

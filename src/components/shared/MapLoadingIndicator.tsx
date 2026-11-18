@@ -15,7 +15,7 @@ export const MapLoadingIndicator = ({ isLoading, centered }: MapLoadingIndicator
   return (
     <div
       className={cn(
-        'absolute top-4 z-10 rounded border border-zinc-200 bg-white px-3 py-2 text-sm shadow-md dark:border-slate-700 dark:bg-slate-900',
+        'absolute top-4 z-10 rounded border border-line bg-popover px-3 py-2 text-sm shadow-md',
         centered ? '-translate-x-1/2 left-1/2' : 'left-4'
       )}
     >

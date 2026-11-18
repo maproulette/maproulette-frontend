@@ -2,9 +2,6 @@ import { LayoutGrid, List, Map as MapIcon } from 'lucide-react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup'
 import { useIntl } from '@/i18n'
 
-const itemClass =
-  'h-8 w-8 text-zinc-400 hover:bg-transparent hover:text-zinc-900 data-[state=on]:bg-zinc-200 data-[state=on]:text-zinc-900 dark:text-slate-400 dark:hover:text-white dark:data-[state=on]:bg-slate-700 dark:data-[state=on]:text-white'
-
 type ViewMode = 'grid-map' | 'grid' | 'list'
 
 interface ViewModeToggleProps<T extends ViewMode> {
@@ -37,19 +34,12 @@ export const ViewModeToggle = <T extends ViewMode>({
       onValueChange={(v) => {
         if (v) onValueChange(v as T)
       }}
-      className="overflow-hidden rounded-full border border-zinc-200 bg-zinc-100 dark:border-slate-800 dark:bg-slate-900"
+      variant="outline"
     >
       {modes.map((mode) => {
         const { label, Icon } = items[mode]
         return (
-          <ToggleGroupItem
-            key={mode}
-            value={mode}
-            title={label}
-            aria-label={label}
-            size="sm"
-            className={itemClass}
-          >
+          <ToggleGroupItem key={mode} value={mode} title={label} aria-label={label}>
             <Icon className="h-4 w-4" />
           </ToggleGroupItem>
         )

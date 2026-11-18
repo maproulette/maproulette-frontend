@@ -43,8 +43,7 @@ const TooltipLabel = ({ text, binding }: { text: string; binding?: ShortcutBindi
   </span>
 )
 
-const mapButtonClass =
-  'text-zinc-500 hover:bg-transparent hover:text-zinc-900 dark:text-slate-300 dark:hover:text-white'
+const mapButtonClass = 'text-fg-muted hover:bg-transparent hover:text-fg'
 
 export const MapControls = ({
   map,
@@ -76,7 +75,7 @@ export const MapControls = ({
   return (
     <TooltipProvider>
       <div className={cn('absolute top-0 right-0 flex flex-col items-end', className)}>
-        <div className="mt-2 mr-2 flex flex-col items-center gap-1 rounded-xl border border-zinc-200 bg-white p-1.5 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:shadow-none">
+        <div className="mt-2 mr-2 flex flex-col items-center gap-1 rounded-xl border border-line bg-popover p-1.5 shadow-md">
           {showLayers && (
             <Popover>
               <Tooltip>
@@ -126,7 +125,7 @@ export const MapControls = ({
                     >
                       <Settings2 className="h-4 w-4" />
                       {settingsModified && (
-                        <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-blue-500" />
+                        <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-accent" />
                       )}
                     </Button>
                   </PopoverTrigger>

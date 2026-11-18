@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/Badge'
 import { useIntl } from '@/i18n'
-import { cn } from '@/lib/utils'
 import {
   TEAM_IMAGE_STATUS_APPROVED,
   TEAM_IMAGE_STATUS_PENDING,
@@ -16,26 +15,26 @@ interface TeamImageStatusBadgeProps {
 export const TeamImageStatusBadge = ({ status, className }: TeamImageStatusBadgeProps) => {
   const { t } = useIntl()
 
-  const { label, tone } = {
+  const { label, variant } = {
     [TEAM_IMAGE_STATUS_PENDING]: {
       label: t({ id: 'teamImages.pendingHeading', defaultMessage: 'Awaiting review' }),
-      tone: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100',
+      variant: 'warning' as const,
     },
     [TEAM_IMAGE_STATUS_APPROVED]: {
       label: t({ id: 'teamImages.status.approved', defaultMessage: 'Approved' }),
-      tone: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
+      variant: 'success' as const,
     },
     [TEAM_IMAGE_STATUS_REJECTED]: {
       label: t({ id: 'teamImages.status.rejected', defaultMessage: 'Rejected' }),
-      tone: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
+      variant: 'destructive' as const,
     },
   }[status] ?? {
     label: t({ id: 'teamImages.status.unknown', defaultMessage: 'Unknown' }),
-    tone: 'bg-zinc-100 text-zinc-600 dark:bg-slate-800 dark:text-slate-400',
+    variant: 'secondary' as const,
   }
 
   return (
-    <Badge variant="secondary" className={cn(tone, className)}>
+    <Badge variant={variant} className={className}>
       {label}
     </Badge>
   )

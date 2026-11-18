@@ -17,7 +17,7 @@ export const ClearManageFiltersButton = ({
       variant="outline"
       size="sm"
       onClick={onClear}
-      className="shrink-0 gap-2 rounded-full px-3 font-normal text-zinc-700 dark:text-slate-300"
+      className="shrink-0 gap-2 rounded-full px-3 font-normal text-fg"
       disabled={!hasActiveFilters}
     >
       <X className="h-4 w-4" />

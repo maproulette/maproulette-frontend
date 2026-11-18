@@ -4,9 +4,9 @@ import { type TagChange, tagChanges, tagsFromOsmElement } from '@/lib/tagDiff'
 import { cn } from '@/lib/utils'
 
 const STATUS_STYLES: Record<TagChange['status'], string> = {
-  added: 'border-green-500/40 bg-green-500/10',
-  changed: 'border-amber-500/40 bg-amber-500/10',
-  removed: 'border-red-500/40 bg-red-500/10',
+  added: 'border-success/40 bg-success/10',
+  changed: 'border-warning/40 bg-warning/10',
+  removed: 'border-danger/40 bg-danger/10',
 }
 
 /**

@@ -126,7 +126,7 @@ export const ScaleBar = ({ mapRef, mapLoaded, maxWidth = 100, className }: Props
   return (
     <div
       className={cn(
-        'flex flex-col rounded-md border border-zinc-200 bg-white px-2 py-1 shadow-md dark:border-slate-700 dark:bg-slate-900',
+        'flex flex-col rounded-md border border-line bg-popover px-2 py-1 shadow-md',
         className
       )}
     >
@@ -140,12 +140,12 @@ const ScaleBarRow = ({ info, placement }: { info: ScaleInfo; placement: 'top' | 
   <div className="flex items-center gap-1.5">
     <div
       className={cn(
-        'h-2 border-zinc-700 border-r border-l dark:border-zinc-300',
+        'h-2 border-fg-muted border-r border-l',
         placement === 'top' ? 'border-b' : 'border-t'
       )}
       style={{ width: `${Math.round(info.width)}px` }}
       aria-hidden="true"
     />
-    <span className="text-[10px] text-zinc-700 leading-none dark:text-zinc-300">{info.label}</span>
+    <span className="text-[10px] text-fg leading-none">{info.label}</span>
   </div>
 )
