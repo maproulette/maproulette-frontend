@@ -47,10 +47,10 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                 <label
                   htmlFor={overpassId}
                   className={cn(
-                    'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
+                    'flex cursor-pointer items-start space-x-3 rounded-lg border border-line p-4 transition-all',
                     field.value === 'overpass'
-                      ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
-                      : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
+                      ? 'bg-accent/10 ring-2 ring-accent hover:bg-accent/15'
+                      : 'hover:bg-muted'
                   )}
                 >
                   <RadioGroupItem value="overpass" id={overpassId} className="mt-1" />
@@ -61,7 +61,7 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                         defaultMessage: 'I want to provide an Overpass query',
                       })}
                     </div>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-fg-muted text-sm">
                       {t({
                         id: 'manageChallengeNew.challengeForm.overpassOptionDescription',
                         defaultMessage:
@@ -73,10 +73,10 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                 <label
                   htmlFor={localGeoJSONId}
                   className={cn(
-                    'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
+                    'flex cursor-pointer items-start space-x-3 rounded-lg border border-line p-4 transition-all',
                     field.value === 'localGeoJSON'
-                      ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
-                      : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
+                      ? 'bg-accent/10 ring-2 ring-accent hover:bg-accent/15'
+                      : 'hover:bg-muted'
                   )}
                 >
                   <RadioGroupItem value="localGeoJSON" id={localGeoJSONId} className="mt-1" />
@@ -87,7 +87,7 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                         defaultMessage: 'I want to upload a GeoJSON file',
                       })}
                     </div>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-fg-muted text-sm">
                       {t({
                         id: 'manageChallengeNew.challengeForm.localGeoJSONOptionDescription',
                         defaultMessage: 'Upload a GeoJSON file from your computer',
@@ -98,10 +98,10 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                 <label
                   htmlFor={remoteGeoJSONId}
                   className={cn(
-                    'flex cursor-pointer items-start space-x-3 rounded-lg border border-zinc-200 p-4 transition-all dark:border-slate-700',
+                    'flex cursor-pointer items-start space-x-3 rounded-lg border border-line p-4 transition-all',
                     field.value === 'remoteGeoJSON'
-                      ? 'bg-blue-50/60 ring-2 ring-blue-500 hover:bg-blue-100/60 dark:bg-blue-950/30 dark:ring-blue-400 dark:hover:bg-blue-950/50'
-                      : 'hover:bg-zinc-50 dark:hover:bg-slate-900/50'
+                      ? 'bg-accent/10 ring-2 ring-accent hover:bg-accent/15'
+                      : 'hover:bg-muted'
                   )}
                 >
                   <RadioGroupItem value="remoteGeoJSON" id={remoteGeoJSONId} className="mt-1" />
@@ -112,7 +112,7 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                         defaultMessage: 'I have a URL to the GeoJSON data',
                       })}
                     </div>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-fg-muted text-sm">
                       {t({
                         id: 'manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription',
                         defaultMessage: 'Provide a URL pointing to a GeoJSON file',
@@ -193,7 +193,7 @@ export const DataSourceFields = ({ dataSource }: DataSourceFieldsProps) => {
                     {...field}
                   />
                   {value && (
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-fg-muted text-sm">
                       {t(
                         {
                           id: 'manageChallengeNew.challengeForm.geoJSONFileSelected',

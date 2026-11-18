@@ -32,7 +32,7 @@ export const TeamDetailSidebar = () => {
   if (!team) return null
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+    <div className="flex h-full flex-col overflow-y-auto rounded-lg border border-line bg-panel">
       <div className="space-y-4 px-6 pt-6 pb-4">
         <div className="flex gap-4">
           <Avatar className="size-16 shrink-0">
@@ -40,13 +40,11 @@ export const TeamDetailSidebar = () => {
             <AvatarFallback>{initials(team.name)}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <h1 className="break-words font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+            <h1 className="break-words font-bold text-base text-fg leading-tight tracking-tight">
               {team.name}
             </h1>
-            {team.description && (
-              <p className="mt-1 text-sm text-zinc-600 dark:text-slate-400">{team.description}</p>
-            )}
-            <p className="mt-1 text-xs text-zinc-500 dark:text-slate-500">
+            {team.description && <p className="mt-1 text-fg-muted text-sm">{team.description}</p>}
+            <p className="mt-1 text-fg-subtle text-xs">
               {t(
                 {
                   id: 'teams.detail.memberCount',

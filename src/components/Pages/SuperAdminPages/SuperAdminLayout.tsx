@@ -9,7 +9,7 @@ export const SuperAdminLayout = () => {
     <SuperAdminGuard>
       <div className="flex h-full flex-col">
         <SectionHeader
-          accentClass="border-l-purple-500"
+          accentClass="border-l-highlight"
           basePath="/super-admin"
           breadcrumbRoot={t({
             id: 'superAdmin.layout.breadcrumbRoot',

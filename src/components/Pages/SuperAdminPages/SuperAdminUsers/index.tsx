@@ -33,8 +33,8 @@ export const SuperAdminUsers = () => {
   return (
     <div className="mx-auto px-4">
       <div className="mb-6 flex items-center gap-2">
-        <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-        <h1 className="font-bold text-base text-zinc-900 dark:text-zinc-50">
+        <Users className="h-8 w-8 text-link" />
+        <h1 className="font-bold text-base text-fg">
           {t({ id: 'superAdminUsers.title', defaultMessage: 'User Management' })}
         </h1>
       </div>
@@ -81,7 +81,7 @@ export const SuperAdminUsers = () => {
         <CardContent>
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="text-zinc-600 dark:text-zinc-400">
+              <div className="text-fg-muted">
                 {t({ id: 'superAdminUsers.table.loading', defaultMessage: 'Loading users...' })}
               </div>
             </div>
@@ -120,18 +120,16 @@ export const SuperAdminUsers = () => {
                           <div>
                             <OsmUserLink
                               username={user.osmProfile.displayName}
-                              className="block text-blue-600 hover:underline dark:text-blue-400"
+                              className="block text-link hover:underline"
                             />
-                            <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                              ID: {user.id}
-                            </div>
+                            <div className="text-fg-muted text-xs">ID: {user.id}</div>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>{user.osmProfile.id}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Mail className="h-4 w-4 text-zinc-400" />
+                          <Mail className="h-4 w-4 text-fg-subtle" />
                           {user.settings?.email ||
                             t({
                               id: 'superAdminUsers.table.notAvailable',
@@ -149,7 +147,7 @@ export const SuperAdminUsers = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-zinc-400" />
+                          <Calendar className="h-4 w-4 text-fg-subtle" />
                           {user.created ? formatDate(new Date(user.created), locale) : '—'}
                         </div>
                       </TableCell>

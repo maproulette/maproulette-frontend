@@ -42,11 +42,7 @@ export const PropertyFilterButton = () => {
     <>
       <Button
         variant="outline"
-        className={cn(
-          'gap-1 font-normal',
-          propertyFilterActive &&
-            'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
-        )}
+        className={cn('gap-1 font-normal', propertyFilterActive && 'border-accent text-link')}
         onClick={() => {
           setDraft(propertyRule)
           setOpen(true)

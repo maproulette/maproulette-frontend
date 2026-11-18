@@ -53,10 +53,10 @@ interface RowProps {
 const SubscriptionRow = ({ id, label, description, value, options, onChange }: RowProps) => {
   const { t } = useIntl()
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-zinc-200 border-b py-3 last:border-b-0 dark:border-slate-700">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-line border-b py-3 last:border-b-0">
       <div className="min-w-48 flex-1">
         <Label htmlFor={id}>{label}</Label>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">{description}</p>
+        <p className="text-fg-muted text-sm">{description}</p>
       </div>
       <Select value={String(value)} onValueChange={(next) => onChange(Number(next))}>
         <SelectTrigger id={id} className="w-72">
@@ -138,7 +138,7 @@ export const NotificationSubscriptionFields = ({
   }
   if (isError || !draft) {
     return (
-      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+      <p className="text-fg-muted text-sm">
         {t({
           id: 'settings.notifications.loadError',
           defaultMessage: 'Notification preferences could not be loaded.',

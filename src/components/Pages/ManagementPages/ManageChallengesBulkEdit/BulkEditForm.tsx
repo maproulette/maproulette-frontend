@@ -161,7 +161,7 @@ export const BulkEditForm = () => {
           <Link
             to="/manage/project/$projectId"
             params={{ projectId: String(projectId) }}
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-600 hover:underline dark:text-slate-300"
+            className="inline-flex items-center gap-1.5 text-fg-muted text-sm hover:underline"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             {t(
@@ -184,7 +184,7 @@ export const BulkEditForm = () => {
             )}
           >
             {challenges.length === 0 ? (
-              <p className="text-sm text-zinc-500 dark:text-slate-400">
+              <p className="text-fg-muted text-sm">
                 {t({
                   id: 'manageChallengesBulkEdit.form.noneSelected',
                   defaultMessage:
@@ -200,7 +200,7 @@ export const BulkEditForm = () => {
                       type="button"
                       onClick={() => removeChallenge(challenge.id)}
                       disabled={isSaving}
-                      className="rounded p-0.5 hover:bg-zinc-200 dark:hover:bg-slate-700"
+                      className="rounded p-0.5 hover:bg-muted-strong"
                       aria-label={t(
                         {
                           id: 'manageChallengesBulkEdit.form.removeChallenge',
@@ -504,9 +504,9 @@ export const BulkEditForm = () => {
           </Alert>
         )}
 
-        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
+        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-line border-t pt-4">
           {progress && (
-            <span className="mr-auto text-sm text-zinc-600 tabular-nums dark:text-slate-300">
+            <span className="mr-auto text-fg-muted text-sm tabular-nums">
               {t(
                 {
                   id: 'manageChallengesBulkEdit.form.saving',

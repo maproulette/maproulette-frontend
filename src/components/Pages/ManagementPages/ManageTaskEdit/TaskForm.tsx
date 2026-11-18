@@ -183,7 +183,7 @@ export const TaskForm = ({ task, onSubmit, onCancel }: TaskFormProps) => {
             )}
           />
         </div>
-        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
+        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-line border-t pt-4">
           <Button type="button" variant="outline" onClick={onCancel}>
             {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </Button>

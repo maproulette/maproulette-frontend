@@ -14,9 +14,9 @@ export const ManageInfoPanel = ({ docs, onClose }: ManageInfoPanelProps) => {
   const { t } = useIntl()
   return (
     <aside className="h-full min-h-0 overflow-hidden">
-      <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white p-6 shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+      <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-panel p-6">
         <div className="flex items-start justify-between">
-          <h2 className="font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+          <h2 className="font-bold text-base text-fg leading-tight tracking-tight">
             {t({
               id: 'managementPages.manageInfoPanel.documentation',
               defaultMessage: 'Documentation',
@@ -37,7 +37,7 @@ export const ManageInfoPanel = ({ docs, onClose }: ManageInfoPanelProps) => {
             <DocsLink
               key={d.page}
               page={d.page}
-              className="gap-2 text-sm text-zinc-700 no-underline hover:underline dark:text-zinc-200"
+              className="gap-2 text-fg text-sm no-underline hover:underline"
             >
               {d.text}
             </DocsLink>

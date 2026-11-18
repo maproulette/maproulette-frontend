@@ -37,10 +37,10 @@ export const ManageTasksOpen = () => {
     <SuperAdminGuard>
       <div className="mx-auto h-full max-w-xl overflow-auto px-4">
         <div className="mb-6">
-          <h1 className="mb-2 font-bold text-base text-zinc-900 dark:text-zinc-50">
+          <h1 className="mb-2 font-bold text-base text-fg">
             {t({ id: 'common.tasks', defaultMessage: 'Tasks' })}
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-fg-muted">
             {t({
               id: 'manageTasksOpen.description',
               defaultMessage:
@@ -93,7 +93,7 @@ export const ManageTasksOpen = () => {
           </CardContent>
         </Card>
 
-        <p className="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-6 text-fg-muted text-sm">
           {t(
             {
               id: 'manageTasksOpen.findChallenge',
@@ -102,18 +102,12 @@ export const ManageTasksOpen = () => {
             },
             {
               projects: (chunks) => (
-                <Link
-                  to="/manage/projects"
-                  className="text-blue-600 hover:underline dark:text-blue-400"
-                >
+                <Link to="/manage/projects" className="text-link hover:underline">
                   {chunks}
                 </Link>
               ),
               challenges: (chunks) => (
-                <Link
-                  to="/manage/challenges"
-                  className="text-blue-600 hover:underline dark:text-blue-400"
-                >
+                <Link to="/manage/challenges" className="text-link hover:underline">
                   {chunks}
                 </Link>
               ),

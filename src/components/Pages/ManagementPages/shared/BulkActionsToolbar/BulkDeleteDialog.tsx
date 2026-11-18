@@ -25,7 +25,7 @@ export const BulkDeleteDialog = ({ open, onOpenChange, onConfirm, count, busy }:
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <TriangleAlert className="size-5 text-red-500" aria-hidden="true" />
+            <TriangleAlert className="size-5 text-coral-500" aria-hidden="true" />
             {t(
               {
                 id: 'managementPages.bulkActionsToolbar.deleteDialog.title',

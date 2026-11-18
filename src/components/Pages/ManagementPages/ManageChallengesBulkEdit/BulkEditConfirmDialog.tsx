@@ -94,10 +94,8 @@ export const BulkEditConfirmDialog = ({ values, onCancel, onConfirm }: Props) =>
           <dl className="max-h-[50vh] space-y-3 overflow-y-auto text-sm">
             {changedBulkEditFields(values).map((field) => (
               <div key={field}>
-                <dt className="font-medium text-zinc-900 dark:text-zinc-50">
-                  {bulkEditFieldLabel(t, field)}
-                </dt>
-                <dd className="whitespace-pre-wrap break-all text-zinc-600 dark:text-slate-300">
+                <dt className="font-medium text-fg">{bulkEditFieldLabel(t, field)}</dt>
+                <dd className="whitespace-pre-wrap break-all text-fg-muted">
                   {describe(field, values)}
                 </dd>
               </div>

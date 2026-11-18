@@ -29,7 +29,7 @@ export const AgreementSection = () => {
               href="https://wiki.openstreetmap.org/wiki/Automated_Edits_code_of_conduct"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              className="text-link underline"
             >
               {chunks}
             </a>

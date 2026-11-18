@@ -20,7 +20,7 @@ export const TeamCard = ({ membership }: Props) => {
     t({ id: 'common.team', defaultMessage: 'Team #{teamId}' }, { teamId: membership.teamId })
   const role = teamDisplayRole(membership)
   return (
-    <div className="group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110">
+    <div className="group stretched-link-container block overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-line-strong">
       <div className="flex items-center gap-3 p-4">
         <Avatar className="size-10">
           <AvatarImage src={resolveTeamImageUrl(team?.avatarURL) ?? ''} alt={name} />
@@ -29,7 +29,7 @@ export const TeamCard = ({ membership }: Props) => {
           </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <div className="truncate font-semibold text-base text-zinc-900 leading-tight dark:text-white">
+          <div className="truncate font-semibold text-base text-fg leading-tight">
             <Link
               to="/teams/$teamId"
               params={{ teamId: String(membership.teamId) }}
@@ -38,9 +38,7 @@ export const TeamCard = ({ membership }: Props) => {
               {name}
             </Link>
           </div>
-          <div className="mt-0.5 text-sm text-zinc-600 dark:text-slate-400">
-            {TeamDisplayRoleLabel[role]}
-          </div>
+          <div className="mt-0.5 text-fg-muted text-sm">{TeamDisplayRoleLabel[role]}</div>
         </div>
       </div>
     </div>

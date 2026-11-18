@@ -34,25 +34,21 @@ const TeamTile = ({ label, selected, onSelect, children, caption }: TeamTileProp
       title={caption ? `${label} — ${caption}` : label}
       className={cn(
         'group relative flex w-full flex-col gap-1.5 rounded-lg border p-2 text-left transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset',
         selected
-          ? 'border-blue-500 bg-blue-50/60 ring-2 ring-blue-500 ring-inset dark:border-blue-400 dark:bg-blue-950/30 dark:ring-blue-400'
-          : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-900/50'
+          ? 'border-accent bg-accent/10 ring-2 ring-accent ring-inset'
+          : 'border-line hover:border-line-strong hover:bg-muted'
       )}
     >
-      <span className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded bg-zinc-100 dark:bg-slate-800">
+      <span className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded bg-muted">
         {children}
       </span>
       <span className="block min-w-0 leading-tight">
-        <span className="block truncate text-xs text-zinc-700 dark:text-zinc-300">{label}</span>
-        {caption && (
-          <span className="block truncate text-[10px] text-zinc-400 dark:text-slate-500">
-            {caption}
-          </span>
-        )}
+        <span className="block truncate text-fg-muted text-xs">{label}</span>
+        {caption && <span className="block truncate text-[10px] text-fg-subtle">{caption}</span>}
       </span>
       {selected && (
-        <span className="absolute top-1.5 right-1.5 rounded-full bg-blue-500 p-0.5 text-white shadow-sm">
+        <span className="absolute top-1.5 right-1.5 rounded-full bg-accent p-0.5 text-accent-fg">
           <Check className="h-3 w-3" />
         </span>
       )}
@@ -69,7 +65,7 @@ const TeamArt = ({ team }: { team: ManagedTeam }) => {
   const [failed, setFailed] = useState(false)
 
   if (!team.challengeImageUrl || failed) {
-    return <Users className="h-6 w-6 text-zinc-400 dark:text-slate-500" aria-hidden="true" />
+    return <Users className="h-6 w-6 text-fg-subtle" aria-hidden="true" />
   }
 
   return (
@@ -123,7 +119,7 @@ export const OwnerTeamSection = ({
                 <Skeleton className="h-28 w-full rounded-lg" />
               </div>
             ) : isError ? (
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="text-fg-muted text-sm">
                 {t({
                   id: 'ownerTeam.loadError',
                   defaultMessage: 'Could not load your teams.',
@@ -140,10 +136,7 @@ export const OwnerTeamSection = ({
                     selected={field.value == null}
                     onSelect={() => field.onChange(null)}
                   >
-                    <UsersRound
-                      className="h-6 w-6 text-zinc-400 dark:text-slate-500"
-                      aria-hidden="true"
-                    />
+                    <UsersRound className="h-6 w-6 text-fg-subtle" aria-hidden="true" />
                   </TeamTile>
 
                   {options.map((managed) => (
@@ -160,12 +153,9 @@ export const OwnerTeamSection = ({
                 </ul>
 
                 {options.length === 0 && (
-                  <p className="rounded-lg border border-zinc-200 border-dashed p-3 text-sm text-zinc-600 dark:border-slate-700 dark:text-zinc-400">
+                  <p className="rounded-lg border border-line border-dashed p-3 text-fg-muted text-sm">
                     {noneAvailable}{' '}
-                    <Link
-                      to="/dashboard"
-                      className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
+                    <Link to="/dashboard" className="text-link underline">
                       {t({
                         id: 'ownerTeam.goToTeams',
                         defaultMessage: 'Your teams',

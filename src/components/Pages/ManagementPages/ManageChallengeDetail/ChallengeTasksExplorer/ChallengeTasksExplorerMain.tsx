@@ -71,7 +71,7 @@ export const ChallengeTasksExplorerMain = () => {
         <button
           type="button"
           onClick={scrollToTop}
-          className="fixed right-6 bottom-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-white shadow-xl transition-opacity hover:bg-zinc-700 dark:bg-slate-200 dark:text-zinc-900 dark:hover:bg-slate-300"
+          className="fixed right-6 bottom-6 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-fg shadow-xl transition-opacity hover:bg-primary-hover"
           aria-label={t({ id: 'common.scrollToTop', defaultMessage: 'Scroll to top' })}
         >
           <ArrowUp className="h-5 w-5" />

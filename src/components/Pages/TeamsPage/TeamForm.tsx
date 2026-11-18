@@ -204,14 +204,11 @@ export const TeamForm = ({ team }: Props) => {
                 {t({ id: 'teams.form.avatarLabel', defaultMessage: 'Avatar (optional)' })}
               </FormLabel>
               <div className="flex items-start gap-4">
-                <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-100 dark:bg-slate-800">
+                <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
                   {previewSrc ? (
                     <img src={previewSrc} alt="" className="size-full object-cover" />
                   ) : (
-                    <ImagePlus
-                      className="size-5 text-zinc-400 dark:text-slate-500"
-                      aria-hidden="true"
-                    />
+                    <ImagePlus className="size-5 text-fg-subtle" aria-hidden="true" />
                   )}
                 </span>
                 <div className="space-y-2">
@@ -250,13 +247,7 @@ export const TeamForm = ({ team }: Props) => {
                       </Button>
                     ) : null}
                   </div>
-                  <p
-                    className={
-                      fileProblem
-                        ? 'text-red-600 text-xs dark:text-red-400'
-                        : 'text-xs text-zinc-500 dark:text-slate-400'
-                    }
-                  >
+                  <p className={fileProblem ? 'text-danger text-xs' : 'text-fg-muted text-xs'}>
                     {fileProblem ??
                       (pendingFile
                         ? t(
@@ -310,7 +301,7 @@ export const TeamForm = ({ team }: Props) => {
             />
           </FormSection>
         </div>
-        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
+        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-line border-t pt-4">
           <Button
             type="button"
             variant="outline"

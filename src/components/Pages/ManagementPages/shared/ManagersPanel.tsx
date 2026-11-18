@@ -135,11 +135,11 @@ export const ManagersPanel = ({
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <Users className="h-4 w-4 text-zinc-500" />
-        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">{title}</h3>
+        <Users className="h-4 w-4 text-fg-subtle" />
+        <h3 className="font-medium text-fg text-sm">{title}</h3>
         {titleAction}
       </div>
-      {description && <p className="text-xs text-zinc-500 dark:text-slate-400">{description}</p>}
+      {description && <p className="text-fg-muted text-xs">{description}</p>}
 
       {isLoading ? (
         <Loader message={t({ id: 'managers.loading', defaultMessage: 'Loading managers...' })} />
@@ -161,7 +161,7 @@ export const ManagersPanel = ({
               />
               <button
                 type="button"
-                className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
+                className="rounded p-1.5 text-fg-subtle hover:text-danger"
                 onClick={() => removeUser(manager)}
                 aria-label={t(
                   { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
@@ -173,7 +173,7 @@ export const ManagersPanel = ({
             </li>
           ))}
           {managers?.length === 0 && (
-            <li className="text-sm text-zinc-500 dark:text-zinc-400">
+            <li className="text-fg-muted text-sm">
               {t({ id: 'managers.none', defaultMessage: 'No managers yet.' })}
             </li>
           )}
@@ -197,21 +197,21 @@ export const ManagersPanel = ({
           <RoleSelect value={newRole} onChange={setNewRole} />
         </div>
         {userQuery.length > 2 && (
-          <ul className="max-h-40 overflow-y-auto rounded-md border border-zinc-200 dark:border-slate-700">
+          <ul className="max-h-40 overflow-y-auto rounded-md border border-line">
             {(userMatches ?? []).map((match) => (
               <li key={match.id}>
                 <button
                   type="button"
-                  className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-50 dark:hover:bg-slate-800"
+                  className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted"
                   onClick={() => handleAddUser(match.id, match.displayName)}
                 >
-                  <UserPlus className="h-3.5 w-3.5 text-zinc-400" />
+                  <UserPlus className="h-3.5 w-3.5 text-fg-subtle" />
                   {match.displayName}
                 </button>
               </li>
             ))}
             {userMatches?.length === 0 && (
-              <li className="px-2 py-1.5 text-sm text-zinc-500">
+              <li className="px-2 py-1.5 text-fg-muted text-sm">
                 {t({ id: 'managers.noMatches', defaultMessage: 'No matching users' })}
               </li>
             )}
@@ -220,10 +220,10 @@ export const ManagersPanel = ({
       </div>
 
       <Separator />
-      <h4 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
+      <h4 className="font-medium text-fg text-sm">
         {t({ id: 'common.teams', defaultMessage: 'Teams' })}
       </h4>
-      <p className="text-xs text-zinc-500 dark:text-slate-400">
+      <p className="text-fg-muted text-xs">
         {t({
           id: 'managers.teamsDescription',
           defaultMessage:
@@ -233,11 +233,11 @@ export const ManagersPanel = ({
       <ul className="space-y-2">
         {(teams ?? []).map((team) => (
           <li key={team.id} className="flex items-center gap-2">
-            <Users className="h-4 w-4 shrink-0 text-purple-400" />
+            <Users className="h-4 w-4 shrink-0 text-fg-subtle" />
             <span className="min-w-0 flex-1 truncate text-sm">{team.name}</span>
             <button
               type="button"
-              className="rounded p-1.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
+              className="rounded p-1.5 text-fg-subtle hover:text-danger"
               onClick={() => removeTeam(team.id)}
               aria-label={t(
                 { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
@@ -249,7 +249,7 @@ export const ManagersPanel = ({
           </li>
         ))}
         {teams?.length === 0 && (
-          <li className="text-sm text-zinc-500 dark:text-zinc-400">
+          <li className="text-fg-muted text-sm">
             {t({ id: 'managers.noTeams', defaultMessage: 'No teams yet.' })}
           </li>
         )}
@@ -266,21 +266,21 @@ export const ManagersPanel = ({
           placeholder={t({ id: 'managers.teamSearchPlaceholder', defaultMessage: 'Team name' })}
         />
         {teamQuery.length > 2 && (
-          <ul className="max-h-40 overflow-y-auto rounded-md border border-zinc-200 dark:border-slate-700">
+          <ul className="max-h-40 overflow-y-auto rounded-md border border-line">
             {newTeamMatches.map((match) => (
               <li key={match.id}>
                 <button
                   type="button"
-                  className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-50 dark:hover:bg-slate-800"
+                  className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-muted"
                   onClick={() => handleAddTeam(match.id, match.name)}
                 >
-                  <Users className="h-3.5 w-3.5 text-zinc-400" />
+                  <Users className="h-3.5 w-3.5 text-fg-subtle" />
                   {match.name}
                 </button>
               </li>
             ))}
             {newTeamMatches.length === 0 && (
-              <li className="px-2 py-1.5 text-sm text-zinc-500">
+              <li className="px-2 py-1.5 text-fg-muted text-sm">
                 {t({ id: 'managers.noTeamMatches', defaultMessage: 'No matching teams' })}
               </li>
             )}

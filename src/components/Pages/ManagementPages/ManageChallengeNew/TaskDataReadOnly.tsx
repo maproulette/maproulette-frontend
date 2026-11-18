@@ -28,9 +28,9 @@ export const TaskDataReadOnly = ({ dataSource, challenge }: TaskDataReadOnlyProp
           <Textarea
             readOnly
             value={challenge?.overpassQL ?? ''}
-            className="min-h-32 resize-none bg-zinc-100 font-mono text-sm dark:bg-slate-800"
+            className="min-h-32 resize-none bg-muted font-mono text-sm"
           />
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-fg-muted text-sm">
             {t({
               id: 'manageChallengeNew.challengeForm.overpassQueryReadOnlyBody',
               defaultMessage:
@@ -44,12 +44,8 @@ export const TaskDataReadOnly = ({ dataSource, challenge }: TaskDataReadOnlyProp
           <p className="font-medium text-sm">
             {t({ id: 'common.geojsonUrl', defaultMessage: 'GeoJSON URL' })}
           </p>
-          <Input
-            readOnly
-            value={challenge?.remoteGeoJson ?? ''}
-            className="bg-zinc-100 dark:bg-slate-800"
-          />
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <Input readOnly value={challenge?.remoteGeoJson ?? ''} className="bg-muted" />
+          <p className="text-fg-muted text-sm">
             {t({
               id: 'manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyBody',
               defaultMessage:
@@ -66,7 +62,7 @@ export const TaskDataReadOnly = ({ dataSource, challenge }: TaskDataReadOnlyProp
               defaultMessage: 'Uploaded GeoJSON file',
             })}
           </p>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-fg-muted text-sm">
             {t({
               id: 'manageChallengeNew.challengeForm.localGeoJSONReadOnlyBody',
               defaultMessage:

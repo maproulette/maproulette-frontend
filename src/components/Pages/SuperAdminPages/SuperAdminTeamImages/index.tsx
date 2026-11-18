@@ -46,8 +46,8 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
   }
 
   return (
-    <li className="flex flex-wrap items-center gap-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
-      <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded bg-zinc-100 dark:bg-slate-800">
+    <li className="flex flex-wrap items-center gap-3 rounded-lg border border-line p-3">
+      <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded bg-muted">
         <img
           src={resolveTeamImageUrl(image.url)}
           alt=""
@@ -62,7 +62,7 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
       </span>
       <div className="min-w-48 flex-1">
         <p className="font-medium text-sm">{image.name}</p>
-        <p className="text-xs text-zinc-500 dark:text-slate-400">
+        <p className="text-fg-muted text-xs">
           {t(
             {
               id: 'superAdminTeamImages.requestMeta',
@@ -83,7 +83,7 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
             }
           )}
         </p>
-        <p className="text-xs text-zinc-400 dark:text-slate-500">
+        <p className="text-fg-subtle text-xs">
           {image.contentType} · {Math.round(image.size / 1024)} KB
         </p>
       </div>
@@ -120,14 +120,14 @@ export const SuperAdminTeamImages = () => {
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 px-4">
-      <h1 className="font-bold text-xl text-zinc-900 dark:text-zinc-50">
+      <h1 className="font-bold text-fg text-xl">
         {t({ id: 'superAdminTeamImages.title', defaultMessage: 'Team challenge images' })}
       </h1>
 
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="text-fg-muted text-sm">
           {t({
             id: 'superAdminTeamImages.loadError',
             defaultMessage: 'Could not load the review queue.',
@@ -142,7 +142,7 @@ export const SuperAdminTeamImages = () => {
       ) : (
         <Empty className="py-16">
           <EmptyMedia>
-            <ImageIcon className="h-16 w-16 text-zinc-300 dark:text-slate-700" aria-hidden="true" />
+            <ImageIcon className="h-16 w-16 text-line-strong" aria-hidden="true" />
           </EmptyMedia>
           <EmptyContent>
             <EmptyTitle>

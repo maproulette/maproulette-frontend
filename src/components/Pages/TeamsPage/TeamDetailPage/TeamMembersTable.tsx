@@ -168,14 +168,14 @@ export const TeamMembersTable = () => {
 
   if (rows.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-zinc-500 dark:text-slate-400">
+      <p className="py-12 text-center text-fg-muted text-sm">
         {t({ id: 'teams.detail.noMembers', defaultMessage: 'This team has no members yet.' })}
       </p>
     )
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
+    <div className="overflow-hidden rounded-lg border border-line">
       <Table>
         <TableHeader>
           <TableRow>

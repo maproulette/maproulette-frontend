@@ -87,7 +87,7 @@ export const PrioritizationContent = ({ challengeId, challengeName }: Props) => 
     <PreviewMapBridgeContext.Provider value={previewMapBridgeValue}>
       <div className="flex h-full flex-col">
         <header className="flex flex-wrap items-start justify-between pb-2">
-          <p className="text-sm text-zinc-500 dark:text-slate-400">
+          <p className="text-fg-muted text-sm">
             {t(
               {
                 id: 'taskPrioritizationPage.content.rulesHint',

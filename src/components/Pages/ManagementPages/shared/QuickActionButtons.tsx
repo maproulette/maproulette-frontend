@@ -32,17 +32,12 @@ const QuickActionButton = ({
     aria-label={label}
   >
     <Icon
-      className={cn(
-        'h-4 w-4',
-        active
-          ? activeClassName
-          : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-      )}
+      className={cn('h-4 w-4', active ? activeClassName : 'text-fg-subtle hover:text-fg-muted')}
     />
   </Button>
 )
 
-const highlighted = 'text-amber-600 dark:text-amber-400'
+const highlighted = 'text-highlight'
 
 export const PinButton = ({
   pinned,
@@ -133,7 +128,7 @@ export const DiscoverableButton = ({
           : t({ id: 'common.makeDiscoverable', defaultMessage: 'Make discoverable' })
       }
       icon={enabled ? Eye : EyeOff}
-      activeClassName="text-emerald-600 dark:text-emerald-400"
+      activeClassName="text-success"
       onClick={onClick}
     />
   )

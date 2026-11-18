@@ -52,7 +52,7 @@ export const ChallengeTasksExplorerTaskTable = ({
   const priorityLabel = (p: number) => (isTaskPriority(p) ? t(PRIORITY_MESSAGES[p]) : String(p))
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-zinc-200 bg-white text-zinc-900 dark:border-slate-700 dark:bg-slate-900 dark:text-zinc-50">
+    <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-line bg-panel text-fg">
       <Table density="compact">
         <TableHeader>
           <TableRow>
@@ -113,7 +113,7 @@ export const ChallengeTasksExplorerTaskTable = ({
         <TableBody>
           {visibleMarkers.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center text-zinc-500">
+              <TableCell colSpan={6} className="h-24 text-center text-fg-muted">
                 {t({
                   id: 'manageChallengeDetail.tasksExplorer.noTasksMatch',
                   defaultMessage: 'No tasks match the current filters.',
@@ -132,7 +132,7 @@ export const ChallengeTasksExplorerTaskTable = ({
                   className={cn(
                     'cursor-pointer',
                     isSelected &&
-                      'bg-purple-50 data-[state=selected]:bg-purple-50 dark:bg-purple-950/30 dark:data-[state=selected]:bg-purple-950/30 [&>td:first-child]:shadow-[inset_3px_0_0_var(--color-purple-500)]'
+                      'bg-accent/10 data-[state=selected]:bg-accent/10 [&>td:first-child]:shadow-[inset_3px_0_0_var(--color-accent)]'
                   )}
                   onClick={(e) => {
                     if ((e.target as HTMLElement).closest('a, button')) return
@@ -169,7 +169,7 @@ export const ChallengeTasksExplorerTaskTable = ({
                         },
                         { id: marker.id }
                       )}
-                      className="rounded-sm hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50"
+                      className="rounded-sm hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       {marker.id}
                     </button>

@@ -7,12 +7,12 @@ export const PreviewLegend = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-3 rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs shadow-sm dark:border-slate-700 dark:bg-slate-900',
+        'inline-flex items-center gap-3 rounded-md border border-line bg-popover px-3 py-1.5 text-xs shadow-md',
         className
       )}
     >
       {PRIORITY_TIERS.map((p) => (
-        <span key={p} className="flex items-center gap-1.5 text-zinc-700 dark:text-slate-200">
+        <span key={p} className="flex items-center gap-1.5 text-fg">
           <span className={cn('size-2.5 rounded-full', PRIORITY_COLOR[p].bg)} />
           {t(PRIORITY_MESSAGES[p])}
         </span>

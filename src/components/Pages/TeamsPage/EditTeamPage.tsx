@@ -15,7 +15,7 @@ export const EditTeamPage = ({ teamId }: Props) => {
   if (isLoading) return <Loader />
   if (!team)
     return (
-      <div className="py-12 text-center text-zinc-500">
+      <div className="py-12 text-center text-fg-muted">
         {t({ id: 'common.teamNotFound', defaultMessage: 'Team not found.' })}
       </div>
     )

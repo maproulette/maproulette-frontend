@@ -42,8 +42,8 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
   }
 
   return (
-    <li className="flex items-center gap-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
-      <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-zinc-100 dark:bg-slate-800">
+    <li className="flex items-center gap-3 rounded-lg border border-line p-3">
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-muted">
         {/* The team's own images are served to them whatever their review
             state, so a request still awaiting review still shows what was
             asked for. */}
@@ -51,7 +51,7 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
       </span>
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-sm">{image.name}</p>
-        <p className="truncate text-xs text-zinc-500 dark:text-slate-400">
+        <p className="truncate text-fg-muted text-xs">
           {image.requestedByName
             ? t(
                 {
@@ -112,9 +112,7 @@ const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }
 }
 
 const SubHeading = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="font-medium text-xs text-zinc-600 uppercase tracking-wide dark:text-slate-400">
-    {children}
-  </h3>
+  <h3 className="font-medium text-fg-muted text-xs uppercase tracking-wide">{children}</h3>
 )
 
 /**
@@ -171,10 +169,10 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
   return (
     <section className="space-y-3">
       <div>
-        <h2 className="font-medium text-sm text-zinc-700 dark:text-slate-300">
+        <h2 className="font-medium text-fg text-sm">
           {t({ id: 'teamImages.heading', defaultMessage: 'Challenge image' })}
         </h2>
-        <p className="text-xs text-zinc-500 dark:text-slate-400">
+        <p className="text-fg-muted text-xs">
           {t({
             id: 'teamImages.description',
             defaultMessage:
@@ -183,13 +181,10 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
         </p>
       </div>
 
-      <div className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
+      <div className="space-y-2 rounded-lg border border-line p-3">
         <div className="flex flex-wrap items-end gap-2">
           <div className="min-w-48 flex-1">
-            <label
-              htmlFor={nameFieldId}
-              className="mb-1 block text-xs text-zinc-600 dark:text-slate-400"
-            >
+            <label htmlFor={nameFieldId} className="mb-1 block text-fg-muted text-xs">
               {t({ id: 'teamImages.nameLabel', defaultMessage: 'Name (optional)' })}
             </label>
             <Input
@@ -231,13 +226,7 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
             </Button>
           </DisabledTooltip>
         </div>
-        <p
-          className={
-            problem
-              ? 'text-red-600 text-xs dark:text-red-400'
-              : 'text-xs text-zinc-500 dark:text-slate-400'
-          }
-        >
+        <p className={problem ? 'text-danger text-xs' : 'text-fg-muted text-xs'}>
           {problem ??
             t(
               {
@@ -252,7 +241,7 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
       {isLoading ? (
         <Skeleton className="h-16 w-full" />
       ) : isError ? (
-        <p className="text-sm text-zinc-600 dark:text-slate-400">
+        <p className="text-fg-muted text-sm">
           {t({ id: 'teamImages.loadError', defaultMessage: "Could not load this team's image." })}
         </p>
       ) : (
@@ -266,7 +255,7 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
                 <ImageRow image={current} canDelete={canDelete(current)} />
               </ul>
             ) : (
-              <p className="text-sm text-zinc-600 dark:text-slate-400">
+              <p className="text-fg-muted text-sm">
                 {t({
                   id: 'teamImages.empty',
                   defaultMessage: 'This team has no challenge image yet.',
@@ -283,7 +272,7 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
               <ul>
                 <ImageRow image={pending} canDelete={canDelete(pending)} />
               </ul>
-              <p className="text-xs text-zinc-500 dark:text-slate-400">
+              <p className="text-fg-muted text-xs">
                 {current
                   ? t({
                       id: 'teamImages.pendingReplaces',

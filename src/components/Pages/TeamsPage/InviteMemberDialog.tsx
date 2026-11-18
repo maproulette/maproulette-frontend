@@ -87,7 +87,10 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
         </DialogHeader>
         <div className="space-y-3">
           <div className="relative">
-            <Search className="absolute top-2.5 left-2.5 size-4 text-zinc-400" aria-hidden="true" />
+            <Search
+              className="absolute top-2.5 left-2.5 size-4 text-fg-subtle"
+              aria-hidden="true"
+            />
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -99,16 +102,14 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
             />
           </div>
           {users.length > 0 && (
-            <ul className="max-h-56 overflow-auto rounded-md border border-zinc-200 dark:border-slate-700">
+            <ul className="max-h-56 overflow-auto rounded-md border border-line">
               {users.map((u) => (
                 <li key={u.id}>
                   <button
                     type="button"
                     onClick={() => setSelectedUserId(u.id)}
                     className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm ${
-                      selectedUserId === u.id
-                        ? 'bg-teal-50 dark:bg-teal-900/40'
-                        : 'hover:bg-zinc-100 dark:hover:bg-slate-800'
+                      selectedUserId === u.id ? 'bg-accent/10' : 'hover:bg-muted'
                     }`}
                   >
                     <Avatar className="size-6">

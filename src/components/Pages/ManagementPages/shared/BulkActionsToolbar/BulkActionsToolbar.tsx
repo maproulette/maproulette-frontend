@@ -125,7 +125,7 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
   }
 
   return (
-    <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 rounded-md border border-zinc-200 bg-white p-3 shadow-lg dark:border-slate-700 dark:bg-slate-900">
+    <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 rounded-md border border-line bg-popover p-3 shadow-lg">
       <span className="font-medium text-sm">
         {t(
           {

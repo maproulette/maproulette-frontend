@@ -76,30 +76,28 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
       </CardHeader>
       <CardContent className="max-h-[min(60vh,520px)] overflow-y-auto pr-1">
         {isError ? (
-          <p className="text-red-600 text-sm dark:text-red-400">
+          <p className="text-danger text-sm">
             {t({
               id: 'manageChallengeDetail.recentActivity.loadError',
               defaultMessage: 'Could not load activity.',
             })}
           </p>
         ) : dayGroups.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-fg-muted text-sm">
             {t({
               id: 'manageChallengeDetail.recentActivity.empty',
               defaultMessage: 'No recent activity.',
             })}
           </p>
         ) : (
-          <ol className="relative ms-2 space-y-6 border-zinc-200 border-l ps-6 dark:border-slate-600">
+          <ol className="relative ms-2 space-y-6 border-line border-l ps-6">
             {dayGroups.map(({ day, rows }) => (
               <li key={day} className="relative">
                 <span
-                  className="-start-[29px] absolute mt-1.5 size-3 rounded-full border-2 border-zinc-200 bg-white dark:border-slate-600 dark:bg-slate-800"
+                  className="-start-[29px] absolute mt-1.5 size-3 rounded-full border-2 border-line bg-popover"
                   aria-hidden
                 />
-                <h3 className="font-semibold text-sm text-zinc-900 dark:text-zinc-50">
-                  {formatDayHeading(day, locale)}
-                </h3>
+                <h3 className="font-semibold text-fg text-sm">{formatDayHeading(day, locale)}</h3>
                 <ul className="mt-2 space-y-2">
                   {rows.map((row) => (
                     <li
@@ -109,7 +107,7 @@ export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivity
                       <Badge variant="secondary" className="tabular-nums">
                         {row.count}
                       </Badge>
-                      <span className="text-zinc-600 dark:text-zinc-400">
+                      <span className="text-fg-muted">
                         {statusLabel(row.status, row.statusName, t)}
                       </span>
                     </li>

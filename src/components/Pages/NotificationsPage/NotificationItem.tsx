@@ -172,26 +172,14 @@ export const NotificationItem = ({
           <AvatarFallback className="text-xs">{initials(sender).slice(0, 2)}</AvatarFallback>
         </Avatar>
       ) : (
-        <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-slate-800 dark:text-slate-400">
+        <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-fg-muted">
           <Icon className="size-4" aria-hidden="true" />
         </span>
       )}
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span
-          className={cn(
-            'text-sm',
-            notification.isRead ? 'text-zinc-700 dark:text-slate-300' : 'text-black dark:text-white'
-          )}
-        >
-          {text}
-        </span>
-        {snippet && (
-          <span className="line-clamp-2 text-sm text-zinc-600 dark:text-slate-400">{snippet}</span>
-        )}
-        <time
-          dateTime={created.toISOString()}
-          className="text-xs text-zinc-500 dark:text-slate-500"
-        >
+        <span className={cn('text-sm', notification.isRead ? 'text-fg' : 'text-fg')}>{text}</span>
+        {snippet && <span className="line-clamp-2 text-fg-muted text-sm">{snippet}</span>}
+        <time dateTime={created.toISOString()} className="text-fg-subtle text-xs">
           {formatTimeAgo(created, locale)}
         </time>
       </span>
@@ -216,7 +204,7 @@ export const NotificationItem = ({
     <div
       className={cn(
         'group flex items-start gap-3 px-3 py-3',
-        notification.isRead ? 'bg-zinc-100 dark:bg-slate-950' : 'bg-white dark:bg-slate-900'
+        notification.isRead ? 'bg-steel-50 dark:bg-transparent' : 'bg-white dark:bg-steel-300/10'
       )}
     >
       {onSelectedChange && (
@@ -237,7 +225,7 @@ export const NotificationItem = ({
             if (!notification.isRead) onMarkRead()
             onNavigate?.()
           }}
-          className="flex min-w-0 flex-1 items-start gap-3 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50"
+          className="flex min-w-0 flex-1 items-start gap-3 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {body}
         </Link>
@@ -282,7 +270,7 @@ export const NotificationItem = ({
         )}
         {!notification.isRead && (
           <span
-            className="ml-1 size-2 rounded-full bg-blue-500 dark:bg-blue-400"
+            className="ml-1 size-2 rounded-full bg-accent"
             role="img"
             aria-label={t({ id: 'notificationsPage.item.unread', defaultMessage: 'Unread' })}
           />

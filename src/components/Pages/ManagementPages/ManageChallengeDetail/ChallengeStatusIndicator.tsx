@@ -112,9 +112,9 @@ export const ChallengeStatusIndicator = ({
     const isUpdating = statusMessage === TASKS_UPDATING_MESSAGE
 
     return (
-      <Alert className="mb-4 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
-        <Spinner className="text-blue-600 dark:text-blue-400" />
-        <AlertTitle className="flex items-center gap-2 text-blue-900 dark:text-blue-100">
+      <Alert className="mb-4 border-accent bg-accent/10">
+        <Spinner className="text-link" />
+        <AlertTitle className="flex items-center gap-2 text-fg">
           {isUpdating
             ? t({
                 id: 'manageChallengeDetail.statusIndicator.tasksUpdatingTitle',
@@ -125,7 +125,7 @@ export const ChallengeStatusIndicator = ({
                 defaultMessage: 'Tasks Building...',
               })}
         </AlertTitle>
-        <AlertDescription className="space-y-2 text-blue-800 dark:text-blue-200">
+        <AlertDescription className="space-y-2 text-fg">
           <div className="flex items-center justify-between gap-4">
             <span className="text-sm">
               {t({
@@ -139,9 +139,7 @@ export const ChallengeStatusIndicator = ({
                 id: 'manageChallengeDetail.statusIndicator.refreshingInLabel',
                 defaultMessage: 'Refreshing in:',
               })}{' '}
-              <strong className="text-orange-600 dark:text-orange-400">
-                {formatDuration(nextUpdateSeconds)}
-              </strong>
+              <strong className="text-warning">{formatDuration(nextUpdateSeconds)}</strong>
             </span>
           </div>
           {!isUpdating && (
@@ -229,15 +227,15 @@ export const ChallengeStatusIndicator = ({
   // Partially loaded status
   if (status === CHALLENGE_STATUS_PARTIALLY_LOADED) {
     return (
-      <Alert className="mb-4 border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950">
-        <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
-        <AlertTitle className="text-yellow-900 dark:text-yellow-100">
+      <Alert className="mb-4 border-warning/40 bg-warning/10">
+        <AlertCircle className="h-4 w-4 text-warning" />
+        <AlertTitle>
           {t({
             id: 'manageChallengeDetail.statusIndicator.partiallyLoadedTitle',
             defaultMessage: 'Challenge Partially Loaded',
           })}
         </AlertTitle>
-        <AlertDescription className="text-yellow-800 dark:text-yellow-200">
+        <AlertDescription className="text-fg">
           <p className="text-sm">
             {t({
               id: 'manageChallengeDetail.statusIndicator.partiallyLoadedBody',
@@ -253,15 +251,15 @@ export const ChallengeStatusIndicator = ({
   // Deleting tasks status
   if (status === CHALLENGE_STATUS_DELETING_TASKS) {
     return (
-      <Alert className="mb-4 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950">
-        <Spinner className="text-orange-600 dark:text-orange-400" />
-        <AlertTitle className="text-orange-900 dark:text-orange-100">
+      <Alert className="mb-4 border-warning/40 bg-warning/10">
+        <Spinner className="text-warning" />
+        <AlertTitle>
           {t({
             id: 'manageChallengeDetail.statusIndicator.deletingTitle',
             defaultMessage: 'Deleting Tasks...',
           })}
         </AlertTitle>
-        <AlertDescription className="text-orange-800 dark:text-orange-200">
+        <AlertDescription className="text-fg">
           <p className="text-sm">
             {t({
               id: 'manageChallengeDetail.statusIndicator.deletingBody',
