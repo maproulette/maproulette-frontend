@@ -51,11 +51,9 @@ export const DescriptionBreadcrumbButton = ({
       className={cn(
         'relative inline-flex size-5 items-center justify-center rounded-full border transition-colors',
         disabled
-          ? 'cursor-not-allowed border-zinc-200 text-zinc-300 dark:border-slate-700 dark:text-slate-600'
-          : 'cursor-pointer border-zinc-300 text-zinc-600 hover:border-blue-400 hover:text-blue-600 dark:border-slate-600 dark:text-zinc-300 dark:hover:border-blue-400 dark:hover:text-blue-400',
-        recommended &&
-          !disabled &&
-          'border-blue-500 bg-blue-50 text-blue-600 ring-2 ring-blue-400/60 dark:border-blue-400 dark:bg-blue-500/15 dark:text-blue-300'
+          ? 'cursor-not-allowed border-line text-fg-subtle opacity-50'
+          : 'cursor-pointer border-line-strong text-fg-muted hover:border-accent hover:text-link',
+        recommended && !disabled && 'border-accent bg-accent/10 text-link ring-2 ring-accent/40'
       )}
     >
       <Icon className="size-3" aria-hidden="true" />
@@ -78,12 +76,12 @@ export const DescriptionBreadcrumbButton = ({
           onOpenAutoFocus={(event) => event.preventDefault()}
         >
           <div className="flex items-start gap-2">
-            <p className="text-sm text-zinc-700 dark:text-slate-200">{recommendationLabel}</p>
+            <p className="text-fg text-sm">{recommendationLabel}</p>
             <button
               type="button"
               onClick={() => setCalloutOpen(false)}
               aria-label={t({ id: 'common.close', defaultMessage: 'Close' })}
-              className="-mr-1 -mt-1 shrink-0 cursor-pointer rounded-sm p-1 text-zinc-400 transition-colors hover:text-zinc-700 dark:hover:text-slate-200"
+              className="-mr-1 -mt-1 shrink-0 cursor-pointer rounded-sm p-1 text-fg-subtle transition-colors hover:text-fg"
             >
               <X className="size-4" />
             </button>

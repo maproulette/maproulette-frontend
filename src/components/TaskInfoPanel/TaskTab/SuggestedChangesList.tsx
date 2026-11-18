@@ -49,11 +49,9 @@ export const SuggestedChangesList = ({
 
         return (
           <div key={fix.elementId} className="space-y-1.5">
-            <code className="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
-              {fix.elementId}
-            </code>
+            <code className="font-mono text-[11px] text-fg-muted">{fix.elementId}</code>
             {changes.length === 0 ? (
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-fg-muted text-xs">
                 {t({
                   id: 'taskInfoPanel.suggested.alreadyApplied',
                   defaultMessage: 'This element already carries the suggested tags.',
@@ -69,7 +67,7 @@ export const SuggestedChangesList = ({
                       STATUS_STYLES[change.status]
                     )}
                   >
-                    <span className="font-medium text-[10px] text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                    <span className="font-medium text-[10px] text-fg-muted uppercase tracking-wide">
                       {label[change.status]}
                     </span>
                     <code className="font-mono text-xs">{change.key}</code>
@@ -77,18 +75,14 @@ export const SuggestedChangesList = ({
                       <code
                         className={cn(
                           'font-mono text-xs line-through',
-                          change.status === 'removed'
-                            ? 'text-red-600 dark:text-red-400'
-                            : 'text-zinc-500 dark:text-zinc-400'
+                          change.status === 'removed' ? 'text-danger' : 'text-fg-muted'
                         )}
                       >
                         {change.from}
                       </code>
                     )}
                     {change.to !== null && (
-                      <code className="font-mono text-green-700 text-xs dark:text-green-400">
-                        {change.to}
-                      </code>
+                      <code className="font-mono text-success text-xs">{change.to}</code>
                     )}
                   </li>
                 ))}

@@ -23,24 +23,20 @@ export const DataSection = ({
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <Collapsible
-      open={open}
-      onOpenChange={setOpen}
-      className="rounded-lg border border-zinc-200 dark:border-slate-700"
-    >
-      <CollapsibleTrigger className="flex w-full items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-800/50">
-        <Icon className="h-4 w-4 shrink-0 text-zinc-500 dark:text-slate-400" />
-        <span className="font-medium text-sm text-zinc-900 dark:text-white">{title}</span>
-        {meta && <span className="text-xs text-zinc-500 dark:text-slate-400">{meta}</span>}
+    <Collapsible open={open} onOpenChange={setOpen} className="rounded-lg border border-line">
+      <CollapsibleTrigger className="flex w-full items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-muted">
+        <Icon className="h-4 w-4 shrink-0 text-fg-muted" />
+        <span className="font-medium text-fg text-sm">{title}</span>
+        {meta && <span className="text-fg-muted text-xs">{meta}</span>}
         <ChevronDown
           className={cn(
-            'ml-auto h-4 w-4 shrink-0 text-zinc-400 transition-transform',
+            'ml-auto h-4 w-4 shrink-0 text-fg-subtle transition-transform',
             open && 'rotate-180'
           )}
         />
       </CollapsibleTrigger>
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-        <div className="border-zinc-200 border-t px-3 py-3 dark:border-slate-700">{children}</div>
+        <div className="border-line border-t px-3 py-3">{children}</div>
       </CollapsibleContent>
     </Collapsible>
   )

@@ -81,7 +81,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
       )}
     >
       {/* Header */}
-      <div className="shrink-0 rounded-t-lg border-zinc-200 border-b bg-gradient-to-r from-purple-200 via-purple-100/50 to-transparent px-4 py-3 dark:border-slate-700 dark:from-purple-800/50 dark:via-purple-900/25 dark:to-transparent">
+      <div className="shrink-0 rounded-t-lg border-line border-b bg-inset px-4 py-3">
         {/* Info zone: badges row, title, breadcrumb */}
         <div className="space-y-1.5">
           {/* Status badge (left) | icon utilities (right) */}
@@ -168,7 +168,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
           </div>
 
           {/* Task ID */}
-          <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
+          <div className="font-bold text-base text-fg leading-tight">
             {t(
               { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
               { id: selectedTask?.id ?? '' }
@@ -177,24 +177,22 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
           {/* Challenge › Project breadcrumb */}
           {(challenge || project) && (
-            <div className="text-xs text-zinc-500 leading-tight dark:text-zinc-400">
+            <div className="text-fg-muted text-xs leading-tight">
               {challenge && (
                 <Link
                   to="/challenge/$challengeId"
                   params={{ challengeId: String(challenge.id) }}
-                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                  className="text-fg-muted underline-offset-2 transition-colors hover:text-fg hover:underline"
                 >
                   {challenge.name}
                 </Link>
               )}
-              {challenge && project && (
-                <span className="mx-1.5 text-zinc-400 dark:text-zinc-500">›</span>
-              )}
+              {challenge && project && <span className="mx-1.5 text-fg-subtle">›</span>}
               {project && (
                 <Link
                   to="/project/$projectId"
                   params={{ projectId: String(project.id) }}
-                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                  className="text-fg-muted underline-offset-2 transition-colors hover:text-fg hover:underline"
                 >
                   {project.displayName ?? project.name}
                 </Link>
@@ -205,7 +203,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
 
         {/* Action zone: Start Task primary CTA */}
         {task && (
-          <div className="mt-3 flex items-center justify-end border-slate-200/60 border-t pt-3 dark:border-slate-700/40">
+          <div className="mt-3 flex items-center justify-end border-line border-t pt-3">
             <Button size="sm" onClick={handleStartTask} className="gap-1.5 rounded-full">
               <Play className="size-4" />
               {t({ id: 'taskInfoPanel.drawer.startTask', defaultMessage: 'Start Task' })}
@@ -224,8 +222,8 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
               {bundleData && bundleData.taskIds.length > 1 && (
                 <div>
                   <div className="flex items-center gap-2 pb-2">
-                    <Package className="h-3.5 w-3.5 text-zinc-400" />
-                    <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+                    <Package className="h-3.5 w-3.5 text-fg-subtle" />
+                    <span className="font-medium text-fg-muted text-xs uppercase tracking-wide">
                       {t(
                         { id: 'common.bundledTasks', defaultMessage: 'Bundled Tasks ({count})' },
                         { count: bundleData.taskIds.length - 1 }
@@ -240,9 +238,9 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
                           key={taskId}
                           to="/tasks/$taskId"
                           params={{ taskId: taskId.toString() }}
-                          className="flex h-8 w-full items-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-left text-sm transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-700 dark:hover:bg-blue-950/30"
+                          className="flex h-8 w-full items-center rounded-lg border border-line bg-inset px-3 text-left text-sm transition-colors hover:border-accent hover:bg-accent/10"
                         >
-                          <span className="font-medium text-xs text-zinc-600 dark:text-slate-300">
+                          <span className="font-medium text-fg-muted text-xs">
                             {t(
                               { id: 'common.taskWithId', defaultMessage: 'Task #{id}' },
                               { id: taskId }
@@ -257,7 +255,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
               {/* Challenge Instructions */}
               {(task?.instruction || challenge?.instruction) && task && (
                 <div>
-                  <h3 className="mb-2 font-semibold text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+                  <h3 className="mb-2 font-semibold text-fg-muted text-xs uppercase tracking-wide">
                     {t({ id: 'common.instructions', defaultMessage: 'Instructions' })}
                   </h3>
                   <MarkdownContent autoLink={false}>

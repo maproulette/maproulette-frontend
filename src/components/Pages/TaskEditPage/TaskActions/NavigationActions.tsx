@@ -80,8 +80,8 @@ export const NavigationActions = ({
   }
 
   return (
-    <div className="rounded-lg bg-zinc-100 p-2.5 dark:bg-slate-800/60">
-      <p className="mb-2 text-center font-medium text-sm text-zinc-700 dark:text-slate-300">
+    <div>
+      <p className="mb-2 text-center font-medium text-fg text-sm">
         {t({
           id: 'taskEditPage.taskActions.navigation.wantToMap',
           defaultMessage: 'Map this challenge',

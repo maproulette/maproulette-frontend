@@ -198,9 +198,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
               <DropdownMenuItem
                 key={`default-${option.value}`}
                 onClick={() => handleSetDefaultEditor(option.value)}
-                className={
-                  option.value === defaultEditor ? 'bg-zinc-100 font-medium dark:bg-slate-800' : ''
-                }
+                className={option.value === defaultEditor ? 'bg-muted font-medium' : ''}
                 disabled={busy}
               >
                 <span className="mr-2">{option.value === defaultEditor ? '✓' : ' '}</span>

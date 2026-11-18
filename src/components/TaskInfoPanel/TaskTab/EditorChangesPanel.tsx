@@ -48,14 +48,14 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
   if (showingSuggestion && !isTagFix) return null
 
   return (
-    <section className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
+    <section className="space-y-2 rounded-lg border border-line p-3">
       <div className="flex items-center gap-2">
         {showingSuggestion ? (
-          <Wand2 className="size-4 text-amber-500" aria-hidden="true" />
+          <Wand2 className="size-4 text-mango-500" aria-hidden="true" />
         ) : (
-          <PencilLine className="size-4 text-amber-500" aria-hidden="true" />
+          <PencilLine className="size-4 text-mango-500" aria-hidden="true" />
         )}
-        <h3 className="font-medium text-sm text-zinc-800 dark:text-slate-200">
+        <h3 className="font-medium text-fg text-sm">
           {showingSuggestion
             ? t({
                 id: 'taskInfoPanel.editorChanges.suggestionTitle',
@@ -70,12 +70,12 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
               id: 'taskInfoPanel.editorChanges.docsLink',
               defaultMessage: 'About tag fix challenges',
             })}
-            className="ml-auto text-zinc-400 no-underline hover:text-zinc-600"
+            className="ml-auto text-fg-subtle no-underline hover:text-fg-muted"
           />
         )}
       </div>
 
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+      <p className="text-fg-muted text-xs">
         {showingSuggestion
           ? t({
               id: 'taskInfoPanel.editorChanges.suggestionDescription',
@@ -101,12 +101,10 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
       {isTagFix && editorOpen && !showingSuggestion && suggestionApplied && (
         <div
           className={`flex flex-wrap items-center gap-2 rounded border px-2 py-1.5 ${
-            hasDiverged
-              ? 'border-amber-500/40 bg-amber-500/10'
-              : 'border-zinc-200 dark:border-slate-700'
+            hasDiverged ? 'border-warning/40 bg-warning/10' : 'border-line'
           }`}
         >
-          <p className="min-w-0 flex-1 text-xs text-zinc-600 dark:text-zinc-300">
+          <p className="min-w-0 flex-1 text-fg-muted text-xs">
             {hasDiverged
               ? t({
                   id: 'taskInfoPanel.editorChanges.diverged',

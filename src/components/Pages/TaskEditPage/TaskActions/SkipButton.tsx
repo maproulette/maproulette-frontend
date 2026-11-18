@@ -17,7 +17,7 @@ export const SkipButton = ({ task }: { task: Task }) => {
       size="sm"
       onClick={skipTask}
       disabled={isSkipping}
-      className="gap-1.5 rounded-full border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-700"
+      className="gap-1.5 rounded-full border-line-strong text-fg-muted hover:bg-muted-strong"
       title={withBindingHint(
         t({
           id: 'taskEditPage.taskActions.skipButton.title',

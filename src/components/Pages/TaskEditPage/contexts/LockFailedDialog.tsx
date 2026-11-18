@@ -60,7 +60,7 @@ export const LockFailedDialog = ({
       <DialogContent size="lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <LockOpen className="size-5 text-amber-500" aria-hidden="true" />
+            <LockOpen className="size-5 text-mango-500" aria-hidden="true" />
             {t({
               id: 'taskEditPage.lockFailedDialog.title',
               defaultMessage: 'Unable to Lock Task',

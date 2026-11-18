@@ -39,7 +39,7 @@ export const LockButton = ({ compact = false }: { compact?: boolean }) => {
   if (!isAuthenticated) {
     return (
       <div
-        className="rounded-md p-1 text-zinc-400"
+        className="rounded-md p-1 text-fg-subtle"
         title={t({
           id: 'taskEditPage.taskActions.lockButton.signInToLock',
           defaultMessage: 'Sign in to lock tasks',
@@ -57,11 +57,7 @@ export const LockButton = ({ compact = false }: { compact?: boolean }) => {
         size={compact ? 'icon-sm' : 'sm'}
         onClick={handleUnlockTask}
         disabled={isLocking}
-        className={
-          compact
-            ? 'text-amber-600 dark:text-amber-400'
-            : 'gap-1.5 text-amber-600 dark:text-amber-400'
-        }
+        className={compact ? 'text-warning' : 'gap-1.5 text-warning'}
         aria-label={t({
           id: 'taskEditPage.taskActions.lockButton.unlockTask',
           defaultMessage: 'Unlock task',

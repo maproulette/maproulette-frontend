@@ -178,7 +178,7 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
             <img
               src={getImageSrc(commentAvatarUrl)}
               alt={commentUserName}
-              className="size-8 rounded-full border border-zinc-200 dark:border-slate-700"
+              className="size-8 rounded-full border border-line"
               onError={() => commentAvatarUrl && handleImageError(commentAvatarUrl)}
               loading="lazy"
             />
@@ -186,14 +186,14 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
 
           <div
             className={cn(
-              'flex min-w-0 max-w-[85%] flex-col gap-1 rounded-2xl bg-white px-3 py-2.5 shadow-sm dark:bg-slate-800',
+              'flex min-w-0 max-w-[85%] flex-col gap-1 rounded-2xl bg-muted px-3 py-2.5',
               isUser && 'items-end text-right'
             )}
           >
             <div className="flex items-center gap-2">
               <OsmUserLink
                 username={commentUserName}
-                className="font-semibold text-blue-600 text-xs hover:underline dark:text-blue-400"
+                className="font-semibold text-link text-xs hover:underline"
               />
             </div>
 
@@ -201,9 +201,7 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
               {commentText}
             </MarkdownContent>
 
-            <div className="text-xs text-zinc-500 dark:text-slate-400">
-              {formatDateTime(timestamp, locale)}
-            </div>
+            <div className="text-fg-muted text-xs">{formatDateTime(timestamp, locale)}</div>
           </div>
         </div>
       )
@@ -232,39 +230,37 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
           {item.user?.username ? (
             <OsmUserLink
               username={item.user.username}
-              className="font-medium text-zinc-700 hover:underline dark:text-slate-200"
+              className="font-medium text-fg hover:underline"
             />
           ) : (
-            <span className="font-medium text-zinc-700 dark:text-slate-200">{userName}</span>
+            <span className="font-medium text-fg">{userName}</span>
           )}
           {item.oldStatus !== undefined && item.status !== undefined ? (
             <>
               <StatusPill status={item.oldStatus} muted />
-              <ArrowRight className="size-3 text-zinc-400 dark:text-slate-500" />
+              <ArrowRight className="size-3 text-fg-subtle" />
               <StatusPill status={item.status} />
             </>
           ) : item.status !== undefined ? (
             <>
-              <span className="text-zinc-500 dark:text-slate-400">
+              <span className="text-fg-muted">
                 {t({ id: 'taskInfoPanel.comments.markedAs', defaultMessage: 'marked as' })}
               </span>
               <StatusPill status={item.status} />
             </>
           ) : item.oldStatus !== undefined ? (
             <>
-              <span className="text-zinc-500 dark:text-slate-400">
+              <span className="text-fg-muted">
                 {t({ id: 'taskInfoPanel.comments.cleared', defaultMessage: 'cleared' })}
               </span>
               <StatusPill status={item.oldStatus} muted />
             </>
           ) : (
-            <span className="text-zinc-500 dark:text-slate-400">
+            <span className="text-fg-muted">
               {t({ id: 'taskInfoPanel.comments.changedStatus', defaultMessage: 'changed status' })}
             </span>
           )}
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">
-            {formatDate(timestamp, locale)}
-          </span>
+          <span className="ml-auto text-fg-subtle">{formatDate(timestamp, locale)}</span>
         </div>
       )
     }
@@ -287,12 +283,12 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
         <div className="space-y-3 pr-2">
           {isLoading ? (
             <div className="flex items-center justify-center py-6">
-              <div className="h-6 w-6 rounded-full border-2 border-zinc-300 border-t-zinc-600 motion-safe:animate-spin" />
+              <div className="h-6 w-6 rounded-full border-2 border-line-strong border-t-fg-muted motion-safe:animate-spin" />
             </div>
           ) : sortedHistory.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-6 text-center">
-              <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
-              <p className="text-sm text-zinc-500 dark:text-slate-400">
+              <MessageSquare className="mb-2 size-8 text-fg-subtle" />
+              <p className="text-fg-muted text-sm">
                 {t({ id: 'taskInfoPanel.comments.emptyState', defaultMessage: 'No activity' })}
               </p>
             </div>
@@ -312,7 +308,7 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
               onChange={(e) => setCommentText(e.target.value)}
               placeholder={t({ id: 'common.addAComment', defaultMessage: 'Add a comment...' })}
               rows={2}
-              className="flex-1 resize-none border-transparent bg-white text-sm shadow-sm dark:border-transparent dark:bg-slate-800"
+              className="flex-1 resize-none text-sm"
               maxLength={5000}
             />
             <Button
@@ -330,7 +326,7 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
           </div>
         </form>
       ) : (
-        <div className="mt-3 rounded-lg bg-white p-3 text-center text-xs text-zinc-600 shadow-sm dark:bg-slate-800 dark:text-slate-400">
+        <div className="mt-3 rounded-lg bg-muted p-3 text-center text-fg-muted text-xs">
           {t({
             id: 'taskInfoPanel.comments.signInPrompt',
             defaultMessage: 'Sign in to add comments',

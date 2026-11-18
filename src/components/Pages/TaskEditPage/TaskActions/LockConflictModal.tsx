@@ -37,7 +37,7 @@ export const LockConflictModal = ({
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Lock className="size-5 text-amber-500" aria-hidden="true" />
+            <Lock className="size-5 text-mango-500" aria-hidden="true" />
             {t({
               id: 'taskEditPage.lockConflictModal.title',
               defaultMessage: 'You already have a task locked',
