@@ -10,7 +10,6 @@ import { useIntl } from '@/i18n'
 import { resolveTeamImageUrl } from '@/lib/teamImage'
 import { cn } from '@/lib/utils'
 import type { ManagedTeam } from '@/types/Team'
-import type { ProjectFormValues } from './projectFormSchema'
 
 interface TeamTileProps {
   label: string
@@ -84,20 +83,24 @@ const TeamArt = ({ team }: { team: ManagedTeam }) => {
 }
 
 /**
- * Lets the project owner hand the project to one of their teams, the same way a
- * challenge is handed over. The team's owners, admins and managers can then
- * manage it, and the team's approved image becomes the picture on its card.
+ * Lets the owner of a project or challenge hand it to one of their teams. The
+ * team's owners, admins and managers can then manage it, and the team's
+ * approved image becomes the picture on its card. This is distinct from
+ * granting a team a role in the managers panel: ownership is singular, and it's
+ * what the card's picture follows.
  *
- * Distinct from granting a team a role on the project, which the project
- * managers panel does: that is one of several teams helping run it. Ownership
- * is singular, and it is what the card's picture follows.
- *
- * Only teams the user runs are offered — belonging to a team is not licence to
- * publish projects under its name — so someone with no teams, or only
- * memberships, simply has nothing to choose from.
+ * Only teams the user runs are offered (belonging to a team is not licence to
+ * publish under its name), so someone with no teams, or only memberships,
+ * simply has nothing to choose from.
  */
-export const ProjectTeamSection = () => {
-  const form = useFormContext<ProjectFormValues>()
+export const OwnerTeamSection = ({
+  description,
+  noneAvailable,
+}: {
+  description: string
+  noneAvailable: string
+}) => {
+  const form = useFormContext<{ ownerTeamId: number | null }>()
   const { t } = useIntl()
   const { data: teams, isLoading, isError } = api.team.managed()
 
@@ -106,11 +109,7 @@ export const ProjectTeamSection = () => {
   return (
     <FormSection
       title={t({ id: 'ownerTeam.title', defaultMessage: 'Team' })}
-      description={t({
-        id: 'manageProjectNew.projectForm.teamDescription',
-        defaultMessage:
-          "An optional team to own this project. Everyone who manages that team can run it, and the team's image becomes the picture on its card.",
-      })}
+      description={description}
     >
       <FormField
         control={form.control}
@@ -162,11 +161,7 @@ export const ProjectTeamSection = () => {
 
                 {options.length === 0 && (
                   <p className="rounded-lg border border-zinc-200 border-dashed p-3 text-sm text-zinc-600 dark:border-slate-700 dark:text-zinc-400">
-                    {t({
-                      id: 'manageProjectNew.projectForm.teamNoneAvailable',
-                      defaultMessage:
-                        "You don't manage any teams yet. Only a team's owners, admins and managers can give it a project.",
-                    })}{' '}
+                    {noneAvailable}{' '}
                     <Link
                       to="/dashboard"
                       className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"

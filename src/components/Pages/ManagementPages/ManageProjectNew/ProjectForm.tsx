@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { OwnerTeamSection } from '@/components/Pages/ManagementPages/shared/OwnerTeamSection'
 import { Button } from '@/components/ui/Button'
 import {
   Form,
@@ -22,7 +23,6 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import { isSuperUser } from '@/lib/SuperAdminGuard'
 import type { Project } from '@/types/Project'
-import { ProjectTeamSection } from './ProjectTeamSection'
 import { makeProjectFormSchema, type ProjectFormValues } from './projectFormSchema'
 
 export type { ProjectFormValues } from './projectFormSchema'
@@ -239,7 +239,18 @@ export const ProjectForm = ({ project, onSubmit, onCancel }: ProjectFormProps) =
             )}
           </FormSection>
 
-          <ProjectTeamSection />
+          <OwnerTeamSection
+            description={t({
+              id: 'manageProjectNew.projectForm.teamDescription',
+              defaultMessage:
+                "An optional team to own this project. Everyone who manages that team can run it, and the team's image becomes the picture on its card.",
+            })}
+            noneAvailable={t({
+              id: 'manageProjectNew.projectForm.teamNoneAvailable',
+              defaultMessage:
+                "You don't manage any teams yet. Only a team's owners, admins and managers can give it a project.",
+            })}
+          />
         </FormSectionGroup>
         <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
           <Button type="button" variant="outline" onClick={onCancel}>
