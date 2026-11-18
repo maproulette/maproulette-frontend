@@ -58,6 +58,8 @@
   "appLayout.header.notifications.triggerLabel": "Notifications for {name}",
   "appLayout.header.notifications.unreadSrOnly": "You have unread notifications",
   "appLayout.header.signingIn": "Signing in...",
+  "appLayout.header.themeToggle.toDark": "Switch to dark theme",
+  "appLayout.header.themeToggle.toLight": "Switch to light theme",
   "appLayout.header.userMenu.accountSettings": "Account Settings",
   "appLayout.header.userMenu.documentation": "Documentation",
   "appLayout.header.userMenu.osmProfile": "OpenStreetMap profile",
