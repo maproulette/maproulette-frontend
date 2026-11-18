@@ -18,6 +18,7 @@ import {
   RebuildTasksDialog,
 } from '@/components/Pages/ManagementPages/shared/RebuildTasksDialog'
 import { VisibilityToggle } from '@/components/Pages/ManagementPages/shared/VisibilityToggle'
+import { ChallengeTaxonomy } from '@/components/shared/ChallengeTaxonomy'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { DrawerPortalTarget } from '@/components/TaskInfoPanel/DrawerPortalContext'
@@ -277,14 +278,8 @@ export const ManageChallengeDetailContent = () => {
             <div className="min-h-0 flex-1 overflow-y-auto">
               {/* Header */}
               <div className="space-y-2.5 px-6 pt-6 pb-4">
-                {!isLoadingChallenge && challengeData?.featured && (
-                  <ul className="flex flex-wrap items-center gap-2.5">
-                    <li>
-                      <span className="font-medium text-highlight text-xs uppercase tracking-wide">
-                        {t({ id: 'common.featured', defaultMessage: 'Featured' })}
-                      </span>
-                    </li>
-                  </ul>
+                {!isLoadingChallenge && challengeData && (
+                  <ChallengeTaxonomy challenge={challengeData} />
                 )}
 
                 <h1 className="line-clamp-2 font-bold text-base text-fg leading-tight tracking-tight">
