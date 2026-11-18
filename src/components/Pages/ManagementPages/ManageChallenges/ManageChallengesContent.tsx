@@ -192,7 +192,8 @@ export const ManageChallengesContent = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => setDeleteChallengeId(challenge.id)}
-                  className="flex cursor-pointer items-center gap-2 text-danger focus:text-danger"
+                  variant="destructive"
+                  className="flex cursor-pointer items-center gap-2"
                 >
                   <Trash2 className="h-4 w-4" />
                   {t({ id: 'common.deleteChallenge', defaultMessage: 'Delete challenge' })}

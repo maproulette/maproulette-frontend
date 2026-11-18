@@ -36,7 +36,6 @@ import {
 import { useMoveChallengeContext } from '@/contexts/MoveChallengeContext'
 import { useIntl } from '@/i18n'
 import { getDifficultyLabel } from '@/lib/difficultyLevelData'
-import { cn } from '@/lib/utils'
 import type { Challenge } from '@/types/Challenge'
 import { ChallengeSelectCheckbox, SelectAllChallengesCheckbox } from './ChallengeSelection'
 
@@ -276,10 +275,8 @@ export const ChallengesTableView = ({
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onClick={() => onDelete(challenge.id)}
-                              className={cn(
-                                'flex cursor-pointer items-center gap-2',
-                                'text-danger focus:text-danger'
-                              )}
+                              variant="destructive"
+                              className="flex cursor-pointer items-center gap-2"
                             >
                               <Trash2 className="h-4 w-4" />
                               {t({
