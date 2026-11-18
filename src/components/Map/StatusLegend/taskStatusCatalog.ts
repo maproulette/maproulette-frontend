@@ -1,6 +1,7 @@
 import { AlertTriangle, Check, CircleHelp, Link2, type LucideIcon, Plus } from 'lucide-react'
+import { MARKER_STATUS_HEX } from '@/components/Map/TaskMarkers/const'
 import type { TranslateFn } from '@/i18n'
-import { getStatusLabel, resolveHex, STATUS_HEX_COLORS } from '@/lib/taskConstants'
+import { getStatusLabel } from '@/lib/taskConstants'
 import { PRIORITY_COLOR } from '@/types/Priority'
 
 export interface StatusLegendEntry {
@@ -23,7 +24,7 @@ export const getStatusLegendEntries = (t: TranslateFn): StatusLegendEntry[] =>
     status: Number(status),
     label:
       getStatusLabel(t, Number(status)) ?? t({ id: 'common.unknown', defaultMessage: 'Unknown' }),
-    color: resolveHex(STATUS_HEX_COLORS[Number(status)] ?? 'zinc-400'),
+    color: MARKER_STATUS_HEX[Number(status)] ?? MARKER_STATUS_HEX[0],
     icon: STATUS_ICONS[Number(status)] ?? Plus,
   }))
 

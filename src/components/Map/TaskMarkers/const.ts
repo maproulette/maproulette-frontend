@@ -1,7 +1,19 @@
-import { resolveHex, STATUS_HEX_COLORS } from '@/lib/taskConstants'
+// TODO: use the app's status colors here once the map gets a design pass
+export const MARKER_STATUS_HEX: Record<number, string> = {
+  0: '#22d3ee',
+  1: '#22c55e',
+  2: '#facc15',
+  3: '#22d3ee',
+  4: '#ef4444',
+  5: '#fb923c',
+  6: '#ef4444',
+  7: '#a855f7',
+  8: '#10b981',
+  9: '#5f7697',
+}
 
 export const STATUS_CONFIG = Object.fromEntries(
-  Object.entries(STATUS_HEX_COLORS).map(([key, color]) => [key, { color: resolveHex(color) }])
+  Object.entries(MARKER_STATUS_HEX).map(([key, color]) => [key, { color }])
 ) as Record<number, { color: string }>
 
 export const CLUSTER_CONFIG = {

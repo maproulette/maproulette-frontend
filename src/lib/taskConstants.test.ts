@@ -2,16 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { testT } from '@/test/translate'
 import {
   getStatusLabel,
-  resolveHex,
   STATUS_BAR_COLORS,
-  STATUS_COLORS,
-  STATUS_HEX,
-  STATUS_HEX_COLORS,
+  STATUS_COLOR,
   STATUS_KEY_TO_ID,
   STATUS_MESSAGES,
   STATUS_PILL_COLORS,
   STATUS_TINT_COLORS,
-  TAILWIND_HEX,
   tabTriggerClass,
 } from './taskConstants.ts'
 
@@ -52,29 +48,11 @@ describe('STATUS_KEY_TO_ID', () => {
   })
 })
 
-describe('resolveHex', () => {
-  it('resolves a known tailwind token to its hex value', () => {
-    expect(resolveHex('cyan-400')).toBe('#22d3ee')
-  })
-
-  it('returns the input unchanged for an unknown token', () => {
-    expect(resolveHex('not-a-real-token')).toBe('not-a-real-token')
-  })
-})
-
-describe('STATUS_HEX', () => {
-  it('derives a hex value for every status from STATUS_HEX_COLORS', () => {
-    for (const [id, token] of Object.entries(STATUS_HEX_COLORS)) {
-      expect(STATUS_HEX[Number(id)]).toBe(TAILWIND_HEX[token])
-    }
-  })
-})
-
 describe('color record completeness', () => {
   const ids = Object.keys(STATUS_MESSAGES).map(Number)
 
   it.each([
-    ['STATUS_COLORS', STATUS_COLORS],
+    ['STATUS_COLOR', STATUS_COLOR],
     ['STATUS_PILL_COLORS', STATUS_PILL_COLORS],
     ['STATUS_BAR_COLORS', STATUS_BAR_COLORS],
     ['STATUS_TINT_COLORS', STATUS_TINT_COLORS],

@@ -1,5 +1,5 @@
 import { useIntl } from '@/i18n'
-import { statusHexByKey, statusMessageByKey } from './statusColors'
+import { statusColorByKey, statusMessageByKey } from './statusColors'
 
 /**
  * Raw per-status counts as they arrive from the backend. Mirrors the shape of
@@ -115,7 +115,7 @@ export const useActionSummary = (actions: ActionCounts | undefined): ActionSumma
     segments.push({
       key,
       label: t(statusMessageByKey[key]),
-      color: statusHexByKey[key] ?? '#71717a',
+      color: statusColorByKey[key],
       count,
       percent: total > 0 ? (count / total) * 100 : 0,
     })

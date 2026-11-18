@@ -17,7 +17,7 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
       <div
         role="img"
         aria-label={t({ id: 'statusBreakdownBar.bar.noTasks', defaultMessage: 'No tasks yet' })}
-        className="w-full rounded-full bg-zinc-200 dark:bg-slate-700"
+        className="w-full rounded-full bg-muted-strong"
         style={{ height }}
       />
     )
@@ -25,7 +25,7 @@ export const StatusBreakdownBar = ({ actions, height = 10 }: Props) => {
 
   return (
     <div
-      className="flex w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-slate-700"
+      className="flex w-full overflow-hidden rounded-full bg-muted-strong"
       style={{ height }}
       role="progressbar"
       aria-valuenow={completed}

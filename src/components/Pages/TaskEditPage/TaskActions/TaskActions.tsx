@@ -1,16 +1,17 @@
-import type { VariantProps } from 'class-variance-authority'
 import { CheckCircle2, Flag, LogIn, X } from 'lucide-react'
 import { type ReactNode, useMemo, useState } from 'react'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
-import { Button, type buttonVariants } from '@/components/ui/Button'
+import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { type KeyboardShortcut, useRegisterShortcuts } from '@/contexts/KeyboardShortcutsContext'
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { useIntl } from '@/i18n'
 import { type ShortcutBinding, withBindingHint } from '@/lib/keyboardShortcuts'
+import { STATUS_BUTTON_COLORS } from '@/lib/taskConstants'
 import { allowedStatusProgressions, TASK_STATUS } from '@/lib/taskStatusProgressions'
+import { cn } from '@/lib/utils'
 import { TaskActionModal } from '../TaskActionModal'
 import { useMappingAvailability } from '../useTaskShortcuts'
 import { NavigationActions } from './NavigationActions'
@@ -74,7 +75,6 @@ export const TaskActions = () => {
   }
 
   const completionActions: Array<{
-    variant: VariantProps<typeof buttonVariants>['variant']
     icon: ReactNode
     onClick: () => void
     title: string
@@ -83,7 +83,6 @@ export const TaskActions = () => {
   }> = [
     {
       status: TASK_STATUS.fixed,
-      variant: 'success',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsFixed,
       title: t({
@@ -94,7 +93,6 @@ export const TaskActions = () => {
     },
     {
       status: TASK_STATUS.alreadyFixed,
-      variant: 'info',
       icon: <CheckCircle2 />,
       onClick: handleMarkAsAlreadyFixed,
       title: t({
@@ -105,7 +103,6 @@ export const TaskActions = () => {
     },
     {
       status: TASK_STATUS.falsePositive,
-      variant: 'warning',
       icon: <Flag />,
       onClick: handleMarkAsFalsePositive,
       title: t({
@@ -116,7 +113,6 @@ export const TaskActions = () => {
     },
     {
       status: TASK_STATUS.tooHard,
-      variant: 'caution',
       icon: <X />,
       onClick: handleMarkAsTooHard,
       title: t({
@@ -249,7 +245,6 @@ export const TaskActions = () => {
           {availableCompletionActions.map((action) => (
             <Button
               key={action.label}
-              variant={action.variant}
               size="sm"
               onClick={action.onClick}
               title={
@@ -257,7 +252,7 @@ export const TaskActions = () => {
                   ? withBindingHint(action.title, STATUS_BINDINGS[action.status])
                   : action.title
               }
-              className="w-full"
+              className={cn('w-full', STATUS_BUTTON_COLORS[action.status])}
               disabled={isSubmitting}
             >
               {action.icon}

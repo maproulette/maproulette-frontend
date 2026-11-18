@@ -1,17 +1,17 @@
 import { defineMessages } from 'react-intl'
-import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
+import { STATUS_COLOR, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 
-const hexForKey = (key: string): string => STATUS_HEX[STATUS_KEY_TO_ID[key] ?? -1] ?? '#71717a'
+const colorForKey = (key: string): string => STATUS_COLOR[STATUS_KEY_TO_ID[key]]
 
-export const statusHexByKey: Record<string, string> = {
-  created: hexForKey('created'),
-  fixed: hexForKey('fixed'),
-  falsePositive: hexForKey('falsePositive'),
-  skipped: hexForKey('skipped'),
-  deleted: hexForKey('deleted'),
-  alreadyFixed: hexForKey('alreadyFixed'),
-  tooHard: hexForKey('tooHard'),
-  disabled: hexForKey('disabled'),
+export const statusColorByKey: Record<string, string> = {
+  created: colorForKey('created'),
+  fixed: colorForKey('fixed'),
+  falsePositive: colorForKey('falsePositive'),
+  skipped: colorForKey('skipped'),
+  deleted: colorForKey('deleted'),
+  alreadyFixed: colorForKey('alreadyFixed'),
+  tooHard: colorForKey('tooHard'),
+  disabled: colorForKey('disabled'),
 }
 
 // Labels here intentionally diverge from STATUS_MESSAGES: in the action-breakdown context, "created"
