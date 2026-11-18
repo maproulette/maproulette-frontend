@@ -5,10 +5,10 @@ import { type AchievementDefinition, getAchievement } from '@/types/Achievement'
 
 // The overlay (e.g. a points threshold) is unreadable at xs, so that size omits it.
 const sizeClasses = {
-  xs: { box: 'h-7 w-7 border', icon: 'size-4', overlay: null },
-  sm: { box: 'h-12 w-12', icon: 'size-6', overlay: 'text-[0.6rem]' },
-  md: { box: 'h-20 w-20', icon: 'size-10', overlay: 'text-xs' },
-  lg: { box: 'h-32 w-32', icon: 'size-16', overlay: 'text-base' },
+  xs: { box: 'size-7', ring: 'p-px', icon: 'size-3.5', overlay: null },
+  sm: { box: 'size-12', ring: 'p-[1.5px]', icon: 'size-5', overlay: 'text-[0.6rem]' },
+  md: { box: 'size-20', ring: 'p-0.5', icon: 'size-9', overlay: 'text-xs' },
+  lg: { box: 'size-32', ring: 'p-[3px]', icon: 'size-14', overlay: 'text-sm' },
 } as const
 
 type AchievementBadgeSize = keyof typeof sizeClasses
@@ -49,24 +49,34 @@ export const AchievementBadge = ({
               : label
           }
           className={cn(
-            'relative inline-flex items-center justify-center rounded-full border-2 transition-all',
+            'relative inline-flex shrink-0 rounded-full',
             sz.box,
             locked
-              ? 'border-line bg-inset opacity-40 grayscale'
-              : 'border-mango-300 bg-gradient-to-br from-mango-100 to-mango-300 text-mango-900 dark:border-mango-700 dark:from-mango-900 dark:to-mango-700 dark:text-mango-100',
+              ? 'border border-line-strong border-dashed text-fg-subtle [&_svg]:opacity-60'
+              : cn(
+                  'bg-linear-to-br from-(--accent-from) to-(--accent-to) text-teal-700 dark:bg-accent dark:bg-none dark:text-mint-200',
+                  sz.ring
+                ),
             className
           )}
         >
-          <Icon className={sz.icon} aria-hidden="true" />
+          <span
+            className={cn(
+              'flex size-full items-center justify-center rounded-full',
+              !locked && 'bg-linear-to-br from-mint-50 to-ocean-50 dark:bg-none dark:bg-teal-950'
+            )}
+          >
+            <Icon className={sz.icon} aria-hidden="true" />
+          </span>
           {overlay && sz.overlay && (
             <span
               aria-hidden="true"
               className={cn(
-                'absolute right-1 bottom-1 rounded px-1 font-bold font-mono tracking-tight',
+                '-bottom-1.5 -translate-x-1/2 absolute left-1/2 rounded-full px-1.5 font-semibold tabular-nums leading-snug',
                 sz.overlay,
                 locked
                   ? 'bg-muted-strong text-fg-muted'
-                  : 'bg-panel/80 text-mango-900 dark:text-mango-100'
+                  : 'bg-linear-to-r from-(--accent-from) to-(--accent-to) text-accent-fg dark:bg-accent dark:bg-none'
               )}
             >
               {overlay}
