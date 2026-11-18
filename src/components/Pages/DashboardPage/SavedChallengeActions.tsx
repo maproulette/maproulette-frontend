@@ -81,7 +81,8 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
             e.preventDefault()
             unsaveChallenge.mutate({ userId, challengeId: challenge.id })
           }}
-          className="flex cursor-pointer items-center gap-2 text-danger focus:text-danger"
+          variant="destructive"
+          className="flex cursor-pointer items-center gap-2"
         >
           <BookmarkX className="h-4 w-4" />
           {t({
