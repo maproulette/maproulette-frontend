@@ -173,9 +173,10 @@ for example), run `git commit --no-verify`.
 
 We are using [Tailwind CSS](https://tailwindcss.com) v4, configured in CSS
 (see `src/main.css`). UI primitives such as buttons, dialogs and menus live in
-`src/components/ui/`; use those rather than styling raw elements. Design tokens
-are generated into `src/styles/tokens.gen.*` from `design-tokens/` by
-`npm run tokens:build`.
+`src/components/ui/`; use those rather than styling raw elements. Colors come
+from the palette in `src/styles/palette.css` and the semantic tokens in
+`src/main.css`, which handle dark mode themselves; the Introduction page in
+Storybook describes them.
 
 ## Internationalization, Localization, and Translation
 
