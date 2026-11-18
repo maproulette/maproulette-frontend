@@ -55,10 +55,7 @@ export const ResetToSuggestionDialog = ({
           <AlertDialogCancel>
             {t({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            className="bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-800"
-          >
+          <AlertDialogAction onClick={onConfirm} variant="destructive">
             {t({
               id: 'taskInfoPanel.resetToSuggestion.confirm',
               defaultMessage: 'Discard and reset',
