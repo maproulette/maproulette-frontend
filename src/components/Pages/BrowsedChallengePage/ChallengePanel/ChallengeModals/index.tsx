@@ -1,6 +1,5 @@
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { ActionsModal } from './ActionsModal'
 import { CommentsModal } from './CommentsModal'
 import { OverpassModal } from './OverpassModal'
 import { ReportHistoryModal } from './ReportHistoryModal'
@@ -17,7 +16,6 @@ export const ChallengeModals = () => {
       <ReportHistoryModal />
       <CommentsModal />
       {hasOverpass && <OverpassModal />}
-      <ActionsModal />
     </>
   )
 }

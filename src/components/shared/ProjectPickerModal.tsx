@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/Dialog'
 import { Spinner } from '@/components/ui/Spinner'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { getVisibleTotal } from '@/hooks/useChallengeProgress'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { useIntl } from '@/i18n'
 import type { Project } from '@/types/Project'
@@ -186,7 +187,7 @@ export const ProjectPickerModal = ({
               style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}
             >
               {projectsToShow.map((project) => {
-                const totalTasks = project.completionMetrics?.total ?? 0
+                const totalTasks = getVisibleTotal(project.completionMetrics)
                 const challengeStats = challengeCountsByProjectId[project.id]
                 return (
                   <ProjectCard
