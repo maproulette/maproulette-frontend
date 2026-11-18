@@ -21,7 +21,7 @@ export const ScrollArea = ({
         // Keyboard-scrollable even when the content has no focusable
         // descendant of its own (Radix's own recommendation).
         tabIndex={0}
-        className="[&>div]:!block [&>div]:!w-full size-full rounded-[inherit] outline-none transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-[3px] focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50"
+        className="[&>div]:!block [&>div]:!w-full size-full rounded-[inherit] outline-none transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-[3px] focus-visible:ring-ring"
       >
         {children}
       </ScrollAreaPrimitive.Viewport>
@@ -49,7 +49,7 @@ export const ScrollBar = ({
   >
     <ScrollAreaPrimitive.ScrollAreaThumb
       data-slot="scroll-area-thumb"
-      className="relative flex-1 rounded-full bg-zinc-200 dark:bg-slate-800"
+      className="relative flex-1 rounded-full bg-muted"
     />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>
 )

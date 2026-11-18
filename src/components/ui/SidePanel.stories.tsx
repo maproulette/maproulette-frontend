@@ -43,7 +43,7 @@ export const Default: Story = {
             </Button>
           </SidePanelHeader>
           <SidePanelBody>
-            <p className="text-sm text-zinc-600 dark:text-slate-400">
+            <p className="text-fg-muted text-sm">
               This panel keeps the underlying page in context while showing details for the selected
               item.
             </p>
@@ -72,7 +72,7 @@ export const Closed: Story = {
             <SidePanelTitle>Task details</SidePanelTitle>
           </SidePanelHeader>
           <SidePanelBody>
-            <p className="text-sm text-zinc-600 dark:text-slate-400">Panel content.</p>
+            <p className="text-fg-muted text-sm">Panel content.</p>
           </SidePanelBody>
         </SidePanel>
       </div>

@@ -10,9 +10,7 @@ const VARIANTS = [
   'ghost',
   'link',
   'success',
-  'info',
   'warning',
-  'caution',
 ] as const
 
 const SIZES = ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg'] as const

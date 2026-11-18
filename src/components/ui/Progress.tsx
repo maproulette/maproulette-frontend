@@ -14,15 +14,12 @@ export const Progress = ({
     data-slot="progress"
     aria-label={ariaLabel ?? (ariaLabelledby ? undefined : `${value ?? 0}% complete`)}
     aria-labelledby={ariaLabelledby}
-    className={cn(
-      'relative h-2 w-full overflow-hidden rounded-full bg-zinc-900/20 dark:bg-slate-50/20',
-      className
-    )}
+    className={cn('relative h-2 w-full overflow-hidden rounded-full bg-muted-strong', className)}
     {...props}
   >
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
-      className="h-full w-full flex-1 bg-zinc-900 transition-all dark:bg-slate-50"
+      className="h-full w-full flex-1 bg-accent transition-all"
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>

@@ -66,7 +66,7 @@ export const SidePanel = ({
         tabIndex={-1}
         inert={!open}
         className={cn(
-          'fixed inset-y-0 right-0 z-50 flex flex-col border-zinc-200 border-l bg-white shadow-2xl outline-none transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950',
+          'fixed inset-y-0 right-0 z-50 flex flex-col border-line border-l bg-popover shadow-2xl outline-none transition-transform duration-300 ease-in-out',
           widthClassName,
           open ? 'translate-x-0' : 'translate-x-full',
           className
@@ -81,7 +81,7 @@ export const SidePanel = ({
 export const SidePanelHeader = ({ className, ...props }: React.ComponentProps<'div'>) => (
   <div
     className={cn(
-      'flex shrink-0 items-start justify-between gap-3 border-zinc-200 border-b px-4 py-3 dark:border-slate-700',
+      'flex shrink-0 items-start justify-between gap-3 border-line border-b px-4 py-3',
       className
     )}
     {...props}
@@ -89,10 +89,7 @@ export const SidePanelHeader = ({ className, ...props }: React.ComponentProps<'d
 )
 
 export const SidePanelTitle = ({ className, ...props }: React.ComponentProps<'h2'>) => (
-  <h2
-    className={cn('m-0 font-semibold text-base text-zinc-900 dark:text-slate-100', className)}
-    {...props}
-  />
+  <h2 className={cn('m-0 font-semibold text-base text-fg', className)} {...props} />
 )
 
 export const SidePanelBody = ({ className, ...props }: React.ComponentProps<'div'>) => (
@@ -102,7 +99,7 @@ export const SidePanelBody = ({ className, ...props }: React.ComponentProps<'div
 export const SidePanelFooter = ({ className, ...props }: React.ComponentProps<'div'>) => (
   <div
     className={cn(
-      'flex shrink-0 flex-wrap items-center justify-end gap-2 border-zinc-200 border-t px-4 py-3 dark:border-slate-700',
+      'flex shrink-0 flex-wrap items-center justify-end gap-2 border-line border-t px-4 py-3',
       className
     )}
     {...props}

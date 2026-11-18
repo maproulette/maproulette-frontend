@@ -5,15 +5,12 @@ import { cn } from '@/lib/utils'
 const panelVariants = cva('rounded-lg border', {
   variants: {
     tone: {
-      neutral: 'border-zinc-200 bg-white dark:border-slate-700 dark:bg-slate-800',
-      muted: 'border-zinc-200 bg-zinc-50 dark:border-slate-700 dark:bg-slate-900/50',
-      info: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100',
-      success:
-        'border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950/40 dark:text-green-100',
-      warning:
-        'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100',
-      danger:
-        'border-red-200 bg-red-50 text-red-900 dark:border-red-900 dark:bg-red-950/40 dark:text-red-100',
+      neutral: 'border-line bg-card',
+      muted: 'border-line bg-inset',
+      info: 'border-ocean-500/40 bg-ocean-500/10',
+      success: 'border-success/40 bg-success/10',
+      warning: 'border-warning/40 bg-warning/10',
+      danger: 'border-danger/40 bg-danger/10',
     },
     padding: {
       none: '',

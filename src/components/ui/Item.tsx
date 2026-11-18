@@ -22,13 +22,13 @@ export const ItemSeparator = ({ className, ...props }: React.ComponentProps<type
 )
 
 const itemVariants = cva(
-  'group/item flex items-center border border-zinc-200 border-transparent text-sm rounded-lg transition-colors [a]:hover:bg-zinc-100/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50 focus-visible:ring-[3px] dark:border-slate-800 dark:[a]:hover:bg-zinc-800/50 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50',
+  'group/item flex items-center border border-line border-transparent text-sm rounded-lg transition-colors [a]:hover:bg-muted/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring focus-visible:ring-[3px]',
   {
     variants: {
       variant: {
         default: 'bg-transparent',
-        outline: 'border-zinc-200 dark:border-slate-800',
-        muted: 'bg-zinc-100/50 dark:bg-slate-800/50',
+        outline: 'border-line',
+        muted: 'bg-muted/50',
       },
       size: {
         default: 'p-4 gap-4',
@@ -69,7 +69,7 @@ const itemMediaVariants = cva(
     variants: {
       variant: {
         default: 'bg-transparent',
-        icon: "size-8 border border-zinc-200 rounded-sm bg-zinc-100 [&_svg:not([class*='size-'])]:size-4 dark:border-slate-800 dark:bg-slate-800",
+        icon: "size-8 border border-line rounded-sm bg-muted [&_svg:not([class*='size-'])]:size-4",
         image: 'size-10 rounded-sm overflow-hidden [&_img]:size-full [&_img]:object-cover',
       },
     },
@@ -112,9 +112,8 @@ export const ItemDescription = ({ className, ...props }: React.ComponentProps<'p
   <p
     data-slot="item-description"
     className={cn(
-      // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
-      'line-clamp-2 text-balance font-normal text-sm text-zinc-600 leading-normal dark:text-zinc-400',
-      '[&>a:hover]:text-zinc-900 dark:[&>a:hover]:text-zinc-50 [&>a]:underline [&>a]:underline-offset-4',
+      'line-clamp-2 text-balance font-normal text-fg-muted text-sm leading-normal',
+      '[&>a:hover]:text-fg [&>a]:underline [&>a]:underline-offset-4',
       className
     )}
     {...props}

@@ -68,7 +68,7 @@ export const ToggleGroupItem = ({
           variant: context.variant || variant,
           size: context.size || size,
         }),
-        'w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10',
+        'w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset',
         'data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:last:rounded-r-lg data-[spacing=0]:data-[variant=outline]:first:border-l data-[spacing=0]:first:rounded-l-lg',
         className
       )}

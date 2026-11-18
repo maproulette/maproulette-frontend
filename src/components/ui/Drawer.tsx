@@ -59,7 +59,7 @@ export const Drawer = ({
         tabIndex={-1}
         inert={!open}
         className={cn(
-          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-t-lg border-zinc-200 border-t bg-white shadow-2xl outline-none transition-transform duration-300 ease-in-out dark:border-slate-700 dark:bg-slate-950`,
+          `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-t-lg border-line border-t bg-popover shadow-2xl outline-none transition-transform duration-300 ease-in-out`,
           open ? 'translate-y-0' : 'translate-y-full',
           className
         )}
@@ -69,7 +69,7 @@ export const Drawer = ({
       >
         {/* Drag handle indicator */}
         <div className="flex justify-center pt-2 pb-1">
-          <div className="h-1 w-10 rounded-full bg-zinc-300 dark:bg-slate-600" />
+          <div className="h-1 w-10 rounded-full bg-line-strong" />
         </div>
         {/* Drawer content */}
         <div className="flex min-h-0 flex-1 flex-col">{children}</div>

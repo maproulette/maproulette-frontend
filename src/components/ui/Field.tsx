@@ -44,31 +44,26 @@ export const FieldGroup = ({ className, ...props }: React.ComponentProps<'div'>)
   />
 )
 
-export const fieldVariants = cva(
-  // red-500 fails WCAG AA contrast on light backgrounds (~3.5-3.8:1); red-600 clears it.
-  // dark:text-red-900 was near-invisible dark-red-on-near-black; red-400 is the correct pairing.
-  'group/field flex w-full gap-3 data-[invalid=true]:text-red-700 dark:data-[invalid=true]:text-red-400',
-  {
-    variants: {
-      orientation: {
-        vertical: ['flex-col [&>*]:w-full [&>.sr-only]:w-auto'],
-        horizontal: [
-          'flex-row items-center',
-          '[&>[data-slot=field-label]]:flex-auto',
-          'has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-        ],
-        responsive: [
-          'flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:[&>*]:w-auto',
-          '@md/field-group:[&>[data-slot=field-label]]:flex-auto',
-          '@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-        ],
-      },
+export const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:text-danger', {
+  variants: {
+    orientation: {
+      vertical: ['flex-col [&>*]:w-full [&>.sr-only]:w-auto'],
+      horizontal: [
+        'flex-row items-center',
+        '[&>[data-slot=field-label]]:flex-auto',
+        'has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      ],
+      responsive: [
+        'flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:[&>*]:w-auto',
+        '@md/field-group:[&>[data-slot=field-label]]:flex-auto',
+        '@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      ],
     },
-    defaultVariants: {
-      orientation: 'vertical',
-    },
-  }
-)
+  },
+  defaultVariants: {
+    orientation: 'vertical',
+  },
+})
 
 export const Field = ({
   className,
@@ -97,7 +92,7 @@ export const FieldLabel = ({ className, ...props }: React.ComponentProps<typeof 
     className={cn(
       'group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50',
       'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4',
-      'has-data-[state=checked]:border-zinc-900 has-data-[state=checked]:bg-zinc-900/5 dark:has-data-[state=checked]:border-zinc-50 dark:dark:has-data-[state=checked]:bg-zinc-50/10 dark:has-data-[state=checked]:bg-zinc-50/5 dark:has-data-[state=checked]:bg-zinc-900/10',
+      'has-data-[state=checked]:border-accent has-data-[state=checked]:bg-accent/5',
       className
     )}
     {...props}
@@ -119,10 +114,9 @@ export const FieldDescription = ({ className, ...props }: React.ComponentProps<'
   <p
     data-slot="field-description"
     className={cn(
-      // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
-      'font-normal text-sm text-zinc-600 leading-normal group-has-[[data-orientation=horizontal]]/field:text-balance dark:text-zinc-400',
+      'font-normal text-fg-muted text-sm leading-normal group-has-[[data-orientation=horizontal]]/field:text-balance',
       'nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 last:mt-0',
-      '[&>a:hover]:text-zinc-900 dark:[&>a:hover]:text-zinc-50 [&>a]:underline [&>a]:underline-offset-4',
+      '[&>a:hover]:text-fg [&>a]:underline [&>a]:underline-offset-4',
       className
     )}
     {...props}
@@ -148,7 +142,7 @@ export const FieldSeparator = ({
     <Separator className="absolute inset-0 top-1/2" />
     {children && (
       <span
-        className="relative mx-auto block w-fit bg-white px-2 text-zinc-500 dark:bg-slate-950 dark:text-zinc-400"
+        className="relative mx-auto block w-fit bg-panel px-2 text-fg-muted"
         data-slot="field-separator-content"
       >
         {children}
@@ -193,7 +187,7 @@ export const FieldError = ({
     <div
       role="alert"
       data-slot="field-error"
-      className={cn('font-normal text-red-700 text-sm dark:text-red-400', className)}
+      className={cn('font-normal text-danger text-sm', className)}
       {...props}
     >
       {content}

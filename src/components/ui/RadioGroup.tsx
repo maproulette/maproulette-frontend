@@ -22,7 +22,7 @@ export const RadioGroupItem = ({
   <RadioGroupPrimitive.Item
     data-slot="radio-group-item"
     className={cn(
-      'aspect-square size-4 shrink-0 rounded-full border border-zinc-200 text-zinc-900 shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-zinc-950 focus-visible:ring-[3px] focus-visible:ring-zinc-950/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-500 aria-invalid:ring-red-500/20 dark:border-slate-800 dark:bg-slate-200/30 dark:dark:bg-slate-800/30 dark:text-zinc-50 dark:aria-invalid:border-red-900 dark:aria-invalid:ring-red-500/40 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:focus-visible:border-zinc-300 dark:focus-visible:ring-zinc-300/50',
+      'aspect-square size-4 shrink-0 rounded-full border border-line-strong bg-field outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:ring-danger/20 data-[state=checked]:border-accent data-[state=checked]:bg-accent',
       className
     )}
     {...props}
@@ -31,7 +31,7 @@ export const RadioGroupItem = ({
       data-slot="radio-group-indicator"
       className="relative flex items-center justify-center"
     >
-      <CircleIcon className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 size-2 fill-primary" />
+      <CircleIcon className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 size-2 fill-white stroke-white" />
     </RadioGroupPrimitive.Indicator>
   </RadioGroupPrimitive.Item>
 )

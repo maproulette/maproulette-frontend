@@ -20,10 +20,7 @@ export const Vertical: Story = {
       <div className="p-4">
         <h4 className="mb-3 font-medium text-sm">Tags</h4>
         {ITEMS.map((item) => (
-          <div
-            key={item}
-            className="border-zinc-100 border-b py-2 text-sm last:border-0 dark:border-slate-800"
-          >
+          <div key={item} className="border-line border-b py-2 text-sm last:border-0">
             {item}
           </div>
         ))}
@@ -39,7 +36,7 @@ export const Horizontal: Story = {
         {ITEMS.slice(0, 15).map((item) => (
           <div
             key={item}
-            className="flex h-20 w-24 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-sm dark:bg-slate-800"
+            className="flex h-20 w-24 shrink-0 items-center justify-center rounded-md bg-muted text-sm"
           >
             {item}
           </div>

@@ -28,7 +28,7 @@ export const Table = ({
 export const TableHeader = ({ className, ref, ...props }: React.ComponentProps<'thead'>) => (
   <thead
     ref={ref}
-    className={cn('sticky top-0 z-10 bg-zinc-50 dark:bg-slate-900 [&_tr]:border-b', className)}
+    className={cn('sticky top-0 z-10 bg-popover [&_tr]:border-b', className)}
     {...props}
   />
 )
@@ -40,10 +40,7 @@ export const TableBody = ({ className, ref, ...props }: React.ComponentProps<'tb
 export const TableFooter = ({ className, ref, ...props }: React.ComponentProps<'tfoot'>) => (
   <tfoot
     ref={ref}
-    className={cn(
-      'border-t bg-zinc-100/50 font-medium dark:bg-slate-800/50 [&>tr]:last:border-b-0',
-      className
-    )}
+    className={cn('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0', className)}
     {...props}
   />
 )
@@ -52,7 +49,7 @@ export const TableRow = ({ className, ref, ...props }: React.ComponentProps<'tr'
   <tr
     ref={ref}
     className={cn(
-      'border-zinc-200 border-b transition-colors hover:bg-zinc-50 data-[state=selected]:bg-zinc-100 dark:border-slate-700 dark:data-[state=selected]:bg-slate-800 dark:hover:bg-slate-800/50',
+      'border-line border-b transition-colors hover:bg-muted data-[state=selected]:bg-muted',
       className
     )}
     {...props}
@@ -75,7 +72,7 @@ export const TableHead = ({ className, children, ref, ...props }: React.Componen
     <th
       ref={setRef}
       className={cn(
-        'relative min-w-[40px] px-4 py-3 text-left align-middle font-medium text-xs text-zinc-600 group-data-[density=compact]/table:py-2 dark:text-slate-400 [&:has([role=checkbox])]:pr-0',
+        'relative min-w-[40px] px-4 py-3 text-left align-middle font-medium text-fg-muted text-xs group-data-[density=compact]/table:py-2 [&:has([role=checkbox])]:pr-0',
         className
       )}
       {...props}
@@ -85,7 +82,7 @@ export const TableHead = ({ className, children, ref, ...props }: React.Componen
         type="button"
         aria-label={t({ id: 'ui.table.resizeColumn', defaultMessage: 'Resize column' })}
         onMouseDown={handleResizeMouseDown}
-        className="absolute top-0 right-0 z-20 h-full w-1 cursor-col-resize select-none border-0 bg-transparent p-0 hover:bg-blue-500"
+        className="absolute top-0 right-0 z-20 h-full w-1 cursor-col-resize select-none border-0 bg-transparent p-0 hover:bg-accent"
       />
     </th>
   )
@@ -114,7 +111,7 @@ export const SortableTableHead = ({
       <button
         type="button"
         onClick={onSort}
-        className="-mx-1 inline-flex items-center gap-1 rounded px-1 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50 dark:hover:text-zinc-100"
+        className="-mx-1 inline-flex items-center gap-1 rounded px-1 hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {children}
         <Icon className={cn('size-3.5 shrink-0', !sort && 'opacity-40')} aria-hidden="true" />
@@ -137,10 +134,5 @@ export const TableCell = ({ className, children, ref, ...props }: React.Componen
 )
 
 export const TableCaption = ({ className, ref, ...props }: React.ComponentProps<'caption'>) => (
-  <caption
-    ref={ref}
-    // zinc-500 fails WCAG AA contrast against the zinc-100 canvas this is often shown on (~4.4:1); zinc-600 clears it.
-    className={cn('mt-4 text-sm text-zinc-600 dark:text-zinc-400', className)}
-    {...props}
-  />
+  <caption ref={ref} className={cn('mt-4 text-fg-muted text-sm', className)} {...props} />
 )

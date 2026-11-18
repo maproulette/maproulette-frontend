@@ -14,7 +14,7 @@ export const Separator = ({
     decorative={decorative}
     orientation={orientation}
     className={cn(
-      'shrink-0 bg-zinc-200 data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px dark:bg-slate-800',
+      'shrink-0 bg-line data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px',
       className
     )}
     {...props}
