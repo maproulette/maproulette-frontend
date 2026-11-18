@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover
 import { useDrawerTransition } from '@/hooks/useDrawerTransition'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
-import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_BAR_COLORS, STATUS_PILL_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task, TaskMarker } from '@/types/Task'
 import { TaskTabs } from './TaskTabs'
@@ -59,7 +59,6 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const status = task?.status ?? selectedTask?.status ?? 0
   const statusLabel =
     getStatusLabel(t, status) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
-  const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const osmFeature = task ? parseOsmFeatureFromTask(task) : null
   const osmServer = getOsmServerUrl()
@@ -89,11 +88,11 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
           <div className="flex items-center gap-2">
             <div
               className={cn(
-                'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
-                statusColor
+                'flex items-center gap-1.5 rounded-full px-2 py-0.5 font-medium text-xs',
+                STATUS_PILL_COLORS[status]
               )}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+              <span className={cn('size-1.5 rounded-full', STATUS_BAR_COLORS[status])} />
               {statusLabel}
             </div>
             <div className="ml-auto flex items-center gap-1">

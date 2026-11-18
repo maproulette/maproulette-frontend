@@ -34,7 +34,7 @@ import { useMapToggle } from '@/contexts/MapToggleContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
 import { canManageChallenge } from '@/lib/challengePermissions'
-import { getStatusLabel, STATUS_COLORS } from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_BAR_COLORS, STATUS_PILL_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { Task } from '@/types/Task'
 import {
@@ -96,7 +96,6 @@ export const TaskInfoHeader = ({
   const status = task.status ?? 0
   const statusLabel =
     getStatusLabel(t, status) || t({ id: 'common.unknown', defaultMessage: 'Unknown' })
-  const statusColor = STATUS_COLORS[status] || 'bg-zinc-500'
 
   const isEditable = EDITABLE_STATUSES.includes(status) || isTaskEditableByPlugins(task)
   // Only show edit actions if user is authenticated, has locked the task, and status is editable
@@ -126,11 +125,11 @@ export const TaskInfoHeader = ({
           <div className="flex flex-wrap gap-x-2 gap-y-1">
             <div
               className={cn(
-                'flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white text-xs',
-                statusColor
+                'flex items-center gap-1.5 rounded-full px-2 py-0.5 font-medium text-xs',
+                STATUS_PILL_COLORS[status]
               )}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+              <span className={cn('size-1.5 rounded-full', STATUS_BAR_COLORS[status])} />
               {statusLabel}
             </div>
             <span

@@ -45,6 +45,17 @@
   --success: var(--color-mint-700);
   --warning: var(--color-mango-700);
   --danger: var(--color-coral-600);
+
+  --status-created: var(--color-steel-400);
+  --status-fixed: var(--color-mint-500);
+  --status-false-positive: var(--color-ocean-500);
+  --status-skipped: var(--color-sand-400);
+  --status-deleted: var(--color-steel-600);
+  --status-already-fixed: var(--color-teal-300);
+  --status-too-hard: var(--color-coral-500);
+  --status-answered: var(--color-lilac-500);
+  --status-validated: var(--color-mint-700);
+  --status-disabled: var(--color-steel-300);
 }
 
 .dark {
@@ -77,6 +88,12 @@
   --success: var(--color-mint-400);
   --warning: var(--color-mango-400);
   --danger: var(--color-coral-400);
+
+  --status-fixed: var(--color-mint-400);
+  --status-false-positive: var(--color-ocean-400);
+  --status-too-hard: var(--color-coral-400);
+  --status-answered: var(--color-lilac-400);
+  --status-validated: var(--color-mint-600);
 }
 
 @theme inline {
@@ -104,6 +121,16 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
+  --color-status-created: var(--status-created);
+  --color-status-fixed: var(--status-fixed);
+  --color-status-false-positive: var(--status-false-positive);
+  --color-status-skipped: var(--status-skipped);
+  --color-status-deleted: var(--status-deleted);
+  --color-status-already-fixed: var(--status-already-fixed);
+  --color-status-too-hard: var(--status-too-hard);
+  --color-status-answered: var(--status-answered);
+  --color-status-validated: var(--status-validated);
+  --color-status-disabled: var(--status-disabled);
   --font-sans: var(--font-brand-sans);
 }
 

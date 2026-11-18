@@ -59,10 +59,9 @@ const STATUS_ICONS: Record<number, LucideIcon> = {
   9: Ban,
 }
 
-const DEFAULT_PILL_CLASS =
-  'bg-zinc-100 text-zinc-700 ring-zinc-300/60 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-700/60'
-const DEFAULT_BAR_CLASS = 'bg-zinc-400'
-const DEFAULT_TINT_CLASS = 'from-zinc-100/80 dark:from-zinc-800/30'
+const DEFAULT_PILL_CLASS = 'bg-muted text-fg ring-line-strong'
+const DEFAULT_BAR_CLASS = 'bg-fg-subtle'
+const DEFAULT_TINT_CLASS = 'from-muted'
 
 type StatusVisual = {
   icon: LucideIcon

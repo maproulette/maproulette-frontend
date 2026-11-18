@@ -1,7 +1,7 @@
 import { defineMessage, defineMessages, type MessageDescriptor } from 'react-intl'
 import type { ProgressSegment } from '@/components/shared/ProgressBar'
 import { useIntl } from '@/i18n'
-import { STATUS_HEX, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
+import { STATUS_COLOR, STATUS_KEY_TO_ID } from '@/lib/taskConstants'
 import type { CompletionMetrics } from '@/types/Challenge'
 
 const SEGMENT_MESSAGES: Record<string, MessageDescriptor> = defineMessages({
@@ -62,7 +62,7 @@ export const useChallengeProgress = (metrics?: CompletionMetrics) => {
       return {
         key: status,
         percentage: (count / total) * 100,
-        color: STATUS_HEX[STATUS_KEY_TO_ID[status]],
+        color: STATUS_COLOR[STATUS_KEY_TO_ID[status]],
         title: t(SEGMENT_TITLE, { status: t(SEGMENT_MESSAGES[status]), count }),
       }
     })
