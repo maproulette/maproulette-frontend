@@ -3,8 +3,8 @@
  */
 
 :root {
-  --color-brand-primary: #2281c2; /** Primary interactive color (links, primary actions). From the v3 frontend's $blue (cornflower-blue). */
-  --color-brand-secondary: #00a592; /** Brand mark color (logo, navbar). From the v3 frontend's $green (persian green). */
+  --color-brand-primary: #00a63c; /** Primary interactive color in Storybook's UI chrome (matches the app's mint-600). */
+  --color-brand-secondary: #162e50; /** Secondary color in Storybook's UI chrome (matches the app's steel-800). */
   --font-brand-sans:
     system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     sans-serif; /** Primary UI font stack — the v4 frontend's system-font stack, used for both the app (via Tailwind's font-sans) and this Storybook's own manager chrome. */
