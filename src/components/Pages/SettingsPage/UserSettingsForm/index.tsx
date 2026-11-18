@@ -80,7 +80,7 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
               </TabsTrigger>
             )}
           </TabsList>
-          <div className="flex max-h-full min-h-0 flex-initial flex-col overflow-hidden rounded-lg bg-zinc-50 p-4 lg:p-6 dark:bg-slate-900">
+          <div className="flex max-h-full min-h-0 flex-initial flex-col overflow-hidden rounded-lg bg-inset p-4 lg:p-6">
             <FieldGroup className="min-h-0 flex-auto">
               <TabsContent value="general" fill>
                 <GeneralSettings form={form}>

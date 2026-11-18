@@ -58,7 +58,7 @@ export const NotificationsPageContent = ({ userId }: { userId: number }) => {
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-4xl px-4 py-6">
-        <h1 className="mb-4 font-bold text-base text-zinc-900 dark:text-white">
+        <h1 className="mb-4 font-bold text-base text-fg">
           {t({ id: 'common.notifications', defaultMessage: 'Notifications' })}
         </h1>
 
@@ -95,7 +95,7 @@ export const NotificationsPageContent = ({ userId }: { userId: number }) => {
           <div className="ml-auto flex flex-wrap items-center gap-2">
             {selectedIds.length > 0 ? (
               <>
-                <span className="text-sm text-zinc-600 dark:text-slate-400">
+                <span className="text-fg-muted text-sm">
                   {t(
                     {
                       id: 'notificationsPage.selectedCount',
@@ -138,13 +138,13 @@ export const NotificationsPageContent = ({ userId }: { userId: number }) => {
             <Spinner />
           </div>
         ) : shown.length === 0 ? (
-          <p className="py-12 text-center text-sm text-zinc-500 dark:text-slate-400">
+          <p className="py-12 text-center text-fg-muted text-sm">
             {tab === 'unread'
               ? t({ id: 'notifications.empty.unread', defaultMessage: 'No unread notifications' })
               : t({ id: 'notifications.empty.all', defaultMessage: 'No notifications yet' })}
           </p>
         ) : (
-          <ul className="divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-slate-800 dark:border-slate-800">
+          <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-panel">
             {shown.map((n) => (
               <li key={n.id}>
                 <NotificationItem

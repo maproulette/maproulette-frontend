@@ -272,7 +272,7 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
   return (
     <div
       className={cn(
-        'inline-flex flex-col gap-1 rounded-md border border-zinc-200 bg-white p-1 shadow-sm dark:border-slate-700 dark:bg-slate-900',
+        'inline-flex flex-col gap-1 rounded-md border border-line bg-popover p-1 shadow-md',
         className
       )}
     >
@@ -345,7 +345,7 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           <MousePointer2 className="size-3.5" />
           {t({ id: 'taskPrioritizationPage.boundsDrawControl.select', defaultMessage: 'Select' })}
         </Button>
-        <div className="mx-1 h-5 w-px bg-zinc-200 dark:bg-slate-700" aria-hidden />
+        <div className="mx-1 h-5 w-px bg-muted-strong" aria-hidden />
         <Button
           type="button"
           size="sm"
@@ -381,9 +381,7 @@ export const BoundsDrawControl = ({ tier, map, mapLoaded, value, onChange, class
           })}
         </Button>
       </div>
-      <p className="px-1 text-xs text-zinc-600 leading-snug dark:text-slate-400">
-        {MODE_HELP[activeMode]}
-      </p>
+      <p className="px-1 text-fg-muted text-xs leading-snug">{MODE_HELP[activeMode]}</p>
     </div>
   )
 }

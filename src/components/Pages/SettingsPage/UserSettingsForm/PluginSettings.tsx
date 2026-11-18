@@ -124,12 +124,12 @@ export const PluginSettings = () => {
         {/* My Plugins Tab */}
         <TabsContent value="my-plugins" className="min-h-0 flex-auto space-y-4 overflow-y-auto">
           {myPlugins.length === 0 ? (
-            <div className="rounded-lg border border-zinc-300 border-dashed p-6 text-center dark:border-slate-700">
-              <Puzzle className="mx-auto mb-3 size-12 text-zinc-400" />
-              <h3 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">
+            <div className="rounded-lg border border-line-strong border-dashed p-6 text-center">
+              <Puzzle className="mx-auto mb-3 size-12 text-fg-subtle" />
+              <h3 className="mb-1 font-semibold text-fg">
                 {t({ id: 'settings.plugins.emptyTitle', defaultMessage: 'No plugins yet' })}
               </h3>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="text-fg-muted text-sm">
                 {t({
                   id: 'settings.plugins.emptyDescription',
                   defaultMessage: 'Visit the Plugins Workshop to discover and add plugins',
@@ -145,10 +145,7 @@ export const PluginSettings = () => {
                 return (
                   <Fragment key={plugin.metadata.id}>
                     <Item variant="outline">
-                      <ItemMedia
-                        variant="icon"
-                        className="bg-lime-100 text-lime-600 dark:bg-lime-900/20"
-                      >
+                      <ItemMedia variant="icon" className="bg-accent/10 text-link">
                         <Puzzle />
                       </ItemMedia>
                       <ItemContent>
@@ -157,7 +154,7 @@ export const PluginSettings = () => {
                           <Badge variant={enabled ? 'default' : 'outline'} className="text-xs">
                             {enabled ? 'Enabled' : 'Disabled'}
                           </Badge>
-                          <span className="text-xs text-zinc-500">v{plugin.metadata.version}</span>
+                          <span className="text-fg-muted text-xs">v{plugin.metadata.version}</span>
                         </ItemTitle>
                         <ItemDescription>
                           {plugin.metadata.description}
@@ -190,7 +187,7 @@ export const PluginSettings = () => {
                             onClick={() =>
                               handleRemovePlugin(plugin.metadata.id, plugin.metadata.name)
                             }
-                            className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950"
+                            className="text-danger hover:bg-danger/10"
                           >
                             <Trash2 className="size-4" />
                           </Button>
@@ -218,7 +215,7 @@ export const PluginSettings = () => {
               <h3 className="mb-2 font-semibold text-base">
                 {t({ id: 'settings.plugins.discoverTitle', defaultMessage: 'Discover Plugins' })}
               </h3>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="text-fg-muted text-sm">
                 {t({
                   id: 'settings.plugins.discoverDescription',
                   defaultMessage: 'Browse and add curated plugins from the community',
@@ -227,15 +224,15 @@ export const PluginSettings = () => {
             </div>
 
             {workshopPlugins.length === 0 ? (
-              <div className="rounded-lg border border-zinc-300 border-dashed p-6 text-center dark:border-slate-700">
-                <Puzzle className="mx-auto mb-3 size-12 text-zinc-400" />
-                <h3 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">
+              <div className="rounded-lg border border-line-strong border-dashed p-6 text-center">
+                <Puzzle className="mx-auto mb-3 size-12 text-fg-subtle" />
+                <h3 className="mb-1 font-semibold text-fg">
                   {t({
                     id: 'settings.plugins.allAddedTitle',
                     defaultMessage: 'All plugins added',
                   })}
                 </h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="text-fg-muted text-sm">
                   {t({
                     id: 'settings.plugins.allAddedDescription',
                     defaultMessage: "You've added all available workshop plugins.",
@@ -247,16 +244,13 @@ export const PluginSettings = () => {
                 {workshopPlugins.map((plugin, index) => (
                   <Fragment key={plugin.id}>
                     <Item variant="outline">
-                      <ItemMedia
-                        variant="icon"
-                        className="bg-lime-100 text-lime-600 dark:bg-lime-900/20"
-                      >
+                      <ItemMedia variant="icon" className="bg-accent/10 text-link">
                         <Puzzle />
                       </ItemMedia>
                       <ItemContent>
                         <ItemTitle>
                           {plugin.name}
-                          <span className="text-xs text-zinc-500">v{plugin.version}</span>
+                          <span className="text-fg-muted text-xs">v{plugin.version}</span>
                         </ItemTitle>
                         <ItemDescription>
                           {plugin.description}

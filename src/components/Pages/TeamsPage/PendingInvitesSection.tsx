@@ -49,7 +49,7 @@ export const PendingInvitesSection = ({ invites }: Props) => {
 
   return (
     <section className="space-y-3">
-      <h2 className="font-semibold text-sm text-zinc-700 dark:text-slate-300">
+      <h2 className="font-semibold text-fg text-sm">
         {t(
           {
             id: 'teams.pendingInvites.count',
@@ -62,7 +62,7 @@ export const PendingInvitesSection = ({ invites }: Props) => {
       <ul className="space-y-2">
         {invites.map((invite) => (
           <li key={invite.id}>
-            <Card className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 p-4 transition-all hover:shadow-md dark:border-slate-700 dark:hover:brightness-110">
+            <Card className="flex items-center justify-between gap-3 rounded-xl border border-line p-4 transition-colors hover:border-line-strong">
               <div className="font-medium">
                 {invite.teamName ||
                   t(

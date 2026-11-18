@@ -32,7 +32,7 @@ export const ProjectManagersPanel = () => {
             id: 'manageProjectDetail.managers.docsLink',
             defaultMessage: 'About project roles',
           })}
-          className="ml-auto text-zinc-400 no-underline hover:text-zinc-600"
+          className="ml-auto text-fg-subtle no-underline hover:text-fg-muted"
         />
       }
       managers={managers?.map((manager) => ({

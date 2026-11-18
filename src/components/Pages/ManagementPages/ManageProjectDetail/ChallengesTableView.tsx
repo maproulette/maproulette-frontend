@@ -66,7 +66,7 @@ export const ChallengesTableView = ({
   const { t } = useIntl()
   const { openMoveModal } = useMoveChallengeContext()
   return (
-    <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
+    <div className="overflow-hidden rounded-lg border border-line">
       <Table>
         <TableHeader>
           <TableRow>
@@ -81,7 +81,7 @@ export const ChallengesTableView = ({
                 title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                 className="flex justify-center"
               >
-                <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <Pin className="h-4 w-4 text-warning" />
               </span>
             </TableHead>
             <TableHead>{t({ id: 'common.name', defaultMessage: 'Name' })}</TableHead>
@@ -131,22 +131,20 @@ export const ChallengesTableView = ({
                       className="mx-auto"
                     />
                   ) : (
-                    <span className="text-zinc-300 dark:text-zinc-600">—</span>
+                    <span className="text-line-strong">—</span>
                   )}
                 </TableCell>
                 <TableCell>
                   <Link
                     to="/manage/challenge/$challengeId"
                     params={{ challengeId: String(challenge.id) }}
-                    className="font-medium text-zinc-900 hover:underline dark:text-zinc-50"
+                    className="font-medium text-fg hover:underline"
                   >
                     {challenge.name}
                   </Link>
                 </TableCell>
-                <TableCell className="hidden text-zinc-500 md:table-cell dark:text-zinc-400">
-                  {challenge.id}
-                </TableCell>
-                <TableCell className="hidden text-center text-zinc-500 md:table-cell dark:text-zinc-400">
+                <TableCell className="hidden text-fg-muted md:table-cell">{challenge.id}</TableCell>
+                <TableCell className="hidden text-center text-fg-muted md:table-cell">
                   {getDifficultyLabel(t, challenge.difficulty)}
                 </TableCell>
                 <TableCell className="hidden text-center md:table-cell">
@@ -154,7 +152,7 @@ export const ChallengesTableView = ({
                     {challenge.completionMetrics?.tasksRemaining ?? 0}
                   </span>
                 </TableCell>
-                <TableCell className="hidden max-w-[200px] truncate text-zinc-600 lg:table-cell dark:text-zinc-400">
+                <TableCell className="hidden max-w-[200px] truncate text-fg-muted lg:table-cell">
                   {challenge.blurb || challenge.description || '—'}
                 </TableCell>
                 <TableCell className="text-right">
@@ -280,7 +278,7 @@ export const ChallengesTableView = ({
                               onClick={() => onDelete(challenge.id)}
                               className={cn(
                                 'flex cursor-pointer items-center gap-2',
-                                'text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400'
+                                'text-danger focus:text-danger'
                               )}
                             >
                               <Trash2 className="h-4 w-4" />

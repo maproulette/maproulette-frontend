@@ -97,11 +97,7 @@ export const PreviewMap = ({
   )
 
   return (
-    <div
-      className={cn(
-        'relative h-full w-full overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700'
-      )}
-    >
+    <div className={cn('relative h-full w-full overflow-hidden rounded-lg border border-line')}>
       <MapGL
         id={mapId}
         ref={mapRef}
@@ -158,7 +154,7 @@ export const PreviewMap = ({
 
       {preview.isEvaluating && (
         <div
-          className="pointer-events-none absolute top-3 right-3 z-10 inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-2.5 py-1.5 font-medium text-xs text-zinc-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+          className="pointer-events-none absolute top-3 right-3 z-10 inline-flex items-center gap-2 rounded-md border border-line bg-popover px-2.5 py-1.5 font-medium text-fg text-xs shadow-md"
           aria-live="polite"
         >
           <Spinner size="sm" />

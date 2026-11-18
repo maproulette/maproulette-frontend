@@ -35,7 +35,7 @@ export const ProjectsTableView = ({
   const { t } = useIntl()
   const showActions = !onSelectProject
   return (
-    <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
+    <div className="overflow-hidden rounded-lg border border-line">
       <Table>
         <TableHeader>
           <TableRow>
@@ -47,7 +47,7 @@ export const ProjectsTableView = ({
                 title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                 className="flex justify-center"
               >
-                <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <Pin className="h-4 w-4 text-warning" />
               </span>
             </TableHead>
             <TableHead>{t({ id: 'common.name', defaultMessage: 'Name' })}</TableHead>
@@ -93,10 +93,10 @@ export const ProjectsTableView = ({
                       title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
                       className="flex justify-center"
                     >
-                      <Pin className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                      <Pin className="h-4 w-4 text-warning" />
                     </span>
                   ) : (
-                    <span className="text-zinc-300 dark:text-zinc-600">—</span>
+                    <span className="text-line-strong">—</span>
                   )}
                 </TableCell>
                 <TableCell>
@@ -105,7 +105,7 @@ export const ProjectsTableView = ({
                       type="button"
                       onClick={() => onSelectProject(project)}
                       aria-pressed={project.id != null && project.id === selectedProjectId}
-                      className="text-left font-medium text-zinc-900 hover:underline dark:text-zinc-50"
+                      className="text-left font-medium text-fg hover:underline"
                     >
                       {project.displayName || project.name}
                     </button>
@@ -113,21 +113,19 @@ export const ProjectsTableView = ({
                     <Link
                       to="/manage/project/$projectId"
                       params={{ projectId: String(project.id) }}
-                      className="font-medium text-zinc-900 hover:underline dark:text-zinc-50"
+                      className="font-medium text-fg hover:underline"
                     >
                       {project.displayName || project.name}
                     </Link>
                   )}
                 </TableCell>
-                <TableCell className="hidden text-zinc-500 md:table-cell dark:text-zinc-400">
-                  {project.id}
-                </TableCell>
+                <TableCell className="hidden text-fg-muted md:table-cell">{project.id}</TableCell>
                 <TableCell className="hidden text-center md:table-cell">
                   {project.id != null
                     ? (challengeCountsByProjectId[project.id]?.total ?? '—')
                     : '—'}
                 </TableCell>
-                <TableCell className="hidden max-w-[240px] truncate text-zinc-600 lg:table-cell dark:text-zinc-400">
+                <TableCell className="hidden max-w-[240px] truncate text-fg-muted lg:table-cell">
                   {project.description || '—'}
                 </TableCell>
                 {showActions && (

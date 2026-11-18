@@ -57,7 +57,7 @@ export const TaskPrioritizationPage = ({ challengeId }: Props) => {
   if (challengeQuery.isError || !challengeQuery.data) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-6">
-        <p className="text-red-600 dark:text-red-400">
+        <p className="text-danger">
           {t({
             id: 'taskPrioritizationPage.index.loadError',
             defaultMessage: 'Could not load challenge.',

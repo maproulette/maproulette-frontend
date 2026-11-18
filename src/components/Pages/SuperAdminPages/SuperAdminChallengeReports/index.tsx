@@ -83,21 +83,21 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
   }
 
   return (
-    <li className="space-y-3 rounded-lg border border-zinc-200 p-4 dark:border-slate-700">
+    <li className="space-y-3 rounded-lg border border-line p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-48">
           {report.challengeName ? (
             <Link
               to="/challenge/$challengeId"
               params={{ challengeId: String(report.challengeId) }}
-              className="font-medium text-blue-600 text-sm hover:underline dark:text-blue-400"
+              className="font-medium text-link text-sm hover:underline"
             >
               #{report.challengeId} — {report.challengeName}
             </Link>
           ) : (
             <p className="font-medium text-sm">#{report.challengeId}</p>
           )}
-          <p className="text-xs text-zinc-500 dark:text-slate-400">
+          <p className="text-fg-muted text-xs">
             {t(
               {
                 id: 'superAdminChallengeReports.reportMeta',
@@ -118,9 +118,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
               }
             )}
           </p>
-          {report.reporterEmail && (
-            <p className="text-xs text-zinc-400 dark:text-slate-500">{report.reporterEmail}</p>
-          )}
+          {report.reporterEmail && <p className="text-fg-subtle text-xs">{report.reporterEmail}</p>}
         </div>
         <div className="flex items-center gap-2">
           {report.challengeIsArchived && (
@@ -132,9 +130,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
         </div>
       </div>
 
-      <p className="whitespace-pre-wrap break-words text-sm text-zinc-700 dark:text-slate-300">
-        {report.comment}
-      </p>
+      <p className="whitespace-pre-wrap break-words text-fg text-sm">{report.comment}</p>
 
       {isOpenReport(report) ? (
         <div className="flex flex-wrap items-center gap-2">
@@ -172,7 +168,7 @@ const ReportRow = ({ report }: { report: ChallengeReport }) => {
           </Button>
         </div>
       ) : (
-        <p className="text-xs text-zinc-500 dark:text-slate-400">
+        <p className="text-fg-muted text-xs">
           {t(
             {
               id: 'superAdminChallengeReports.resolvedMeta',
@@ -214,7 +210,7 @@ export const SuperAdminChallengeReports = () => {
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 px-4">
-      <h1 className="font-bold text-xl text-zinc-900 dark:text-zinc-50">
+      <h1 className="font-bold text-fg text-xl">
         {t({ id: 'superAdminChallengeReports.title', defaultMessage: 'Challenge reports' })}
       </h1>
 
@@ -234,10 +230,7 @@ export const SuperAdminChallengeReports = () => {
             ))}
           </SelectContent>
         </Select>
-        <label
-          htmlFor={activeOnlyId}
-          className="flex items-center gap-2 text-sm text-zinc-700 dark:text-slate-300"
-        >
+        <label htmlFor={activeOnlyId} className="flex items-center gap-2 text-fg text-sm">
           <Checkbox
             id={activeOnlyId}
             checked={activeOnly}
@@ -253,7 +246,7 @@ export const SuperAdminChallengeReports = () => {
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="text-fg-muted text-sm">
           {t({
             id: 'common.reportsLoadError',
             defaultMessage: 'Could not load the reports.',
@@ -268,7 +261,7 @@ export const SuperAdminChallengeReports = () => {
       ) : (
         <Empty className="py-16">
           <EmptyMedia>
-            <Flag className="h-16 w-16 text-zinc-300 dark:text-slate-700" aria-hidden="true" />
+            <Flag className="h-16 w-16 text-line-strong" aria-hidden="true" />
           </EmptyMedia>
           <EmptyContent>
             <EmptyTitle>

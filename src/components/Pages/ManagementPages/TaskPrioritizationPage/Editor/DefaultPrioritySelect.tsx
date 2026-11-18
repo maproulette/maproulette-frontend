@@ -15,7 +15,7 @@ export const DefaultPrioritySelect = () => {
   const { draft, setDefaultPriority } = usePrioritizationContext()
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <Label className="text-sm text-zinc-700 dark:text-slate-200">
+      <Label className="text-fg text-sm">
         {t({
           id: 'taskPrioritizationPage.defaultPrioritySelect.label',
           defaultMessage: 'Default priority',

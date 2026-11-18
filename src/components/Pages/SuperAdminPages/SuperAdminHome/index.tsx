@@ -8,14 +8,14 @@ export const SuperAdminHome = () => {
   const pages = [
     {
       to: '/super-admin/users',
-      icon: <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-      iconBg: 'bg-blue-100 dark:bg-blue-900',
+      icon: <Users className="h-6 w-6 text-link" />,
+      iconBg: 'bg-accent/10',
       title: t({ id: 'common.users', defaultMessage: 'Users' }),
     },
     {
       to: '/super-admin/challenge-reports',
-      icon: <Flag className="h-6 w-6 text-red-600 dark:text-red-400" />,
-      iconBg: 'bg-red-100 dark:bg-red-900',
+      icon: <Flag className="h-6 w-6 text-danger" />,
+      iconBg: 'bg-danger/10',
       title: t({
         id: 'superAdminHome.cards.challengeReports.title',
         defaultMessage: 'Challenge Reports',
@@ -23,8 +23,8 @@ export const SuperAdminHome = () => {
     },
     {
       to: '/super-admin/team-images',
-      icon: <ImageIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />,
-      iconBg: 'bg-pink-100 dark:bg-pink-900',
+      icon: <ImageIcon className="h-6 w-6 text-link" />,
+      iconBg: 'bg-accent/10',
       title: t({ id: 'superAdminHome.cards.teamImages.title', defaultMessage: 'Team Images' }),
     },
   ] as const
@@ -32,15 +32,18 @@ export const SuperAdminHome = () => {
   return (
     <div className="mx-auto px-4">
       <div className="mb-6 flex items-center gap-3">
-        <Shield className="h-8 w-8 text-red-600 dark:text-red-400" />
-        <h1 className="font-bold text-2xl text-zinc-900 tracking-tight dark:text-zinc-50">
+        <Shield className="h-8 w-8 text-danger" />
+        <h1 className="font-bold text-2xl text-fg tracking-tight">
           {t({ id: 'superAdminHome.title', defaultMessage: 'Super Admin Dashboard' })}
         </h1>
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {pages.map((p) => (
-          <Card key={p.to} className="stretched-link-container transition-shadow hover:shadow-md">
+          <Card
+            key={p.to}
+            className="stretched-link-container transition-colors hover:border-line-strong"
+          >
             <CardHeader className="flex flex-row items-center gap-4">
               <div
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${p.iconBg}`}

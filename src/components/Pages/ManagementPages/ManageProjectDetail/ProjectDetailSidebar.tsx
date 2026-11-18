@@ -30,7 +30,7 @@ export const ProjectDetailSidebar = () => {
   return (
     // Scrolls rather than clips: the panel grows with the project's managers and
     // teams, and the docs footer below them would otherwise be cut off.
-    <div className="flex h-full flex-col overflow-y-auto rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+    <div className="flex h-full flex-col overflow-y-auto rounded-lg border border-line bg-panel">
       {/* Header */}
       <div className="shrink-0 space-y-2.5 px-6 pt-6 pb-4">
         {/* Taxonomy badges */}
@@ -38,14 +38,14 @@ export const ProjectDetailSidebar = () => {
           <ul className="flex flex-wrap items-center gap-2.5">
             {project?.featured && (
               <li>
-                <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
+                <span className="font-medium text-highlight text-xs uppercase tracking-wide">
                   {t({ id: 'common.featured', defaultMessage: 'Featured' })}
                 </span>
               </li>
             )}
             {project?.isArchived && (
               <li>
-                <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                <span className="font-medium text-fg-muted text-xs uppercase tracking-wide">
                   {t({ id: 'common.archived', defaultMessage: 'Archived' })}
                 </span>
               </li>
@@ -54,15 +54,15 @@ export const ProjectDetailSidebar = () => {
         )}
 
         {/* Title */}
-        <h1 className="line-clamp-2 font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+        <h1 className="line-clamp-2 font-bold text-base text-fg leading-tight tracking-tight">
           {projectData?.displayName || projectData?.name}
         </h1>
 
         {/* Metadata line */}
         {!isLoadingProject && (
-          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-fg-muted text-xs">
             <StatusBadge enabled={projectData?.enabled || false} />
-            <span className="text-zinc-400 dark:text-zinc-500">•</span>
+            <span className="text-fg-subtle">•</span>
             <span className="whitespace-nowrap">
               {t({ id: 'common.idNumber', defaultMessage: 'ID {id}' }, { id: projectId })}
             </span>
@@ -72,14 +72,14 @@ export const ProjectDetailSidebar = () => {
 
       {projectData?.description && (
         <div className="shrink-0 px-6 py-4">
-          <MarkdownContent className="text-pretty text-zinc-700 dark:text-zinc-300">
+          <MarkdownContent className="text-pretty text-fg">
             {projectData.description}
           </MarkdownContent>
         </div>
       )}
 
       {/* Action buttons */}
-      <div className="shrink-0 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+      <div className="shrink-0 border-line border-t px-6 py-4">
         <div className="flex flex-col gap-2">
           <Button
             asChild
@@ -162,7 +162,7 @@ export const ProjectDetailSidebar = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setDeleteProjectConfirm(true)}
-                className="w-full justify-start gap-2 rounded-full text-red-600 hover:text-red-600 dark:text-red-400 dark:hover:text-red-400"
+                className="w-full justify-start gap-2 rounded-full text-danger"
               >
                 <Trash2 className="h-4 w-4" />
                 {t({ id: 'common.deleteProject', defaultMessage: 'Delete project' })}
@@ -173,31 +173,31 @@ export const ProjectDetailSidebar = () => {
       </div>
 
       {/* Stats */}
-      <div className="shrink-0 border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
+      <div className="shrink-0 border-line border-t px-6 py-4">
         <div className="space-y-3">
           {!(isLoadingProject || isLoadingChallenges) && (
             <>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-fg-muted">
                   {t({ id: 'common.challenges', defaultMessage: 'Challenges' })}
                 </span>
                 <span className="font-semibold tabular-nums">{challengeSummary.total}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-fg-muted">
                   {t({ id: 'common.shown', defaultMessage: 'Shown' })}
                 </span>
                 <span className="font-semibold tabular-nums">{filteredChallengesCount}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-fg-muted">
                   {t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })}
                 </span>
                 <span className="font-semibold tabular-nums">{challengeSummary.enabled}</span>
               </div>
               <Separator />
               <div className="flex items-center justify-between text-sm">
-                <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                <span className="font-medium text-fg">
                   {t({ id: 'common.tasksRemaining', defaultMessage: 'Tasks remaining' })}
                 </span>
                 <span className="font-bold text-base tabular-nums">
@@ -209,11 +209,11 @@ export const ProjectDetailSidebar = () => {
         </div>
       </div>
 
-      <div className="mt-auto shrink-0 border-zinc-200/50 border-t bg-zinc-50/50 px-6 py-4 dark:border-slate-700/50 dark:bg-slate-800/50">
+      <div className="mt-auto shrink-0 border-line border-t bg-muted/50 px-6 py-4">
         <DocsLink
           page="projectsAndProjectManagers"
-          icon={<BookOpen className="h-3.5 w-3.5 text-zinc-500" />}
-          className="gap-2 text-xs text-zinc-700 no-underline hover:underline dark:text-zinc-200"
+          icon={<BookOpen className="h-3.5 w-3.5 text-fg-subtle" />}
+          className="gap-2 text-fg text-xs no-underline hover:underline"
         >
           {t({
             id: 'manageProjectDetail.content.playbookDocsLink',

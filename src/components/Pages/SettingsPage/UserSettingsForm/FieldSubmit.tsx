@@ -20,7 +20,7 @@ export const FieldSubmit = ({
 
   return (
     <Field
-      className={cn('shrink-0 border-zinc-200 border-t pt-4 dark:border-slate-700', className)}
+      className={cn('shrink-0 border-line border-t pt-4', className)}
       orientation="horizontal"
       {...props}
     >

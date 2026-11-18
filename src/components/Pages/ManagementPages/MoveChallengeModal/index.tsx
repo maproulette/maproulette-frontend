@@ -41,7 +41,7 @@ export const MoveChallengeModal = () => {
       disabled={isPending}
     >
       {isError && (
-        <p className="text-red-600 text-sm dark:text-red-400">
+        <p className="text-danger text-sm">
           {t({
             id: 'moveChallengeModal.moveError',
             defaultMessage:

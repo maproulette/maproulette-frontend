@@ -196,7 +196,7 @@ export const ChallengeForm = () => {
             <AlertDescription>{serverError}</AlertDescription>
           </Alert>
         )}
-        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-zinc-200 border-t pt-4 dark:border-slate-700">
+        <div className="mt-4 flex shrink-0 items-center justify-end gap-3 border-line border-t pt-4">
           {/* A field marked invalid can sit well outside the scrolled view, so
             the count sits by the submit button and names them on demand. */}
           {fieldErrors.length > 0 && (
@@ -204,7 +204,7 @@ export const ChallengeForm = () => {
               <PopoverTrigger asChild>
                 <button
                   type="button"
-                  className="mr-auto flex items-center gap-1.5 text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400"
+                  className="mr-auto flex items-center gap-1.5 text-danger text-xs underline-offset-2 hover:underline"
                 >
                   <CircleAlert className="h-3.5 w-3.5 shrink-0" />
                   {t(
@@ -233,7 +233,7 @@ export const ChallengeForm = () => {
                         type="button"
                         // Scrolls the offending field back into view and focuses it.
                         onClick={() => form.setFocus(error.name as keyof ChallengeFormValues)}
-                        className="w-full rounded px-2 py-1 text-left text-xs text-zinc-700 transition-colors hover:bg-zinc-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                        className="w-full rounded px-2 py-1 text-left text-fg text-xs transition-colors hover:bg-muted"
                       >
                         {error.message}
                       </button>

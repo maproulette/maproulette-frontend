@@ -122,7 +122,7 @@ export const RemotePluginManager = () => {
         <h3 className="mb-2 font-semibold text-base">
           {t({ id: 'settings.remotePlugins.title', defaultMessage: 'Remote Plugins' })}
         </h3>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="text-fg-muted text-sm">
           {t({
             id: 'settings.remotePlugins.description',
             defaultMessage:
@@ -192,7 +192,7 @@ export const RemotePluginManager = () => {
           </Button>
         </div>
         {validationError && (
-          <p className="flex items-center gap-1 text-red-600 text-sm dark:text-red-400">
+          <p className="flex items-center gap-1 text-danger text-sm">
             <AlertCircle className="size-3" />
             {validationError}
           </p>
@@ -200,25 +200,21 @@ export const RemotePluginManager = () => {
       </div>
 
       {pluginPreview && (
-        <div className="rounded-lg border border-lime-200 bg-lime-50 p-4 dark:border-lime-800 dark:bg-lime-950/20">
+        <div className="rounded-lg border border-accent bg-accent/10 p-4">
           <div className="mb-2 flex items-center gap-2">
-            <AlertCircle className="size-4 text-lime-600 dark:text-lime-400" />
-            <span className="font-semibold text-lime-900 text-sm dark:text-lime-100">
+            <AlertCircle className="size-4 text-link" />
+            <span className="font-semibold text-fg text-sm">
               {t({ id: 'settings.remotePlugins.pluginFound', defaultMessage: 'Plugin Found!' })}
             </span>
           </div>
           <div className="space-y-1 text-sm">
             <div className="flex items-center gap-2">
-              <span className="font-medium text-lime-900 dark:text-lime-100">
-                {pluginPreview.name}
-              </span>
-              <span className="text-lime-700 text-xs dark:text-lime-400">
-                v{pluginPreview.version}
-              </span>
+              <span className="font-medium text-fg">{pluginPreview.name}</span>
+              <span className="text-fg-muted text-xs">v{pluginPreview.version}</span>
             </div>
-            <p className="text-lime-800 dark:text-lime-300">{pluginPreview.description}</p>
+            <p className="text-fg">{pluginPreview.description}</p>
             {pluginPreview.author && (
-              <p className="text-lime-700 text-xs dark:text-lime-400">by {pluginPreview.author}</p>
+              <p className="text-fg-muted text-xs">by {pluginPreview.author}</p>
             )}
           </div>
         </div>
@@ -241,7 +237,7 @@ export const RemotePluginManager = () => {
                     <ItemContent>
                       <ItemTitle>
                         {plugin.metadata.name}
-                        <span className="text-xs text-zinc-500">v{plugin.metadata.version}</span>
+                        <span className="text-fg-muted text-xs">v{plugin.metadata.version}</span>
                       </ItemTitle>
                       {moduleUrl && (
                         <ItemDescription>
@@ -263,7 +259,7 @@ export const RemotePluginManager = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemovePlugin(plugin.metadata.id, plugin.metadata.name)}
-                        className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950"
+                        className="text-danger hover:bg-danger/10"
                       >
                         <Trash2 className="size-4" />
                       </Button>

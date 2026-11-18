@@ -46,10 +46,10 @@ export const ChallengeTasksExplorerControls = () => {
         id: 'manageChallengeDetail.tasksExplorer.filterBarLabel',
         defaultMessage: 'Task filters',
       })}
-      className="flex min-w-0 flex-wrap items-center gap-3 rounded-lg border border-zinc-200 bg-white p-2 shadow-xs dark:border-slate-700 dark:bg-slate-800"
+      className="flex min-w-0 flex-wrap items-center gap-3 rounded-lg border border-line bg-card p-2"
     >
       <div className="flex items-center gap-2">
-        <span className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
+        <span className="whitespace-nowrap font-medium text-fg text-sm">
           {t({ id: 'manageChallengeDetail.tasksExplorer.filtersLabel', defaultMessage: 'Filters' })}
         </span>
         <DropdownMenu>
@@ -58,8 +58,7 @@ export const ChallengeTasksExplorerControls = () => {
               variant="outline"
               className={cn(
                 'w-32 justify-between gap-1 font-normal',
-                statusDirty &&
-                  'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
+                statusDirty && 'border-accent text-link'
               )}
             >
               <span>
@@ -96,8 +95,7 @@ export const ChallengeTasksExplorerControls = () => {
               variant="outline"
               className={cn(
                 'w-32 justify-between gap-1 font-normal',
-                priorityDirty &&
-                  'border-emerald-500 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
+                priorityDirty && 'border-accent text-link'
               )}
             >
               <span>
@@ -130,7 +128,7 @@ export const ChallengeTasksExplorerControls = () => {
         <Button
           type="button"
           variant="ghost"
-          className="gap-1 text-zinc-600 hover:text-zinc-900 disabled:opacity-40 dark:text-zinc-400 dark:hover:text-zinc-100"
+          className="gap-1 text-fg-muted hover:text-fg disabled:opacity-40"
           disabled={!filtersDirty}
           onClick={clearFilters}
           title={t({
@@ -144,7 +142,7 @@ export const ChallengeTasksExplorerControls = () => {
       </div>
 
       <div className="ml-auto flex items-center gap-3">
-        <span className="whitespace-nowrap text-sm text-zinc-600 dark:text-zinc-400">
+        <span className="whitespace-nowrap text-fg-muted text-sm">
           {isLoading
             ? t({
                 id: 'manageChallengeDetail.tasksExplorer.loadingTasks',

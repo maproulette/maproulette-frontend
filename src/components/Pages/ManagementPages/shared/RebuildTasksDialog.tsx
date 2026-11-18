@@ -160,7 +160,7 @@ export const RebuildTasksDialog = ({
         </DialogHeader>
 
         <div className="space-y-4">
-          <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-700 dark:text-zinc-300">
+          <ul className="list-disc space-y-1 pl-5 text-fg text-sm">
             <li>
               {t({
                 id: 'managementPages.rebuildTasksDialog.listUpdated',
@@ -192,9 +192,9 @@ export const RebuildTasksDialog = ({
             </li>
           </ul>
 
-          <div className="flex items-start gap-3 rounded-lg bg-zinc-100 p-4 dark:bg-slate-800">
-            <CircleAlert className="mt-0.5 h-6 w-6 shrink-0 text-red-500" />
-            <div className="space-y-2 text-amber-600 text-sm dark:text-amber-500">
+          <div className="flex items-start gap-3 rounded-lg bg-muted p-4">
+            <CircleAlert className="mt-0.5 h-6 w-6 shrink-0 text-coral-500" />
+            <div className="space-y-2 text-warning text-sm">
               <p>
                 {t({
                   id: 'managementPages.rebuildTasksDialog.warning',
@@ -202,11 +202,7 @@ export const RebuildTasksDialog = ({
                     "Rebuilding can duplicate tasks if your feature IDs don't line up, or if old and new data can't be matched.",
                 })}
               </p>
-              <DocsLink
-                page="rebuildingChallengeTasks"
-                icon={null}
-                className="text-green-600 hover:text-green-700 dark:text-green-400"
-              >
+              <DocsLink page="rebuildingChallengeTasks" icon={null} className="text-link">
                 {t({
                   id: 'managementPages.rebuildTasksDialog.learnMore',
                   defaultMessage: 'Learn More',

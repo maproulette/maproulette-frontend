@@ -141,7 +141,7 @@ const ChallengeStats = ({
 
   if (isLoading) {
     return (
-      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+      <p className="text-fg-muted text-sm">
         {t({ id: 'common.loading', defaultMessage: 'Loading…' })}
       </p>
     )
@@ -151,7 +151,7 @@ const ChallengeStats = ({
     <div className="space-y-2 text-sm">
       <div>
         <div className="mb-1 flex items-center justify-between">
-          <span className="text-zinc-600 dark:text-zinc-400">
+          <span className="text-fg-muted">
             {t({
               id: 'manageChallengeDetail.detail.statistics.completion',
               defaultMessage: 'Completion',
@@ -165,9 +165,9 @@ const ChallengeStats = ({
       <Collapsible>
         <CollapsibleTrigger
           disabled={!stats}
-          className="group flex w-full items-center justify-between rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950/50 dark:focus-visible:ring-zinc-300/50"
+          className="group flex w-full items-center justify-between rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+          <span className="flex items-center gap-1 text-fg-muted">
             {t({ id: 'common.tasksRemaining', defaultMessage: 'Tasks remaining' })}
             {stats && (
               <ChevronDown
@@ -179,7 +179,7 @@ const ChallengeStats = ({
           <span className="font-semibold tabular-nums">
             {tasksRemaining}
             {totalTasks > 0 ? (
-              <span className="font-normal text-zinc-500 dark:text-zinc-400"> / {totalTasks}</span>
+              <span className="font-normal text-fg-muted"> / {totalTasks}</span>
             ) : null}
           </span>
         </CollapsibleTrigger>
@@ -189,11 +189,11 @@ const ChallengeStats = ({
               id: 'manageChallengeDetail.detail.statistics.taskCountsByStatus',
               defaultMessage: 'Task counts by status',
             })}
-            className="mt-2 min-w-0 space-y-1 border-zinc-200 border-l-2 pl-3 dark:border-slate-700"
+            className="mt-2 min-w-0 space-y-1 border-line border-l-2 pl-3"
           >
             {statusCounts.map(({ id, label, value }) => (
               <div key={id} className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
+                <span className="text-fg-muted">{label}</span>
                 <span className="font-semibold tabular-nums">{value || 0}</span>
               </div>
             ))}
@@ -202,7 +202,7 @@ const ChallengeStats = ({
       </Collapsible>
 
       <div className="flex items-center justify-between">
-        <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+        <span className="flex items-center gap-2 text-fg-muted">
           <Calendar className="h-4 w-4 opacity-70" />
           {t({ id: 'common.created', defaultMessage: 'Created' })}
         </span>
@@ -211,7 +211,7 @@ const ChallengeStats = ({
         </span>
       </div>
       <div className="flex items-center justify-between">
-        <span className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+        <span className="flex items-center gap-2 text-fg-muted">
           <Clock className="h-4 w-4 opacity-70" />
           {t({
             id: 'manageChallengeDetail.detail.statistics.lastModified',
@@ -271,7 +271,7 @@ export const ManageChallengeDetailContent = () => {
     <ResizablePanelGroup direction="horizontal" className="h-full">
       <ResizablePanel defaultSize={30} minSize={20} maxSize={45}>
         <aside className="h-full min-h-0 overflow-hidden pr-4">
-          <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+          <div className="relative flex h-full flex-col overflow-hidden rounded-lg border border-line bg-panel">
             {/* Scrolls as a whole; the card itself stays put because the task
                 drawer is portalled into it. */}
             <div className="min-h-0 flex-1 overflow-y-auto">
@@ -280,25 +280,25 @@ export const ManageChallengeDetailContent = () => {
                 {!isLoadingChallenge && challengeData?.featured && (
                   <ul className="flex flex-wrap items-center gap-2.5">
                     <li>
-                      <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
+                      <span className="font-medium text-highlight text-xs uppercase tracking-wide">
                         {t({ id: 'common.featured', defaultMessage: 'Featured' })}
                       </span>
                     </li>
                   </ul>
                 )}
 
-                <h1 className="line-clamp-2 font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+                <h1 className="line-clamp-2 font-bold text-base text-fg leading-tight tracking-tight">
                   {challengeData?.name}
                 </h1>
 
                 {!isLoadingChallenge && (
-                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-fg-muted text-xs">
                     <StatusBadge enabled={challengeData?.enabled || false} />
-                    <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                    <span className="text-fg-subtle">•</span>
                     <span className="whitespace-nowrap">
                       {t({ id: 'common.idNumber', defaultMessage: 'ID {id}' }, { id: challengeId })}
                     </span>
-                    <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                    <span className="text-fg-subtle">•</span>
                     <span
                       className={cn(
                         'font-medium',
@@ -351,15 +351,12 @@ export const ManageChallengeDetailContent = () => {
               {(challengeData?.description || challengeData?.blurb) && (
                 <div className="space-y-2 px-6 py-4">
                   {challengeData.description && (
-                    <MarkdownContent
-                      shortCodes
-                      className="text-pretty text-zinc-700 dark:text-zinc-300"
-                    >
+                    <MarkdownContent shortCodes className="text-pretty text-fg">
                       {challengeData.description}
                     </MarkdownContent>
                   )}
                   {challengeData.blurb && challengeData.blurb !== challengeData.description && (
-                    <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
+                    <p className="text-pretty text-fg text-sm leading-relaxed">
                       {challengeData.blurb}
                     </p>
                   )}
@@ -370,7 +367,7 @@ export const ManageChallengeDetailContent = () => {
                 <ChallengeStats challengeId={Number(challengeId)} challengeData={challengeData} />
               </div>
 
-              <div className="border-zinc-200/50 border-t dark:border-slate-700/50">
+              <div className="border-line border-t">
                 <div className="flex flex-col gap-2 px-6 py-4">
                   <Button
                     asChild
