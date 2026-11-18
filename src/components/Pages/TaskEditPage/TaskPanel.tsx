@@ -51,10 +51,10 @@ export const TaskPanel = () => {
       <TaskInfoHeader task={task} relation="primary" isLocked={isLocked} />
 
       {/* Primary Task Tabs */}
-      <TaskTabs task={task} contentClassName="p-4 pb-44" taskTabContent={<TaskTab task={task} />} />
+      <TaskTabs task={task} taskTabContent={<TaskTab task={task} />} />
 
-      {/* Task Actions Footer - floats over content, under drawer */}
-      <div className="absolute right-0 bottom-0 left-0 z-10 rounded-b-2xl border-slate-200/80 border-t bg-white px-3 pt-3 pb-3 dark:border-slate-700/50 dark:bg-slate-800">
+      {/* Task Actions Footer */}
+      <div className="shrink-0 rounded-b-2xl border-slate-200/80 border-t bg-white p-3 dark:border-slate-700/50 dark:bg-slate-800">
         {replacePanels.length > 0 ? (
           replacePanels.map((panel) => {
             const PanelComponent = panel.component
@@ -104,11 +104,7 @@ export const TaskPanel = () => {
 
         {/* Drawer Task Tabs */}
         {drawerOpen && (
-          <TaskTabs
-            task={viewedTask}
-            contentClassName="p-4 pb-44"
-            taskTabContent={<TaskTab task={viewedTask} />}
-          />
+          <TaskTabs task={viewedTask} taskTabContent={<TaskTab task={viewedTask} />} />
         )}
       </Drawer>
     </div>

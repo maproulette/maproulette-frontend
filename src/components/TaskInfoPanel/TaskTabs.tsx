@@ -16,13 +16,11 @@ interface TaskTabsProps {
   task: Task
   /** Content rendered inside the "task" (Instructions) tab */
   taskTabContent?: ReactNode
-  /** Extra className applied to the content wrapper inside ScrollArea */
-  contentClassName?: string
 }
 
 const VALID_TABS = ['task', 'features', 'data', 'comments'] as const
 
-export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsProps) => {
+export const TaskTabs = ({ task, taskTabContent }: TaskTabsProps) => {
   const search = useRouterState({ select: (s) => s.location.search }) as { tab?: string }
   const initialTab =
     search.tab && (VALID_TABS as readonly string[]).includes(search.tab) ? search.tab : 'task'
@@ -45,7 +43,7 @@ export const TaskTabs = ({ task, taskTabContent, contentClassName }: TaskTabsPro
       <TaskTabsList commentsCount={commentsCount} taskCount={taskCount} />
 
       <ScrollArea className="min-h-0 flex-1">
-        <div className={contentClassName ?? 'p-4'}>
+        <div className="p-4">
           <TabsContent value="task" className="mt-0">
             {taskTabContent}
           </TabsContent>
