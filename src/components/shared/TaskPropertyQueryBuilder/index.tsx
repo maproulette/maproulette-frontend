@@ -76,15 +76,13 @@ export const TaskPropertyQueryBuilder = ({
       <div className="space-y-3">
         <RuleGroup group={flat} onChange={handleChange} />
         {errors.length > 0 && (
-          <ul className="text-red-600 text-sm dark:text-red-400">
+          <ul className="text-danger text-sm">
             {errors.map((e) => (
               <li key={e}>{e}</li>
             ))}
           </ul>
         )}
-        <div className="rounded-md bg-zinc-50 p-2 font-mono text-xs text-zinc-600 dark:bg-slate-800 dark:text-slate-400">
-          {summary}
-        </div>
+        <div className="rounded-md bg-muted p-2 font-mono text-fg-muted text-xs">{summary}</div>
       </div>
     </RuleBuilderProvider>
   )

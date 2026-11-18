@@ -12,14 +12,8 @@ export const StatusBadge = ({ enabled, className }: StatusBadgeProps) => {
   const { t } = useIntl()
   return (
     <Badge
-      className={cn(
-        'gap-1',
-        enabled
-          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'
-          : 'bg-zinc-100 text-zinc-600 dark:bg-slate-800 dark:text-slate-400',
-        className
-      )}
-      variant={enabled ? 'default' : 'secondary'}
+      className={cn('gap-1', !enabled && 'text-fg-muted', className)}
+      variant={enabled ? 'success' : 'secondary'}
       title={
         enabled
           ? t({ id: 'common.discoverable', defaultMessage: 'Discoverable' })

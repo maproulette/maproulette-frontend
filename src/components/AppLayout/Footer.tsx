@@ -9,7 +9,7 @@ const FooterLink = ({ href, children }: { href: string; children: ReactNode }) =
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="underline-offset-2 hover:text-zinc-900 hover:underline dark:hover:text-white"
+    className="underline-offset-2 hover:text-fg hover:underline"
   >
     {children}
   </a>
@@ -21,7 +21,7 @@ export const Footer = () => {
   const backendVersion = serviceInfo?.compiletime.version
 
   return (
-    <footer className="flex h-8 shrink-0 items-center gap-4 whitespace-nowrap px-3 text-xs text-zinc-600 md:px-5 dark:text-slate-400">
+    <footer className="flex h-8 shrink-0 items-center gap-4 whitespace-nowrap px-3 text-fg-muted text-xs md:px-5">
       <span className="truncate">
         {t(
           {

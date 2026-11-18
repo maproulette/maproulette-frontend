@@ -30,9 +30,7 @@ export const ProjectPickerButton = ({
       className={cn('w-full justify-between font-normal', className)}
       {...props}
     >
-      <span className={cn('truncate', hasProject ? '' : 'text-zinc-500 dark:text-zinc-400')}>
-        {label}
-      </span>
+      <span className={cn('truncate', hasProject ? '' : 'text-fg-muted')}>{label}</span>
       <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
     </Button>
   )

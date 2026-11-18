@@ -118,10 +118,7 @@ export const SharePopoverContent = ({ url, title, description }: Props) => {
         )}
       </div>
       {showQr && (
-        <div
-          id={qrId}
-          className="flex justify-center rounded-md border border-zinc-200 bg-white p-3 dark:border-slate-800"
-        >
+        <div id={qrId} className="flex justify-center rounded-md border border-line bg-white p-3">
           <canvas
             ref={canvasRef}
             width={QR_SIZE}

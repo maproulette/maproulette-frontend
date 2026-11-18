@@ -22,19 +22,15 @@ export const LegendRow = (props: Props) => {
         <>
           <span
             aria-hidden="true"
-            className="inline-block size-3.5 shrink-0 rounded-full border border-zinc-900/20 dark:border-white/20"
+            className="inline-block size-3.5 shrink-0 rounded-full border border-steel-900/20 dark:border-white/20"
             style={{ backgroundColor: props.color }}
           />
-          <props.icon
-            aria-hidden="true"
-            className="size-3.5 shrink-0 text-zinc-700 dark:text-zinc-200"
-            strokeWidth={2.5}
-          />
+          <props.icon aria-hidden="true" className="size-3.5 shrink-0 text-fg" strokeWidth={2.5} />
         </>
       ) : (
         <span
           aria-hidden="true"
-          className="relative inline-block size-4 shrink-0 overflow-hidden rounded-sm bg-zinc-200 dark:bg-slate-700"
+          className="relative inline-block size-4 shrink-0 overflow-hidden rounded-sm bg-muted-strong"
         >
           <span
             className="absolute inset-0"

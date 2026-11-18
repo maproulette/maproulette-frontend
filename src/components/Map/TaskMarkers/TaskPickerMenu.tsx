@@ -86,10 +86,10 @@ export const TaskPickerMenu = <M extends TaskMarker>({
       className="task-picker-popup"
       onClose={onClose}
     >
-      <div className="w-64 overflow-hidden rounded-xl border border-zinc-200 bg-white font-sans text-sm leading-5 shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/40">
-        <div className="flex items-center gap-1.5 border-zinc-100 border-b px-3 py-2 dark:border-slate-800">
-          <MapPin aria-hidden="true" className="size-3.5 text-zinc-400 dark:text-slate-500" />
-          <p className="font-semibold text-xs text-zinc-600 dark:text-slate-300">
+      <div className="w-64 overflow-hidden rounded-xl border border-line bg-popover font-sans text-sm leading-5 shadow-lg">
+        <div className="flex items-center gap-1.5 border-line border-b px-3 py-2">
+          <MapPin aria-hidden="true" className="size-3.5 text-fg-subtle" />
+          <p className="font-semibold text-fg-muted text-xs">
             {t(
               {
                 id: 'map.taskPicker.heading',
@@ -108,7 +108,7 @@ export const TaskPickerMenu = <M extends TaskMarker>({
               <button
                 type="button"
                 onClick={() => onSelect(marker)}
-                className="group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-zinc-900 transition-colors hover:bg-zinc-100 focus-visible:bg-zinc-100 focus-visible:outline-none dark:text-slate-100 dark:focus-visible:bg-slate-800 dark:hover:bg-slate-800"
+                className="group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-fg transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
               >
                 <span className="font-medium tabular-nums">
                   {t(
@@ -116,7 +116,7 @@ export const TaskPickerMenu = <M extends TaskMarker>({
                     { taskId: marker.id }
                   )}
                 </span>
-                <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 group-hover:bg-white group-focus-visible:bg-white dark:bg-slate-800 dark:text-slate-300 dark:group-focus-visible:bg-slate-900 dark:group-hover:bg-slate-900">
+                <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-fg-muted text-xs group-hover:bg-popover group-focus-visible:bg-popover">
                   <span
                     aria-hidden="true"
                     className="size-2 shrink-0 rounded-full ring-1 ring-black/10 dark:ring-white/20"
@@ -129,14 +129,14 @@ export const TaskPickerMenu = <M extends TaskMarker>({
                 </span>
                 <ChevronRight
                   aria-hidden="true"
-                  className="size-3.5 shrink-0 text-zinc-300 group-hover:text-zinc-500 dark:text-slate-600 dark:group-hover:text-slate-400"
+                  className="size-3.5 shrink-0 text-line-strong group-hover:text-fg-muted"
                 />
               </button>
             </li>
           ))}
         </ul>
         {picker.total > picker.markers.length && (
-          <p className="border-zinc-100 border-t px-3 py-2 text-xs text-zinc-500 dark:border-slate-800 dark:text-slate-400">
+          <p className="border-line border-t px-3 py-2 text-fg-muted text-xs">
             {t(
               {
                 id: 'map.taskPicker.more',

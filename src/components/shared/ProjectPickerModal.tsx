@@ -163,10 +163,10 @@ export const ProjectPickerModal = ({
         >
           {isLoading ? (
             <div className="flex items-center justify-center p-6">
-              <Spinner size="lg" className="text-zinc-400" />
+              <Spinner size="lg" className="text-fg-subtle" />
             </div>
           ) : projectsToShow.length === 0 ? (
-            <div className="rounded-lg border border-zinc-200 p-6 text-center text-sm text-zinc-500 dark:border-slate-700 dark:text-zinc-400">
+            <div className="rounded-lg border border-line p-6 text-center text-fg-muted text-sm">
               {t({
                 id: 'shared.projectPickerModal.noProjectsFound',
                 defaultMessage: 'No projects found.',

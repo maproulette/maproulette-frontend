@@ -78,7 +78,7 @@ export const ClusterToggle = ({
       >
         <div
           className={cn(
-            'flex flex-col justify-center rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900',
+            'flex flex-col justify-center rounded-lg border border-line bg-popover shadow-md',
             inline ? 'h-10 px-3' : 'p-2.5 md:p-3'
           )}
         >
@@ -96,8 +96,8 @@ export const ClusterToggle = ({
               onCheckedChange={handleToggle}
               disabled={disabled}
             />
-            <Network className="h-3.5 w-3.5 text-zinc-700 md:h-4 md:w-4 dark:text-zinc-300" />
-            <span className="font-medium text-xs text-zinc-700 dark:text-zinc-300">
+            <Network className="h-3.5 w-3.5 text-fg md:h-4 md:w-4" />
+            <span className="font-medium text-fg text-xs">
               {t({ id: 'map.taskMarkers.clusterToggle.label', defaultMessage: 'Cluster Markers' })}
             </span>
           </Label>

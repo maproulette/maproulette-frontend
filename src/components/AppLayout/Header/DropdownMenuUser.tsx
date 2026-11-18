@@ -45,7 +45,7 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
               <br />
               <OsmUserLink
                 username={user.osmProfile.displayName}
-                className="text-xs text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-slate-200"
+                className="text-fg-muted text-xs hover:text-fg"
               >
                 {t({
                   id: 'appLayout.header.userMenu.osmProfile',

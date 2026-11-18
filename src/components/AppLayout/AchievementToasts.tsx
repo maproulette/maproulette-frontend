@@ -42,7 +42,7 @@ export const AchievementToasts = () => {
       const Icon = def.icon
       toast.success(t(def.title), {
         description: t(def.description),
-        icon: <Icon className="size-5 text-amber-500" aria-hidden="true" />,
+        icon: <Icon className="size-5 text-mango-500" aria-hidden="true" />,
       })
     }
   }, [user, earnedIds, t])

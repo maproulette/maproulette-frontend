@@ -78,7 +78,7 @@ export const RouteErrorBoundary = ({ error }: { error: Error }) => {
   if (status === 404) return <NotFound />
 
   const details = import.meta.env.DEV ? (
-    <pre className="max-w-2xl overflow-auto rounded bg-zinc-100 p-4 text-left text-sm dark:bg-slate-800">
+    <pre className="max-w-2xl overflow-auto rounded bg-muted p-4 text-left text-sm">
       {error.message}
       {'\n\n'}
       {error.stack}

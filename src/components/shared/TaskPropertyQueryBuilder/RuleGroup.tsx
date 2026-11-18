@@ -38,17 +38,12 @@ export const RuleGroup = ({ group, onChange, onRemove, depth = 0 }: Props) => {
   }
 
   return (
-    <div
-      className={`space-y-2 rounded-md border border-zinc-200 p-3 dark:border-slate-700 ${
-        depth > 0 ? 'bg-zinc-50 dark:bg-slate-800/40' : ''
-      }`}
-    >
+    <div className={`space-y-2 rounded-md border border-line p-3 ${depth > 0 ? 'bg-muted' : ''}`}>
       <div className="flex items-center justify-between gap-2">
         <ToggleGroup
           type="single"
           variant="outline"
           size="sm"
-          className="bg-white dark:bg-slate-900"
           value={group.condition}
           onValueChange={(v) => v && onChange({ ...group, condition: v as 'and' | 'or' })}
         >

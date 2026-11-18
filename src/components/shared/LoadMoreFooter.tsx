@@ -55,20 +55,18 @@ export const LoadMoreFooter = ({
   return (
     <div
       className={cn(
-        'mt-4 flex flex-col items-center gap-2 border-zinc-200 border-t p-6 text-center dark:border-slate-700',
+        'mt-4 flex flex-col items-center gap-2 border-line border-t p-6 text-center',
         className
       )}
     >
-      <CheckCircle2 className="h-5 w-5 text-zinc-400 dark:text-slate-500" />
-      <p className="font-medium text-sm text-zinc-600 dark:text-slate-400">
+      <CheckCircle2 className="h-5 w-5 text-fg-subtle" />
+      <p className="font-medium text-fg-muted text-sm">
         {t({
           id: 'common.youveReachedTheEndOfTheList',
           defaultMessage: "You've reached the end of the list",
         })}
       </p>
-      {endOfListHint && (
-        <p className="text-xs text-zinc-500 dark:text-slate-500">{endOfListHint}</p>
-      )}
+      {endOfListHint && <p className="text-fg-subtle text-xs">{endOfListHint}</p>}
     </div>
   )
 }

@@ -50,9 +50,7 @@ export const KeyboardShortcutsModal = () => {
         <div className="space-y-4 pt-2">
           {byCategory.map(({ category, shortcuts: categoryShortcuts }) => (
             <div key={category}>
-              <h3 className="mb-2 font-medium text-sm text-zinc-500 dark:text-zinc-400">
-                {categoryLabels[category]}
-              </h3>
+              <h3 className="mb-2 font-medium text-fg-muted text-sm">{categoryLabels[category]}</h3>
               <div className="space-y-1.5">
                 {categoryShortcuts.map((shortcut) => (
                   <ShortcutRow key={shortcutRowKey(shortcut)} shortcut={shortcut} />
@@ -82,16 +80,14 @@ const ShortcutRow = ({ shortcut }: { shortcut: KeyboardShortcut }) => {
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-4 rounded-lg bg-zinc-50 px-3 py-2 dark:bg-slate-900',
+        'flex items-center justify-between gap-4 rounded-lg bg-inset px-3 py-2',
         unavailable && 'opacity-60'
       )}
     >
-      <span className="text-sm text-zinc-700 dark:text-zinc-300">
+      <span className="text-fg text-sm">
         {shortcut.description}
         {unavailable && shortcut.disabledReason && (
-          <span className="block text-xs text-zinc-400 dark:text-zinc-500">
-            {shortcut.disabledReason}
-          </span>
+          <span className="block text-fg-subtle text-xs">{shortcut.disabledReason}</span>
         )}
       </span>
       <KbdBinding binding={shortcut} />

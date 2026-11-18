@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 type TranslateFn = ReturnType<typeof useIntl>['t']
 
 interface SectionHeaderProps {
-  /** Tailwind accent border class, e.g. "border-l-emerald-500" */
+  /** Tailwind accent border class, e.g. "border-l-accent" */
   accentClass: string
   /** The URL prefix to strip, e.g. "/manage" or "/super-admin" */
   basePath: string
@@ -125,22 +125,22 @@ export const SectionHeader = ({ accentClass, basePath, breadcrumbRoot }: Section
   return (
     <div
       className={cn(
-        'flex h-12 items-center gap-4 border-zinc-700/50 border-b border-l-4 bg-zinc-900 px-4 md:px-5',
+        'flex h-12 items-center gap-4 border-line border-b border-l-4 bg-panel px-4 md:px-5',
         accentClass
       )}
     >
-      <h1 className="font-semibold text-sm text-zinc-100">{title}</h1>
+      <h1 className="font-semibold text-fg text-sm">{title}</h1>
       {segments.length > 0 && (
-        <nav className="flex items-center gap-1 text-xs text-zinc-500">
+        <nav className="flex items-center gap-1 text-fg-muted text-xs">
           {segments.map((seg, i) => (
             <span key={seg.href} className="flex items-center gap-1">
               {i > 0 && <ChevronRight className="h-3 w-3" />}
               {i < segments.length - 1 ? (
-                <Link to={seg.href} className="hover:text-zinc-300">
+                <Link to={seg.href} className="hover:text-fg">
                   {seg.label}
                 </Link>
               ) : (
-                <span className="text-zinc-400">{seg.label}</span>
+                <span className="text-fg">{seg.label}</span>
               )}
             </span>
           ))}

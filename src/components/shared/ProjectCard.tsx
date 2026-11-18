@@ -43,8 +43,8 @@ export const ProjectCard = ({
       : undefined
   const lastUpdated = project.modified
   const cardClassName = cn(
-    'group stretched-link-container block overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-slate-700 dark:bg-slate-800 dark:shadow-none dark:hover:brightness-110',
-    selected && 'ring-2 ring-blue-500 dark:ring-blue-400',
+    'group stretched-link-container block overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-line-strong',
+    selected && 'ring-2 ring-accent',
     className
   )
 
@@ -72,7 +72,7 @@ export const ProjectCard = ({
     <div className={cardClassName}>
       <div className="p-4">
         <div className="flex items-center justify-between pb-2">
-          <h3 className="flex items-center font-semibold text-base text-zinc-900 leading-tight dark:text-white">
+          <h3 className="flex items-center font-semibold text-base text-fg leading-tight">
             <span className="line-clamp-2">{titleTarget}</span>
           </h3>
           <div className="flex items-center gap-2">
@@ -86,15 +86,15 @@ export const ProjectCard = ({
 
         <div>
           {challengeMeta ? (
-            <div className="mb-1 text-xs text-zinc-500 dark:text-slate-300">
-              <span className="font-semibold text-zinc-900 dark:text-white">
+            <div className="mb-1 text-fg-muted text-xs">
+              <span className="font-semibold text-fg">
                 {challengeMeta.totalTasks - challengeMeta.completed} / {challengeMeta.totalTasks}
               </span>{' '}
               {t({ id: 'common.tasksRemaining2', defaultMessage: 'tasks remaining' })}
             </div>
           ) : null}
           <ProgressBar percentage={completionPercentage} className="mb-3" />
-          <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-slate-300">
+          <div className="flex items-center justify-between gap-3 text-fg-muted text-xs">
             <span className="flex items-center gap-3">
               <span>
                 {totalChallenges != null
@@ -107,7 +107,7 @@ export const ProjectCard = ({
                     )
                   : null}
               </span>
-              <span className="text-emerald-500">
+              <span className="text-success">
                 {completedChallenges != null
                   ? t(
                       { id: 'shared.projectCard.completed', defaultMessage: 'Completed: {count}' },

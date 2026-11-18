@@ -19,9 +19,9 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
 
   const list = (items: Notification[], empty: string) =>
     items.length === 0 ? (
-      <p className="py-8 text-center text-sm text-zinc-500 dark:text-slate-400">{empty}</p>
+      <p className="py-8 text-center text-fg-muted text-sm">{empty}</p>
     ) : (
-      <ul className="divide-y divide-zinc-200 dark:divide-slate-800">
+      <ul className="divide-y divide-line">
         {items.map((n) => (
           <li key={n.id}>
             <NotificationItem
@@ -51,7 +51,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
         {unread.length > 0 && (
           <span
             aria-live="polite"
-            className="-right-0.75 -top-0.75 absolute size-1.25 rounded-full bg-red-400"
+            className="-right-0.75 -top-0.75 absolute size-1.25 rounded-full bg-accent"
           >
             <span className="sr-only">
               {t({
@@ -69,7 +69,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
         className="flex w-96 max-w-[calc(100vw-2rem)] flex-col"
       >
         <Tabs defaultValue="unread" className="flex min-h-0 flex-1 flex-col gap-0">
-          <div className="flex items-center justify-between gap-2 border-zinc-200 border-b p-3 dark:border-slate-800">
+          <div className="flex items-center justify-between gap-2 border-line border-b p-3">
             <TabsList>
               <TabsTrigger value="unread">
                 {t(
@@ -117,7 +117,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
             </>
           )}
         </Tabs>
-        <div className="border-zinc-200 border-t p-3 dark:border-slate-800">
+        <div className="border-line border-t p-3">
           <Link
             to="/notifications"
             onClick={() => setOpen(false)}

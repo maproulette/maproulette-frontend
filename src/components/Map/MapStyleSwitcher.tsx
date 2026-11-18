@@ -80,8 +80,8 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
               className={cn(
                 'block flex-1 rounded-lg border p-3 text-left transition-colors',
                 selectedIndex === index
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
-                  : 'border-zinc-200 hover:bg-zinc-50 dark:border-slate-700 dark:hover:bg-slate-800'
+                  ? 'border-accent bg-accent/10'
+                  : 'border-line hover:bg-muted'
               )}
             >
               <span className="block font-medium text-sm">{style.name}</span>
@@ -90,7 +90,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
               <button
                 type="button"
                 onClick={() => handleRemove(custom.id)}
-                className="rounded p-2 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
+                className="rounded p-2 text-fg-subtle hover:text-danger"
                 aria-label={t(
                   { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },
                   { name: custom.name }
@@ -104,7 +104,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
       })}
 
       {adding ? (
-        <div className="mt-2 space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
+        <div className="mt-2 space-y-2 rounded-lg border border-line p-3">
           <div className="space-y-1">
             <Label htmlFor={`${fieldId}-name`}>
               {t({ id: 'common.name', defaultMessage: 'Name' })}

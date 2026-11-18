@@ -179,7 +179,7 @@ export const GlobalSearch = ({ className, ...props }: React.ComponentProps<'sear
       <Popover open={showPopover} onOpenChange={setIsOpen}>
         <PopoverAnchor asChild>
           <div ref={anchorRef}>
-            <InputGroup className="rounded-[20px] py-5 dark:border-slate-700 dark:bg-slate-800">
+            <InputGroup className="rounded-[20px] py-5">
               <label htmlFor={id} className="sr-only">
                 {placeholder}
               </label>
@@ -228,7 +228,7 @@ export const GlobalSearch = ({ className, ...props }: React.ComponentProps<'sear
             {groups.map((group) => (
               // biome-ignore lint/a11y/useSemanticElements: a fieldset isn't valid inside a listbox
               <div key={group.label} role="group" aria-label={group.label}>
-                <div className="px-2 pt-2 pb-1 font-medium text-xs text-zinc-500 dark:text-slate-400">
+                <div className="px-2 pt-2 pb-1 font-medium text-fg-muted text-xs">
                   {group.label}
                 </div>
                 {group.results.map((result) => {
@@ -245,11 +245,11 @@ export const GlobalSearch = ({ className, ...props }: React.ComponentProps<'sear
                       onClick={close}
                       onMouseMove={() => setActiveIndex(i)}
                       className={cn(
-                        'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-zinc-900 dark:text-slate-100',
-                        i === active && 'bg-zinc-100 dark:bg-slate-800'
+                        'flex items-center gap-2 rounded-md px-2 py-1.5 text-fg text-sm',
+                        i === active && 'bg-muted'
                       )}
                     >
-                      <Icon className="size-4 shrink-0 text-zinc-500 dark:text-slate-400" />
+                      <Icon className="size-4 shrink-0 text-fg-muted" />
                       <span className="truncate">{result.name}</span>
                     </Link>
                   )
@@ -258,7 +258,7 @@ export const GlobalSearch = ({ className, ...props }: React.ComponentProps<'sear
             ))}
           </div>
           {results.length === 0 && (
-            <div className="flex justify-center px-2 py-4 text-sm text-zinc-500 dark:text-slate-400">
+            <div className="flex justify-center px-2 py-4 text-fg-muted text-sm">
               {isPending ? (
                 <Spinner />
               ) : (

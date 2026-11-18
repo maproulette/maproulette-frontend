@@ -12,11 +12,9 @@ export const MapSettingsSection = ({
   title?: string
   children: ReactNode
 }) => (
-  <section className="space-y-3 not-first:border-zinc-200 not-first:border-t p-3 dark:not-first:border-slate-700">
+  <section className="space-y-3 not-first:border-line not-first:border-t p-3">
     {title && (
-      <h3 className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
-        {title}
-      </h3>
+      <h3 className="font-medium text-fg-muted text-xs uppercase tracking-wide">{title}</h3>
     )}
     {children}
   </section>
