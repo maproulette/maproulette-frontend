@@ -1,12 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { MessageSquare, Send } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@/components/ui/Checkbox'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
@@ -36,6 +37,7 @@ export const ChallengeComments = () => {
   const { user } = useAuthContext()
   const [commentText, setCommentText] = useState('')
   const [showTaskComments, setShowTaskComments] = useState(false)
+  const showTaskCommentsId = useId()
   const commentsEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { handleImageError, getImageSrc } = useAvatarContext()
@@ -116,19 +118,19 @@ export const ChallengeComments = () => {
     <div className="flex h-full min-h-0 flex-col">
       {taskCommentsData && Object.keys(taskCommentsData).length > 0 && (
         <div className="mb-4 flex items-center justify-end gap-2">
-          <label className="flex cursor-pointer items-center gap-2 text-sm text-zinc-600 dark:text-slate-400">
-            <input
-              type="checkbox"
-              checked={showTaskComments}
-              onChange={(e) => setShowTaskComments(e.target.checked)}
-              className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-slate-600"
-            />
-            <span>
-              {t({
-                id: 'browsedChallengePage.challengeModals.comments.showTaskComments',
-                defaultMessage: 'Show task comments',
-              })}
-            </span>
+          <Checkbox
+            id={showTaskCommentsId}
+            checked={showTaskComments}
+            onCheckedChange={(checked) => setShowTaskComments(checked === true)}
+          />
+          <label
+            htmlFor={showTaskCommentsId}
+            className="cursor-pointer text-sm text-zinc-600 dark:text-slate-400"
+          >
+            {t({
+              id: 'browsedChallengePage.challengeModals.comments.showTaskComments',
+              defaultMessage: 'Show task comments',
+            })}
           </label>
         </div>
       )}
