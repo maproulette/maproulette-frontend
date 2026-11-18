@@ -1040,6 +1040,8 @@
   "taskInfoPanel.comments.send": "Send comment",
   "taskInfoPanel.comments.signInPrompt": "Sign in to add comments",
   "taskInfoPanel.comments.systemUser": "System",
+  "taskInfoPanel.comments.viewAttic": "View attic",
+  "taskInfoPanel.comments.viewAtticTitle": "See the OSM data around this task as it was at this time",
   "taskInfoPanel.data.areaHistory": "Area History",
   "taskInfoPanel.data.areaHistoryDescription": "View recent changes in the area around this task",
   "taskInfoPanel.data.noOsmFeature": "This task's geometry does not reference an OSM element (like @id: \"way/12345\").",

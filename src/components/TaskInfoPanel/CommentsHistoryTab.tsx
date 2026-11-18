@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Circle,
   HelpCircle,
+  History,
   type LucideIcon,
   MessageCircleQuestion,
   MessageSquare,
@@ -27,13 +28,23 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarContext } from '@/contexts/AvatarContext'
 import { usePluginContext } from '@/contexts/PluginContext'
+import { josmNoResponseMessage } from '@/hooks/useJosmShortCodes'
 import { useIntl } from '@/i18n'
 import { formatDateTime } from '@/lib/date'
+import { isJosmEditor } from '@/lib/editors'
+import { JOSM_HOST, sendJosmCommand } from '@/lib/josmRemoteControl'
 import { logger } from '@/lib/logger'
 import { markdownRemarkPlugins } from '@/lib/markdown'
+import {
+  atticBbox,
+  atticDate,
+  josmAtticImportUrl,
+  overpassTurboAtticUrl,
+} from '@/lib/overpassAttic'
 import { linkifyShortCodes } from '@/lib/shortCodes'
 import { getStatusLabel, STATUS_PILL_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
+import type { Bbox2D } from '@/types/Map'
 import type { PluginTaskHistoryItem } from '@/types/Plugin'
 import type { TaskHistoryAction } from '@/types/Task'
 
@@ -80,6 +91,44 @@ const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean
   )
 }
 
+const ViewAtticLink = ({
+  timestamp,
+  bounds,
+  useJosm,
+}: {
+  timestamp: string
+  bounds: Bbox2D
+  useJosm: boolean
+}) => {
+  const { t } = useIntl()
+
+  const viewAttic = () => {
+    const date = atticDate(timestamp)
+    if (useJosm) {
+      void sendJosmCommand(josmAtticImportUrl(JOSM_HOST, bounds, date)).then((sent) => {
+        if (!sent) toast.error(t(josmNoResponseMessage))
+      })
+      return
+    }
+    window.open(overpassTurboAtticUrl(bounds, date), '_blank', 'noopener,noreferrer')
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={viewAttic}
+      title={t({
+        id: 'taskInfoPanel.comments.viewAtticTitle',
+        defaultMessage: 'See the OSM data around this task as it was at this time',
+      })}
+      className="inline-flex items-center gap-1 text-zinc-500 hover:text-blue-600 hover:underline dark:text-slate-400 dark:hover:text-blue-400"
+    >
+      <History className="size-3" aria-hidden="true" />
+      {t({ id: 'taskInfoPanel.comments.viewAttic', defaultMessage: 'View attic' })}
+    </button>
+  )
+}
+
 const commentComponents: Components = {
   a: (props) => (
     <ShortCodeLink
@@ -99,8 +148,11 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
   const { taskHistoryItemRenderers } = usePluginContext()
 
   const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(taskId)
+  const { data: task } = api.task.getTask(taskId)
   const addCommentMutation = api.task.useAddTaskComment()
   const userOsmId = user?.osmProfile?.id
+  const atticBounds = useMemo(() => (task ? atticBbox(task) : null), [task])
+  const atticInJosm = isJosmEditor(user?.settings?.defaultEditor)
 
   const sortedHistory = useMemo(() => {
     return [...taskHistory].sort(
@@ -153,8 +205,11 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
     }
 
     const timeRow = (
-      <div className="text-xs text-zinc-400 dark:text-slate-500">
-        {formatDateTime(timestamp, locale)}
+      <div className="flex items-center justify-between gap-2 text-xs text-zinc-400 dark:text-slate-500">
+        <span>{formatDateTime(timestamp, locale)}</span>
+        {atticBounds && (
+          <ViewAtticLink timestamp={item.timestamp} bounds={atticBounds} useJosm={atticInJosm} />
+        )}
       </div>
     )
 
