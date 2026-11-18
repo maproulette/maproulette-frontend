@@ -2,14 +2,14 @@
   "color": {
     "brand": {
       "primary": {
-        "$value": "#2281c2",
+        "$value": "#00a63c",
         "$type": "color",
-        "$description": "Primary interactive color (links, primary actions). From the v3 frontend's $blue (cornflower-blue)."
+        "$description": "Primary interactive color in Storybook's UI chrome (matches the app's mint-600)."
       },
       "secondary": {
-        "$value": "#00a592",
+        "$value": "#162e50",
         "$type": "color",
-        "$description": "Brand mark color (logo, navbar). From the v3 frontend's $green (persian green)."
+        "$description": "Secondary color in Storybook's UI chrome (matches the app's steel-800)."
       }
     }
   }

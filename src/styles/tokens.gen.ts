@@ -2,8 +2,8 @@
  * Do not edit directly, this file was auto-generated.
  */
 
-export const ColorBrandPrimary = "#2281c2"; // Primary interactive color (links, primary actions). From the v3 frontend's $blue (cornflower-blue).
-export const ColorBrandSecondary = "#00a592"; // Brand mark color (logo, navbar). From the v3 frontend's $green (persian green).
+export const ColorBrandPrimary = "#00a63c"; // Primary interactive color in Storybook's UI chrome (matches the app's mint-600).
+export const ColorBrandSecondary = "#162e50"; // Secondary color in Storybook's UI chrome (matches the app's steel-800).
 export const FontBrandSans = [
   "system-ui",
   "-apple-system",
