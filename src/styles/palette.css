@@ -1,4 +1,9 @@
 @theme {
+  --color-*: initial;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
   --color-steel-50: oklch(97.5% 0.0062 255.47);
   --color-steel-100: oklch(95.26% 0.0114 252.09);
   --color-steel-200: oklch(90.44% 0.0227 260.72);
