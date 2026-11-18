@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!**/*.gen.ts", "!**/*.d.ts"]
+    "includes": ["**", "!**/*.gen.ts", "!**/*.d.ts", "!src/styles/palette.css"]
   },
   "formatter": {
     "enabled": true,
