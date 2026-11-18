@@ -4,6 +4,7 @@ import { api } from '@/api'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { Button } from '@/components/ui/Button'
+import { Checkbox } from '@/components/ui/Checkbox'
 import {
   Dialog,
   DialogContent,
@@ -233,17 +234,15 @@ export const ReportModal = () => {
             </div>
           )}
 
-          <div className="mt-4 flex items-baseline">
-            <input
-              type="checkbox"
+          <div className="mt-4 flex items-center gap-2">
+            <Checkbox
               id={confirmId}
               checked={isConfirmed}
-              onChange={(e) => {
-                setIsConfirmed(e.target.checked)
+              onCheckedChange={(checked) => {
+                setIsConfirmed(checked === true)
                 setErrors((prev) => ({ ...prev, checkbox: false }))
               }}
               disabled={isSubmitting}
-              className="mr-2 h-4 w-4"
             />
             <label
               htmlFor={confirmId}
