@@ -20,6 +20,7 @@ import { DropdownMenuItem } from '@/components/ui/DropdownMenu'
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { useMapToggle } from '@/contexts/MapToggleContext'
 import { useIntl } from '@/i18n'
+import { getChallengeTaxonomy } from '@/lib/challengeTaxonomy'
 import { cn } from '@/lib/utils'
 import { ChallengeActionButtons } from './ChallengeActionButtons'
 import { useChallengeModals } from './ChallengeModals/ChallengeModalsContext'
@@ -38,9 +39,6 @@ interface SocialAction {
   /** Set when the action needs a signed-in user and there isn't one. */
   signInMessage?: string
 }
-
-const COOPERATIVE_TYPE_TAGS = 1
-const COOPERATIVE_TYPE_CHANGEFILE = 2
 
 export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) => {
   const {
@@ -185,7 +183,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           </DropdownMenuItem>
         ))
 
-  const badges: Array<{ label: string; variant: 'warning' | 'secondary' }> = []
+  const badges: Array<{ label: string; variant: 'warning' | 'outline'; className?: string }> = []
   if (challenge.paused) {
     badges.push({ label: t({ id: 'common.paused', defaultMessage: 'Paused' }), variant: 'warning' })
   }
@@ -204,23 +202,8 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
       variant: 'warning',
     })
   }
-  if (challenge.featured) {
-    badges.push({
-      label: t({ id: 'common.featured', defaultMessage: 'Featured' }),
-      variant: 'secondary',
-    })
-  }
-  if (challenge.cooperativeType === COOPERATIVE_TYPE_TAGS) {
-    badges.push({
-      label: t({ id: 'common.tagFix', defaultMessage: 'Tag Fix' }),
-      variant: 'secondary',
-    })
-  }
-  if (challenge.cooperativeType === COOPERATIVE_TYPE_CHANGEFILE) {
-    badges.push({
-      label: t({ id: 'common.cooperative', defaultMessage: 'Cooperative' }),
-      variant: 'secondary',
-    })
+  for (const entry of getChallengeTaxonomy(challenge, t)) {
+    badges.push({ label: entry.label, variant: 'outline', className: entry.className })
   }
 
   const bylineParts: Array<{ key: string; node: ReactNode }> = []
@@ -312,7 +295,11 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
             <div className="break-words text-xl leading-snug">
               <h1 className="inline font-semibold text-fg tracking-tight">{name}</h1>
               {badges.map((badge) => (
-                <Badge key={badge.label} variant={badge.variant} className="ml-2 align-middle">
+                <Badge
+                  key={badge.label}
+                  variant={badge.variant}
+                  className={cn('ml-2 align-middle', badge.className)}
+                >
                   {badge.label}
                 </Badge>
               ))}
