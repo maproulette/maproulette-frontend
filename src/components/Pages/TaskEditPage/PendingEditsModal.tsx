@@ -45,7 +45,7 @@ export const PendingEditsModal = ({
         </DialogHeader>
 
         {edits.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-fg-muted text-sm">
             {t({ id: 'taskEditPage.pendingEdits.none', defaultMessage: 'Nothing is pending.' })}
           </p>
         ) : (

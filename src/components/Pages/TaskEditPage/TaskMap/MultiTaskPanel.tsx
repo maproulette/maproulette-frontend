@@ -25,13 +25,13 @@ export const MultiTaskPanel = () => {
     <Collapsible
       open={multiTaskPanelOpen}
       onOpenChange={setMultiTaskPanelOpen}
-      className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
+      className="rounded-lg border border-line bg-popover shadow-md"
     >
       {/* Header - always visible, clickable to expand/collapse */}
-      <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
+      <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-muted">
         <span className="flex items-center gap-2">
-          <Users className="h-4 w-4 text-blue-500" />
-          <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
+          <Users className="h-4 w-4 text-fg-subtle" />
+          <span className="font-medium text-fg text-sm">
             {activeBundle ? (
               <>
                 {t(
@@ -42,7 +42,7 @@ export const MultiTaskPanel = () => {
                   },
                   { count: activeBundle.taskIds.length }
                 )}
-                <span className="ml-1 text-zinc-400">
+                <span className="ml-1 text-fg-subtle">
                   {t(
                     { id: 'taskMap.multiTaskPanel.maxBadge', defaultMessage: '({max} max)' },
                     { max: MAX_SELECTED_TASKS }
@@ -56,7 +56,7 @@ export const MultiTaskPanel = () => {
         </span>
         <ChevronDown
           className={cn(
-            'h-4 w-4 text-zinc-400 transition-transform',
+            'h-4 w-4 text-fg-subtle transition-transform',
             multiTaskPanelOpen && 'rotate-180'
           )}
         />
@@ -64,7 +64,7 @@ export const MultiTaskPanel = () => {
 
       {/* Expandable content */}
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-        <div className="flex flex-col gap-2 border-zinc-200 border-t px-3 pt-2 pb-3 dark:border-slate-700">
+        <div className="flex flex-col gap-2 border-line border-t px-3 pt-2 pb-3">
           {/* Lasso tool */}
           <button
             type="button"
@@ -82,8 +82,8 @@ export const MultiTaskPanel = () => {
             className={cn(
               'flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50',
               drawingMode === 'select'
-                ? 'bg-blue-500 text-white'
-                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-slate-700 dark:text-zinc-200 dark:hover:bg-slate-600'
+                ? 'bg-accent text-accent-fg'
+                : 'bg-muted text-fg hover:bg-muted-strong'
             )}
             title={
               activeBundle && activeBundle.taskIds.length >= MAX_SELECTED_TASKS
@@ -111,7 +111,7 @@ export const MultiTaskPanel = () => {
             <button
               type="button"
               onClick={handleClearBundle}
-              className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+              className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-danger text-sm transition-colors hover:bg-danger/10"
             >
               <Trash2 className="h-4 w-4" />
               {t({
@@ -130,7 +130,7 @@ export const MultiTaskPanel = () => {
               <button
                 type="button"
                 onClick={() => resetBundle()}
-                className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-sm text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-slate-700"
+                className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-fg-muted text-sm transition-colors hover:bg-muted-strong"
               >
                 <RotateCcw className="h-4 w-4" />
                 {t({

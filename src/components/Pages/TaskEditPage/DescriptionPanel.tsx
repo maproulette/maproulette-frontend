@@ -29,21 +29,21 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
     : projectDescriptionText(project)
 
   return (
-    <div className="flex w-full flex-col overflow-hidden md:h-full">
-      <div className="shrink-0 rounded-t-lg border-slate-200 border-b bg-white px-4 py-3 dark:border-slate-700/50 dark:bg-slate-800">
+    <div className="flex w-full flex-col overflow-hidden rounded-lg border border-line bg-panel md:h-full">
+      <div className="shrink-0 border-line border-b p-4">
         <Button
           variant="ghost"
           size="sm"
-          className="-ml-2 mb-1.5 gap-1.5 text-zinc-600 dark:text-zinc-300"
+          className="-ml-2 mb-1.5 gap-1.5 text-fg-muted"
           onClick={() => showView('task')}
         >
           <ArrowLeft className="size-4" />
           {t({ id: 'taskEditPage.descriptionPanel.backToTask', defaultMessage: 'Back to task' })}
         </Button>
         <div className="flex items-center gap-2">
-          <Icon className="size-4 shrink-0 text-blue-500 dark:text-blue-400" aria-hidden="true" />
+          <Icon className="size-4 shrink-0 text-link" aria-hidden="true" />
           <div className="min-w-0">
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-fg-muted text-xs">
               {isChallenge
                 ? t({
                     id: 'taskEditPage.descriptionPanel.challengeTitle',
@@ -54,9 +54,7 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
                     defaultMessage: 'About this project',
                   })}
             </p>
-            <h2 className="truncate font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
-              {name}
-            </h2>
+            <h2 className="truncate font-bold text-base text-fg leading-tight">{name}</h2>
           </div>
         </div>
       </div>
@@ -66,7 +64,7 @@ export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> })
           {description ? (
             <MarkdownContent shortCodes={isChallenge}>{description}</MarkdownContent>
           ) : (
-            <p className="text-sm text-zinc-500 dark:text-slate-400">
+            <p className="text-fg-muted text-sm">
               {isChallenge
                 ? t({
                     id: 'taskEditPage.descriptionPanel.noChallengeDescription',

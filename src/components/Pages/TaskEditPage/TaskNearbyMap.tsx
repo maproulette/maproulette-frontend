@@ -71,7 +71,7 @@ export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapPro
   )
 
   if (isLoading) {
-    return <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
+    return <div className="h-64 w-full rounded-lg bg-muted" />
   }
 
   return (
@@ -107,8 +107,8 @@ export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapPro
         {/* Current task marker */}
         <Marker longitude={currentLng} latitude={currentLat} anchor="bottom">
           <div className="flex flex-col items-center">
-            <MapPin className="h-8 w-8 fill-amber-500 text-amber-600 drop-shadow-md" />
-            <span className="mt-0.5 rounded bg-amber-500 px-1.5 py-0.5 font-medium text-white text-xs shadow">
+            <MapPin className="h-8 w-8 fill-mango-500 text-mango-600 drop-shadow-md" />
+            <span className="mt-0.5 rounded bg-mango-500 px-1.5 py-0.5 font-medium text-steel-950 text-xs shadow-md">
               {t({ id: 'common.current', defaultMessage: 'Current' })}
             </span>
           </div>
@@ -116,7 +116,7 @@ export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapPro
       </MapGL>
 
       {/* Task count indicator */}
-      <div className="absolute top-2 right-2 rounded border border-zinc-200 bg-white px-2 py-1 text-xs shadow dark:border-slate-700 dark:bg-slate-900">
+      <div className="absolute top-2 right-2 rounded border border-line bg-popover px-2 py-1 text-xs shadow-md">
         {t(
           {
             id: 'taskEditPage.taskNearbyMap.nearbyCount',
@@ -128,7 +128,7 @@ export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapPro
 
       {/* Selected task info */}
       {selectedTaskId && (
-        <div className="absolute top-2 left-2 rounded bg-green-500 px-2 py-1 font-medium text-white text-xs shadow">
+        <div className="absolute top-2 left-2 rounded bg-accent px-2 py-1 font-medium text-accent-fg text-xs shadow-md">
           {t(
             {
               id: 'taskEditPage.taskNearbyMap.selectedTask',

@@ -31,7 +31,7 @@ const CopyableText = ({ text }: { text: string }) => {
       <button
         type="button"
         onClick={() => copy(text)}
-        className="rounded p-0.5 text-zinc-500 hover:text-zinc-800 dark:text-slate-400 dark:hover:text-slate-100"
+        className="rounded p-0.5 text-fg-muted hover:text-fg"
         aria-label={t(
           {
             id: 'taskInfoPanel.instructions.copy',
@@ -102,7 +102,7 @@ const SelectField = ({
   )
 }
 
-const externalLinkClass = 'text-blue-600 hover:underline dark:text-blue-400'
+const externalLinkClass = 'text-link hover:underline'
 
 const OsmElements = ({ elements }: { elements: OsmElementsToken['elements'] }) => {
   const josm = useJosmShortCodes()

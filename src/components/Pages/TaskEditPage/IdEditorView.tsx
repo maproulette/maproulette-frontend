@@ -604,7 +604,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
   }, [hasUnsavedChanges])
 
   return (
-    <div className="size-full bg-white dark:bg-slate-950">
+    <div className="size-full bg-panel">
       {/* MapRoulette's own controls, floating over iD. Dragging the panel by its
           handle moves it anywhere the mapper wants; it starts bottom right so
           it is clear of iD's own toolbars. */}
@@ -618,7 +618,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         {/* Drag handle, which doubles as the collapse toggle */}
         <div
           {...handleProps}
-          className={`flex items-center bg-slate-900 pl-1.5 ${
+          className={`flex items-center bg-steel-900 pl-1.5 ${
             dragging ? 'cursor-grabbing' : 'cursor-grab'
           }`}
           title={t({
@@ -626,12 +626,12 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
             defaultMessage: 'Drag to move these controls',
           })}
         >
-          <GripVertical className="h-4 w-4 text-slate-500" aria-hidden="true" />
+          <GripVertical className="h-4 w-4 text-steel-500" aria-hidden="true" />
         </div>
         <button
           type="button"
           onClick={() => setDrawerOpen(!drawerOpen)}
-          className="flex h-10 items-center gap-1.5 bg-slate-900 pr-2.5 pl-2 shadow-md transition-colors hover:bg-slate-800"
+          className="flex h-10 items-center gap-1.5 bg-steel-900 pr-2.5 pl-2 shadow-md transition-colors hover:bg-steel-800"
           title={
             drawerOpen
               ? t({ id: 'taskEditPage.idEditor.collapsePanel', defaultMessage: 'Collapse panel' })
@@ -639,9 +639,9 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
           }
         >
           {drawerOpen ? (
-            <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+            <ChevronRight className="h-3.5 w-3.5 text-steel-400" />
           ) : (
-            <ChevronLeft className="h-3.5 w-3.5 text-slate-400" />
+            <ChevronLeft className="h-3.5 w-3.5 text-steel-400" />
           )}
           <img src="/logo192.png" alt="MapRoulette" className="h-5 w-5" />
         </button>
@@ -650,13 +650,13 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
         <div
           className={`flex items-center overflow-hidden transition-all duration-200 ${drawerOpen ? 'max-w-[600px] opacity-100' : 'max-w-0 opacity-0'}`}
         >
-          <div className="flex items-center gap-1 bg-slate-900 py-1.5 pr-2 pl-1 shadow-md">
+          <div className="flex items-center gap-1 bg-steel-900 py-1.5 pr-2 pl-1 shadow-md">
             {/* Unsaved changes */}
             {hasUnsavedChanges && (
               <button
                 type="button"
                 onClick={handleShowPendingEdits}
-                className="flex items-center gap-1.5 rounded-md bg-yellow-500/90 px-2.5 py-1.5 transition-colors hover:bg-yellow-400"
+                className="flex items-center gap-1.5 rounded-md bg-mango-500/90 px-2.5 py-1.5 transition-colors hover:bg-mango-400"
                 title={t({
                   id: 'taskEditPage.idEditor.reviewChanges',
                   defaultMessage: 'Review the unsaved changes',
@@ -681,7 +681,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
             <button
               type="button"
               onClick={handleResetView}
-              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
+              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-steel-300 transition-colors hover:bg-steel-700/80 hover:text-white"
               title={t({
                 id: 'common.resetViewToTaskLocation',
                 defaultMessage: 'Reset view to task location',
@@ -699,7 +699,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
                   if (!ctx || !iDGlobal) return
                   selectValidEntities(ctx, iDGlobal, osmEntityIdsRef.current)
                 }}
-                className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
+                className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-steel-300 transition-colors hover:bg-steel-700/80 hover:text-white"
                 title={t({
                   id: 'taskEditPage.idEditor.selectTasksTitle',
                   defaultMessage: 'Select task features in iD',
@@ -714,8 +714,8 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
               onClick={handleToggleFocusMode}
               className={`flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] transition-colors ${
                 focusMode
-                  ? 'bg-purple-600/80 text-white hover:bg-purple-500'
-                  : 'text-slate-300 hover:bg-slate-700/80 hover:text-white'
+                  ? 'bg-accent text-accent-fg hover:bg-accent/90'
+                  : 'text-steel-300 hover:bg-steel-700/80 hover:text-white'
               }`}
               title={
                 focusMode
@@ -737,7 +737,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-slate-300 transition-colors hover:bg-slate-700/80 hover:text-white"
+              className="flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 font-medium text-[11px] text-steel-300 transition-colors hover:bg-steel-700/80 hover:text-white"
               title={t({
                 id: 'taskEditPage.idEditor.closeEditorTitle',
                 defaultMessage: 'Close editor and return to task map',
@@ -752,10 +752,10 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
 
       {/* Loading Indicator */}
       {isLoading && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-slate-950/80">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-panel/80">
           <div className="text-center">
-            <div className="mx-auto mb-4 size-10 rounded-full border-4 border-purple-200 border-t-purple-600 motion-safe:animate-spin" />
-            <div className="text-zinc-700 dark:text-zinc-300">
+            <div className="mx-auto mb-4 size-10 rounded-full border-4 border-line border-t-accent motion-safe:animate-spin" />
+            <div className="text-fg-muted">
               {t({ id: 'taskEditPage.idEditor.loading', defaultMessage: 'Loading iD Editor...' })}
             </div>
           </div>

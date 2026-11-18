@@ -44,7 +44,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
   }
 
   return (
-    <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
+    <div>
       <div className="grid grid-cols-2 gap-1.5">
         <Button variant="success" size="lg" onClick={lockTask} disabled={isLocking}>
           {isLocking ? <Spinner /> : <MapPin />}

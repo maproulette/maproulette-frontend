@@ -28,7 +28,7 @@ export const BundleStateIndicator = ({
         disabled={isAddingToBundle}
         variant="outline"
         size="sm"
-        className="w-full border-green-500/50 bg-green-50 text-green-700 shadow-sm transition-all hover:border-green-500 hover:bg-green-100 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none dark:border-green-600/50 dark:bg-green-950/30 dark:text-green-400 dark:hover:bg-green-950/50"
+        className="w-full border-accent/50 bg-accent/10 text-link transition-all hover:border-accent hover:bg-accent/20 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Package className="mr-2 h-3.5 w-3.5" />
         {isAddingToBundle
@@ -50,7 +50,7 @@ export const BundleStateIndicator = ({
         onClick={onRemoveFromBundle}
         variant="outline"
         size="sm"
-        className="w-full border-red-500/50 bg-red-50 text-red-700 shadow-sm transition-all hover:border-red-500 hover:bg-red-100 hover:shadow-md dark:border-red-600/50 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50"
+        className="w-full border-danger/50 bg-danger/10 text-danger transition-all hover:border-danger hover:bg-danger/20"
       >
         <Trash2 className="mr-2 h-3.5 w-3.5" />
         {t({
@@ -63,7 +63,7 @@ export const BundleStateIndicator = ({
 
   if (isInBundle) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 font-medium text-xs text-zinc-600 dark:bg-slate-800/50 dark:text-slate-400">
+      <div className="flex items-center justify-center gap-2 rounded-lg bg-muted px-3 py-2 font-medium text-fg-muted text-xs">
         <Package className="h-3.5 w-3.5" />
         {t({ id: 'taskInfoPanel.taskTab.bundleState.inBundle', defaultMessage: 'In bundle' })}
       </div>

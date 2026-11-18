@@ -12,7 +12,7 @@ interface TaskTabsListProps {
 export const TaskTabsList = ({ commentsCount, taskCount }: TaskTabsListProps) => {
   const { t } = useIntl()
   return (
-    <div className="shrink-0 overflow-scroll border-zinc-200 border-b dark:border-slate-700">
+    <div className="shrink-0 overflow-scroll border-line border-b">
       <TabsList className="h-auto w-full justify-start gap-1 rounded-none bg-transparent p-0">
         <TabsTrigger value="task" className={tabTriggerClass}>
           <BookOpen className="h-3.5 w-3.5" />

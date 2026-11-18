@@ -239,7 +239,7 @@ export const TaskMap = () => {
             <Button
               variant="outline"
               onClick={() => setShowMap(false)}
-              className="h-10 gap-2 border-zinc-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
+              className="h-10 gap-2 border-line bg-popover shadow-md"
             >
               <MapIcon className="size-4" />
               {t({ id: 'browsedChallengePage.footer.hideMap', defaultMessage: 'Hide Map' })}
@@ -260,7 +260,7 @@ export const TaskMap = () => {
               type="button"
               onClick={openIdEditor}
               disabled={isChangeFile}
-              className="relative flex h-10 items-center gap-1.5 rounded-lg bg-zinc-800 px-3 font-medium text-sm text-white shadow-md transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-zinc-800"
+              className="relative flex h-10 items-center gap-1.5 rounded-lg bg-primary px-3 font-medium text-primary-fg text-sm shadow-md transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-primary"
               title={
                 isChangeFile
                   ? undefined
@@ -274,9 +274,9 @@ export const TaskMap = () => {
               {t({ id: 'taskEditPage.taskMap.editInIdShort', defaultMessage: 'Edit in iD' })}
               {idEditorMounted && (
                 <span className="flex items-center gap-1">
-                  <span className="h-2 w-2 rounded-full bg-green-400" />
+                  <span className="h-2 w-2 rounded-full bg-accent" />
                   {idUnsavedCount > 0 && (
-                    <span className="rounded-full bg-yellow-500 px-1.5 py-0.5 font-bold text-[10px] text-white leading-none">
+                    <span className="rounded-full bg-mango-500 px-1.5 py-0.5 font-bold text-[10px] text-steel-950 leading-none">
                       {idUnsavedCount}
                     </span>
                   )}
@@ -290,7 +290,7 @@ export const TaskMap = () => {
       {/* Drawing mode and single-feature indicators */}
       <div className="-translate-x-1/2 absolute top-14 left-1/2 z-10 flex flex-col items-center gap-2">
         {drawingMode && (
-          <div className="rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+          <div className="rounded-lg border border-line bg-popover px-3 py-1.5 text-fg text-sm shadow-md">
             {t({
               id: 'taskEditPage.taskMap.drawingModeHint',
               defaultMessage: 'Click and drag to select tasks • ESC to cancel',
@@ -298,7 +298,7 @@ export const TaskMap = () => {
           </div>
         )}
         {focusedFeature && (
-          <div className="flex items-center gap-2 rounded-lg bg-zinc-800 px-3 py-1.5 text-sm text-white shadow-md">
+          <div className="flex items-center gap-2 rounded-lg border border-line bg-popover px-3 py-1.5 text-fg text-sm shadow-md">
             {t({
               id: 'taskEditPage.taskMap.focusedFeatureHint',
               defaultMessage: 'Showing one feature of this task',
@@ -306,7 +306,7 @@ export const TaskMap = () => {
             <button
               type="button"
               onClick={clearFocusedFeature}
-              className="font-medium text-amber-400 underline-offset-2 hover:underline"
+              className="font-medium text-highlight underline-offset-2 hover:underline"
             >
               {t({ id: 'taskEditPage.taskMap.showAllFeatures', defaultMessage: 'Show all' })}
             </button>

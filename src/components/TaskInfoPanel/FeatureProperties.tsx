@@ -29,7 +29,7 @@ const renderValueWithLinks = (text: string): ReactNode => {
           href={part}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:underline dark:text-blue-400"
+          className="text-link hover:underline"
         >
           {part}
         </a>
@@ -87,18 +87,14 @@ const PropertyRows = ({
         <div
           key={key}
           className={cn(
-            'rounded bg-zinc-100 px-2 py-1.5 text-xs dark:bg-slate-800/50',
+            'rounded bg-muted px-2 py-1.5 text-xs',
             isLong ? 'space-y-1' : 'flex items-start justify-between gap-2'
           )}
         >
-          <span
-            className={cn('font-medium text-zinc-500 dark:text-slate-400', !isLong && 'shrink-0')}
-          >
-            {key}
-          </span>
+          <span className={cn('font-medium text-fg-muted', !isLong && 'shrink-0')}>{key}</span>
           <span
             className={cn(
-              'block whitespace-pre-wrap break-words font-mono text-zinc-900 [overflow-wrap:anywhere] dark:text-white',
+              'block whitespace-pre-wrap break-words font-mono text-fg [overflow-wrap:anywhere]',
               isLong ? 'w-full text-left' : 'min-w-0 text-right'
             )}
           >
@@ -128,7 +124,7 @@ const FeatureSwatch = ({ group }: { group: TaskFeatureGroup }) => {
 
   return (
     <span
-      className="h-3 w-3 shrink-0 rounded-full border border-zinc-300 dark:border-slate-600"
+      className="h-3 w-3 shrink-0 rounded-full border border-line-strong"
       style={{ backgroundColor: color }}
       aria-hidden="true"
     />
@@ -207,10 +203,7 @@ export const FeatureProperties = ({
     <Collapsible
       open={open}
       onOpenChange={setOpen}
-      className={cn(
-        'rounded-lg border border-zinc-200 dark:border-slate-700',
-        isFocused && 'border-amber-500 dark:border-amber-500'
-      )}
+      className={cn('rounded-lg border border-line', isFocused && 'border-warning')}
       aria-label={label}
       onMouseEnter={() => highlight(true)}
       onMouseLeave={() => highlight(false)}
@@ -224,19 +217,19 @@ export const FeatureProperties = ({
           <FeatureSwatch group={group} />
           <span
             className={cn(
-              'min-w-0 truncate font-medium text-xs text-zinc-900 dark:text-white',
-              !namedLabel && 'text-zinc-500 uppercase dark:text-slate-400'
+              'min-w-0 truncate font-medium text-fg text-xs',
+              !namedLabel && 'text-fg-muted uppercase'
             )}
           >
             {label}
           </span>
           {namedLabel && group.geometryType && (
-            <span className="shrink-0 text-[10px] text-zinc-500 uppercase dark:text-slate-400">
+            <span className="shrink-0 text-[10px] text-fg-muted uppercase">
               {group.geometryType}
             </span>
           )}
           {childCount > 0 && (
-            <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
+            <span className="shrink-0 text-[10px] text-fg-subtle">
               {t(
                 {
                   id: 'taskInfoPanel.properties.childCount',
@@ -247,7 +240,7 @@ export const FeatureProperties = ({
             </span>
           )}
           {propertyCount > 0 && (
-            <span className="shrink-0 text-[10px] text-zinc-400 dark:text-slate-500">
+            <span className="shrink-0 text-[10px] text-fg-subtle">
               {t(
                 {
                   id: 'taskInfoPanel.properties.propertyCount',
@@ -259,7 +252,7 @@ export const FeatureProperties = ({
           )}
           <ChevronDown
             className={cn(
-              'h-3.5 w-3.5 shrink-0 text-zinc-400 transition-transform',
+              'h-3.5 w-3.5 shrink-0 text-fg-subtle transition-transform',
               open && 'rotate-180'
             )}
           />
@@ -271,7 +264,7 @@ export const FeatureProperties = ({
               onClick={() => featureContext.zoomToFeature(group.feature)}
               title={zoomLabel}
               aria-label={zoomLabel}
-              className="rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+              className="rounded p-1 text-fg-muted transition-colors hover:bg-muted hover:text-fg"
             >
               <Crosshair className="h-3.5 w-3.5" />
             </button>
@@ -285,8 +278,8 @@ export const FeatureProperties = ({
                 className={cn(
                   'rounded p-1 transition-colors',
                   isFocused
-                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
-                    : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white'
+                    ? 'bg-warning/15 text-warning'
+                    : 'text-fg-muted hover:bg-muted hover:text-fg'
                 )}
               >
                 {isFocused ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
@@ -297,9 +290,9 @@ export const FeatureProperties = ({
       </div>
 
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-        <div className="space-y-2 border-zinc-200 border-t px-2 py-2 dark:border-slate-700">
+        <div className="space-y-2 border-line border-t px-2 py-2">
           {childCount > 0 && (
-            <div className="space-y-2 border-zinc-200 border-l pl-2 dark:border-slate-700">
+            <div className="space-y-2 border-line border-l pl-2">
               {group.children.map((child) => (
                 <FeatureProperties
                   key={child.nodeKey}
@@ -316,7 +309,7 @@ export const FeatureProperties = ({
           {osmRef && (
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
-                <span className="font-medium text-[10px] text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+                <span className="font-medium text-[10px] text-fg-muted uppercase tracking-wide">
                   {t({
                     id: 'taskInfoPanel.properties.osmTags',
                     defaultMessage: 'Current OSM tags',
@@ -326,20 +319,20 @@ export const FeatureProperties = ({
                   href={`${api.osm.getOSMServerUrl()}/${osmRef}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[10px] text-blue-600 hover:underline dark:text-blue-400"
+                  className="text-[10px] text-link hover:underline"
                 >
                   {osmRef}
                 </a>
               </div>
               {osmStatus ? (
-                <p className="text-xs text-zinc-500 dark:text-slate-400">{osmStatus}</p>
+                <p className="text-fg-muted text-xs">{osmStatus}</p>
               ) : (
                 <PropertyRows properties={osmTags} containerWidth={containerWidth} />
               )}
             </div>
           )}
           {propertyCount === 0 && childCount === 0 && (
-            <p className="text-xs text-zinc-500 dark:text-slate-400">
+            <p className="text-fg-muted text-xs">
               {t({
                 id: 'taskInfoPanel.properties.featureEmpty',
                 defaultMessage: 'No properties on this feature.',

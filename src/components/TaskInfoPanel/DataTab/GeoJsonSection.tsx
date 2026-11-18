@@ -24,9 +24,7 @@ export const GeoJsonSection = ({ task }: { task: Task }) => {
             : t({ id: 'common.copy', defaultMessage: 'Copy' })}
         </Button>
       </div>
-      <pre className="max-h-96 overflow-auto rounded bg-zinc-100 p-2 text-xs text-zinc-900 dark:bg-slate-800/50 dark:text-white">
-        {geoJson}
-      </pre>
+      <pre className="max-h-96 overflow-auto rounded bg-muted p-2 text-fg text-xs">{geoJson}</pre>
     </div>
   )
 }

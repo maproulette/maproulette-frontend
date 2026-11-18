@@ -393,13 +393,13 @@ export const TaskActionModal = ({
                 })}
               </Label>
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 dark:bg-slate-700">
+                <div className="flex items-center gap-2 rounded-lg bg-muted-strong px-3 py-2">
                   <span className="font-medium text-sm">
                     {getStatusLabel(t, currentStatus) ||
                       t({ id: 'common.unknown', defaultMessage: 'Unknown' })}
                   </span>
                 </div>
-                <ArrowRight className="h-4 w-4 text-zinc-500" />
+                <ArrowRight className="h-4 w-4 text-fg-subtle" />
                 <Select
                   value={String(newStatus)}
                   onValueChange={(value) => setNewStatus(Number(value))}
@@ -443,10 +443,7 @@ export const TaskActionModal = ({
               const ExtensionComponent = extension.component
               if (!ExtensionComponent) return null
               return (
-                <div
-                  key={extension.id}
-                  className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700"
-                >
+                <div key={extension.id} className="space-y-2 rounded-lg border border-line p-3">
                   <ExtensionComponent
                     task={task}
                     newStatus={newStatus}
@@ -481,7 +478,7 @@ export const TaskActionModal = ({
                           defaultMessage: 'Random High Priority Task',
                         })}
                       </Label>
-                      <p className="mt-1 text-xs text-zinc-500">
+                      <p className="mt-1 text-fg-muted text-xs">
                         {t({
                           id: 'taskEditPage.taskActionModal.randomTask.description',
                           defaultMessage: 'Load the next highest priority task from this challenge',
@@ -503,7 +500,7 @@ export const TaskActionModal = ({
                           defaultMessage: 'Nearby Task',
                         })}
                       </Label>
-                      <p className="mt-1 text-xs text-zinc-500">
+                      <p className="mt-1 text-fg-muted text-xs">
                         {t({
                           id: 'taskEditPage.taskActionModal.nearbyTask.description',
                           defaultMessage:
@@ -517,14 +514,14 @@ export const TaskActionModal = ({
 
               {/* Nearby Map */}
               {nextTaskType === 'nearby' && (
-                <div className="mt-3 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
+                <div className="mt-3 rounded-lg border border-line p-3">
                   {animationDone ? (
                     <TaskNearbyMap
                       selectedTaskId={selectedNearbyTaskId}
                       onTaskSelect={setSelectedNearbyTaskId}
                     />
                   ) : (
-                    <div className="h-64 w-full rounded-lg bg-zinc-100 dark:bg-slate-800" />
+                    <div className="h-64 w-full rounded-lg bg-muted" />
                   )}
                 </div>
               )}

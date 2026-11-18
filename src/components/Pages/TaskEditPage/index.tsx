@@ -58,7 +58,7 @@ const TaskContent = () => {
             <div
               className={
                 showViewer
-                  ? 'relative h-full overflow-hidden rounded-lg border border-slate-700/50'
+                  ? 'relative h-full overflow-hidden rounded-lg border border-line'
                   : 'hidden'
               }
             >
@@ -84,7 +84,7 @@ const TaskContent = () => {
             </ResizablePanel>
             <ResizableHandle withHandle className="ml-2" />
             <ResizablePanel defaultSize={70}>
-              <div className="relative h-full overflow-hidden rounded-lg border border-slate-700/50">
+              <div className="relative h-full overflow-hidden rounded-lg border border-line">
                 {viewer}
               </div>
             </ResizablePanel>

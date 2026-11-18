@@ -170,15 +170,13 @@ export const TaskActions = () => {
   // Show sign in button if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
-        <Button variant="success" size="lg" className="w-full" onClick={login}>
-          <LogIn />
-          {t({
-            id: 'common.signInToMapTask',
-            defaultMessage: 'Sign in to map this task',
-          })}
-        </Button>
-      </div>
+      <Button variant="success" size="lg" className="w-full" onClick={login}>
+        <LogIn />
+        {t({
+          id: 'common.signInToMapTask',
+          defaultMessage: 'Sign in to map this task',
+        })}
+      </Button>
     )
   }
 
@@ -234,8 +232,8 @@ export const TaskActions = () => {
   // Show completion buttons when locked (disabled while a submission is in flight)
   return (
     <>
-      <div className="@container rounded-lg bg-zinc-100 p-1.5 dark:bg-slate-800/60">
-        <div className="mb-1.5 px-1 font-medium text-xs text-zinc-500 uppercase tracking-wider dark:text-slate-400">
+      <div className="@container">
+        <div className="mb-2 font-medium text-fg-muted text-xs uppercase tracking-wider">
           {t({
             id: 'taskEditPage.taskActions.main.completionHeading',
             defaultMessage: 'Completion: Set Task Status',

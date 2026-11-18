@@ -77,25 +77,25 @@ const TaskFeatures = ({
     <Collapsible
       open={open}
       onOpenChange={setOpen}
-      className="rounded-lg border border-zinc-200 dark:border-slate-700"
+      className="rounded-lg border border-line"
       {...handlers(taskId)}
     >
       <div className="flex items-center gap-2 px-3 py-2">
-        <CollapsibleTrigger className="flex min-w-0 flex-1 items-center gap-2 text-left transition-colors hover:text-zinc-900 dark:hover:text-white">
+        <CollapsibleTrigger className="flex min-w-0 flex-1 items-center gap-2 text-left transition-colors hover:text-fg">
           {isPrimary ? (
-            <Star className="h-3.5 w-3.5 shrink-0 fill-yellow-500 text-yellow-500" />
+            <Star className="h-3.5 w-3.5 shrink-0 fill-mango-500 text-mango-500" />
           ) : (
-            <Package className="h-3.5 w-3.5 shrink-0 text-zinc-500 dark:text-slate-400" />
+            <Package className="h-3.5 w-3.5 shrink-0 text-fg-muted" />
           )}
-          <span className="font-medium text-sm text-zinc-900 dark:text-white">
+          <span className="font-medium text-fg text-sm">
             {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: taskId })}
           </span>
           {isPrimary && (
-            <span className="font-medium text-[10px] text-yellow-600 dark:text-yellow-400">
+            <span className="font-medium text-[10px] text-warning">
               {t({ id: 'common.primary', defaultMessage: 'Primary' })}
             </span>
           )}
-          <span className="text-xs text-zinc-500 dark:text-slate-400">
+          <span className="text-fg-muted text-xs">
             {task
               ? t(
                   {
@@ -108,7 +108,7 @@ const TaskFeatures = ({
           </span>
           <ChevronDown
             className={cn(
-              'h-4 w-4 shrink-0 text-zinc-400 transition-transform',
+              'h-4 w-4 shrink-0 text-fg-subtle transition-transform',
               open && 'rotate-180'
             )}
           />
@@ -120,7 +120,7 @@ const TaskFeatures = ({
               type="button"
               onClick={() => selectInEditor([taskId])}
               {...handlers(taskId)}
-              className="rounded p-1 text-blue-500 transition-colors hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-950/30 dark:hover:text-blue-300"
+              className="rounded p-1 text-link transition-colors hover:bg-muted"
               title={t(
                 {
                   id: 'taskInfoPanel.taskTab.bundleList.selectTaskTitle',
@@ -137,7 +137,7 @@ const TaskFeatures = ({
               type="button"
               onClick={() => onOpenTask(taskId)}
               {...handlers(taskId)}
-              className="rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+              className="rounded p-1 text-fg-muted transition-colors hover:bg-muted hover:text-fg"
               title={t(
                 { id: 'taskInfoPanel.features.openTask', defaultMessage: 'Open Task #{id}' },
                 { id: taskId }
@@ -154,9 +154,9 @@ const TaskFeatures = ({
       </div>
 
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-        <div className="space-y-2 border-zinc-200 border-t px-3 py-3 dark:border-slate-700">
+        <div className="space-y-2 border-line border-t px-3 py-3">
           {groups.length === 0 ? (
-            <p className="text-xs text-zinc-500 dark:text-slate-400">
+            <p className="text-fg-muted text-xs">
               {task
                 ? t({
                     id: 'taskInfoPanel.features.noFeatures',
@@ -201,8 +201,8 @@ export const FeaturesTab = ({ task }: FeaturesTabProps) => {
     <div ref={containerRef} className="space-y-2">
       {isBundled && (
         <div className="flex items-center gap-2 pb-1">
-          <Package className="h-3.5 w-3.5 text-zinc-400 dark:text-slate-500" />
-          <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-slate-400">
+          <Package className="h-3.5 w-3.5 text-fg-subtle" />
+          <span className="font-medium text-fg-muted text-xs uppercase tracking-wide">
             {t(
               { id: 'common.bundledTasks', defaultMessage: 'Bundled Tasks ({count})' },
               { count: taskIds.length }
@@ -212,7 +212,7 @@ export const FeaturesTab = ({ task }: FeaturesTabProps) => {
             <button
               type="button"
               onClick={() => selectInEditor(taskIds)}
-              className="ml-auto flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-[10px] text-blue-600 transition-colors hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/30"
+              className="ml-auto flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-[10px] text-link transition-colors hover:bg-muted"
               title={t({
                 id: 'taskInfoPanel.taskTab.bundleList.selectAllTitle',
                 defaultMessage: 'Select all bundled tasks in iD editor',

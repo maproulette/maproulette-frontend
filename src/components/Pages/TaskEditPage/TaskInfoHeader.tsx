@@ -52,15 +52,15 @@ export type TaskRelation = 'primary' | 'bundle' | 'selection'
 
 const RELATION_PILLS: Record<TaskRelation, { className: string; icon: typeof Star }> = {
   primary: {
-    className: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+    className: 'bg-highlight/10 text-highlight',
     icon: Star,
   },
   bundle: {
-    className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    className: 'bg-accent/10 text-link',
     icon: Layers,
   },
   selection: {
-    className: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+    className: 'bg-muted-strong text-fg-muted',
     icon: MousePointerClick,
   },
 }
@@ -117,7 +117,7 @@ export const TaskInfoHeader = ({
   }[relation]
 
   return (
-    <div className="shrink-0 rounded-t-lg border-slate-200 border-b bg-white px-4 py-3 dark:border-slate-700/50 dark:bg-slate-800">
+    <div className="shrink-0 border-line border-b p-4">
       {/* Info zone: badges row, title, breadcrumb */}
       <div className="space-y-1.5">
         {/* Status + Primary badge (left) | icon utilities + ellipsis (right) */}
@@ -194,7 +194,7 @@ export const TaskInfoHeader = ({
 
         {/* Project › Challenge breadcrumb, each with a button opening its description */}
         {(challenge || project) && (
-          <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-500 leading-tight dark:text-zinc-400">
+          <div className="flex flex-wrap items-center gap-1.5 text-fg-muted text-xs leading-tight">
             {project && (
               <>
                 <DescriptionBreadcrumbButton
@@ -213,13 +213,13 @@ export const TaskInfoHeader = ({
                 <Link
                   to="/project/$projectId"
                   params={{ projectId: String(project.id) }}
-                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                  className="text-fg-muted underline-offset-2 transition-colors hover:text-fg hover:underline"
                 >
                   {project.displayName ?? project.name}
                 </Link>
               </>
             )}
-            {challenge && project && <span className="text-zinc-400 dark:text-zinc-500">›</span>}
+            {challenge && project && <span className="text-fg-subtle">›</span>}
             {challenge && (
               <>
                 <DescriptionBreadcrumbButton
@@ -247,7 +247,7 @@ export const TaskInfoHeader = ({
                 <Link
                   to="/challenge/$challengeId"
                   params={{ challengeId: String(challenge.id) }}
-                  className="text-zinc-600 underline-offset-2 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                  className="text-fg-muted underline-offset-2 transition-colors hover:text-fg hover:underline"
                 >
                   {challenge.name}
                 </Link>
@@ -257,7 +257,7 @@ export const TaskInfoHeader = ({
         )}
 
         {/* Task ID */}
-        <div className="font-bold text-base text-zinc-900 leading-tight dark:text-zinc-100">
+        <div className="font-bold text-base text-fg leading-tight">
           {t({ id: 'common.taskWithId', defaultMessage: 'Task #{id}' }, { id: task.id })}
         </div>
       </div>
