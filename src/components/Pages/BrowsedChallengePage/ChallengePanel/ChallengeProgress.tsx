@@ -20,14 +20,13 @@ export const ChallengeProgress = () => {
     <div className="mb-4 flex flex-col gap-3 md:mb-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-          <span className="font-semibold text-zinc-900 dark:text-white">
+          <span className="font-semibold text-fg">
             {t({ id: 'browsedChallengePage.progress.progress', defaultMessage: 'Progress' })}
           </span>
           <Button
             variant="outline"
             size="sm"
-            className="h-7 gap-1.5 rounded-full px-2.5 text-xs hover:bg-zinc-100 dark:hover:bg-slate-700"
+            className="h-7 gap-1.5 rounded-full px-2.5 text-xs hover:bg-muted-strong"
             onClick={onViewDetails}
           >
             <BarChart3 className="size-3.5" />
@@ -35,9 +34,7 @@ export const ChallengeProgress = () => {
           </Button>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-bold text-base text-zinc-900 dark:text-white">
-            {completionPercentage}%
-          </span>
+          <span className="font-bold text-base text-fg">{completionPercentage}%</span>
         </div>
       </div>
       <ProgressBar

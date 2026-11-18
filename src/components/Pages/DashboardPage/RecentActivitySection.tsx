@@ -42,7 +42,7 @@ export const RecentActivitySection = ({ userId }: RecentActivitySectionProps) =>
       <div className="space-y-4">
         {days.map((day) => (
           <div key={day.date}>
-            <h3 className="mb-2 border-zinc-200 border-b pb-1 font-medium text-xs text-zinc-600 dark:border-slate-700 dark:text-slate-400">
+            <h3 className="mb-2 border-line border-b pb-1 font-medium text-fg-muted text-xs">
               {day.date}
             </h3>
             <ul className="space-y-3">
@@ -51,11 +51,11 @@ export const RecentActivitySection = ({ userId }: RecentActivitySectionProps) =>
                   <Link
                     to="/challenge/$challengeId"
                     params={{ challengeId: String(challenge.parentId) }}
-                    className="font-medium text-blue-600 text-sm hover:underline dark:text-blue-400"
+                    className="font-medium text-link text-sm hover:underline"
                   >
                     {challenge.name}
                   </Link>
-                  <ul className="mt-0.5 text-sm text-zinc-700 dark:text-slate-300">
+                  <ul className="mt-0.5 text-fg text-sm">
                     {challenge.actions.map((action) => (
                       <li key={action.status}>
                         {t(

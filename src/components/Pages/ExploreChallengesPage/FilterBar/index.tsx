@@ -90,7 +90,7 @@ export const FilterBar = () => {
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
       {showListFilters && (
-        <span className="shrink-0 font-medium text-sm text-zinc-600 dark:text-zinc-300">
+        <span className="shrink-0 font-medium text-fg-muted text-sm">
           {t({ id: 'exploreChallenges.filterBar.title', defaultMessage: 'Challenge List Filters' })}
         </span>
       )}

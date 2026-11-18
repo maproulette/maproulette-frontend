@@ -34,7 +34,7 @@ export const Default: Story = {
           </button>
           <button
             type="button"
-            className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-coral-600 text-sm transition-colors hover:bg-coral-50 dark:text-coral-400 dark:hover:bg-coral-900/20"
+            className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-danger text-sm transition-colors hover:bg-danger/10"
           >
             <Trash2 className="h-4 w-4" />
             Work on only the primary task

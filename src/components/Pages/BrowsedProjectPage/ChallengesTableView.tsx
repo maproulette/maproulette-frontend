@@ -26,7 +26,7 @@ interface ChallengesTableViewProps {
 export const ChallengesTableView = ({ challenges, renderActions }: ChallengesTableViewProps) => {
   const { t } = useIntl()
   return (
-    <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-slate-700">
+    <div className="overflow-hidden rounded-lg border border-line">
       <Table>
         <TableHeader>
           <TableRow>
@@ -93,15 +93,15 @@ const ChallengesTableRow = ({ challenge, actions }: ChallengesTableRowProps) => 
         <Link
           to="/challenge/$challengeId"
           params={{ challengeId: String(challenge.id) }}
-          className="font-medium text-zinc-900 hover:underline dark:text-zinc-50"
+          className="font-medium text-fg hover:underline"
         >
           {challenge.name}
         </Link>
       </TableCell>
-      <TableCell className="hidden max-w-[240px] truncate text-zinc-600 lg:table-cell dark:text-zinc-400">
+      <TableCell className="hidden max-w-[240px] truncate text-fg-muted lg:table-cell">
         {challenge.blurb || challenge.description || '—'}
       </TableCell>
-      <TableCell className="hidden text-center text-zinc-500 md:table-cell dark:text-zinc-400">
+      <TableCell className="hidden text-center text-fg-muted md:table-cell">
         {getDifficultyLabel(t, challenge.difficulty)}
       </TableCell>
       <TableCell className="hidden text-center md:table-cell">

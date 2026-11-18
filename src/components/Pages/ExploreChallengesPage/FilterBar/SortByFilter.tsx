@@ -15,7 +15,7 @@ export const SortByFilter = () => {
   const { sortBy, setSortBy } = useExploreChallengesSearchContext()
   return (
     <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
-      <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
+      <Label className="whitespace-nowrap font-medium text-fg text-sm">
         {t({ id: 'exploreChallenges.filterBar.sortBy.label', defaultMessage: 'Sort by' })}
       </Label>
       <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortBy)}>

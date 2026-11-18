@@ -32,7 +32,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 bg-white/80 backdrop-blur dark:bg-slate-800/80"
+          className="h-8 w-8 bg-popover"
           onClick={(e) => {
             // The card is wrapped in a Link; keep opening the menu from navigating.
             e.preventDefault()
@@ -81,7 +81,7 @@ export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActio
             e.preventDefault()
             unsaveChallenge.mutate({ userId, challengeId: challenge.id })
           }}
-          className="flex cursor-pointer items-center gap-2 text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
+          className="flex cursor-pointer items-center gap-2 text-danger focus:text-danger"
         >
           <BookmarkX className="h-4 w-4" />
           {t({

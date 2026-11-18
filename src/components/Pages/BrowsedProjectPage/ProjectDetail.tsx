@@ -61,21 +61,21 @@ export const ProjectDetail = () => {
 
   return (
     <aside className="h-full min-h-0 overflow-hidden pr-2">
-      <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800">
+      <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-panel">
         {/* Header */}
         <div className="space-y-2.5 px-6 pt-6 pb-4">
           {(project.featured || project.isArchived) && (
             <ul className="flex flex-wrap items-center gap-2.5">
               {project.featured && (
                 <li>
-                  <span className="font-medium text-cyan-500 text-xs uppercase tracking-wide dark:text-cyan-400">
+                  <span className="font-medium text-highlight text-xs uppercase tracking-wide">
                     {t({ id: 'common.featured', defaultMessage: 'Featured' })}
                   </span>
                 </li>
               )}
               {project.isArchived && (
                 <li>
-                  <span className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                  <span className="font-medium text-fg-muted text-xs uppercase tracking-wide">
                     {t({ id: 'common.archived', defaultMessage: 'Archived' })}
                   </span>
                 </li>
@@ -83,19 +83,19 @@ export const ProjectDetail = () => {
             </ul>
           )}
 
-          <h1 className="line-clamp-2 font-bold text-base text-zinc-900 leading-tight tracking-tight dark:text-zinc-50">
+          <h1 className="line-clamp-2 font-bold text-base text-fg leading-tight tracking-tight">
             {project.displayName || project.name}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-xs text-zinc-600 dark:text-zinc-400">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0 font-medium text-fg-muted text-xs">
             <StatusBadge enabled={project.enabled || false} />
-            <span className="text-zinc-400 dark:text-zinc-500">•</span>
+            <span className="text-fg-subtle">•</span>
             <span className="whitespace-nowrap">
               {t({ id: 'common.idNumber', defaultMessage: 'ID {id}' }, { id: project.id ?? '' })}
             </span>
             {project.owner && (
               <>
-                <span className="text-zinc-400 dark:text-zinc-500">•</span>
+                <span className="text-fg-subtle">•</span>
                 <span className="whitespace-nowrap">
                   {t(
                     {
@@ -130,21 +130,19 @@ export const ProjectDetail = () => {
         </div>
 
         {project.description && (
-          <div className="border-zinc-200/50 border-t px-6 py-4 dark:border-slate-700/50">
-            <p className="text-pretty text-sm text-zinc-700 leading-relaxed dark:text-zinc-300">
-              {project.description}
-            </p>
+          <div className="border-line border-t px-6 py-4">
+            <p className="text-pretty text-fg text-sm leading-relaxed">{project.description}</p>
           </div>
         )}
 
         {/* Scrollable stats area */}
-        <div className="flex-1 border-zinc-200/50 border-t dark:border-slate-700/50">
+        <div className="flex-1 border-line border-t">
           <ScrollArea className="h-full">
             <div className="space-y-4 px-6 py-4 text-sm">
               {totalTasks > 0 && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                    <span className="font-semibold text-fg">
                       {t(
                         {
                           id: 'browsedProjectPage.projectDetail.percentComplete',
@@ -153,7 +151,7 @@ export const ProjectDetail = () => {
                         { percent: Math.round(completionPercentage) }
                       )}
                     </span>
-                    <span className="text-zinc-500 dark:text-zinc-400">
+                    <span className="text-fg-subtle">
                       {formatNumber(completedTasks)} / {formatNumber(totalTasks)}
                     </span>
                   </div>
@@ -164,13 +162,13 @@ export const ProjectDetail = () => {
               <Separator />
 
               <div className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-fg-muted">
                   {t({ id: 'common.challenges', defaultMessage: 'Challenges' })}
                 </span>
                 <span className="font-semibold tabular-nums">{challenges.length}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-zinc-600 dark:text-zinc-400">
+                <span className="text-fg-muted">
                   {t({ id: 'common.tasksRemaining', defaultMessage: 'Tasks remaining' })}
                 </span>
                 <span className="font-semibold tabular-nums">{formatNumber(remainingTasks)}</span>
@@ -181,7 +179,7 @@ export const ProjectDetail = () => {
                   <Separator />
                   {project.created && (
                     <div className="flex items-center justify-between">
-                      <span className="text-zinc-600 dark:text-zinc-400">
+                      <span className="text-fg-muted">
                         {t({ id: 'common.created', defaultMessage: 'Created' })}
                       </span>
                       <span className="font-medium">
@@ -191,7 +189,7 @@ export const ProjectDetail = () => {
                   )}
                   {project.modified && (
                     <div className="flex items-center justify-between">
-                      <span className="text-zinc-600 dark:text-zinc-400">
+                      <span className="text-fg-muted">
                         {t({ id: 'common.modified', defaultMessage: 'Modified' })}
                       </span>
                       <span className="font-medium">

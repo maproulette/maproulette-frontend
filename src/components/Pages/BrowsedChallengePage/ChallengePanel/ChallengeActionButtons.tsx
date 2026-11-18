@@ -43,7 +43,7 @@ export const ChallengeActionButtons = ({ leadingItems }: { leadingItems?: ReactN
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="flex items-center justify-center rounded-lg p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:text-slate-400 dark:focus:ring-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+          className="flex items-center justify-center rounded-lg p-1.5 text-fg-muted transition-colors hover:bg-muted hover:text-fg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           aria-label={t({
             id: 'browsedChallengePage.actionButtons.challengeActions',
             defaultMessage: 'Challenge actions',
@@ -98,12 +98,7 @@ export const ChallengeActionButtons = ({ leadingItems }: { leadingItems?: ReactN
           title={reportTitle}
           className={openReport ? 'data-[disabled]:opacity-100' : ''}
         >
-          <Flag
-            className={cn(
-              'size-4 transition-all',
-              openReport && 'fill-red-600 text-red-600 dark:fill-red-500 dark:text-red-500'
-            )}
-          />
+          <Flag className={cn('size-4 transition-all', openReport && 'fill-danger text-danger')} />
           {openReport
             ? t({
                 id: 'browsedChallengePage.actionButtons.challengeReported',

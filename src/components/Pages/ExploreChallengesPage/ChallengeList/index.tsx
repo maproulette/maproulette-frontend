@@ -21,7 +21,7 @@ export const ChallengeList = () => {
     <div className="@container relative flex h-full w-full flex-1 flex-col overflow-hidden">
       <div
         className={cn(
-          'absolute inset-0 z-10 flex items-center justify-center bg-white/5 backdrop-blur-sm transition-opacity duration-200',
+          'absolute inset-0 z-10 flex items-center justify-center bg-panel/40 transition-opacity duration-200',
           isLoadingState ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
       >
@@ -34,8 +34,8 @@ export const ChallengeList = () => {
         <ScrollArea className="h-full w-full [&_[data-slot=scroll-area-scrollbar]]:hidden">
           <Empty className="p-4">
             <EmptyHeader>
-              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
-                <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
+              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-danger/10">
+                <AlertCircle className="h-6 w-6 text-danger" />
               </div>
               <EmptyTitle>
                 {t({

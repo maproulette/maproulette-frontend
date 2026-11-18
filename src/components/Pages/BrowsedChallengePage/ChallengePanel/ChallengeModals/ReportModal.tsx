@@ -28,12 +28,12 @@ const MAX_CHARACTERS = CHALLENGE_REPORT_MAX_LENGTH
 
 const getCharacterCountColor = (count: number) => {
   if (count >= MAX_CHARACTERS || count < MIN_CHARACTERS) {
-    return 'text-red-600 dark:text-red-400'
+    return 'text-danger'
   }
   if (count >= MAX_CHARACTERS * 0.9) {
-    return 'text-yellow-600 dark:text-yellow-400'
+    return 'text-warning'
   }
-  return 'text-zinc-500 dark:text-slate-400'
+  return 'text-fg-muted'
 }
 
 export const ReportModal = () => {
@@ -146,7 +146,7 @@ export const ReportModal = () => {
         </DialogHeader>
 
         <div className="mt-2">
-          <label htmlFor={emailId} className="font-medium text-sm text-zinc-900 dark:text-white">
+          <label htmlFor={emailId} className="font-medium text-fg text-sm">
             {t({
               id: 'browsedChallengePage.challengeModals.reportModal.emailLabel',
               defaultMessage: 'Email (optional)',
@@ -174,10 +174,8 @@ export const ReportModal = () => {
                   setErrors((prev) => ({ ...prev, input: false }))
                 }}
                 className={cn(
-                  'border-zinc-300 border-r pr-2 font-medium uppercase transition-colors dark:border-slate-700',
-                  !showingPreview
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
+                  'border-line-strong border-r pr-2 font-medium uppercase transition-colors',
+                  !showingPreview ? 'text-link' : 'text-fg-muted hover:text-fg'
                 )}
               >
                 {t({ id: 'common.write', defaultMessage: 'Write' })}
@@ -187,9 +185,7 @@ export const ReportModal = () => {
                 onClick={() => setShowingPreview(true)}
                 className={cn(
                   'pl-2 font-medium uppercase transition-colors',
-                  showingPreview
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-zinc-600 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white'
+                  showingPreview ? 'text-link' : 'text-fg-muted hover:text-fg'
                 )}
               >
                 {t({ id: 'common.preview', defaultMessage: 'Preview' })}
@@ -201,17 +197,17 @@ export const ReportModal = () => {
           </div>
 
           {showingPreview ? (
-            <div className="min-h-32 rounded border-2 border-zinc-300 bg-zinc-50 p-2 dark:border-slate-700 dark:bg-slate-900">
+            <div className="min-h-32 rounded border-2 border-line-strong bg-inset p-2">
               {reportText.trim() ? (
                 <MarkdownContent autoLink={false}>{reportText}</MarkdownContent>
               ) : (
-                <p className="text-zinc-500 dark:text-slate-400">
+                <p className="text-fg-muted">
                   {t({ id: 'common.nothingToPreview', defaultMessage: 'Nothing to preview' })}
                 </p>
               )}
             </div>
           ) : (
-            <div className="overflow-hidden rounded border-2 border-zinc-300 bg-zinc-100 dark:border-slate-700 dark:bg-slate-800">
+            <div className="overflow-hidden rounded border-2 border-line-strong bg-muted">
               <Textarea
                 id={textId}
                 rows={4}
@@ -228,7 +224,7 @@ export const ReportModal = () => {
                   }
                 }}
                 disabled={isSubmitting}
-                className="w-full resize-none appearance-none whitespace-pre-wrap break-all border-none bg-transparent p-3 font-mono text-sm shadow-inner outline-none placeholder:text-zinc-500 dark:placeholder:text-slate-400"
+                className="w-full resize-none appearance-none whitespace-pre-wrap break-all border-none bg-transparent p-3 font-mono text-sm outline-none placeholder:text-fg-muted"
                 style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
               />
             </div>
@@ -244,10 +240,7 @@ export const ReportModal = () => {
               }}
               disabled={isSubmitting}
             />
-            <label
-              htmlFor={confirmId}
-              className="cursor-pointer text-sm text-zinc-700 dark:text-slate-300"
-            >
+            <label htmlFor={confirmId} className="cursor-pointer text-fg text-sm">
               {t({
                 id: 'browsedChallengePage.challengeModals.reportModal.confirmLabel',
                 defaultMessage: 'I have attempted to contact the Challenge creator',
@@ -256,7 +249,7 @@ export const ReportModal = () => {
           </div>
 
           {errors.input && (
-            <div className="mt-2 text-red-600 text-sm dark:text-red-400">
+            <div className="mt-2 text-danger text-sm">
               {t(
                 {
                   id: 'browsedChallengePage.challengeModals.reportModal.minLengthError',
@@ -268,7 +261,7 @@ export const ReportModal = () => {
             </div>
           )}
           {errors.checkbox && (
-            <div className="mt-2 text-red-600 text-sm dark:text-red-400">
+            <div className="mt-2 text-danger text-sm">
               {t({
                 id: 'browsedChallengePage.challengeModals.reportModal.checkboxError',
                 defaultMessage: "Confirm that you've tried contacting the challenge creator.",

@@ -18,10 +18,8 @@ const formatPercent = (percent: number) =>
 
 const MetaRow = ({ label, value }: { label: string; value: string }) => (
   <div className="flex items-baseline justify-between gap-4">
-    <span className="text-sm text-zinc-600 dark:text-slate-400">{label}</span>
-    <span className="font-semibold text-sm text-zinc-900 tabular-nums dark:text-white">
-      {value}
-    </span>
+    <span className="text-fg-muted text-sm">{label}</span>
+    <span className="font-semibold text-fg text-sm tabular-nums">{value}</span>
   </div>
 )
 
@@ -59,7 +57,7 @@ export const ActionsModal = () => {
           </DialogTitle>
         </DialogHeader>
         {!actions ? (
-          <p className="py-6 text-center text-sm text-zinc-600 dark:text-slate-400">
+          <p className="py-6 text-center text-fg-muted text-sm">
             {t({
               id: 'browsedChallengePage.challengeModals.actions.unavailable',
               defaultMessage: 'Task activity is not available for this challenge.',
@@ -67,20 +65,20 @@ export const ActionsModal = () => {
           </p>
         ) : (
           <div className="space-y-5">
-            <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-slate-700 dark:bg-slate-800/60">
+            <section className="rounded-lg border border-line bg-muted p-4">
               <div className="flex items-end justify-between gap-4">
                 <div>
-                  <p className="font-medium text-xs text-zinc-500 uppercase tracking-wide dark:text-zinc-400">
+                  <p className="font-medium text-fg-muted text-xs uppercase tracking-wide">
                     {t({
                       id: 'common.completed',
                       defaultMessage: 'Completed',
                     })}
                   </p>
-                  <p className="mt-1.5 font-semibold text-3xl text-zinc-900 tabular-nums leading-none tracking-tight dark:text-zinc-50">
+                  <p className="mt-1.5 font-semibold text-3xl text-fg tabular-nums leading-none tracking-tight">
                     {formatPercent(completedPercent)}
                   </p>
                 </div>
-                <p className="text-sm text-zinc-600 tabular-nums dark:text-slate-400">
+                <p className="text-fg-muted text-sm tabular-nums">
                   {t(
                     {
                       id: 'browsedChallengePage.challengeModals.actions.completedOf',
@@ -101,20 +99,18 @@ export const ActionsModal = () => {
                 {segments.map((segment) => (
                   <div
                     key={segment.key}
-                    className="flex items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-800/60"
+                    className="flex items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
                   >
                     <span
                       aria-hidden="true"
                       className="size-2.5 shrink-0 rounded-full"
                       style={{ backgroundColor: segment.color }}
                     />
-                    <dt className="min-w-0 flex-1 truncate text-sm text-zinc-700 dark:text-slate-300">
-                      {segment.label}
-                    </dt>
-                    <dd className="font-semibold text-sm text-zinc-900 tabular-nums dark:text-white">
+                    <dt className="min-w-0 flex-1 truncate text-fg text-sm">{segment.label}</dt>
+                    <dd className="font-semibold text-fg text-sm tabular-nums">
                       {formatNumber(segment.count)}
                     </dd>
-                    <dd className="w-12 text-right text-xs text-zinc-500 tabular-nums dark:text-slate-400">
+                    <dd className="w-12 text-right text-fg-muted text-xs tabular-nums">
                       {formatPercent(segment.percent)}
                     </dd>
                   </div>

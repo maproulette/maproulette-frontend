@@ -127,7 +127,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     {
       key: 'like',
       icon: Heart,
-      iconClassName: isLiked ? 'fill-red-500 text-red-500' : undefined,
+      iconClassName: isLiked ? 'fill-coral-500 text-coral-500' : undefined,
       label: isLiked
         ? t({ id: 'browsedChallengePage.header.liked', defaultMessage: 'Liked' })
         : t({ id: 'browsedChallengePage.header.like', defaultMessage: 'Like' }),
@@ -149,7 +149,7 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
     {
       key: 'save',
       icon: Bookmark,
-      iconClassName: isFavorited ? 'fill-yellow-500 text-yellow-500' : undefined,
+      iconClassName: isFavorited ? 'fill-mango-500 text-mango-500' : undefined,
       label: isFavorited
         ? t({ id: 'browsedChallengePage.header.saved', defaultMessage: 'Saved' })
         : t({ id: 'common.save', defaultMessage: 'Save' }),
@@ -304,15 +304,13 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
       <div className={cn('flex gap-3', isScrolled ? 'items-center' : 'items-start')}>
         <div className={cn('min-w-0 flex-1', !isScrolled && 'space-y-2')}>
           {isScrolled ? (
-            <h1 className="truncate font-semibold text-base text-zinc-900 leading-tight tracking-tight dark:text-white">
+            <h1 className="truncate font-semibold text-base text-fg leading-tight tracking-tight">
               {name}
             </h1>
           ) : (
             // The badges sit inline after the name so they wrap along with it
             <div className="break-words text-xl leading-snug">
-              <h1 className="inline font-semibold text-zinc-900 tracking-tight dark:text-white">
-                {name}
-              </h1>
+              <h1 className="inline font-semibold text-fg tracking-tight">{name}</h1>
               {badges.map((badge) => (
                 <Badge key={badge.label} variant={badge.variant} className="ml-2 align-middle">
                   {badge.label}
@@ -322,10 +320,10 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
           )}
 
           {!isScrolled && bylineParts.length > 0 && (
-            <div className="flex flex-wrap items-center gap-x-2 text-sm text-zinc-600 dark:text-slate-400">
+            <div className="flex flex-wrap items-center gap-x-2 text-fg-muted text-sm">
               {bylineParts.map(({ key, node }, i) => (
                 <span key={key} className="contents">
-                  {i > 0 && <span className="text-zinc-400 dark:text-slate-500">•</span>}
+                  {i > 0 && <span className="text-fg-subtle">•</span>}
                   {node}
                 </span>
               ))}

@@ -7,7 +7,7 @@ const fillLayer: LayerProps = {
   id: 'location-polygon-fill',
   type: 'fill',
   paint: {
-    'fill-color': '#3b82f6',
+    'fill-color': '#00c94f',
     'fill-opacity': 0.2,
   },
 }
@@ -16,7 +16,7 @@ const fillOutlineLayer: LayerProps = {
   id: 'location-polygon-fill-outline',
   type: 'line',
   paint: {
-    'line-color': '#3b82f6',
+    'line-color': '#00c94f',
     'line-width': 2,
     'line-opacity': 0.8,
   },
