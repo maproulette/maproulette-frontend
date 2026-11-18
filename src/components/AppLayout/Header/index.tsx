@@ -16,7 +16,7 @@ export const Header = () => {
 
   return (
     <header className="relative z-20 flex flex-wrap items-center justify-between gap-3 px-3 py-2.5 has-[[aria-expanded=true]]:z-40 md:flex-nowrap md:gap-6 md:px-5 md:py-3.5 lg:gap-12">
-      <Link to="/" rel="home" className="flex items-center gap-2">
+      <Link to="/" rel="home" className="flex items-center gap-2 rounded-md">
         <Logomark className="size-8 md:size-9" />
         <span className="whitespace-nowrap font-medium text-xl/5">
           {window.env.VITE_APP_NAME ||

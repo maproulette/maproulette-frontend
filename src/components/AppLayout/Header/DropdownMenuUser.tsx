@@ -24,7 +24,7 @@ export const DropdownMenuUser = ({ user }: { user: User }) => {
   const { t } = useIntl()
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex cursor-pointer">
+      <DropdownMenuTrigger className="flex cursor-pointer rounded-full">
         <Avatar className="size-8 md:size-9">
           <AvatarImage src={user.osmProfile.avatarURL} alt={user.osmProfile.displayName} />
           <AvatarFallback>{initials(user.osmProfile.displayName)}</AvatarFallback>

@@ -18,7 +18,7 @@ export const MobileNav = () => {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="hover:text-lime-600 lg:hidden"
+          className="rounded-sm hover:text-link lg:hidden"
           aria-label={t({ id: 'appLayout.header.nav.mobile', defaultMessage: 'Mobile navigation' })}
         >
           <MenuIcon className="size-6" />
