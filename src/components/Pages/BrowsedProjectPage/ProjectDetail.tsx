@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Progress } from '@/components/ui/Progress'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Separator } from '@/components/ui/Separator'
+import { getVisibleTotal } from '@/hooks/useChallengeProgress'
 import { useIntl } from '@/i18n'
 import { formatDate } from '@/lib/date'
 import { logger } from '@/lib/logger'
@@ -21,7 +22,7 @@ export const ProjectDetail = () => {
     (sum, c) => sum + (c.completionMetrics?.tasksRemaining ?? 0),
     0
   )
-  const totalTasks = challenges.reduce((sum, c) => sum + (c.completionMetrics?.total ?? 0), 0)
+  const totalTasks = challenges.reduce((sum, c) => sum + getVisibleTotal(c.completionMetrics), 0)
   const completedTasks = totalTasks - remainingTasks
   const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0
 

@@ -38,34 +38,31 @@ describe('useChallengeProgress', () => {
     expect(result.current.tasksRemaining).toBe(5)
   })
 
-  it('derives the total from summed status fields when total is missing', () => {
-    // The backend sometimes omits `total` even when per-status counts are present.
-    const { total: _, ...withoutTotal } = makeMetrics({ fixed: 2, available: 3, tooHard: 1 })
-
+  it('leaves deleted and disabled tasks out of the total', () => {
+    // The backend's own total counts them, but they aren't work anyone can do.
     const { result } = renderHook(() =>
-      useChallengeProgress(withoutTotal as unknown as CompletionMetrics)
+      useChallengeProgress(
+        makeMetrics({ total: 20, fixed: 6, available: 4, deleted: 3, disabled: 7 })
+      )
     )
 
-    expect(result.current.total).toBe(6)
-  })
-
-  it('derives the total from summed status fields when total is zero', () => {
-    const { result } = renderHook(() =>
-      useChallengeProgress(makeMetrics({ total: 0, fixed: 1, available: 1 }))
-    )
-
-    expect(result.current.total).toBe(2)
+    expect(result.current.total).toBe(10)
+    expect(result.current.completionPercentage).toBe(60)
   })
 
   it('rounds the completion percentage', () => {
-    const { result } = renderHook(() => useChallengeProgress(makeMetrics({ total: 3, fixed: 1 })))
+    const { result } = renderHook(() =>
+      useChallengeProgress(makeMetrics({ total: 3, fixed: 1, available: 2 }))
+    )
 
     expect(result.current.completionPercentage).toBe(33)
   })
 
   it('counts falsePositive and alreadyFixed toward completion alongside fixed', () => {
     const { result } = renderHook(() =>
-      useChallengeProgress(makeMetrics({ total: 10, fixed: 2, falsePositive: 3, alreadyFixed: 1 }))
+      useChallengeProgress(
+        makeMetrics({ total: 10, fixed: 2, falsePositive: 3, alreadyFixed: 1, available: 4 })
+      )
     )
 
     expect(result.current.completionPercentage).toBe(60)

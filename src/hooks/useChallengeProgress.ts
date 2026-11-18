@@ -18,31 +18,26 @@ const SEGMENT_TITLE: MessageDescriptor = defineMessage({
 
 const SHOWN_STATUSES = ['fixed', 'alreadyFixed', 'falsePositive', 'tooHard'] as const
 
-// All per-status fields the backend reports; used to derive a total when
-// `actions.total` is missing or zero (the backend sometimes omits it even when
-// individual metrics are present, which used to hide the progress bar entirely).
-const ALL_STATUS_FIELDS = [
+// The statuses that make up a challenge's visible work (either done or still to do).
+// The backend's `total` also counts deleted and disabled tasks, but these don't make
+// sense to include in progress metrics.
+const VISIBLE_STATUS_FIELDS = [
   'fixed',
   'falsePositive',
   'alreadyFixed',
   'skipped',
   'tooHard',
   'available',
-  'deleted',
-  'disabled',
   'answered',
-  'validated',
 ] as const
 
-const getTotal = (metrics?: CompletionMetrics) => {
-  const summedTotal = metrics
-    ? ALL_STATUS_FIELDS.reduce((acc, field) => acc + (metrics[field] ?? 0), 0)
-    : 0
-  return metrics?.total && metrics.total > 0 ? metrics.total : summedTotal
-}
+type VisibleStatus = (typeof VISIBLE_STATUS_FIELDS)[number]
+
+export const getVisibleTotal = (metrics?: Partial<Record<VisibleStatus, number>>) =>
+  metrics ? VISIBLE_STATUS_FIELDS.reduce((acc, field) => acc + (metrics[field] ?? 0), 0) : 0
 
 const getCompletionPercentage = (metrics?: CompletionMetrics) => {
-  const total = getTotal(metrics)
+  const total = getVisibleTotal(metrics)
   if (total === 0 || !metrics) return 0
   const completed =
     (metrics.fixed || 0) + (metrics.falsePositive || 0) + (metrics.alreadyFixed || 0)
@@ -51,7 +46,7 @@ const getCompletionPercentage = (metrics?: CompletionMetrics) => {
 
 export const useChallengeProgress = (metrics?: CompletionMetrics) => {
   const { t } = useIntl()
-  const total = getTotal(metrics)
+  const total = getVisibleTotal(metrics)
   const completionPercentage = getCompletionPercentage(metrics)
 
   const buildSegments = (): ProgressSegment[] => {
