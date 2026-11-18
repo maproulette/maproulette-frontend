@@ -3,16 +3,19 @@ import {
   Archive,
   ArrowRightLeft,
   Copy,
-  Eye,
-  EyeOff,
   Hammer,
   MoreHorizontal,
-  Pause,
   Pencil,
   Pin,
   Play,
   Trash2,
 } from 'lucide-react'
+import {
+  ArchiveButton,
+  DiscoverableButton,
+  PauseButton,
+  PinButton,
+} from '@/components/Pages/ManagementPages/shared/QuickActionButtons'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import {
@@ -121,30 +124,12 @@ export const ChallengesTableView = ({
                 </TableCell>
                 <TableCell className="text-center">
                   {challenge.id != null ? (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="mx-auto h-8 w-8"
+                    <PinButton
+                      pinned={pinned}
+                      entity="challenge"
                       onClick={() => onTogglePin(challenge.id)}
-                      title={
-                        pinned
-                          ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
-                          : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
-                      }
-                      aria-label={
-                        pinned
-                          ? t({ id: 'common.unpinChallenge', defaultMessage: 'Unpin challenge' })
-                          : t({ id: 'common.pinChallenge', defaultMessage: 'Pin challenge' })
-                      }
-                    >
-                      <Pin
-                        className={
-                          pinned
-                            ? 'h-4 w-4 text-amber-600 dark:text-amber-400'
-                            : 'h-4 w-4 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-                        }
-                      />
-                    </Button>
+                      className="mx-auto"
+                    />
                   ) : (
                     <span className="text-zinc-300 dark:text-zinc-600">—</span>
                   )}
@@ -175,112 +160,22 @@ export const ChallengesTableView = ({
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">
                     {challenge.id != null && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
+                      <PauseButton
+                        paused={challenge.paused ?? false}
                         onClick={() => onTogglePaused(challenge.id, challenge.paused ?? false)}
-                        title={
-                          challenge.paused
-                            ? t({
-                                id: 'common.resumeChallenge',
-                                defaultMessage: 'Resume challenge',
-                              })
-                            : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
-                        }
-                        aria-label={
-                          challenge.paused
-                            ? t({
-                                id: 'common.resumeChallenge',
-                                defaultMessage: 'Resume challenge',
-                              })
-                            : t({ id: 'common.pauseChallenge', defaultMessage: 'Pause challenge' })
-                        }
-                      >
-                        <Pause
-                          className={cn(
-                            'h-4 w-4',
-                            challenge.paused
-                              ? 'text-amber-500 dark:text-amber-400'
-                              : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-                          )}
-                        />
-                      </Button>
+                      />
                     )}
                     {challenge.id != null && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
+                      <ArchiveButton
+                        archived={challenge.isArchived ?? false}
                         onClick={() => onArchive(challenge.id, challenge.isArchived ?? false)}
-                        title={
-                          challenge.isArchived
-                            ? t({
-                                id: 'common.unarchiveChallenge',
-                                defaultMessage: 'Unarchive challenge',
-                              })
-                            : t({
-                                id: 'common.archiveChallenge',
-                                defaultMessage: 'Archive challenge',
-                              })
-                        }
-                        aria-label={
-                          challenge.isArchived
-                            ? t({
-                                id: 'common.unarchiveChallenge',
-                                defaultMessage: 'Unarchive challenge',
-                              })
-                            : t({
-                                id: 'common.archiveChallenge',
-                                defaultMessage: 'Archive challenge',
-                              })
-                        }
-                      >
-                        <Archive
-                          className={cn(
-                            'h-4 w-4',
-                            challenge.isArchived
-                              ? 'text-amber-600 dark:text-amber-400'
-                              : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-                          )}
-                        />
-                      </Button>
+                      />
                     )}
                     {challenge.id != null && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
+                      <DiscoverableButton
+                        enabled={challenge.enabled ?? false}
                         onClick={() => onToggleEnabled(challenge)}
-                        title={
-                          challenge.enabled
-                            ? t({
-                                id: 'common.makeNotDiscoverable',
-                                defaultMessage: 'Make not discoverable',
-                              })
-                            : t({
-                                id: 'common.makeDiscoverable',
-                                defaultMessage: 'Make discoverable',
-                              })
-                        }
-                        aria-label={
-                          challenge.enabled
-                            ? t({
-                                id: 'common.makeNotDiscoverable',
-                                defaultMessage: 'Make not discoverable',
-                              })
-                            : t({
-                                id: 'common.makeDiscoverable',
-                                defaultMessage: 'Make discoverable',
-                              })
-                        }
-                      >
-                        {challenge.enabled ? (
-                          <Eye className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                        ) : (
-                          <EyeOff className="h-4 w-4 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400" />
-                        )}
-                      </Button>
+                      />
                     )}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

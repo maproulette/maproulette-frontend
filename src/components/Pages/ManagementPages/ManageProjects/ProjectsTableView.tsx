@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Pin } from 'lucide-react'
+import { PinButton } from '@/components/Pages/ManagementPages/shared/QuickActionButtons'
 import { StatusBadge } from '@/components/shared/StatusBadge'
-import { Button } from '@/components/ui/Button'
 import {
   Table,
   TableBody,
@@ -82,30 +82,12 @@ export const ProjectsTableView = ({
                 </TableCell>
                 <TableCell className="text-center">
                   {onTogglePin && project.id != null ? (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="mx-auto h-8 w-8"
+                    <PinButton
+                      pinned={pinned}
+                      entity="project"
                       onClick={() => onTogglePin(project.id as number)}
-                      title={
-                        pinned
-                          ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
-                          : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
-                      }
-                      aria-label={
-                        pinned
-                          ? t({ id: 'common.unpinProject', defaultMessage: 'Unpin project' })
-                          : t({ id: 'common.pinProject', defaultMessage: 'Pin project' })
-                      }
-                    >
-                      <Pin
-                        className={
-                          pinned
-                            ? 'h-4 w-4 text-amber-600 dark:text-amber-400'
-                            : 'h-4 w-4 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-400'
-                        }
-                      />
-                    </Button>
+                      className="mx-auto"
+                    />
                   ) : pinned ? (
                     <span
                       title={t({ id: 'common.pinned', defaultMessage: 'Pinned' })}
