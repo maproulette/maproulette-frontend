@@ -4,20 +4,12 @@ import { api } from '@/api'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { useIntl } from '@/i18n'
 import { resolveTeamImageUrl } from '@/lib/teamImage'
-import { cn, initials } from '@/lib/utils'
-import type { TeamDisplayRole, TeamUser } from '@/types/Team'
+import { initials } from '@/lib/utils'
+import type { TeamUser } from '@/types/Team'
 import { TeamDisplayRoleLabel, teamDisplayRole } from '@/types/Team'
 
 interface Props {
   membership: TeamUser
-}
-
-const roleBadge: Record<TeamDisplayRole, string> = {
-  invited: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
-  member: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300',
-  manager: 'bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:text-sky-300',
-  admin: 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300',
-  owner: 'bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300',
 }
 
 export const TeamCard = ({ membership }: Props) => {
@@ -46,14 +38,9 @@ export const TeamCard = ({ membership }: Props) => {
               {name}
             </Link>
           </div>
-          <span
-            className={cn(
-              'mt-1 inline-block rounded-full px-2 py-0.5 font-medium text-xs',
-              roleBadge[role]
-            )}
-          >
+          <div className="mt-0.5 text-sm text-zinc-600 dark:text-slate-400">
             {TeamDisplayRoleLabel[role]}
-          </span>
+          </div>
         </div>
       </div>
     </div>
