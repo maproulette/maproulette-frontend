@@ -37,13 +37,13 @@ export const DashboardSection = ({
     <section
       aria-labelledby={headingId}
       className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900',
+        'flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-line bg-panel',
         className
       )}
     >
       <div className="flex shrink-0 items-center gap-2 px-4 py-3">
-        <span className="text-zinc-500 dark:text-slate-400 [&_svg]:size-4">{icon}</span>
-        <h2 id={headingId} className="font-medium text-sm text-zinc-900 dark:text-slate-100">
+        <span className="text-fg-muted [&_svg]:size-4">{icon}</span>
+        <h2 id={headingId} className="font-medium text-fg text-sm">
           {title}
         </h2>
         {count !== undefined && count > 0 && (
@@ -57,7 +57,7 @@ export const DashboardSection = ({
             <Loader />
           </div>
         ) : error ? (
-          <p className="py-2 text-center text-red-700 text-sm dark:text-red-400">
+          <p className="py-2 text-center text-danger text-sm">
             {t({ id: 'dashboard.common.failedToLoad', defaultMessage: 'Failed to load' })}
           </p>
         ) : (
@@ -76,10 +76,8 @@ interface DashboardEmptyProps {
 
 export const DashboardEmpty = ({ icon, title, description }: DashboardEmptyProps) => (
   <div className="flex flex-col items-center justify-center py-6 text-center">
-    <div className="mb-2 rounded-lg bg-zinc-100 p-2 text-zinc-500 dark:bg-slate-800 dark:text-slate-400 [&_svg]:size-5">
-      {icon}
-    </div>
-    <p className="font-medium text-sm text-zinc-900 dark:text-slate-100">{title}</p>
-    <p className="text-sm text-zinc-600 dark:text-slate-400">{description}</p>
+    <div className="mb-2 rounded-lg bg-muted p-2 text-fg-muted [&_svg]:size-5">{icon}</div>
+    <p className="font-medium text-fg text-sm">{title}</p>
+    <p className="text-fg-muted text-sm">{description}</p>
   </div>
 )

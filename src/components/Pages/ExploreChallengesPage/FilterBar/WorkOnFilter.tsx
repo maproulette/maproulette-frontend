@@ -15,7 +15,7 @@ export const WorkOnFilter = () => {
   const { workOn, setWorkOn } = useExploreChallengesSearchContext()
   return (
     <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
-      <Label className="whitespace-nowrap font-medium text-sm text-zinc-700 dark:text-zinc-300">
+      <Label className="whitespace-nowrap font-medium text-fg text-sm">
         {t({ id: 'exploreChallenges.filterBar.workOn.label', defaultMessage: 'Work on' })}
       </Label>
       <Select value={workOn} onValueChange={(value) => setWorkOn(value as WorkOnCategory)}>

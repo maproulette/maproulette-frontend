@@ -19,11 +19,11 @@ export const OverpassModal = () => {
         </DialogHeader>
         <div className="min-h-0 flex-1 overflow-hidden">
           <ScrollArea className="h-full">
-            <div className="rounded-lg border border-zinc-200 bg-zinc-50 dark:border-slate-700 dark:bg-slate-900">
+            <div className="rounded-lg border border-line bg-inset">
               <textarea
                 readOnly
                 value={challenge.overpassQL || ''}
-                className="h-full w-full resize-none rounded-lg border-0 bg-transparent p-4 font-mono text-sm text-zinc-900 focus:outline-none dark:text-white"
+                className="h-full w-full resize-none rounded-lg border-0 bg-transparent p-4 font-mono text-fg text-sm focus:outline-none"
                 style={{ minHeight: '400px' }}
               />
             </div>

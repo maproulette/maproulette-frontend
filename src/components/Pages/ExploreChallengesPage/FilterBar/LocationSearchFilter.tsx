@@ -408,9 +408,7 @@ export const LocationSearchFilter = () => {
             <MapPin
               className={cn(
                 'absolute left-3 h-4 w-4',
-                hasSelection
-                  ? 'text-emerald-600 dark:text-emerald-400'
-                  : 'text-zinc-400 dark:text-zinc-500'
+                hasSelection ? 'text-link' : 'text-fg-subtle'
               )}
             />
             <Input
@@ -432,19 +430,19 @@ export const LocationSearchFilter = () => {
                 id: 'exploreChallenges.filterBar.location.searchPlaceholder',
                 defaultMessage: 'Search location...',
               })}
-              className="bg-white pr-9 pl-9 focus-visible:border-emerald-500 focus-visible:ring-emerald-500/50"
+              className="pr-9 pl-9"
               aria-autocomplete="list"
               aria-controls={`${inputId}-listbox`}
             />
             <div className="absolute right-2 flex items-center gap-1">
-              {isLoading && <Spinner className="text-emerald-600 dark:text-emerald-400" />}
+              {isLoading && <Spinner className="text-link" />}
               {locationInput && (
                 <Button
                   variant="ghost"
                   size="icon-sm"
                   onClick={handleClearLocation}
                   onMouseDown={(e) => e.preventDefault()}
-                  className="h-6 w-6 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
+                  className="h-6 w-6 text-fg-subtle hover:text-fg-muted"
                   aria-label={t({
                     id: 'exploreChallenges.filterBar.location.clearAriaLabel',
                     defaultMessage: 'Clear location',
@@ -468,7 +466,7 @@ export const LocationSearchFilter = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         {error ? (
-          <div className="flex items-center gap-1.5 px-3 py-2 text-red-700 text-xs dark:text-red-400">
+          <div className="flex items-center gap-1.5 px-3 py-2 text-danger text-xs">
             <AlertCircle className="h-3 w-3 shrink-0" />
             <span>{error}</span>
           </div>
@@ -487,28 +485,20 @@ export const LocationSearchFilter = () => {
                   onMouseEnter={() => setHighlightedIndex(index)}
                   className={cn(
                     'h-auto w-full justify-start rounded-none px-3 py-2.5 text-left',
-                    index === highlightedIndex
-                      ? 'bg-emerald-50 dark:bg-emerald-900/20'
-                      : 'hover:bg-zinc-50 dark:hover:bg-slate-700'
+                    index === highlightedIndex ? 'bg-accent/10' : 'hover:bg-muted-strong'
                   )}
                 >
                   <div className="flex items-start gap-2">
                     <MapPin
                       className={cn(
                         'mt-0.5 h-4 w-4 shrink-0',
-                        index === highlightedIndex
-                          ? 'text-emerald-600 dark:text-emerald-400'
-                          : 'text-zinc-400 dark:text-zinc-500'
+                        index === highlightedIndex ? 'text-link' : 'text-fg-subtle'
                       )}
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
-                        {primary}
-                      </p>
+                      <p className="font-medium text-fg text-sm">{primary}</p>
                       {secondary.length > 0 && (
-                        <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                          {secondary.join(',').trim()}
-                        </p>
+                        <p className="mt-0.5 text-fg-muted text-xs">{secondary.join(',').trim()}</p>
                       )}
                     </div>
                   </div>

@@ -59,9 +59,9 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
   const statusLabel = statusMessage ? t(statusMessage) : report.statusName
 
   return (
-    <li className="space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-slate-700">
+    <li className="space-y-2 rounded-lg border border-line p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-xs text-zinc-500 dark:text-slate-400">
+        <span className="text-fg-muted text-xs">
           {t(
             {
               id: 'browsedChallengePage.challengeModals.reportHistory.reportedBy',
@@ -91,7 +91,7 @@ const ReportEntry = ({ report }: { report: ChallengeReport }) => {
 
       <MarkdownContent autoLink={false}>{report.comment}</MarkdownContent>
 
-      <p className="text-xs text-zinc-500 dark:text-slate-400">
+      <p className="text-fg-muted text-xs">
         {report.statusName === 'open'
           ? t({
               id: 'browsedChallengePage.challengeModals.reportHistory.awaitingReview',
@@ -157,7 +157,7 @@ export const ReportHistoryModal = () => {
         {isLoading ? (
           <Loader />
         ) : isError ? (
-          <p className="py-6 text-center text-sm text-zinc-600 dark:text-slate-400">
+          <p className="py-6 text-center text-fg-muted text-sm">
             {t({
               id: 'common.reportsLoadError',
               defaultMessage: 'Could not load the reports.',
@@ -171,8 +171,8 @@ export const ReportHistoryModal = () => {
           </ul>
         ) : (
           <div className="flex flex-col items-center gap-2 py-8">
-            <Flag className="size-10 text-zinc-300 dark:text-slate-700" aria-hidden="true" />
-            <p className="text-sm text-zinc-600 dark:text-slate-400">
+            <Flag className="size-10 text-line-strong" aria-hidden="true" />
+            <p className="text-fg-muted text-sm">
               {t({
                 id: 'browsedChallengePage.challengeModals.reportHistory.empty',
                 defaultMessage: 'No one has reported this challenge.',

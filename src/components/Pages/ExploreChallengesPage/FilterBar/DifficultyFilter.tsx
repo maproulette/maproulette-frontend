@@ -17,7 +17,7 @@ export const DifficultyFilter = () => {
   const { difficulty, setDifficulty } = useExploreChallengesSearchContext()
   return (
     <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
-      <Label className="font-medium text-sm text-zinc-700 dark:text-zinc-300">
+      <Label className="font-medium text-fg text-sm">
         {t({ id: 'common.difficulty', defaultMessage: 'Difficulty' })}
       </Label>
       <Select value={difficulty} onValueChange={(value) => setDifficulty(value as DifficultyLevel)}>

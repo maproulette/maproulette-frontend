@@ -92,7 +92,7 @@ export const ChallengeFooter = () => {
 
   const mapContent = (
     <>
-      <div className="shrink-0 rounded-b-lg bg-white dark:bg-slate-800">
+      <div>
         <ChallengeProgress />
         {hasOpenReport && (
           <div className="mt-3">
@@ -103,10 +103,10 @@ export const ChallengeFooter = () => {
                 id: 'browsedChallengePage.footer.reportedIssueTooltip',
                 defaultMessage: 'View the reports on this challenge',
               })}
-              className="flex w-full items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50/50 px-3 py-2 text-center transition-colors hover:bg-red-50 dark:border-red-800 dark:bg-red-900/10 dark:hover:bg-red-900/20"
+              className="flex w-full items-center justify-center gap-2 rounded-md border border-danger/40 bg-danger/5 px-3 py-2 text-center transition-colors hover:bg-danger/10"
             >
-              <Flag className="size-3.5 flex-shrink-0 fill-red-600 text-red-600 dark:fill-red-500 dark:text-red-500" />
-              <span className="text-red-600 text-xs underline-offset-2 hover:underline dark:text-red-400">
+              <Flag className="size-3.5 flex-shrink-0 fill-danger text-danger" />
+              <span className="text-danger text-xs underline-offset-2 hover:underline">
                 {t({
                   id: 'browsedChallengePage.footer.reportedIssueMessage',
                   defaultMessage: 'This challenge has been reported. Click to view the reports.',
@@ -127,7 +127,8 @@ export const ChallengeFooter = () => {
           ) : (
             <Button
               size="lg"
-              className="w-full gap-2 rounded-full bg-teal-600 text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-md"
+              variant="success"
+              className="w-full gap-2 rounded-full"
               onClick={isBrowseOnly ? handleBrowseTask : handleStartTask}
               disabled={isLoadingTask}
             >
@@ -152,7 +153,7 @@ export const ChallengeFooter = () => {
   const FooterExtension = challengeFooterExtensions[0]?.component
 
   return (
-    <div className="shrink-0 rounded-b-xl border-zinc-200/50 border-t bg-white p-3 md:p-4 dark:border-slate-700/50 dark:bg-slate-800">
+    <div className="shrink-0 border-line border-t px-4 py-4 md:px-6">
       {FooterExtension ? (
         <FooterExtension challenge={challenge} user={user} mapContent={mapContent} />
       ) : (

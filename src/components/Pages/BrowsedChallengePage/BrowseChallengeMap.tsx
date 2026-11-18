@@ -80,7 +80,7 @@ export const BrowseChallengeMap = () => {
           <Button
             variant="outline"
             onClick={() => setShowMap(false)}
-            className="h-10 gap-2 border-zinc-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900"
+            className="h-10 gap-2 border-line bg-popover shadow-md"
           >
             <MapIcon className="size-4" />
             {t({ id: 'browsedChallengePage.footer.hideMap', defaultMessage: 'Hide Map' })}

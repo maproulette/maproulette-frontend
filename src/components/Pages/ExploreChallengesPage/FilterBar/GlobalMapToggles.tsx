@@ -12,7 +12,7 @@ export const GlobalToggle = () => {
   return (
     <Label htmlFor={globalId} className="flex cursor-pointer items-center gap-2 whitespace-nowrap">
       <Switch id={globalId} checked={global} onCheckedChange={(checked) => setGlobal(checked)} />
-      <span className="text-sm text-zinc-700 dark:text-zinc-300">
+      <span className="text-fg text-sm">
         {t({ id: 'common.global', defaultMessage: 'Global' })}
       </span>
     </Label>

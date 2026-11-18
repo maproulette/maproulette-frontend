@@ -19,7 +19,7 @@ export const LockedTasksBlock = ({ lockedTasks }: LockedTasksBlockProps) => {
 
   return (
     <div className="mb-4">
-      <h3 className="mb-2 flex items-center gap-1.5 font-medium text-xs text-zinc-600 dark:text-slate-400">
+      <h3 className="mb-2 flex items-center gap-1.5 font-medium text-fg-muted text-xs">
         <Lock className="size-3.5" />
         {t(
           {
@@ -33,16 +33,16 @@ export const LockedTasksBlock = ({ lockedTasks }: LockedTasksBlockProps) => {
         {lockedTasks.map((lockedTask) => (
           <div
             key={lockedTask.id}
-            className="stretched-link-container rounded-lg border border-zinc-200 px-3 py-2 transition-colors hover:border-zinc-400 dark:border-slate-700 dark:hover:border-slate-500"
+            className="stretched-link-container rounded-lg border border-line px-3 py-2 transition-colors hover:border-line-strong"
           >
             <Link
               to="/tasks/$taskId"
               params={{ taskId: String(lockedTask.id) }}
-              className="stretched-link block truncate font-medium text-sm text-zinc-900 dark:text-slate-100"
+              className="stretched-link block truncate font-medium text-fg text-sm"
             >
               {lockedTask.parentName}
             </Link>
-            <div className="mt-0.5 flex items-center gap-2 text-xs text-zinc-600 dark:text-slate-400">
+            <div className="mt-0.5 flex items-center gap-2 text-fg-muted text-xs">
               <span>
                 {t(
                   {

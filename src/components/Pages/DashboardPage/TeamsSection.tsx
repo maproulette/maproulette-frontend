@@ -31,11 +31,11 @@ export const TeamsSection = ({ userId }: TeamsSectionProps) => {
             page="teams"
             icon={<ExternalLink className="size-4" />}
             label={t({ id: 'dashboard.teams.learnMore', defaultMessage: 'Learn more about teams' })}
-            className="rounded p-1.5 text-zinc-600 no-underline transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            className="rounded p-1.5 text-fg-muted no-underline transition-colors hover:bg-muted hover:text-fg"
           />
           <Link
             to="/teams/new"
-            className="rounded p-1.5 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            className="rounded p-1.5 text-fg-muted transition-colors hover:bg-muted hover:text-fg"
             title={t({ id: 'common.createTeam', defaultMessage: 'Create team' })}
           >
             <Plus className="size-4" />

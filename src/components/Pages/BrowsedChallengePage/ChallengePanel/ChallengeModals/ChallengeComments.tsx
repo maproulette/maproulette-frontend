@@ -123,10 +123,7 @@ export const ChallengeComments = () => {
             checked={showTaskComments}
             onCheckedChange={(checked) => setShowTaskComments(checked === true)}
           />
-          <label
-            htmlFor={showTaskCommentsId}
-            className="cursor-pointer text-sm text-zinc-600 dark:text-slate-400"
-          >
+          <label htmlFor={showTaskCommentsId} className="cursor-pointer text-fg-muted text-sm">
             {t({
               id: 'browsedChallengePage.challengeModals.comments.showTaskComments',
               defaultMessage: 'Show task comments',
@@ -139,8 +136,8 @@ export const ChallengeComments = () => {
         <div className="space-y-4 pr-4">
           {sortedComments.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-6 text-center">
-              <MessageSquare className="mb-2 size-8 text-zinc-400 dark:text-slate-500" />
-              <p className="text-sm text-zinc-500 dark:text-slate-400">
+              <MessageSquare className="mb-2 size-8 text-fg-subtle" />
+              <p className="text-fg-muted text-sm">
                 {t({
                   id: 'browsedChallengePage.challengeModals.comments.empty',
                   defaultMessage: 'No comments',
@@ -161,7 +158,7 @@ export const ChallengeComments = () => {
                     <img
                       src={getImageSrc(comment.avatarUrl)}
                       alt={comment.osm_username}
-                      className="size-10 rounded-full border-2 border-zinc-200 dark:border-slate-700"
+                      className="size-10 rounded-full border-2 border-line"
                       onError={() => handleImageError(comment.avatarUrl)}
                       loading="lazy"
                     />
@@ -170,16 +167,16 @@ export const ChallengeComments = () => {
                   <div
                     className={cn(
                       'flex min-w-0 flex-1 flex-col gap-2 rounded-lg p-3',
-                      isUser ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-zinc-100 dark:bg-slate-800'
+                      isUser ? 'bg-accent/10' : 'bg-muted'
                     )}
                   >
                     <div className="flex items-center gap-2">
                       <OsmUserLink
                         username={comment.osm_username}
-                        className="font-semibold text-blue-600 text-sm hover:underline dark:text-blue-400"
+                        className="font-semibold text-link text-sm hover:underline"
                       />
                       {isOwner && (
-                        <span className="rounded bg-yellow-100 px-2 py-0.5 font-medium text-xs text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                        <span className="rounded bg-highlight/10 px-2 py-0.5 font-medium text-highlight text-xs">
                           {t({
                             id: 'browsedChallengePage.challengeModals.comments.owner',
                             defaultMessage: 'Owner',
@@ -190,7 +187,7 @@ export const ChallengeComments = () => {
                         <Link
                           to="/tasks/$taskId"
                           params={{ taskId: String(comment.taskId) }}
-                          className="text-xs text-zinc-500 hover:underline dark:text-slate-400"
+                          className="text-fg-muted text-xs hover:underline"
                         >
                           {t(
                             {
@@ -205,7 +202,7 @@ export const ChallengeComments = () => {
 
                     <MarkdownContent autoLink={false}>{comment.comment}</MarkdownContent>
 
-                    <div className="text-xs text-zinc-500 dark:text-slate-400">
+                    <div className="text-fg-muted text-xs">
                       {formatDateTime(new Date(comment.created), locale)}
                     </div>
                   </div>
@@ -218,10 +215,7 @@ export const ChallengeComments = () => {
       </ScrollArea>
 
       {user ? (
-        <form
-          onSubmit={handleSubmit}
-          className="mt-4 border-zinc-200 border-t pt-4 dark:border-slate-700"
-        >
+        <form onSubmit={handleSubmit} className="mt-4 border-line border-t pt-4">
           <div className="flex gap-2">
             <Textarea
               ref={textareaRef}
@@ -250,7 +244,7 @@ export const ChallengeComments = () => {
                   })}
             </Button>
           </div>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-slate-400">
+          <p className="mt-1 text-fg-muted text-xs">
             {t(
               {
                 id: 'browsedChallengePage.challengeModals.comments.characterCount',
@@ -262,7 +256,7 @@ export const ChallengeComments = () => {
           </p>
         </form>
       ) : (
-        <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-center text-sm text-zinc-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+        <div className="mt-4 rounded-lg border border-line bg-inset p-4 text-center text-fg-muted text-sm">
           {t({
             id: 'browsedChallengePage.challengeModals.comments.signInRequired',
             defaultMessage: 'Please sign in to add comments',

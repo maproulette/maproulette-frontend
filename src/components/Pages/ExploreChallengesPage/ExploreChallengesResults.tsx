@@ -23,7 +23,7 @@ export const ExploreChallengesResults = () => {
             onValueChange={(v) => setMobileTab(v as 'list' | 'map')}
             className="flex flex-col"
           >
-            <div className="border-zinc-200 border-b bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-800">
+            <div className="border-line border-b bg-card px-4 py-2">
               <TabsList className="w-full">
                 <TabsTrigger value="list">
                   <List />

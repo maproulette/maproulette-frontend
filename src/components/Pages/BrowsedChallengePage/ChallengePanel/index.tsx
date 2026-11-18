@@ -102,18 +102,10 @@ export const ChallengePanel = () => {
   return (
     <>
       <CommentsAutoOpener shouldOpen={shouldAutoOpenComments} />
-      <div className="flex h-full w-full flex-col overflow-hidden rounded-lg bg-white dark:bg-slate-900">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-lg border border-line bg-panel">
         <div className="flex h-full flex-col overflow-hidden">
           <div className="relative flex min-h-0 flex-1 flex-col">
-            <div
-              ref={headerRef}
-              className={cn(
-                'sticky top-0 z-10 w-full shrink-0 rounded-t-lg border-b backdrop-blur-md transition-all duration-500 ease-in-out',
-                isScrolled
-                  ? 'border-zinc-200/60 bg-white/95 shadow-md dark:border-slate-700/60 dark:bg-slate-800/95'
-                  : 'border-zinc-200/40 bg-white shadow-sm dark:border-slate-700/40 dark:bg-slate-800'
-              )}
-            >
+            <div ref={headerRef} className="w-full shrink-0 border-line border-b">
               <div
                 className={cn(
                   'relative flex w-full min-w-0 border-0 bg-transparent px-4 text-left transition-all duration-500 ease-in-out md:px-6',
@@ -125,7 +117,7 @@ export const ChallengePanel = () => {
                 {isScrolled && (
                   <Button
                     variant="ghost"
-                    className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-zinc-100/50 dark:hover:bg-slate-800/50"
+                    className="absolute inset-0 z-0 h-auto cursor-pointer rounded-none border-0 bg-transparent hover:bg-muted/50"
                     onClick={scrollToTop}
                     aria-label={t({ id: 'common.scrollToTop', defaultMessage: 'Scroll to top' })}
                   />
@@ -136,7 +128,7 @@ export const ChallengePanel = () => {
 
             <div className="relative min-h-0 flex-1">
               <ScrollArea ref={scrollAreaRef} className="h-full">
-                <div className="flex flex-col px-4 py-3 md:px-6 md:py-4">
+                <div className="px-4 py-4 md:px-6">
                   <ChallengeDescription />
                 </div>
               </ScrollArea>

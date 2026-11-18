@@ -38,7 +38,7 @@ export const BrowsedChallengePageContent = () => {
               <ResizablePanel defaultSize={65}>
                 <div
                   ref={mapContainerRef}
-                  className="h-full overflow-hidden rounded-lg border border-slate-700/50"
+                  className="h-full overflow-hidden rounded-lg border border-line"
                 >
                   <BrowseChallengeMap />
                 </div>
@@ -49,7 +49,7 @@ export const BrowsedChallengePageContent = () => {
           <div className="relative flex h-full flex-col gap-4 overflow-hidden px-4">
             <div
               ref={mapContainerRef}
-              className="min-h-0 flex-1 overflow-hidden rounded-lg border border-slate-700/50"
+              className="min-h-0 flex-1 overflow-hidden rounded-lg border border-line"
             >
               <BrowseChallengeMap />
             </div>

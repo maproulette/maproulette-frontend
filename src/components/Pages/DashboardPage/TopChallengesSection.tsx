@@ -42,11 +42,11 @@ export const TopChallengesSection = ({ userId }: TopChallengesSectionProps) => {
                 <Link
                   to="/challenge/$challengeId"
                   params={{ challengeId: String(challenge.id) }}
-                  className="truncate font-medium text-blue-600 hover:underline dark:text-blue-400"
+                  className="truncate font-medium text-link hover:underline"
                 >
                   {challenge.name}
                 </Link>
-                <span className="shrink-0 text-zinc-600 tabular-nums dark:text-slate-400">
+                <span className="shrink-0 text-fg-muted tabular-nums">
                   {t(
                     {
                       id: 'common.tasksWithCount',

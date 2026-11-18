@@ -40,7 +40,7 @@ export const ProfileSummary = ({ user }: ProfileSummaryProps) => {
   ]
 
   return (
-    <div className="flex shrink-0 flex-col gap-3 rounded-xl bg-white px-4 py-3 dark:bg-slate-900">
+    <div className="flex shrink-0 flex-col gap-3 rounded-xl border border-line bg-panel px-4 py-3">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
         <div className="flex min-w-0 items-center gap-3">
           <Avatar className="size-10">
@@ -50,12 +50,10 @@ export const ProfileSummary = ({ user }: ProfileSummaryProps) => {
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <h1 className="truncate font-semibold text-base text-zinc-900 dark:text-slate-100">
-              {displayName}
-            </h1>
+            <h1 className="truncate font-semibold text-base text-fg">{displayName}</h1>
             <OsmUserLink
               username={displayName}
-              className="flex items-center gap-1 text-sm text-zinc-600 dark:text-slate-400"
+              className="flex items-center gap-1 text-fg-muted text-sm"
             >
               {t({ id: 'dashboard.profile.osmProfile', defaultMessage: 'OpenStreetMap profile' })}
               <ExternalLink className="size-3.5" />
@@ -65,16 +63,14 @@ export const ProfileSummary = ({ user }: ProfileSummaryProps) => {
         <dl className="flex flex-wrap gap-x-6 gap-y-2 sm:ml-auto">
           {stats.map(({ label, value }) => (
             <div key={label}>
-              <dt className="text-xs text-zinc-600 dark:text-slate-400">{label}</dt>
-              <dd className="font-semibold text-base text-zinc-900 tabular-nums dark:text-slate-100">
-                {value}
-              </dd>
+              <dt className="text-fg-muted text-xs">{label}</dt>
+              <dd className="font-semibold text-base text-fg tabular-nums">{value}</dd>
             </div>
           ))}
         </dl>
       </div>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-        <h2 className="text-xs text-zinc-600 dark:text-slate-400">
+        <h2 className="text-fg-muted text-xs">
           {t(
             {
               id: 'dashboard.profile.achievements',
