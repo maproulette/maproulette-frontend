@@ -90,7 +90,6 @@ export interface PluginApiContext {
         percentage: number
         color: string
         title?: string
-        opacity?: number
       }>
       className?: string
     }>

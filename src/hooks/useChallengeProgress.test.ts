@@ -71,68 +71,35 @@ describe('useChallengeProgress', () => {
     expect(result.current.completionPercentage).toBe(60)
   })
 
-  it('builds one segment per non-zero completed status plus a gray remaining fill', () => {
+  it('builds segments for completed statuses then tooHard, leaving the rest unfilled', () => {
     const { result } = renderHook(() =>
-      useChallengeProgress(makeMetrics({ total: 10, fixed: 2, falsePositive: 3, available: 5 }))
+      useChallengeProgress(
+        makeMetrics({
+          total: 10,
+          fixed: 2,
+          falsePositive: 3,
+          alreadyFixed: 1,
+          tooHard: 1,
+          skipped: 1,
+          available: 2,
+        })
+      )
     )
 
-    expect(result.current.segments).toEqual([
-      { key: 'fixed', percentage: 20, color: '#22c55e', title: 'Fixed: 2' },
-      { key: 'falsePositive', percentage: 30, color: '#facc15', title: 'Not an Issue: 3' },
-      {
-        key: 'remaining',
-        percentage: 50,
-        color: '#9ca3af',
-        title: 'Remaining: 5',
-        opacity: 0.45,
-      },
+    expect(
+      result.current.segments.map(({ key, percentage, title }) => ({ key, percentage, title }))
+    ).toEqual([
+      { key: 'fixed', percentage: 20, title: 'Fixed: 2' },
+      { key: 'alreadyFixed', percentage: 10, title: 'Already Fixed: 1' },
+      { key: 'falsePositive', percentage: 30, title: 'Not an Issue: 3' },
+      { key: 'tooHard', percentage: 10, title: "Can't Complete: 1" },
     ])
   })
 
-  it('omits the remaining fill segment once completed statuses reach 100%', () => {
+  it('omits statuses with no tasks', () => {
     const { result } = renderHook(() => useChallengeProgress(makeMetrics({ total: 10, fixed: 10 })))
 
-    expect(result.current.segments).toEqual([
-      { key: 'fixed', percentage: 100, color: '#22c55e', title: 'Fixed: 10' },
-    ])
-  })
-
-  it('gives tooHard its own red problem segment separate from the gray remaining fill', () => {
-    const { result } = renderHook(() =>
-      useChallengeProgress(makeMetrics({ total: 10, tooHard: 3, available: 7 }))
-    )
-
-    expect(result.current.completionPercentage).toBe(0)
-    expect(result.current.segments).toEqual([
-      {
-        key: 'tooHard',
-        percentage: 30,
-        color: '#ef4444',
-        title: "Can't Complete: 3",
-        opacity: 0.55,
-      },
-      {
-        key: 'remaining',
-        percentage: 70,
-        color: '#9ca3af',
-        title: 'Remaining: 7',
-        opacity: 0.45,
-      },
-    ])
-  })
-
-  it('omits the remaining fill when tooHard alone accounts for 100%', () => {
-    const { result } = renderHook(() => useChallengeProgress(makeMetrics({ total: 3, tooHard: 3 })))
-
-    expect(result.current.segments).toEqual([
-      {
-        key: 'tooHard',
-        percentage: 100,
-        color: '#ef4444',
-        title: "Can't Complete: 3",
-        opacity: 0.55,
-      },
-    ])
+    expect(result.current.segments.map((s) => s.key)).toEqual(['fixed'])
   })
 
   it('returns no segments when there are no tasks at all', () => {
