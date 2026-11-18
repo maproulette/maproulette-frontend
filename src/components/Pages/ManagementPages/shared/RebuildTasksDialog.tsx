@@ -194,7 +194,7 @@ export const RebuildTasksDialog = ({
 
           <div className="flex items-start gap-3 rounded-lg bg-muted p-4">
             <CircleAlert className="mt-0.5 h-6 w-6 shrink-0 text-coral-500" />
-            <div className="space-y-2 text-warning text-sm">
+            <div className="space-y-2 text-sm text-warning">
               <p>
                 {t({
                   id: 'managementPages.rebuildTasksDialog.warning',
