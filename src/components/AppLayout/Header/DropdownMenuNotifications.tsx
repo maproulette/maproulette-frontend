@@ -45,7 +45,7 @@ export const DropdownMenuNotifications = ({ user }: { user: User }) => {
           },
           { name: user.osmProfile.displayName }
         )}
-        className="relative flex"
+        className="relative flex rounded-sm"
       >
         <Bell className="size-5" aria-hidden="true" />
         {unread.length > 0 && (

@@ -6,16 +6,112 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --shadow-lg: 0 0 10px rgba(0, 0, 0, 0.15);
+  --shadow: none;
+  --shadow-2xs: none;
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow-md: 0 1px 3px var(--shadow-color);
+  --shadow-lg: 0 2px 8px var(--shadow-color);
+  --shadow-xl: 0 4px 16px var(--shadow-color);
+  --shadow-2xl: 0 8px 24px var(--shadow-color);
+}
+
+:root {
+  --shadow-color: rgb(8 20 37 / 0.1);
+  --page: white;
+  --panel: white;
+  --card: white;
+  --inset: var(--color-steel-50);
+  --field: white;
+  --popover: white;
+  --muted: var(--color-steel-50);
+  --muted-strong: var(--color-steel-100);
+
+  --fg: var(--color-steel-950);
+  --fg-muted: var(--color-steel-600);
+  --fg-subtle: var(--color-steel-500);
+
+  --line: var(--color-steel-200);
+  --line-strong: var(--color-steel-300);
+  --ring: var(--color-mint-500);
+
+  --primary: var(--color-steel-800);
+  --primary-hover: var(--color-steel-700);
+  --primary-fg: white;
+  --link: var(--color-mint-700);
+  --accent: var(--color-mint-400);
+  --accent-fg: var(--color-steel-950);
+  --highlight: var(--color-mango-700);
+  --success: var(--color-mint-700);
+  --warning: var(--color-mango-700);
+  --danger: var(--color-coral-600);
+}
+
+.dark {
+  --shadow-color: rgb(0 0 0 / 0.35);
+  --page: var(--color-steel-950);
+  --page-gradient: linear-gradient(to right, oklch(0.29 0.05 168), oklch(0.215 0.05 252));
+  --panel: color-mix(in oklab, var(--color-steel-950) 50%, transparent);
+  --card: var(--panel);
+  --inset: color-mix(in oklab, var(--color-steel-950) 45%, transparent);
+  --field: var(--panel);
+  --popover: #071d29;
+  --muted: color-mix(in oklab, var(--color-steel-600) 35%, transparent);
+  --muted-strong: color-mix(in oklab, var(--color-steel-500) 40%, transparent);
+
+  --fg: var(--color-steel-50);
+  --fg-muted: var(--color-steel-300);
+  --fg-subtle: var(--color-steel-400);
+
+  --line: var(--color-steel-700);
+  --line-strong: var(--color-steel-600);
+  --ring: var(--color-mint-300);
+
+  --primary: var(--color-mint-300);
+  --primary-hover: var(--color-mint-200);
+  --primary-fg: var(--color-steel-900);
+  --link: var(--color-mint-300);
+  --accent: var(--color-mint-300);
+  --accent-fg: var(--color-steel-900);
+  --highlight: var(--color-mango-300);
+  --success: var(--color-mint-400);
+  --warning: var(--color-mango-400);
+  --danger: var(--color-coral-400);
 }
 
 @theme inline {
-  --color-primary: var(--color-brand-primary);
-  --color-secondary: var(--color-brand-secondary);
+  --color-page: var(--page);
+  --color-panel: var(--panel);
+  --color-card: var(--card);
+  --color-inset: var(--inset);
+  --color-field: var(--field);
+  --color-popover: var(--popover);
+  --color-muted: var(--muted);
+  --color-muted-strong: var(--muted-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-link: var(--link);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-highlight: var(--highlight);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
   --font-sans: var(--font-brand-sans);
 }
 
 @layer base {
+  .bg-panel {
+    --card: transparent;
+  }
+
   /* Lets the browser render native UI (scrollbars, form controls) with
      dark-appropriate colors. `color-scheme` alone isn't reliably honored
      for scrollbars across browsers, so the thumb/track colors below are
@@ -24,12 +120,12 @@
      scrollbar against a dark page. */
   html {
     color-scheme: light;
-    scrollbar-color: rgb(212 212 216) transparent; /* zinc-300 thumb */
+    scrollbar-color: var(--color-steel-300) transparent;
   }
 
   .dark {
     color-scheme: dark;
-    scrollbar-color: rgb(82 82 91) transparent; /* zinc-600 thumb */
+    scrollbar-color: oklch(1 0 0 / 0.25) transparent;
   }
 
   ::-webkit-scrollbar {
@@ -43,19 +139,29 @@
 
   ::-webkit-scrollbar-thumb {
     @apply rounded-full;
-    background-color: rgb(212 212 216); /* zinc-300 */
+    background-color: var(--color-steel-300);
   }
 
   .dark ::-webkit-scrollbar-thumb {
-    background-color: rgb(82 82 91); /* zinc-600 */
+    background-color: oklch(1 0 0 / 0.25);
   }
 
   * {
-    @apply border-zinc-200 outline-current/50 dark:border-slate-700;
+    @apply border-line outline-current/50;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  a:focus-visible {
+    @apply rounded-xs;
   }
 
   body {
-    @apply antialiased bg-zinc-100 text-zinc-700 dark:bg-slate-950 dark:text-zinc-50;
+    @apply antialiased bg-page text-fg;
+    background-image: var(--page-gradient, none);
+    background-attachment: fixed;
   }
 
   button:not(:disabled),
@@ -76,13 +182,13 @@
   }
 
   [type="search"]::-webkit-search-cancel-button {
-    @apply appearance-none cursor-pointer w-6 h-6 bg-zinc-500;
+    @apply appearance-none cursor-pointer w-6 h-6 bg-fg-muted;
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg class='w-6 h-6' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z'/%3E%3C/svg%3E%0A");
   }
 }
 
 @utility link {
-  @apply cursor-pointer text-current underline underline-offset-4 dark:hover:text-green-400 hover:text-green-600 transition-colors [&.active]:text-green-600 dark:[&.active]:text-green-400;
+  @apply cursor-pointer text-link underline decoration-current/40 underline-offset-4 transition-colors hover:decoration-current;
 }
 
 @utility stretched-link {
@@ -95,7 +201,7 @@
 }
 
 @utility stretched-link-container {
-  @apply relative has-[.stretched-link:focus-visible]:ring-[3px] has-[.stretched-link:focus-visible]:ring-zinc-950/50 dark:has-[.stretched-link:focus-visible]:ring-zinc-300/50;
+  @apply relative has-[.stretched-link:focus-visible]:outline-3 has-[.stretched-link:focus-visible]:-outline-offset-3 has-[.stretched-link:focus-visible]:outline-ring;
 }
 
 @utility container {
@@ -105,7 +211,7 @@
 
 @layer utilities {
   .link-nav {
-    @apply link no-underline hover:underline;
+    @apply cursor-pointer transition-colors hover:text-link [&.active]:text-link;
   }
 
   /* Custom scrollbar styles */
@@ -119,19 +225,19 @@
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
     @apply rounded-full;
-    background-color: rgb(212 212 216); /* zinc-300 */
+    background-color: var(--color-steel-300);
   }
 
   .scrollbar-thin:hover::-webkit-scrollbar-thumb {
-    background-color: rgb(161 161 170); /* zinc-400 */
+    background-color: var(--color-steel-400);
   }
 
   .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: rgb(63 63 70); /* zinc-700 */
+    background-color: oklch(1 0 0 / 0.15);
   }
 
   .dark .scrollbar-thin:hover::-webkit-scrollbar-thumb {
-    background-color: rgb(82 82 91); /* zinc-600 */
+    background-color: oklch(1 0 0 / 0.25);
   }
 
   /* Task marker popup styles */
@@ -173,13 +279,8 @@
 }
 
 .task-picker-popup {
-  --picker-bg: #ffffff;
-  --picker-border: #e4e4e7;
-}
-
-.dark .task-picker-popup {
-  --picker-bg: #0f172a;
-  --picker-border: #334155;
+  --picker-bg: var(--popover);
+  --picker-border: var(--line);
 }
 
 .task-picker-popup .maplibregl-popup-tip {
