@@ -16,14 +16,11 @@ describe('PRIORITY_MESSAGES', () => {
 })
 
 describe('PRIORITY_COLOR', () => {
-  it('provides light, dark, hex, and bg classes for every priority value', () => {
+  it('provides a hex value and a bg class for every priority value', () => {
     for (const value of Object.values(TaskPriority)) {
       const color = PRIORITY_COLOR[value]
-      expect(color.light).toMatch(/^bg-/)
-      expect(color.dark).toMatch(/^dark:bg-/)
       expect(color.hex).toMatch(/^#[0-9a-f]{6}$/)
-      expect(color.bg).toContain(color.light)
-      expect(color.bg).toContain(color.dark)
+      expect(color.bg).toMatch(/^bg-/)
     }
   })
 })

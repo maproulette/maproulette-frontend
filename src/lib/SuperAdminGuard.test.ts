@@ -138,20 +138,20 @@ describe('getUserRole', () => {
 })
 
 describe('getRoleBadgeColor', () => {
-  it('returns red classes for "super_admin"', () => {
-    expect(getRoleBadgeColor('super_admin')).toContain('red')
+  it('returns danger classes for "super_admin"', () => {
+    expect(getRoleBadgeColor('super_admin')).toContain('danger')
   })
 
-  it('returns blue classes for "admin"', () => {
-    expect(getRoleBadgeColor('admin')).toContain('blue')
+  it('returns accent classes for "admin"', () => {
+    expect(getRoleBadgeColor('admin')).toContain('accent')
   })
 
-  it('returns the default zinc/slate classes for "user"', () => {
-    expect(getRoleBadgeColor('user')).toContain('zinc')
+  it('returns the neutral classes for "user"', () => {
+    expect(getRoleBadgeColor('user')).toContain('bg-muted')
   })
 
-  it('returns the default zinc/slate classes for an unrecognized role', () => {
-    expect(getRoleBadgeColor('something-else')).toContain('zinc')
+  it('returns the neutral classes for an unrecognized role', () => {
+    expect(getRoleBadgeColor('something-else')).toContain('bg-muted')
   })
 })
 

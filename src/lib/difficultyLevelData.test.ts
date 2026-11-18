@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { testT } from '@/test/translate'
-import { getDifficultyColor, getDifficultyLabel } from './difficultyLevelData.ts'
+import {
+  getDifficultyBadgeColor,
+  getDifficultyColor,
+  getDifficultyLabel,
+} from './difficultyLevelData.ts'
 
 const t = testT
 
@@ -18,12 +22,28 @@ describe('getDifficultyLabel', () => {
 
 describe('getDifficultyColor', () => {
   it.each([
-    [1, 'text-green-600'],
-    [2, 'text-yellow-600'],
-    [3, 'text-red-600'],
-    [0, 'text-yellow-600'],
-    [99, 'text-yellow-600'],
-  ] as const)('difficulty %s returns %s', (difficulty, expected) => {
+    [1, 'text-success'],
+    [2, 'text-warning'],
+    [3, 'text-danger'],
+  ] as const)('difficulty %s uses %s', (difficulty, expected) => {
     expect(getDifficultyColor(difficulty)).toBe(expected)
+  })
+
+  it('treats an unknown difficulty as normal', () => {
+    expect(getDifficultyColor(99)).toBe(getDifficultyColor(2))
+  })
+})
+
+describe('getDifficultyBadgeColor', () => {
+  it.each([
+    [1, 'mint'],
+    [2, 'mango'],
+    [3, 'coral'],
+  ] as const)('difficulty %s uses %s', (difficulty, hue) => {
+    expect(getDifficultyBadgeColor(difficulty)).toContain(`bg-${hue}-`)
+  })
+
+  it('treats an unknown difficulty as normal', () => {
+    expect(getDifficultyBadgeColor(99)).toBe(getDifficultyBadgeColor(2))
   })
 })
