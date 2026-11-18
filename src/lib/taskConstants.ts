@@ -97,33 +97,5 @@ export const STATUS_PILL_COLORS: Record<number, string> = {
   9: 'bg-zinc-100 text-zinc-500 ring-zinc-300/60 dark:bg-zinc-800 dark:text-zinc-400 dark:ring-zinc-700/60',
 }
 
-/** Left accent bar bg class per status — used for activity rows. */
-export const STATUS_BAR_COLORS: Record<number, string> = {
-  0: 'bg-cyan-400',
-  1: 'bg-green-500',
-  2: 'bg-yellow-400',
-  3: 'bg-cyan-400',
-  4: 'bg-red-500',
-  5: 'bg-orange-400',
-  6: 'bg-red-500',
-  7: 'bg-purple-500',
-  8: 'bg-emerald-500',
-  9: 'bg-zinc-400',
-}
-
-/** Gradient `from-` tint class per status — used for activity row backgrounds. */
-export const STATUS_TINT_COLORS: Record<number, string> = {
-  0: 'from-cyan-100/70 dark:from-cyan-950/30',
-  1: 'from-green-100/70 dark:from-green-950/30',
-  2: 'from-yellow-100/70 dark:from-yellow-950/30',
-  3: 'from-cyan-100/70 dark:from-cyan-950/30',
-  4: 'from-red-100/70 dark:from-red-950/30',
-  5: 'from-orange-100/70 dark:from-orange-950/30',
-  6: 'from-red-100/70 dark:from-red-950/30',
-  7: 'from-purple-100/70 dark:from-purple-950/30',
-  8: 'from-emerald-100/70 dark:from-emerald-950/30',
-  9: 'from-zinc-100/80 dark:from-zinc-800/30',
-}
-
 export const tabTriggerClass =
   'gap-1.5 rounded-none border-transparent border-b-2 bg-transparent px-3 py-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:text-blue-600 dark:data-[state=active]:border-blue-400 dark:data-[state=active]:text-blue-400'

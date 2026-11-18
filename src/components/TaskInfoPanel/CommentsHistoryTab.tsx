@@ -28,16 +28,11 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useAvatarContext } from '@/contexts/AvatarContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
-import { formatDate, formatDateTime } from '@/lib/date'
+import { formatDateTime } from '@/lib/date'
 import { logger } from '@/lib/logger'
 import { markdownRemarkPlugins } from '@/lib/markdown'
 import { linkifyShortCodes } from '@/lib/shortCodes'
-import {
-  getStatusLabel,
-  STATUS_BAR_COLORS,
-  STATUS_PILL_COLORS,
-  STATUS_TINT_COLORS,
-} from '@/lib/taskConstants'
+import { getStatusLabel, STATUS_PILL_COLORS } from '@/lib/taskConstants'
 import { cn } from '@/lib/utils'
 import type { PluginTaskHistoryItem } from '@/types/Plugin'
 import type { TaskHistoryAction } from '@/types/Task'
@@ -64,26 +59,6 @@ const STATUS_ICONS: Record<number, LucideIcon> = {
 
 const DEFAULT_PILL_CLASS =
   'bg-zinc-100 text-zinc-700 ring-zinc-300/60 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-700/60'
-const DEFAULT_BAR_CLASS = 'bg-zinc-400'
-const DEFAULT_TINT_CLASS = 'from-zinc-100/80 dark:from-zinc-800/30'
-
-type StatusVisual = {
-  icon: LucideIcon
-  pill: string
-  bar: string
-  tint: string
-}
-
-const getStatusVisual = (status: number | undefined): StatusVisual | null => {
-  if (status === undefined) return null
-  return {
-    icon: STATUS_ICONS[status] ?? HelpCircle,
-    pill: STATUS_PILL_COLORS[status] ?? DEFAULT_PILL_CLASS,
-    bar: STATUS_BAR_COLORS[status] ?? DEFAULT_BAR_CLASS,
-    tint: STATUS_TINT_COLORS[status] ?? DEFAULT_TINT_CLASS,
-  }
-}
-
 const StatusPill = ({ status, muted = false }: { status: number; muted?: boolean }) => {
   const { t } = useIntl()
   const Icon = STATUS_ICONS[status] ?? HelpCircle
@@ -177,6 +152,12 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
       return null
     }
 
+    const timeRow = (
+      <div className="text-xs text-zinc-400 dark:text-slate-500">
+        {formatDateTime(timestamp, locale)}
+      </div>
+    )
+
     if (item.actionType === ACTION_TYPE.COMMENT && item.comment) {
       const commentText = typeof item.comment === 'string' ? item.comment : item.comment.comment
       const commentObj = typeof item.comment === 'object' ? item.comment : null
@@ -199,27 +180,18 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
             />
           </div>
 
-          <div
-            className={cn(
-              'flex min-w-0 max-w-[85%] flex-col gap-1 rounded-2xl bg-white px-3 py-2.5 shadow-sm dark:bg-slate-800',
-              isUser && 'items-end text-right'
-            )}
-          >
-            <div className="flex items-center gap-2">
-              <OsmUserLink
-                username={commentUserName}
-                className="font-semibold text-blue-600 text-xs hover:underline dark:text-blue-400"
-              />
-            </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            {timeRow}
+
+            <OsmUserLink
+              username={commentUserName}
+              className="self-start font-semibold text-blue-600 text-xs hover:underline dark:text-blue-400"
+            />
 
             <div className="prose prose-sm dark:prose-invert max-w-none break-words text-xs [&_*]:break-words [&_a]:text-blue-600 [&_a]:hover:underline dark:[&_a]:text-blue-400">
               <ReactMarkdown remarkPlugins={markdownRemarkPlugins} components={commentComponents}>
                 {linkifyShortCodes(commentText)}
               </ReactMarkdown>
-            </div>
-
-            <div className="text-xs text-zinc-500 dark:text-slate-400">
-              {formatDateTime(timestamp, locale)}
             </div>
           </div>
         </div>
@@ -227,61 +199,49 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
     }
 
     if (item.actionType === ACTION_TYPE.STATUS_CHANGE) {
-      const oldVisual = getStatusVisual(item.oldStatus)
-      const newVisual = getStatusVisual(item.status) ??
-        oldVisual ?? {
-          icon: HelpCircle,
-          pill: DEFAULT_PILL_CLASS,
-          bar: DEFAULT_BAR_CLASS,
-          tint: DEFAULT_TINT_CLASS,
-        }
-
       return (
-        <div
-          key={`status-${item.timestamp}-${index}`}
-          title={formatDateTime(timestamp, locale)}
-          className={cn(
-            'relative flex flex-wrap items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r to-transparent py-2 pr-3 pl-4 text-xs',
-            newVisual.tint
-          )}
-        >
-          <div className={cn('absolute top-0 bottom-0 left-0 w-1', newVisual.bar)} />
-          {item.user?.username ? (
-            <OsmUserLink
-              username={item.user.username}
-              className="font-medium text-zinc-700 hover:underline dark:text-slate-200"
-            />
-          ) : (
-            <span className="font-medium text-zinc-700 dark:text-slate-200">{userName}</span>
-          )}
-          {item.oldStatus !== undefined && item.status !== undefined ? (
-            <>
-              <StatusPill status={item.oldStatus} muted />
-              <ArrowRight className="size-3 text-zinc-400 dark:text-slate-500" />
-              <StatusPill status={item.status} />
-            </>
-          ) : item.status !== undefined ? (
-            <>
-              <span className="text-zinc-500 dark:text-slate-400">
-                {t({ id: 'taskInfoPanel.comments.markedAs', defaultMessage: 'marked as' })}
-              </span>
-              <StatusPill status={item.status} />
-            </>
-          ) : item.oldStatus !== undefined ? (
-            <>
-              <span className="text-zinc-500 dark:text-slate-400">
-                {t({ id: 'taskInfoPanel.comments.cleared', defaultMessage: 'cleared' })}
-              </span>
-              <StatusPill status={item.oldStatus} muted />
-            </>
-          ) : (
-            <span className="text-zinc-500 dark:text-slate-400">
-              {t({ id: 'taskInfoPanel.comments.changedStatus', defaultMessage: 'changed status' })}
-            </span>
-          )}
-          <span className="ml-auto text-zinc-400 dark:text-slate-500">
-            {formatDate(timestamp, locale)}
-          </span>
+        <div key={`status-${item.timestamp}-${index}`} className="flex flex-col gap-1 text-xs">
+          {timeRow}
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            {item.user?.username ? (
+              <OsmUserLink
+                username={item.user.username}
+                className="font-medium text-zinc-700 hover:underline dark:text-slate-200"
+              />
+            ) : (
+              <span className="font-medium text-zinc-700 dark:text-slate-200">{userName}</span>
+            )}
+            <div className="flex flex-wrap items-center gap-2">
+              {item.oldStatus !== undefined && item.status !== undefined ? (
+                <>
+                  <StatusPill status={item.oldStatus} muted />
+                  <ArrowRight className="size-3 text-zinc-400 dark:text-slate-500" />
+                  <StatusPill status={item.status} />
+                </>
+              ) : item.status !== undefined ? (
+                <>
+                  <span className="text-zinc-500 dark:text-slate-400">
+                    {t({ id: 'taskInfoPanel.comments.markedAs', defaultMessage: 'marked as' })}
+                  </span>
+                  <StatusPill status={item.status} />
+                </>
+              ) : item.oldStatus !== undefined ? (
+                <>
+                  <span className="text-zinc-500 dark:text-slate-400">
+                    {t({ id: 'taskInfoPanel.comments.cleared', defaultMessage: 'cleared' })}
+                  </span>
+                  <StatusPill status={item.oldStatus} muted />
+                </>
+              ) : (
+                <span className="text-zinc-500 dark:text-slate-400">
+                  {t({
+                    id: 'taskInfoPanel.comments.changedStatus',
+                    defaultMessage: 'changed status',
+                  })}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       )
     }
@@ -301,7 +261,7 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <ScrollArea className="min-h-0 flex-1">
-        <div className="space-y-3 pr-2">
+        <div className="space-y-3">
           {isLoading ? (
             <div className="flex items-center justify-center py-6">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600" />
@@ -314,9 +274,21 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
               </p>
             </div>
           ) : (
-            sortedHistory
-              .map((item, index) => renderHistoryItem(item, index))
-              .filter((item) => item !== null)
+            <div className="space-y-3">
+              {sortedHistory.map((item, index) => {
+                const entry = renderHistoryItem(item, index)
+                return (
+                  entry && (
+                    <div
+                      key={entry.key ?? index}
+                      className="rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:shadow-none"
+                    >
+                      {entry}
+                    </div>
+                  )
+                )
+              })}
+            </div>
           )}
         </div>
       </ScrollArea>
