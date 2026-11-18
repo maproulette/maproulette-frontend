@@ -15,28 +15,26 @@ type Story = StoryObj<typeof Collapsible>
 
 export const Default: Story = {
   render: () => (
-    <Collapsible defaultOpen className="w-80 rounded-lg bg-white shadow-sm dark:bg-slate-800">
-      <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-zinc-50 dark:hover:bg-slate-700/50">
+    <Collapsible defaultOpen className="w-80 rounded-lg bg-card shadow-sm">
+      <CollapsibleTrigger className="flex h-10 w-full items-center justify-between gap-2 rounded-lg px-3 transition-colors hover:bg-muted">
         <div className="flex items-center gap-2">
-          <Users className="h-4 w-4 text-blue-500" />
-          <span className="font-medium text-sm text-zinc-700 dark:text-zinc-200">
-            Work on multiple tasks
-          </span>
+          <Users className="h-4 w-4 text-fg-subtle" />
+          <span className="font-medium text-fg text-sm">Work on multiple tasks</span>
         </div>
-        <ChevronDown className="h-4 w-4 rotate-180 text-zinc-400 transition-transform" />
+        <ChevronDown className="h-4 w-4 rotate-180 text-fg-subtle transition-transform" />
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="flex flex-col gap-2 border-zinc-200 border-t px-3 pt-2 pb-3 dark:border-slate-700">
+        <div className="flex flex-col gap-2 border-line border-t px-3 pt-2 pb-3">
           <button
             type="button"
-            className="flex items-center justify-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 font-medium text-sm text-zinc-700 transition-colors hover:bg-zinc-200 dark:bg-slate-700 dark:text-zinc-200 dark:hover:bg-slate-600"
+            className="flex items-center justify-center gap-2 rounded-lg bg-muted px-3 py-2 font-medium text-fg text-sm transition-colors hover:bg-muted-strong"
           >
             <Lasso className="h-4 w-4" />
             Draw to add tasks
           </button>
           <button
             type="button"
-            className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+            className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-medium text-coral-600 text-sm transition-colors hover:bg-coral-50 dark:text-coral-400 dark:hover:bg-coral-900/20"
           >
             <Trash2 className="h-4 w-4" />
             Work on only the primary task

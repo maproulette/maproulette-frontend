@@ -38,14 +38,14 @@ export const ResizableHandle = ({
     {...props}
   >
     {withHandle && (
-      <div className="flex h-14 w-4 items-center justify-center rounded-full bg-white shadow-md dark:bg-slate-200">
+      <div className="flex h-14 w-4 items-center justify-center rounded-full bg-popover shadow-md">
         <div className="grid grid-cols-2 gap-[3px]">
-          <div className="h-1 w-1 rounded-full bg-zinc-500" />
-          <div className="h-1 w-1 rounded-full bg-zinc-500" />
-          <div className="h-1 w-1 rounded-full bg-zinc-500" />
-          <div className="h-1 w-1 rounded-full bg-zinc-500" />
-          <div className="h-1 w-1 rounded-full bg-zinc-500" />
-          <div className="h-1 w-1 rounded-full bg-zinc-500" />
+          <div className="h-1 w-1 rounded-full bg-fg-subtle" />
+          <div className="h-1 w-1 rounded-full bg-fg-subtle" />
+          <div className="h-1 w-1 rounded-full bg-fg-subtle" />
+          <div className="h-1 w-1 rounded-full bg-fg-subtle" />
+          <div className="h-1 w-1 rounded-full bg-fg-subtle" />
+          <div className="h-1 w-1 rounded-full bg-fg-subtle" />
         </div>
       </div>
     )}

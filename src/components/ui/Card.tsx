@@ -4,10 +4,7 @@ import { cn } from '@/lib/utils'
 export const Card = ({ className, ref, ...props }: React.ComponentProps<'div'>) => (
   <div
     ref={ref}
-    className={cn(
-      'rounded-xl bg-white text-zinc-900 shadow-sm dark:bg-slate-800 dark:text-zinc-50 dark:shadow-none',
-      className
-    )}
+    className={cn('rounded-xl border border-line bg-card text-fg', className)}
     {...props}
   />
 )
@@ -25,7 +22,7 @@ export const CardTitle = ({ className, ref, ...props }: React.ComponentProps<'h3
 )
 
 export const CardDescription = ({ className, ref, ...props }: React.ComponentProps<'p'>) => (
-  <p ref={ref} className={cn('text-sm text-zinc-500 dark:text-slate-400', className)} {...props} />
+  <p ref={ref} className={cn('text-fg-muted text-sm', className)} {...props} />
 )
 
 export const CardContent = ({ className, ref, ...props }: React.ComponentProps<'div'>) => (

@@ -21,9 +21,7 @@ export const Default: Story = {
         <CardDescription>Task completions by status, grouped by day.</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          No activity in the selected range.
-        </p>
+        <p className="text-fg-muted text-sm">No activity in the selected range.</p>
       </CardContent>
     </Card>
   ),
@@ -37,7 +35,7 @@ export const WithFooter: Story = {
         <CardDescription>Update the visibility and status of this challenge.</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Changes take effect immediately.</p>
+        <p className="text-fg-muted text-sm">Changes take effect immediately.</p>
       </CardContent>
       <CardFooter className="justify-end gap-2">
         <Button variant="outline">Cancel</Button>

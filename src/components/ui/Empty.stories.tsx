@@ -41,7 +41,7 @@ export const AllVariants: Story = {
           <EmptyMedia variant={variant}>
             <TriangleAlert />
           </EmptyMedia>
-          <span className="text-xs text-zinc-600">{variant}</span>
+          <span className="text-fg-muted text-xs">{variant}</span>
         </div>
       ))}
     </div>

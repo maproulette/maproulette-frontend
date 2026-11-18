@@ -14,12 +14,8 @@ export const FormSection = ({
   <section className={cn('space-y-4', className)} {...props}>
     {(title || description) && (
       <header className="space-y-1">
-        {title && (
-          <h3 className="font-semibold text-base text-zinc-900 leading-none dark:text-zinc-50">
-            {title}
-          </h3>
-        )}
-        {description && <p className="text-sm text-zinc-600 dark:text-zinc-400">{description}</p>}
+        {title && <h3 className="font-semibold text-base text-fg leading-none">{title}</h3>}
+        {description && <p className="text-fg-muted text-sm">{description}</p>}
       </header>
     )}
     <div className="space-y-4">{children}</div>

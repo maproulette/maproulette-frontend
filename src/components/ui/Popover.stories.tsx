@@ -29,13 +29,13 @@ export const Default: Story = {
         <div className="mt-2 flex flex-col gap-1">
           <button
             type="button"
-            className="rounded px-2 py-1.5 text-left text-sm hover:bg-zinc-50 dark:hover:bg-slate-700"
+            className="rounded px-2 py-1.5 text-left text-sm hover:bg-muted-strong"
           >
             Portland, Multnomah County, Oregon, United States
           </button>
           <button
             type="button"
-            className="rounded px-2 py-1.5 text-left text-sm hover:bg-zinc-50 dark:hover:bg-slate-700"
+            className="rounded px-2 py-1.5 text-left text-sm hover:bg-muted-strong"
           >
             Portland, Cumberland County, Maine, United States
           </button>

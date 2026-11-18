@@ -51,13 +51,9 @@ export const Default: Story = {
       <TableBody>
         {CHALLENGES.map((challenge) => (
           <TableRow key={challenge.id}>
-            <TableCell className="font-medium text-blue-600 dark:text-blue-400">
-              {challenge.name}
-            </TableCell>
-            <TableCell className="text-zinc-600 dark:text-slate-400">{challenge.owner}</TableCell>
-            <TableCell className="text-center text-zinc-600 dark:text-slate-400">
-              {challenge.percentMapped}%
-            </TableCell>
+            <TableCell className="font-medium text-link">{challenge.name}</TableCell>
+            <TableCell className="text-fg-muted">{challenge.owner}</TableCell>
+            <TableCell className="text-center text-fg-muted">{challenge.percentMapped}%</TableCell>
             <TableCell className="text-center">
               <Badge variant={challenge.status === 'Completed' ? 'success' : 'outline'}>
                 {challenge.status}
@@ -85,7 +81,7 @@ export const WithCaption: Story = {
         {CHALLENGES.slice(0, 3).map((challenge) => (
           <TableRow key={challenge.id}>
             <TableCell>{challenge.name}</TableCell>
-            <TableCell className="text-zinc-600 dark:text-slate-400">{challenge.owner}</TableCell>
+            <TableCell className="text-fg-muted">{challenge.owner}</TableCell>
             <TableCell className="text-center">
               <Badge variant={challenge.status === 'Completed' ? 'success' : 'outline'}>
                 {challenge.status}
@@ -132,10 +128,8 @@ const SortableTable = () => {
         {rows.map((challenge) => (
           <TableRow key={challenge.id}>
             <TableCell>{challenge.name}</TableCell>
-            <TableCell className="text-zinc-600 dark:text-slate-400">{challenge.owner}</TableCell>
-            <TableCell className="text-zinc-600 dark:text-slate-400">
-              {challenge.percentMapped}%
-            </TableCell>
+            <TableCell className="text-fg-muted">{challenge.owner}</TableCell>
+            <TableCell className="text-fg-muted">{challenge.percentMapped}%</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -161,7 +155,7 @@ export const Compact: Story = {
         {CHALLENGES.map((challenge) => (
           <TableRow key={challenge.id}>
             <TableCell>{challenge.name}</TableCell>
-            <TableCell className="text-zinc-600 dark:text-slate-400">{challenge.owner}</TableCell>
+            <TableCell className="text-fg-muted">{challenge.owner}</TableCell>
             <TableCell className="text-center">
               <Badge variant={challenge.status === 'Completed' ? 'success' : 'outline'}>
                 {challenge.status}
