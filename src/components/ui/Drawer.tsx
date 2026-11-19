@@ -58,6 +58,7 @@ export const Drawer = ({
         aria-label={ariaLabel}
         tabIndex={-1}
         inert={!open}
+        aria-hidden={!open}
         className={cn(
           `${pos} inset-x-0 bottom-0 ${zDrawer} flex h-[85%] flex-col overflow-hidden rounded-t-lg border-line border-t bg-popover shadow-2xl outline-none transition-transform duration-300 ease-in-out`,
           open ? 'translate-y-0' : 'translate-y-full',
