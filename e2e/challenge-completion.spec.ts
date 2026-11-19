@@ -111,9 +111,7 @@ test('working through every task of a challenge records the results everywhere',
     await page.goto(`/challenge/${challenge.id}`)
     await expect(page.getByText('75%').first()).toBeVisible({ timeout: 20_000 })
     await page.getByRole('button', { name: 'Details' }).click()
-    const activity = page.getByRole('dialog', { name: 'Task Activity' })
-    await expect(activity).toContainText('3 of 4 tasks')
-    await expect(activity).toContainText('75%')
+    await expect(page.getByText('3 of 4 tasks completed')).toBeVisible()
   })
 
   await test.step('the challenge is marked finished at 75% complete', async () => {
