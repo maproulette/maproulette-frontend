@@ -113,7 +113,7 @@ export async function completeTask(
   { comment, toast }: { comment?: string; toast: string }
 ) {
   await page.getByRole('button', { name: statusButton, exact: true }).click()
-  const dialog = page.getByRole('dialog', { name: 'Complete Task Action' })
+  const dialog = page.getByRole('dialog', { name: /^Complete Task #\d+$/ })
   await expect(dialog).toBeVisible({ timeout: 10_000 })
   if (comment) await dialog.getByLabel('Comment (Optional)').fill(comment)
   await dialog.getByRole('button', { name: 'Complete & Continue' }).click()

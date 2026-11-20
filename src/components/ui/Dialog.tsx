@@ -103,7 +103,10 @@ export const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLD
 
 export const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('flex flex-col-reverse gap-2 sm:flex-row sm:justify-end', className)}
+    className={cn(
+      '-bottom-6 -mx-6 -mt-4 -mb-6 scroll-edge-top sticky z-10 flex flex-col-reverse gap-2 bg-popover px-6 pt-4 pb-6 sm:flex-row sm:justify-end',
+      className
+    )}
     {...props}
   />
 )

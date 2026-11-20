@@ -962,7 +962,7 @@
   "taskEditPage.taskActionModal.randomTask.label": "Random High Priority Task",
   "taskEditPage.taskActionModal.statusChange": "Status Change",
   "taskEditPage.taskActionModal.submitShortcut": "Submit this confirmation",
-  "taskEditPage.taskActionModal.title": "Complete Task Action",
+  "taskEditPage.taskActionModal.title": "Complete Task #{id}",
   "taskEditPage.taskActionModal.toast.commentFailed": "The task status was saved, but your comment could not be.",
   "taskEditPage.taskActionModal.toast.loadingNext": "Loading next task...",
   "taskEditPage.taskActionModal.toast.markedAs": "Task marked as {status}",

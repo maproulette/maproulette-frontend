@@ -270,6 +270,35 @@
   @apply relative has-[.stretched-link:focus-visible]:outline-3 has-[.stretched-link:focus-visible]:-outline-offset-3 has-[.stretched-link:focus-visible]:outline-ring;
 }
 
+/*
+ * Draws a separator for a sticky footer at the bottom of a scroll container
+ * which only appears when there is more content to scroll to.
+ */
+@utility scroll-edge-top {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: var(--line);
+    box-shadow: 0 -4px 10px oklch(0 0 0 / 0.12);
+    opacity: 0;
+    pointer-events: none;
+    animation: scroll-edge-fade linear both;
+    animation-timeline: scroll(nearest block);
+    animation-range: calc(100% - 2rem) 100%;
+  }
+}
+
+@keyframes scroll-edge-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @utility container {
   margin-inline: auto;
   padding-inline: 4rem;
