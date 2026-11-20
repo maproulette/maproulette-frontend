@@ -5,8 +5,6 @@ import { api } from '@/api'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { resetSeenChallengeDescriptions } from '@/lib/challengeDescriptionSeen'
-import { resetTaskArrivalLocks } from '@/lib/taskArrivalLocks'
 import { renderHook } from '@/test/renderHook'
 import type { Challenge } from '@/types/Challenge'
 import type { TaskGetResponse } from '@/types/Task'
@@ -53,8 +51,6 @@ const setup = ({
 
 beforeEach(() => {
   sessionStorage.clear()
-  resetSeenChallengeDescriptions()
-  resetTaskArrivalLocks()
   vi.clearAllMocks()
 })
 
@@ -137,8 +133,6 @@ describe('useDescriptionRecommendation', () => {
 
     // Reloaded: the arrival verdict comes back from sessionStorage, while the live picture
     // now shows the lock they took in the meantime.
-    resetTaskArrivalLocks()
-    resetSeenChallengeDescriptions()
     setup({ lockedBy: USER_ID, heldLocks: [lock(TASK_ID)] })
     const { result } = renderHook(() => useDescriptionRecommendation())
 
@@ -156,8 +150,6 @@ describe('useDescriptionRecommendation', () => {
     expect(result.current.recommended).toBe(false)
     unmount()
 
-    resetTaskArrivalLocks()
-    resetSeenChallengeDescriptions()
     setup({ lockedBy: USER_ID, heldLocks: [lock(TASK_ID)] })
     const second = renderHook(() => useDescriptionRecommendation())
 

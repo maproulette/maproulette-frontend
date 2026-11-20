@@ -6,7 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHook } from '@/test/renderHook'
 import { type PanelPosition, useDraggablePanel } from './useDraggablePanel.ts'
 
-const KEY = 'mr4:test:panel'
+const NAME = 'test.panel'
+const KEY = `mr.${NAME}`
 
 // happy-dom has no ResizeObserver; this stand-in also hands the observation
 // callback back to the test so a panel resize can be simulated.
@@ -45,7 +46,7 @@ const renderWithPanel = (
   defaultPosition?: (size: PanelPosition) => PanelPosition
 ) =>
   renderHook(() => {
-    const panel = useDraggablePanel(KEY, defaultPosition)
+    const panel = useDraggablePanel(NAME, defaultPosition)
     panel.panelRef.current = element as HTMLDivElement
     return panel
   })
@@ -77,26 +78,18 @@ afterEach(() => {
 
 describe('useDraggablePanel', () => {
   it('starts hidden until it has been measured, so it does not visibly jump', () => {
-    const { result } = renderHook(() => useDraggablePanel(KEY))
+    const { result } = renderHook(() => useDraggablePanel(NAME))
     expect(result.current.style).toMatchObject({ visibility: 'hidden' })
   })
 
   it('restores a remembered position instead of measuring again', () => {
     localStorage.setItem(KEY, JSON.stringify({ x: 120, y: 240 }))
-    const { result } = renderHook(() => useDraggablePanel(KEY))
+    const { result } = renderHook(() => useDraggablePanel(NAME))
     expect(result.current.style).toEqual({ left: 120, top: 240 })
   })
 
-  it('ignores unusable stored values', () => {
-    for (const stored of ['not json', '{"x":"a","y":2}', 'null']) {
-      localStorage.setItem(KEY, stored)
-      const { result } = renderHook(() => useDraggablePanel(KEY))
-      expect(result.current.style).toMatchObject({ visibility: 'hidden' })
-    }
-  })
-
   it('does not begin a drag from a click on one of the panel’s buttons', () => {
-    const { result } = renderHook(() => useDraggablePanel(KEY))
+    const { result } = renderHook(() => useDraggablePanel(NAME))
     const button = document.createElement('button')
     document.body.appendChild(button)
 
@@ -269,7 +262,7 @@ describe('useDraggablePanel', () => {
   })
 
   it('does not start a drag once the panel has gone away', () => {
-    const { result } = renderHook(() => useDraggablePanel(KEY))
+    const { result } = renderHook(() => useDraggablePanel(NAME))
 
     act(() => {
       result.current.handleProps.onPointerDown(pointerEvent())

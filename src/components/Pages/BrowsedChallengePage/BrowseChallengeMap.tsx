@@ -12,7 +12,7 @@ import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
 import { useMapToggle } from '@/contexts/MapToggleContext'
 import { useIntl } from '@/i18n'
 import { useBrowsedChallengeContext } from './contexts/BrowsedChallengeContext'
-import { filterMarkers, type TaskFilter } from './taskFilter'
+import { DEFAULT_TASK_FILTER, filterMarkers, storedTaskFilter, type TaskFilter } from './taskFilter'
 
 export const BrowseChallengeMap = () => {
   const { challenge } = useBrowsedChallengeContext()
@@ -24,17 +24,20 @@ export const BrowseChallengeMap = () => {
   // own default, then the style they last picked.
   const [mapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
   const { data, isLoading } = api.challenge.getChallengeTaskMarkers(challenge.id)
-  const { tasks: filter } = useSearch({ from: '/_app/challenge/$challengeId/' })
+  const { tasks } = useSearch({ from: '/_app/challenge/$challengeId/' })
+  const filter = tasks ?? storedTaskFilter.get()
   const navigate = useNavigate({ from: '/challenge/$challengeId' })
   const markers = useMemo(() => filterMarkers(flattenTaskMarkers(data), filter), [data, filter])
 
-  const setFilter = (value: TaskFilter | 'all') =>
+  const setFilter = (value: TaskFilter) => {
+    storedTaskFilter.set(value)
     navigate({
-      search: (prev) => ({ ...prev, tasks: value === 'all' ? undefined : value }),
+      search: (prev) => ({ ...prev, tasks: value }),
       // The map keeps its view in the hash.
       hash: true,
       replace: true,
     })
+  }
 
   const shownTitle = t({ id: 'browsedChallengePage.map.tasksShown', defaultMessage: 'Tasks shown' })
 
@@ -49,7 +52,7 @@ export const BrowseChallengeMap = () => {
         <MapSettingsSection title={shownTitle}>
           <MapSettingRadioGroup
             label={shownTitle}
-            value={filter ?? 'all'}
+            value={filter}
             onValueChange={setFilter}
             options={[
               {
@@ -74,7 +77,7 @@ export const BrowseChallengeMap = () => {
           />
         </MapSettingsSection>
       }
-      settingsModified={!!filter}
+      settingsModified={filter !== DEFAULT_TASK_FILTER}
       topLeftControls={
         !isDesktop && (
           <Button

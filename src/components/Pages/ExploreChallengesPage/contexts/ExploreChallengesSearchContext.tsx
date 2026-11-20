@@ -1,6 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { z } from 'zod'
 import type { AreaGeometry } from '@/api/nominatim'
 import {
   boundsStringToPolygon,
@@ -9,66 +10,21 @@ import {
   intersectBoundsStrings,
 } from '@/components/Map/mapUtils'
 import {
+  DIFFICULTY_LEVELS,
   type DifficultyLevel,
   SORT_BY_VALUES,
   type SortBy,
+  VIEW_MODES,
   type ViewMode,
+  WORK_ON_CATEGORIES,
   type WorkOnCategory,
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterTypes'
 import {
   difficultyMap,
   workOnCategoryMap,
 } from '@/components/Pages/ExploreChallengesPage/FilterBar/filterUtils'
-import { logger } from '@/lib/logger'
+import { localStored } from '@/lib/storage'
 import type { ExploreChallengesRequest } from '@/types/Challenge'
-
-const COOKIE_PREFIX = 'mr4_'
-const COOKIE_EXPIRY_DAYS = 365
-
-const setCookie = (name: string, value: string, days: number = COOKIE_EXPIRY_DAYS): void => {
-  const expires = new Date()
-  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
-  document.cookie = `${COOKIE_PREFIX}${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax`
-}
-
-const getCookie = (name: string): string | null => {
-  const nameEQ = `${COOKIE_PREFIX}${name}=`
-  const cookies = document.cookie.split(';')
-  for (let i = 0; i < cookies.length; i++) {
-    let cookie = cookies[i]
-    while (cookie.charAt(0) === ' ') {
-      cookie = cookie.substring(1, cookie.length)
-    }
-    if (cookie.indexOf(nameEQ) === 0) {
-      return decodeURIComponent(cookie.substring(nameEQ.length, cookie.length))
-    }
-  }
-  return null
-}
-
-const removeCookie = (name: string): void => {
-  document.cookie = `${COOKIE_PREFIX}${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`
-}
-
-const setJSONCookie = (name: string, value: unknown, days?: number): void => {
-  try {
-    const jsonString = JSON.stringify(value)
-    setCookie(name, jsonString, days)
-  } catch (error) {
-    logger.error(`Failed to set cookie ${name}`, { error })
-  }
-}
-
-const getJSONCookie = <T,>(name: string): T | null => {
-  try {
-    const cookieValue = getCookie(name)
-    if (!cookieValue) return null
-    return JSON.parse(cookieValue) as T
-  } catch (error) {
-    logger.error(`Failed to get cookie ${name}`, { error })
-    return null
-  }
-}
 
 export type LocationGeojson = AreaGeometry | null
 
@@ -143,23 +99,20 @@ const buildKeywords = (workOnValue: WorkOnCategory): string | undefined => {
   return workOnKeywords && workOnKeywords.length > 0 ? workOnKeywords.join(',') : undefined
 }
 
-interface PersistedFilters {
-  difficulty?: DifficultyLevel
-  workOn?: WorkOnCategory
-  sortBy?: string
-  global?: boolean
-  locationOsmType?: string
-  locationOsmId?: number
-  locationBounds?: string
-  locationName?: string
-  viewMode?: ViewMode
-  cluster?: boolean
-}
+const PersistedFilters = z.object({
+  difficulty: z.enum(DIFFICULTY_LEVELS).optional(),
+  workOn: z.enum(WORK_ON_CATEGORIES).optional(),
+  sortBy: z.enum(SORT_BY_VALUES).optional(),
+  global: z.boolean().optional(),
+  locationOsmType: z.string().optional(),
+  locationOsmId: z.number().optional(),
+  locationBounds: z.string().optional(),
+  locationName: z.string().optional(),
+  viewMode: z.enum(VIEW_MODES).optional(),
+  cluster: z.boolean().optional(),
+})
 
-const COOKIE_NAME = 'explore_challenges_filters'
-
-const persistedSortBy = (filters: PersistedFilters | null): SortBy | undefined =>
-  SORT_BY_VALUES.find((value) => value === filters?.sortBy)
+const storedFilters = localStored('explore.filters', PersistedFilters, {})
 
 const PAGE_SIZE = 48
 
@@ -179,40 +132,40 @@ export const ExploreChallengesSearchContextProvider = ({
     viewMode: initialViewMode,
   } = useSearch({ from: '/_app/' })
 
-  const persistedFilters = getJSONCookie<PersistedFilters>(COOKIE_NAME)
+  const [persistedFilters] = useState(storedFilters.get)
 
   const [difficulty, setDifficulty] = useState<DifficultyLevel>(
-    initialDifficulty ?? persistedFilters?.difficulty ?? 'Any'
+    initialDifficulty ?? persistedFilters.difficulty ?? 'Any'
   )
   const [workOn, setWorkOn] = useState<WorkOnCategory>(
-    initialWorkOn ?? persistedFilters?.workOn ?? 'Anything'
+    initialWorkOn ?? persistedFilters.workOn ?? 'Anything'
   )
   const [sortBy, setSortBy] = useState<SortBy>(
-    initialSortBy ?? persistedSortBy(persistedFilters) ?? 'default'
+    initialSortBy ?? persistedFilters.sortBy ?? 'default'
   )
-  const [cluster, setCluster] = useState<boolean>(persistedFilters?.cluster ?? true)
+  const [cluster, setCluster] = useState<boolean>(persistedFilters.cluster ?? true)
   const [viewMode, setViewMode] = useState<ViewMode>(
-    (initialViewMode as ViewMode) ?? persistedFilters?.viewMode ?? 'grid-map'
+    (initialViewMode as ViewMode) ?? persistedFilters.viewMode ?? 'grid-map'
   )
 
   const [bounds, setBounds] = useState(DEFAULT_WORLD_BOUNDS)
   const [locationOsmType, setLocationOsmType] = useState<string | undefined>(
-    initialOsmType ?? persistedFilters?.locationOsmType
+    initialOsmType ?? persistedFilters.locationOsmType
   )
   const [locationOsmId, setLocationOsmId] = useState<number | undefined>(
-    initialOsmId ?? persistedFilters?.locationOsmId
+    initialOsmId ?? persistedFilters.locationOsmId
   )
   // Bounding box of the place picked in the location filter. Kept separate
   // from `bounds` (the map viewport) because the viewport is overwritten on
   // every map move, which would otherwise widen the results back out.
   const [locationBounds, setLocationBounds] = useState<string | undefined>(() => {
-    // A place supplied in the URL wins over the cookie, and its bbox isn't
+    // A place supplied in the URL wins over the stored one, and its bbox isn't
     // known until Nominatim resolves it, so don't seed a mismatched one.
     const urlPlaceDiffers =
       (initialOsmType !== undefined || initialOsmId !== undefined) &&
-      (initialOsmType !== persistedFilters?.locationOsmType ||
-        initialOsmId !== persistedFilters?.locationOsmId)
-    return urlPlaceDiffers ? undefined : persistedFilters?.locationBounds
+      (initialOsmType !== persistedFilters.locationOsmType ||
+        initialOsmId !== persistedFilters.locationOsmId)
+    return urlPlaceDiffers ? undefined : persistedFilters.locationBounds
   })
   // The place's real boundary, once Nominatim has returned one. Until then --
   // and for places it has no polygon for -- the bbox above stands in.
@@ -225,23 +178,20 @@ export const ExploreChallengesSearchContextProvider = ({
       setResolvedPlaceFilter(null)
     }
   }, [])
-  const [global, setGlobal] = useState<boolean>(initialGlobal ?? persistedFilters?.global ?? true)
+  const [global, setGlobal] = useState<boolean>(initialGlobal ?? persistedFilters.global ?? true)
 
   const isInitialUrlSync = useRef(true)
-  const isInitialCookiePersist = useRef(true)
+  const isInitialPersist = useRef(true)
 
   useEffect(() => {
-    if (!persistedFilters) return
-
     if (initialDifficulty === undefined && persistedFilters.difficulty) {
       setDifficulty(persistedFilters.difficulty)
     }
     if (initialWorkOn === undefined && persistedFilters.workOn) {
       setWorkOn(persistedFilters.workOn)
     }
-    const savedSortBy = persistedSortBy(persistedFilters)
-    if (initialSortBy === undefined && savedSortBy) {
-      setSortBy(savedSortBy)
+    if (initialSortBy === undefined && persistedFilters.sortBy) {
+      setSortBy(persistedFilters.sortBy)
     }
     if (initialGlobal === undefined && persistedFilters.global !== undefined) {
       setGlobal(persistedFilters.global)
@@ -304,7 +254,7 @@ export const ExploreChallengesSearchContextProvider = ({
   // Persisted with the place itself so a reload can label the outline before
   // the Nominatim lookup that re-resolves it comes back.
   const [locationName, setLocationName] = useState<string | undefined>(
-    persistedFilters?.locationName
+    persistedFilters.locationName
   )
   const [pendingFitBounds, setPendingFitBounds] = useState<string | null>(null)
 
@@ -415,12 +365,12 @@ export const ExploreChallengesSearchContextProvider = ({
   ])
 
   useEffect(() => {
-    if (isInitialCookiePersist.current) {
-      isInitialCookiePersist.current = false
+    if (isInitialPersist.current) {
+      isInitialPersist.current = false
       return
     }
 
-    const filtersToSave: PersistedFilters = {
+    storedFilters.set({
       difficulty: difficulty !== 'Any' ? difficulty : undefined,
       workOn: workOn !== 'Anything' ? workOn : undefined,
       sortBy: sortBy !== 'default' ? sortBy : undefined,
@@ -431,14 +381,7 @@ export const ExploreChallengesSearchContextProvider = ({
       locationName,
       viewMode: viewMode !== 'grid-map' ? viewMode : undefined,
       cluster: cluster !== true ? cluster : undefined,
-    }
-
-    const hasFilters = Object.values(filtersToSave).some((value) => value !== undefined)
-    if (hasFilters) {
-      setJSONCookie(COOKIE_NAME, filtersToSave)
-    } else {
-      removeCookie(COOKIE_NAME)
-    }
+    })
   }, [
     difficulty,
     workOn,
@@ -463,8 +406,6 @@ export const ExploreChallengesSearchContextProvider = ({
     setWorkOn('Anything')
     setLocationGeojson(null)
     setPendingFitBounds(null)
-
-    removeCookie(COOKIE_NAME)
   }, [])
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
