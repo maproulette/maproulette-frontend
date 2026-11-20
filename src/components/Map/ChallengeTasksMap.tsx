@@ -66,7 +66,7 @@ export const ChallengeTasksMap = ({
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [cluster, setCluster] = useClustering(markers.length)
-  const [initialStyle] = useState(() => mapStyle ?? getCurrentMapStyle())
+  const [fallbackStyle] = useState(getCurrentMapStyle)
   const { showDirections, setShowDirections } = useDirectionsToggle(mapLoaded)
   const { portalTarget } = useDrawerPortal()
 
@@ -113,7 +113,7 @@ export const ChallengeTasksMap = ({
         ref={mapRef}
         hash={hash}
         initialViewState={{ longitude: 0, latitude: 0, zoom: 1.5 }}
-        mapStyle={initialStyle}
+        mapStyle={mapStyle ?? fallbackStyle}
         style={{ width: '100%', height: '100%' }}
         onLoad={() => setMapLoaded(true)}
         onMoveEnd={onBoundsChange ? reportBounds : undefined}

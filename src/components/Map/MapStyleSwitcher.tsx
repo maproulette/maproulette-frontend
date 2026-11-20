@@ -16,7 +16,7 @@ import { useCustomBaseLayers } from '@/contexts/CustomBaseLayersContext'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
 import type { CustomLayerType } from './customBaseLayers'
-import { allMapStyles, bundledMapStyles, getCurrentMapStyleIndex, saveMapStyle } from './mapStyles'
+import { allMapStyles, bundledMapStyles, saveMapStyle } from './mapStyles'
 
 interface MapStyleSwitcherProps {
   map: React.RefObject<MapRef | null>
@@ -25,7 +25,7 @@ interface MapStyleSwitcherProps {
 
 export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
   const { t } = useIntl()
-  const [selectedIndex, setSelectedIndex] = useState(getCurrentMapStyleIndex)
+  const [selectedName, setSelectedName] = useState(() => map.current?.getMap().getStyle()?.name)
   const { layers: customLayers, addLayer, removeLayer } = useCustomBaseLayers()
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
@@ -39,7 +39,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
   const handleStyleChange = (style: StyleSpecification, index: number) => {
     if (!map.current || !mapLoaded) return
     map.current.getMap().setStyle(style)
-    setSelectedIndex(index)
+    setSelectedName(style.name)
     saveMapStyle(index)
   }
 
@@ -59,12 +59,6 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
     setAdding(false)
   }
 
-  const handleRemove = (id: string) => {
-    removeLayer(id)
-    // The removed layer may have been the selected one; fall back to the first.
-    setSelectedIndex(getCurrentMapStyleIndex())
-  }
-
   return (
     <div className="max-h-[70vh] w-72 overflow-y-auto p-2">
       {styles.map((style, index) => {
@@ -79,7 +73,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
               onClick={() => handleStyleChange(style, index)}
               className={cn(
                 'block flex-1 rounded-lg border p-3 text-left transition-colors',
-                selectedIndex === index
+                selectedName === style.name
                   ? 'border-accent bg-accent/10'
                   : 'border-line hover:bg-muted'
               )}
@@ -89,7 +83,7 @@ export const MapStyleSwitcher = ({ map, mapLoaded }: MapStyleSwitcherProps) => {
             {custom && (
               <button
                 type="button"
-                onClick={() => handleRemove(custom.id)}
+                onClick={() => removeLayer(custom.id)}
                 className="rounded p-2 text-fg-subtle hover:text-danger"
                 aria-label={t(
                   { id: 'common.removeWithName', defaultMessage: 'Remove {name}' },

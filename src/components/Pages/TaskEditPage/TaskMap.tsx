@@ -2,7 +2,6 @@ import { Map as MapIcon } from 'lucide-react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { resolveMapStyle } from '@/components/Map/basemap'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapGL } from '@/components/Map/MapGL'
 import { ScaleBar } from '@/components/Map/ScaleBar'
@@ -11,6 +10,7 @@ import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { type MarkerStyle, statusPinIcon } from '@/components/Map/TaskMarkers/markerStyle'
 import { TaskMarkersLayer } from '@/components/Map/TaskMarkers/TaskMarkersLayer'
 import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
+import { useInitialMapStyle } from '@/components/Map/useInitialMapStyle'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import {
   EDITABLE_STATUSES,
@@ -71,20 +71,7 @@ export const TaskMap = () => {
   const isChangeFile = isChangeFileTask(task)
   const { challenge } = useChallengeContext()
   const { user } = useAuthContext()
-  // The challenge's basemap wins over the mapper's own default, which in turn
-  // wins over the style they last picked with the Map style control. Resolved
-  // once, not on every render, so switching styles mid-task isn't undone - but
-  // re-resolved when the mapper lands in a *different* challenge, since the map
-  // is no longer rebuilt for them (MapStyleSwitcher drives the live map directly,
-  // so it is untouched by this).
-  const [mapStyle, setMapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
-  const styledChallengeIdRef = useRef(challenge?.id)
-
-  useEffect(() => {
-    if (styledChallengeIdRef.current === challenge?.id) return
-    styledChallengeIdRef.current = challenge?.id
-    setMapStyle(resolveMapStyle(challenge, user?.settings))
-  }, [challenge, user?.settings])
+  const mapStyle = useInitialMapStyle(challenge, user)
 
   const { openIdEditor, idEditorMounted, idUnsavedCount, activeView, idViewportRef } =
     useEditorContext()

@@ -1,11 +1,11 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { Map as MapIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { api } from '@/api'
-import { resolveMapStyle } from '@/components/Map/basemap'
 import { ChallengeTasksMap } from '@/components/Map/ChallengeTasksMap'
 import { MapSettingRadioGroup, MapSettingsSection } from '@/components/Map/MapSettings'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
+import { useInitialMapStyle } from '@/components/Map/useInitialMapStyle'
 import { Button } from '@/components/ui/Button'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIsDesktopLayoutContext } from '@/contexts/LayoutContext'
@@ -20,9 +20,7 @@ export const BrowseChallengeMap = () => {
   const { t } = useIntl()
   const isDesktop = useIsDesktopLayoutContext()
   const { setShowMap } = useMapToggle()
-  // Same precedence as the task map: challenge basemap, then the mapper's
-  // own default, then the style they last picked.
-  const [mapStyle] = useState(() => resolveMapStyle(challenge, user?.settings))
+  const mapStyle = useInitialMapStyle(challenge, user)
   const { data, isLoading } = api.challenge.getChallengeTaskMarkers(challenge.id)
   const { tasks } = useSearch({ from: '/_app/challenge/$challengeId/' })
   const filter = tasks ?? storedTaskFilter.get()

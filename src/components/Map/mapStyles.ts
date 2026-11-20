@@ -35,7 +35,7 @@ export const allMapStyles = (): StyleSpecification[] => [
 
 const savedStyleName = localStored('map.style', z.string().nullable(), null)
 
-export const getCurrentMapStyleIndex = (): number => {
+const getCurrentMapStyleIndex = (): number => {
   const saved = savedStyleName.get()
   const i = allMapStyles().findIndex((s) => s.name === saved)
   return i >= 0 ? i : 0
