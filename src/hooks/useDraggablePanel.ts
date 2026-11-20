@@ -1,24 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { z } from 'zod'
+import { localStored } from '@/lib/storage'
 
-export interface PanelPosition {
+const PanelPosition = z.object({
   /** Distance from the left edge of the viewport, in pixels. */
-  x: number
+  x: z.number(),
   /** Distance from the top edge of the viewport, in pixels. */
-  y: number
-}
+  y: z.number(),
+})
+
+export type PanelPosition = z.infer<typeof PanelPosition>
 
 const MARGIN = 12
-
-const readStored = (storageKey: string): PanelPosition | null => {
-  try {
-    const raw = window.localStorage.getItem(storageKey)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    return typeof parsed?.x === 'number' && typeof parsed?.y === 'number' ? parsed : null
-  } catch {
-    return null
-  }
-}
 
 /** Keep a panel fully on screen, so it can't be dragged (or resized) out of reach. */
 const clampToViewport = (position: PanelPosition, size: PanelPosition): PanelPosition => ({
@@ -34,7 +27,8 @@ const clampToViewport = (position: PanelPosition, size: PanelPosition): PanelPos
  * start a drag, and the position to apply.
  */
 export const useDraggablePanel = (
-  storageKey: string,
+  /** Name to remember the position under (see `localStored`). */
+  storageName: string,
   /**
    * Where the panel sits until the user moves it, given its measured size.
    * Defaults to the bottom right.
@@ -45,7 +39,11 @@ export const useDraggablePanel = (
   })
 ) => {
   const panelRef = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState<PanelPosition | null>(() => readStored(storageKey))
+  const stored = useMemo(
+    () => localStored(storageName, PanelPosition.nullable(), null),
+    [storageName]
+  )
+  const [position, setPosition] = useState(stored.get)
   const [dragging, setDragging] = useState(false)
   // Where in the panel the pointer grabbed it, so it doesn't jump on grab.
   const grabOffset = useRef<PanelPosition>({ x: 0, y: 0 })
@@ -90,12 +88,8 @@ export const useDraggablePanel = (
   // Persist only once the drag ends, to avoid a write per pointer move.
   useEffect(() => {
     if (dragging || !position) return
-    try {
-      window.localStorage.setItem(storageKey, JSON.stringify(position))
-    } catch {
-      // A private window may refuse to store; the panel still works this session.
-    }
-  }, [dragging, position, storageKey])
+    stored.set(position)
+  }, [dragging, position, stored])
 
   const onPointerDown = useCallback((event: React.PointerEvent<HTMLElement>) => {
     // Let clicks on the panel's own buttons through untouched.

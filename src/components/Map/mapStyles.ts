@@ -1,4 +1,6 @@
 import type { StyleSpecification } from 'maplibre-gl'
+import { z } from 'zod'
+import { localStored } from '@/lib/storage'
 import BingAerial from './bing-aerial.json'
 import { customBaseLayerStyles } from './customBaseLayers'
 import EsriWorldImagery from './esri-world-imagery.json'
@@ -31,27 +33,17 @@ export const allMapStyles = (): StyleSpecification[] => [
   ...customBaseLayerStyles(),
 ]
 
-const STORAGE_KEY = 'mapstyle'
+const savedStyleName = localStored('map.style', z.string().nullable(), null)
 
 export const getCurrentMapStyleIndex = (): number => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    const i = allMapStyles().findIndex((s) => s.name === saved)
-    return i >= 0 ? i : 0
-  } catch {
-    return 0
-  }
+  const saved = savedStyleName.get()
+  const i = allMapStyles().findIndex((s) => s.name === saved)
+  return i >= 0 ? i : 0
 }
 
 export const saveMapStyle = (index: number) => {
-  try {
-    const name = allMapStyles()[index]?.name
-    if (name) localStorage.setItem(STORAGE_KEY, name)
-  } catch {
-    // localStorage may throw (e.g. in a private browser window).
-    // doing nothing in this case is fine, it just means that the
-    // selection won't be persistent across reloads.
-  }
+  const name = allMapStyles()[index]?.name
+  if (name) savedStyleName.set(name)
 }
 
 export const getCurrentMapStyle = () =>

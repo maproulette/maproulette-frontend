@@ -1,4 +1,6 @@
 import type { StyleSpecification } from 'maplibre-gl'
+import { z } from 'zod'
+import { localStored } from '@/lib/storage'
 
 /**
  * A minimal raster style for a caller-supplied XYZ tile template, so a
@@ -14,20 +16,22 @@ export const customRasterStyle = (url: string, name = 'Custom'): StyleSpecificat
   layers: [{ id: 'custom', type: 'raster', source: 'custom' }],
 })
 
-const STORAGE_KEY = 'mr4:map:customBaseLayers'
-
-export type CustomLayerType = 'xyz' | 'wms'
-
-export interface CustomBaseLayer {
-  id: string
-  name: string
-  type: CustomLayerType
+const CustomBaseLayer = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.enum(['xyz', 'wms']),
   /** XYZ tile template, or the WMS endpoint URL. */
-  url: string
+  url: z.string(),
   /** WMS only: comma-separated layer names to request. */
-  layers?: string
-  attribution?: string
-}
+  layers: z.string().optional(),
+  attribution: z.string().optional(),
+})
+
+export type CustomBaseLayer = z.infer<typeof CustomBaseLayer>
+
+export type CustomLayerType = CustomBaseLayer['type']
+
+const stored = localStored('map.customBaseLayers', z.array(CustomBaseLayer), [])
 
 /**
  * Turn a WMS endpoint into a tile template MapLibre can request. MapLibre
@@ -62,25 +66,7 @@ export const customBaseLayerStyle = (layer: CustomBaseLayer): StyleSpecification
   return style
 }
 
-const readStored = (): CustomBaseLayer[] => {
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
-    const parsed = raw ? JSON.parse(raw) : []
-    return Array.isArray(parsed) ? parsed.filter((l) => l?.id && l?.name && l?.url) : []
-  } catch {
-    return []
-  }
-}
-
-const writeStored = (layers: CustomBaseLayer[]): void => {
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layers))
-  } catch {
-    // A private window may refuse to store; the layer still works this session.
-  }
-}
-
-export const getCustomBaseLayers = (): CustomBaseLayer[] => readStored()
+export const getCustomBaseLayers = (): CustomBaseLayer[] => stored.get()
 
 const newId = (): string =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto
@@ -89,18 +75,18 @@ const newId = (): string =>
 
 export const addCustomBaseLayer = (layer: Omit<CustomBaseLayer, 'id'>): CustomBaseLayer => {
   const created = { ...layer, id: newId() }
-  writeStored([...readStored(), created])
+  stored.set([...stored.get(), created])
   return created
 }
 
 export const removeCustomBaseLayer = (id: string): void => {
-  writeStored(readStored().filter((layer) => layer.id !== id))
+  stored.set(stored.get().filter((layer) => layer.id !== id))
 }
 
 /**
  * Replace the mirror wholesale, used when syncing with the account's copy.
  */
-export const replaceCustomBaseLayers = (layers: CustomBaseLayer[]): void => writeStored(layers)
+export const replaceCustomBaseLayers = (layers: CustomBaseLayer[]): void => stored.set(layers)
 
 /**
  * The account stores a custom basemap as a name and a single URL, with no

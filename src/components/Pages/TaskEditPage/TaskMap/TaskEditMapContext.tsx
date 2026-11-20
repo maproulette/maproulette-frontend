@@ -1,16 +1,19 @@
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
+import { z } from 'zod'
 import { api } from '@/api'
 import { useClustering } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
-import { useStoredFlag } from '@/lib/useStoredFlag'
+import { localStored, useStored } from '@/lib/storage'
 import type { TaskEditMapContextType } from './taskEditMapTypes'
 import { useInitialMapBounds } from './useInitialMapBounds'
 import { useMapViewport } from './useMapViewport'
 
 const TaskEditMapContext = createContext<TaskEditMapContextType | null>(null)
+
+const showOtherChallenges = localStored('taskMap.showOtherChallenges', z.boolean(), false)
 
 export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const { task } = useTaskContext()
@@ -18,7 +21,7 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const { showBundleOnly, activeBundle } = useTaskBundleContext()
 
   const [mapLoaded, setMapLoaded] = useState(false)
-  const [showExploreLayer, setShowExploreLayer] = useStoredFlag('map.showOtherChallenges', false)
+  const [showExploreLayer, setShowExploreLayer] = useStored(showOtherChallenges)
 
   const { data: taskMarkersData, isLoading: isLoadingMarkers } =
     api.challenge.getChallengeTaskMarkers(task.parent)

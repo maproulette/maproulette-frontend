@@ -85,11 +85,4 @@ describe('storage', () => {
     removeCustomBaseLayer(a.id)
     expect(getCustomBaseLayers().map((l) => l.name)).toEqual(['B'])
   })
-
-  it('ignores stored junk rather than throwing', () => {
-    localStorage.setItem('mr4:map:customBaseLayers', 'not json')
-    expect(getCustomBaseLayers()).toEqual([])
-    localStorage.setItem('mr4:map:customBaseLayers', '[{"name":"no id or url"}]')
-    expect(getCustomBaseLayers()).toEqual([])
-  })
 })

@@ -31,8 +31,7 @@ describe('ExploreChallengesSearchContext filters by view mode', () => {
   })
 
   afterEach(() => {
-    document.cookie =
-      'mr4_explore_challenges_filters=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;'
+    localStorage.clear()
     vi.clearAllMocks()
   })
 

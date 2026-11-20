@@ -1,16 +1,14 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, type ReactNode, useContext, useEffect, useMemo } from 'react'
+import { z } from 'zod'
 import { useIntl } from '@/i18n'
+import { localStored, useStored } from '@/lib/storage'
 
-type Theme = 'dark' | 'light' | 'system'
+const Theme = z.enum(['dark', 'light', 'system'])
+
+type Theme = z.infer<typeof Theme>
+
+const storedTheme = localStored('theme', Theme, 'system')
 
 type ThemeOption = { key: Theme; icon: React.ElementType; label: string }
 
@@ -42,9 +40,7 @@ const ThemeProviderContext = createContext<ThemeContextType>(initialState)
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useIntl()
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem('app-theme') as Theme) || 'system'
-  )
+  const [theme, setTheme] = useStored(storedTheme)
 
   const themeLabels: Record<Theme, string> = useMemo(
     () => ({
@@ -77,21 +73,15 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     root.classList.add(theme)
   }, [theme])
 
-  // All callbacks are stored in the context value — stable references prevent consumer re-renders.
-  const handleSetTheme = useCallback((theme: Theme) => {
-    localStorage.setItem('app-theme', theme)
-    setTheme(theme)
-  }, [])
-
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value = useMemo(
     () => ({
       theme,
-      setTheme: handleSetTheme,
-      handleSetTheme,
+      setTheme,
+      handleSetTheme: setTheme,
       themes,
     }),
-    [theme, handleSetTheme, themes]
+    [theme, setTheme, themes]
   )
 
   return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>

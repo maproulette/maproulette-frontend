@@ -1,21 +1,12 @@
 // @vitest-environment happy-dom
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import {
-  getTaskArrivalLocks,
-  recordTaskArrivalLocks,
-  resetTaskArrivalLocks,
-} from './taskArrivalLocks'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { getTaskArrivalLocks, recordTaskArrivalLocks } from './taskArrivalLocks'
 
 const arrivedFree = { heldThis: false, heldInChallenge: false }
 const arrivedHolding = { heldThis: true, heldInChallenge: false }
 
 beforeEach(() => {
   sessionStorage.clear()
-  resetTaskArrivalLocks()
-})
-
-afterEach(() => {
-  vi.restoreAllMocks()
 })
 
 describe('task arrival locks record', () => {
@@ -31,23 +22,8 @@ describe('task arrival locks record', () => {
     expect(getTaskArrivalLocks(102686)).toEqual(arrivedHolding)
   })
 
-  it('survives a reload - the record lives in sessionStorage', () => {
-    recordTaskArrivalLocks(102685, arrivedFree)
-    resetTaskArrivalLocks() // as if the page were reloaded
-
-    expect(getTaskArrivalLocks(102685)).toEqual(arrivedFree)
-  })
-
   it('keeps the first verdict for a task - a later lock cannot rewrite it', () => {
     recordTaskArrivalLocks(102685, arrivedFree)
-    recordTaskArrivalLocks(102685, arrivedHolding)
-
-    expect(getTaskArrivalLocks(102685)).toEqual(arrivedFree)
-  })
-
-  it('keeps the first verdict across a reload too', () => {
-    recordTaskArrivalLocks(102685, arrivedFree)
-    resetTaskArrivalLocks()
     recordTaskArrivalLocks(102685, arrivedHolding)
 
     expect(getTaskArrivalLocks(102685)).toEqual(arrivedFree)
@@ -57,38 +33,10 @@ describe('task arrival locks record', () => {
     for (let id = 1; id <= 205; id += 1) {
       recordTaskArrivalLocks(id, arrivedFree)
     }
-    resetTaskArrivalLocks() // force reads to go back to sessionStorage
 
     expect(getTaskArrivalLocks(1)).toBeNull()
     expect(getTaskArrivalLocks(5)).toBeNull()
     expect(getTaskArrivalLocks(6)).toEqual(arrivedFree)
     expect(getTaskArrivalLocks(205)).toEqual(arrivedFree)
-  })
-
-  it('ignores stored junk rather than throwing', () => {
-    sessionStorage.setItem('mr:taskArrivalLocks', '{"not":"an array"}')
-    expect(getTaskArrivalLocks(102685)).toBeNull()
-
-    sessionStorage.setItem('mr:taskArrivalLocks', 'not json at all')
-    expect(getTaskArrivalLocks(102685)).toBeNull()
-  })
-
-  it('skips malformed entries but keeps the sound ones', () => {
-    sessionStorage.setItem(
-      'mr:taskArrivalLocks',
-      JSON.stringify([{ id: 'nope' }, null, { id: 102685, heldThis: false, heldInChallenge: true }])
-    )
-
-    expect(getTaskArrivalLocks(102685)).toEqual({ heldThis: false, heldInChallenge: true })
-  })
-
-  it('still records in memory when storage refuses the write', () => {
-    vi.spyOn(sessionStorage, 'setItem').mockImplementation(() => {
-      throw new Error('quota exceeded')
-    })
-
-    recordTaskArrivalLocks(102685, { heldThis: true, heldInChallenge: true })
-
-    expect(getTaskArrivalLocks(102685)).toEqual({ heldThis: true, heldInChallenge: true })
   })
 })

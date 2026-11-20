@@ -13,12 +13,18 @@ import {
   IntlProvider as ReactIntlProvider,
   useIntl as useReactIntl,
 } from 'react-intl'
-import { defaultLocale, type Locale, resolveInitialLocale } from './locales'
+import { z } from 'zod'
+import { localStored } from '@/lib/storage'
+import { defaultLocale, isSupportedLocale, type Locale, resolveInitialLocale } from './locales'
 import { baseCatalog, loadCatalog, type MessageCatalog } from './messageFormatting'
 
 export type TranslateFn = IntlShape['formatMessage']
 
-const LOCALE_STORAGE_KEY = 'mr4:locale'
+const storedLocale = localStored(
+  'locale',
+  z.custom<Locale>((value) => typeof value === 'string' && isSupportedLocale(value)).nullable(),
+  null
+)
 
 interface LocaleContextValue {
   locale: Locale
@@ -38,10 +44,9 @@ const ignoreMissingTranslations = (error: { code: string }) => {
 }
 
 export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
-  const [locale, setLocaleState] = useState<Locale>(() => {
-    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY)
-    return resolveInitialLocale(initialLocale ?? stored ?? undefined)
-  })
+  const [locale, setLocaleState] = useState<Locale>(() =>
+    resolveInitialLocale(initialLocale ?? storedLocale.get())
+  )
   const [catalog, setCatalog] = useState<MessageCatalog>(baseCatalog)
 
   useEffect(() => {
@@ -55,11 +60,13 @@ export const IntlProvider = ({ initialLocale, children }: ProviderProps) => {
   }, [locale])
 
   useEffect(() => {
-    window.localStorage.setItem(LOCALE_STORAGE_KEY, locale)
     document.documentElement.lang = locale
   }, [locale])
 
-  const setLocale = useCallback((next: Locale) => setLocaleState(next), [])
+  const setLocale = useCallback((next: Locale) => {
+    storedLocale.set(next)
+    setLocaleState(next)
+  }, [])
 
   const value = useMemo<LocaleContextValue>(() => ({ locale, setLocale }), [locale, setLocale])
 

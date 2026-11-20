@@ -12,6 +12,7 @@ import { routeTree } from './routeTree.gen'
 import './main.css'
 import { NotFound, RouteErrorBoundary } from '@/components/shared/ErrorPages'
 import { Loader } from '@/components/ui/Loader'
+import { migrateLegacyStorage } from '@/lib/legacyStorage'
 import { setAppRouter } from '@/lib/routerRef'
 
 const queryClient = new QueryClient({
@@ -53,6 +54,8 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
+
+migrateLegacyStorage()
 
 const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {

@@ -113,7 +113,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
     dragging,
     handleProps,
     style: panelStyle,
-  } = useDraggablePanel('mr4:idEditor:controlsPosition', (size) => ({
+  } = useDraggablePanel('idEditor.controlsPosition', (size) => ({
     x: Math.max(12, (window.innerWidth - size.x) / 2),
     // Clear of iD's Inspect / Add Feature / Save row along the top.
     y: ID_TOOLBAR_HEIGHT,
