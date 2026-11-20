@@ -65,7 +65,7 @@ test('the status chosen in the confirmation dialog is the one saved', async ({
   const { page } = mapper
   await startMapping(page, task.id)
   await page.getByRole('button', { name: 'Fixed', exact: true }).click()
-  const dialog = page.getByRole('dialog', { name: 'Complete Task Action' })
+  const dialog = page.getByRole('dialog', { name: `Complete Task #${task.id}` })
   await dialog.getByRole('combobox').click()
   await page.getByRole('option', { name: 'Already Fixed' }).click()
   await dialog.getByRole('button', { name: 'Complete & Continue' }).click()
@@ -82,7 +82,7 @@ test('cancelling the confirmation dialog leaves the task untouched and still loc
   const { page } = mapper
   await startMapping(page, task.id)
   await page.getByRole('button', { name: 'Fixed', exact: true }).click()
-  const dialog = page.getByRole('dialog', { name: 'Complete Task Action' })
+  const dialog = page.getByRole('dialog', { name: `Complete Task #${task.id}` })
   await dialog.getByLabel('Comment (Optional)').fill('never sent')
   await dialog.getByRole('button', { name: 'Cancel' }).click()
   await expect(dialog).toBeHidden()
@@ -103,7 +103,7 @@ test('status keys open the confirmation and Shift+Enter submits it', async ({
   await startMapping(page, task.id)
   await page.getByText('Completion: Set Task Status').click()
   await page.keyboard.press('x')
-  const dialog = page.getByRole('dialog', { name: 'Complete Task Action' })
+  const dialog = page.getByRole('dialog', { name: `Complete Task #${task.id}` })
   await expect(dialog).toBeVisible()
   await expect(dialog.getByRole('combobox')).toHaveText('Already Fixed')
   await page.keyboard.type('typed in the comment box')
