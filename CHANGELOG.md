@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [v4.0.2] - 2026-11-20
+
+* Tweak the new UI's theme to bring back a little of MapRoulette 3's visual identity
+* Add language picker and light/dark mode switch for logged out users
+* Fix focus trapping in drawers, tab order in challenge cards, and some other keyboard accessibility issues
+* Make Dialog buttons sticky (for when the content is taller than the viewport)
+* Refactor local preference storage, and fix some view settings not being persisted
+
 ## [v4.0.1] - 2026-11-16
 
 * Fix cooperative challenge tasks so that they open in JOSM
