@@ -376,14 +376,17 @@ export const TaskActionModal = ({
         >
           <DialogHeader>
             <DialogTitle>
-              {t({
-                id: 'taskEditPage.taskActionModal.title',
-                defaultMessage: 'Complete Task Action',
-              })}
+              {t(
+                {
+                  id: 'taskEditPage.taskActionModal.title',
+                  defaultMessage: 'Complete Task #{id}',
+                },
+                { id: task.id }
+              )}
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-6 py-4">
+          <div className="space-y-4">
             {/* Status Transition */}
             <div className="space-y-2">
               <Label>
