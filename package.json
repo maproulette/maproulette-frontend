@@ -101,7 +101,7 @@
     "@vitejs/plugin-react": "^5.0.3",
     "@vitest/browser-playwright": "^4.1.8",
     "@vitest/coverage-v8": "^4.1.8",
-    "happy-dom": "^20.9.0",
+    "happy-dom": "^21.0.4",
     "knip": "^6.44.1",
     "openapi-typescript": "^7.10.1",
     "playwright": "^1.64.0",
