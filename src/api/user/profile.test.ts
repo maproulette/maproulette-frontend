@@ -4,7 +4,7 @@ import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
-import { userProfile } from './profile'
+import { useUnsaveChallenge, useUpdateUserSettings } from './profile'
 
 // Captures each request body as text (via a clone, so ky's own read of the
 // original is unaffected) at mock-invocation time — reading the body from
@@ -24,288 +24,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('userProfile.getPublicUser', () => {
-  it('fetches a public user by id', async () => {
-    const user = { id: 5, osmProfile: { displayName: 'dave' } }
-    const fetchMock = stubFetch(new Response(JSON.stringify(user), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.getPublicUser(5), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(user)
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).pathname).toBe('/api/v2/user/5/public')
-  })
-
-  it('is disabled when userId is 0 (falsy)', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.getPublicUser(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userProfile.activity', () => {
-  it('fetches the current user activity log', async () => {
-    const activity = [
-      {
-        id: 1,
-        created: '2024-01-01',
-        osmUserId: 1,
-        typeId: 1,
-        parentId: 1,
-        parentName: 'p',
-        itemId: 1,
-        action: 1,
-        status: 1,
-        extra: '',
-      },
-    ]
-    stubFetch(new Response(JSON.stringify(activity), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.activity(), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(activity)
-  })
-})
-
-describe('userProfile.metrics', () => {
-  it('fetches metrics for a defined userId with the default monthDuration', async () => {
-    const metrics = { total: 10 }
-    const fetchMock = stubFetch(new Response(JSON.stringify(metrics), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.metrics(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(metrics)
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.pathname).toBe('/api/v2/data/user/9/metrics')
-    expect(url.searchParams.get('monthDuration')).toBe('-1')
-  })
-
-  it('fetches metrics using a custom monthDuration', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.metrics(9, 3), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).searchParams.get('monthDuration')).toBe('3')
-  })
-
-  it('is disabled when userId is undefined', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.metrics(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userProfile.topChallenges', () => {
-  it('fetches top challenges with default params', async () => {
-    const challenges = [{ id: 1, name: 'Challenge 1' }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(challenges), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.topChallenges(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(challenges)
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.pathname).toBe('/api/v2/data/user/9/topChallenges')
-    expect(url.searchParams.get('monthDuration')).toBe('-1')
-    expect(url.searchParams.get('limit')).toBe('10')
-    expect(url.searchParams.get('offset')).toBe('0')
-  })
-
-  it('fetches top challenges with custom params', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(
-      () => userProfile.topChallenges(9, { monthDuration: 6, limit: 3, offset: 2 }),
-      { wrapper: queryClientWrapper() }
-    )
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.searchParams.get('monthDuration')).toBe('6')
-    expect(url.searchParams.get('limit')).toBe('3')
-    expect(url.searchParams.get('offset')).toBe('2')
-  })
-
-  it('is disabled when userId is undefined', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.topChallenges(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userProfile.savedChallenges', () => {
-  it('fetches saved challenges with default limit/page', async () => {
-    const challenges = [{ id: 2, name: 'Saved Challenge' }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(challenges), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.savedChallenges(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(challenges)
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.pathname).toBe('/api/v2/user/9/saved')
-    expect(url.searchParams.get('limit')).toBe('10')
-    expect(url.searchParams.get('page')).toBe('0')
-  })
-
-  it('fetches saved challenges using custom limit/page', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.savedChallenges(9, 20, 1), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.searchParams.get('limit')).toBe('20')
-    expect(url.searchParams.get('page')).toBe('1')
-  })
-
-  it('is disabled when userId is undefined', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.savedChallenges(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userProfile.lockedTasks', () => {
-  it('fetches locked tasks with the default limit', async () => {
-    const locked = [{ taskId: 1, userId: 9 }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(locked), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.lockedTasks(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(locked)
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.pathname).toBe('/api/v2/user/9/lockedTasks')
-    expect(url.searchParams.get('limit')).toBe('50')
-  })
-
-  it('fetches locked tasks using a custom limit', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.lockedTasks(9, 5), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).searchParams.get('limit')).toBe('5')
-  })
-
-  it('does not fetch when disabled', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.lockedTasks(9, undefined, { enabled: false }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('is not refetched by an invalidation once disabled', async () => {
-    const fetchMock = vi.fn(async () => new Response('[]', { status: 200 }))
-    vi.stubGlobal('fetch', fetchMock)
-    const queryClient = createTestQueryClient()
-    const { result, rerender } = renderHook(
-      ({ enabled }: { enabled: boolean }) => userProfile.lockedTasks(9, undefined, { enabled }),
-      { wrapper: queryClientWrapper(queryClient), initialProps: { enabled: true } }
-    )
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    rerender({ enabled: false })
-    await queryClient.invalidateQueries({ queryKey: ['user', 9, 'lockedTasks'] })
-
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-  })
-
-  it('is disabled when userId is undefined', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.lockedTasks(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userProfile.teamMemberships', () => {
-  it('fetches team memberships for a defined userId', async () => {
-    const memberships = [{ teamId: 1, userId: 9 }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(memberships), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.teamMemberships(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(memberships)
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).pathname).toBe('/api/v2/team/all/user/9/memberships')
-  })
-
-  it('is disabled when userId is undefined', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.teamMemberships(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userProfile.useUpdateUserSettings', () => {
+describe('useUpdateUserSettings', () => {
   it('updates settings without properties and refreshes the whoami cache', async () => {
     const updatedUser = { id: 9, osmProfile: { displayName: 'dave' } }
     const { fetchMock, bodies } = stubFetchCapturingBody(
@@ -313,7 +32,7 @@ describe('userProfile.useUpdateUserSettings', () => {
     )
     const queryClient = createTestQueryClient()
 
-    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+    const { result } = renderHook(() => useUpdateUserSettings(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -334,7 +53,7 @@ describe('userProfile.useUpdateUserSettings', () => {
       new Response(JSON.stringify(updatedUser), { status: 200 })
     )
 
-    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+    const { result } = renderHook(() => useUpdateUserSettings(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -370,7 +89,7 @@ describe('userProfile.useUpdateUserSettings', () => {
       properties: { theme: 'light' },
     })
 
-    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+    const { result } = renderHook(() => useUpdateUserSettings(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -403,7 +122,7 @@ describe('userProfile.useUpdateUserSettings', () => {
     }
     queryClient.setQueryData(['user', 'whoami'], cachedUser)
 
-    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+    const { result } = renderHook(() => useUpdateUserSettings(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -422,7 +141,7 @@ describe('userProfile.useUpdateUserSettings', () => {
     stubFetch(new Response('nope', { status: 500 }))
     const queryClient = createTestQueryClient()
 
-    const { result } = renderHook(() => userProfile.useUpdateUserSettings(), {
+    const { result } = renderHook(() => useUpdateUserSettings(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -433,7 +152,7 @@ describe('userProfile.useUpdateUserSettings', () => {
   })
 })
 
-describe('userProfile.useUnsaveChallenge', () => {
+describe('useUnsaveChallenge', () => {
   it('unsaves the challenge and refreshes the saved list', async () => {
     const fetchMock = stubFetch(new Response('ok', { status: 200 }))
     const queryClient = createTestQueryClient()
@@ -441,7 +160,7 @@ describe('userProfile.useUnsaveChallenge', () => {
       .spyOn(queryClient, 'invalidateQueries')
       .mockResolvedValue(undefined)
 
-    const { result } = renderHook(() => userProfile.useUnsaveChallenge(), {
+    const { result } = renderHook(() => useUnsaveChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
     await result.current.mutateAsync({ userId: 9, challengeId: 42 })

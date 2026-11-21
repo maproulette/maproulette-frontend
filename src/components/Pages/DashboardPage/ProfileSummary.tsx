@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { ExternalLink } from 'lucide-react'
-import { api } from '@/api'
+import { userMetricsOptions } from '@/api/user'
 import { AchievementBadge } from '@/components/shared/AchievementBadge'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
@@ -14,7 +15,7 @@ interface ProfileSummaryProps {
 
 export const ProfileSummary = ({ user }: ProfileSummaryProps) => {
   const { t, formatNumber, locale } = useIntl()
-  const { data: metrics } = api.user.metrics(user.id)
+  const { data: metrics } = useQuery(userMetricsOptions(user.id))
   const displayName = user.osmProfile.displayName
   const earnedIds = new Set(user.achievements ?? [])
   const earned = achievementDefinitions.filter(({ id }) => earnedIds.has(id))

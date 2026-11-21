@@ -1,10 +1,15 @@
 // @vitest-environment happy-dom
+import { useQuery } from '@tanstack/react-query'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { baseNotification } from '@/test/notificationFixtures'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { waitFor } from '@/test/waitFor'
-import { userNotifications } from './notifications'
+import {
+  notificationsOptions,
+  useDeleteNotifications,
+  useMarkNotificationsAsRead,
+} from './notifications'
 
 const key = ['user', 'notifications', 7]
 
@@ -20,11 +25,11 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('userNotifications.notification', () => {
+describe('notificationsOptions', () => {
   it('asks for every notification, not just the first page', async () => {
     const fetchMock = stubFetch(() => new Response('[]'))
 
-    const { result } = renderHook(() => userNotifications.notification(7), {
+    const { result } = renderHook(() => useQuery(notificationsOptions(7)), {
       wrapper: queryClientWrapper(),
     })
 
@@ -39,7 +44,7 @@ describe('notification mutations', () => {
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(key, [baseNotification({ id: 1 }), baseNotification({ id: 2 })])
 
-    const { result } = renderHook(() => userNotifications.useMarkNotificationsAsRead(), {
+    const { result } = renderHook(() => useMarkNotificationsAsRead(), {
       wrapper: queryClientWrapper(queryClient),
     })
     result.current.mutate({ userId: 7, notificationIds: [1] })
@@ -56,7 +61,7 @@ describe('notification mutations', () => {
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(key, [baseNotification({ id: 1 }), baseNotification({ id: 2 })])
 
-    const { result } = renderHook(() => userNotifications.useDeleteNotifications(), {
+    const { result } = renderHook(() => useDeleteNotifications(), {
       wrapper: queryClientWrapper(queryClient),
     })
     result.current.mutate({ userId: 7, notificationIds: [1] })
@@ -76,8 +81,8 @@ describe('notification mutations', () => {
 
     const { result } = renderHook(
       () => ({
-        list: userNotifications.notification(7),
-        markRead: userNotifications.useMarkNotificationsAsRead(),
+        list: useQuery(notificationsOptions(7)),
+        markRead: useMarkNotificationsAsRead(),
       }),
       { wrapper: queryClientWrapper() }
     )

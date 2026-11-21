@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import { Button } from '@/components/ui/Button'
 import { DisabledTooltip } from '@/components/ui/DisabledTooltip'
 import {
@@ -32,7 +32,7 @@ export const EditorButton = ({ task }: EditorButtonProps) => {
   const { t } = useIntl()
   const { user } = useAuthContext()
   const [isSaving, setIsSaving] = useState(false)
-  const updateEditorMutation = api.user.useUpdateUserSettings()
+  const updateEditorMutation = useUpdateUserSettings()
   const {
     openEditor,
     openDefaultEditor,

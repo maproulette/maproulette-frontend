@@ -1,10 +1,11 @@
 // @vitest-environment happy-dom
+import { useQuery } from '@tanstack/react-query'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
-import { userAnnouncements } from './announcements'
+import { announcementsOptions } from './announcements'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -16,7 +17,7 @@ const jsonResponse = (body: unknown) =>
     headers: { 'Content-Type': 'application/json' },
   })
 
-describe('userAnnouncements.announcements', () => {
+describe('announcementsOptions', () => {
   it('parses the notices the backend serves', async () => {
     const notice = {
       uuid: 'outage-1',
@@ -25,7 +26,7 @@ describe('userAnnouncements.announcements', () => {
     }
     const fetchMock = stubFetch(jsonResponse({ message: { notices: [notice] } }))
 
-    const { result } = renderHook(() => userAnnouncements.announcements(), {
+    const { result } = renderHook(() => useQuery(announcementsOptions()), {
       wrapper: queryClientWrapper(),
     })
 
@@ -37,7 +38,7 @@ describe('userAnnouncements.announcements', () => {
   it('reports no notices when the deployment has none configured', async () => {
     stubFetch(new Response('', { status: 404 }))
 
-    const { result } = renderHook(() => userAnnouncements.announcements(), {
+    const { result } = renderHook(() => useQuery(announcementsOptions()), {
       wrapper: queryClientWrapper(),
     })
 

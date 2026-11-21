@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { Bookmark } from 'lucide-react'
-import { api } from '@/api'
+import { savedChallengesOptions } from '@/api/user'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { useIntl } from '@/i18n'
 import { DashboardEmpty, DashboardSection } from './DashboardSection'
@@ -12,7 +13,7 @@ interface SavedChallengesSectionProps {
 export const SavedChallengesSection = ({ userId }: SavedChallengesSectionProps) => {
   const { t } = useIntl()
   // FIXME: the backend ignores the paging params here and always returns every saved challenge.
-  const { data: challenges, isLoading, error } = api.user.savedChallenges(userId)
+  const { data: challenges, isLoading, error } = useQuery(savedChallengesOptions(userId))
 
   return (
     <DashboardSection

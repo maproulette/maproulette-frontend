@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useContext, useMemo } from 'react'
 import { api } from '@/api'
+import { publicUserOptions } from '@/api/user'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { canManageChallenge } from '@/lib/challengePermissions'
@@ -66,7 +68,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const { data: projectData } = api.project.getProject(challenge.parent)
 
-  const { data: ownerData } = api.user.getPublicUser(challenge.owner)
+  const { data: ownerData } = useQuery(publicUserOptions(challenge.owner))
 
   // A team-owned challenge is the team's work, so the byline credits the team
   // instead of whoever happened to create it.

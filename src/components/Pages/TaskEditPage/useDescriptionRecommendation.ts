@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { api } from '@/api'
+import { lockedTasksOptions } from '@/api/user'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import {
   challengeDescriptionText,
@@ -47,8 +48,9 @@ export const useDescriptionRecommendation = () => {
     hasSeenChallengeDescription(challenge?.id)
   )
   const [arrival, setArrival] = useState<Arrival | null>(() => arrivalFromRecord(task.id))
-  const { data: heldLocks } = api.user.lockedTasks(user?.id, undefined, {
-    enabled: arrival?.taskId !== task.id,
+  const { data: heldLocks } = useQuery({
+    ...lockedTasksOptions(user?.id),
+    enabled: !!user && arrival?.taskId !== task.id,
   })
 
   // Did this task's lock already belong to the mapper as the page first rendered it? Read

@@ -3,6 +3,7 @@ import type { Challenge } from '@/types/Challenge'
 import type { Project } from '@/types/Project'
 import type { ManagedTeam, Team, TeamRole, TeamUser } from '@/types/Team'
 import { apiRequest } from '../client'
+import { userKeys } from '../user/keys'
 
 export const team = {
   get: (teamId: number | undefined) =>
@@ -88,7 +89,7 @@ export const team = {
       mutationFn: (payload: { name: string; description?: string; avatarURL?: string }) =>
         apiRequest.post('api/v2/team', { json: { id: 0, groupType: 0, ...payload } }).json<Team>(),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
       },
     })
   },
@@ -127,7 +128,7 @@ export const team = {
       onSuccess: (_team, { teamId }) => {
         queryClient.invalidateQueries({ queryKey: ['team', teamId] })
         // The avatar shows up on team listings hanging off the user too
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
       },
     })
   },
@@ -139,7 +140,7 @@ export const team = {
         apiRequest.delete(`api/v2/team/${teamId}/avatar`).json<Team>(),
       onSuccess: (_team, teamId) => {
         queryClient.invalidateQueries({ queryKey: ['team', teamId] })
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
       },
     })
   },
@@ -149,7 +150,7 @@ export const team = {
     return useMutation({
       mutationFn: (teamId: number) => apiRequest.delete(`api/v2/team/${teamId}`).json<void>(),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
         queryClient.invalidateQueries({ queryKey: ['team'] })
       },
     })
@@ -173,7 +174,7 @@ export const team = {
         apiRequest.put(`api/v2/team/${teamId}/invite/accept`).json<TeamUser>(),
       onSuccess: (_res, teamId) => {
         queryClient.invalidateQueries({ queryKey: ['team', teamId] })
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
       },
     })
   },
@@ -184,7 +185,7 @@ export const team = {
       mutationFn: (teamId: number) =>
         apiRequest.delete(`api/v2/team/${teamId}/invite`).json<void>(),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
       },
     })
   },

@@ -1,4 +1,5 @@
-import { api } from '@/api'
+import { useQuery } from '@tanstack/react-query'
+import { announcementsOptions, useUpdateUserSettings } from '@/api/user'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { acknowledgedNoticeIds, activeNotices, withAcknowledgedNotice } from '@/lib/systemNotices'
@@ -12,8 +13,8 @@ import { DismissibleBanner } from './DismissibleBanner'
  */
 export const SystemNotices = () => {
   const { user } = useAuthContext()
-  const { data: notices } = api.user.announcements()
-  const updateSettings = api.user.useUpdateUserSettings()
+  const { data: notices } = useQuery(announcementsOptions())
+  const updateSettings = useUpdateUserSettings()
 
   if (!notices?.length) return null
 

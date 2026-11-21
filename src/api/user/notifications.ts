@@ -1,8 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Notification } from '@/types/Notification'
 import { apiRequest } from '../client'
+import { userKeys } from './keys'
 
-const notificationsKey = (userId: number | undefined) => ['user', 'notifications', userId]
+const notificationsKey = (userId: number | undefined) => [...userKeys.notifications, userId]
 
 type NotificationsMutation = { userId: number; notificationIds: number[] }
 
@@ -28,35 +29,33 @@ const useNotificationsMutation = (
   })
 }
 
-export const userNotifications = {
-  notification: (userId: number | undefined) =>
-    useQuery({
-      queryKey: notificationsKey(userId),
-      queryFn: () =>
-        apiRequest
-          .get(`api/v2/user/${userId}/notifications`, {
-            // Newest first; the backend otherwise puts unread ones first
-            searchParams: { limit: -1, sort: 'created', order: 'DESC' },
-          })
-          .json<Notification[]>(),
-      enabled: !!userId,
-      // Websocket pushes are off by default, so poll as well.
-      refetchInterval: 2 * 60 * 1000,
-      refetchOnWindowFocus: true,
-    }),
+export const notificationsOptions = (userId: number | undefined) =>
+  queryOptions({
+    queryKey: notificationsKey(userId),
+    queryFn: () =>
+      apiRequest
+        .get(`api/v2/user/${userId}/notifications`, {
+          // Newest first; the backend otherwise puts unread ones first
+          searchParams: { limit: -1, sort: 'created', order: 'DESC' },
+        })
+        .json<Notification[]>(),
+    enabled: !!userId,
+    // Websocket pushes are off by default, so poll as well.
+    refetchInterval: 2 * 60 * 1000,
+    refetchOnWindowFocus: true,
+  })
 
-  useMarkNotificationsAsRead: () =>
-    useNotificationsMutation('notifications', (notifications, ids) =>
-      notifications.map((n) => (ids.includes(n.id) ? { ...n, isRead: true } : n))
-    ),
+export const useMarkNotificationsAsRead = () =>
+  useNotificationsMutation('notifications', (notifications, ids) =>
+    notifications.map((n) => (ids.includes(n.id) ? { ...n, isRead: true } : n))
+  )
 
-  useMarkNotificationsAsUnread: () =>
-    useNotificationsMutation('notifications/unread', (notifications, ids) =>
-      notifications.map((n) => (ids.includes(n.id) ? { ...n, isRead: false } : n))
-    ),
+export const useMarkNotificationsAsUnread = () =>
+  useNotificationsMutation('notifications/unread', (notifications, ids) =>
+    notifications.map((n) => (ids.includes(n.id) ? { ...n, isRead: false } : n))
+  )
 
-  useDeleteNotifications: () =>
-    useNotificationsMutation('notifications/delete', (notifications, ids) =>
-      notifications.filter((n) => !ids.includes(n.id))
-    ),
-}
+export const useDeleteNotifications = () =>
+  useNotificationsMutation('notifications/delete', (notifications, ids) =>
+    notifications.filter((n) => !ids.includes(n.id))
+  )

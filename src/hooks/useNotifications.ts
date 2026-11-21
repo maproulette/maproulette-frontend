@@ -1,13 +1,19 @@
+import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import {
+  notificationsOptions,
+  useDeleteNotifications,
+  useMarkNotificationsAsRead,
+  useMarkNotificationsAsUnread,
+} from '@/api/user'
 import { useIntl } from '@/i18n'
 
 export const useNotifications = (userId: number) => {
   const { t } = useIntl()
-  const { data: notifications = [], isLoading } = api.user.notification(userId)
-  const markRead = api.user.useMarkNotificationsAsRead()
-  const markUnread = api.user.useMarkNotificationsAsUnread()
-  const remove = api.user.useDeleteNotifications()
+  const { data: notifications = [], isLoading } = useQuery(notificationsOptions(userId))
+  const markRead = useMarkNotificationsAsRead()
+  const markUnread = useMarkNotificationsAsUnread()
+  const remove = useDeleteNotifications()
 
   const action =
     (mutation: typeof markRead, failure: (error: Error) => string) => (ids: number[]) => {

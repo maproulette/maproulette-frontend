@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
@@ -108,7 +109,7 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   }, [fetchNextPage])
 
   // Mutations
-  const updateSettingsMutation = api.user.useUpdateUserSettings()
+  const updateSettingsMutation = useUpdateUserSettings()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
   const pauseChallengeMutation = api.challenge.usePauseChallenge()

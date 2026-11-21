@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { Calendar, ChevronLeft, ChevronRight, Mail, Users } from 'lucide-react'
 import { useState } from 'react'
-import { api } from '@/api'
+import { allUsersOptions } from '@/api/user'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
@@ -24,7 +25,7 @@ export const SuperAdminUsers = () => {
   const [page, setPage] = useState(0)
   const limit = 50
 
-  const { data: users, isLoading } = api.user.getAllUsers({ limit, page })
+  const { data: users, isLoading } = useQuery(allUsersOptions({ limit, page }))
 
   const totalUsers = users?.length ?? 0
   const hasNextPage = totalUsers === limit

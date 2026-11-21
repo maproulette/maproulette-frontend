@@ -3,6 +3,7 @@ import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -116,7 +117,7 @@ export const TaskActionModal = ({
   const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
   const createBundleMutation = api.taskBundle.useCreateTaskBundle()
   const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
-  const updateUserSettingsMutation = api.user.useUpdateUserSettings()
+  const updateUserSettingsMutation = useUpdateUserSettings()
   const lockConflict = useLockConflict()
   const { activeBundle, initialBundle } = useTaskBundleContext()
   const [currentStatus, setCurrentStatus] = useState(task.status ?? 0)

@@ -1,5 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiRequest } from '../client'
+import { userKeys } from '../user/keys'
 
 export const challengeFavorites = {
   isChallengeFavorited: (challengeId: number) =>
@@ -24,7 +25,7 @@ export const challengeFavorites = {
           ['challenge', challengeId, 'isFavorited'],
           { isFavorited: true }
         )
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
       },
     })
   },
@@ -39,7 +40,7 @@ export const challengeFavorites = {
           ['challenge', challengeId, 'isFavorited'],
           { isFavorited: false }
         )
-        queryClient.invalidateQueries({ queryKey: ['user'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.all })
       },
     })
   },

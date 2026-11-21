@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { BookmarkX, MoreHorizontal, Play, Settings } from 'lucide-react'
-import { api } from '@/api'
+import { useUnsaveChallenge } from '@/api/user'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -23,7 +23,7 @@ interface SavedChallengeActionsProps {
 export const SavedChallengeActions = ({ challenge, userId }: SavedChallengeActionsProps) => {
   const { t } = useIntl()
   const { user } = useAuthContext()
-  const unsaveChallenge = api.user.useUnsaveChallenge()
+  const unsaveChallenge = useUnsaveChallenge()
   const canManage = canManageChallenge(user, challenge)
 
   return (

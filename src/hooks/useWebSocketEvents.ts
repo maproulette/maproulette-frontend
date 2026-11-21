@@ -51,7 +51,7 @@ const invalidateOwnUserQueries = (
 ) => {
   queryClient.invalidateQueries({ queryKey: userKeys.whoami })
   queryClient.invalidateQueries({
-    queryKey: ['user', userId],
+    queryKey: userKeys.user(userId),
     predicate: (query) => query.queryKey[2] !== 'lockedTasks',
   })
 }
@@ -242,12 +242,12 @@ export const useWebSocketEvents = () => {
 
       if (isTeamUpdate(lastMessage)) {
         queryClient.invalidateQueries({ queryKey: ['team', lastMessage.data.teamId] })
-        queryClient.invalidateQueries({ queryKey: ['user', user?.id, 'teamMemberships'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.teamMemberships(user?.id) })
         return
       }
 
       if (isNotificationMessage(lastMessage)) {
-        queryClient.invalidateQueries({ queryKey: ['user', 'notifications'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.notifications })
         return
       }
     } catch (error) {

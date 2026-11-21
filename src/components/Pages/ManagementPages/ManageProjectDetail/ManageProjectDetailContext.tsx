@@ -2,6 +2,7 @@ import { useNavigate, useParams } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import {
   buildPropertiesWithPinnedChallenges,
   getPinnedChallengeIds,
@@ -112,7 +113,7 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   )
 
   // API mutations
-  const updateSettingsMutation = api.user.useUpdateUserSettings()
+  const updateSettingsMutation = useUpdateUserSettings()
   const updateProjectMutation = api.project.useUpdateProject()
   const deleteProjectMutation = api.project.useDeleteProject()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()

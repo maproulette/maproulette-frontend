@@ -1,5 +1,5 @@
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo } from 'react'
-import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import {
   addCustomBaseLayer,
   type CustomBaseLayer,
@@ -32,7 +32,7 @@ const CustomBaseLayersContext = createContext<CustomBaseLayersContextValue | nul
  */
 export const CustomBaseLayersProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuthContext()
-  const updateSettings = api.user.useUpdateUserSettings()
+  const updateSettings = useUpdateUserSettings()
 
   const accountLayers = useMemo(
     () => (user?.settings?.customBasemaps ?? []).filter((basemap) => !basemap.overlay),

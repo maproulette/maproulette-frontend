@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { defineMessage, type MessageDescriptor } from 'react-intl'
-import { api } from '@/api'
+import { notificationSubscriptionsOptions, useUpdateNotificationSubscriptions } from '@/api/user'
 import { FieldDescription, FieldLegend, FieldSet } from '@/components/ui/Field'
 import { Label } from '@/components/ui/Label'
 import { Loader } from '@/components/ui/Loader'
@@ -89,8 +90,8 @@ export interface SubscriptionsDraft {
  * saved alongside the account form when it submits.
  */
 export const useNotificationSubscriptionsDraft = (userId: number): SubscriptionsDraft => {
-  const { data, isLoading, isError } = api.user.notificationSubscriptions(userId)
-  const updateMutation = api.user.useUpdateNotificationSubscriptions()
+  const { data, isLoading, isError } = useQuery(notificationSubscriptionsOptions(userId))
+  const updateMutation = useUpdateNotificationSubscriptions()
   const [draft, setDraft] = useState<NotificationSubscriptions | null>(null)
 
   const saved = useMemo(() => (data ? withSubscriptionDefaults(data) : null), [data])

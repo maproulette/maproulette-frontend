@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Activity } from 'lucide-react'
 import { useMemo } from 'react'
-import { api } from '@/api'
+import { contributionsOptions, lockedTasksOptions } from '@/api/user'
 import { useIntl } from '@/i18n'
 import { getStatusLabel } from '@/lib/taskConstants'
 import { aggregateActivity } from './activityAggregation'
@@ -14,8 +15,8 @@ interface RecentActivitySectionProps {
 
 export const RecentActivitySection = ({ userId }: RecentActivitySectionProps) => {
   const { t, locale } = useIntl()
-  const { data: activityData, isLoading, error } = api.user.activity()
-  const { data: lockedTasks } = api.user.lockedTasks(userId)
+  const { data: activityData, isLoading, error } = useQuery(contributionsOptions())
+  const { data: lockedTasks } = useQuery(lockedTasksOptions(userId))
 
   const days = useMemo(() => aggregateActivity(activityData, t, locale), [activityData, t, locale])
 

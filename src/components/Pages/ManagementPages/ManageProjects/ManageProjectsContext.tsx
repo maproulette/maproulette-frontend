@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
@@ -43,7 +44,7 @@ const useManageProjectsState = () => {
     )
   const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
 
-  const updateSettingsMutation = api.user.useUpdateUserSettings()
+  const updateSettingsMutation = useUpdateUserSettings()
   const updateProjectMutation = api.project.useUpdateProject()
   const deleteProjectMutation = api.project.useDeleteProject()
   const actionErrors = useManageActionErrors()

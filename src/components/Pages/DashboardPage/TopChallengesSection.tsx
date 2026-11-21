@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Trophy } from 'lucide-react'
-import { api } from '@/api'
+import { topChallengesOptions } from '@/api/user'
 import { Progress } from '@/components/ui/Progress'
 import { useIntl } from '@/i18n'
 import { DashboardEmpty, DashboardSection } from './DashboardSection'
@@ -11,7 +12,11 @@ interface TopChallengesSectionProps {
 
 export const TopChallengesSection = ({ userId }: TopChallengesSectionProps) => {
   const { t } = useIntl()
-  const { data: challenges, isLoading, error } = api.user.topChallenges(userId, { limit: 5 })
+  const {
+    data: challenges,
+    isLoading,
+    error,
+  } = useQuery(topChallengesOptions(userId, { limit: 5 }))
   const maxActivity = Math.max(0, ...(challenges ?? []).map((c) => c.activity))
 
   return (

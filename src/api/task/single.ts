@@ -30,7 +30,7 @@ export const invalidateLockedTasks = (queryClient: ReturnType<typeof useQueryCli
       pendingLockedTasksInvalidations.delete(queryClient)
       const userId = getCurrentUserId(queryClient)
       if (userId != null) {
-        queryClient.invalidateQueries({ queryKey: ['user', userId, 'lockedTasks'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.lockedTasks(userId) })
       }
     }, LOCKED_TASKS_INVALIDATION_DELAY_MS)
   )

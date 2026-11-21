@@ -1,16 +1,17 @@
 // @vitest-environment happy-dom
+import type { QueryClient } from '@tanstack/react-query'
 import { act } from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { api } from '@/api'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { type LockedTaskData, lockedTasksOptions } from '@/api/user'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import type { Challenge } from '@/types/Challenge'
 import type { TaskGetResponse } from '@/types/Task'
 import { useDescriptionRecommendation } from './useDescriptionRecommendation'
 
-vi.mock('@/api', () => ({ api: { user: { lockedTasks: vi.fn() } } }))
 vi.mock('@/components/Pages/TaskEditPage/contexts/ChallengeContext', () => ({
   useChallengeContext: vi.fn(),
 }))
@@ -44,42 +45,58 @@ const setup = ({
   vi.mocked(useAuthContext).mockReturnValue({ user: { id: USER_ID } } as ReturnType<
     typeof useAuthContext
   >)
-  vi.mocked(api.user.lockedTasks).mockReturnValue({ data: heldLocks } as ReturnType<
-    typeof api.user.lockedTasks
-  >)
+
+  if (heldLocks) {
+    act(() => {
+      queryClient.setQueryData(lockedTasksOptions(USER_ID).queryKey, heldLocks as LockedTaskData[])
+    })
+  }
 }
+
+let queryClient: QueryClient
+
+const render = () =>
+  renderHook(() => useDescriptionRecommendation(), { wrapper: queryClientWrapper(queryClient) })
+
+const lockListIsRead = () =>
+  !queryClient
+    .getQueryCache()
+    .find({ queryKey: lockedTasksOptions(USER_ID).queryKey })
+    ?.isDisabled()
 
 beforeEach(() => {
   sessionStorage.clear()
   vi.clearAllMocks()
+  queryClient = createTestQueryClient()
+  vi.stubGlobal('fetch', () => new Promise(() => {}))
+})
+
+afterEach(() => {
+  vi.unstubAllGlobals()
 })
 
 describe('useDescriptionRecommendation', () => {
   it("says nothing until the mapper's locks are known", () => {
     setup({ heldLocks: undefined })
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(false)
   })
 
   it('stops reading the lock list once the arrival locks are recorded', () => {
     setup({ heldLocks: undefined })
-    const { rerender } = renderHook(() => useDescriptionRecommendation())
-    expect(vi.mocked(api.user.lockedTasks)).toHaveBeenLastCalledWith(USER_ID, undefined, {
-      enabled: true,
-    })
+    const { rerender } = render()
+    expect(lockListIsRead()).toBe(true)
 
     setup({ heldLocks: [] })
     rerender()
 
-    expect(vi.mocked(api.user.lockedTasks)).toHaveBeenLastCalledWith(USER_ID, undefined, {
-      enabled: false,
-    })
+    expect(lockListIsRead()).toBe(false)
   })
 
   it('nudges a mapper who arrived on a shared link holding no locks', () => {
     setup({ heldLocks: [] })
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(true)
   })
@@ -88,7 +105,7 @@ describe('useDescriptionRecommendation', () => {
     // The lock list lands only after they hit lock, so it already holds this task - the
     // shape of a direct link followed by a claim.
     setup({ heldLocks: undefined })
-    const { result, rerender } = renderHook(() => useDescriptionRecommendation())
+    const { result, rerender } = render()
     expect(result.current.recommended).toBe(false)
 
     setup({ lockedBy: USER_ID, heldLocks: [lock(TASK_ID)] })
@@ -99,49 +116,49 @@ describe('useDescriptionRecommendation', () => {
 
   it('drops the nudge for a task whose lock the mapper already held on arrival', () => {
     setup({ lockedBy: USER_ID, heldLocks: [lock(TASK_ID)] })
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(false)
   })
 
   it('leaves a lock held by somebody else out of it', () => {
     setup({ lockedBy: 99, heldLocks: [] })
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(true)
   })
 
   it('drops the nudge when the mapper holds a lock elsewhere in the challenge', () => {
     setup({ heldLocks: [lock(TASK_ID + 1)] })
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(false)
   })
 
   it('ignores a lock held in some other challenge', () => {
     setup({ heldLocks: [lock(TASK_ID + 1, CHALLENGE_ID + 1)] })
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(true)
   })
 
   it('still nudges after a reload of the locked task, having arrived without the lock', () => {
     setup({ heldLocks: [] })
-    const first = renderHook(() => useDescriptionRecommendation())
+    const first = render()
     expect(first.result.current.recommended).toBe(true)
     first.unmount()
 
     // Reloaded: the arrival verdict comes back from sessionStorage, while the live picture
     // now shows the lock they took in the meantime.
     setup({ lockedBy: USER_ID, heldLocks: [lock(TASK_ID)] })
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(true)
   })
 
   it('stops nudging once the description is read, and remembers it', () => {
     setup({ heldLocks: [] })
-    const { result, unmount } = renderHook(() => useDescriptionRecommendation())
+    const { result, unmount } = render()
     expect(result.current.recommended).toBe(true)
 
     act(() => {
@@ -151,7 +168,7 @@ describe('useDescriptionRecommendation', () => {
     unmount()
 
     setup({ lockedBy: USER_ID, heldLocks: [lock(TASK_ID)] })
-    const second = renderHook(() => useDescriptionRecommendation())
+    const second = render()
 
     expect(second.result.current.recommended).toBe(false)
   })
@@ -161,7 +178,7 @@ describe('useDescriptionRecommendation', () => {
     vi.mocked(useChallengeContext).mockReturnValue({
       challenge: { id: CHALLENGE_ID } as Challenge,
     } as ReturnType<typeof useChallengeContext>)
-    const { result } = renderHook(() => useDescriptionRecommendation())
+    const { result } = render()
 
     expect(result.current.recommended).toBe(false)
   })

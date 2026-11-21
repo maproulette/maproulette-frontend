@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { Trash2, UserPlus, Users } from 'lucide-react'
 import { type ReactNode, useId, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { findUsersOptions } from '@/api/user'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Input } from '@/components/ui/Input'
@@ -92,11 +94,10 @@ export const ManagersPanel = ({
   const [newRole, setNewRole] = useState<number>(PROJECT_ROLE.write)
   const addManagerId = useId()
   const debouncedUserQuery = useDebouncedValue(userQuery)
-  const { data: userMatches } = api.user.findUsers(
-    debouncedUserQuery,
-    10,
-    debouncedUserQuery.length > 2
-  )
+  const { data: userMatches } = useQuery({
+    ...findUsersOptions(debouncedUserQuery, 10),
+    enabled: debouncedUserQuery.length > 2,
+  })
 
   const [teamQuery, setTeamQuery] = useState('')
   const addTeamId = useId()

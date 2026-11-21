@@ -1,24 +1,17 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { queryOptions } from '@tanstack/react-query'
 import type { GetAllUsersParams, User } from '@/types/User'
 import { apiRequest, convertParamsToSearchParams } from '../client'
 
-export const userAdmin = {
-  getAllUsers: (params?: GetAllUsersParams) => {
-    return useQuery(
-      queryOptions({
-        queryKey: ['user', 'all', params],
-        queryFn: async () => {
-          const users = await apiRequest
-            .get('api/v2/super-admin/users', {
-              searchParams: convertParamsToSearchParams({
-                limit: params?.limit ?? 50,
-                page: params?.page ?? 0,
-              }),
-            })
-            .json<User[]>()
-          return users
-        },
-      })
-    )
-  },
-}
+export const allUsersOptions = (params?: GetAllUsersParams) =>
+  queryOptions({
+    queryKey: ['user', 'all', params],
+    queryFn: () =>
+      apiRequest
+        .get('api/v2/super-admin/users', {
+          searchParams: convertParamsToSearchParams({
+            limit: params?.limit ?? 50,
+            page: params?.page ?? 0,
+          }),
+        })
+        .json<User[]>(),
+  })

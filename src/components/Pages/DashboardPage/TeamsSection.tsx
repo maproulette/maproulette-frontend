@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { ExternalLink, Plus, Users } from 'lucide-react'
-import { api } from '@/api'
+import { teamMembershipsOptions } from '@/api/user'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { useIntl } from '@/i18n'
 import { isPendingInvite } from '@/types/Team'
@@ -14,7 +15,7 @@ interface TeamsSectionProps {
 
 export const TeamsSection = ({ userId }: TeamsSectionProps) => {
   const { t } = useIntl()
-  const { data: teamMemberships, isLoading, error } = api.user.teamMemberships(userId)
+  const { data: teamMemberships, isLoading, error } = useQuery(teamMembershipsOptions(userId))
   const pending = teamMemberships?.filter(isPendingInvite) ?? []
   const active = teamMemberships?.filter((m) => !isPendingInvite(m)) ?? []
 

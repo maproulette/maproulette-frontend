@@ -1,6 +1,6 @@
 import { Languages } from 'lucide-react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import type { User } from '@/types/User'
 
 export const DropdownMenuLanguage = ({ user }: { user?: User }) => {
   const { t, locale, setLocale } = useIntl()
-  const updateSettings = api.user.useUpdateUserSettings()
+  const updateSettings = useUpdateUserSettings()
 
   const changeLocale = (next: Locale) => {
     if (!user) {

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useUpdateUserSettings } from '@/api/user'
 import { FieldGroup } from '@/components/ui/Field'
 import { Form } from '@/components/ui/Form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
@@ -21,7 +21,7 @@ import { PluginSettings } from './PluginSettings'
 import { PluginUserSettingsFields } from './PluginUserSettingsFields'
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
-  const updateSettingsMutation = api.user.useUpdateUserSettings()
+  const updateSettingsMutation = useUpdateUserSettings()
   const subscriptions = useNotificationSubscriptionsDraft(user.id)
   const { locale, t } = useIntl()
 
