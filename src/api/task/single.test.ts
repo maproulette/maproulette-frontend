@@ -304,28 +304,6 @@ describe('taskSingle.useLockTaskBundle', () => {
     expect(url.searchParams.getAll('taskIds')).toEqual(['2', '3'])
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
-
-  it('logs and swallows a failed bundle lock update', async () => {
-    const { logger } = await import('@/lib/logger')
-    const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => {})
-    stubFetch(new Response('conflict', { status: 409 }))
-    const queryClient = createTestQueryClient()
-
-    const { result } = renderHook(() => taskSingle.useLockTaskBundle(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ taskId: 1, taskIds: [2] })
-
-    await waitFor(() => expect(result.current.isError).toBe(true))
-
-    expect(loggerErrorSpy).toHaveBeenCalledWith(
-      'Failed to update bundle lock',
-      expect.objectContaining({ variables: { taskId: 1, taskIds: [2] } })
-    )
-
-    loggerErrorSpy.mockRestore()
-  })
 })
 
 describe('taskSingle.useSkipTask', () => {
@@ -478,19 +456,13 @@ describe('taskSingle.useUpdateTask', () => {
 })
 
 describe('taskSingle.useUpdateTaskStatus', () => {
-  it('builds a query string with opaque plugin queryParams, posts a comment, and falls back to a GET when the PUT has no JSON body', async () => {
+  it('builds a query string with opaque plugin queryParams and falls back to a GET when the PUT has no JSON body', async () => {
     const finalTask = makeTask({ id: 1, parent: 10, status: 2 })
     const fetchMock = stubRoutedFetch((request) => {
       const url = new URL(request.url)
       if (request.method === 'PUT' && url.pathname === '/api/v2/task/1/2') {
         expect(url.searchParams.get('pluginFlag')).toBe('true')
         return new Response(null, { status: 204 })
-      }
-      if (request.method === 'POST' && url.pathname === '/api/v2/task/1/comment') {
-        return new Response(JSON.stringify({}), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        })
       }
       if (request.method === 'GET' && url.pathname === '/api/v2/task/1') {
         return new Response(JSON.stringify(finalTask), {
@@ -514,17 +486,15 @@ describe('taskSingle.useUpdateTaskStatus', () => {
       options: {
         // A plugin passing an absent value must not turn into `?omitted=null`.
         queryParams: { pluginFlag: true, omitted: null, alsoOmitted: undefined },
-        comment: 'looks good',
       },
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual(finalTask)
-    expect(fetchMock).toHaveBeenCalledTimes(3)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
     expect(queryClient.getQueryData(['task', 1])).toEqual(finalTask)
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'history', 1] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'comments', 1] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 10] })
 
     const statusUrl = new URL(
@@ -533,45 +503,6 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     expect(statusUrl.searchParams.get('pluginFlag')).toBe('true')
     expect(statusUrl.searchParams.has('omitted')).toBe(false)
     expect(statusUrl.searchParams.has('alsoOmitted')).toBe(false)
-  })
-
-  it('logs and swallows a comment POST failure so the status update still succeeds and updates caches', async () => {
-    const { logger } = await import('@/lib/logger')
-    const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => {})
-    const finalTask = makeTask({ id: 4, parent: 20, status: 2 })
-    const fetchMock = stubRoutedFetch((request) => {
-      const url = new URL(request.url)
-      if (request.method === 'PUT' && url.pathname === '/api/v2/task/4/2') {
-        return new Response(JSON.stringify(finalTask), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        })
-      }
-      if (request.method === 'POST' && url.pathname === '/api/v2/task/4/comment') {
-        return new Response('server error', { status: 500 })
-      }
-      throw new Error(`Unexpected request: ${request.method} ${url.pathname}`)
-    })
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskSingle.useUpdateTaskStatus(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ taskId: 4, status: 2, options: { comment: 'looks good' } })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual(finalTask)
-    expect(fetchMock).toHaveBeenCalledTimes(2)
-    expect(loggerErrorSpy).toHaveBeenCalledWith(
-      'Failed to add comment after task status update',
-      expect.objectContaining({ taskId: 4, status: 2 })
-    )
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 20] })
-
-    loggerErrorSpy.mockRestore()
   })
 
   it('omits the query string and returns the PUT response JSON directly when no options are given', async () => {
@@ -599,7 +530,6 @@ describe('taskSingle.useUpdateTaskStatus', () => {
 
     expect(result.current.data).toEqual(finalTask)
     expect(fetchMock).toHaveBeenCalledTimes(1)
-    expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: ['task', 'comments', 2] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 5] })
   })
 

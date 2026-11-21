@@ -1,6 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
-import { logger } from '@/lib/logger'
 import type { TaskBundleLockResponse, TaskGetResponse, TaskStartResponse } from '@/types/Task'
 import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../client'
@@ -75,7 +74,9 @@ export const taskSingle = {
     queryOptions({
       queryKey: ['task', taskId],
       queryFn: () =>
-        apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<TaskGetResponse>(),
+        apiRequest
+          .get(`api/v2/task/${taskId}`, { searchParams: { mapillary: false } })
+          .json<TaskGetResponse>(),
       enabled: !!taskId,
     }),
 
@@ -148,9 +149,6 @@ export const taskSingle = {
           .put(`api/v2/task/${taskId}/lockBundle`, { searchParams })
           .json<TaskBundleLockResponse>()
       },
-      onError: (error, variables) => {
-        logger.error('Failed to update bundle lock', { error, variables })
-      },
       onSuccess: (lock, { taskId }) => {
         const lockedBy = getCurrentUserId(queryClient)
         for (const id of new Set([taskId, lock.lockPrimaryTaskId, ...lock.lockBundledTasks])) {
@@ -213,9 +211,9 @@ export const taskSingle = {
   },
 
   /**
-   * Save the mapper's answers to the form fields embedded in a challenge's task
-   * instructions. Stored on the task and included in the challenge's CSV and
-   * GeoJSON exports.
+   * Set a task's status. `completionResponses` holds the mapper's answers to
+   * the form fields in the challenge's instructions; the backend stores them on
+   * the task.
    */
   useUpdateTaskStatus: () => {
     const queryClient = useQueryClient()
@@ -228,50 +226,20 @@ export const taskSingle = {
         taskId: number
         status: number
         options?: {
-          comment?: string
           completionResponses?: Record<string, unknown>
           /** Opaque query params contributed by plugins */
           queryParams?: Record<string, string | boolean | number | undefined | null>
         }
       }) => {
-        // Build query string manually
-        const params = new URLSearchParams()
-        if (options?.queryParams) {
-          for (const [key, value] of Object.entries(options.queryParams)) {
-            if (value !== undefined && value !== null) {
-              params.set(key, String(value))
-            }
-          }
+        const searchParams: Record<string, string> = {}
+        for (const [key, value] of Object.entries(options?.queryParams ?? {})) {
+          if (value !== undefined && value !== null) searchParams[key] = String(value)
         }
 
-        const queryString = params.toString()
-        const url = `api/v2/task/${taskId}/${status}${queryString ? `?${queryString}` : ''}`
-
-        const response = await apiRequest.put(
-          url,
-          options?.completionResponses ? { json: options.completionResponses } : undefined
-        )
-
-        // If comment is provided, add it separately. The status change above has
-        // already succeeded on the server, so a failure here must not fail the
-        // whole mutation (which would prevent onSuccess from updating caches).
-        if (options?.comment) {
-          try {
-            await apiRequest
-              .post(`api/v2/task/${taskId}/comment`, {
-                json: {
-                  comment: options.comment,
-                },
-              })
-              .json()
-          } catch (error) {
-            logger.error('Failed to add comment after task status update', {
-              taskId,
-              status,
-              error,
-            })
-          }
-        }
+        const response = await apiRequest.put(`api/v2/task/${taskId}/${status}`, {
+          searchParams,
+          ...(options?.completionResponses ? { json: options.completionResponses } : {}),
+        })
 
         // Handle case where response might be empty (204 No Content)
         const contentType = response.headers.get('content-type')
@@ -280,7 +248,9 @@ export const taskSingle = {
         }
 
         // If no JSON response, fetch the updated task
-        return apiRequest.get(`api/v2/task/${taskId}?mapillary=false`).json<TaskGetResponse>()
+        return apiRequest
+          .get(`api/v2/task/${taskId}`, { searchParams: { mapillary: false } })
+          .json<TaskGetResponse>()
       },
       onSuccess: (updatedTask, variables) => {
         const oldCached = queryClient.getQueryData<TaskGetResponse>(['task', variables.taskId])
@@ -290,9 +260,6 @@ export const taskSingle = {
         // The backend awards score and achievements on status change, and
         // reports them nowhere in the response, so refresh the current user.
         queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
-        if (variables.options?.comment) {
-          queryClient.invalidateQueries({ queryKey: ['task', 'comments', variables.taskId] })
-        }
         if (updatedTask?.parent) {
           patchChallengeTaskMarker(queryClient, updatedTask.parent, variables.taskId, {
             status: variables.status,
