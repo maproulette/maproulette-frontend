@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import { invalidateLockedTasks } from '@/api/task/single'
+import { userKeys } from '@/api/user'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
 import { wsLogger } from '@/lib/logger'
@@ -48,7 +49,7 @@ const invalidateOwnUserQueries = (
   queryClient: ReturnType<typeof useQueryClient>,
   userId: number
 ) => {
-  queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
+  queryClient.invalidateQueries({ queryKey: userKeys.whoami })
   queryClient.invalidateQueries({
     queryKey: ['user', userId],
     predicate: (query) => query.queryKey[2] !== 'lockedTasks',

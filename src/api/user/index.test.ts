@@ -2,14 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { user } from './index'
 
 describe('user barrel export', () => {
-  it('re-exports the auth API', () => {
-    expect(typeof user.signOut).toBe('function')
-    expect(typeof user.callback).toBe('function')
-    expect(typeof user.whoAmI).toBe('function')
-    expect(typeof user.refreshAuth).toBe('function')
-    expect(typeof user.clearAuth).toBe('function')
-  })
-
   it('re-exports the profile API', () => {
     expect(typeof user.activity).toBe('function')
     expect(typeof user.metrics).toBe('function')

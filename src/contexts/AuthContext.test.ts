@@ -1,12 +1,25 @@
 // @vitest-environment happy-dom
-import { type QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+  type QueryClient,
+  QueryClientProvider,
+  queryOptions,
+  skipToken,
+} from '@tanstack/react-query'
 import { useLocation, useSearch } from '@tanstack/react-router'
 import { HTTPError, type NormalizedOptions } from 'ky'
 import { act, createElement, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { api } from '@/api'
 import { apiRequest as realApiRequest } from '@/api/client'
+import {
+  authenticate,
+  clearAuth,
+  oauthCallback,
+  refreshAuth,
+  signOut,
+  userKeys,
+  whoamiOptions,
+} from '@/api/user'
 import { Loader } from '@/components/ui/Loader'
 import { logger } from '@/lib/logger'
 import { createTestQueryClient } from '@/test/queryClient'
@@ -30,18 +43,19 @@ vi.mock('@tanstack/react-router', () => ({
   useLocation: vi.fn(),
 }))
 
-vi.mock('@/api', () => ({
-  api: {
-    user: {
-      whoAmI: vi.fn(),
-      authenticate: vi.fn(),
-      callback: vi.fn(),
-      refreshAuth: vi.fn(),
-      clearAuth: vi.fn(),
-      signOut: vi.fn(),
-    },
-  },
-}))
+vi.mock('@/api/user/auth', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/api/user/auth')>()
+  return {
+    ...actual,
+    whoamiOptions: vi.fn(),
+    authenticate: vi.fn(),
+    oauthCallback: vi.fn(),
+    refreshAuth: vi.fn(),
+    // use the real function here so the cache is emptied when it gets called
+    clearAuth: vi.fn(actual.clearAuth),
+    signOut: vi.fn(),
+  }
+})
 
 vi.mock('@/components/ui/Loader', () => ({ Loader: vi.fn(() => null) }))
 
@@ -104,8 +118,6 @@ describe('isSecurityError', () => {
   })
 })
 
-type WhoAmIResult = ReturnType<typeof api.user.whoAmI>
-
 const fakeUser = (overrides: { requestToken?: string } = {}): User =>
   ({
     id: 1,
@@ -120,29 +132,24 @@ const mockLocation = (value: { pathname: string; searchStr: string }) => {
   vi.mocked(useLocation).mockReturnValue(value as unknown as ReturnType<typeof useLocation>)
 }
 
-const mockWhoAmI = (result: { data?: User; isLoading?: boolean; error?: unknown }) => {
-  vi.mocked(api.user.whoAmI).mockReturnValue({
-    data: result.data,
-    isLoading: result.isLoading ?? false,
-    error: result.error ?? null,
-  } as unknown as WhoAmIResult)
-}
+let seededUser: User | undefined
 
-// Simulates the real hook's `enabled: !isLoggedOut` behavior so tests can
-// observe context flipping to unauthenticated after logout/401 handling.
-const mockWhoAmIDynamic = (user: User) => {
-  vi.mocked(api.user.whoAmI).mockImplementation(
-    ((isLoggedOut: boolean) =>
-      ({
-        data: isLoggedOut ? undefined : user,
-        isLoading: false,
-        error: null,
-      }) as unknown as WhoAmIResult) as typeof api.user.whoAmI
+const mockWhoAmI = (result: { data?: User; isLoading?: boolean; error?: unknown }) => {
+  seededUser = result.data
+  const fetchUser = result.isLoading
+    ? () => new Promise<User>(() => {})
+    : () => Promise.reject(result.error)
+  vi.mocked(whoamiOptions).mockReturnValue(
+    queryOptions({
+      queryKey: userKeys.whoami,
+      queryFn: result.isLoading || result.error ? fetchUser : skipToken,
+      retry: false,
+    }) as unknown as ReturnType<typeof whoamiOptions>
   )
 }
 
 const mockAuthenticateResponse = (response: { state: string; redirect: string }) => {
-  vi.mocked(api.user.authenticate).mockResolvedValue(response)
+  vi.mocked(authenticate).mockResolvedValue(response)
 }
 
 const wrapper =
@@ -155,6 +162,7 @@ const wrapper =
     )
 
 const mount = (queryClient: QueryClient = createTestQueryClient()) => {
+  if (seededUser) queryClient.setQueryData(userKeys.whoami, seededUser)
   const rendered = renderHook(() => useAuthContext(), { wrapper: wrapper(queryClient) })
   return { ...rendered, queryClient }
 }
@@ -163,6 +171,7 @@ describe('useAuthContext', () => {
   afterEach(() => {
     vi.clearAllMocks()
     vi.unstubAllGlobals()
+    seededUser = undefined
     localStorage.clear()
     window.history.pushState({}, '', '/')
   })
@@ -234,7 +243,7 @@ describe('useAuthContext', () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
-      vi.mocked(api.user.authenticate).mockRejectedValue(new Error('network down'))
+      vi.mocked(authenticate).mockRejectedValue(new Error('network down'))
 
       const { result } = mount()
 
@@ -254,8 +263,8 @@ describe('useAuthContext', () => {
       localStorage.setItem('state', 'leftover-state')
       localStorage.setItem('osm_token', 'abc123')
       const queryClient = createTestQueryClient()
-      mockWhoAmIDynamic(fakeUser())
-      vi.mocked(api.user.signOut).mockResolvedValue(undefined)
+      mockWhoAmI({ data: fakeUser() })
+      vi.mocked(signOut).mockResolvedValue(undefined)
 
       const { result } = mount(queryClient)
       expect(result.current.isAuthenticated).toBe(true)
@@ -266,8 +275,8 @@ describe('useAuthContext', () => {
 
       expect(localStorage.getItem('state')).toBeNull()
       expect(localStorage.getItem('osm_token')).toBeNull()
-      expect(api.user.signOut).toHaveBeenCalled()
-      expect(api.user.clearAuth).toHaveBeenCalledWith(queryClient)
+      expect(signOut).toHaveBeenCalled()
+      expect(clearAuth).toHaveBeenCalledWith(queryClient)
       expect(result.current.isAuthenticated).toBe(false)
     })
 
@@ -275,8 +284,8 @@ describe('useAuthContext', () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
       const queryClient = createTestQueryClient()
-      mockWhoAmIDynamic(fakeUser())
-      vi.mocked(api.user.signOut).mockRejectedValue(new Error('signout failed'))
+      mockWhoAmI({ data: fakeUser() })
+      vi.mocked(signOut).mockRejectedValue(new Error('signout failed'))
 
       const { result } = mount(queryClient)
 
@@ -285,7 +294,7 @@ describe('useAuthContext', () => {
       })
 
       expect(logger.error).toHaveBeenCalledWith('Logout error', { error: expect.any(Error) })
-      expect(api.user.clearAuth).toHaveBeenCalledWith(queryClient)
+      expect(clearAuth).toHaveBeenCalledWith(queryClient)
       expect(result.current.isAuthenticated).toBe(false)
     })
 
@@ -293,7 +302,8 @@ describe('useAuthContext', () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({ data: fakeUser() })
-      vi.mocked(api.user.signOut).mockResolvedValue(undefined)
+      vi.mocked(signOut).mockResolvedValue(undefined)
+      vi.mocked(clearAuth).mockImplementationOnce(() => {})
 
       const { result } = mount()
       expect(result.current.isAuthenticated).toBe(true)
@@ -315,25 +325,23 @@ describe('useAuthContext', () => {
         localStorage.setItem('osm_token', 'stale')
         mockWhoAmI({ error: httpError(status) })
 
-        mount()
+        const { result } = mount()
 
-        await waitFor(() => {
-          expect(
-            vi.mocked(api.user.whoAmI).mock.calls.some(([loggedOut]) => loggedOut === true)
-          ).toBe(true)
-        })
-        expect(localStorage.getItem('osm_token')).toBeNull()
+        await waitFor(() => expect(localStorage.getItem('osm_token')).toBeNull())
+        expect(result.current.isAuthenticated).toBe(false)
       }
     )
 
-    it('leaves the session alone on a non-security error, e.g. a 500', () => {
+    it('leaves the session alone on a non-security error, e.g. a 500', async () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
+      localStorage.setItem('osm_token', 'abc123')
       mockWhoAmI({ error: httpError(500) })
 
-      mount()
+      const { result } = mount()
 
-      expect(vi.mocked(api.user.whoAmI).mock.calls.every(([loggedOut]) => !loggedOut)).toBe(true)
+      await waitFor(() => expect(result.current.error).not.toBeNull())
+      expect(localStorage.getItem('osm_token')).toBe('abc123')
     })
   })
 
@@ -351,12 +359,12 @@ describe('useAuthContext', () => {
       localStorage.setItem('osm_token', 'abc123')
       const queryClient = createTestQueryClient()
       queryClient.setQueryData(['user', 'whoami'], fakeUser())
-      mockWhoAmIDynamic(fakeUser())
+      mockWhoAmI({ data: fakeUser() })
 
       const { result } = mount(queryClient)
       await respondWith401()
 
-      expect(api.user.clearAuth).toHaveBeenCalledWith(queryClient)
+      expect(clearAuth).toHaveBeenCalledWith(queryClient)
       expect(localStorage.getItem('osm_token')).toBeNull()
       expect(result.current.isAuthenticated).toBe(false)
       expect(toast.error).toHaveBeenCalledWith(
@@ -373,7 +381,7 @@ describe('useAuthContext', () => {
       mount()
       await respondWith401()
 
-      expect(api.user.clearAuth).not.toHaveBeenCalled()
+      expect(clearAuth).not.toHaveBeenCalled()
       expect(toast.error).not.toHaveBeenCalled()
     })
   })
@@ -413,8 +421,8 @@ describe('useAuthContext', () => {
       mockSearch({ code: 'the-code', state: 'matching-state' })
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
-      vi.mocked(api.user.callback).mockResolvedValue({ token: 'jwt-token' } as Awaited<
-        ReturnType<typeof api.user.callback>
+      vi.mocked(oauthCallback).mockResolvedValue({ token: 'jwt-token' } as Awaited<
+        ReturnType<typeof oauthCallback>
       >)
 
       mount()
@@ -422,8 +430,8 @@ describe('useAuthContext', () => {
       await waitFor(() => {
         expect(localStorage.getItem('osm_token')).toBe('jwt-token')
       })
-      expect(api.user.callback).toHaveBeenCalledWith('the-code', 'matching-state')
-      expect(api.user.refreshAuth).toHaveBeenCalled()
+      expect(oauthCallback).toHaveBeenCalledWith('the-code', 'matching-state')
+      expect(refreshAuth).toHaveBeenCalled()
       expect(window.location.href).toContain('/dashboard')
       expect(getStoredRedirectUrl()).toBeNull()
       expect(localStorage.getItem('state')).toBeNull()
@@ -436,8 +444,8 @@ describe('useAuthContext', () => {
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
       const originalPath = window.location.origin + window.location.pathname
-      vi.mocked(api.user.callback).mockResolvedValue({ token: 'jwt-token' } as Awaited<
-        ReturnType<typeof api.user.callback>
+      vi.mocked(oauthCallback).mockResolvedValue({ token: 'jwt-token' } as Awaited<
+        ReturnType<typeof oauthCallback>
       >)
 
       const { result } = mount()
@@ -445,7 +453,7 @@ describe('useAuthContext', () => {
       await waitFor(() => {
         expect(localStorage.getItem('osm_token')).toBe('jwt-token')
       })
-      expect(api.user.refreshAuth).toHaveBeenCalled()
+      expect(refreshAuth).toHaveBeenCalled()
       // stripOAuthParamsFromUrl removes ?code/&state, but no external redirect happens
       expect(window.location.origin + window.location.pathname).toBe(originalPath)
       expect(window.location.search).toBe('')
@@ -458,9 +466,7 @@ describe('useAuthContext', () => {
       mockSearch({ code: 'the-code', state: 'matching-state' })
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
-      vi.mocked(api.user.callback).mockResolvedValue(
-        {} as Awaited<ReturnType<typeof api.user.callback>>
-      )
+      vi.mocked(oauthCallback).mockResolvedValue({} as Awaited<ReturnType<typeof oauthCallback>>)
 
       const { result } = mount()
 
@@ -468,7 +474,7 @@ describe('useAuthContext', () => {
         expect(result.current).not.toBeUndefined()
       })
       expect(localStorage.getItem('osm_token')).toBeNull()
-      expect(api.user.refreshAuth).not.toHaveBeenCalled()
+      expect(refreshAuth).not.toHaveBeenCalled()
     })
 
     it('discards the callback and recovers when the state does not match', async () => {
@@ -484,7 +490,7 @@ describe('useAuthContext', () => {
         expect(result.current).not.toBeUndefined()
       })
       expect(localStorage.getItem('state')).toBeNull()
-      expect(api.user.callback).not.toHaveBeenCalled()
+      expect(oauthCallback).not.toHaveBeenCalled()
       expect(result.current.authLoading).toBe(false)
     })
 
@@ -494,14 +500,14 @@ describe('useAuthContext', () => {
       mockSearch({ code: 'the-code', state: 'matching-state' })
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
-      vi.mocked(api.user.callback).mockRejectedValue(httpError(401))
+      vi.mocked(oauthCallback).mockRejectedValue(httpError(401))
 
       const { result } = mount()
 
       await waitFor(() => {
         expect(result.current).not.toBeUndefined()
       })
-      expect(api.user.refreshAuth).toHaveBeenCalled()
+      expect(refreshAuth).toHaveBeenCalled()
       expect(logger.error).not.toHaveBeenCalledWith('OAuth callback error', expect.anything())
       expect(toast.error).not.toHaveBeenCalled()
     })
@@ -512,7 +518,7 @@ describe('useAuthContext', () => {
       mockSearch({ code: 'the-code', state: 'matching-state' })
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
-      vi.mocked(api.user.callback).mockRejectedValue(new Error('server exploded'))
+      vi.mocked(oauthCallback).mockRejectedValue(new Error('server exploded'))
 
       const { result } = mount()
 
@@ -522,7 +528,7 @@ describe('useAuthContext', () => {
       expect(logger.error).toHaveBeenCalledWith('OAuth callback error', {
         error: expect.any(Error),
       })
-      expect(api.user.refreshAuth).not.toHaveBeenCalled()
+      expect(refreshAuth).not.toHaveBeenCalled()
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           'Sign-in failed or expired. Please try signing in again.'

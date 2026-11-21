@@ -1,10 +1,18 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useLocation, useSearch } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
 import { setUnauthorizedHandler } from '@/api/client'
+import {
+  authenticate,
+  clearAuth,
+  oauthCallback,
+  refreshAuth,
+  signOut,
+  userKeys,
+  whoamiOptions,
+} from '@/api/user'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
@@ -70,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const search = useSearch({ from: '/_app' }) as AuthParams
   const location = useLocation()
   const queryClient = useQueryClient()
-  const { data: user, isLoading, error } = api.user.whoAmI(isLoggedOut)
+  const { data: user, isLoading, error } = useQuery({ ...whoamiOptions(), enabled: !isLoggedOut })
   const [codeUsed, setCodeUsed] = useState<boolean>(false)
   const [loginFailed, setLoginFailed] = useState(false)
   const { t } = useIntl()
@@ -96,12 +104,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsVerifying(true)
 
     try {
-      const { token } = await api.user.callback(code, state)
+      const { token } = await oauthCallback(code, state)
 
       if (token) {
         localStorage.setItem('osm_token', token)
         setIsLoggedOut(false)
-        api.user.refreshAuth(queryClient)
+        refreshAuth(queryClient)
 
         const redirectUrl = getStoredRedirectUrl()
         if (redirectUrl) {
@@ -113,7 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error: unknown) {
       if (isSecurityError(error)) {
-        api.user.refreshAuth(queryClient)
+        refreshAuth(queryClient)
       } else {
         logger.error('OAuth callback error', { error })
         setLoginFailed(true)
@@ -172,7 +180,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearSession = useCallback(() => {
     localStorage.removeItem('osm_token')
-    api.user.clearAuth(queryClient)
+    clearAuth(queryClient)
     setIsLoggedOut(true)
   }, [queryClient])
 
@@ -188,7 +196,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setStoredRedirectUrl(currentUrl)
 
     try {
-      const { state, redirect } = await api.user.authenticate()
+      const { state, redirect } = await authenticate()
       setOAuthState(state)
       window.location.href = redirect
     } catch (error) {
@@ -206,7 +214,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     clearOAuthState()
 
     try {
-      await api.user.signOut()
+      await signOut()
     } catch (error) {
       logger.error('Logout error', { error })
     } finally {
@@ -217,7 +225,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Handle HTTP 401 errors from whoami, which means the session has expired
   useEffect(() => {
     setUnauthorizedHandler(() => {
-      if (!queryClient.getQueryData(['user', 'whoami'])) return
+      if (!queryClient.getQueryData(userKeys.whoami)) return
       clearSession()
       toast.error(t({ id: 'auth.sessionExpired', defaultMessage: 'Your session has expired.' }), {
         id: 'session-expired',

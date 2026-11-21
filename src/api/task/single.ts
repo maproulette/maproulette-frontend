@@ -3,9 +3,10 @@ import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/c
 import type { TaskBundleLockResponse, TaskGetResponse, TaskStartResponse } from '@/types/Task'
 import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../client'
+import { userKeys } from '../user/keys'
 
 const getCurrentUserId = (queryClient: ReturnType<typeof useQueryClient>): number | null => {
-  const me = queryClient.getQueryData<UserWhoamiResponse>(['user', 'whoami'])
+  const me = queryClient.getQueryData<UserWhoamiResponse>(userKeys.whoami)
   return (me as { id?: number } | undefined)?.id ?? null
 }
 
@@ -224,7 +225,7 @@ export const taskSingle = {
         invalidateLockedTasks(queryClient)
         // The backend awards score and achievements on status change, and
         // reports them nowhere in the response, so refresh the current user.
-        queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
+        queryClient.invalidateQueries({ queryKey: userKeys.whoami })
         if (updatedTask?.parent) {
           patchChallengeTaskMarker(queryClient, updatedTask.parent, variables.taskId, {
             status: variables.status,
