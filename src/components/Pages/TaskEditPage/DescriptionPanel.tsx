@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, BookOpen, FolderOpen } from 'lucide-react'
-import { api } from '@/api'
+import { projectOptions } from '@/api/project'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { Button } from '@/components/ui/Button'
 import { ScrollArea } from '@/components/ui/ScrollArea'
@@ -18,7 +19,7 @@ import { type PanelView, usePanelViewContext } from './contexts/PanelViewContext
 export const DescriptionPanel = ({ view }: { view: Exclude<PanelView, 'task'> }) => {
   const { t } = useIntl()
   const { challenge } = useChallengeContext()
-  const { data: project } = api.project.getProject(challenge?.parent)
+  const { data: project } = useQuery(projectOptions(challenge?.parent))
   const { showView } = usePanelViewContext()
 
   const isChallenge = view === 'challengeDescription'

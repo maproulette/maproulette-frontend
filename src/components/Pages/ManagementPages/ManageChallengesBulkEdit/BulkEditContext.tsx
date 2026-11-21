@@ -1,8 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { projectChallengesOptions, projectOptions } from '@/api/project'
 import { useSetPageTitle } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
 import { getErrorMessage } from '@/lib/apiError'
@@ -55,9 +56,10 @@ export const BulkEditProvider = ({
   const { t } = useIntl()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { data: project, isLoading: isLoadingProject } = api.project.getProject(projectId)
-  const { data: projectChallenges, isLoading: isLoadingChallenges } =
-    api.project.getProjectChallenges(projectId)
+  const { data: project, isLoading: isLoadingProject } = useQuery(projectOptions(projectId))
+  const { data: projectChallenges, isLoading: isLoadingChallenges } = useQuery(
+    projectChallengesOptions(projectId)
+  )
   const removeKeywords = api.challenge.useRemoveChallengeKeywords()
   const updatePriorities = api.challenge.useUpdatePriorities()
   const [savedCount, setSavedCount] = useState<number | null>(null)

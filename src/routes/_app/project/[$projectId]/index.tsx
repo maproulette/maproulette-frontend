@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
-import { api } from '@/api'
+import { projectOptions } from '@/api/project'
 import { BrowsedProjectPage } from '@/components/Pages/BrowsedProjectPage'
 import { logger } from '@/lib/logger'
 import { requireIds } from '@/lib/routeParams'
@@ -11,9 +11,7 @@ export const Route = createFileRoute('/_app/project/$projectId/')({
     requireIds(params)
     const { projectId } = params
     try {
-      const project = await queryClient.ensureQueryData(
-        api.project.getProjectOptions(Number(projectId))
-      )
+      const project = await queryClient.ensureQueryData(projectOptions(Number(projectId)))
 
       return { project }
     } catch (error) {

@@ -1,4 +1,12 @@
-import { api } from '@/api'
+import { useQuery } from '@tanstack/react-query'
+import {
+  projectManagersOptions,
+  projectTeamManagersOptions,
+  useRemoveTeamFromProject,
+  useRemoveUserFromProject,
+  useSetTeamProjectRole,
+  useSetUserProjectRole,
+} from '@/api/project'
 import { ManagersPanel } from '@/components/Pages/ManagementPages/shared/ManagersPanel'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { useIntl } from '@/i18n'
@@ -15,12 +23,12 @@ export const ProjectManagersPanel = () => {
   const { projectId } = useManageProjectDetailContext()
   const id = Number(projectId)
 
-  const { data: managers, isLoading } = api.project.managers(id)
-  const { data: teamManagers } = api.project.teamManagers(id)
-  const setUserRole = api.project.useSetUserProjectRole()
-  const removeUser = api.project.useRemoveUserFromProject()
-  const setTeamRole = api.project.useSetTeamProjectRole()
-  const removeTeam = api.project.useRemoveTeamFromProject()
+  const { data: managers, isLoading } = useQuery(projectManagersOptions(id))
+  const { data: teamManagers } = useQuery(projectTeamManagersOptions(id))
+  const setUserRole = useSetUserProjectRole()
+  const removeUser = useRemoveUserFromProject()
+  const setTeamRole = useSetTeamProjectRole()
+  const removeTeam = useRemoveTeamFromProject()
 
   return (
     <ManagersPanel

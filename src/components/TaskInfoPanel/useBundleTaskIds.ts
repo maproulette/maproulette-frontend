@@ -1,4 +1,5 @@
-import { api } from '@/api'
+import { useQuery } from '@tanstack/react-query'
+import { taskBundleOptions } from '@/api/taskBundle'
 import { useOptionalTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import type { Task } from '@/types/Task'
 
@@ -13,8 +14,8 @@ export const useBundleTaskIds = (task: Task): number[] => {
   const activeBundleIds = bundleContext?.activeBundle?.taskIds ?? []
   const isInActiveBundle = activeBundleIds.includes(task.id)
 
-  const { data: savedBundle } = api.taskBundle.getTaskBundle(
-    isInActiveBundle ? 0 : (task.bundleId ?? 0)
+  const { data: savedBundle } = useQuery(
+    taskBundleOptions(isInActiveBundle ? 0 : (task.bundleId ?? 0))
   )
 
   const bundleIds = isInActiveBundle ? activeBundleIds : (savedBundle?.taskIds ?? [])

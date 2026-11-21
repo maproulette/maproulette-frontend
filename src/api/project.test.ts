@@ -1,12 +1,23 @@
 // @vitest-environment happy-dom
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { act } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
-import { project } from './project'
+import {
+  exportProjectTasksCsv,
+  managedProjectsInfiniteOptions,
+  projectTeamManagersOptions,
+  useCreateProject,
+  useDeleteProject,
+  useRemoveTeamFromProject,
+  useRemoveUserFromProject,
+  useSetTeamProjectRole,
+  useSetUserProjectRole,
+  useUpdateProject,
+} from './project'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -16,213 +27,7 @@ afterEach(() => {
 const projectA = { id: 1, name: 'Project A', enabled: true }
 const projectB = { id: 2, name: 'Project B', enabled: true }
 
-describe('project.getProject', () => {
-  it('fetches a project by id', async () => {
-    stubFetch(new Response(JSON.stringify(projectA), { status: 200 }))
-
-    const { result } = renderHook(() => project.getProject(1), { wrapper: queryClientWrapper() })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(projectA)
-  })
-
-  it('is disabled when projectId is undefined', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => project.getProject(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('project.getProjectOptions', () => {
-  it('builds the expected query key', () => {
-    expect(project.getProjectOptions(7).queryKey).toEqual(['project', 7])
-  })
-
-  it('fetches a project by id when used as query options', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify(projectA), { status: 200 }))
-
-    const { result } = renderHook(() => useQuery(project.getProjectOptions(1)), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(projectA)
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/project/1')
-  })
-})
-
-describe('project.getManagedProjects', () => {
-  it('fetches managed projects with default params', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([projectA, projectB]), { status: 200 }))
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => project.getManagedProjects(), {
-      wrapper: queryClientWrapper(client),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([projectA, projectB])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('limit=50')
-    expect(request.url).toContain('page=0')
-    expect(request.url).toContain('onlyEnabled=false')
-    expect(request.url).toContain('onlyOwned=false')
-  })
-
-  it('honors explicit limit, page, onlyEnabled, onlyOwned, and searchString params', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    renderHook(
-      () =>
-        project.getManagedProjects({
-          limit: 5,
-          page: 1,
-          onlyEnabled: true,
-          onlyOwned: true,
-          searchString: 'road',
-        }),
-      { wrapper: queryClientWrapper() }
-    )
-
-    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('limit=5')
-    expect(request.url).toContain('page=1')
-    expect(request.url).toContain('onlyEnabled=true')
-    expect(request.url).toContain('onlyOwned=true')
-    expect(request.url).toContain('searchString=road')
-  })
-
-  it('uses previous data as a placeholder while refetching with new params', async () => {
-    const responses = [
-      new Response(JSON.stringify([projectA]), { status: 200 }),
-      new Response(JSON.stringify([projectB]), { status: 200 }),
-    ]
-    let call = 0
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (_request: Request) => responses[call++])
-    )
-
-    const { result, rerender } = renderHook(
-      (page: number) => project.getManagedProjects({ page }),
-      {
-        wrapper: queryClientWrapper(),
-        initialProps: 0,
-      }
-    )
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([projectA])
-
-    rerender(1)
-    await waitFor(() => expect(result.current.data).toEqual([projectB]))
-  })
-})
-
-describe('project.getProjectChallengesOptions', () => {
-  it('builds the expected query key with default limit/page', () => {
-    expect(project.getProjectChallengesOptions(3).queryKey).toEqual([
-      'project',
-      'challenges',
-      3,
-      { limit: 100, page: 0 },
-    ])
-  })
-
-  it('fetches project challenges with explicit limit/page when used as query options', async () => {
-    const challenges = [{ id: 10, name: 'Challenge A' }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(challenges), { status: 200 }))
-
-    const { result } = renderHook(() => useQuery(project.getProjectChallengesOptions(3, 5, 1)), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(challenges)
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/project/3/challenges')
-    expect(request.url).toContain('limit=5')
-    expect(request.url).toContain('page=1')
-  })
-
-  it('is disabled when projectId is falsy', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => useQuery(project.getProjectChallengesOptions(0)), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('project.getProjectChallenges', () => {
-  it('fetches challenges for a project', async () => {
-    const challengeA = { id: 10, name: 'Challenge A' }
-    const challengeB = { id: 11, name: 'Challenge B' }
-    const fetchMock = stubFetch(
-      new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
-    )
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => project.getProjectChallenges(3), {
-      wrapper: queryClientWrapper(client),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([challengeA, challengeB])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/project/3/challenges')
-    expect(request.url).toContain('limit=100')
-    expect(request.url).toContain('page=0')
-  })
-
-  it('is disabled when projectId is undefined', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => project.getProjectChallenges(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('project.searchProjects', () => {
-  it('is disabled when search is empty', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => project.searchProjects(), { wrapper: queryClientWrapper() })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('fetches matching projects when a search term is given', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([projectA]), { status: 200 }))
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => project.searchProjects({ search: 'road' }), {
-      wrapper: queryClientWrapper(client),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([projectA])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('search=road')
-  })
-})
-
-describe('project.exportProjectTasksCsv', () => {
+describe('exportProjectTasksCsv', () => {
   it('downloads the CSV using a default filename derived from the project id', async () => {
     stubFetch(new Response('id,name\n1,Task', { status: 200 }))
     const anchor = document.createElement('a')
@@ -231,7 +36,7 @@ describe('project.exportProjectTasksCsv', () => {
     const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url')
     const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
 
-    await project.exportProjectTasksCsv(42)
+    await exportProjectTasksCsv(42)
 
     expect(createObjectURLSpy).toHaveBeenCalledTimes(1)
     expect(anchor.href).toBe('blob:mock-url')
@@ -250,7 +55,7 @@ describe('project.exportProjectTasksCsv', () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:mock-url')
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
 
-    await project.exportProjectTasksCsv(42, 'custom-name.csv')
+    await exportProjectTasksCsv(42, 'custom-name.csv')
 
     expect(anchor.download).toBe('custom-name.csv')
 
@@ -258,14 +63,14 @@ describe('project.exportProjectTasksCsv', () => {
   })
 })
 
-describe('project.useCreateProject', () => {
+describe('useCreateProject', () => {
   it('seeds the new project by id and prepends it to a cached managed list', async () => {
     const created = { id: 9, name: 'Created', enabled: true }
     stubFetch(new Response(JSON.stringify(created), { status: 200 }))
     const client = createTestQueryClient()
     client.setQueryData(['project', 'managed', 'seed'], [projectA])
 
-    const { result } = renderHook(() => project.useCreateProject(), {
+    const { result } = renderHook(() => useCreateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ name: 'Created' })
@@ -283,7 +88,7 @@ describe('project.useCreateProject', () => {
     await client.resetQueries({ queryKey: ['project', 'managed', 'seed'] })
     expect(client.getQueryData(['project', 'managed', 'seed'])).toBeUndefined()
 
-    const { result } = renderHook(() => project.useCreateProject(), {
+    const { result } = renderHook(() => useCreateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ name: 'Created' })
@@ -293,7 +98,7 @@ describe('project.useCreateProject', () => {
   })
 })
 
-describe('project.managedProjectsInfinite', () => {
+describe('managedProjectsInfiniteOptions', () => {
   it('sends the filters and asks for the next page by page number', async () => {
     const fetchMock = vi.fn(async (request: Request) => {
       if (request.url.includes('page=0')) {
@@ -305,9 +110,11 @@ describe('project.managedProjectsInfinite', () => {
 
     const { result, rerender } = renderHook(
       () =>
-        project.managedProjectsInfinite(
-          { searchString: 'roads', isArchived: false, projectIds: '1,2' },
-          { limit: 2 }
+        useInfiniteQuery(
+          managedProjectsInfiniteOptions(
+            { searchString: 'roads', isArchived: false, projectIds: '1,2' },
+            2
+          )
         ),
       { wrapper: queryClientWrapper() }
     )
@@ -330,20 +137,9 @@ describe('project.managedProjectsInfinite', () => {
     const secondCall = fetchMock.mock.calls[1][0] as Request
     expect(secondCall.url).toContain('page=1')
   })
-
-  it('does not fetch when disabled', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => project.managedProjectsInfinite({}, { enabled: false }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
 })
 
-describe('project.useUpdateProject', () => {
+describe('useUpdateProject', () => {
   it('patches paged managed lists before the request resolves', async () => {
     let releaseResponse: () => void = () => {}
     const pending = new Promise<void>((resolve) => {
@@ -362,7 +158,7 @@ describe('project.useUpdateProject', () => {
       pageParams: [0, 1],
     })
 
-    const { result } = renderHook(() => project.useUpdateProject(), {
+    const { result } = renderHook(() => useUpdateProject(), {
       wrapper: queryClientWrapper(client),
     })
     act(() => {
@@ -385,7 +181,7 @@ describe('project.useUpdateProject', () => {
     const client = createTestQueryClient()
     client.setQueryData(['project', 'managed', 'seed'], [projectA, projectB])
 
-    const { result } = renderHook(() => project.useUpdateProject(), {
+    const { result } = renderHook(() => useUpdateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 1, updates: { name: 'Updated' } })
@@ -405,7 +201,7 @@ describe('project.useUpdateProject', () => {
     client.setQueryData(['project', 'managed', 'seed'], [projectA, projectB])
     await client.resetQueries({ queryKey: ['project', 'managed', 'seed'] })
 
-    const { result } = renderHook(() => project.useUpdateProject(), {
+    const { result } = renderHook(() => useUpdateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 1, updates: { name: 'Updated' } })
@@ -430,7 +226,7 @@ describe('project.useUpdateProject', () => {
     client.setQueryData(['project', 1], projectA)
     client.setQueryData(['project', 'managed', 'seed'], [projectA, projectB])
 
-    const { result } = renderHook(() => project.useUpdateProject(), {
+    const { result } = renderHook(() => useUpdateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 1, updates: { enabled: false } })
@@ -454,7 +250,7 @@ describe('project.useUpdateProject', () => {
     client.setQueryData(['project', 1], projectA)
     client.setQueryData(['project', 'managed', 'seed'], [projectA, projectB])
 
-    const { result } = renderHook(() => project.useUpdateProject(), {
+    const { result } = renderHook(() => useUpdateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 1, updates: { enabled: false } })
@@ -473,7 +269,7 @@ describe('project.useUpdateProject', () => {
       throw new Error('cache unavailable')
     })
 
-    const { result } = renderHook(() => project.useUpdateProject(), {
+    const { result } = renderHook(() => useUpdateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 1, updates: { enabled: false } })
@@ -486,7 +282,7 @@ describe('project.useUpdateProject', () => {
     stubFetch(new Response('nope', { status: 500 }))
     const client = createTestQueryClient()
 
-    const { result } = renderHook(() => project.useUpdateProject(), {
+    const { result } = renderHook(() => useUpdateProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 1, updates: { enabled: false } })
@@ -497,14 +293,14 @@ describe('project.useUpdateProject', () => {
   })
 })
 
-describe('project.useDeleteProject', () => {
+describe('useDeleteProject', () => {
   it('removes the project query and filters it out of cached managed lists', async () => {
     const fetchMock = stubFetch(new Response(null, { status: 200 }))
     const client = createTestQueryClient()
     client.setQueryData(['project', 5], projectA)
     client.setQueryData(['project', 'managed', 'seed'], [{ id: 5, name: 'Gone' }, projectB])
 
-    const { result } = renderHook(() => project.useDeleteProject(), {
+    const { result } = renderHook(() => useDeleteProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 5 })
@@ -520,7 +316,7 @@ describe('project.useDeleteProject', () => {
   it('passes immediate=true as a search param when requested', async () => {
     const fetchMock = stubFetch(new Response(null, { status: 200 }))
 
-    const { result } = renderHook(() => project.useDeleteProject(), {
+    const { result } = renderHook(() => useDeleteProject(), {
       wrapper: queryClientWrapper(),
     })
     result.current.mutate({ projectId: 5, immediate: true })
@@ -536,7 +332,7 @@ describe('project.useDeleteProject', () => {
     client.setQueryData(['project', 'managed', 'seed'], [projectA, projectB])
     await client.resetQueries({ queryKey: ['project', 'managed', 'seed'] })
 
-    const { result } = renderHook(() => project.useDeleteProject(), {
+    const { result } = renderHook(() => useDeleteProject(), {
       wrapper: queryClientWrapper(client),
     })
     result.current.mutate({ projectId: 1 })
@@ -546,24 +342,7 @@ describe('project.useDeleteProject', () => {
   })
 })
 
-describe('project.managers', () => {
-  it('does not fetch without a project, or while switched off', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result: noProject } = renderHook(() => project.managers(0), {
-      wrapper: queryClientWrapper(),
-    })
-    const { result: switchedOff } = renderHook(() => project.managers(4, { enabled: false }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(noProject.current.fetchStatus).toBe('idle')
-    expect(switchedOff.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('project.teamManagers', () => {
+describe('projectTeamManagersOptions', () => {
   it('flattens each team grant down to the roles it carries', async () => {
     const team = { id: 2, name: 'Team' }
     const fetchMock = stubFetch(
@@ -578,7 +357,7 @@ describe('project.teamManagers', () => {
       )
     )
 
-    const { result } = renderHook(() => project.teamManagers(4), {
+    const { result } = renderHook(() => useQuery(projectTeamManagersOptions(4)), {
       wrapper: queryClientWrapper(),
     })
 
@@ -589,24 +368,10 @@ describe('project.teamManagers', () => {
     ])
     expect(new URL(fetchMock.mock.calls[0][0].url).pathname).toBe('/api/v2/teams/projectManagers/4')
   })
-
-  it('does not fetch without a project, or while switched off', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result: noProject } = renderHook(() => project.teamManagers(0), {
-      wrapper: queryClientWrapper(),
-    })
-    const { result: switchedOff } = renderHook(() => project.teamManagers(4, { enabled: false }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(noProject.current.fetchStatus).toBe('idle')
-    expect(switchedOff.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
 })
 
 describe('project manager role mutations', () => {
+  const roleHooks = { useSetUserProjectRole, useRemoveUserFromProject }
   const managerQueries = [
     { queryKey: ['project', 4, 'managers'] },
     { queryKey: ['project', 4, 'teamManagers'] },
@@ -620,7 +385,7 @@ describe('project manager role mutations', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => project[hook](), {
+    const { result } = renderHook(() => roleHooks[hook](), {
       wrapper: queryClientWrapper(queryClient),
     })
     await result.current.mutateAsync({ userId: 7, projectId: 4, role: 1 })
@@ -636,7 +401,7 @@ describe('project manager role mutations', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => project.useSetTeamProjectRole(), {
+    const { result } = renderHook(() => useSetTeamProjectRole(), {
       wrapper: queryClientWrapper(queryClient),
     })
     await result.current.mutateAsync({ teamId: 2, projectId: 4, role: 1 })
@@ -652,7 +417,7 @@ describe('project manager role mutations', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => project.useRemoveTeamFromProject(), {
+    const { result } = renderHook(() => useRemoveTeamFromProject(), {
       wrapper: queryClientWrapper(queryClient),
     })
     await result.current.mutateAsync({ teamId: 2, projectId: 4 })

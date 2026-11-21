@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { api } from '@/api'
+import { useCreateProject } from '@/api/project'
 import {
   ProjectForm,
   type ProjectFormValues,
@@ -10,7 +10,7 @@ import { useIntl } from '@/i18n'
 export const ManageProjectNew = () => {
   const { t } = useIntl()
   const navigate = useNavigate()
-  const createProjectMutation = api.project.useCreateProject()
+  const createProjectMutation = useCreateProject()
 
   const handleSubmit = async (values: ProjectFormValues) => {
     const newProject = await createProjectMutation.mutateAsync({

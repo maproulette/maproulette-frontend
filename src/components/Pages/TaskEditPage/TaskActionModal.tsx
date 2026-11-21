@@ -3,6 +3,11 @@ import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import {
+  useCreateTaskBundle,
+  useUpdateTaskBundle,
+  useUpdateTaskBundleStatus,
+} from '@/api/taskBundle'
 import { useUpdateUserSettings } from '@/api/user'
 import { Button } from '@/components/ui/Button'
 import {
@@ -114,9 +119,9 @@ export const TaskActionModal = ({
   const addTaskBundleCommentMutation = api.task.useAddTaskBundleComment()
   const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
   const completionResponses = useCompletionResponses()
-  const updateBundleStatusMutation = api.taskBundle.useUpdateTaskBundleStatus()
-  const createBundleMutation = api.taskBundle.useCreateTaskBundle()
-  const updateBundleMutation = api.taskBundle.useUpdateTaskBundle()
+  const updateBundleStatusMutation = useUpdateTaskBundleStatus()
+  const createBundleMutation = useCreateTaskBundle()
+  const updateBundleMutation = useUpdateTaskBundle()
   const updateUserSettingsMutation = useUpdateUserSettings()
   const lockConflict = useLockConflict()
   const { activeBundle, initialBundle } = useTaskBundleContext()

@@ -18,6 +18,7 @@ import type {
 import type { Task } from '@/types/Task'
 import type { ManagingTeam } from '@/types/Team'
 import { apiRequest } from '../client'
+import { projectKeys } from '../project'
 
 /**
  * Surgically update a single task's entry in the cached `taskMarkers` list for
@@ -171,7 +172,7 @@ const fetchChallengeTagsBatch = (challengeIds: number[]) =>
     .json<Record<string, Array<{ id: number; name: string }>>>()
 
 const invalidateChallengeListings = (queryClient: QueryClient) => {
-  void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+  void queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'tags'] })
@@ -466,7 +467,9 @@ export const challengeSingle = {
         // Set the new challenge in cache
         queryClient.setQueryData<Challenge>(['challenge', newChallenge.id], newChallenge)
         // Invalidate project challenges list
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges', variables.projectId] })
+        queryClient.invalidateQueries({
+          queryKey: [...projectKeys.challenges, variables.projectId],
+        })
       },
     })
   },
@@ -657,7 +660,7 @@ export const challengeSingle = {
         apiRequest.post(`api/v2/challenge/${challengeId}/project/${toProjectId}`).json<void>(),
       onSuccess: (_data, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
       },
     })
   },
@@ -669,7 +672,7 @@ export const challengeSingle = {
         apiRequest.delete(`api/v2/challenge/${challengeId}`).then(() => ({ challengeId })),
       onSuccess: (_, challengeId) => {
         queryClient.removeQueries({ queryKey: ['challenge', challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
       },
     })
@@ -690,7 +693,7 @@ export const challengeSingle = {
       onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
       },
     })
@@ -711,7 +714,7 @@ export const challengeSingle = {
       onError: (_error, _variables, context) => context?.rollback(),
       onSuccess: (_, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
@@ -739,7 +742,7 @@ export const challengeSingle = {
       },
       onSettled: (_, _error, variables) => {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
+        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
       },
     })

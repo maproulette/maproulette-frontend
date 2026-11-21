@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { managedProjectsOptions } from '@/api/project'
 import { useUpdateUserSettings } from '@/api/user'
 import {
   buildPropertiesWithPinnedChallenges,
@@ -68,8 +70,8 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
   // API queries
   const debouncedSearchQuery = useDebouncedValue(searchQuery)
   const superUser = isSuperUser(user)
-  const { data: managedProjects, isLoading: isLoadingProjects } = api.project.getManagedProjects({
-    limit: -1,
+  const { data: managedProjects, isLoading: isLoadingProjects } = useQuery({
+    ...managedProjectsOptions({ limit: -1 }),
     enabled: !!user && !superUser,
   })
   const managedProjectIds = useMemo(

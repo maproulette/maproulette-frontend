@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import {
   BookOpen,
@@ -12,7 +13,7 @@ import {
   X,
 } from 'lucide-react'
 import { useState } from 'react'
-import { api } from '@/api'
+import { projectOptions } from '@/api/project'
 import { useChallengeContext } from '@/components/Pages/TaskEditPage/contexts/ChallengeContext'
 import {
   EDITABLE_STATUSES,
@@ -84,7 +85,7 @@ export const TaskInfoHeader = ({
   const { challenge } = useChallengeContext()
   const { isAuthenticated, user } = useAuthContext()
   const { isTaskEditableByPlugins } = usePluginContext()
-  const { data: project } = api.project.getProject(challenge?.parent)
+  const { data: project } = useQuery(projectOptions(challenge?.parent))
   const { task: contextTask } = useTaskContext()
   const { showView } = usePanelViewContext()
   const { recommended, markDescriptionRead } = useDescriptionRecommendation()

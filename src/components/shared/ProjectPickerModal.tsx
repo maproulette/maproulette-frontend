@@ -1,6 +1,7 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { Archive, Eye, Pin, User } from 'lucide-react'
 import { type ReactNode, useMemo, useState } from 'react'
-import { api } from '@/api'
+import { managedProjectsInfiniteOptions } from '@/api/project'
 import { ProjectsTableView } from '@/components/Pages/ManagementPages/ManageProjects/ProjectsTableView'
 import { getPinnedProjectIds } from '@/components/Pages/ManagementPages/ManageProjects/pinnedProjects'
 import { useProjectChallengeCounts } from '@/components/Pages/ManagementPages/ManageProjects/useProjectChallengeCounts'
@@ -74,8 +75,8 @@ export const ProjectPickerModal = ({
   const excluded = useMemo(() => new Set(excludeProjectIds ?? []), [excludeProjectIds])
   const canList = open && (!onlyShowPinned || pinnedProjectIds.length > 0)
 
-  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
-    api.project.managedProjectsInfinite(
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery({
+    ...managedProjectsInfiniteOptions(
       {
         searchString: debouncedSearchQuery,
         onlyEnabled,
@@ -83,8 +84,10 @@ export const ProjectPickerModal = ({
         isArchived: onlyShowArchived,
         projectIds: onlyShowPinned ? pinnedProjectIds.join(',') : '',
       },
-      { limit: PAGE_SIZE, enabled: canList }
-    )
+      PAGE_SIZE
+    ),
+    enabled: canList,
+  })
   const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
   const challengeCountsByProjectId = useProjectChallengeCounts(projects)
 

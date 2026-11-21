@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Pencil, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { projectChallengesOptions } from '@/api/project'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { StatusBadge } from '@/components/shared/StatusBadge'
 import { Button } from '@/components/ui/Button'
@@ -16,7 +17,7 @@ import { logger } from '@/lib/logger'
 export const ProjectDetail = () => {
   const { t, locale, formatNumber } = useIntl()
   const { project } = useBrowsedProjectContext()
-  const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
+  const { data: challenges = [] } = useQuery(projectChallengesOptions(project.id))
 
   const remainingTasks = challenges.reduce(
     (sum, c) => sum + (c.completionMetrics?.tasksRemaining ?? 0),

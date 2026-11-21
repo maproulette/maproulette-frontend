@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
 import type { ComponentProps } from 'react'
-import { api } from '@/api'
+import { projectOptions } from '@/api/project'
 import { Button } from '@/components/ui/Button'
 import { useIntl } from '@/i18n'
 import { cn } from '@/lib/utils'
@@ -16,7 +17,7 @@ export const ProjectPickerButton = ({
 }: ProjectPickerButtonProps) => {
   const { t } = useIntl()
   const hasProject = projectId != null && projectId > 0
-  const { data: selectedProject } = api.project.getProject(hasProject ? projectId : undefined)
+  const { data: selectedProject } = useQuery(projectOptions(hasProject ? projectId : undefined))
   const label = selectedProject
     ? `${selectedProject.id} - ${selectedProject.displayName || selectedProject.name}`
     : hasProject

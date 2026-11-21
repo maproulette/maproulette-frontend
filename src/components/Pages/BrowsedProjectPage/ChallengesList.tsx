@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Copy, Eye, ListChecks, MoreHorizontal, Play } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { api } from '@/api'
+import { projectChallengesOptions } from '@/api/project'
 import { ChallengesTableView } from '@/components/Pages/BrowsedProjectPage/ChallengesTableView'
 import { useBrowsedProjectContext } from '@/components/Pages/BrowsedProjectPage/contexts/BrowsedProjectContext'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
@@ -24,7 +25,7 @@ import type { Challenge } from '@/types/Challenge'
 export const ChallengesList = () => {
   const { t } = useIntl()
   const { project } = useBrowsedProjectContext()
-  const { data: challenges = [] } = api.project.getProjectChallenges(project.id)
+  const { data: challenges = [] } = useQuery(projectChallengesOptions(project.id))
 
   const [searchQuery, setSearchQuery] = useState('')
   const [showCompleted, setShowCompleted] = useState(true)

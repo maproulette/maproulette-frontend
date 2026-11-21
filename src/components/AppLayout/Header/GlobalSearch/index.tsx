@@ -3,6 +3,7 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { FolderOpen, ListTodo, Search, Target } from 'lucide-react'
 import { useId, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
+import { searchProjectsOptions } from '@/api/project'
 import { searchByIdOptions } from '@/api/search'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
 import { KbdBinding } from '@/components/ui/Kbd'
@@ -37,7 +38,7 @@ const useResults = (query: string) => {
   const name = id ? '' : query
 
   const challenges = api.challenge.searchChallenges({ search: name, limit: CHALLENGE_LIMIT })
-  const projects = api.project.searchProjects({ search: name, limit: PROJECT_LIMIT })
+  const projects = useQuery(searchProjectsOptions({ search: name, limit: PROJECT_LIMIT }))
   const byId = useQuery(searchByIdOptions(id))
   const taskChallenge = api.challenge.getChallenge(byId.data?.task?.parent ?? 0)
 

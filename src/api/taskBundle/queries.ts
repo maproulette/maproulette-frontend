@@ -1,4 +1,4 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@/types/Task'
 import { apiRequest } from '../client'
 import { invalidateLockedTasks } from '../task/single'
@@ -16,95 +16,81 @@ export interface CreateTaskBundleRequest {
   primaryId?: number
 }
 
-export const taskBundleQueries = {
-  getTaskBundle: (bundleId: number, lockTasks = false) => {
-    return useQuery(
-      queryOptions({
-        queryKey: ['taskBundle', bundleId, { lockTasks }],
-        queryFn: async () => {
-          const bundle = await apiRequest
-            .post(`api/v2/taskBundle/${bundleId}`, {
-              searchParams: { lockTasks: lockTasks.toString() },
-            })
-            .json<TaskBundleResponse>()
-          return bundle
-        },
-        enabled: !!bundleId,
-      })
-    )
-  },
+// A read, despite being a POST.
+export const taskBundleOptions = (bundleId: number) =>
+  queryOptions({
+    queryKey: ['taskBundle', bundleId],
+    queryFn: () => apiRequest.post(`api/v2/taskBundle/${bundleId}`).json<TaskBundleResponse>(),
+    enabled: !!bundleId,
+  })
 
-  useCreateTaskBundle: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: (data: CreateTaskBundleRequest) =>
-        apiRequest
-          .post('api/v2/taskBundle', {
-            json: data,
-          })
-          .json<TaskBundleResponse>(),
-      onSuccess: (bundle) => {
-        queryClient.setQueryData(['taskBundle', bundle.bundleId, { lockTasks: false }], bundle)
-        invalidateLockedTasks(queryClient)
-      },
-    })
-  },
+export const useCreateTaskBundle = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: CreateTaskBundleRequest) =>
+      apiRequest
+        .post('api/v2/taskBundle', {
+          json: data,
+        })
+        .json<TaskBundleResponse>(),
+    onSuccess: (bundle) => {
+      queryClient.setQueryData(['taskBundle', bundle.bundleId], bundle)
+      invalidateLockedTasks(queryClient)
+    },
+  })
+}
 
-  useUpdateTaskBundle: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ bundleId, taskIds }: { bundleId: number; taskIds: number[] }) =>
-        apiRequest
-          .post(`api/v2/taskBundle/${bundleId}/update`, {
-            searchParams: { taskIds: taskIds.join(',') },
-          })
-          .json<TaskBundleResponse>(),
-      onSuccess: (updatedBundle, variables) => {
-        queryClient.setQueryData(
-          ['taskBundle', variables.bundleId, { lockTasks: false }],
-          updatedBundle
-        )
-        invalidateLockedTasks(queryClient)
-      },
-    })
-  },
+export const useUpdateTaskBundle = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ bundleId, taskIds }: { bundleId: number; taskIds: number[] }) =>
+      apiRequest
+        .post(`api/v2/taskBundle/${bundleId}/update`, {
+          searchParams: { taskIds: taskIds.join(',') },
+        })
+        .json<TaskBundleResponse>(),
+    onSuccess: (updatedBundle, variables) => {
+      queryClient.setQueryData(['taskBundle', variables.bundleId], updatedBundle)
+      invalidateLockedTasks(queryClient)
+    },
+  })
+}
 
-  useUpdateTaskBundleStatus: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: async ({
-        bundleId,
-        primaryId,
-        status,
-        completionResponses,
-        queryParams,
-      }: {
-        bundleId: number
-        primaryId: number
-        status: number
-        completionResponses?: Record<string, unknown>
-        /** Opaque query params contributed by plugins */
-        queryParams?: Record<string, string | boolean | number | undefined | null>
-      }) => {
-        const searchParams: Record<string, string> = { primaryId: String(primaryId) }
-        if (queryParams) {
-          for (const [key, value] of Object.entries(queryParams)) {
-            if (value !== undefined && value !== null) {
-              searchParams[key] = String(value)
-            }
+export const useUpdateTaskBundleStatus = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      bundleId,
+      primaryId,
+      status,
+      completionResponses,
+      queryParams,
+    }: {
+      bundleId: number
+      primaryId: number
+      status: number
+      completionResponses?: Record<string, unknown>
+      /** Opaque query params contributed by plugins */
+      queryParams?: Record<string, string | boolean | number | undefined | null>
+    }) => {
+      const searchParams: Record<string, string> = { primaryId: String(primaryId) }
+      if (queryParams) {
+        for (const [key, value] of Object.entries(queryParams)) {
+          if (value !== undefined && value !== null) {
+            searchParams[key] = String(value)
           }
         }
-        await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, {
-          searchParams,
-          ...(completionResponses ? { json: completionResponses } : {}),
-        })
-      },
-      onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })
-        queryClient.invalidateQueries({ queryKey: ['task'] })
-        queryClient.invalidateQueries({ queryKey: ['challenge'] })
-        invalidateLockedTasks(queryClient)
-      },
-    })
-  },
+      }
+      await apiRequest.put(`api/v2/taskBundle/${bundleId}/${status}`, {
+        searchParams,
+        ...(completionResponses ? { json: completionResponses } : {}),
+      })
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })
+      queryClient.invalidateQueries({ queryKey: ['task'] })
+      queryClient.invalidateQueries({ queryKey: ['challenge'] })
+      invalidateLockedTasks(queryClient)
+    },
+  })
 }

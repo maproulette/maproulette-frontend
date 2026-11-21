@@ -3,6 +3,7 @@
  */
 import { act, createElement, type ReactNode } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 
 const state = vi.hoisted(() => ({
@@ -23,7 +24,6 @@ vi.mock('@/api', () => ({
       useLockTaskBundle: () => ({ mutateAsync: state.lockBundle, mutate: state.lockBundle }),
       getTask: () => ({ data: null }),
     },
-    taskBundle: { getTaskBundle: () => ({ data: null }) },
   },
 }))
 vi.mock('@/contexts/AuthContext', () => ({ useAuthContext: () => ({ user: { id: 7 } }) }))
@@ -52,8 +52,10 @@ vi.mock('@/hooks/useDrawerTransition', () => ({ useDrawerTransition: () => false
 
 const { TaskBundleProvider, useTaskBundleContext } = await import('./TaskBundleContext')
 
+const QueryProvider = queryClientWrapper()
+
 const wrapper = ({ children }: { children: ReactNode }) =>
-  createElement(TaskBundleProvider, null, children)
+  createElement(QueryProvider, null, createElement(TaskBundleProvider, null, children))
 
 describe('TaskBundleContext bundling requires a lock', () => {
   beforeEach(() => {

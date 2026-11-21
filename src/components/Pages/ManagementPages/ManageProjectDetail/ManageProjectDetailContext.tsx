@@ -1,7 +1,14 @@
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import {
+  projectChallengesOptions,
+  projectOptions,
+  useDeleteProject,
+  useUpdateProject,
+} from '@/api/project'
 import { useUpdateUserSettings } from '@/api/user'
 import {
   buildPropertiesWithPinnedChallenges,
@@ -103,19 +110,19 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   } = useRowSelection<number>()
 
   // API queries
-  const { data: projectData, isLoading: isLoadingProject } = api.project.getProject(
-    Number(projectId)
+  const { data: projectData, isLoading: isLoadingProject } = useQuery(
+    projectOptions(Number(projectId))
   )
   useSetPageTitle(projectData?.displayName || projectData?.name || null)
 
-  const { data: challenges, isLoading: isLoadingChallenges } = api.project.getProjectChallenges(
-    Number(projectId)
+  const { data: challenges, isLoading: isLoadingChallenges } = useQuery(
+    projectChallengesOptions(Number(projectId))
   )
 
   // API mutations
   const updateSettingsMutation = useUpdateUserSettings()
-  const updateProjectMutation = api.project.useUpdateProject()
-  const deleteProjectMutation = api.project.useDeleteProject()
+  const updateProjectMutation = useUpdateProject()
+  const deleteProjectMutation = useDeleteProject()
   const deleteChallengeMutation = api.challenge.useDeleteChallenge()
   const archiveChallengeMutation = api.challenge.useArchiveChallenge()
   const pauseChallengeMutation = api.challenge.usePauseChallenge()

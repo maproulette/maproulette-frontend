@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
-import { api } from '@/api'
+import { projectOptions, useUpdateProject } from '@/api/project'
 import {
   ProjectForm,
   type ProjectFormValues,
@@ -12,8 +13,8 @@ export const ManageProjectEdit = () => {
   const { projectId } = useParams({ from: '/_app/manage/project/$projectId/edit' })
   const navigate = useNavigate()
 
-  const { data: projectData, isLoading } = api.project.getProject(Number(projectId))
-  const updateProjectMutation = api.project.useUpdateProject()
+  const { data: projectData, isLoading } = useQuery(projectOptions(Number(projectId)))
+  const updateProjectMutation = useUpdateProject()
 
   const handleSubmit = async (values: ProjectFormValues) => {
     await updateProjectMutation.mutateAsync({

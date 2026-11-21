@@ -1,6 +1,12 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { api } from '@/api'
+import {
+  exportProjectTasksCsv,
+  managedProjectsInfiniteOptions,
+  useDeleteProject,
+  useUpdateProject,
+} from '@/api/project'
 import { useUpdateUserSettings } from '@/api/user'
 import { useManageActionErrors } from '@/components/Pages/ManagementPages/shared/useManageActionErrors'
 import { useAuthContext } from '@/contexts/AuthContext'
@@ -31,8 +37,8 @@ const useManageProjectsState = () => {
   const pinnedProjectIds = useMemo(() => getPinnedProjectIds(user), [user])
   const canList = !onlyShowPinned || pinnedProjectIds.length > 0
 
-  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
-    api.project.managedProjectsInfinite(
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery({
+    ...managedProjectsInfiniteOptions(
       {
         searchString: debouncedSearchQuery,
         onlyEnabled,
@@ -40,13 +46,15 @@ const useManageProjectsState = () => {
         isArchived: onlyShowArchived,
         projectIds: onlyShowPinned ? pinnedProjectIds.join(',') : '',
       },
-      { limit: PAGE_SIZE, enabled: canList }
-    )
+      PAGE_SIZE
+    ),
+    enabled: canList,
+  })
   const projects = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
 
   const updateSettingsMutation = useUpdateUserSettings()
-  const updateProjectMutation = api.project.useUpdateProject()
-  const deleteProjectMutation = api.project.useDeleteProject()
+  const updateProjectMutation = useUpdateProject()
+  const deleteProjectMutation = useDeleteProject()
   const actionErrors = useManageActionErrors()
 
   const projectsToShow = useMemo(() => {
@@ -68,10 +76,7 @@ const useManageProjectsState = () => {
         projects.find((p) => p.id === projectId)?.displayName ??
         projects.find((p) => p.id === projectId)?.name
       const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '-') : ''
-      void api.project.exportProjectTasksCsv(
-        projectId,
-        safeName ? `project-${safeName}-tasks.csv` : undefined
-      )
+      void exportProjectTasksCsv(projectId, safeName ? `project-${safeName}-tasks.csv` : undefined)
     },
     [projects]
   )

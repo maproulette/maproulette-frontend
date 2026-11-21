@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useContext, useMemo } from 'react'
 import { api } from '@/api'
+import { managedProjectsOptions, projectOptions } from '@/api/project'
 import { teamOptions } from '@/api/team'
 import { publicUserOptions } from '@/api/user'
 import { useAuthContext } from '@/contexts/AuthContext'
@@ -59,15 +60,17 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
 
   const { data: likeData } = api.challenge.isChallengeLiked(challenge.id ?? 0)
 
-  const { data: managedProjects } = api.project.getManagedProjects({
-    limit: 1,
-    page: 0,
-    onlyEnabled: false,
-    onlyOwned: false,
-    searchString: '',
-  })
+  const { data: managedProjects } = useQuery(
+    managedProjectsOptions({
+      limit: 1,
+      page: 0,
+      onlyEnabled: false,
+      onlyOwned: false,
+      searchString: '',
+    })
+  )
 
-  const { data: projectData } = api.project.getProject(challenge.parent)
+  const { data: projectData } = useQuery(projectOptions(challenge.parent))
 
   const { data: ownerData } = useQuery(publicUserOptions(challenge.owner))
 

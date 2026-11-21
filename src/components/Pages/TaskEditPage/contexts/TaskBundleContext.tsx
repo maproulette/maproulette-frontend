@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { taskBundleOptions } from '@/api/taskBundle'
 import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
@@ -122,7 +124,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
     [task.id, lockBundleMutation.mutateAsync]
   )
 
-  const { data: dbBundle } = api.taskBundle.getTaskBundle(task.bundleId ?? 0)
+  const { data: dbBundle } = useQuery(taskBundleOptions(task.bundleId ?? 0))
   const dbBundleTaskIds = useMemo(
     () => dbBundle?.taskIds.filter((id) => id !== task.id) ?? [],
     [dbBundle, task.id]

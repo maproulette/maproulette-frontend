@@ -1,15 +1,11 @@
 import { challenge } from './challenge'
 import { nominatim } from './nominatim'
 import { osm } from './osm'
-import { project } from './project'
 import { task } from './task'
-import { taskBundle } from './taskBundle'
 
 export const api = {
   challenge,
   task,
-  taskBundle,
-  project,
   osm,
   nominatim,
 }

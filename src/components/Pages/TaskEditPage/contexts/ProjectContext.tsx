@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useMemo } from 'react'
-import { api } from '@/api'
+import { projectOptions } from '@/api/project'
 import type { Project } from '@/types/Project'
 import { useChallengeContext } from './ChallengeContext'
 
@@ -13,7 +14,7 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined)
 
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
   const { challenge } = useChallengeContext()
-  const { data, isLoading, error } = api.project.getProject(challenge?.parent)
+  const { data, isLoading, error } = useQuery(projectOptions(challenge?.parent))
 
   // Reason: context value must be stable to prevent all consumers from re-rendering
   const value: ProjectContextType = useMemo(
