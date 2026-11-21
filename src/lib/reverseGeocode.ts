@@ -1,4 +1,4 @@
-import { nominatim } from '@/api/nominatim'
+import { reverseGeocode } from '@/api/nominatim'
 import { logger } from '@/lib/logger'
 
 /** Town/city level rather than a house number, which is what a mapper wants to read. */
@@ -17,7 +17,7 @@ export const reverseGeocodePlaceName = async (
   signal?: AbortSignal
 ): Promise<string | null> => {
   try {
-    const data = await nominatim.reverse(latitude, longitude, ZOOM, signal)
+    const data = await reverseGeocode(latitude, longitude, ZOOM, signal)
     const address = data.address ?? {}
     const parts = PLACE_FIELDS.map((field) => address[field]).filter(Boolean)
     if (parts.length > 0) return parts.slice(0, 2).join(', ')

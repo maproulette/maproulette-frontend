@@ -47,49 +47,53 @@ const fetchJSON = async <T>(path: string, params: Record<string, string>, signal
   return (await response.json()) as T
 }
 
-export const nominatim = {
-  /**
-   * Places matching the query that are areas, since only an area can be used to
-   * filter challenges by location. Nominatim can't filter by geometry type, so
-   * this asks for (heavily simplified) geometries and filters them here.
-   */
-  search: async (query: string, signal?: AbortSignal): Promise<PlaceSuggestion[]> => {
-    const places = await fetchJSON<Array<PlaceSuggestion & { geojson?: Geometry }>>(
-      '/search',
-      {
-        format: 'json',
-        q: query,
-        limit: '20',
-        addressdetails: '1',
-        polygon_geojson: '1',
-        polygon_threshold: '0.1',
-      },
-      signal
-    )
-    return places
-      .filter((place) => isAreaGeometry(place.geojson))
-      .slice(0, 8)
-      .map(({ geojson: _, ...place }) => place)
-  },
-
-  lookup: async (osmId: string, signal?: AbortSignal): Promise<PlaceDetail | null> => {
-    const places = await fetchJSON<PlaceDetail[]>(
-      '/lookup',
-      { osm_ids: osmId, polygon_geojson: '1', format: 'jsonv2' },
-      signal
-    )
-    return places[0] ?? null
-  },
-
-  reverse: (
-    latitude: number,
-    longitude: number,
-    zoom: number,
-    signal?: AbortSignal
-  ): Promise<ReverseGeocodeResult> =>
-    fetchJSON(
-      '/reverse',
-      { format: 'json', zoom: String(zoom), lat: String(latitude), lon: String(longitude) },
-      signal
-    ),
+/**
+ * Places matching the query that are areas, since only an area can be used to
+ * filter challenges by location. Nominatim can't filter by geometry type, so
+ * this asks for (heavily simplified) geometries and filters them here.
+ */
+export const searchAreas = async (
+  query: string,
+  signal?: AbortSignal
+): Promise<PlaceSuggestion[]> => {
+  const places = await fetchJSON<Array<PlaceSuggestion & { geojson?: Geometry }>>(
+    '/search',
+    {
+      format: 'json',
+      q: query,
+      limit: '20',
+      addressdetails: '1',
+      polygon_geojson: '1',
+      polygon_threshold: '0.1',
+    },
+    signal
+  )
+  return places
+    .filter((place) => isAreaGeometry(place.geojson))
+    .slice(0, 8)
+    .map(({ geojson: _, ...place }) => place)
 }
+
+export const lookupPlace = async (
+  osmId: string,
+  signal?: AbortSignal
+): Promise<PlaceDetail | null> => {
+  const places = await fetchJSON<PlaceDetail[]>(
+    '/lookup',
+    { osm_ids: osmId, polygon_geojson: '1', format: 'jsonv2' },
+    signal
+  )
+  return places[0] ?? null
+}
+
+export const reverseGeocode = (
+  latitude: number,
+  longitude: number,
+  zoom: number,
+  signal?: AbortSignal
+): Promise<ReverseGeocodeResult> =>
+  fetchJSON(
+    '/reverse',
+    { format: 'json', zoom: String(zoom), lat: String(latitude), lon: String(longitude) },
+    signal
+  )

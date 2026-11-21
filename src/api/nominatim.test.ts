@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { stubFetch } from '@/test/stubFetch'
-import { nominatim } from './nominatim'
+import { lookupPlace, searchAreas } from './nominatim'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -36,7 +36,7 @@ describe('nominatim', () => {
       jsonResponse([{ display_name: 'Bonn', place_id: '1', geojson: square }])
     )
 
-    expect(await nominatim.search('Bonn & Köln')).toEqual([{ display_name: 'Bonn', place_id: '1' }])
+    expect(await searchAreas('Bonn & Köln')).toEqual([{ display_name: 'Bonn', place_id: '1' }])
 
     const url = requestedUrl(fetchMock)
     expect(`${url.origin}${url.pathname}`).toBe(`${NOMINATIM_BASE_URL}/search`)
@@ -58,14 +58,14 @@ describe('nominatim', () => {
       ])
     )
 
-    expect((await nominatim.search('Bonn')).map((place) => place.place_id)).toEqual(['1', '4'])
+    expect((await searchAreas('Bonn')).map((place) => place.place_id)).toEqual(['1', '4'])
   })
 
   it('does not try to set a User-Agent header', async () => {
     const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) => jsonResponse([]))
     vi.stubGlobal('fetch', fetchMock)
 
-    await nominatim.search('Bonn')
+    await searchAreas('Bonn')
 
     expect(new Headers(fetchMock.mock.calls[0][1]?.headers).has('User-Agent')).toBe(false)
   })
@@ -73,7 +73,7 @@ describe('nominatim', () => {
   it('looks up a single place by its type-prefixed OSM id', async () => {
     const fetchMock = stubFetch(jsonResponse([{ display_name: 'Salt Lake City' }]))
 
-    expect(await nominatim.lookup('R126461')).toEqual({ display_name: 'Salt Lake City' })
+    expect(await lookupPlace('R126461')).toEqual({ display_name: 'Salt Lake City' })
 
     const url = requestedUrl(fetchMock)
     expect(url.pathname).toBe('/lookup')
@@ -84,12 +84,12 @@ describe('nominatim', () => {
   it('returns null when a lookup finds nothing', async () => {
     stubFetch(jsonResponse([]))
 
-    expect(await nominatim.lookup('N1')).toBeNull()
+    expect(await lookupPlace('N1')).toBeNull()
   })
 
   it('throws when Nominatim responds with an error', async () => {
     stubFetch(new Response('slow down', { status: 429, statusText: 'Too Many Requests' }))
 
-    await expect(nominatim.search('Bonn')).rejects.toThrow('429')
+    await expect(searchAreas('Bonn')).rejects.toThrow('429')
   })
 })

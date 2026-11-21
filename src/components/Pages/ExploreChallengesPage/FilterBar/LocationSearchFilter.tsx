@@ -1,6 +1,12 @@
 import { AlertCircle, MapPin, X } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { isAreaGeometry, nominatim, type PlaceDetail, type PlaceSuggestion } from '@/api/nominatim'
+import {
+  isAreaGeometry,
+  lookupPlace,
+  type PlaceDetail,
+  type PlaceSuggestion,
+  searchAreas,
+} from '@/api/nominatim'
 import { DEFAULT_WORLD_BOUNDS, isWorldBounds } from '@/components/Map/mapUtils'
 import type {
   LocationGeojson,
@@ -120,7 +126,7 @@ export const LocationSearchFilter = () => {
       setError('')
 
       try {
-        const data = await nominatim.search(trimmed, controller.signal)
+        const data = await searchAreas(trimmed, controller.signal)
 
         if (data.length === 0) {
           setError(
@@ -169,7 +175,7 @@ export const LocationSearchFilter = () => {
       setIsLocationLoading(true)
 
       try {
-        const place = await nominatim.lookup(placeKey)
+        const place = await lookupPlace(placeKey)
 
         if (place) {
           setLocationInput(place.display_name)
@@ -246,7 +252,7 @@ export const LocationSearchFilter = () => {
           return null
         }
 
-        return await nominatim.lookup(`${prefix}${suggestion.osm_id}`)
+        return await lookupPlace(`${prefix}${suggestion.osm_id}`)
       } catch (err) {
         logger.error('Error fetching location details', { error: err })
         setError(
