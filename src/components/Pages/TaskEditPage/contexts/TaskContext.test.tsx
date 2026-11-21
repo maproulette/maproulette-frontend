@@ -25,15 +25,11 @@ vi.mock('@tanstack/react-router', () => ({
   useSearch: () => ({ claimTask: state.claimTask }),
   useNavigate: () => vi.fn(),
 }))
-vi.mock('@/api', () => ({
-  api: {
-    task: {
-      getTask: () => ({ data: state.task }),
-      useLockTask: () => ({ mutateAsync: state.lock, isPending: false }),
-      useUnlockTask: () => ({ mutateAsync: vi.fn(), mutate: vi.fn(), isPending: false }),
-      useRefreshLock: () => ({ mutate: state.refresh }),
-    },
-  },
+vi.mock('@/api/task', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/api/task')>()),
+  useLockTask: () => ({ mutateAsync: state.lock, isPending: false }),
+  useUnlockTask: () => ({ mutateAsync: vi.fn(), mutate: vi.fn(), isPending: false }),
+  useRefreshLock: () => ({ mutate: state.refresh }),
 }))
 vi.mock('@/contexts/AuthContext', () => ({
   useAuthContext: () => ({ user: { id: USER_ID }, isAuthenticated: true }),
@@ -55,6 +51,7 @@ vi.mock('./LockFailedDialog', () => ({
 }))
 
 const { TaskProvider, useTaskContext } = await import('./TaskContext')
+const { taskKeys } = await import('@/api/task')
 
 const queryClient = createTestQueryClient()
 const wrapper = ({ children }: { children: ReactNode }) =>
@@ -63,6 +60,11 @@ const wrapper = ({ children }: { children: ReactNode }) =>
     { client: queryClient },
     createElement(TaskProvider, null, children)
   )
+
+const mount = () => {
+  queryClient.setQueryData(taskKeys.task(TASK_ID), state.task)
+  return renderHook(() => useTaskContext(), { wrapper })
+}
 
 const task = (overrides: Partial<TaskGetResponse> = {}) =>
   ({ id: TASK_ID, parent: 10, status: 0, lockedBy: null, ...overrides }) as TaskGetResponse
@@ -75,15 +77,18 @@ describe('TaskContext locks', () => {
     state.lock.mockResolvedValue({})
     state.refresh.mockReset()
     state.lockFailure = undefined
+    queryClient.clear()
+    vi.stubGlobal('fetch', () => new Promise(() => {}))
   })
 
   afterEach(() => {
     vi.useRealTimers()
+    vi.unstubAllGlobals()
   })
 
   it('reads the lock from the task it holds', () => {
     state.task = task({ lockedBy: USER_ID, lockBundledTasks: [TASK_ID, 2, 3] })
-    const { result } = renderHook(() => useTaskContext(), { wrapper })
+    const { result } = mount()
 
     expect(result.current.isLocked).toBe(true)
     expect(result.current.lockedTasks).toEqual([2, 3])
@@ -91,7 +96,7 @@ describe('TaskContext locks', () => {
 
   it('treats a lock held by somebody else as not held', () => {
     state.task = task({ lockedBy: 99, lockBundledTasks: [TASK_ID, 2] })
-    const { result } = renderHook(() => useTaskContext(), { wrapper })
+    const { result } = mount()
 
     expect(result.current.isLocked).toBe(false)
     expect(result.current.lockedTasks).toEqual([])
@@ -99,7 +104,7 @@ describe('TaskContext locks', () => {
 
   it('keeps a lock it found on load alive', () => {
     state.task = task({ lockedBy: USER_ID })
-    renderHook(() => useTaskContext(), { wrapper })
+    mount()
 
     act(() => {
       vi.advanceTimersByTime(15 * 60 * 1000)
@@ -114,7 +119,7 @@ describe('TaskContext locks', () => {
       (_taskId: number, { onError }: { onError: (error: unknown) => Promise<void> }) =>
         onError(new Error('lock lost'))
     )
-    renderHook(() => useTaskContext(), { wrapper })
+    mount()
 
     await act(async () => {
       vi.advanceTimersByTime(15 * 60 * 1000)
@@ -127,7 +132,7 @@ describe('TaskContext locks', () => {
     state.claimTask = true
     state.task = task()
     state.lock.mockRejectedValue(new Error('network down'))
-    renderHook(() => useTaskContext(), { wrapper })
+    mount()
 
     await act(async () => {})
 
@@ -147,7 +152,7 @@ describe('TaskContext locks', () => {
         {} as NormalizedOptions
       )
     )
-    renderHook(() => useTaskContext(), { wrapper })
+    mount()
 
     await act(async () => {})
 
@@ -159,7 +164,7 @@ describe('TaskContext locks', () => {
 
   it('does not refresh a lock it does not hold', () => {
     state.task = task()
-    renderHook(() => useTaskContext(), { wrapper })
+    mount()
 
     act(() => {
       vi.advanceTimersByTime(15 * 60 * 1000)
@@ -171,7 +176,7 @@ describe('TaskContext locks', () => {
   it('does not claim a task it already holds', () => {
     state.claimTask = true
     state.task = task({ lockedBy: USER_ID })
-    renderHook(() => useTaskContext(), { wrapper })
+    mount()
 
     expect(state.lock).not.toHaveBeenCalled()
   })
@@ -179,7 +184,7 @@ describe('TaskContext locks', () => {
   it('claims a free task when asked to', () => {
     state.claimTask = true
     state.task = task()
-    renderHook(() => useTaskContext(), { wrapper })
+    mount()
 
     expect(state.lock).toHaveBeenCalledWith(TASK_ID)
   })

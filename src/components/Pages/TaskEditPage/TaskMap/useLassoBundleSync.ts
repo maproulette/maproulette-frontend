@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { taskOptions } from '@/api/task'
 import {
   PENDING_BUNDLE_ID,
   type TaskBundle,
@@ -19,7 +20,7 @@ export const useLassoBundleSync = () => {
   const { activeBundle, setActiveBundle, lockBundleTasks } = useTaskBundleContext()
   const { task, isLocked } = useTaskContext()
   const primaryTaskId = task.id
-  const { data: primaryTaskData } = api.task.getTask(primaryTaskId)
+  const { data: primaryTaskData } = useQuery(taskOptions(primaryTaskId))
 
   useEffect(() => {
     if (selectedTaskIds.size === 0) return

@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
-import { api } from '@/api'
+import { challengePropertyKeysOptions } from '@/api/task'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { TaskPropertyQueryBuilder } from '@/components/shared/TaskPropertyQueryBuilder'
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
@@ -33,7 +34,10 @@ export const PropertyFilterButton = () => {
   } = useExplorerContext()
   const [open, setOpen] = useState(false)
   // Only sampled once the manager actually opens the filter.
-  const { data: propertyKeys } = api.task.getChallengePropertyKeys(challengeId, { enabled: open })
+  const { data: propertyKeys } = useQuery({
+    ...challengePropertyKeysOptions(challengeId),
+    enabled: open && !!challengeId,
+  })
   // Held while the manager edits, and only applied on Apply, so the table
   // doesn't refetch on every keystroke in the rule builder.
   const [draft, setDraft] = useState<BinaryNode | null>(propertyRule)

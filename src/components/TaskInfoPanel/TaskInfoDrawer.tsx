@@ -4,6 +4,7 @@ import { ExternalLink, Package, Play, Share2, X, ZoomIn } from 'lucide-react'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { api } from '@/api'
 import { projectOptions } from '@/api/project'
+import { taskOptions } from '@/api/task'
 import { taskBundleOptions } from '@/api/taskBundle'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { SharePopoverContent } from '@/components/shared/ShareLink/SharePopoverContent'
@@ -33,7 +34,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const { t } = useIntl()
   const navigateToTask = useNavigateToTask()
 
-  const { data: fullTask } = api.task.getTask(selectedTask?.id ?? 0)
+  const { data: fullTask } = useQuery(taskOptions(selectedTask?.id ?? 0))
   const task = fullTask as Task | undefined
 
   const { data: challenge } = api.challenge.getChallenge(task?.parent ?? 0)

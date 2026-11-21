@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { taskOptions, useLockTaskBundle } from '@/api/task'
 import { taskBundleOptions } from '@/api/taskBundle'
 import { isTaskEligibleForBundle } from '@/components/Map/TaskMarkers/utils'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
@@ -92,7 +92,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [drawerTaskId, setDrawerTaskId] = useState<number | null>(null)
 
-  const lockBundleMutation = api.task.useLockTaskBundle()
+  const lockBundleMutation = useLockTaskBundle()
   const isAddingToBundle = lockBundleMutation.isPending
 
   const persistBundle = useCallback(
@@ -194,7 +194,7 @@ export const TaskBundleProvider = ({ children }: { children: ReactNode }) => {
   const viewedTaskId = targetTaskId
 
   // Fetch the viewed task data (skip if it's the primary task)
-  const { data: fetchedTask } = api.task.getTask(viewedTaskId !== task.id ? viewedTaskId : 0)
+  const { data: fetchedTask } = useQuery(taskOptions(viewedTaskId !== task.id ? viewedTaskId : 0))
   const viewedTask: Task = viewedTaskId === task.id ? task : (fetchedTask ?? task)
 
   const confirmedBundleTaskIds = useMemo(

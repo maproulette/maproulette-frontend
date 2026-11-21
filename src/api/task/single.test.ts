@@ -5,7 +5,17 @@ import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
 import type { TaskGetResponse } from '@/types/Task'
-import { invalidateLockedTasks, LOCKED_TASKS_INVALIDATION_DELAY_MS, taskSingle } from './single'
+import {
+  invalidateLockedTasks,
+  LOCKED_TASKS_INVALIDATION_DELAY_MS,
+  useLockTask,
+  useLockTaskBundle,
+  useRefreshLock,
+  useSkipTask,
+  useUnlockTask,
+  useUpdateTask,
+  useUpdateTaskStatus,
+} from './single'
 
 function makeTask(overrides: Partial<TaskGetResponse> = {}): TaskGetResponse {
   return {
@@ -35,47 +45,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('taskSingle.getTaskOptions', () => {
-  it('builds enabled query options for a truthy taskId', () => {
-    const options = taskSingle.getTaskOptions(9)
-    expect(options.queryKey).toEqual(['task', 9])
-    expect(options.enabled).toBe(true)
-  })
-
-  it('builds disabled query options for a falsy taskId', () => {
-    const options = taskSingle.getTaskOptions(0)
-    expect(options.enabled).toBe(false)
-  })
-})
-
-describe('taskSingle.getTask', () => {
-  it('fetches a task by id, exercising the shared getTaskOptions queryFn', async () => {
-    const task = makeTask({ id: 9 })
-    const fetchMock = stubFetch(new Response(JSON.stringify(task), { status: 200 }))
-
-    const { result } = renderHook(() => taskSingle.getTask(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(task)
-    const [request] = fetchMock.mock.calls[0] as [Request]
-    expect(new URL(request.url).pathname).toBe('/api/v2/task/9')
-  })
-
-  it('is disabled when taskId is falsy', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => taskSingle.getTask(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('taskSingle.useLockTask', () => {
+describe('useLockTask', () => {
   it('locks a task, caches it, and patches the challenge marker with the current user id', async () => {
     const lockedTask = makeTask({ id: 1, parent: 10 })
     stubFetch(new Response(JSON.stringify(lockedTask), { status: 200 }))
@@ -86,7 +56,7 @@ describe('taskSingle.useLockTask', () => {
     })
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useLockTask(), {
+    const { result } = renderHook(() => useLockTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -112,7 +82,7 @@ describe('taskSingle.useLockTask', () => {
       markers: [{ id: 2, status: 0 }],
     })
 
-    const { result } = renderHook(() => taskSingle.useLockTask(), {
+    const { result } = renderHook(() => useLockTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -131,7 +101,7 @@ describe('taskSingle.useLockTask', () => {
     stubFetch(new Response(JSON.stringify(lockedTask), { status: 200 }))
     const queryClient = createTestQueryClient()
 
-    const { result } = renderHook(() => taskSingle.useLockTask(), {
+    const { result } = renderHook(() => useLockTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -144,7 +114,7 @@ describe('taskSingle.useLockTask', () => {
   })
 })
 
-describe('taskSingle.useUnlockTask', () => {
+describe('useUnlockTask', () => {
   it('unlocks a task, caches it, and clears the lock on the challenge marker', async () => {
     const unlockedTask = makeTask({ id: 3, parent: 11 })
     stubFetch(new Response(JSON.stringify(unlockedTask), { status: 200 }))
@@ -154,7 +124,7 @@ describe('taskSingle.useUnlockTask', () => {
     })
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUnlockTask(), {
+    const { result } = renderHook(() => useUnlockTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -179,7 +149,7 @@ describe('taskSingle.useUnlockTask', () => {
     stubFetch(new Response(JSON.stringify(unlockedTask), { status: 200 }))
     const queryClient = createTestQueryClient()
 
-    const { result } = renderHook(() => taskSingle.useUnlockTask(), {
+    const { result } = renderHook(() => useUnlockTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -190,7 +160,7 @@ describe('taskSingle.useUnlockTask', () => {
   })
 })
 
-describe('taskSingle.useLockTaskBundle', () => {
+describe('useLockTaskBundle', () => {
   it('PUTs the bundled task ids as repeated taskIds params and invalidates inBounds tasks', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify({ lockPrimaryTaskId: 1, lockBundledTasks: [2, 3] }), {
@@ -199,7 +169,7 @@ describe('taskSingle.useLockTaskBundle', () => {
     )
     const queryClient = createTestQueryClient()
 
-    const { result } = renderHook(() => taskSingle.useLockTaskBundle(), {
+    const { result } = renderHook(() => useLockTaskBundle(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -216,7 +186,7 @@ describe('taskSingle.useLockTaskBundle', () => {
   })
 })
 
-describe('taskSingle.useSkipTask', () => {
+describe('useSkipTask', () => {
   it('keeps the cached status, releases the lock and leaves the challenge alone', async () => {
     stubFetch(new Response('', { status: 200 }))
     const queryClient = createTestQueryClient()
@@ -229,7 +199,7 @@ describe('taskSingle.useSkipTask', () => {
     })
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useSkipTask(), {
+    const { result } = renderHook(() => useSkipTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -260,7 +230,7 @@ describe('taskSingle.useSkipTask', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useSkipTask(), {
+    const { result } = renderHook(() => useSkipTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -273,21 +243,7 @@ describe('taskSingle.useSkipTask', () => {
   })
 })
 
-describe('taskSingle.updateTask', () => {
-  it('PUTs the task body and returns the updated task', async () => {
-    const updated = makeTask({ id: 1, name: 'Updated' })
-    const fetchMock = stubFetch(new Response(JSON.stringify(updated), { status: 200 }))
-
-    const result = await taskSingle.updateTask(1, makeTask({ id: 1, name: 'Updated' }))
-
-    expect(result).toEqual(updated)
-    const [request] = fetchMock.mock.calls[0] as [Request]
-    expect(request.method).toBe('PUT')
-    expect(new URL(request.url).pathname).toBe('/api/v2/task/1')
-  })
-})
-
-describe('taskSingle.useUpdateTask', () => {
+describe('useUpdateTask', () => {
   it('updates the task, invalidates aggregates on status change, and patches the marker', async () => {
     const updated = makeTask({ id: 1, parent: 10, status: 2, priority: 1 })
     stubFetch(new Response(JSON.stringify(updated), { status: 200 }))
@@ -298,7 +254,7 @@ describe('taskSingle.useUpdateTask', () => {
     })
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUpdateTask(), {
+    const { result } = renderHook(() => useUpdateTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -322,7 +278,7 @@ describe('taskSingle.useUpdateTask', () => {
     queryClient.setQueryData(['task', 1], makeTask({ id: 1, status: null }))
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUpdateTask(), {
+    const { result } = renderHook(() => useUpdateTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -338,7 +294,7 @@ describe('taskSingle.useUpdateTask', () => {
     stubFetch(new Response(JSON.stringify(updated), { status: 200 }))
     const queryClient = createTestQueryClient()
 
-    const { result } = renderHook(() => taskSingle.useUpdateTask(), {
+    const { result } = renderHook(() => useUpdateTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -354,7 +310,7 @@ describe('taskSingle.useUpdateTask', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUpdateTask(), {
+    const { result } = renderHook(() => useUpdateTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -365,7 +321,7 @@ describe('taskSingle.useUpdateTask', () => {
   })
 })
 
-describe('taskSingle.useUpdateTaskStatus', () => {
+describe('useUpdateTaskStatus', () => {
   it('builds a query string with opaque plugin queryParams and falls back to a GET when the PUT has no JSON body', async () => {
     const finalTask = makeTask({ id: 1, parent: 10, status: 2 })
     const fetchMock = stubRoutedFetch((request) => {
@@ -386,7 +342,7 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     queryClient.setQueryData(['task', 1], makeTask({ id: 1, status: 1 }))
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUpdateTaskStatus(), {
+    const { result } = renderHook(() => useUpdateTaskStatus(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -430,7 +386,7 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUpdateTaskStatus(), {
+    const { result } = renderHook(() => useUpdateTaskStatus(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -457,7 +413,7 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     queryClient.setQueryData(['task', 3], makeTask({ id: 3, status: 3 }))
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUpdateTaskStatus(), {
+    const { result } = renderHook(() => useUpdateTaskStatus(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -490,7 +446,7 @@ describe('taskSingle.useUpdateTaskStatus', () => {
     })
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskSingle.useUpdateTaskStatus(), {
+    const { result } = renderHook(() => useUpdateTaskStatus(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -509,12 +465,12 @@ describe('taskSingle.useUpdateTaskStatus', () => {
   })
 })
 
-describe('taskSingle.useRefreshLock', () => {
+describe('useRefreshLock', () => {
   it('refreshes the lock on a task the mapper is still working on', async () => {
     const refreshed = { id: 5, lockedBy: 9 }
     const fetchMock = stubFetch(new Response(JSON.stringify(refreshed), { status: 200 }))
 
-    const { result } = renderHook(() => taskSingle.useRefreshLock(), {
+    const { result } = renderHook(() => useRefreshLock(), {
       wrapper: queryClientWrapper(),
     })
     await expect(result.current.mutateAsync(5)).resolves.toEqual(refreshed)
@@ -537,7 +493,7 @@ describe('task lock state in the cache', () => {
     queryClient.setQueryData(['task', 1], makeTask({ id: 1 }))
     queryClient.setQueryData(['task', 2], makeTask({ id: 2 }))
 
-    const { result } = renderHook(() => taskSingle.useLockTaskBundle(), {
+    const { result } = renderHook(() => useLockTaskBundle(), {
       wrapper: queryClientWrapper(queryClient),
     })
     result.current.mutate({ taskId: 1, taskIds: [2] })
@@ -560,7 +516,7 @@ describe('task lock state in the cache', () => {
       makeTask({ id: 1, status: 0, lockedBy: 42, lockBundledTasks: [1, 2] })
     )
 
-    const { result } = renderHook(() => taskSingle.useSkipTask(), {
+    const { result } = renderHook(() => useSkipTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
     result.current.mutate(1)
@@ -580,7 +536,7 @@ describe('task lock state in the cache', () => {
       makeTask({ id: 1, lockedBy: 42, lockBundledTasks: [1, 2] })
     )
 
-    const { result } = renderHook(() => taskSingle.useUpdateTask(), {
+    const { result } = renderHook(() => useUpdateTask(), {
       wrapper: queryClientWrapper(queryClient),
     })
     result.current.mutate({ taskId: 1, body: makeTask({ id: 1, priority: 2 }) })

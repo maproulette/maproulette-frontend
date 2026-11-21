@@ -1,7 +1,7 @@
 import { Archive, ArchiveRestore, ChevronDown, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useBulkArchiveTasks, useBulkDeleteTasks, useBulkUpdateTaskStatus } from '@/api/task'
 import { Button } from '@/components/ui/Button'
 import {
   DropdownMenu,
@@ -23,9 +23,9 @@ export const BulkActionsToolbar = ({ selectedIds, onClearSelection }: Props) => 
   const { t } = useIntl()
   const [statusOpen, setStatusOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
-  const bulkStatus = api.task.useBulkUpdateStatus()
-  const bulkDelete = api.task.useBulkDelete()
-  const bulkArchive = api.task.useBulkArchive()
+  const bulkStatus = useBulkUpdateTaskStatus()
+  const bulkDelete = useBulkDeleteTasks()
+  const bulkArchive = useBulkArchiveTasks()
 
   if (selectedIds.length === 0) return null
 

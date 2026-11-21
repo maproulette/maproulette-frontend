@@ -1,7 +1,7 @@
 import { LockOpen } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useRequestUnlock } from '@/api/task'
 import { Button } from '@/components/ui/Button'
 import {
   Dialog,
@@ -37,7 +37,7 @@ export const LockFailedDialog = ({
   busy,
 }: Props) => {
   const { t } = useIntl()
-  const requestUnlockMutation = api.task.useRequestUnlock()
+  const requestUnlockMutation = useRequestUnlock()
   const [requestedTaskId, setRequestedTaskId] = useState<number | null>(null)
 
   const handleRequestUnlock = async () => {

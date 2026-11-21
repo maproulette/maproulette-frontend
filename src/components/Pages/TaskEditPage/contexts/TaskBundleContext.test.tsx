@@ -18,13 +18,9 @@ const state = vi.hoisted(() => ({
   lockBundle: vi.fn(),
 }))
 
-vi.mock('@/api', () => ({
-  api: {
-    task: {
-      useLockTaskBundle: () => ({ mutateAsync: state.lockBundle, mutate: state.lockBundle }),
-      getTask: () => ({ data: null }),
-    },
-  },
+vi.mock('@/api/task', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/api/task')>()),
+  useLockTaskBundle: () => ({ mutateAsync: state.lockBundle, mutate: state.lockBundle }),
 }))
 vi.mock('@/contexts/AuthContext', () => ({ useAuthContext: () => ({ user: { id: 7 } }) }))
 vi.mock('@/i18n', async () => {
@@ -64,6 +60,7 @@ describe('TaskBundleContext bundling requires a lock', () => {
     state.selectedMarker = { id: 2, status: 0, bundleId: null, lockedBy: null }
     state.lockBundle.mockReset()
     state.lockBundle.mockResolvedValue({})
+    vi.stubGlobal('fetch', () => new Promise(() => {}))
   })
 
   it('offers nothing and adds nothing while the primary task is unlocked', async () => {

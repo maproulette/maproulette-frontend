@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { api, apiRequest } from '@/api'
 import { projectOptions } from '@/api/project'
+import { taskOptions } from '@/api/task'
 import { whoamiOptions } from '@/api/user'
 import { wrapPluginComponent } from '@/components/PluginErrorBoundary'
 import { useIntl } from '@/i18n'
@@ -82,6 +83,7 @@ const PluginContext = createContext<PluginContextType | null>(null)
 
 const useCurrentUser = () => useQuery(whoamiOptions())
 const useProject = (projectId: number) => useQuery(projectOptions(projectId))
+const useTask = (taskId: number) => useQuery(taskOptions(taskId))
 
 export const PluginProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthContext()
@@ -160,7 +162,7 @@ const PluginProviderInner = ({
       },
       api: {
         task: {
-          useTask: api.task.getTask,
+          useTask,
         },
         challenge: {
           useChallenge: api.challenge.getChallenge,

@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, MousePointerClick, Package, PanelRight, Star } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { api } from '@/api'
+import { taskOptions } from '@/api/task'
 import { useOptionalEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { useOptionalTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useOptionalTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
@@ -69,7 +70,7 @@ const TaskFeatures = ({
   const [open, setOpen] = useState(defaultOpen)
   const { inIdEditor, selectInEditor, handlers } = useTaskHighlighting()
   // `getTask` already returns the generated task type, narrowed in @/types/Task
-  const { data: task } = api.task.getTask(taskId)
+  const { data: task } = useQuery(taskOptions(taskId))
   const groups = useMemo(() => (task ? getTaskFeatureGroups(task) : []), [task])
   const featureCount = countTaskFeatures(groups)
 

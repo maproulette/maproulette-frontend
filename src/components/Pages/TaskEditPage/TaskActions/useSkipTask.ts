@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useSkipTask as useSkipTaskMutation } from '@/api/task'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
 import { getErrorMessage } from '@/lib/apiError'
@@ -22,7 +23,7 @@ export const useSkipTask = (task: Task) => {
   // Only mutateAsync is pulled out: react-query hands back a fresh result
   // object every render, and `skipTask` has to stay referentially stable for
   // the shortcut registration that depends on it.
-  const { mutateAsync: skipMutation } = api.task.useSkipTask()
+  const { mutateAsync: skipMutation } = useSkipTaskMutation()
   const [isSkipping, setIsSkipping] = useState(false)
   const confirmDiscardIdEdits = useConfirmDiscardIdEdits()
 

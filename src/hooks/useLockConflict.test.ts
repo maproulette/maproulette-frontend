@@ -3,21 +3,19 @@ import type { NormalizedOptions } from 'ky'
 import { HTTPError } from 'ky'
 import { act } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { api } from '@/api'
+import { useUnlockTask } from '@/api/task'
 import { renderHook } from '@/test/renderHook'
 import { useLockConflict } from './useLockConflict'
 
-vi.mock('@/api', () => ({
-  api: { task: { useUnlockTask: vi.fn() } },
-}))
+vi.mock('@/api/task', () => ({ useUnlockTask: vi.fn() }))
 
-type UnlockMutate = ReturnType<typeof api.task.useUnlockTask>['mutate']
+type UnlockMutate = ReturnType<typeof useUnlockTask>['mutate']
 
 const mockUnlock = (mutate: UnlockMutate = vi.fn((_id, opts) => opts?.onSuccess?.())) => {
-  vi.mocked(api.task.useUnlockTask).mockReturnValue({
+  vi.mocked(useUnlockTask).mockReturnValue({
     mutate,
     isPending: false,
-  } as unknown as ReturnType<typeof api.task.useUnlockTask>)
+  } as unknown as ReturnType<typeof useUnlockTask>)
   return mutate
 }
 

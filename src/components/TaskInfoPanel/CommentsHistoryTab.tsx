@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import {
   AlertTriangle,
   ArrowRight,
@@ -17,7 +18,7 @@ import {
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { taskHistoryOptions, useAddTaskComment } from '@/api/task'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Button } from '@/components/ui/Button'
@@ -108,8 +109,8 @@ export const CommentsHistoryTab = ({ taskId }: { taskId: number }) => {
   const { handleImageError, getImageSrc } = useAvatarContext()
   const { taskHistoryItemRenderers } = usePluginContext()
 
-  const { data: taskHistory = [], isLoading } = api.task.getTaskHistory(taskId)
-  const addCommentMutation = api.task.useAddTaskComment()
+  const { data: taskHistory = [], isLoading } = useQuery(taskHistoryOptions(taskId))
+  const addCommentMutation = useAddTaskComment()
   const userOsmId = user?.osmProfile?.id
 
   const sortedHistory = useMemo(() => {

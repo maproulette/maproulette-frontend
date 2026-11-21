@@ -1,6 +1,7 @@
 import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@/types/Task'
 import { apiRequest } from '../client'
+import { taskKeys } from '../task/keys'
 import { invalidateLockedTasks } from '../task/single'
 
 export interface TaskBundleResponse {
@@ -88,7 +89,7 @@ export const useUpdateTaskBundleStatus = () => {
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['taskBundle', variables.bundleId] })
-      queryClient.invalidateQueries({ queryKey: ['task'] })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all })
       queryClient.invalidateQueries({ queryKey: ['challenge'] })
       invalidateLockedTasks(queryClient)
     },

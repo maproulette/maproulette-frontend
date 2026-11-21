@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
+import { taskKeys } from '@/api/task'
 import { invalidateLockedTasks } from '@/api/task/single'
 import { teamKeys } from '@/api/team'
 import { userKeys } from '@/api/user'
@@ -95,12 +96,12 @@ export const useWebSocketEvents = () => {
         const isLockEvent = messageType === 'task-claimed' || messageType === 'task-released'
         const newStatus = isLockEvent ? undefined : (lastMessage.data.task.status ?? undefined)
 
-        const cachedTask = queryClient.getQueryData<TaskGetResponse>(['task', taskId])
+        const cachedTask = queryClient.getQueryData<TaskGetResponse>(taskKeys.task(taskId))
         const oldStatus = cachedTask?.status ?? undefined
 
         // Patch the cached task with the new status instead of refetching.
         if ((newStatus !== undefined || isLockEvent) && cachedTask) {
-          queryClient.setQueryData<TaskGetResponse>(['task', taskId], {
+          queryClient.setQueryData<TaskGetResponse>(taskKeys.task(taskId), {
             ...cachedTask,
             ...(newStatus !== undefined && { status: newStatus }),
             ...(messageType === 'task-claimed' && {
@@ -124,7 +125,7 @@ export const useWebSocketEvents = () => {
 
         // History always changes (every event creates a history entry); we can't
         // hydrate it from the message payload alone.
-        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: taskKeys.history(taskId) })
 
         // Aggregates only go stale when status actually changed. Lock/unlock
         // and unchanged-status updates leave counts untouched.
@@ -164,10 +165,12 @@ export const useWebSocketEvents = () => {
           const challengeId = lastMessage.data.challenge?.id ?? bundledTask.parent
           const newStatus = isLockEvent ? undefined : (bundledTask.status ?? undefined)
 
-          const cachedTask = queryClient.getQueryData<TaskGetResponse>(['task', bundledTask.id])
+          const cachedTask = queryClient.getQueryData<TaskGetResponse>(
+            taskKeys.task(bundledTask.id)
+          )
           const oldStatus = cachedTask?.status ?? undefined
           if (cachedTask) {
-            queryClient.setQueryData<TaskGetResponse>(['task', bundledTask.id], {
+            queryClient.setQueryData<TaskGetResponse>(taskKeys.task(bundledTask.id), {
               ...cachedTask,
               status: newStatus ?? cachedTask.status,
               bundleId: bundledTask.bundleId ?? cachedTask.bundleId,
@@ -203,7 +206,7 @@ export const useWebSocketEvents = () => {
         })
 
         for (const id of releasedTaskIds) {
-          queryClient.invalidateQueries({ queryKey: ['task', id], exact: true })
+          queryClient.invalidateQueries({ queryKey: taskKeys.task(id), exact: true })
         }
 
         if (historyTaskIds.size > 0) {
@@ -235,8 +238,8 @@ export const useWebSocketEvents = () => {
       if (isReviewEvent(lastMessage)) {
         const taskId = lastMessage.data.taskWithReview.task.id
         const challengeId = lastMessage.data.taskWithReview.task.parent
-        queryClient.invalidateQueries({ queryKey: ['task', taskId] })
-        queryClient.invalidateQueries({ queryKey: ['task', 'history', taskId] })
+        queryClient.invalidateQueries({ queryKey: taskKeys.task(taskId) })
+        queryClient.invalidateQueries({ queryKey: taskKeys.history(taskId) })
         invalidateChallengeAggregates(queryClient, challengeId)
         return
       }

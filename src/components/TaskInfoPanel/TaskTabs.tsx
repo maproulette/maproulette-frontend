@@ -1,8 +1,9 @@
 import { Tabs } from '@radix-ui/react-tabs'
+import { useQuery } from '@tanstack/react-query'
 import { useRouterState } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
-import { api } from '@/api'
+import { taskCommentsOptions } from '@/api/task'
 import { ScrollArea } from '@/components/ui/ScrollArea'
 import { TabsContent } from '@/components/ui/Tabs'
 import type { Task } from '@/types/Task'
@@ -33,7 +34,7 @@ export const TaskTabs = ({ task, taskTabContent }: TaskTabsProps) => {
     }
   }, [search.tab])
 
-  const commentsQueryResult = api.task.getTaskComments(task.id)
+  const commentsQueryResult = useQuery(taskCommentsOptions(task.id))
   const commentsCount = commentsQueryResult.data?.length ?? 0
   // How many tasks the Features tab covers: this one, plus its bundle.
   const taskCount = useBundleTaskIds(task).length

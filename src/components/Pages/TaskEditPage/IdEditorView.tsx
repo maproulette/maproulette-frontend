@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import bbox from '@turf/bbox'
 import {
   ChevronDown,
@@ -11,7 +12,7 @@ import {
   MousePointerClick,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { api } from '@/api'
+import { tasksOptions } from '@/api/task'
 import { parseOsmFeaturesFromTask } from '@/components/TaskInfoPanel/taskUtils/osmUtils'
 import { useDraggablePanel } from '@/hooks/useDraggablePanel'
 import { useIntl } from '@/i18n'
@@ -139,7 +140,7 @@ export const IdEditorView = ({ onClose }: IdEditorViewProps) => {
 
     [activeBundle?.taskIds.join(','), task.id]
   )
-  const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
+  const { data: bundledTasks } = useQuery(tasksOptions(bundledTaskIds))
 
   const { osmEntityIds, taskBounds } = useMemo(() => {
     const allTasks: Task[] = [task, ...(bundledTasks ?? [])]

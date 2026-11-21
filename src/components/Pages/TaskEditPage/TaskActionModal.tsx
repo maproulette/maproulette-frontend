@@ -3,6 +3,7 @@ import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { useAddTaskBundleComment, useAddTaskComment, useUpdateTaskStatus } from '@/api/task'
 import {
   useCreateTaskBundle,
   useUpdateTaskBundle,
@@ -115,9 +116,9 @@ export const TaskActionModal = ({
   const [selectedNearbyTaskId, setSelectedNearbyTaskId] = useState<number | null>(null)
   const [formState, setFormState] = useState<Record<string, unknown>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const addTaskCommentMutation = api.task.useAddTaskComment()
-  const addTaskBundleCommentMutation = api.task.useAddTaskBundleComment()
-  const updateTaskStatusMutation = api.task.useUpdateTaskStatus()
+  const addTaskCommentMutation = useAddTaskComment()
+  const addTaskBundleCommentMutation = useAddTaskBundleComment()
+  const updateTaskStatusMutation = useUpdateTaskStatus()
   const completionResponses = useCompletionResponses()
   const updateBundleStatusMutation = useUpdateTaskBundleStatus()
   const createBundleMutation = useCreateTaskBundle()

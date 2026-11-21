@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { api } from '@/api'
+import { useUnlockTask } from '@/api/task'
 import { getLockConflict, type LockConflict } from '@/lib/apiError'
 
 /**
@@ -9,7 +9,7 @@ import { getLockConflict, type LockConflict } from '@/lib/apiError'
  * releasing that lock and retrying the original action.
  */
 export const useLockConflict = () => {
-  const unlockTaskMutation = api.task.useUnlockTask()
+  const unlockTaskMutation = useUnlockTask()
   const [conflict, setConflict] = useState<LockConflict | null>(null)
   const pendingRetryRef = useRef<(() => void) | null>(null)
 

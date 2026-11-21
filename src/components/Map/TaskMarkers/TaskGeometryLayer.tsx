@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { api } from '@/api'
+import { taskOptions } from '@/api/task'
 import { TaskGeometrySource } from '@/components/Map/TaskMarkers/TaskGeometrySource'
 import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
 
@@ -17,7 +18,7 @@ export const TaskGeometryLayer = ({
   selectedTaskId,
   showDirections = true,
 }: TaskGeometryLayerProps) => {
-  const { data: taskData } = api.task.getTask(selectedTaskId as number)
+  const { data: taskData } = useQuery(taskOptions(selectedTaskId as number))
 
   const geometries = useMemo(() => {
     if (!selectedTaskId || !taskData) return null

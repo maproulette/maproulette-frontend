@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { api } from '@/api'
+import { taskOptions, tasksOptions } from '@/api/task'
 import { TaskGeometrySource } from '@/components/Map/TaskMarkers/TaskGeometrySource'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
@@ -24,15 +25,15 @@ export const TaskGeometryLayer = () => {
   const primaryTaskId = task.id
 
   // Always fetch the primary task's geometries
-  const { data: primaryTask } = api.task.getTask(primaryTaskId)
+  const { data: primaryTask } = useQuery(taskOptions(primaryTaskId))
 
   // Fetch bundled task geometries (excluding primary task)
   const bundledTaskIds = activeBundle?.taskIds.filter((id) => id !== primaryTaskId) ?? []
-  const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
+  const { data: bundledTasks } = useQuery(tasksOptions(bundledTaskIds))
 
   // Fetch selected marker task data if there's a marker selected
   const selectedTaskId = selectedMarker?.id ?? null
-  const { data: selectedTask } = api.task.getTask(selectedTaskId ?? 0)
+  const { data: selectedTask } = useQuery(taskOptions(selectedTaskId ?? 0))
 
   const geometries = useMemo(() => {
     const allFeatures: GeoJSON.Feature[] = []

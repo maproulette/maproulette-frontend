@@ -1,5 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { api } from '@/api'
+import { taskOptions, useUpdateTask } from '@/api/task'
 import {
   TaskForm,
   type TaskFormValues,
@@ -18,13 +20,13 @@ export const ManageTaskEdit = () => {
   const { user } = useAuthContext()
   const taskIdNum = Number(taskId)
 
-  const { data: task, isLoading, isError } = api.task.getTask(taskIdNum)
+  const { data: task, isLoading, isError } = useQuery(taskOptions(taskIdNum))
   const challengeId =
     task && typeof task.parent === 'number' ? task.parent : (task?.parent as { id?: number })?.id
   const { data: challenge, isLoading: challengeLoading } = api.challenge.getChallenge(
     challengeId ?? 0
   )
-  const updateTaskMutation = api.task.useUpdateTask()
+  const updateTaskMutation = useUpdateTask()
 
   const canAccess =
     user &&

@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { z } from 'zod'
 import { api } from '@/api'
+import { taskOptions } from '@/api/task'
 import { Task } from '@/components/Pages/TaskEditPage'
 import { logger } from '@/lib/logger'
 import { requireIds } from '@/lib/routeParams'
@@ -18,7 +19,7 @@ export const Route = createFileRoute('/_app/tasks/$taskId/')({
     requireIds(params)
     const { taskId } = params
     try {
-      const task = await queryClient.ensureQueryData(api.task.getTaskOptions(Number(taskId)))
+      const task = await queryClient.ensureQueryData(taskOptions(Number(taskId)))
       const challenge = await queryClient.ensureQueryData(
         api.challenge.getChallengeOptions(task.parent)
       )

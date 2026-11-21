@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import bbox from '@turf/bbox'
 import { useEffect, useRef, useState } from 'react'
-import { api } from '@/api'
+import { taskOptions } from '@/api/task'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { useTaskMapContext } from '@/components/Pages/TaskEditPage/contexts/TaskMapContext'
 import { decorateTaskFeatures } from '@/lib/decorateTaskFeatures'
@@ -20,7 +21,7 @@ import type { Bbox2D } from '@/types/Map'
 export const useInitialMapBounds = (mapLoaded: boolean, isLoadingMarkers: boolean) => {
   const { map: mapRef } = useTaskMapContext()
   const { task } = useTaskContext()
-  const { data: fullTaskData } = api.task.getTask(task.id)
+  const { data: fullTaskData } = useQuery(taskOptions(task.id))
 
   const fittedTaskIdRef = useRef<number | null>(null)
   const [initialBoundsApplied, setInitialBoundsApplied] = useState(false)

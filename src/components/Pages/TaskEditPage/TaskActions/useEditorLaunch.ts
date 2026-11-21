@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import bbox from '@turf/bbox'
 import { useCallback, useRef } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { tasksOptions } from '@/api/task'
 import { attachmentDataUrl, changeFileUrl } from '@/api/urls'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { useOptionalTaskEditMapContext } from '@/components/Pages/TaskEditPage/TaskMap/TaskEditMapContext'
@@ -65,7 +66,7 @@ export const useEditorLaunch = (task: Task) => {
   const { challenge } = useChallengeContext()
   const { activeBundle } = useTaskBundleContext()
   const bundledTaskIds = (activeBundle?.taskIds ?? []).filter((id) => id !== task.id)
-  const { data: bundledTasks } = api.task.getTasks(bundledTaskIds)
+  const { data: bundledTasks } = useQuery(tasksOptions(bundledTaskIds))
   const { openIdEditor } = useEditorContext()
   const taskMap = useOptionalTaskEditMapContext()
   const taskMapRef = useRef(taskMap)

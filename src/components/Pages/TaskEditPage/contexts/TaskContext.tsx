@@ -1,9 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useLoaderData, useNavigate, useSearch } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { taskKeys, taskOptions, useLockTask, useRefreshLock, useUnlockTask } from '@/api/task'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { usePluginContext } from '@/contexts/PluginContext'
 import { useIntl } from '@/i18n'
@@ -44,15 +44,15 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const { task: loaderTask, challenge } = useLoaderData({ from: '/_app/tasks/$taskId/' })
   const { claimTask: shouldClaimTask } = useSearch({ from: '/_app/tasks/$taskId/' })
   const navigate = useNavigate()
-  const { data: liveTask } = api.task.getTask(loaderTask.id)
+  const { data: liveTask } = useQuery(taskOptions(loaderTask.id))
   const task = liveTask ?? loaderTask
   const { user, isAuthenticated } = useAuthContext()
   const { isTaskEditableByPlugins } = usePluginContext()
   const { t } = useIntl()
   const queryClient = useQueryClient()
-  const lockTaskMutation = api.task.useLockTask()
-  const unlockTaskMutation = api.task.useUnlockTask()
-  const refreshLockMutation = api.task.useRefreshLock()
+  const lockTaskMutation = useLockTask()
+  const unlockTaskMutation = useUnlockTask()
+  const refreshLockMutation = useRefreshLock()
   const hasAttemptedLock = useRef(false)
   const [lockConflict, setLockConflict] = useState<LockConflictInfo | null>(null)
   const [lockFailure, setLockFailure] = useState<LockFailure | null>(null)
@@ -129,7 +129,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
             message: await getApiErrorMessage(error),
             lockedByAnotherUser: isLockedByAnotherUser(error),
           })
-          void queryClient.invalidateQueries({ queryKey: ['task', taskId], exact: true })
+          void queryClient.invalidateQueries({ queryKey: taskKeys.task(taskId), exact: true })
         },
       })
     }, LOCK_REFRESH_INTERVAL_MS)

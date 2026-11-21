@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { waitFor } from '@/test/waitFor'
-import { taskBulk } from './bulk'
+import { useBulkArchiveTasks, useBulkDeleteTasks, useBulkUpdateTaskStatus } from './bulk'
 
 // `.clone()` gives each concurrent fetch its own readable body stream — several
 // of these mutations fire multiple requests in parallel against the same
@@ -18,7 +18,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('taskBulk.useBulkUpdateStatus', () => {
+describe('useBulkUpdateTaskStatus', () => {
   it('PUTs the full tasks with the new status and cleared review fields in one batch update', async () => {
     const fetchMock = vi.fn(async (request: Request) => {
       const path = new URL(request.url).pathname
@@ -42,7 +42,7 @@ describe('taskBulk.useBulkUpdateStatus', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskBulk.useBulkUpdateStatus(), {
+    const { result } = renderHook(() => useBulkUpdateTaskStatus(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -74,7 +74,7 @@ describe('taskBulk.useBulkUpdateStatus', () => {
 
   it('surfaces a rejection when a status update request fails', async () => {
     stubFetch(new Response('', { status: 500 }))
-    const { result } = renderHook(() => taskBulk.useBulkUpdateStatus(), {
+    const { result } = renderHook(() => useBulkUpdateTaskStatus(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -84,14 +84,14 @@ describe('taskBulk.useBulkUpdateStatus', () => {
   })
 })
 
-describe('taskBulk.useBulkDelete', () => {
+describe('useBulkDeleteTasks', () => {
   it('DELETEs the given task ids and returns the bulk delete result', async () => {
     const deleteResult = { requested: 2, deleted: 1 }
     const fetchMock = stubFetch(new Response(JSON.stringify(deleteResult), { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskBulk.useBulkDelete(), {
+    const { result } = renderHook(() => useBulkDeleteTasks(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -109,13 +109,13 @@ describe('taskBulk.useBulkDelete', () => {
   })
 })
 
-describe('taskBulk.useBulkArchive', () => {
+describe('useBulkArchiveTasks', () => {
   it('PUTs the archived flag for the given task ids and invalidates task/challenge queries', async () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskBulk.useBulkArchive(), {
+    const { result } = renderHook(() => useBulkArchiveTasks(), {
       wrapper: queryClientWrapper(queryClient),
     })
 

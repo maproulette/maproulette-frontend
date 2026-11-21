@@ -19,6 +19,7 @@ import type { Task } from '@/types/Task'
 import type { ManagingTeam } from '@/types/Team'
 import { apiRequest } from '../client'
 import { projectKeys } from '../project'
+import { taskKeys } from '../task/keys'
 
 /**
  * Surgically update a single task's entry in the cached `taskMarkers` list for
@@ -546,7 +547,7 @@ export const challengeSingle = {
         void queryClient.invalidateQueries({
           queryKey: ['challenge', 'taskMarkers', variables.challengeId],
         })
-        void queryClient.invalidateQueries({ queryKey: ['task'] })
+        void queryClient.invalidateQueries({ queryKey: taskKeys.all })
       },
     })
   },

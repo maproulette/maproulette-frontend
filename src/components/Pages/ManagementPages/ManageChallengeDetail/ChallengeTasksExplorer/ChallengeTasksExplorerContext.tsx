@@ -1,5 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { taskIdsMatchingPropertiesOptions } from '@/api/task'
 import { coordInBbox, parseBoundsString } from '@/components/Map/mapUtils'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
 import type { BinaryNode } from '@/components/shared/TaskPropertyQueryBuilder/propertyRuleTypes'
@@ -133,8 +135,10 @@ export const ChallengeTasksExplorerProvider = ({
   // Feature properties live server-side, so the property rule is resolved to a
   // set of matching task ids and intersected with the markers below.
   const taskPropertySearch = useMemo(() => binaryToTaskPropertySearch(propertyRule), [propertyRule])
-  const { data: propertyMatches, isFetching: propertyMatchesLoading } =
-    api.task.getTaskIdsMatchingProperties(challengeId, taskPropertySearch, { enabled })
+  const { data: propertyMatches, isFetching: propertyMatchesLoading } = useQuery({
+    ...taskIdsMatchingPropertiesOptions(challengeId, taskPropertySearch),
+    enabled: enabled && !!taskPropertySearch,
+  })
   const propertyFilterActive = !!taskPropertySearch
 
   const markers = useMemo(() => flattenTaskMarkers(taskMarkersData), [taskMarkersData])

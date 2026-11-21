@@ -6,7 +6,7 @@ import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
 import type { Comment } from '@/types/Comment'
 import type { TaskGetResponse } from '@/types/Task'
-import { taskComments } from './comments'
+import { useAddTaskBundleComment, useAddTaskComment } from './comments'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -27,74 +27,14 @@ const fakeComment = (overrides: Partial<Comment> = {}): Comment => ({
   ...overrides,
 })
 
-describe('taskComments.getTaskComments', () => {
-  it('fetches comments for a task id', async () => {
-    const comments = [fakeComment({ id: 2 })]
-    const fetchMock = stubFetch(new Response(JSON.stringify(comments), { status: 200 }))
-
-    const { result } = renderHook(() => taskComments.getTaskComments(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual(comments)
-    expect(new URL((fetchMock.mock.calls[0][0] as Request).url).pathname).toBe(
-      '/api/v2/task/9/comments'
-    )
-  })
-
-  it('is disabled when taskId is 0', () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(() => taskComments.getTaskComments(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('taskComments.getTaskHistory', () => {
-  it('fetches history actions for a task id', async () => {
-    const history = [
-      { taskId: 9, timestamp: 't', actionType: 1, user: { id: 1, username: 'alice' } },
-    ]
-    const fetchMock = stubFetch(new Response(JSON.stringify(history), { status: 200 }))
-
-    const { result } = renderHook(() => taskComments.getTaskHistory(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual(history)
-    expect(new URL((fetchMock.mock.calls[0][0] as Request).url).pathname).toBe(
-      '/api/v2/task/9/history'
-    )
-  })
-
-  it('is disabled when taskId is 0', () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(() => taskComments.getTaskHistory(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('taskComments.useAddTaskComment', () => {
+describe('useAddTaskComment', () => {
   it('appends the new comment when comments are not yet cached and skips the challenge activity invalidation when no task is cached', async () => {
     const newComment = fakeComment({ id: 10, taskId: 5, comment: 'first!' })
     stubFetch(new Response(JSON.stringify(newComment), { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskComments.useAddTaskComment(), {
+    const { result } = renderHook(() => useAddTaskComment(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -118,7 +58,7 @@ describe('taskComments.useAddTaskComment', () => {
     queryClient.setQueryData(['task', 5], { id: 5, parent: 42 } as unknown as TaskGetResponse)
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => taskComments.useAddTaskComment(), {
+    const { result } = renderHook(() => useAddTaskComment(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -131,11 +71,11 @@ describe('taskComments.useAddTaskComment', () => {
   })
 })
 
-describe('taskComments.useAddTaskComment actionId', () => {
+describe('useAddTaskComment actionId', () => {
   it('never sends an actionId, since the backend reads it as an action row id', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify(fakeComment()), { status: 200 }))
 
-    const { result } = renderHook(() => taskComments.useAddTaskComment(), {
+    const { result } = renderHook(() => useAddTaskComment(), {
       wrapper: queryClientWrapper(),
     })
     result.current.mutate({ taskId: 5, commentText: 'done' })
@@ -146,11 +86,11 @@ describe('taskComments.useAddTaskComment actionId', () => {
   })
 })
 
-describe('taskComments.useAddTaskBundleComment', () => {
+describe('useAddTaskBundleComment', () => {
   it('posts the comment to every task in the bundle without an actionId', async () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
 
-    const { result } = renderHook(() => taskComments.useAddTaskBundleComment(), {
+    const { result } = renderHook(() => useAddTaskBundleComment(), {
       wrapper: queryClientWrapper(),
     })
     result.current.mutate({ bundleId: 8, primaryTaskId: 5, commentText: 'done' })
