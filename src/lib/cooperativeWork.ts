@@ -114,21 +114,19 @@ export const applyTagFix = (
 export const isChangeFileTask = (task: Task): boolean =>
   cooperativeWorkType(task) === COOPERATIVE_TYPE.changeFile
 
-export const changeFileUrl = (apiBaseUrl: string, taskId: number): string =>
-  `${apiBaseUrl.replace(/\/+$/, '')}/api/v2/task/${taskId}/cooperative/change/task_${taskId}_change.osc`
-
 export const CHANGE_FILE_EDITORS: readonly number[] = [EDITOR.josmLayer, EDITOR.josm]
 
+/** JOSM remote-control `import` command for the change file served at `url`. */
 export const josmChangeFileImportUrl = (
   josmHost: string,
-  apiBaseUrl: string,
   taskId: number,
+  url: string,
   newLayer: boolean
 ): string => {
   const parts = [
     `new_layer=${newLayer ? 'true' : 'false'}`,
     `layer_name=${encodeURIComponent(`MR Task ${taskId} Changes`)}`,
-    `url=${encodeURIComponent(changeFileUrl(apiBaseUrl, taskId))}`,
+    `url=${encodeURIComponent(url)}`,
   ]
   return `${josmHost.replace(/\/+$/, '')}/import?${parts.join('&')}`
 }

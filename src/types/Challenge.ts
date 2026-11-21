@@ -65,7 +65,7 @@ export type Challenge = Omit<
   /**
    * Root-relative path serving the image of the team that owns this
    * challenge, derived by the backend so clients never assemble it themselves.
-   * Resolve with `resolveTeamImageUrl` before using it as an `<img>` src.
+   * Resolve with `resolveTeamImageUrl` (`@/api/urls`) before using it as an `<img>` src.
    *
    * Addressed by team rather than by image, so it always serves whatever that
    * team currently has approved. A team with no approved image answers 404

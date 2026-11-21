@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { resolveTeamImageUrl } from '@/lib/teamImage'
+import { resolveTeamImageUrl } from '@/api/urls'
 import { cn } from '@/lib/utils'
 
 interface SidebarIndicatorProps {

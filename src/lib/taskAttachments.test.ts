@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Task } from '@/types/Task'
 import {
-  attachmentDataUrl,
   attachmentFilename,
   josmImportUrl,
   referenceLayers,
@@ -10,6 +9,7 @@ import {
 
 const layer = { id: 'abc-123', kind: 'referenceLayer', type: 'geojson', name: 'Boundary Layer' }
 const blob = { id: 'def-456', kind: 'blob', type: 'json' }
+const dataUrl = 'https://api.example.org/data/boundary_layer_99.geojson'
 
 const makeTask = (geometries: unknown, id = 99): Task => ({ id, geometries }) as unknown as Task
 
@@ -71,22 +71,8 @@ describe('attachmentFilename', () => {
   })
 })
 
-describe('attachmentDataUrl', () => {
-  it('points at the backend route serving the data', () => {
-    expect(attachmentDataUrl('https://api.example.org', 99, layer)).toBe(
-      'https://api.example.org/api/v2/task/99/attachment/abc-123/data/boundary_layer_99.geojson'
-    )
-  })
-
-  it('tolerates a base URL with a trailing slash', () => {
-    expect(attachmentDataUrl('https://api.example.org/', 99, layer)).toContain(
-      'https://api.example.org/api/v2/'
-    )
-  })
-})
-
 describe('josmImportUrl', () => {
-  const url = () => josmImportUrl('http://127.0.0.1:8111/', 'https://api.example.org', 99, layer)
+  const url = () => josmImportUrl('http://127.0.0.1:8111/', 99, layer, dataUrl)
 
   it('locks the layer and forbids upload and download by default', () => {
     expect(url()).toContain('layer_locked=true')
@@ -100,23 +86,22 @@ describe('josmImportUrl', () => {
   })
 
   it('lets a challenge relax the defaults through settings', () => {
-    const relaxed = josmImportUrl('http://127.0.0.1:8111', 'https://api.example.org', 99, {
-      ...layer,
-      settings: { layerLocked: false, downloadPolicy: '' },
-    })
+    const relaxed = josmImportUrl(
+      'http://127.0.0.1:8111',
+      99,
+      { ...layer, settings: { layerLocked: false, downloadPolicy: '' } },
+      dataUrl
+    )
     expect(relaxed).toContain('layer_locked=false')
     expect(relaxed).toContain('download_policy=&')
   })
 
   it('falls back to a task-derived layer name for an unnamed attachment', () => {
-    const unnamed = josmImportUrl('http://127.0.0.1:8111', 'https://api.example.org', 99, {
-      ...layer,
-      name: '',
-    })
+    const unnamed = josmImportUrl('http://127.0.0.1:8111', 99, { ...layer, name: '' }, dataUrl)
     expect(unnamed).toContain('layer_name=MR%20Task%2099%20Reference')
   })
 
   it('encodes the data URL so JOSM receives it whole', () => {
-    expect(url()).toContain('url=https%3A%2F%2Fapi.example.org%2Fapi%2Fv2%2Ftask%2F99')
+    expect(url()).toContain(`url=${encodeURIComponent(dataUrl)}`)
   })
 })

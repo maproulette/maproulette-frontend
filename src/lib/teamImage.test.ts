@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { apiBaseUrl } from '@/api/client'
 import { testT } from '@/test/translate'
 import {
   isUploadedTeamAvatarUrl,
-  resolveTeamImageUrl,
   TEAM_IMAGE_ACCEPT,
   TEAM_IMAGE_MAX_BYTES,
   TEAM_IMAGE_MIME_TYPES,
@@ -11,33 +9,6 @@ import {
 } from './teamImage'
 
 const t = testT
-
-describe('resolveTeamImageUrl', () => {
-  it('returns undefined when there is no image', () => {
-    expect(resolveTeamImageUrl(undefined)).toBeUndefined()
-    expect(resolveTeamImageUrl(null)).toBeUndefined()
-    expect(resolveTeamImageUrl('')).toBeUndefined()
-  })
-
-  it('passes external urls through untouched', () => {
-    expect(resolveTeamImageUrl('https://example.org/logo.png')).toBe('https://example.org/logo.png')
-    expect(resolveTeamImageUrl('http://example.org/logo.png')).toBe('http://example.org/logo.png')
-    expect(resolveTeamImageUrl('//example.org/logo.png')).toBe('//example.org/logo.png')
-    expect(resolveTeamImageUrl('data:image/png;base64,AAAA')).toBe('data:image/png;base64,AAAA')
-  })
-
-  it('resolves team image paths against the api host', () => {
-    expect(resolveTeamImageUrl('/api/v2/teamImage/7/file')).toBe(
-      `${apiBaseUrl}/api/v2/teamImage/7/file`
-    )
-  })
-
-  it('inserts a separator for paths that do not start with a slash', () => {
-    expect(resolveTeamImageUrl('api/v2/teamImage/7/file')).toBe(
-      `${apiBaseUrl}/api/v2/teamImage/7/file`
-    )
-  })
-})
 
 describe('image constraints', () => {
   it('matches the 2MB cap the backend enforces', () => {

@@ -63,16 +63,9 @@ export const attachmentFilename = (taskId: number, attachment: TaskAttachment): 
   return `${stem}.${attachment.type ?? 'geojson'}`
 }
 
-/** Where the backend serves an attachment's data. */
-export const attachmentDataUrl = (
-  apiBaseUrl: string,
-  taskId: number,
-  attachment: TaskAttachment
-): string =>
-  `${apiBaseUrl.replace(/\/+$/, '')}/api/v2/task/${taskId}/attachment/${attachment.id}/data/${attachmentFilename(taskId, attachment)}`
-
 /**
- * JOSM remote-control `import` command for a reference layer.
+ * JOSM remote-control `import` command for a reference layer whose data is
+ * served at `url`.
  *
  * Reference layers default to locked with upload and download both disabled,
  * so a mapper cannot accidentally edit or submit the reference data. A
@@ -80,9 +73,9 @@ export const attachmentDataUrl = (
  */
 export const josmImportUrl = (
   josmHost: string,
-  apiBaseUrl: string,
   taskId: number,
-  attachment: TaskAttachment
+  attachment: TaskAttachment,
+  url: string
 ): string => {
   const settings = attachment.settings ?? {}
   const parts = [
@@ -91,7 +84,7 @@ export const josmImportUrl = (
     `layer_locked=${(settings.layerLocked ?? true) ? 'true' : 'false'}`,
     `download_policy=${encodeURIComponent(settings.downloadPolicy ?? 'never')}`,
     `upload_policy=${encodeURIComponent(settings.uploadPolicy ?? 'never')}`,
-    `url=${encodeURIComponent(attachmentDataUrl(apiBaseUrl, taskId, attachment))}`,
+    `url=${encodeURIComponent(url)}`,
   ]
   return `${josmHost.replace(/\/+$/, '')}/import?${parts.join('&')}`
 }

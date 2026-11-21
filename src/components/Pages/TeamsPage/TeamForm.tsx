@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { resolveTeamImageUrl } from '@/api/urls'
 import { Button } from '@/components/ui/Button'
 import {
   Form,
@@ -23,7 +24,6 @@ import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
 import {
   isUploadedTeamAvatarUrl,
-  resolveTeamImageUrl,
   TEAM_IMAGE_ACCEPT,
   TEAM_IMAGE_MAX_BYTES,
   teamImageFileProblem,

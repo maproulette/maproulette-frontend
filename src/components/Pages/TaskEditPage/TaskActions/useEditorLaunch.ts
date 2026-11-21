@@ -2,7 +2,7 @@ import bbox from '@turf/bbox'
 import { useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
-import { apiBaseUrl } from '@/api/client'
+import { attachmentDataUrl, changeFileUrl } from '@/api/urls'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { useOptionalTaskEditMapContext } from '@/components/Pages/TaskEditPage/TaskMap/TaskEditMapContext'
 import {
@@ -158,12 +158,12 @@ export const useEditorLaunch = (task: Task) => {
               `${JOSM_HOST}load_and_zoom?${parts.join('&')}`,
               ...(isChangeFile
                 ? tasks.map((t) =>
-                    josmChangeFileImportUrl(JOSM_HOST, apiBaseUrl, t.id, changesInOwnLayer)
+                    josmChangeFileImportUrl(JOSM_HOST, t.id, changeFileUrl(t.id), changesInOwnLayer)
                   )
                 : []),
               ...tasks.flatMap((t) =>
                 referenceLayers(t).map((attachment) =>
-                  josmImportUrl(JOSM_HOST, apiBaseUrl, t.id, attachment)
+                  josmImportUrl(JOSM_HOST, t.id, attachment, attachmentDataUrl(t.id, attachment))
                 )
               ),
             ]

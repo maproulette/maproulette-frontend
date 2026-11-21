@@ -1,7 +1,7 @@
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
-import { apiBaseUrl } from '@/api/client'
+import { taskTilesUrl } from '@/api/urls'
 import { boundsAreEqual, getMapBoundsString, parseBoundsString } from '@/components/Map/mapUtils'
 import {
   type ClusterMarkerFeature,
@@ -114,7 +114,7 @@ export const useExploreChallengesMap = () => {
   // The map shows all available work: challenge-level filters live on the grid
   // and list views, so a tile depends on nothing but its coordinates. That is
   // what lets every tile below z=12 be served from the pre-computed pyramid.
-  const tileUrl = `${apiBaseUrl}/api/v2/taskTilesMvt/{z}/{x}/{y}`
+  const tileUrl = taskTilesUrl()
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return

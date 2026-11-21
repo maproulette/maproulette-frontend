@@ -2,7 +2,7 @@ import { Map as MapIcon } from 'lucide-react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { Layer, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { apiBaseUrl } from '@/api/client'
+import { taskTilesUrl } from '@/api/urls'
 import { MapControls } from '@/components/Map/MapControls'
 import { MapGL } from '@/components/Map/MapGL'
 import { ScaleBar } from '@/components/Map/ScaleBar'
@@ -43,7 +43,7 @@ import { useMarkerVisibility } from './TaskMap/useMarkerVisibility'
 import { useTaskMapHighlights } from './TaskMap/useTaskMapHighlights'
 import { MAP_BINDINGS, useTaskMapShortcuts } from './TaskMap/useTaskMapShortcuts'
 
-const exploreTileUrl = `${apiBaseUrl}/api/v2/taskTilesMvt/{z}/{x}/{y}?global=true`
+const exploreTileUrl = taskTilesUrl({ global: true })
 
 const OsmIcon = ({ className }: { className?: string }) => (
   <svg

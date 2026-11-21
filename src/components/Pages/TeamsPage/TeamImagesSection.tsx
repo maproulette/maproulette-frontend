@@ -2,6 +2,7 @@ import { ImagePlus, Trash2 } from 'lucide-react'
 import { useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { resolveTeamImageUrl } from '@/api/urls'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { TeamImageStatusBadge } from '@/components/shared/TeamImageStatusBadge'
 import { Button } from '@/components/ui/Button'
@@ -10,12 +11,7 @@ import { Input } from '@/components/ui/Input'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import {
-  resolveTeamImageUrl,
-  TEAM_IMAGE_ACCEPT,
-  TEAM_IMAGE_MAX_BYTES,
-  teamImageFileProblem,
-} from '@/lib/teamImage'
+import { TEAM_IMAGE_ACCEPT, TEAM_IMAGE_MAX_BYTES, teamImageFileProblem } from '@/lib/teamImage'
 import type { TeamImage } from '@/types/TeamImage'
 import { isApprovedImage, isPendingImage, isRejectedImage } from '@/types/TeamImage'
 
