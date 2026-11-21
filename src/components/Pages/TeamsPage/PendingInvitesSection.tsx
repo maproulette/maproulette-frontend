@@ -1,6 +1,6 @@
 import { Check, X } from 'lucide-react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useAcceptTeamInvite, useDeclineTeamInvite } from '@/api/team'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { useIntl } from '@/i18n'
@@ -13,8 +13,8 @@ interface Props {
 
 export const PendingInvitesSection = ({ invites }: Props) => {
   const { t } = useIntl()
-  const accept = api.team.useAcceptInvite()
-  const decline = api.team.useDeclineInvite()
+  const accept = useAcceptTeamInvite()
+  const decline = useDeclineTeamInvite()
 
   const handleAccept = async (teamId: number) => {
     try {

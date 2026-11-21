@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Trash2, UserPlus, Users } from 'lucide-react'
 import { type ReactNode, useId, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { findTeamsOptions } from '@/api/team'
 import { findUsersOptions } from '@/api/user'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
@@ -102,11 +102,10 @@ export const ManagersPanel = ({
   const [teamQuery, setTeamQuery] = useState('')
   const addTeamId = useId()
   const debouncedTeamQuery = useDebouncedValue(teamQuery)
-  const { data: teamMatches } = api.team.findTeamsByName(
-    debouncedTeamQuery,
-    10,
-    debouncedTeamQuery.length > 2
-  )
+  const { data: teamMatches } = useQuery({
+    ...findTeamsOptions(debouncedTeamQuery, 10),
+    enabled: debouncedTeamQuery.length > 2,
+  })
   // A team that's already listed is edited there, not added again
   const existingTeamIds = new Set((teams ?? []).map((team) => team.id))
   const newTeamMatches = (teamMatches ?? []).filter((match) => !existingTeamIds.has(match.id))

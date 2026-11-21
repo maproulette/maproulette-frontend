@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { ImagePlus, Trash2 } from 'lucide-react'
 import { useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { teamImagesOptions, useDeleteTeamImage, useRequestTeamImage } from '@/api/teamImage'
 import { resolveTeamImageUrl } from '@/api/urls'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { TeamImageStatusBadge } from '@/components/shared/TeamImageStatusBadge'
@@ -25,7 +26,7 @@ interface TeamImagesSectionProps {
 
 const ImageRow = ({ image, canDelete }: { image: TeamImage; canDelete: boolean }) => {
   const { t } = useIntl()
-  const deleteImage = api.teamImage.useDeleteImage()
+  const deleteImage = useDeleteTeamImage()
 
   const handleDelete = async () => {
     try {
@@ -123,8 +124,8 @@ export const TeamImagesSection = ({ teamId, isAdmin, currentUserId }: TeamImages
   const [file, setFile] = useState<File | null>(null)
   const [name, setName] = useState('')
 
-  const { data: images, isLoading, isError } = api.teamImage.forTeam(teamId)
-  const requestImage = api.teamImage.useRequestImage()
+  const { data: images, isLoading, isError } = useQuery(teamImagesOptions(teamId))
+  const requestImage = useRequestTeamImage()
 
   // The endpoint returns the team's whole history, but at most one image is in
   // use and at most one is awaiting review — everything else is a past

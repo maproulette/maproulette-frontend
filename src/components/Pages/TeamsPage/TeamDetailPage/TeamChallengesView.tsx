@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { Target } from 'lucide-react'
-import { api } from '@/api'
+import { teamChallengesOptions } from '@/api/team'
 import { ChallengeCard } from '@/components/shared/ChallengeCard'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { Loader } from '@/components/ui/Loader'
@@ -15,7 +16,7 @@ import { useTeamDetailContext } from './TeamDetailContext'
 export const TeamChallengesView = () => {
   const { t } = useIntl()
   const { teamId } = useTeamDetailContext()
-  const { data: challenges = [], isLoading } = api.team.challenges(teamId)
+  const { data: challenges = [], isLoading } = useQuery(teamChallengesOptions(teamId))
 
   if (isLoading) return <Loader />
 

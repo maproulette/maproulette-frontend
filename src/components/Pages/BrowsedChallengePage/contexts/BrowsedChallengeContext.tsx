@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useContext, useMemo } from 'react'
 import { api } from '@/api'
+import { teamOptions } from '@/api/team'
 import { publicUserOptions } from '@/api/user'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
@@ -73,7 +74,7 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   // A team-owned challenge is the team's work, so the byline credits the team
   // instead of whoever happened to create it.
   const ownerTeamId = challenge.ownerTeamId ?? undefined
-  const { data: ownerTeam } = api.team.get(ownerTeamId)
+  const { data: ownerTeam } = useQuery(teamOptions(ownerTeamId))
 
   const projectName = projectData?.displayName || projectData?.name
 

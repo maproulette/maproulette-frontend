@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useInviteTeamMember } from '@/api/team'
 import { findUsersOptions } from '@/api/user'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
@@ -48,7 +48,7 @@ export const InviteMemberDialog = ({ teamId, open, onOpenChange, canAssignOwner 
   const [query, setQuery] = useState('')
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
   const [role, setRole] = useState<TeamRole>(TEAM_ROLE_MEMBER)
-  const invite = api.team.useInviteMember()
+  const invite = useInviteTeamMember()
   const debouncedQuery = useDebouncedValue(query)
   const { data: users = [] } = useQuery(findUsersOptions(debouncedQuery, 8))
 

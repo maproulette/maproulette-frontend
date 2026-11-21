@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { teamMembersOptions, teamOptions, useDeleteTeam } from '@/api/team'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
@@ -50,9 +51,9 @@ export const TeamDetailProvider = ({
   const { t } = useIntl()
   const navigate = useNavigate()
   const { user } = useAuthContext()
-  const { data: team, isLoading } = api.team.get(teamId)
-  const { data: members = [] } = api.team.members(teamId)
-  const deleteTeam = api.team.useDeleteTeam()
+  const { data: team, isLoading } = useQuery(teamOptions(teamId))
+  const { data: members = [] } = useQuery(teamMembersOptions(teamId))
+  const deleteTeam = useDeleteTeam()
 
   const [inviteOpen, setInviteOpen] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)

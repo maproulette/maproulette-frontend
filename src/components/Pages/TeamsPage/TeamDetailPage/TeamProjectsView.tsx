@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { FolderOpen } from 'lucide-react'
-import { api } from '@/api'
+import { teamProjectsOptions } from '@/api/team'
 import { EntityGrid } from '@/components/shared/EntityGrid'
 import { ProjectCard } from '@/components/shared/ProjectCard'
 import { Loader } from '@/components/ui/Loader'
@@ -14,7 +15,7 @@ import { useTeamDetailContext } from './TeamDetailContext'
 export const TeamProjectsView = () => {
   const { t } = useIntl()
   const { teamId } = useTeamDetailContext()
-  const { data: projects = [], isLoading } = api.team.projects(teamId)
+  const { data: projects = [], isLoading } = useQuery(teamProjectsOptions(teamId))
 
   if (isLoading) return <Loader />
 

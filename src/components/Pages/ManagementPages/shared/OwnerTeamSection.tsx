@@ -1,8 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Check, Users, UsersRound } from 'lucide-react'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { api } from '@/api'
+import { managedTeamsOptions } from '@/api/team'
 import { resolveTeamImageUrl } from '@/api/urls'
 import { FormField, FormItem, FormMessage } from '@/components/ui/Form'
 import { FormSection } from '@/components/ui/FormSection'
@@ -98,7 +99,7 @@ export const OwnerTeamSection = ({
 }) => {
   const form = useFormContext<{ ownerTeamId: number | null }>()
   const { t } = useIntl()
-  const { data: teams, isLoading, isError } = api.team.managed()
+  const { data: teams, isLoading, isError } = useQuery(managedTeamsOptions())
 
   const options = teams ?? []
 

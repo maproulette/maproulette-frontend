@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { Check, ImageIcon, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { pendingTeamImagesOptions, useApproveTeamImage, useRejectTeamImage } from '@/api/teamImage'
 import { resolveTeamImageUrl } from '@/api/urls'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Button } from '@/components/ui/Button'
@@ -21,8 +22,8 @@ import type { TeamImage } from '@/types/TeamImage'
 const PendingRow = ({ image }: { image: TeamImage }) => {
   const { t, locale } = useIntl()
   const [comment, setComment] = useState('')
-  const approve = api.teamImage.useApproveImage()
-  const reject = api.teamImage.useRejectImage()
+  const approve = useApproveTeamImage()
+  const reject = useRejectTeamImage()
   const busy = approve.isPending || reject.isPending
 
   const decide = async (decision: 'approve' | 'reject') => {
@@ -116,7 +117,7 @@ const PendingRow = ({ image }: { image: TeamImage }) => {
  */
 export const SuperAdminTeamImages = () => {
   const { t } = useIntl()
-  const { data: images, isLoading, isError } = api.teamImage.pending()
+  const { data: images, isLoading, isError } = useQuery(pendingTeamImagesOptions())
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 px-4">

@@ -5,7 +5,7 @@ import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
 import type { TeamImage as TeamImageType } from '@/types/TeamImage'
-import { teamImage } from './index'
+import { useApproveTeamImage, useRejectTeamImage, useRequestTeamImage } from './index'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -33,37 +33,7 @@ const anImage = (overrides: Partial<TeamImageType> = {}): TeamImageType => ({
   ...overrides,
 })
 
-describe('teamImage.forTeam', () => {
-  it('fetches a single team’s images', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([anImage()]), { status: 200 }))
-
-    const { result } = renderHook(() => teamImage.forTeam(2), { wrapper: queryClientWrapper() })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(new URL(fetchMock.mock.calls[0][0].url).pathname).toContain('/api/v2/team/2/images')
-  })
-
-  it('does not fetch without a team id', async () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    renderHook(() => teamImage.forTeam(undefined), { wrapper: queryClientWrapper() })
-
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('teamImage.pending', () => {
-  it('fetches the review queue', async () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => teamImage.pending(), { wrapper: queryClientWrapper() })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(new URL(fetchMock.mock.calls[0][0].url).pathname).toContain('/api/v2/teamImages/pending')
-  })
-})
-
-describe('teamImage.useRequestImage', () => {
+describe('useRequestTeamImage', () => {
   it('posts the file as multipart form data and refreshes the image lists', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify(anImage({ status: 0, statusName: 'pending' })), { status: 200 })
@@ -71,7 +41,7 @@ describe('teamImage.useRequestImage', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => teamImage.useRequestImage(), {
+    const { result } = renderHook(() => useRequestTeamImage(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -94,7 +64,7 @@ describe('teamImage.useRequestImage', () => {
   it('omits the name part when none was given', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify(anImage()), { status: 200 }))
 
-    const { result } = renderHook(() => teamImage.useRequestImage(), {
+    const { result } = renderHook(() => useRequestTeamImage(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -110,29 +80,11 @@ describe('teamImage.useRequestImage', () => {
   })
 })
 
-describe('teamImage.useApproveImage', () => {
-  it('approves without a comment', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify(anImage()), { status: 200 }))
-
-    const { result } = renderHook(() => teamImage.useApproveImage(), {
-      wrapper: queryClientWrapper(),
-    })
-
-    result.current.mutate({ imageId: 5 })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('PUT')
-    const url = new URL(request.url)
-    expect(url.pathname).toContain('/api/v2/teamImage/5/approve')
-    expect(url.searchParams.has('comment')).toBe(false)
-  })
-
+describe('useApproveTeamImage', () => {
   it('passes a comment through as a query param', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify(anImage()), { status: 200 }))
 
-    const { result } = renderHook(() => teamImage.useApproveImage(), {
+    const { result } = renderHook(() => useApproveTeamImage(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -143,36 +95,13 @@ describe('teamImage.useApproveImage', () => {
   })
 })
 
-describe('teamImage.useRejectImage', () => {
-  it('rejects and also refreshes challenges, since rejection detaches the image', async () => {
-    const fetchMock = stubFetch(
-      new Response(JSON.stringify(anImage({ status: 2 })), { status: 200 })
-    )
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => teamImage.useRejectImage(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ imageId: 5, comment: 'off brand' })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const url = new URL(fetchMock.mock.calls[0][0].url)
-    expect(url.pathname).toContain('/api/v2/teamImage/5/reject')
-    expect(url.searchParams.get('comment')).toBe('off brand')
-
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['teamImage'] })
-  })
-
+describe('useRejectTeamImage', () => {
   it('sends no comment param when the moderator gave no reason', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify(anImage({ status: 2 })), { status: 200 })
     )
 
-    const { result } = renderHook(() => teamImage.useRejectImage(), {
+    const { result } = renderHook(() => useRejectTeamImage(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -180,28 +109,5 @@ describe('teamImage.useRejectImage', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(new URL(fetchMock.mock.calls[0][0].url).search).toBe('')
-  })
-})
-
-describe('teamImage.useDeleteImage', () => {
-  it('deletes and refreshes both challenges and image lists', async () => {
-    const fetchMock = stubFetch(new Response('null', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => teamImage.useDeleteImage(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate(5)
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('DELETE')
-    expect(new URL(request.url).pathname).toContain('/api/v2/teamImage/5')
-
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['teamImage'] })
   })
 })

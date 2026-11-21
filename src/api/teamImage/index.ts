@@ -1,4 +1,4 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { TeamImage } from '@/types/TeamImage'
 import { apiRequest } from '../client'
 
@@ -9,88 +9,80 @@ import { apiRequest } from '../client'
 const invalidateAll = (queryClient: ReturnType<typeof useQueryClient>) =>
   queryClient.invalidateQueries({ queryKey: ['teamImage'] })
 
-export const teamImage = {
-  /** A single team's images, including ones pending review or rejected. */
-  forTeam: (teamId: number | undefined) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['teamImage', 'team', teamId],
-        queryFn: () => apiRequest.get(`api/v2/team/${teamId}/images`).json<TeamImage[]>(),
-        enabled: !!teamId,
-      })
-    ),
+/** A single team's images, including ones pending review or rejected. */
+export const teamImagesOptions = (teamId: number | undefined) =>
+  queryOptions({
+    queryKey: ['teamImage', 'team', teamId],
+    queryFn: () => apiRequest.get(`api/v2/team/${teamId}/images`).json<TeamImage[]>(),
+    enabled: !!teamId,
+  })
 
-  /** The super admin review queue. */
-  pending: (enabled = true) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['teamImage', 'pending'],
-        queryFn: () => apiRequest.get('api/v2/teamImages/pending').json<TeamImage[]>(),
-        enabled,
-      })
-    ),
+/** The super admin review queue. */
+export const pendingTeamImagesOptions = () =>
+  queryOptions({
+    queryKey: ['teamImage', 'pending'],
+    queryFn: () => apiRequest.get('api/v2/teamImages/pending').json<TeamImage[]>(),
+  })
 
-  useRequestImage: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({
-        teamId,
-        imageFile,
-        name,
-      }: {
-        teamId: number
-        imageFile: File
-        name?: string
-      }) => {
-        const formData = new FormData()
-        formData.append('image', imageFile)
-        if (name) formData.append('name', name)
+export const useRequestTeamImage = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      teamId,
+      imageFile,
+      name,
+    }: {
+      teamId: number
+      imageFile: File
+      name?: string
+    }) => {
+      const formData = new FormData()
+      formData.append('image', imageFile)
+      if (name) formData.append('name', name)
 
-        return apiRequest.post(`api/v2/team/${teamId}/image`, { body: formData }).json<TeamImage>()
-      },
-      onSuccess: () => invalidateAll(queryClient),
-    })
-  },
+      return apiRequest.post(`api/v2/team/${teamId}/image`, { body: formData }).json<TeamImage>()
+    },
+    onSuccess: () => invalidateAll(queryClient),
+  })
+}
 
-  useApproveImage: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ imageId, comment }: { imageId: number; comment?: string }) =>
-        apiRequest
-          .put(`api/v2/teamImage/${imageId}/approve`, {
-            searchParams: comment ? { comment } : undefined,
-          })
-          .json<TeamImage>(),
-      onSuccess: () => invalidateAll(queryClient),
-    })
-  },
+export const useApproveTeamImage = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ imageId, comment }: { imageId: number; comment?: string }) =>
+      apiRequest
+        .put(`api/v2/teamImage/${imageId}/approve`, {
+          searchParams: comment ? { comment } : undefined,
+        })
+        .json<TeamImage>(),
+    onSuccess: () => invalidateAll(queryClient),
+  })
+}
 
-  useRejectImage: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ imageId, comment }: { imageId: number; comment?: string }) =>
-        apiRequest
-          .put(`api/v2/teamImage/${imageId}/reject`, {
-            searchParams: comment ? { comment } : undefined,
-          })
-          .json<TeamImage>(),
-      onSuccess: () => {
-        // Rejecting detaches the image from any challenges that were using it.
-        queryClient.invalidateQueries({ queryKey: ['challenge'] })
-        return invalidateAll(queryClient)
-      },
-    })
-  },
+export const useRejectTeamImage = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ imageId, comment }: { imageId: number; comment?: string }) =>
+      apiRequest
+        .put(`api/v2/teamImage/${imageId}/reject`, {
+          searchParams: comment ? { comment } : undefined,
+        })
+        .json<TeamImage>(),
+    onSuccess: () => {
+      // Rejecting detaches the image from any challenges that were using it.
+      queryClient.invalidateQueries({ queryKey: ['challenge'] })
+      return invalidateAll(queryClient)
+    },
+  })
+}
 
-  useDeleteImage: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: (imageId: number) =>
-        apiRequest.delete(`api/v2/teamImage/${imageId}`).json<void>(),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['challenge'] })
-        return invalidateAll(queryClient)
-      },
-    })
-  },
+export const useDeleteTeamImage = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (imageId: number) => apiRequest.delete(`api/v2/teamImage/${imageId}`).json<void>(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['challenge'] })
+      return invalidateAll(queryClient)
+    },
+  })
 }

@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { invalidateChallengeAggregates, patchChallengeTaskMarker } from '@/api/challenge/single'
 import { invalidateLockedTasks } from '@/api/task/single'
+import { teamKeys } from '@/api/team'
 import { userKeys } from '@/api/user'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useWebSocketContext } from '@/contexts/WebSocketContext'
@@ -241,7 +242,7 @@ export const useWebSocketEvents = () => {
       }
 
       if (isTeamUpdate(lastMessage)) {
-        queryClient.invalidateQueries({ queryKey: ['team', lastMessage.data.teamId] })
+        queryClient.invalidateQueries({ queryKey: teamKeys.team(lastMessage.data.teamId) })
         queryClient.invalidateQueries({ queryKey: userKeys.teamMemberships(user?.id) })
         return
       }

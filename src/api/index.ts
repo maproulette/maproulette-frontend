@@ -4,8 +4,6 @@ import { osm } from './osm'
 import { project } from './project'
 import { task } from './task'
 import { taskBundle } from './taskBundle'
-import { team } from './team'
-import { teamImage } from './teamImage'
 
 export const api = {
   challenge,
@@ -14,8 +12,6 @@ export const api = {
   project,
   osm,
   nominatim,
-  team,
-  teamImage,
 }
 
 // Re-exported for backward compatibility. Feature modules under src/api/**

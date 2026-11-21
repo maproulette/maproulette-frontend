@@ -4,7 +4,7 @@ import { ImagePlus, Trash2, Upload } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useCreateTeam, useDeleteTeamAvatar, useUpdateTeam, useUploadTeamAvatar } from '@/api/team'
 import { resolveTeamImageUrl } from '@/api/urls'
 import { Button } from '@/components/ui/Button'
 import {
@@ -38,10 +38,10 @@ interface Props {
 export const TeamForm = ({ team }: Props) => {
   const { t } = useIntl()
   const navigate = useNavigate()
-  const create = api.team.useCreateTeam()
-  const update = api.team.useUpdateTeam()
-  const uploadAvatar = api.team.useUploadAvatar()
-  const deleteAvatar = api.team.useDeleteAvatar()
+  const create = useCreateTeam()
+  const update = useUpdateTeam()
+  const uploadAvatar = useUploadTeamAvatar()
+  const deleteAvatar = useDeleteTeamAvatar()
 
   // An avatar the team uploaded is served from a url of ours. It is edited by
   // uploading, not by typing, so it is kept out of the url field entirely.

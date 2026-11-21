@@ -1,4 +1,5 @@
-import { api } from '@/api'
+import { useQuery } from '@tanstack/react-query'
+import { teamOptions } from '@/api/team'
 import { FormCard, ManageFormLayout } from '@/components/shared/ManageFormLayout'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
@@ -10,7 +11,7 @@ interface Props {
 
 export const EditTeamPage = ({ teamId }: Props) => {
   const { t } = useIntl()
-  const { data: team, isLoading } = api.team.get(teamId)
+  const { data: team, isLoading } = useQuery(teamOptions(teamId))
 
   if (isLoading) return <Loader />
   if (!team)

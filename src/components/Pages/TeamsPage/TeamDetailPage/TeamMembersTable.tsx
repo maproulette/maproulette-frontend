@@ -1,6 +1,6 @@
 import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useChangeTeamMemberRole, useRemoveTeamMember } from '@/api/team'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
@@ -39,8 +39,8 @@ import { useTeamDetailContext } from './TeamDetailContext'
 const MemberRow = ({ member }: { member: TeamUser }) => {
   const { t } = useIntl()
   const { teamId, iAmAdmin, iAmOwner, lastOwnerId, currentUserId } = useTeamDetailContext()
-  const changeRole = api.team.useChangeRole()
-  const removeMember = api.team.useRemoveMember()
+  const changeRole = useChangeTeamMemberRole()
+  const removeMember = useRemoveTeamMember()
 
   const isLastOwner = member.userId === lastOwnerId
   const pending = isPendingInvite(member)

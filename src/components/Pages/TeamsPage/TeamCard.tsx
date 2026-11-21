@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Users } from 'lucide-react'
-import { api } from '@/api'
+import { teamOptions } from '@/api/team'
 import { resolveTeamImageUrl } from '@/api/urls'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { useIntl } from '@/i18n'
@@ -14,7 +15,7 @@ interface Props {
 
 export const TeamCard = ({ membership }: Props) => {
   const { t } = useIntl()
-  const { data: team } = api.team.get(membership.teamId)
+  const { data: team } = useQuery(teamOptions(membership.teamId))
   const name =
     membership.teamName ||
     t({ id: 'common.team', defaultMessage: 'Team #{teamId}' }, { teamId: membership.teamId })
