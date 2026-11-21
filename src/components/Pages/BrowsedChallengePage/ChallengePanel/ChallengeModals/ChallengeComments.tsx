@@ -1,8 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { MessageSquare, Send } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import {
+  challengeCommentsOptions,
+  challengeTaskCommentsOptions,
+  useAddChallengeComment,
+} from '@/api/challenge'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
@@ -42,9 +47,9 @@ export const ChallengeComments = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { handleImageError, getImageSrc } = useAvatarContext()
 
-  const { data: challengeComments = [] } = api.challenge.getChallengeComments(challengeId)
+  const { data: challengeComments = [] } = useQuery(challengeCommentsOptions(challengeId))
 
-  const { data: taskComments = [] } = api.challenge.getTaskComments(challengeId)
+  const { data: taskComments = [] } = useQuery(challengeTaskCommentsOptions(challengeId))
 
   const allComments: ChallengeComment[] = []
 
@@ -58,7 +63,7 @@ export const ChallengeComments = () => {
 
   const sortedComments = [...allComments].sort((a, b) => a.created - b.created)
 
-  const addCommentMutation = api.challenge.useAddChallengeComment()
+  const addCommentMutation = useAddChallengeComment()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

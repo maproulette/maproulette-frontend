@@ -1,11 +1,12 @@
 // @vitest-environment happy-dom
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { act } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
-import { challengeExplore } from './explore'
+import { challengeListingInfiniteOptions, exploreChallengesInfiniteOptions } from './explore'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -14,16 +15,19 @@ afterEach(() => {
 const challengeA = { id: 1, name: 'Challenge A' }
 const challengeB = { id: 2, name: 'Challenge B' }
 
-describe('challengeExplore.exploreChallengesInfinite', () => {
+describe('exploreChallengesInfiniteOptions', () => {
   it('fetches the first page and reports a next page when the page is full', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify([challengeA, challengeB]), { status: 200 })
     )
     const client = createTestQueryClient()
 
-    const { result } = renderHook(() => challengeExplore.exploreChallengesInfinite({ limit: 2 }), {
-      wrapper: queryClientWrapper(client),
-    })
+    const { result } = renderHook(
+      () => useInfiniteQuery(exploreChallengesInfiniteOptions({ limit: 2 })),
+      {
+        wrapper: queryClientWrapper(client),
+      }
+    )
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data?.pages).toEqual([[challengeA, challengeB]])
@@ -37,9 +41,12 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
   it('reports no next page when the returned page is shorter than the limit', async () => {
     stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
 
-    const { result } = renderHook(() => challengeExplore.exploreChallengesInfinite({ limit: 10 }), {
-      wrapper: queryClientWrapper(),
-    })
+    const { result } = renderHook(
+      () => useInfiniteQuery(exploreChallengesInfiniteOptions({ limit: 10 })),
+      {
+        wrapper: queryClientWrapper(),
+      }
+    )
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.hasNextPage).toBe(false)
@@ -49,9 +56,12 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
     const ten = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, name: `C${i + 1}` }))
     stubFetch(new Response(JSON.stringify(ten), { status: 200 }))
 
-    const { result } = renderHook(() => challengeExplore.exploreChallengesInfinite(undefined), {
-      wrapper: queryClientWrapper(),
-    })
+    const { result } = renderHook(
+      () => useInfiniteQuery(exploreChallengesInfiniteOptions(undefined)),
+      {
+        wrapper: queryClientWrapper(),
+      }
+    )
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.hasNextPage).toBe(true)
@@ -62,12 +72,14 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
 
     const { result } = renderHook(
       () =>
-        challengeExplore.exploreChallengesInfinite({
-          limit: 10,
-          bounds: '-98,37,-97,38',
-          placeGeometryJson: '{"type":"Polygon","coordinates":[]}',
-          placeKey: 'R129814:boundary',
-        }),
+        useInfiniteQuery(
+          exploreChallengesInfiniteOptions({
+            limit: 10,
+            bounds: '-98,37,-97,38',
+            placeGeometryJson: '{"type":"Polygon","coordinates":[]}',
+            placeKey: 'R129814:boundary',
+          })
+        ),
       { wrapper: queryClientWrapper() }
     )
 
@@ -80,19 +92,6 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
     expect(await request.clone().text()).toBe('{"polygon":{"type":"Polygon","coordinates":[]}}')
   })
 
-  it('does not fetch at all when the query is disabled', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
-
-    renderHook(
-      () => challengeExplore.exploreChallengesInfinite({ limit: 10 }, { enabled: false }),
-      {
-        wrapper: queryClientWrapper(),
-      }
-    )
-
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
   it('fetches subsequent pages using the accumulated offset', async () => {
     const fetchMock = vi.fn(async (request: Request) => {
       if (request.url.includes('offset=0')) {
@@ -103,7 +102,7 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
     vi.stubGlobal('fetch', fetchMock)
 
     const { result, rerender } = renderHook(
-      () => challengeExplore.exploreChallengesInfinite({ limit: 2 }),
+      () => useInfiniteQuery(exploreChallengesInfiniteOptions({ limit: 2 })),
       { wrapper: queryClientWrapper() }
     )
 
@@ -119,7 +118,7 @@ describe('challengeExplore.exploreChallengesInfinite', () => {
   })
 })
 
-describe('challengeExplore.listingInfinite', () => {
+describe('challengeListingInfiniteOptions', () => {
   it('sends the filters and asks for the next page by row offset', async () => {
     const fetchMock = vi.fn(async (request: Request) => {
       if (request.url.includes('page=0')) {
@@ -131,16 +130,18 @@ describe('challengeExplore.listingInfinite', () => {
 
     const { result, rerender } = renderHook(
       () =>
-        challengeExplore.listingInfinite(
-          [1, 2],
-          {
-            searchString: 'roads',
-            onlyEnabled: true,
-            onlyArchived: false,
-            onlyOwned: true,
-            challengeIds: '7,8',
-          },
-          { limit: 2 }
+        useInfiniteQuery(
+          challengeListingInfiniteOptions(
+            [1, 2],
+            {
+              searchString: 'roads',
+              onlyEnabled: true,
+              onlyArchived: false,
+              onlyOwned: true,
+              challengeIds: '7,8',
+            },
+            2
+          )
         ),
       { wrapper: queryClientWrapper() }
     )
@@ -164,44 +165,5 @@ describe('challengeExplore.listingInfinite', () => {
     expect(result.current.hasNextPage).toBe(false)
     const secondCall = fetchMock.mock.calls[1][0] as Request
     expect(secondCall.url).toContain('page=2')
-  })
-
-  it('does not fetch when disabled', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(
-      () => challengeExplore.listingInfinite([], {}, { enabled: false }),
-      { wrapper: queryClientWrapper() }
-    )
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeExplore.searchChallenges', () => {
-  it('is disabled when no search term is provided', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => challengeExplore.searchChallenges(), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('fetches matching challenges when a search term is given', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => challengeExplore.searchChallenges({ search: 'road' }), {
-      wrapper: queryClientWrapper(client),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([challengeA])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('search=road')
   })
 })

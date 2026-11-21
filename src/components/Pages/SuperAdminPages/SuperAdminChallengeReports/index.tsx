@@ -1,8 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Ban, Check, Flag } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { allChallengeReportsOptions, useUpdateReportStatus } from '@/api/challenge'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -47,7 +48,7 @@ const statusBadgeVariant = (statusName: string) => {
 const ReportRow = ({ report }: { report: ChallengeReport }) => {
   const { t, locale } = useIntl()
   const [reviewComment, setReviewComment] = useState('')
-  const updateStatus = api.challenge.useUpdateReportStatus()
+  const updateStatus = useUpdateReportStatus()
   const busy = updateStatus.isPending
 
   const decide = async (status: ChallengeReportStatusName) => {
@@ -206,7 +207,11 @@ export const SuperAdminChallengeReports = () => {
   const [status, setStatus] = useState<ChallengeReportStatusName>('open')
   const [activeOnly, setActiveOnly] = useState(true)
 
-  const { data: reports, isLoading, isError } = api.challenge.reports({ status, activeOnly })
+  const {
+    data: reports,
+    isLoading,
+    isError,
+  } = useQuery(allChallengeReportsOptions({ status, activeOnly }))
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 px-4">

@@ -1,6 +1,7 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useContext, useMemo } from 'react'
-import { api } from '@/api'
+import { exploreChallengesInfiniteOptions } from '@/api/challenge'
 import type { Challenge } from '@/types/Challenge'
 import { useExploreChallengesSearchContext } from './ExploreChallengesSearchContext'
 
@@ -28,7 +29,8 @@ export const ChallengeResultsContextProvider = ({ children }: ChallengeResultsPr
   // The map has been moved clear of the selected place: nothing can match, so
   // there is nothing to ask the server for.
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    api.challenge.exploreChallengesInfinite(extendedFindParams, {
+    useInfiniteQuery({
+      ...exploreChallengesInfiniteOptions(extendedFindParams),
       enabled: !hasEmptyPlaceIntersection,
     })
 

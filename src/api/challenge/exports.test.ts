@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
-import { __testing, challengeExports } from './exports'
+import { __testing, useExportChallenge } from './exports'
 
 const { exportFilename } = __testing
 
@@ -54,12 +54,12 @@ describe('exportFilename', () => {
   })
 })
 
-describe('challengeExports.useExportChallenge', () => {
+describe('useExportChallenge', () => {
   it('downloads a CSV from the extract endpoint and saves it under the challenge name', async () => {
     const fetchMock = stubFetch(new Response('id,status\n1,3', { status: 200 }))
     const { clicked, revokeObjectURL } = stubDownload()
 
-    const { result } = renderHook(() => challengeExports.useExportChallenge(), {
+    const { result } = renderHook(() => useExportChallenge(), {
       wrapper: queryClientWrapper(),
     })
     await result.current.mutateAsync({
@@ -82,7 +82,7 @@ describe('challengeExports.useExportChallenge', () => {
     const fetchMock = stubFetch(new Response('{}', { status: 200 }))
     const { clicked } = stubDownload()
 
-    const { result } = renderHook(() => challengeExports.useExportChallenge(), {
+    const { result } = renderHook(() => useExportChallenge(), {
       wrapper: queryClientWrapper(),
     })
     await result.current.mutateAsync({ challengeId: 7, format: 'geojson' })
@@ -95,7 +95,7 @@ describe('challengeExports.useExportChallenge', () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
     stubDownload()
 
-    const { result } = renderHook(() => challengeExports.useExportChallenge(), {
+    const { result } = renderHook(() => useExportChallenge(), {
       wrapper: queryClientWrapper(),
     })
     await result.current.mutateAsync({
@@ -118,7 +118,7 @@ describe('challengeExports.useExportChallenge', () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
     stubDownload()
 
-    const { result } = renderHook(() => challengeExports.useExportChallenge(), {
+    const { result } = renderHook(() => useExportChallenge(), {
       wrapper: queryClientWrapper(),
     })
     await result.current.mutateAsync({
@@ -141,12 +141,10 @@ describe('challengeExports.useExportChallenge', () => {
       value: 'gravel',
       operator: 'equals',
     } as unknown as NonNullable<
-      Parameters<
-        ReturnType<typeof challengeExports.useExportChallenge>['mutateAsync']
-      >[0]['taskPropertySearch']
+      Parameters<ReturnType<typeof useExportChallenge>['mutateAsync']>[0]['taskPropertySearch']
     >
 
-    const { result } = renderHook(() => challengeExports.useExportChallenge(), {
+    const { result } = renderHook(() => useExportChallenge(), {
       wrapper: queryClientWrapper(),
     })
     await result.current.mutateAsync({ challengeId: 7, format: 'csv', taskPropertySearch })

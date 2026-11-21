@@ -1,7 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useLoaderData } from '@tanstack/react-router'
 import { createContext, type ReactNode, useContext, useMemo } from 'react'
-import { api } from '@/api'
+import {
+  challengeFavoritedOptions,
+  challengeLikedOptions,
+  challengeReportsOptions,
+} from '@/api/challenge'
 import { managedProjectsOptions, projectOptions } from '@/api/project'
 import { teamOptions } from '@/api/team'
 import { publicUserOptions } from '@/api/user'
@@ -56,9 +60,9 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   const challenge: Challenge = loadedChallenge
   const { user } = useAuthContext()
 
-  const { data: favoriteData } = api.challenge.isChallengeFavorited(challenge.id ?? 0)
+  const { data: favoriteData } = useQuery(challengeFavoritedOptions(challenge.id ?? 0))
 
-  const { data: likeData } = api.challenge.isChallengeLiked(challenge.id ?? 0)
+  const { data: likeData } = useQuery(challengeLikedOptions(challenge.id ?? 0))
 
   const { data: managedProjects } = useQuery(
     managedProjectsOptions({
@@ -90,7 +94,9 @@ export const BrowsedChallengeProvider = ({ children }: { children: ReactNode }) 
   // One listing answers both questions the page asks about reports: whether the
   // challenge has been reported at all, and whether this reader is the one who
   // reported it and so should not be invited to file another.
-  const { data: reports, isLoading: isCheckingReport } = api.challenge.forChallenge(challenge.id)
+  const { data: reports, isLoading: isCheckingReport } = useQuery(
+    challengeReportsOptions(challenge.id)
+  )
   const openReports = useMemo(() => (reports ?? []).filter(isOpenReport), [reports])
   const hasOpenReport = openReports.length > 0
   const openReport = openReports.find((report) => !!user && report.reporterId === user.id)

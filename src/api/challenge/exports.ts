@@ -41,41 +41,39 @@ const saveBlob = (blob: Blob, filename: string) => {
   URL.revokeObjectURL(url)
 }
 
-export const challengeExports = {
-  /**
-   * Download one challenge's tasks as CSV or GeoJSON, honouring the filters
-   * currently applied to the task table. A property filter is a nested rule
-   * tree, so it travels in the body and the POST form of each endpoint is used.
-   */
-  useExportChallenge: () =>
-    useMutation({
-      mutationFn: async (options: ChallengeExportOptions) => {
-        const searchParams = convertParamsToSearchParams({
-          ...(options.taskStatuses?.length ? { status: options.taskStatuses.join(',') } : {}),
-          ...(options.priorities?.length ? { priority: options.priorities.join(',') } : {}),
-          ...(options.reviewStatuses?.length
-            ? { reviewStatus: options.reviewStatuses.join(',') }
-            : {}),
-          ...(options.timezone ? { timezone: options.timezone } : {}),
+/**
+ * Download one challenge's tasks as CSV or GeoJSON, honouring the filters
+ * currently applied to the task table. A property filter is a nested rule
+ * tree, so it travels in the body and the POST form of each endpoint is used.
+ */
+export const useExportChallenge = () =>
+  useMutation({
+    mutationFn: async (options: ChallengeExportOptions) => {
+      const searchParams = convertParamsToSearchParams({
+        ...(options.taskStatuses?.length ? { status: options.taskStatuses.join(',') } : {}),
+        ...(options.priorities?.length ? { priority: options.priorities.join(',') } : {}),
+        ...(options.reviewStatuses?.length
+          ? { reviewStatus: options.reviewStatuses.join(',') }
+          : {}),
+        ...(options.timezone ? { timezone: options.timezone } : {}),
+      })
+
+      const path =
+        options.format === 'csv'
+          ? `api/v2/challenge/${options.challengeId}/tasks/extract`
+          : `api/v2/challenge/view/${options.challengeId}`
+
+      const blob = await apiRequest
+        .post(path, {
+          searchParams,
+          json: options.taskPropertySearch
+            ? { taskPropertySearch: options.taskPropertySearch }
+            : {},
         })
+        .blob()
 
-        const path =
-          options.format === 'csv'
-            ? `api/v2/challenge/${options.challengeId}/tasks/extract`
-            : `api/v2/challenge/view/${options.challengeId}`
-
-        const blob = await apiRequest
-          .post(path, {
-            searchParams,
-            json: options.taskPropertySearch
-              ? { taskPropertySearch: options.taskPropertySearch }
-              : {},
-          })
-          .blob()
-
-        saveBlob(blob, exportFilename(options))
-      },
-    }),
-}
+      saveBlob(blob, exportFilename(options))
+    },
+  })
 
 export const __testing = { exportFilename }

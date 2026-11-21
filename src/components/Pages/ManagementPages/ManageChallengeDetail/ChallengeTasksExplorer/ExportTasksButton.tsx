@@ -1,7 +1,7 @@
 import { Download } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useExportChallenge } from '@/api/challenge'
 import type { ExportFormat } from '@/api/challenge/exports'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { binaryToTaskPropertySearch } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
@@ -37,7 +37,7 @@ export const ExportTasksButton = () => {
   const { t } = useIntl()
   const { challengeId, challengeName, statusEnabled, priorityEnabled, propertyRule } =
     useExplorerContext()
-  const exportMutation = api.challenge.useExportChallenge()
+  const exportMutation = useExportChallenge()
   const [open, setOpen] = useState(false)
   const [format, setFormat] = useState<ExportFormat>('csv')
   const [timezone, setTimezone] = useState(localTimezoneOffset)

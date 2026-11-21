@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import {
   Bookmark,
@@ -9,7 +10,13 @@ import {
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import {
+  challengeLikeCountOptions,
+  useFavoriteChallenge,
+  useLikeChallenge,
+  useUnfavoriteChallenge,
+  useUnlikeChallenge,
+} from '@/api/challenge'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
 import { SidebarIndicator } from '@/components/shared/SidebarIndicator'
@@ -64,12 +71,12 @@ export const ChallengeHeader = ({ isScrolled = false }: ChallengeHeaderProps) =>
   const { t } = useIntl()
   const needsSignIn = !user?.id
 
-  const favoriteMutation = api.challenge.useFavoriteChallenge()
-  const unfavoriteMutation = api.challenge.useUnfavoriteChallenge()
-  const likeMutation = api.challenge.useLikeChallenge()
-  const unlikeMutation = api.challenge.useUnlikeChallenge()
+  const favoriteMutation = useFavoriteChallenge()
+  const unfavoriteMutation = useUnfavoriteChallenge()
+  const likeMutation = useLikeChallenge()
+  const unlikeMutation = useUnlikeChallenge()
 
-  const { data: likeCountData } = api.challenge.getChallengeLikeCount(challengeId)
+  const { data: likeCountData } = useQuery(challengeLikeCountOptions(challengeId))
   const likeCount = likeCountData?.likeCount ?? 0
 
   const handleSave = () =>

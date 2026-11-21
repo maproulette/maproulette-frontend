@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { Flag } from 'lucide-react'
 import { defineMessages } from 'react-intl'
-import { api } from '@/api'
+import { challengeReportsOptions } from '@/api/challenge'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { OsmUserLink } from '@/components/shared/OsmUserLink'
@@ -133,7 +134,7 @@ export const ReportHistoryModal = () => {
 
   // The page already holds this listing -- it is what decides whether the
   // footer notice shows at all -- so opening the dialog reads it from the cache.
-  const { data: reports, isLoading, isError } = api.challenge.forChallenge(challenge.id)
+  const { data: reports, isLoading, isError } = useQuery(challengeReportsOptions(challenge.id))
 
   return (
     <Dialog open={isReportHistoryModalOpen} onOpenChange={setReportHistoryOpen}>

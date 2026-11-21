@@ -1,6 +1,6 @@
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useReportChallenge } from '@/api/challenge'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { MarkdownContent } from '@/components/shared/MarkdownContent'
 import { Button } from '@/components/ui/Button'
@@ -52,7 +52,7 @@ export const ReportModal = () => {
   const [showingPreview, setShowingPreview] = useState(false)
   const [errors, setErrors] = useState({ input: false, checkbox: false })
 
-  const reportChallengeMutation = api.challenge.useReportChallenge()
+  const reportChallengeMutation = useReportChallenge()
 
   const characterCount = reportText.length
 

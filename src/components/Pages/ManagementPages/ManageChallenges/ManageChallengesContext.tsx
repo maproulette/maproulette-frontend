@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { api } from '@/api'
+import { challengeListingInfiniteOptions } from '@/api/challenge'
 import { managedProjectsOptions } from '@/api/project'
 import { useUpdateUserSettings } from '@/api/user'
 import {
@@ -89,20 +90,20 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
     isFetching,
     hasNextPage,
     fetchNextPage,
-  } = api.challenge.listingInfinite(
-    superUser ? [] : managedProjectIds,
-    {
-      searchString: debouncedSearchQuery,
-      onlyEnabled: onlyDiscoverable,
-      onlyArchived,
-      onlyOwned,
-      challengeIds: onlyPinned ? pinnedChallengeIds.join(',') : '',
-    },
-    {
-      limit: PAGE_SIZE,
-      enabled: canList,
-    }
-  )
+  } = useInfiniteQuery({
+    ...challengeListingInfiniteOptions(
+      superUser ? [] : managedProjectIds,
+      {
+        searchString: debouncedSearchQuery,
+        onlyEnabled: onlyDiscoverable,
+        onlyArchived,
+        onlyOwned,
+        challengeIds: onlyPinned ? pinnedChallengeIds.join(',') : '',
+      },
+      PAGE_SIZE
+    ),
+    enabled: canList,
+  })
   const challenges = useMemo(() => (canList ? (data?.pages.flat() ?? []) : []), [canList, data])
   const isLoading = (!superUser && isLoadingProjects) || isLoadingChallenges
 

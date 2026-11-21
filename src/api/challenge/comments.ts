@@ -1,4 +1,4 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Comment } from '@/types/Comment'
 import { apiRequest } from '../client'
 
@@ -13,48 +13,42 @@ interface ChallengeCommentResponse {
   comment: string
 }
 
-export const challengeComments = {
-  getChallengeComments: (challengeId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'comments', challengeId],
-        queryFn: () =>
-          apiRequest
-            .get(`api/v2/challenge/${challengeId}/challengeComments`)
-            .json<ChallengeCommentResponse[]>(),
-        enabled: !!challengeId,
-      })
-    ),
+export const challengeCommentsOptions = (challengeId: number) =>
+  queryOptions({
+    queryKey: ['challenge', 'comments', challengeId],
+    queryFn: () =>
+      apiRequest
+        .get(`api/v2/challenge/${challengeId}/challengeComments`)
+        .json<ChallengeCommentResponse[]>(),
+    enabled: !!challengeId,
+  })
 
-  getTaskComments: (challengeId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'taskComments', challengeId],
-        queryFn: () =>
-          apiRequest
-            .get(`api/v2/challenge/${challengeId}/comments`, { searchParams: { limit: -1 } })
-            .json<Comment[]>(),
-        enabled: !!challengeId,
-      })
-    ),
+export const challengeTaskCommentsOptions = (challengeId: number) =>
+  queryOptions({
+    queryKey: ['challenge', 'taskComments', challengeId],
+    queryFn: () =>
+      apiRequest
+        .get(`api/v2/challenge/${challengeId}/comments`, { searchParams: { limit: -1 } })
+        .json<Comment[]>(),
+    enabled: !!challengeId,
+  })
 
-  useAddChallengeComment: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ challengeId, comment }: { challengeId: number; comment: string }) =>
-        apiRequest
-          .post(`api/v2/challenge/${challengeId}/comment`, {
-            json: { comment },
-          })
-          .json<{ id: number; comment: string; created: number }>(),
-      onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries({
-          queryKey: ['challenge', 'comments', variables.challengeId],
+export const useAddChallengeComment = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, comment }: { challengeId: number; comment: string }) =>
+      apiRequest
+        .post(`api/v2/challenge/${challengeId}/comment`, {
+          json: { comment },
         })
-        queryClient.invalidateQueries({
-          queryKey: ['challenge', 'taskComments', variables.challengeId],
-        })
-      },
-    })
-  },
+        .json<{ id: number; comment: string; created: number }>(),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['challenge', 'comments', variables.challengeId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['challenge', 'taskComments', variables.challengeId],
+      })
+    },
+  })
 }
