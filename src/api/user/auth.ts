@@ -1,10 +1,15 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import type { OAuthCallbackResponse } from '@/types/Oauth'
+import type { OAuthCallbackResponse, OAuthLoginResponse } from '@/types/Oauth'
 import type { UserWhoamiResponse } from '@/types/User'
 import { apiRequest } from '../client'
 
 export const userAuth = {
+  // The backend works out the OAuth redirect_uri from this request's Origin
+  // header, so we don't pass one. We don't pass a redirect param either:
+  // AuthContext remembers where to go after sign-in.
+  authenticate: async () => await apiRequest.get('auth/authenticate').json<OAuthLoginResponse>(),
+
   signOut: async () => await apiRequest.get('auth/signout').json<void>(),
 
   // The backend checks state against the one it stored in the session at

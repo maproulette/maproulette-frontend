@@ -5,7 +5,7 @@ import { HTTPError, type NormalizedOptions } from 'ky'
 import { act, createElement, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { api, apiRequest } from '@/api'
+import { api } from '@/api'
 import { apiRequest as realApiRequest } from '@/api/client'
 import { Loader } from '@/components/ui/Loader'
 import { logger } from '@/lib/logger'
@@ -34,13 +34,13 @@ vi.mock('@/api', () => ({
   api: {
     user: {
       whoAmI: vi.fn(),
+      authenticate: vi.fn(),
       callback: vi.fn(),
       refreshAuth: vi.fn(),
       clearAuth: vi.fn(),
       signOut: vi.fn(),
     },
   },
-  apiRequest: { get: vi.fn() },
 }))
 
 vi.mock('@/components/ui/Loader', () => ({ Loader: vi.fn(() => null) }))
@@ -105,7 +105,6 @@ describe('isSecurityError', () => {
 })
 
 type WhoAmIResult = ReturnType<typeof api.user.whoAmI>
-type ApiRequestGetResult = ReturnType<typeof apiRequest.get>
 
 const fakeUser = (overrides: { requestToken?: string } = {}): User =>
   ({
@@ -143,9 +142,9 @@ const mockWhoAmIDynamic = (user: User) => {
 }
 
 const mockAuthenticateResponse = (response: { state?: string; redirect?: string }) => {
-  vi.mocked(apiRequest.get).mockReturnValue({
-    json: () => Promise.resolve(response),
-  } as unknown as ApiRequestGetResult)
+  vi.mocked(api.user.authenticate).mockResolvedValue(
+    response as Awaited<ReturnType<typeof api.user.authenticate>>
+  )
 }
 
 const wrapper =
@@ -254,9 +253,7 @@ describe('useAuthContext', () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
-      vi.mocked(apiRequest.get).mockReturnValue({
-        json: () => Promise.reject(new Error('network down')),
-      } as unknown as ApiRequestGetResult)
+      vi.mocked(api.user.authenticate).mockRejectedValue(new Error('network down'))
 
       const { result } = mount()
 

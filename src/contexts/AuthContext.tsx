@@ -3,12 +3,11 @@ import { useLocation, useSearch } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { api, apiRequest } from '@/api'
+import { api } from '@/api'
 import { setUnauthorizedHandler } from '@/api/client'
 import { Loader } from '@/components/ui/Loader'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
-import type { OAuthLoginResponse } from '@/types/Oauth'
 import type { User } from '@/types/User'
 
 type AuthParams = {
@@ -189,17 +188,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setStoredRedirectUrl(currentUrl)
 
     try {
-      // Hit the backend via the shared apiRequest client (same host as the
-      // callback) so the backend derives the OAuth redirect_uri from this
-      // request's Origin header, which resolves correctly across deployments
-      // (maproulette.org, beta.maproulette.org, 127.0.0.1). No redirect param:
-      // post-login navigation is handled client-side via the stored redirect URL.
-      const response = await apiRequest.get('auth/authenticate')
-      const jsonData = (await response.json()) as OAuthLoginResponse
+      const { state, redirect } = await api.user.authenticate()
 
-      if (jsonData.state) {
-        setOAuthState(jsonData.state)
-        window.location.href = jsonData.redirect
+      if (state) {
+        setOAuthState(state)
+        window.location.href = redirect
       }
     } catch (error) {
       logger.error('Login failed', { error })
