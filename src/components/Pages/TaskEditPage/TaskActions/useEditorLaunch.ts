@@ -2,6 +2,7 @@ import bbox from '@turf/bbox'
 import { useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/api'
+import { apiBaseUrl } from '@/api/client'
 import { useEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { useOptionalTaskEditMapContext } from '@/components/Pages/TaskEditPage/TaskMap/TaskEditMapContext'
 import {
@@ -33,9 +34,6 @@ import type { Bbox2D } from '@/types/Map'
 import type { Task } from '@/types/Task'
 import { useChallengeContext } from '../contexts/ChallengeContext'
 import { useTaskBundleContext } from '../contexts/TaskBundleContext'
-
-// JOSM fetches attachment data itself, so it needs an absolute backend URL.
-const apiBaseUrl = window.env.VITE_API_BASE_URL || window.location.origin
 
 const idEditorUrl = window.env.VITE_ID_EDITOR_SERVER_URL || 'https://www.openstreetmap.org/edit'
 const rapidEditorUrl = window.env.VITE_RAPID_EDITOR_SERVER_URL || 'https://rapideditor.org/edit'

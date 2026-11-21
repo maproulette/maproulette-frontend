@@ -5,9 +5,8 @@
  * resolve them against the API host rather than the app's own origin.
  */
 
+import { apiBaseUrl } from '@/api/client'
 import type { TranslateFn } from '@/i18n'
-
-const API_BASE_URL = () => window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 
 /** Image types the backend accepts for a team image. */
 export const TEAM_IMAGE_MIME_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'] as const
@@ -26,7 +25,7 @@ export const TEAM_IMAGE_MAX_BYTES = 2 * 1024 * 1024
 export const resolveTeamImageUrl = (avatarUrl?: string | null): string | undefined => {
   if (!avatarUrl) return undefined
   if (/^(https?:)?\/\//i.test(avatarUrl) || avatarUrl.startsWith('data:')) return avatarUrl
-  return `${API_BASE_URL().replace(/\/$/, '')}${avatarUrl.startsWith('/') ? '' : '/'}${avatarUrl}`
+  return `${apiBaseUrl}${avatarUrl.startsWith('/') ? '' : '/'}${avatarUrl}`
 }
 
 /**

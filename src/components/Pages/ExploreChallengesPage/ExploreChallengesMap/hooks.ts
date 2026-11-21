@@ -1,6 +1,7 @@
 import type maplibregl from 'maplibre-gl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { MapRef } from 'react-map-gl/maplibre'
+import { apiBaseUrl } from '@/api/client'
 import { boundsAreEqual, getMapBoundsString, parseBoundsString } from '@/components/Map/mapUtils'
 import {
   type ClusterMarkerFeature,
@@ -11,7 +12,6 @@ import { useChallengeTypes } from '@/components/Map/TaskMarkers/useChallengeType
 import type { TaskMarker } from '@/types/Task'
 import { useExploreChallengesSearchContext } from '../contexts/ExploreChallengesSearchContext'
 
-const API_BASE_URL = window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
 export const MVT_SOURCE_ID = 'mvt-data'
 export const MVT_SOURCE_LAYER = 'default'
 const VIEW_BUFFER_DEGREES = 1
@@ -114,7 +114,7 @@ export const useExploreChallengesMap = () => {
   // The map shows all available work: challenge-level filters live on the grid
   // and list views, so a tile depends on nothing but its coordinates. That is
   // what lets every tile below z=12 be served from the pre-computed pyramid.
-  const tileUrl = `${API_BASE_URL}/api/v2/taskTilesMvt/{z}/{x}/{y}`
+  const tileUrl = `${apiBaseUrl}/api/v2/taskTilesMvt/{z}/{x}/{y}`
 
   useEffect(() => {
     if (!mapLoaded || !mapRef.current) return

@@ -1,6 +1,9 @@
 import ky from 'ky'
 
-export const apiBaseUrl = window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'
+export const apiBaseUrl = (window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000').replace(
+  /\/+$/,
+  ''
+)
 
 let unauthorizedHandler: (() => void) | undefined
 

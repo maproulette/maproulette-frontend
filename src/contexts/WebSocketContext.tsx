@@ -20,7 +20,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const enabled = window.env.VITE_ENABLE_WEBSOCKET === 'true'
 
   const { lastMessage, readyState, sendMessage } = useWebSocketHook(
-    user && enabled ? `${apiBaseUrl.replace(/^http/, 'ws').replace(/\/$/, '')}/ws` : null,
+    user && enabled ? `${apiBaseUrl.replace(/^http/, 'ws')}/ws` : null,
     {
       shouldReconnect: () => user !== null,
       reconnectAttempts: 10,

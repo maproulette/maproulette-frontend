@@ -132,4 +132,19 @@ describe('apiRequest beforeRequest hook', () => {
       vi.resetModules()
     }
   })
+
+  it('strips trailing slashes from the API base URL', async () => {
+    const mutableEnv = window.env as MutableEnv
+    const originalBaseUrl = mutableEnv.VITE_API_BASE_URL
+    mutableEnv.VITE_API_BASE_URL = 'https://api.example.org/'
+    vi.resetModules()
+
+    try {
+      const { apiBaseUrl } = await import('./client')
+      expect(apiBaseUrl).toBe('https://api.example.org')
+    } finally {
+      mutableEnv.VITE_API_BASE_URL = originalBaseUrl
+      vi.resetModules()
+    }
+  })
 })

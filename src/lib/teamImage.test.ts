@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
+import { apiBaseUrl } from '@/api/client'
 import { testT } from '@/test/translate'
 import {
   isUploadedTeamAvatarUrl,
@@ -10,14 +11,6 @@ import {
 } from './teamImage'
 
 const t = testT
-
-type MutableEnv = { VITE_API_BASE_URL?: string }
-const env = window.env as MutableEnv
-const originalBaseUrl = env.VITE_API_BASE_URL
-
-afterEach(() => {
-  env.VITE_API_BASE_URL = originalBaseUrl
-})
 
 describe('resolveTeamImageUrl', () => {
   it('returns undefined when there is no image', () => {
@@ -34,30 +27,14 @@ describe('resolveTeamImageUrl', () => {
   })
 
   it('resolves team image paths against the api host', () => {
-    env.VITE_API_BASE_URL = 'https://api.example.org'
     expect(resolveTeamImageUrl('/api/v2/teamImage/7/file')).toBe(
-      'https://api.example.org/api/v2/teamImage/7/file'
-    )
-  })
-
-  it('does not double up slashes when the base url has a trailing one', () => {
-    env.VITE_API_BASE_URL = 'https://api.example.org/'
-    expect(resolveTeamImageUrl('/api/v2/teamImage/7/file')).toBe(
-      'https://api.example.org/api/v2/teamImage/7/file'
+      `${apiBaseUrl}/api/v2/teamImage/7/file`
     )
   })
 
   it('inserts a separator for paths that do not start with a slash', () => {
-    env.VITE_API_BASE_URL = 'https://api.example.org'
     expect(resolveTeamImageUrl('api/v2/teamImage/7/file')).toBe(
-      'https://api.example.org/api/v2/teamImage/7/file'
-    )
-  })
-
-  it('falls back to the local backend when no base url is configured', () => {
-    env.VITE_API_BASE_URL = undefined
-    expect(resolveTeamImageUrl('/api/v2/teamImage/7/file')).toBe(
-      'http://127.0.0.1:9000/api/v2/teamImage/7/file'
+      `${apiBaseUrl}/api/v2/teamImage/7/file`
     )
   })
 })
