@@ -16,7 +16,7 @@ import type {
   ChallengeTaskMarkersResponse,
 } from '@/types/Challenge'
 import type { Task } from '@/types/Task'
-import type { Team } from '@/types/Team'
+import type { ManagingTeam } from '@/types/Team'
 import { apiRequest } from '../client'
 
 /**
@@ -223,13 +223,10 @@ export const challengeSingle = {
       queryOptions({
         queryKey: ['challenge', challengeId, 'teamManagers'],
         queryFn: async () => {
-          const raw = await apiRequest
+          const teams = await apiRequest
             .get(`api/v2/teams/challengeManagers/${challengeId}`)
-            .json<Array<{ team: Team; grants?: Array<{ role: number }> }>>()
-          return (raw ?? []).map((entry) => ({
-            team: entry.team,
-            roles: (entry.grants ?? []).map((grant) => grant.role),
-          }))
+            .json<ManagingTeam[]>()
+          return teams.map(({ team, grants }) => ({ team, roles: grants.map((g) => g.role) }))
         },
         enabled: !!challengeId,
       })

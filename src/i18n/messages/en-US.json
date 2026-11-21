@@ -70,6 +70,7 @@
   "auth.loginFailed": "Sign-in failed or expired. Please try signing in again.",
   "auth.sessionExpired": "Your session has expired.",
   "auth.signInAgain": "Sign in again",
+  "auth.signInUnavailable": "Couldn't start signing in. Please try again.",
   "browsedChallengePage.actionButtons.alreadyReported": "You have already reported this challenge; it is awaiting review",
   "browsedChallengePage.actionButtons.challengeActions": "Challenge actions",
   "browsedChallengePage.actionButtons.challengeReported": "Challenge Reported",

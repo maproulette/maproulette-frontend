@@ -141,10 +141,8 @@ const mockWhoAmIDynamic = (user: User) => {
   )
 }
 
-const mockAuthenticateResponse = (response: { state?: string; redirect?: string }) => {
-  vi.mocked(api.user.authenticate).mockResolvedValue(
-    response as Awaited<ReturnType<typeof api.user.authenticate>>
-  )
+const mockAuthenticateResponse = (response: { state: string; redirect: string }) => {
+  vi.mocked(api.user.authenticate).mockResolvedValue(response)
 }
 
 const wrapper =
@@ -232,24 +230,7 @@ describe('useAuthContext', () => {
       expect(window.location.href).toContain('osm.example/authorize')
     })
 
-    it('does not store oauth state or navigate when the response has no state', async () => {
-      mockSearch({})
-      mockLocation({ pathname: '/', searchStr: '' })
-      mockWhoAmI({})
-      const originalHref = window.location.href
-      mockAuthenticateResponse({ redirect: 'https://osm.example/authorize' })
-
-      const { result } = mount()
-
-      await act(async () => {
-        await result.current.login()
-      })
-
-      expect(localStorage.getItem('state')).toBeNull()
-      expect(window.location.href).toBe(originalHref)
-    })
-
-    it('logs and swallows errors from the authenticate request', async () => {
+    it('tells the mapper when the authenticate request fails', async () => {
       mockSearch({})
       mockLocation({ pathname: '/', searchStr: '' })
       mockWhoAmI({})
@@ -261,7 +242,7 @@ describe('useAuthContext', () => {
         await result.current.login()
       })
 
-      expect(logger.error).toHaveBeenCalledWith('Login failed', { error: expect.any(Error) })
+      expect(toast.error).toHaveBeenCalledWith("Couldn't start signing in. Please try again.")
       expect(localStorage.getItem('state')).toBeNull()
     })
   })

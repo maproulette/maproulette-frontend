@@ -30,12 +30,10 @@ export const challengeComments = {
     useQuery(
       queryOptions({
         queryKey: ['challenge', 'taskComments', challengeId],
-        queryFn: async () => {
-          const response = await apiRequest
+        queryFn: () =>
+          apiRequest
             .get(`api/v2/challenge/${challengeId}/comments`)
-            .json<Record<string, Comment[]>>()
-          return response || {}
-        },
+            .json<Record<string, Comment[]>>(),
         enabled: !!challengeId,
       })
     ),

@@ -547,51 +547,6 @@ describe('project.useDeleteProject', () => {
 })
 
 describe('project.managers', () => {
-  it('normalises the manager shapes the backend returns', async () => {
-    const fetchMock = stubFetch(
-      new Response(
-        JSON.stringify([
-          {
-            userId: 7,
-            osmProfile: { displayName: 'alice', avatarURL: 'https://osm/alice.png' },
-            roles: [1],
-          },
-          { id: 8, grants: [{ role: 2 }, { role: 3 }], displayName: 'bob' },
-          {},
-        ]),
-        { status: 200 }
-      )
-    )
-
-    const { result } = renderHook(() => project.managers(4), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([
-      {
-        userId: 7,
-        avatarURL: 'https://osm/alice.png',
-        displayName: 'alice',
-        roles: [1],
-      },
-      { userId: 8, avatarURL: undefined, displayName: 'bob', roles: [2, 3] },
-      { userId: 0, avatarURL: undefined, displayName: 'User 0', roles: [] },
-    ])
-    expect(new URL(fetchMock.mock.calls[0][0].url).pathname).toBe('/api/v2/user/project/4')
-  })
-
-  it('copes with a body that is not a list', async () => {
-    stubFetch(new Response('null', { status: 200 }))
-
-    const { result } = renderHook(() => project.managers(4), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([])
-  })
-
   it('does not fetch without a project, or while switched off', () => {
     const fetchMock = stubFetch(new Response('[]', { status: 200 }))
 
@@ -612,9 +567,15 @@ describe('project.teamManagers', () => {
   it('flattens each team grant down to the roles it carries', async () => {
     const team = { id: 2, name: 'Team' }
     const fetchMock = stubFetch(
-      new Response(JSON.stringify([{ team, grants: [{ role: 1 }, { role: 2 }] }, { team }]), {
-        status: 200,
-      })
+      new Response(
+        JSON.stringify([
+          { team, grants: [{ role: 1 }, { role: 2 }] },
+          { team, grants: [] },
+        ]),
+        {
+          status: 200,
+        }
+      )
     )
 
     const { result } = renderHook(() => project.teamManagers(4), {
@@ -627,17 +588,6 @@ describe('project.teamManagers', () => {
       { team, roles: [] },
     ])
     expect(new URL(fetchMock.mock.calls[0][0].url).pathname).toBe('/api/v2/teams/projectManagers/4')
-  })
-
-  it('copes with a body that is not a list', async () => {
-    stubFetch(new Response('null', { status: 200 }))
-
-    const { result } = renderHook(() => project.teamManagers(4), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([])
   })
 
   it('does not fetch without a project, or while switched off', () => {

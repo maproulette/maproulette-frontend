@@ -9,8 +9,8 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
-import type { ManagedProjectsFilters, Project } from '@/types/Project'
-import type { Team } from '@/types/Team'
+import type { ManagedProjectsFilters, Project, ProjectManager } from '@/types/Project'
+import type { ManagingTeam } from '@/types/Team'
 import { apiRequest } from './client'
 
 interface ProjectRoleVariables {
@@ -266,27 +266,7 @@ export const project = {
     useQuery(
       queryOptions({
         queryKey: ['project', projectId, 'managers'],
-        queryFn: async () => {
-          const raw = await apiRequest.get(`api/v2/user/project/${projectId}`).json<unknown[]>()
-          return (raw ?? []).map((entry) => {
-            const manager = entry as {
-              userId?: number
-              id?: number
-              osmProfile?: { displayName?: string; avatarURL?: string }
-              displayName?: string
-              roles?: number[]
-              grants?: Array<{ role: number }>
-            }
-            const userId = manager.userId ?? manager.id ?? 0
-            return {
-              userId,
-              avatarURL: manager.osmProfile?.avatarURL,
-              displayName:
-                manager.displayName ?? manager.osmProfile?.displayName ?? `User ${userId}`,
-              roles: manager.roles ?? (manager.grants ?? []).map((grant) => grant.role),
-            }
-          })
-        },
+        queryFn: () => apiRequest.get(`api/v2/user/project/${projectId}`).json<ProjectManager[]>(),
         enabled: (options?.enabled ?? true) && !!projectId,
       })
     ),
@@ -297,13 +277,10 @@ export const project = {
       queryOptions({
         queryKey: ['project', projectId, 'teamManagers'],
         queryFn: async () => {
-          const raw = await apiRequest
+          const teams = await apiRequest
             .get(`api/v2/teams/projectManagers/${projectId}`)
-            .json<Array<{ team: Team; grants?: Array<{ role: number }> }>>()
-          return (raw ?? []).map((entry) => ({
-            team: entry.team,
-            roles: (entry.grants ?? []).map((grant) => grant.role),
-          }))
+            .json<ManagingTeam[]>()
+          return teams.map(({ team, grants }) => ({ team, roles: grants.map((g) => g.role) }))
         },
         enabled: (options?.enabled ?? true) && !!projectId,
       })

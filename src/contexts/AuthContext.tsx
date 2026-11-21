@@ -189,15 +189,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const { state, redirect } = await api.user.authenticate()
-
-      if (state) {
-        setOAuthState(state)
-        window.location.href = redirect
-      }
+      setOAuthState(state)
+      window.location.href = redirect
     } catch (error) {
       logger.error('Login failed', { error })
+      toast.error(
+        t({
+          id: 'auth.signInUnavailable',
+          defaultMessage: "Couldn't start signing in. Please try again.",
+        })
+      )
     }
-  }, [location, queryClient])
+  }, [location, t])
 
   const logout = useCallback(async (): Promise<void> => {
     clearOAuthState()

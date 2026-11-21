@@ -62,17 +62,6 @@ describe('challengeComments.getTaskComments', () => {
     expect(request.url).toContain('api/v2/challenge/3/comments')
   })
 
-  it('falls back to an empty object when the response body is null', async () => {
-    stubFetch(new Response('null', { status: 200 }))
-
-    const { result } = renderHook(() => challengeComments.getTaskComments(3), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual({})
-  })
-
   it('is disabled when challengeId is falsy', () => {
     const fetchMock = stubFetch(new Response('{}', { status: 200 }))
 

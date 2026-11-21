@@ -3,6 +3,13 @@ import type { components } from './openApiTypes'
 export type Team = components['schemas']['org.maproulette.framework.model.Group']
 export type TeamUser = components['schemas']['org.maproulette.framework.model.TeamUser']
 
+/**
+ * A team granted roles on a project or challenge, as listed by
+ * `GET /teams/projectManagers/:id` and `GET /teams/challengeManagers/:id`. The
+ * spec says the project route returns bare `Group`s, but it returns these too.
+ */
+export type ManagingTeam = components['schemas']['org.maproulette.framework.model.ManagingTeam']
+
 // Matches the backend's org.maproulette.framework.model.TeamRole, which is the
 // generic Grant roles under team-facing names. They are ordered by privilege
 // with the lowest number the most powerful, so `role <= TEAM_ROLE_ADMIN` reads

@@ -17,3 +17,5 @@ export type Project = components['schemas']['org.maproulette.framework.model.Pro
   avatarUrl?: string | null
   challengeCounts?: ProjectChallengeCounts
 }
+
+export type ProjectManager = components['schemas']['org.maproulette.framework.model.ProjectManager']
