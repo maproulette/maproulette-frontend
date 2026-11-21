@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, MapPin, Shuffle } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { fetchPrioritizedTasks, fetchTasksNearby } from '@/api/challenge'
 import { useAddTaskBundleComment, useAddTaskComment, useUpdateTaskStatus } from '@/api/task'
 import {
   useCreateTaskBundle,
@@ -264,8 +264,8 @@ export const TaskActionModal = ({
         try {
           const taskCandidates =
             nextTaskType === 'nearby'
-              ? await api.challenge.fetchTasksNearby(task.parent, task.id, 1)
-              : await api.challenge.getRandomTask(task.parent)
+              ? await fetchTasksNearby(task.parent, task.id, 1)
+              : await fetchPrioritizedTasks(task.parent)
           if (taskCandidates && taskCandidates.length > 0) {
             await navigateToTask(taskCandidates[0].id)
           } else {

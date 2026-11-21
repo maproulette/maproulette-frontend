@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { api } from '@/api'
+import { challengeOptions, challengeTaskMarkersOptions } from '@/api/challenge'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
 import { DrawerPortalProvider } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { Spinner } from '@/components/ui/Spinner'
@@ -21,8 +22,8 @@ const clampPriority = (value: number | null | undefined): TaskPriorityValue => {
 
 export const TaskPrioritizationPage = ({ challengeId }: Props) => {
   const { t } = useIntl()
-  const challengeQuery = api.challenge.getChallenge(challengeId)
-  const markersQuery = api.challenge.getChallengeTaskMarkers(challengeId)
+  const challengeQuery = useQuery(challengeOptions(challengeId))
+  const markersQuery = useQuery(challengeTaskMarkersOptions(challengeId))
 
   const initialDraft = useMemo<PrioritizationDraft | null>(() => {
     const challenge = challengeQuery.data

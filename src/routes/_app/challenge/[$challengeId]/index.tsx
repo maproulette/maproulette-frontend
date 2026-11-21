@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { z } from 'zod'
-import { api } from '@/api'
+import { challengeOptions, challengeTaskMarkersOptions } from '@/api/challenge'
 import { BrowsedChallengePage } from '@/components/Pages/BrowsedChallengePage'
 import { TASK_FILTERS } from '@/components/Pages/BrowsedChallengePage/taskFilter'
 import { logger } from '@/lib/logger'
@@ -26,11 +26,11 @@ export const Route = createFileRoute('/_app/challenge/$challengeId/')({
     // fire a marker request per hovered challenge. Only the challenge details
     // block navigation, as before.
     if (!preload) {
-      void queryClient.prefetchQuery(api.challenge.getChallengeTaskMarkersOptions(id))
+      void queryClient.prefetchQuery(challengeTaskMarkersOptions(id))
     }
 
     try {
-      const challenge = await queryClient.ensureQueryData(api.challenge.getChallengeOptions(id))
+      const challenge = await queryClient.ensureQueryData(challengeOptions(id))
 
       return { challenge }
     } catch (error) {

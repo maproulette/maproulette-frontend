@@ -1,7 +1,7 @@
 import { Eye, Flag, Play } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { fetchFirstTasks, fetchPrioritizedTasks } from '@/api/challenge'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ChallengePausedNotice } from '@/components/shared/ChallengePausedNotice'
 import { Button } from '@/components/ui/Button'
@@ -34,7 +34,7 @@ export const ChallengeFooter = () => {
 
     try {
       setIsLoadingTask(true)
-      const task = await api.challenge.getRandomTask(challenge.id)
+      const task = await fetchPrioritizedTasks(challenge.id)
 
       if (task && task.length > 0) {
         await navigateToTask(task[0].id)
@@ -65,7 +65,7 @@ export const ChallengeFooter = () => {
 
     try {
       setIsLoadingTask(true)
-      const tasks = await api.challenge.getFirstTask(challenge.id)
+      const tasks = await fetchFirstTasks(challenge.id)
 
       if (tasks && tasks.length > 0) {
         await navigateToTask(tasks[0].id, { claim: false })

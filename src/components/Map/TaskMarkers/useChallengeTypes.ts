@@ -1,5 +1,6 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { api } from '@/api'
+import { challengeTagsBatchOptions } from '@/api/challenge'
 import { resolveTaskTypeFromTags, type TaskTypeKey } from './taskTypes'
 
 /**
@@ -8,8 +9,12 @@ import { resolveTaskTypeFromTags, type TaskTypeKey } from './taskTypes'
  * data is still loading.
  */
 export const useChallengeTypes = (challengeIds: number[]): Map<number, TaskTypeKey | null> => {
-  const { data: tagsByChallenge } = api.challenge.getChallengeTagsBatch(
-    challengeIds.filter((id) => id > 0)
+  const queryClient = useQueryClient()
+  const { data: tagsByChallenge } = useQuery(
+    challengeTagsBatchOptions(
+      queryClient,
+      challengeIds.filter((id) => id > 0)
+    )
   )
 
   return useMemo(() => {

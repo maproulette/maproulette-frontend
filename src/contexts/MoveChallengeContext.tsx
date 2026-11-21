@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { api } from '@/api'
+import { useMoveChallenge } from '@/api/challenge'
 
 interface MoveChallengeTarget {
   id: number
@@ -32,7 +32,7 @@ export const MoveChallengeProvider = ({
   children,
 }: MoveChallengeProviderProps) => {
   const [challenge, setChallenge] = useState<MoveChallengeTarget | null>(null)
-  const moveChallenge = api.challenge.useMoveChallenge()
+  const moveChallenge = useMoveChallenge()
 
   const openMoveModal = useCallback((target: MoveChallengeTarget) => {
     setChallenge(target)

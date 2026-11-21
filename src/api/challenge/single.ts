@@ -4,7 +4,6 @@ import {
   type QueryKey,
   queryOptions,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
 import type {
@@ -155,7 +154,7 @@ export const invalidateChallengeAggregates = (queryClient: QueryClient, challeng
   })
 }
 
-const putChallenge = (challengeId: number, updates: Partial<Challenge>) =>
+export const putChallenge = (challengeId: number, updates: Partial<Challenge>) =>
   apiRequest
     .put(`api/v2/challenge/${challengeId}`, {
       json: {
@@ -165,587 +164,513 @@ const putChallenge = (challengeId: number, updates: Partial<Challenge>) =>
     })
     .json<Challenge>()
 
-const fetchChallengeTagsBatch = (challengeIds: number[]) =>
+export const fetchChallengeTagsBatch = (challengeIds: number[]) =>
   apiRequest
     .get('api/v2/challenges/tags/batch', {
       searchParams: { challengeIds: challengeIds.join(',') },
     })
     .json<Record<string, Array<{ id: number; name: string }>>>()
 
-const invalidateChallengeListings = (queryClient: QueryClient) => {
+export const invalidateChallengeListings = (queryClient: QueryClient) => {
   void queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'tags'] })
 }
 
-export const challengeSingle = {
-  putChallenge,
+type ChallengeTags = Array<{ id: number; name: string }>
 
-  fetchChallengeTagsBatch,
+const tagsKey = (challengeId: number) => ['challenge', 'tags', challengeId] as const
 
-  invalidateChallengeListings,
+export const challengeOptions = (challengeId: number) =>
+  queryOptions({
+    queryKey: ['challenge', challengeId],
+    queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<ChallengeGetResponse>(),
+    enabled: !!challengeId,
+  })
 
-  getChallenge: (challengeId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', challengeId],
-        queryFn: () =>
-          apiRequest.get(`api/v2/challenge/${challengeId}`).json<ChallengeGetResponse>(),
-        enabled: !!challengeId,
-      })
-    ),
+/**
+ * The users granted a role on this challenge itself, as opposed to those who
+ * reach it through the parent project or the team that owns it.
+ */
+export const challengeManagersOptions = (challengeId: number | undefined) =>
+  queryOptions({
+    queryKey: ['challenge', challengeId, 'managers'],
+    queryFn: () =>
+      apiRequest.get(`api/v2/challenge/${challengeId}/managers`).json<ChallengeManager[]>(),
+    enabled: !!challengeId,
+  })
 
-  getChallengeOptions: (challengeId: number) =>
-    queryOptions({
-      queryKey: ['challenge', challengeId],
-      queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}`).json<ChallengeGetResponse>(),
-    }),
+/**
+ * The teams granted a role on this challenge itself. Does not include the
+ * team that owns it, which manages it by ownership rather than by grant.
+ */
+export const challengeTeamManagersOptions = (challengeId: number | undefined) =>
+  queryOptions({
+    queryKey: ['challenge', challengeId, 'teamManagers'],
+    queryFn: async () => {
+      const teams = await apiRequest
+        .get(`api/v2/teams/challengeManagers/${challengeId}`)
+        .json<ManagingTeam[]>()
+      return teams.map(({ team, grants }) => ({ team, roles: grants.map((g) => g.role) }))
+    },
+    enabled: !!challengeId,
+  })
 
-  /**
-   * The users granted a role on this challenge itself, as opposed to those who
-   * reach it through the parent project or the team that owns it.
-   */
-  managers: (challengeId: number | undefined) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', challengeId, 'managers'],
-        queryFn: () =>
-          apiRequest.get(`api/v2/challenge/${challengeId}/managers`).json<ChallengeManager[]>(),
-        enabled: !!challengeId,
-      })
-    ),
+export const challengeTagsOptions = (challengeId: number) =>
+  queryOptions({
+    queryKey: tagsKey(challengeId),
+    queryFn: () => apiRequest.get(`api/v2/challenge/${challengeId}/tags`).json<ChallengeTags>(),
+    enabled: !!challengeId,
+    staleTime: 5 * 60 * 1000,
+  })
 
-  /**
-   * The teams granted a role on this challenge itself. Does not include the
-   * team that owns it, which manages it by ownership rather than by grant.
-   */
-  teamManagers: (challengeId: number | undefined) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', challengeId, 'teamManagers'],
-        queryFn: async () => {
-          const teams = await apiRequest
-            .get(`api/v2/teams/challengeManagers/${challengeId}`)
-            .json<ManagingTeam[]>()
-          return teams.map(({ team, grants }) => ({ team, roles: grants.map((g) => g.role) }))
-        },
-        enabled: !!challengeId,
-      })
-    ),
+/**
+ * Tags for many challenges in a single request instead of one request per
+ * challenge id. Reuses and backfills the per-challenge `challengeTagsOptions`
+ * cache entries so single-challenge lookups can hit the cache too.
+ */
+export const challengeTagsBatchOptions = (queryClient: QueryClient, challengeIds: number[]) =>
+  queryOptions({
+    queryKey: ['challenge', 'tags', 'batch', [...challengeIds].sort((a, b) => a - b)],
+    queryFn: async () => {
+      const result = new Map<number, ChallengeTags>()
+      const missingIds: number[] = []
 
-  /**
-   * Set a team's role on a challenge, replacing whatever it held before. PUT
-   * rather than POST, so changing a role doesn't leave the team holding two.
-   */
-  useSetTeamChallengeRole: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({
-        challengeId,
-        teamId,
-        role,
-      }: {
-        challengeId: number
-        teamId: number
-        role: number
-      }) => apiRequest.put(`api/v2/team/${teamId}/challenge/${challengeId}/${role}`).text(),
-      onSuccess: (_data, { challengeId }) =>
-        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
-    })
-  },
-
-  useRemoveTeamFromChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ challengeId, teamId }: { challengeId: number; teamId: number }) =>
-        apiRequest.delete(`api/v2/team/${teamId}/challenge/${challengeId}`).text(),
-      onSuccess: (_data, { challengeId }) =>
-        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
-    })
-  },
-
-  useSetChallengeUserRole: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({
-        challengeId,
-        userId,
-        role,
-      }: {
-        challengeId: number
-        userId: number
-        role: number
-      }) => apiRequest.post(`api/v2/challenge/${challengeId}/user/${userId}/${role}`).json(),
-      onSuccess: (_data, { challengeId }) =>
-        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
-    })
-  },
-
-  useRemoveChallengeUser: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ challengeId, userId }: { challengeId: number; userId: number }) =>
-        apiRequest.delete(`api/v2/challenge/${challengeId}/user/${userId}`).json(),
-      onSuccess: (_data, { challengeId }) =>
-        queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
-    })
-  },
-
-  getChallengeTags: (challengeId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'tags', challengeId],
-        queryFn: () =>
-          apiRequest
-            .get(`api/v2/challenge/${challengeId}/tags`)
-            .json<Array<{ id: number; name: string }>>(),
-        enabled: !!challengeId,
-        staleTime: 5 * 60 * 1000,
-      })
-    ),
-
-  /**
-   * Fetches tags for many challenges in a single request instead of one request
-   * per challenge id. Reuses/backfills the per-challenge `getChallengeTags` cache
-   * entries so single-challenge lookups can hit cache too.
-   */
-  getChallengeTagsBatch: (challengeIds: number[]) => {
-    const queryClient = useQueryClient()
-    return useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'tags', 'batch', [...challengeIds].sort((a, b) => a - b)],
-        queryFn: async () => {
-          const result = new Map<number, Array<{ id: number; name: string }>>()
-          const missingIds: number[] = []
-
-          for (const id of challengeIds) {
-            const cached = queryClient.getQueryData<Array<{ id: number; name: string }>>([
-              'challenge',
-              'tags',
-              id,
-            ])
-            if (cached) {
-              result.set(id, cached)
-            } else {
-              missingIds.push(id)
-            }
-          }
-
-          if (missingIds.length === 0) {
-            return result
-          }
-
-          const fetched = await fetchChallengeTagsBatch(missingIds)
-
-          for (const id of missingIds) {
-            const tags = fetched[String(id)] ?? []
-            queryClient.setQueryData(['challenge', 'tags', id], tags)
-            result.set(id, tags)
-          }
-
-          return result
-        },
-        staleTime: 5 * 60 * 1000,
-        enabled: challengeIds.length > 0,
-        // The id list changes whenever a challenge enters or leaves the view;
-        // keep the last answer meanwhile so known challenges don't drop out.
-        placeholderData: keepPreviousData,
-      })
-    )
-  },
-
-  getChallengeStats: (challengeId: number, enabled = true) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'stats', challengeId],
-        queryFn: async () =>
-          apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeStatsResponse>(),
-        enabled: !!challengeId && enabled,
-      })
-    ),
-
-  getChallengeActivity: (challengeId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'activity', challengeId],
-        queryFn: ({ signal }) =>
-          apiRequest
-            .get(`api/v2/data/challenge/${challengeId}/activity`, { signal })
-            .json<ChallengeActivityEntry[]>(),
-        enabled: !!challengeId,
-      })
-    ),
-
-  // Shared so the route loader can prefetch the (often large, slow) task-marker
-  // set without blocking navigation, while the map reads the same query.
-  getChallengeTaskMarkersOptions: (challengeId: number) =>
-    queryOptions({
-      queryKey: ['challenge', 'taskMarkers', challengeId],
-      queryFn: () =>
-        apiRequest
-          .get(`api/v2/challenge/${challengeId}/taskMarkers`)
-          .json<ChallengeTaskMarkersResponse>(),
-      enabled: !!challengeId,
-    }),
-
-  getChallengeTaskMarkers: (challengeId: number) =>
-    useQuery(challengeSingle.getChallengeTaskMarkersOptions(challengeId)),
-
-  getRandomTask: (challengeId: number) =>
-    apiRequest
-      .get(`api/v2/challenge/${challengeId}/tasks/prioritizedTasks`, { searchParams: { limit: 1 } })
-      .json<Task[]>(),
-
-  // Any task in the challenge, regardless of status - used to drop into read-only
-  // browsing when the challenge has no startable tasks left.
-  getFirstTask: (challengeId: number) =>
-    apiRequest
-      .get(`api/v2/challenge/${challengeId}/tasks`, { searchParams: { limit: 1, page: 0 } })
-      .json<Task[]>(),
-
-  fetchTasksNearby: async (challengeId: number, taskId: number, limit = 5) => {
-    const tasks = await apiRequest
-      .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
-        searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
-      })
-      .json<Task[]>()
-    return tasks
-  },
-
-  getTasksNearby: (
-    challengeId: number,
-    taskId: number,
-    options?: { limit?: number; enabled?: boolean }
-  ) => {
-    const { limit = 5, enabled = true } = options ?? {}
-    return useQuery(
-      queryOptions({
-        queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit }],
-        queryFn: () =>
-          apiRequest
-            .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
-              searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
-            })
-            .json<Task[]>(),
-        enabled: enabled && !!challengeId && !!taskId,
-      })
-    )
-  },
-
-  // Mutation hook
-  useCreateChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({
-        projectId,
-        challengeData,
-      }: {
-        projectId: number
-        challengeData: Partial<Challenge>
-      }) => {
-        const { id: _, ...challengeDataWithoutId } = challengeData
-        // Everything the form assembled is passed through as-is; only the
-        // fields the backend requires on create get a default filled in. An
-        // allowlist here would silently drop task-data fields like
-        // remoteGeoJson, leaving the challenge with no source to build from.
-        const body: Record<string, unknown> = {
-          ...challengeDataWithoutId,
-          parent: projectId,
-          name: challengeDataWithoutId.name || '',
-          description: challengeDataWithoutId.description || '',
-          instruction: challengeDataWithoutId.instruction || '',
-          difficulty: challengeDataWithoutId.difficulty ?? 2,
-          enabled: challengeDataWithoutId.enabled ?? true,
-          featured: challengeDataWithoutId.featured ?? false,
-          overpassQL: challengeDataWithoutId.overpassQL || '',
-          overpassTargetType: challengeDataWithoutId.overpassTargetType || '',
+      for (const id of challengeIds) {
+        const cached = queryClient.getQueryData<ChallengeTags>(tagsKey(id))
+        if (cached) {
+          result.set(id, cached)
+        } else {
+          missingIds.push(id)
         }
+      }
 
-        return apiRequest.post('api/v2/challenge', { json: body }).json<Challenge>()
-      },
-      onSuccess: (newChallenge, variables) => {
-        // Set the new challenge in cache
-        queryClient.setQueryData<Challenge>(['challenge', newChallenge.id], newChallenge)
-        // Invalidate project challenges list
-        queryClient.invalidateQueries({
-          queryKey: [...projectKeys.challenges, variables.projectId],
+      if (missingIds.length === 0) {
+        return result
+      }
+
+      const fetched = await fetchChallengeTagsBatch(missingIds)
+
+      for (const id of missingIds) {
+        const tags = fetched[String(id)] ?? []
+        queryClient.setQueryData(tagsKey(id), tags)
+        result.set(id, tags)
+      }
+
+      return result
+    },
+    staleTime: 5 * 60 * 1000,
+    enabled: challengeIds.length > 0,
+    // The id list changes whenever a challenge enters or leaves the view;
+    // keep the last answer meanwhile so known challenges don't drop out.
+    placeholderData: keepPreviousData,
+  })
+
+export const challengeStatsOptions = (challengeId: number) =>
+  queryOptions({
+    queryKey: ['challenge', 'stats', challengeId],
+    queryFn: () =>
+      apiRequest.get(`api/v2/data/challenge/${challengeId}`).json<ChallengeStatsResponse>(),
+    enabled: !!challengeId,
+  })
+
+export const challengeActivityOptions = (challengeId: number) =>
+  queryOptions({
+    queryKey: ['challenge', 'activity', challengeId],
+    queryFn: ({ signal }) =>
+      apiRequest
+        .get(`api/v2/data/challenge/${challengeId}/activity`, { signal })
+        .json<ChallengeActivityEntry[]>(),
+    enabled: !!challengeId,
+  })
+
+export const challengeTaskMarkersOptions = (challengeId: number) =>
+  queryOptions({
+    queryKey: ['challenge', 'taskMarkers', challengeId],
+    queryFn: () =>
+      apiRequest
+        .get(`api/v2/challenge/${challengeId}/taskMarkers`)
+        .json<ChallengeTaskMarkersResponse>(),
+    enabled: !!challengeId,
+  })
+
+/** The challenge's next task by priority, as a list of at most one. */
+export const fetchPrioritizedTasks = (challengeId: number) =>
+  apiRequest
+    .get(`api/v2/challenge/${challengeId}/tasks/prioritizedTasks`, { searchParams: { limit: 1 } })
+    .json<Task[]>()
+
+/**
+ * Any task in the challenge, regardless of status, as a list of at most one.
+ * Used to drop into read-only browsing when no startable tasks are left.
+ */
+export const fetchFirstTasks = (challengeId: number) =>
+  apiRequest
+    .get(`api/v2/challenge/${challengeId}/tasks`, { searchParams: { limit: 1, page: 0 } })
+    .json<Task[]>()
+
+export const fetchTasksNearby = (challengeId: number, taskId: number, limit = 5) =>
+  apiRequest
+    .get(`api/v2/challenge/${challengeId}/tasksNearby/${taskId}`, {
+      searchParams: { excludeSelfLocked: 'true', limit: String(limit) },
+    })
+    .json<Task[]>()
+
+export const tasksNearbyOptions = (challengeId: number, taskId: number, limit = 5) =>
+  queryOptions({
+    queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit }],
+    queryFn: () => fetchTasksNearby(challengeId, taskId, limit),
+    enabled: !!challengeId && !!taskId,
+  })
+
+interface PriorityRules {
+  defaultPriority: number
+  highPriorityRule: string
+  highPriorityBounds: string
+  mediumPriorityRule: string
+  mediumPriorityBounds: string
+  lowPriorityRule: string
+  lowPriorityBounds: string
+}
+
+/**
+ * Dry-run priority recompute. Takes the same body as `useUpdatePriorities`
+ * and returns the priority each task would receive, without writing. The
+ * editor calls this (debounced) so the preview map and match counts match
+ * what a subsequent save would actually persist — client-side `evaluatePriority`
+ * can't evaluate rule-based tiers since the frontend doesn't load OSM tags.
+ */
+export const previewPrioritiesOptions = (challengeId: number, draft: PriorityRules | null) =>
+  queryOptions({
+    // Include the draft in the key so React Query dedupes identical drafts
+    // and fetches anew when the user actually edits — no manual debounce
+    // state plumbing needed on the caller side.
+    queryKey: ['challenge', 'priorities', 'preview', challengeId, draft],
+    queryFn: () =>
+      apiRequest
+        .post(`api/v2/challenge/${challengeId}/priorities/preview`, { json: draft ?? {} })
+        .json<{
+          priorities: Record<string, number>
+          counts: { high: number; medium: number; low: number }
+        }>(),
+    enabled: Number.isFinite(challengeId) && challengeId > 0 && draft != null,
+    // Keep the previous result rendered while a new preview is in flight,
+    // so pins don't flicker to default between keystrokes.
+    placeholderData: keepPreviousData,
+    staleTime: 0,
+  })
+
+/**
+ * Set a team's role on a challenge, replacing whatever it held before. PUT
+ * rather than POST, so changing a role doesn't leave the team holding two.
+ */
+export const useSetTeamChallengeRole = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      challengeId,
+      teamId,
+      role,
+    }: {
+      challengeId: number
+      teamId: number
+      role: number
+    }) => apiRequest.put(`api/v2/team/${teamId}/challenge/${challengeId}/${role}`).text(),
+    onSuccess: (_data, { challengeId }) =>
+      queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
+  })
+}
+
+export const useRemoveTeamFromChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, teamId }: { challengeId: number; teamId: number }) =>
+      apiRequest.delete(`api/v2/team/${teamId}/challenge/${challengeId}`).text(),
+    onSuccess: (_data, { challengeId }) =>
+      queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'teamManagers'] }),
+  })
+}
+
+export const useSetChallengeUserRole = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      challengeId,
+      userId,
+      role,
+    }: {
+      challengeId: number
+      userId: number
+      role: number
+    }) => apiRequest.post(`api/v2/challenge/${challengeId}/user/${userId}/${role}`).json(),
+    onSuccess: (_data, { challengeId }) =>
+      queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
+  })
+}
+
+export const useRemoveChallengeUser = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, userId }: { challengeId: number; userId: number }) =>
+      apiRequest.delete(`api/v2/challenge/${challengeId}/user/${userId}`).json(),
+    onSuccess: (_data, { challengeId }) =>
+      queryClient.invalidateQueries({ queryKey: ['challenge', challengeId, 'managers'] }),
+  })
+}
+
+export const useCreateChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      projectId,
+      challengeData,
+    }: {
+      projectId: number
+      challengeData: Partial<Challenge>
+    }) => {
+      const { id: _, ...challengeDataWithoutId } = challengeData
+      // Everything the form assembled is passed through as-is; only the
+      // fields the backend requires on create get a default filled in. An
+      // allowlist here would silently drop task-data fields like
+      // remoteGeoJson, leaving the challenge with no source to build from.
+      const body: Record<string, unknown> = {
+        ...challengeDataWithoutId,
+        parent: projectId,
+        name: challengeDataWithoutId.name || '',
+        description: challengeDataWithoutId.description || '',
+        instruction: challengeDataWithoutId.instruction || '',
+        difficulty: challengeDataWithoutId.difficulty ?? 2,
+        enabled: challengeDataWithoutId.enabled ?? true,
+        featured: challengeDataWithoutId.featured ?? false,
+        overpassQL: challengeDataWithoutId.overpassQL || '',
+        overpassTargetType: challengeDataWithoutId.overpassTargetType || '',
+      }
+
+      return apiRequest.post('api/v2/challenge', { json: body }).json<Challenge>()
+    },
+    onSuccess: (newChallenge, variables) => {
+      // Set the new challenge in cache
+      queryClient.setQueryData<Challenge>(['challenge', newChallenge.id], newChallenge)
+      // Invalidate project challenges list
+      queryClient.invalidateQueries({
+        queryKey: [...projectKeys.challenges, variables.projectId],
+      })
+    },
+  })
+}
+
+export const useRemoveChallengeKeywords = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, keywords }: { challengeId: number; keywords: string[] }) =>
+      apiRequest
+        .delete(`api/v2/challenge/${challengeId}/tags`, {
+          searchParams: { tags: keywords.join(',') },
         })
-      },
-    })
-  },
+        .text(),
+    onSuccess: (_data, { challengeId }) =>
+      queryClient.invalidateQueries({ queryKey: tagsKey(challengeId) }),
+  })
+}
 
-  useRemoveChallengeKeywords: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ challengeId, keywords }: { challengeId: number; keywords: string[] }) =>
-        apiRequest
-          .delete(`api/v2/challenge/${challengeId}/tags`, {
-            searchParams: { tags: keywords.join(',') },
-          })
-          .text(),
-      onSuccess: (_data, { challengeId }) =>
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'tags', challengeId] }),
-    })
-  },
-
-  useUpdateChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({
-        challengeId,
-        updates,
-      }: {
-        challengeId: number
-        updates: Partial<Challenge>
-      }) => putChallenge(challengeId, updates),
-      // Repaint the edited fields everywhere the challenge is cached before the
-      // request goes out; the invalidations below reconcile with the server.
-      onMutate: ({ challengeId, updates }) => ({
-        rollback: patchChallengeInCaches(queryClient, challengeId, updates),
-      }),
-      onError: (_error, _variables, context) => context?.rollback(),
-      onSuccess: (updatedChallenge) => {
-        queryClient.setQueryData<ChallengeGetResponse>(
-          ['challenge', updatedChallenge.id],
-          updatedChallenge
-        )
-        invalidateChallengeListings(queryClient)
-      },
-    })
-  },
-
-  useUpdatePriorities: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      // The body must always include every priority key, even when a tier's
-      // rule or bounds have been cleared. Empty strings tell the backend
-      // "unset this field"; omitting them makes the DAL fall back to the
-      // cached value and persist stale config the user thought they deleted.
-      mutationFn: ({
-        challengeId,
-        priorities,
-      }: {
-        challengeId: number
-        priorities: {
-          defaultPriority: number
-          highPriorityRule: string
-          highPriorityBounds: string
-          mediumPriorityRule: string
-          mediumPriorityBounds: string
-          lowPriorityRule: string
-          lowPriorityBounds: string
-        }
-      }) =>
-        apiRequest
-          .put(`api/v2/challenge/${challengeId}/priorities`, { json: priorities })
-          .json<Challenge>(),
-      onSuccess: (updated, variables) => {
-        queryClient.setQueryData<ChallengeGetResponse>(['challenge', updated.id], updated)
-        // Backend re-evaluates every task's priority; force a refetch so the
-        // map markers and any per-task views show the new tier values.
-        void queryClient.invalidateQueries({
-          queryKey: ['challenge', 'taskMarkers', variables.challengeId],
-        })
-        void queryClient.invalidateQueries({ queryKey: taskKeys.all })
-      },
-    })
-  },
-
-  /**
-   * Dry-run priority recompute. Takes the same body as `useUpdatePriorities`
-   * and returns the priority each task would receive, without writing. The
-   * editor calls this (debounced) so the preview map and match counts match
-   * what a subsequent save would actually persist — client-side `evaluatePriority`
-   * can't evaluate rule-based tiers since the frontend doesn't load OSM tags.
-   */
-  usePreviewPriorities: (
-    challengeId: number,
-    draft: {
-      defaultPriority: number
-      highPriorityRule: string
-      highPriorityBounds: string
-      mediumPriorityRule: string
-      mediumPriorityBounds: string
-      lowPriorityRule: string
-      lowPriorityBounds: string
-    } | null
-  ) =>
-    useQuery({
-      // Include the draft in the key so React Query dedupes identical drafts
-      // and fetches anew when the user actually edits — no manual debounce
-      // state plumbing needed on the caller side.
-      queryKey: ['challenge', 'priorities', 'preview', challengeId, draft],
-      queryFn: () =>
-        apiRequest
-          .post(`api/v2/challenge/${challengeId}/priorities/preview`, {
-            json: draft ?? {},
-          })
-          .json<{
-            priorities: Record<string, number>
-            counts: { high: number; medium: number; low: number }
-          }>(),
-      enabled: Number.isFinite(challengeId) && challengeId > 0 && draft != null,
-      // Keep the previous result rendered while a new preview is in flight,
-      // so pins don't flicker to default between keystrokes.
-      placeholderData: (prev) => prev,
-      staleTime: 0,
+export const useUpdateChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, updates }: { challengeId: number; updates: Partial<Challenge> }) =>
+      putChallenge(challengeId, updates),
+    // Repaint the edited fields everywhere the challenge is cached before the
+    // request goes out; the invalidations below reconcile with the server.
+    onMutate: ({ challengeId, updates }) => ({
+      rollback: patchChallengeInCaches(queryClient, challengeId, updates),
     }),
+    onError: (_error, _variables, context) => context?.rollback(),
+    onSuccess: (updatedChallenge) => {
+      queryClient.setQueryData<ChallengeGetResponse>(
+        ['challenge', updatedChallenge.id],
+        updatedChallenge
+      )
+      invalidateChallengeListings(queryClient)
+    },
+  })
+}
 
-  useUploadGeoJSON: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({
-        challengeId,
-        geoJSONFile,
-        options,
-      }: {
-        challengeId: number
-        geoJSONFile: File
-        options?: {
-          lineByLine?: boolean
-          removeUnmatched?: boolean
-          dataOriginDate?: string
-          skipSnapshot?: boolean
-        }
-      }) => {
-        const searchParams: Record<string, string> = {
-          lineByLine: String(options?.lineByLine ?? false),
-          removeUnmatched: String(options?.removeUnmatched ?? false),
-          skipSnapshot: String(options?.skipSnapshot ?? true),
-        }
-        if (options?.dataOriginDate) {
-          searchParams.dataOriginDate = options.dataOriginDate
-        }
+export const useUpdatePriorities = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    // The body must always include every priority key, even when a tier's
+    // rule or bounds have been cleared. Empty strings tell the backend
+    // "unset this field"; omitting them makes the DAL fall back to the
+    // cached value and persist stale config the user thought they deleted.
+    mutationFn: ({ challengeId, priorities }: { challengeId: number; priorities: PriorityRules }) =>
+      apiRequest
+        .put(`api/v2/challenge/${challengeId}/priorities`, { json: priorities })
+        .json<Challenge>(),
+    onSuccess: (updated, variables) => {
+      queryClient.setQueryData<ChallengeGetResponse>(['challenge', updated.id], updated)
+      // Backend re-evaluates every task's priority; force a refetch so the
+      // map markers and any per-task views show the new tier values.
+      void queryClient.invalidateQueries({
+        queryKey: ['challenge', 'taskMarkers', variables.challengeId],
+      })
+      void queryClient.invalidateQueries({ queryKey: taskKeys.all })
+    },
+  })
+}
 
-        const formData = new FormData()
-        formData.append('json', geoJSONFile)
-
-        return apiRequest
-          .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
-            body: formData,
-            searchParams,
-            timeout: false,
-          })
-          .json<void>()
-      },
-      onSuccess: (_data, variables) => {
-        // Invalidate challenge task markers since tasks changed
-        queryClient.invalidateQueries({
-          queryKey: ['challenge', 'taskMarkers', variables.challengeId],
-        })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
-      },
-    })
-  },
-
-  refreshChallenge: async (
-    challengeId: number,
-    queryClient: QueryClient,
-    { includeTaskMarkers = true }: { includeTaskMarkers?: boolean } = {}
-  ) => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] }),
-      ...(includeTaskMarkers
-        ? [queryClient.invalidateQueries({ queryKey: ['challenge', 'taskMarkers', challengeId] })]
-        : []),
-      queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] }),
-      queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] }),
-    ])
-  },
-
-  useMoveChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ challengeId, toProjectId }: { challengeId: number; toProjectId: number }) =>
-        apiRequest.post(`api/v2/challenge/${challengeId}/project/${toProjectId}`).json<void>(),
-      onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
-      },
-    })
-  },
-
-  useDeleteChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: (challengeId: number) =>
-        apiRequest.delete(`api/v2/challenge/${challengeId}`).then(() => ({ challengeId })),
-      onSuccess: (_, challengeId) => {
-        queryClient.removeQueries({ queryKey: ['challenge', challengeId] })
-        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
-      },
-    })
-  },
-
-  useArchiveChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ challengeId, isArchived }: { challengeId: number; isArchived: boolean }) =>
-        apiRequest
-          .post(`api/v2/challenge/${challengeId}/archive`, {
-            json: { isArchived },
-          })
-          .json<void>(),
-      onMutate: ({ challengeId, isArchived }) => ({
-        rollback: patchChallengeInCaches(queryClient, challengeId, { isArchived }),
-      }),
-      onError: (_error, _variables, context) => context?.rollback(),
-      onSuccess: (_, variables) => {
-        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
-      },
-    })
-  },
-
-  usePauseChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({ challengeId, paused }: { challengeId: number; paused: boolean }) =>
-        apiRequest
-          .put(`api/v2/challenge/${challengeId}`, {
-            json: { id: challengeId, paused },
-          })
-          .json<Challenge>(),
-      onMutate: ({ challengeId, paused }) => ({
-        rollback: patchChallengeInCaches(queryClient, challengeId, { paused }),
-      }),
-      onError: (_error, _variables, context) => context?.rollback(),
-      onSuccess: (_, variables) => {
-        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
-      },
-    })
-  },
-
-  useRebuildChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: ({
-        challengeId,
-        removeUnmatched,
-        skipSnapshot,
-      }: {
-        challengeId: number
+export const useUploadGeoJSON = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      challengeId,
+      geoJSONFile,
+      options,
+    }: {
+      challengeId: number
+      geoJSONFile: File
+      options?: {
+        lineByLine?: boolean
         removeUnmatched?: boolean
+        dataOriginDate?: string
         skipSnapshot?: boolean
-      }) => {
-        const searchParams: Record<string, string> = {}
-        if (removeUnmatched !== undefined) searchParams.removeUnmatched = String(removeUnmatched)
-        if (skipSnapshot !== undefined) searchParams.skipSnapshot = String(skipSnapshot)
-        return apiRequest
-          .put(`api/v2/challenge/${challengeId}/rebuild`, { searchParams, timeout: false })
-          .json<void>()
-      },
-      onSettled: (_, _error, variables) => {
-        queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
-        queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
-      },
-    })
-  },
+      }
+    }) => {
+      const searchParams: Record<string, string> = {
+        lineByLine: String(options?.lineByLine ?? false),
+        removeUnmatched: String(options?.removeUnmatched ?? false),
+        skipSnapshot: String(options?.skipSnapshot ?? true),
+      }
+      if (options?.dataOriginDate) {
+        searchParams.dataOriginDate = options.dataOriginDate
+      }
+
+      const formData = new FormData()
+      formData.append('json', geoJSONFile)
+
+      return apiRequest
+        .put(`api/v2/challenge/${challengeId}/addFileTasks`, {
+          body: formData,
+          searchParams,
+          timeout: false,
+        })
+        .json<void>()
+    },
+    onSuccess: (_data, variables) => {
+      // Invalidate challenge task markers since tasks changed
+      queryClient.invalidateQueries({
+        queryKey: ['challenge', 'taskMarkers', variables.challengeId],
+      })
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
+    },
+  })
+}
+
+export const refreshChallenge = async (
+  challengeId: number,
+  queryClient: QueryClient,
+  { includeTaskMarkers = true }: { includeTaskMarkers?: boolean } = {}
+) => {
+  await Promise.all([
+    queryClient.invalidateQueries({ queryKey: ['challenge', challengeId] }),
+    ...(includeTaskMarkers
+      ? [queryClient.invalidateQueries({ queryKey: ['challenge', 'taskMarkers', challengeId] })]
+      : []),
+    queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', challengeId] }),
+    queryClient.invalidateQueries({ queryKey: ['challenge', 'activity', challengeId] }),
+  ])
+}
+
+export const useMoveChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, toProjectId }: { challengeId: number; toProjectId: number }) =>
+      apiRequest.post(`api/v2/challenge/${challengeId}/project/${toProjectId}`).json<void>(),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+      queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
+    },
+  })
+}
+
+export const useDeleteChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (challengeId: number) =>
+      apiRequest.delete(`api/v2/challenge/${challengeId}`).then(() => ({ challengeId })),
+    onSuccess: (_, challengeId) => {
+      queryClient.removeQueries({ queryKey: ['challenge', challengeId] })
+      queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+    },
+  })
+}
+
+export const useArchiveChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, isArchived }: { challengeId: number; isArchived: boolean }) =>
+      apiRequest
+        .post(`api/v2/challenge/${challengeId}/archive`, {
+          json: { isArchived },
+        })
+        .json<void>(),
+    onMutate: ({ challengeId, isArchived }) => ({
+      rollback: patchChallengeInCaches(queryClient, challengeId, { isArchived }),
+    }),
+    onError: (_error, _variables, context) => context?.rollback(),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+      queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+    },
+  })
+}
+
+export const usePauseChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ challengeId, paused }: { challengeId: number; paused: boolean }) =>
+      apiRequest
+        .put(`api/v2/challenge/${challengeId}`, {
+          json: { id: challengeId, paused },
+        })
+        .json<Challenge>(),
+    onMutate: ({ challengeId, paused }) => ({
+      rollback: patchChallengeInCaches(queryClient, challengeId, { paused }),
+    }),
+    onError: (_error, _variables, context) => context?.rollback(),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+      queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
+    },
+  })
+}
+
+export const useRebuildChallenge = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      challengeId,
+      removeUnmatched,
+      skipSnapshot,
+    }: {
+      challengeId: number
+      removeUnmatched?: boolean
+      skipSnapshot?: boolean
+    }) => {
+      const searchParams: Record<string, string> = {}
+      if (removeUnmatched !== undefined) searchParams.removeUnmatched = String(removeUnmatched)
+      if (skipSnapshot !== undefined) searchParams.skipSnapshot = String(skipSnapshot)
+      return apiRequest
+        .put(`api/v2/challenge/${challengeId}/rebuild`, { searchParams, timeout: false })
+        .json<void>()
+    },
+    onSettled: (_, _error, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
+      queryClient.invalidateQueries({ queryKey: projectKeys.challenges })
+      queryClient.invalidateQueries({ queryKey: ['challenge', 'stats', variables.challengeId] })
+    },
+  })
 }

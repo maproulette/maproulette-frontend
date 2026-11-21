@@ -1,7 +1,7 @@
 import { CircleAlert } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useRebuildChallenge, useUploadGeoJSON } from '@/api/challenge'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
@@ -88,8 +88,8 @@ export const RebuildTasksDialog = ({
     }),
   }
 
-  const rebuild = api.challenge.useRebuildChallenge()
-  const uploadGeoJSON = api.challenge.useUploadGeoJSON()
+  const rebuild = useRebuildChallenge()
+  const uploadGeoJSON = useUploadGeoJSON()
   const unmatchedId = useId()
   const fileId = useId()
   const dateId = useId()

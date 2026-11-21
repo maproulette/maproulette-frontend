@@ -2,7 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { api } from '@/api'
+import {
+  useArchiveChallenge,
+  useDeleteChallenge,
+  usePauseChallenge,
+  useUpdateChallenge,
+} from '@/api/challenge'
 import {
   projectChallengesOptions,
   projectOptions,
@@ -123,11 +128,11 @@ export const ManageProjectDetailProvider = ({ children }: { children: ReactNode 
   const updateSettingsMutation = useUpdateUserSettings()
   const updateProjectMutation = useUpdateProject()
   const deleteProjectMutation = useDeleteProject()
-  const deleteChallengeMutation = api.challenge.useDeleteChallenge()
-  const archiveChallengeMutation = api.challenge.useArchiveChallenge()
-  const pauseChallengeMutation = api.challenge.usePauseChallenge()
+  const deleteChallengeMutation = useDeleteChallenge()
+  const archiveChallengeMutation = useArchiveChallenge()
+  const pauseChallengeMutation = usePauseChallenge()
   const actionErrors = useManageActionErrors()
-  const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const updateChallengeMutation = useUpdateChallenge()
 
   // Derived values
   const pinnedChallengeIds = useMemo(() => getPinnedChallengeIds(user), [user])

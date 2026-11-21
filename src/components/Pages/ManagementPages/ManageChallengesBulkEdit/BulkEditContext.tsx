@@ -2,7 +2,14 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import {
+  challengeOptions,
+  fetchChallengeTagsBatch,
+  invalidateChallengeListings,
+  putChallenge,
+  useRemoveChallengeKeywords,
+  useUpdatePriorities,
+} from '@/api/challenge'
 import { projectChallengesOptions, projectOptions } from '@/api/project'
 import { useSetPageTitle } from '@/contexts/ChromeContext'
 import { useIntl } from '@/i18n'
@@ -60,8 +67,8 @@ export const BulkEditProvider = ({
   const { data: projectChallenges, isLoading: isLoadingChallenges } = useQuery(
     projectChallengesOptions(projectId)
   )
-  const removeKeywords = api.challenge.useRemoveChallengeKeywords()
-  const updatePriorities = api.challenge.useUpdatePriorities()
+  const removeKeywords = useRemoveChallengeKeywords()
+  const updatePriorities = useUpdatePriorities()
   const [savedCount, setSavedCount] = useState<number | null>(null)
   const [failure, setFailure] = useState<BulkEditFailure | null>(null)
 
@@ -99,7 +106,7 @@ export const BulkEditProvider = ({
 
       try {
         const tagsById = fields.has('additionalKeywords')
-          ? await api.challenge.fetchChallengeTagsBatch(challenges.map(({ id }) => id))
+          ? await fetchChallengeTagsBatch(challenges.map(({ id }) => id))
           : {}
 
         for (const challenge of challenges) {
@@ -108,9 +115,7 @@ export const BulkEditProvider = ({
           const { updates, removedKeywords } = buildChallengeBulkUpdate(values, keywords, fields)
 
           const updated =
-            Object.keys(updates).length > 0
-              ? await api.challenge.putChallenge(challenge.id, updates)
-              : undefined
+            Object.keys(updates).length > 0 ? await putChallenge(challenge.id, updates) : undefined
           if (removedKeywords.length > 0) {
             await removeKeywords.mutateAsync({
               challengeId: challenge.id,
@@ -121,7 +126,7 @@ export const BulkEditProvider = ({
             const latest =
               updated ??
               (await queryClient.fetchQuery({
-                ...api.challenge.getChallengeOptions(challenge.id),
+                ...challengeOptions(challenge.id),
                 staleTime: 0,
               }))
             await updatePriorities.mutateAsync({
@@ -150,7 +155,7 @@ export const BulkEditProvider = ({
         return
       } finally {
         if (saved.length > 0) {
-          api.challenge.invalidateChallengeListings(queryClient)
+          invalidateChallengeListings(queryClient)
           for (const { id } of saved) {
             void queryClient.invalidateQueries({ queryKey: ['challenge', id] })
           }

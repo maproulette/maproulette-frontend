@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
-import { api } from '@/api'
+import { challengeOptions } from '@/api/challenge'
 import { DrawerPortalProvider } from '@/components/TaskInfoPanel/DrawerPortalContext'
 import { useChallengeSubscription } from '@/contexts/WebSocketContext'
 import { ChallengeTasksExplorerProvider } from './ChallengeTasksExplorer'
@@ -9,8 +10,8 @@ export const ManageChallengeDetail = () => {
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
   useChallengeSubscription(Number(challengeId))
 
-  const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
-    Number(challengeId)
+  const { data: challengeData, isLoading: isLoadingChallenge } = useQuery(
+    challengeOptions(Number(challengeId))
   )
 
   return (

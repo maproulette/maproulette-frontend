@@ -3,7 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { Navigation, Shuffle } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { fetchPrioritizedTasks, fetchTasksNearby } from '@/api/challenge'
 import { Button } from '@/components/ui/Button'
 import { Spinner } from '@/components/ui/Spinner'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
@@ -28,7 +28,7 @@ export const NavigationActions = ({
     try {
       const nearbyTasks = await queryClient.fetchQuery({
         queryKey: ['challenge', 'tasksNearby', challengeId, { taskId, limit: 1 }],
-        queryFn: () => api.challenge.fetchTasksNearby(challengeId, taskId, 1),
+        queryFn: () => fetchTasksNearby(challengeId, taskId, 1),
       })
       if (nearbyTasks && nearbyTasks.length > 0) {
         await navigateToTask(nearbyTasks[0].id)
@@ -55,7 +55,7 @@ export const NavigationActions = ({
   const handleGoToRandomTask = async () => {
     setIsLoadingRandom(true)
     try {
-      const randomTasks = await api.challenge.getRandomTask(challengeId)
+      const randomTasks = await fetchPrioritizedTasks(challengeId)
       if (randomTasks && randomTasks.length > 0) {
         await navigateToTask(randomTasks[0].id)
       } else {

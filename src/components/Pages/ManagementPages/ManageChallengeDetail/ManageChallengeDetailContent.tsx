@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
 import {
   Calendar,
@@ -11,7 +12,7 @@ import {
   Users,
 } from 'lucide-react'
 import { type ReactNode, useMemo, useState } from 'react'
-import { api } from '@/api'
+import { challengeOptions, challengeStatsOptions, useUpdateChallenge } from '@/api/challenge'
 import { ChallengeStatusIndicator } from '@/components/Pages/ManagementPages/ManageChallengeDetail/ChallengeStatusIndicator'
 import {
   getChallengeSourceType,
@@ -77,7 +78,7 @@ const ChallengeStats = ({
   challengeData: ChallengeGetResponse | undefined
 }) => {
   const { t, locale } = useIntl()
-  const { data: statsData, isLoading } = api.challenge.getChallengeStats(challengeId)
+  const { data: statsData, isLoading } = useQuery(challengeStatsOptions(challengeId))
   const challengeStats = statsData?.[0]
   const stats = challengeStats?.actions
   const tasksRemaining = challengeData?.completionMetrics?.tasksRemaining ?? stats?.available ?? 0
@@ -231,13 +232,13 @@ export const ManageChallengeDetailContent = () => {
   const { t } = useIntl()
   const { challengeId } = useParams({ from: '/_app/manage/challenge/$challengeId/' })
 
-  const { data: challengeData, isLoading: isLoadingChallenge } = api.challenge.getChallenge(
-    Number(challengeId)
+  const { data: challengeData, isLoading: isLoadingChallenge } = useQuery(
+    challengeOptions(Number(challengeId))
   )
   const [rebuildOpen, setRebuildOpen] = useState(false)
   const { user } = useAuthContext()
   const canSetFeatured = isSuperUser(user)
-  const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const updateChallengeMutation = useUpdateChallenge()
   const toggleField = (field: 'enabled' | 'paused' | 'featured') => (id: number, value: boolean) =>
     updateChallengeMutation.mutateAsync({ challengeId: id, updates: { [field]: value } })
 

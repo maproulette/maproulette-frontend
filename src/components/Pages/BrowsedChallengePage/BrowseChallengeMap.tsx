@@ -1,7 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { Map as MapIcon } from 'lucide-react'
 import { useMemo } from 'react'
-import { api } from '@/api'
+import { challengeTaskMarkersOptions } from '@/api/challenge'
 import { ChallengeTasksMap } from '@/components/Map/ChallengeTasksMap'
 import { MapSettingRadioGroup, MapSettingsSection } from '@/components/Map/MapSettings'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
@@ -21,7 +22,7 @@ export const BrowseChallengeMap = () => {
   const isDesktop = useIsDesktopLayoutContext()
   const { setShowMap } = useMapToggle()
   const mapStyle = useInitialMapStyle(challenge, user)
-  const { data, isLoading } = api.challenge.getChallengeTaskMarkers(challenge.id)
+  const { data, isLoading } = useQuery(challengeTaskMarkersOptions(challenge.id))
   const { tasks } = useSearch({ from: '/_app/challenge/$challengeId/' })
   const filter = tasks ?? storedTaskFilter.get()
   const navigate = useNavigate({ from: '/challenge/$challengeId' })

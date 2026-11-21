@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { AlertCircle } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { api } from '@/api'
+import { refreshChallenge } from '@/api/challenge'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Panel } from '@/components/ui/Panel'
 import { Spinner } from '@/components/ui/Spinner'
@@ -55,7 +55,7 @@ export const ChallengeStatusIndicator = ({
 
   useEffect(() => {
     if (!hasInitialRefresh.current && NON_TERMINAL_STATUSES.includes(status)) {
-      api.challenge.refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
+      refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
       setLastRefresh(Date.now())
       hasInitialRefresh.current = true
     }
@@ -65,7 +65,7 @@ export const ChallengeStatusIndicator = ({
   useEffect(() => {
     if (!NON_TERMINAL_STATUSES.includes(status)) return
     const refreshInterval = setInterval(() => {
-      api.challenge.refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
+      refreshChallenge(challengeId, queryClient, { includeTaskMarkers: false })
       setLastRefresh(Date.now())
     }, 10000) // 10 seconds
     return () => clearInterval(refreshInterval)
@@ -74,7 +74,7 @@ export const ChallengeStatusIndicator = ({
   useEffect(() => {
     const nonTerminal = NON_TERMINAL_STATUSES.includes(status)
     if (wasNonTerminal.current && !nonTerminal) {
-      api.challenge.refreshChallenge(challengeId, queryClient)
+      refreshChallenge(challengeId, queryClient)
     }
     wasNonTerminal.current = nonTerminal
   }, [status, challengeId])

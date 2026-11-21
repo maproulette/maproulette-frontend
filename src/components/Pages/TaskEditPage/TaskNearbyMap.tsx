@@ -3,8 +3,9 @@ import { useCallback, useId, useMemo } from 'react'
 import type { MapMouseEvent } from 'react-map-gl/maplibre'
 import { Layer, Marker, Source } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useQuery } from '@tanstack/react-query'
 import { MapPin } from 'lucide-react'
-import { api } from '@/api'
+import { tasksNearbyOptions } from '@/api/challenge'
 import { MapGL } from '@/components/Map/MapGL'
 import { getCurrentMapStyle } from '@/components/Map/mapStyles'
 import { useIntl } from '@/i18n'
@@ -24,7 +25,7 @@ export const TaskNearbyMap = ({ selectedTaskId, onTaskSelect }: TaskNearbyMapPro
 
   const [currentLng, currentLat] = task.location.coordinates
 
-  const { data = [], isLoading } = api.challenge.getTasksNearby(task.parent, task.id)
+  const { data = [], isLoading } = useQuery(tasksNearbyOptions(task.parent, task.id))
 
   const nearbyTasks = useMemo(() => {
     const sourceTasks = data.filter(

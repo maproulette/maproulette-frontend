@@ -1,8 +1,13 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { api } from '@/api'
-import { challengeListingInfiniteOptions } from '@/api/challenge'
+import {
+  challengeListingInfiniteOptions,
+  useArchiveChallenge,
+  useDeleteChallenge,
+  usePauseChallenge,
+  useUpdateChallenge,
+} from '@/api/challenge'
 import { managedProjectsOptions } from '@/api/project'
 import { useUpdateUserSettings } from '@/api/user'
 import {
@@ -113,10 +118,10 @@ export const ManageChallengesProvider = ({ children }: { children: ReactNode }) 
 
   // Mutations
   const updateSettingsMutation = useUpdateUserSettings()
-  const deleteChallengeMutation = api.challenge.useDeleteChallenge()
-  const archiveChallengeMutation = api.challenge.useArchiveChallenge()
-  const pauseChallengeMutation = api.challenge.usePauseChallenge()
-  const updateChallengeMutation = api.challenge.useUpdateChallenge()
+  const deleteChallengeMutation = useDeleteChallenge()
+  const archiveChallengeMutation = useArchiveChallenge()
+  const pauseChallengeMutation = usePauseChallenge()
+  const updateChallengeMutation = useUpdateChallenge()
   const actionErrors = useManageActionErrors()
 
   // All useCallback hooks below are stored in the context value — stable references

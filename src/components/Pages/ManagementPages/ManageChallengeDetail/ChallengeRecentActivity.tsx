@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { History } from 'lucide-react'
 import { useMemo } from 'react'
-import { api } from '@/api'
+import { challengeActivityOptions } from '@/api/challenge'
 import { TASK_STATUS_MESSAGES } from '@/components/Pages/ManagementPages/taskStatusLabels'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -61,7 +62,7 @@ interface ChallengeRecentActivityProps {
 
 export const ChallengeRecentActivity = ({ challengeId }: ChallengeRecentActivityProps) => {
   const { t, locale } = useIntl()
-  const { data, isError } = api.challenge.getChallengeActivity(challengeId)
+  const { data, isError } = useQuery(challengeActivityOptions(challengeId))
 
   // Reason: groups activity data by day - avoids expensive regrouping and sorting on every render
   const dayGroups = useMemo(() => (data?.length ? buildDayGroups(data) : []), [data])

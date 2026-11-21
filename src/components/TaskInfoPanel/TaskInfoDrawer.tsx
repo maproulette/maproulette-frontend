@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { ExternalLink, Package, Play, Share2, X, ZoomIn } from 'lucide-react'
 import type { MapRef } from 'react-map-gl/maplibre'
-import { api } from '@/api'
+import { challengeOptions } from '@/api/challenge'
 import { projectOptions } from '@/api/project'
 import { taskOptions } from '@/api/task'
 import { taskBundleOptions } from '@/api/taskBundle'
@@ -37,7 +37,7 @@ export const TaskInfoDrawer = ({ selectedTask, onClose, mapRef }: TaskInfoDrawer
   const { data: fullTask } = useQuery(taskOptions(selectedTask?.id ?? 0))
   const task = fullTask as Task | undefined
 
-  const { data: challenge } = api.challenge.getChallenge(task?.parent ?? 0)
+  const { data: challenge } = useQuery(challengeOptions(task?.parent ?? 0))
   const { data: project } = useQuery(projectOptions(challenge?.parent))
   const { data: bundleData } = useQuery(taskBundleOptions(task?.bundleId ?? 0))
 

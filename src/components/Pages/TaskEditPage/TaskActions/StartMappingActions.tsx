@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { MapPin, Shuffle } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { fetchPrioritizedTasks } from '@/api/challenge'
 import { useTaskContext } from '@/components/Pages/TaskEditPage/contexts/TaskContext'
 import { Button } from '@/components/ui/Button'
 import { Spinner } from '@/components/ui/Spinner'
@@ -19,7 +19,7 @@ export const StartMappingActions = ({ challengeId }: { challengeId: number }) =>
   const handleGoToDifferentTask = async () => {
     setIsLoadingNext(true)
     try {
-      const randomTasks = await api.challenge.getRandomTask(challengeId)
+      const randomTasks = await fetchPrioritizedTasks(challengeId)
       if (randomTasks && randomTasks.length > 0) {
         await navigateToTask(randomTasks[0].id)
       } else {

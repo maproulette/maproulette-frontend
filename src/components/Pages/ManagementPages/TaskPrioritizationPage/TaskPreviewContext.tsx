@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
-import { api } from '@/api'
+import { previewPrioritiesOptions } from '@/api/challenge'
 import type { TaskPriorityValue } from '@/types/Priority'
 import type { TaskMarker } from '@/types/Task'
 import { analyzeWarnings, type PrioritizationWarnings } from './evaluation/ruleAnalysis'
@@ -55,7 +56,7 @@ export const TaskPreviewProvider = ({
   // Stable body reference so the query key only changes when the debounced
   // draft genuinely changes shape.
   const previewBody = useMemo(() => draftToPriorityBody(debouncedDraft), [debouncedDraft])
-  const previewQuery = api.challenge.usePreviewPriorities(challengeId, previewBody)
+  const previewQuery = useQuery(previewPrioritiesOptions(challengeId, previewBody))
 
   const preview = useMemo<PreviewResult>(() => {
     const data = previewQuery.data

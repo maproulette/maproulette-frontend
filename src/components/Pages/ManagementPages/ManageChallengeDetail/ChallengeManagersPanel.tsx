@@ -1,5 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import {
+  challengeManagersOptions,
+  challengeTeamManagersOptions,
+  useRemoveChallengeUser,
+  useRemoveTeamFromChallenge,
+  useSetChallengeUserRole,
+  useSetTeamChallengeRole,
+} from '@/api/challenge'
 import { ManagersPanel } from '@/components/Pages/ManagementPages/shared/ManagersPanel'
 import { useIntl } from '@/i18n'
 import { logger } from '@/lib/logger'
@@ -14,12 +22,12 @@ import { TEAM_ATTACHMENT_ROLE } from '@/lib/projectRoles'
  */
 export const ChallengeManagersPanel = ({ challengeId }: { challengeId: number }) => {
   const { t } = useIntl()
-  const { data: managers, isLoading } = api.challenge.managers(challengeId)
-  const { data: teamManagers } = api.challenge.teamManagers(challengeId)
-  const setUserRole = api.challenge.useSetChallengeUserRole()
-  const removeUser = api.challenge.useRemoveChallengeUser()
-  const setTeamRole = api.challenge.useSetTeamChallengeRole()
-  const removeTeam = api.challenge.useRemoveTeamFromChallenge()
+  const { data: managers, isLoading } = useQuery(challengeManagersOptions(challengeId))
+  const { data: teamManagers } = useQuery(challengeTeamManagersOptions(challengeId))
+  const setUserRole = useSetChallengeUserRole()
+  const removeUser = useRemoveChallengeUser()
+  const setTeamRole = useSetTeamChallengeRole()
+  const removeTeam = useRemoveTeamFromChallenge()
 
   const handleRemove = async (userId: number, displayName: string) => {
     try {

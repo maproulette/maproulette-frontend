@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import {
   Archive,
@@ -15,7 +16,7 @@ import {
   User,
 } from 'lucide-react'
 import { useState } from 'react'
-import { api } from '@/api'
+import { challengeOptions } from '@/api/challenge'
 import {
   ArchiveButton,
   DiscoverableButton,
@@ -394,7 +395,7 @@ const ChallengeRebuildDialog = ({
   challengeId: number
   onClose: () => void
 }) => {
-  const { data: challenge } = api.challenge.getChallenge(challengeId)
+  const { data: challenge } = useQuery(challengeOptions(challengeId))
   if (!challenge) return null
   return (
     <RebuildTasksDialog

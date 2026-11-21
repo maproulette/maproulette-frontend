@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
 import { z } from 'zod'
-import { api } from '@/api'
+import { challengeTaskMarkersOptions } from '@/api/challenge'
 import { useClustering } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
 import { useTaskBundleContext } from '@/components/Pages/TaskEditPage/contexts/TaskBundleContext'
@@ -23,8 +24,9 @@ export const TaskEditMapProvider = ({ children }: { children: ReactNode }) => {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [showExploreLayer, setShowExploreLayer] = useStored(showOtherChallenges)
 
-  const { data: taskMarkersData, isLoading: isLoadingMarkers } =
-    api.challenge.getChallengeTaskMarkers(task.parent)
+  const { data: taskMarkersData, isLoading: isLoadingMarkers } = useQuery(
+    challengeTaskMarkersOptions(task.parent)
+  )
 
   const allMarkers = useMemo(() => flattenTaskMarkers(taskMarkersData), [taskMarkersData])
   const [isClustered, setIsClustered] = useClustering(allMarkers.length)

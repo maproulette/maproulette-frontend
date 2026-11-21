@@ -3,7 +3,7 @@ import { createContext, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { MapRef } from 'react-map-gl/maplibre'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { useUpdatePriorities } from '@/api/challenge'
 import { ClusterToggle } from '@/components/Map/TaskMarkers/ClusterToggle'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { DrawerPortalTarget, useDrawerPortal } from '@/components/TaskInfoPanel/DrawerPortalContext'
@@ -42,7 +42,7 @@ const PreviewMapBridgeContext = createContext<PreviewMapBridgeValue | null>(null
 export const PrioritizationContent = ({ challengeId, challengeName }: Props) => {
   const { t } = useIntl()
   const { draft, isDirty, reset, markSaved, setTierBounds } = usePrioritizationContext()
-  const mutation = api.challenge.useUpdatePriorities()
+  const mutation = useUpdatePriorities()
   const navigate = useNavigate()
   const mapRef = useRef<MapRef | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)

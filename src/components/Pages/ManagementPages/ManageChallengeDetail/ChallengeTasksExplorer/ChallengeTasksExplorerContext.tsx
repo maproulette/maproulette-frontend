@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react'
-import { api } from '@/api'
+import { challengeTaskMarkersOptions } from '@/api/challenge'
 import { taskIdsMatchingPropertiesOptions } from '@/api/task'
 import { coordInBbox, parseBoundsString } from '@/components/Map/mapUtils'
 import { flattenTaskMarkers } from '@/components/Map/TaskMarkers/utils'
@@ -130,7 +130,7 @@ export const ChallengeTasksExplorerProvider = ({
     setViewportBoundsRaw(parseBoundsString(boundsStr))
   }, [])
 
-  const { data: taskMarkersData, isLoading } = api.challenge.getChallengeTaskMarkers(challengeId)
+  const { data: taskMarkersData, isLoading } = useQuery(challengeTaskMarkersOptions(challengeId))
 
   // Feature properties live server-side, so the property rule is resolved to a
   // set of matching task ids and intersected with the markers below.

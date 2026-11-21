@@ -1,9 +1,7 @@
-import { challenge } from './challenge'
 import { nominatim } from './nominatim'
 import { osm } from './osm'
 
 export const api = {
-  challenge,
   osm,
   nominatim,
 }

@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
-import { api } from '@/api'
+import { challengeStatsOptions } from '@/api/challenge'
 import { useBrowsedChallengeContext } from '@/components/Pages/BrowsedChallengePage/contexts/BrowsedChallengeContext'
 import { ProgressBar } from '@/components/shared/ProgressBar'
 import { Button } from '@/components/ui/Button'
@@ -26,7 +27,10 @@ export const ChallengeProgress = () => {
 
   // /api/v2/data/challenge/:id requires auth, so logged-out users get the
   // listing-provided completion metrics instead (which have no timing data).
-  const { data: statsData } = api.challenge.getChallengeStats(challenge.id, isAuthenticated && open)
+  const { data: statsData } = useQuery({
+    ...challengeStatsOptions(challenge.id),
+    enabled: !!challenge.id && isAuthenticated && open,
+  })
   const stats = statsData?.[0]?.actions
   const actions: ActionCounts | undefined = stats ?? challenge.completionMetrics
   const summary = useActionSummary(actions)

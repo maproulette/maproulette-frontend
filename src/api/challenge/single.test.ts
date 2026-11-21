@@ -1,50 +1,29 @@
 // @vitest-environment happy-dom
+import { useQuery } from '@tanstack/react-query'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
 import { stubFetch } from '@/test/stubFetch'
 import { waitFor } from '@/test/waitFor'
-import type {
-  Challenge,
-  ChallengeActivityEntry,
-  ChallengeGetResponse,
-  ChallengeStatsResponse,
-  ChallengeTaskMarkersResponse,
-} from '@/types/Challenge'
-import type { Task } from '@/types/Task'
+import type { Challenge } from '@/types/Challenge'
 import {
-  challengeSingle,
+  challengeTagsBatchOptions,
   invalidateChallengeAggregates,
   patchChallengeInCaches,
   patchChallengeTaskMarker,
+  previewPrioritiesOptions,
+  useArchiveChallenge,
+  useCreateChallenge,
+  usePauseChallenge,
+  useRebuildChallenge,
+  useRemoveChallengeKeywords,
+  useUpdateChallenge,
+  useUploadGeoJSON,
 } from './single'
 
 afterEach(() => {
   vi.unstubAllGlobals()
 })
-
-function makePriorities(
-  overrides: Partial<{
-    defaultPriority: number
-    highPriorityRule: string
-    highPriorityBounds: string
-    mediumPriorityRule: string
-    mediumPriorityBounds: string
-    lowPriorityRule: string
-    lowPriorityBounds: string
-  }> = {}
-) {
-  return {
-    defaultPriority: 0,
-    highPriorityRule: '',
-    highPriorityBounds: '',
-    mediumPriorityRule: '',
-    mediumPriorityBounds: '',
-    lowPriorityRule: '',
-    lowPriorityBounds: '',
-    ...overrides,
-  }
-}
 
 describe('patchChallengeTaskMarker', () => {
   it('does nothing when challengeId is falsy', () => {
@@ -138,74 +117,14 @@ describe('invalidateChallengeAggregates', () => {
   })
 })
 
-describe('challengeSingle.getChallenge', () => {
-  it('fetches a challenge by id', async () => {
-    stubFetch(new Response(JSON.stringify({ id: 1, name: 'Alpha' }), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallenge(1), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual({ id: 1, name: 'Alpha' })
-  })
-
-  it('is disabled when challengeId is falsy', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallenge(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeSingle.getChallengeOptions', () => {
-  it('builds queryOptions whose queryFn fetches the challenge', async () => {
-    stubFetch(new Response(JSON.stringify({ id: 3, name: 'Beta' }), { status: 200 }))
-
-    const options = challengeSingle.getChallengeOptions(3)
-    expect(options.queryKey).toEqual(['challenge', 3])
-
-    const data = await (options.queryFn as unknown as () => Promise<ChallengeGetResponse>)()
-    expect(data).toEqual({ id: 3, name: 'Beta' })
-  })
-})
-
-describe('challengeSingle.getChallengeTags', () => {
-  it('fetches tags for a challenge', async () => {
-    stubFetch(new Response(JSON.stringify([{ id: 1, name: 'tag-a' }]), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeTags(4), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([{ id: 1, name: 'tag-a' }])
-  })
-
-  it('is disabled when challengeId is falsy', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeTags(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeSingle.getChallengeTagsBatch', () => {
+describe('getChallengeTagsBatch', () => {
   it('returns all tags from cache without fetching when every id is already cached', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(['challenge', 'tags', 1], [{ id: 1, name: 'tag-a' }])
     queryClient.setQueryData(['challenge', 'tags', 2], [{ id: 2, name: 'tag-b' }])
 
-    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([1, 2]), {
+    const { result } = renderHook(() => useQuery(challengeTagsBatchOptions(queryClient, [1, 2])), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -227,7 +146,7 @@ describe('challengeSingle.getChallengeTagsBatch', () => {
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(['challenge', 'tags', 1], [{ id: 1, name: 'tag-a' }])
 
-    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([1, 2]), {
+    const { result } = renderHook(() => useQuery(challengeTagsBatchOptions(queryClient, [1, 2])), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -251,7 +170,7 @@ describe('challengeSingle.getChallengeTagsBatch', () => {
     stubFetch(new Response(JSON.stringify({}), { status: 200 }))
     const queryClient = createTestQueryClient()
 
-    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([3]), {
+    const { result } = renderHook(() => useQuery(challengeTagsBatchOptions(queryClient, [3])), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -260,223 +179,6 @@ describe('challengeSingle.getChallengeTagsBatch', () => {
     expect(result.current.data).toEqual(new Map([[3, []]]))
     expect(queryClient.getQueryData(['challenge', 'tags', 3])).toEqual([])
   })
-
-  it('is disabled when given an empty array of challenge ids', () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeTagsBatch([]), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeSingle.getChallengeStats', () => {
-  it('fetches stats for a challenge', async () => {
-    const stats = { actions: [] } as unknown as ChallengeStatsResponse
-    stubFetch(new Response(JSON.stringify(stats), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeStats(4), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(stats)
-  })
-
-  it('is disabled when challengeId is falsy', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeStats(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('is disabled when the enabled param is false, even with a valid challengeId', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeStats(4, false), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeSingle.getChallengeActivity', () => {
-  it('fetches activity entries for a challenge', async () => {
-    const activity: ChallengeActivityEntry[] = [
-      { date: '2024-01-01', status: 1, statusName: 'Fixed', count: 3 },
-    ]
-    stubFetch(new Response(JSON.stringify(activity), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeActivity(4), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(activity)
-  })
-
-  it('is disabled when challengeId is falsy', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeActivity(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeSingle.getChallengeTaskMarkersOptions', () => {
-  it('builds queryOptions whose queryFn fetches task markers', async () => {
-    const markers = { markers: [], overlaps: [] } as unknown as ChallengeTaskMarkersResponse
-    stubFetch(new Response(JSON.stringify(markers), { status: 200 }))
-
-    const options = challengeSingle.getChallengeTaskMarkersOptions(6)
-    expect(options.queryKey).toEqual(['challenge', 'taskMarkers', 6])
-    expect(options.enabled).toBe(true)
-
-    const data = await (options.queryFn as unknown as () => Promise<ChallengeTaskMarkersResponse>)()
-    expect(data).toEqual(markers)
-  })
-
-  it('is disabled when challengeId is falsy', () => {
-    const options = challengeSingle.getChallengeTaskMarkersOptions(0)
-
-    expect(options.enabled).toBe(false)
-  })
-})
-
-describe('challengeSingle.getChallengeTaskMarkers', () => {
-  it('fetches task markers for a challenge', async () => {
-    const markers = {
-      markers: [{ id: 1 }],
-      overlaps: [],
-    } as unknown as ChallengeTaskMarkersResponse
-    stubFetch(new Response(JSON.stringify(markers), { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeTaskMarkers(6), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(markers)
-  })
-
-  it('is disabled when challengeId is falsy', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getChallengeTaskMarkers(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeSingle.getRandomTask', () => {
-  it('fetches a random task', async () => {
-    const tasks = [{ id: 11 }, { id: 22 }] as unknown as Task[]
-    const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-
-    const result = await challengeSingle.getRandomTask(9)
-
-    expect(result).toEqual(tasks)
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/challenge/9/tasks/prioritizedTasks')
-    expect(new URL(request.url).searchParams.get('limit')).toBe('1')
-  })
-})
-
-describe('challengeSingle.getFirstTask', () => {
-  it('fetches the first task in the challenge', async () => {
-    const tasks = [{ id: 33 }] as unknown as Task[]
-    const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-
-    const result = await challengeSingle.getFirstTask(9)
-
-    expect(result).toEqual(tasks)
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/challenge/9/tasks')
-    const params = new URL(request.url).searchParams
-    expect(params.get('limit')).toBe('1')
-    expect(params.get('page')).toBe('0')
-  })
-})
-
-describe('challengeSingle.fetchTasksNearby', () => {
-  it('fetches nearby tasks using the default limit', async () => {
-    const tasks = [{ id: 5 }] as unknown as Task[]
-    const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-
-    const result = await challengeSingle.fetchTasksNearby(9, 3)
-
-    expect(result).toEqual(tasks)
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/challenge/9/tasksNearby/3')
-    const params = new URL(request.url).searchParams
-    expect(params.get('excludeSelfLocked')).toBe('true')
-    expect(params.get('limit')).toBe('5')
-  })
-
-  it('fetches nearby tasks using a custom limit', async () => {
-    const tasks: Task[] = []
-    const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-
-    await challengeSingle.fetchTasksNearby(9, 3, 20)
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).searchParams.get('limit')).toBe('20')
-  })
-})
-
-describe('challengeSingle.getTasksNearby', () => {
-  it('fetches nearby tasks', async () => {
-    const tasks = [{ id: 5 }, { id: 6 }] as unknown as Task[]
-    stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-    const queryClient = createTestQueryClient()
-
-    const { result } = renderHook(() => challengeSingle.getTasksNearby(9, 3), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(tasks)
-  })
-
-  it('is disabled when taskId is falsy', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getTasksNearby(9, 0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('is disabled when challengeId is falsy', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.getTasksNearby(0, 3), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
 })
 
 type ChallengeDraft = Omit<Partial<Challenge>, 'dataOriginDate'> & {
@@ -484,14 +186,14 @@ type ChallengeDraft = Omit<Partial<Challenge>, 'dataOriginDate'> & {
   dataOriginDate?: string
 }
 
-describe('challengeSingle.useCreateChallenge', () => {
+describe('useCreateChallenge', () => {
   it('applies defaults for omitted fields and omits extra keys when unset', async () => {
     const created = { id: 30, name: '' } as unknown as Challenge
     const fetchMock = stubFetch(new Response(JSON.stringify(created), { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => challengeSingle.useCreateChallenge(), {
+    const { result } = renderHook(() => useCreateChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -525,7 +227,7 @@ describe('challengeSingle.useCreateChallenge', () => {
     const created = { id: 31 } as unknown as Challenge
     const fetchMock = stubFetch(new Response(JSON.stringify(created), { status: 200 }))
 
-    const { result } = renderHook(() => challengeSingle.useCreateChallenge(), {
+    const { result } = renderHook(() => useCreateChallenge(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -568,7 +270,7 @@ describe('challengeSingle.useCreateChallenge', () => {
     const created = { id: 32 } as unknown as Challenge
     const fetchMock = stubFetch(new Response(JSON.stringify(created), { status: 200 }))
 
-    const { result } = renderHook(() => challengeSingle.useCreateChallenge(), {
+    const { result } = renderHook(() => useCreateChallenge(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -588,10 +290,10 @@ describe('challengeSingle.useCreateChallenge', () => {
   })
 })
 
-describe('challengeSingle.useRemoveChallengeKeywords', () => {
+describe('useRemoveChallengeKeywords', () => {
   it('DELETEs the comma-joined keywords from the challenge', async () => {
     const fetchMock = stubFetch(new Response('', { status: 200 }))
-    const { result } = renderHook(() => challengeSingle.useRemoveChallengeKeywords(), {
+    const { result } = renderHook(() => useRemoveChallengeKeywords(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -607,111 +309,7 @@ describe('challengeSingle.useRemoveChallengeKeywords', () => {
   })
 })
 
-describe('challengeSingle.useUpdateChallenge', () => {
-  it('updates a challenge and refreshes related caches', async () => {
-    const updated = { id: 40, name: 'Updated' } as unknown as Challenge
-    const fetchMock = stubFetch(new Response(JSON.stringify(updated), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => challengeSingle.useUpdateChallenge(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ challengeId: 40, updates: { name: 'Updated' } })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('PUT')
-    const body = await request.clone().json()
-    expect(body).toEqual({ id: 40, name: 'Updated' })
-
-    expect(queryClient.getQueryData(['challenge', 40])).toEqual(updated)
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
-    // The manage-challenges pages read from ['challenge', 'listing'], so it must be
-    // invalidated or their cards keep rendering stale enabled/name values.
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'exploreInfinite'] })
-  })
-})
-
-describe('challengeSingle.useUpdatePriorities', () => {
-  it('updates priorities and refreshes task-dependent caches', async () => {
-    const updated = { id: 60 } as unknown as Challenge
-    const fetchMock = stubFetch(new Response(JSON.stringify(updated), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => challengeSingle.useUpdatePriorities(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    const priorities = makePriorities({ defaultPriority: 1 })
-    result.current.mutate({ challengeId: 60, priorities })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('PUT')
-    const body = await request.clone().json()
-    expect(body).toEqual(priorities)
-
-    expect(queryClient.getQueryData(['challenge', 60])).toEqual(updated)
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'taskMarkers', 60] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task'] })
-  })
-})
-
-describe('challengeSingle.usePreviewPriorities', () => {
-  it('fetches a priority preview when enabled', async () => {
-    const preview = { priorities: { '1': 0 }, counts: { high: 1, medium: 2, low: 3 } }
-    stubFetch(new Response(JSON.stringify(preview), { status: 200 }))
-
-    const draft = makePriorities({ defaultPriority: 2 })
-    const { result } = renderHook(() => challengeSingle.usePreviewPriorities(7, draft), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(preview)
-  })
-
-  it('is disabled when draft is null', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => challengeSingle.usePreviewPriorities(7, null), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('is disabled when challengeId is not positive', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-    const draft = makePriorities()
-
-    const { result } = renderHook(() => challengeSingle.usePreviewPriorities(0, draft), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('is disabled when challengeId is not finite', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-    const draft = makePriorities()
-
-    const { result } = renderHook(() => challengeSingle.usePreviewPriorities(Number.NaN, draft), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
+describe('usePreviewPriorities', () => {
   it('falls back to an empty body when manually refetched with a null draft', async () => {
     const fetchMock = stubFetch(
       new Response(JSON.stringify({ priorities: {}, counts: { high: 0, medium: 0, low: 0 } }), {
@@ -719,7 +317,7 @@ describe('challengeSingle.usePreviewPriorities', () => {
       })
     )
 
-    const { result } = renderHook(() => challengeSingle.usePreviewPriorities(7, null), {
+    const { result } = renderHook(() => useQuery(previewPrioritiesOptions(7, null)), {
       wrapper: queryClientWrapper(),
     })
     expect(result.current.fetchStatus).toBe('idle')
@@ -733,13 +331,13 @@ describe('challengeSingle.usePreviewPriorities', () => {
   })
 })
 
-describe('challengeSingle.useUploadGeoJSON', () => {
+describe('useUploadGeoJSON', () => {
   it('uploads a GeoJSON file with default options', async () => {
     const fetchMock = stubFetch(new Response('null', { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => challengeSingle.useUploadGeoJSON(), {
+    const { result } = renderHook(() => useUploadGeoJSON(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -769,7 +367,7 @@ describe('challengeSingle.useUploadGeoJSON', () => {
   it('honors provided options including dataOriginDate', async () => {
     const fetchMock = stubFetch(new Response('null', { status: 200 }))
 
-    const { result } = renderHook(() => challengeSingle.useUploadGeoJSON(), {
+    const { result } = renderHook(() => useUploadGeoJSON(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -793,94 +391,6 @@ describe('challengeSingle.useUploadGeoJSON', () => {
     expect(url.searchParams.get('removeUnmatched')).toBe('true')
     expect(url.searchParams.get('skipSnapshot')).toBe('false')
     expect(url.searchParams.get('dataOriginDate')).toBe('2024-06-01')
-  })
-})
-
-describe('challengeSingle.refreshChallenge', () => {
-  it('invalidates all per-challenge aggregate caches', async () => {
-    const queryClient = createTestQueryClient()
-    const spy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    await challengeSingle.refreshChallenge(80, queryClient)
-
-    expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 80] })
-    expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'taskMarkers', 80] })
-    expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'stats', 80] })
-    expect(spy).toHaveBeenCalledWith({ queryKey: ['challenge', 'activity', 80] })
-    expect(spy).toHaveBeenCalledTimes(4)
-  })
-})
-
-describe('challengeSingle.useMoveChallenge', () => {
-  it('moves a challenge to a new project and refreshes caches', async () => {
-    const fetchMock = stubFetch(new Response('null', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => challengeSingle.useMoveChallenge(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ challengeId: 90, toProjectId: 5 })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('POST')
-    expect(request.url).toContain('api/v2/challenge/90/project/5')
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 90] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
-  })
-})
-
-describe('challengeSingle.useDeleteChallenge', () => {
-  it('deletes a challenge and clears related caches', async () => {
-    const fetchMock = stubFetch(new Response('null', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const removeSpy = vi.spyOn(queryClient, 'removeQueries')
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => challengeSingle.useDeleteChallenge(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate(95)
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual({ challengeId: 95 })
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('DELETE')
-    expect(request.url).toContain('api/v2/challenge/95')
-    expect(removeSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 95] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
-  })
-})
-
-describe('challengeSingle.useArchiveChallenge', () => {
-  it('archives a challenge and refreshes related caches', async () => {
-    const fetchMock = stubFetch(new Response('null', { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => challengeSingle.useArchiveChallenge(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate({ challengeId: 100, isArchived: true })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('POST')
-    expect(request.url).toContain('api/v2/challenge/100/archive')
-    const body = await request.clone().json()
-    expect(body).toEqual({ isArchived: true })
-
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 100] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
   })
 })
 
@@ -1037,7 +547,7 @@ describe('optimistic challenge toggles', () => {
       [{ id: 120, paused: false }]
     )
 
-    const { result } = renderHook(() => challengeSingle.usePauseChallenge(), {
+    const { result } = renderHook(() => usePauseChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -1062,7 +572,7 @@ describe('optimistic challenge toggles', () => {
       [{ id: 121, isArchived: false }]
     )
 
-    const { result } = renderHook(() => challengeSingle.useArchiveChallenge(), {
+    const { result } = renderHook(() => useArchiveChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -1080,7 +590,7 @@ describe('optimistic challenge toggles', () => {
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(['challenge', 123], { id: 123, enabled: true })
 
-    const { result } = renderHook(() => challengeSingle.useUpdateChallenge(), {
+    const { result } = renderHook(() => useUpdateChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -1098,7 +608,7 @@ describe('optimistic challenge toggles', () => {
       [{ id: 124, paused: false }]
     )
 
-    const { result } = renderHook(() => challengeSingle.usePauseChallenge(), {
+    const { result } = renderHook(() => usePauseChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -1124,7 +634,7 @@ describe('optimistic challenge toggles', () => {
     const queryClient = createTestQueryClient()
     queryClient.setQueryData(['challenge', 122], { id: 122, enabled: true })
 
-    const { result } = renderHook(() => challengeSingle.useUpdateChallenge(), {
+    const { result } = renderHook(() => useUpdateChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -1139,13 +649,13 @@ describe('optimistic challenge toggles', () => {
   })
 })
 
-describe('challengeSingle.useRebuildChallenge', () => {
+describe('useRebuildChallenge', () => {
   it('rebuilds a challenge without extra search params when none are provided', async () => {
     const fetchMock = stubFetch(new Response('null', { status: 200 }))
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => challengeSingle.useRebuildChallenge(), {
+    const { result } = renderHook(() => useRebuildChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 
@@ -1167,7 +677,7 @@ describe('challengeSingle.useRebuildChallenge', () => {
   it('includes removeUnmatched and skipSnapshot when provided', async () => {
     const fetchMock = stubFetch(new Response('null', { status: 200 }))
 
-    const { result } = renderHook(() => challengeSingle.useRebuildChallenge(), {
+    const { result } = renderHook(() => useRebuildChallenge(), {
       wrapper: queryClientWrapper(),
     })
 
@@ -1186,7 +696,7 @@ describe('challengeSingle.useRebuildChallenge', () => {
     const queryClient = createTestQueryClient()
     const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
-    const { result } = renderHook(() => challengeSingle.useRebuildChallenge(), {
+    const { result } = renderHook(() => useRebuildChallenge(), {
       wrapper: queryClientWrapper(queryClient),
     })
 

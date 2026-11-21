@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
-import { api } from '@/api'
+import { fetchPrioritizedTasks } from '@/api/challenge'
 import { useSkipTask as useSkipTaskMutation } from '@/api/task'
 import { useNavigateToTask } from '@/hooks/useNavigateToTask'
 import { useIntl } from '@/i18n'
@@ -34,7 +34,7 @@ export const useSkipTask = (task: Task) => {
     try {
       await skipMutation(task.id)
 
-      const randomTasks = await api.challenge.getRandomTask(task.parent)
+      const randomTasks = await fetchPrioritizedTasks(task.parent)
       if (randomTasks && randomTasks.length > 0) {
         await navigateToTask(randomTasks[0].id)
       } else {

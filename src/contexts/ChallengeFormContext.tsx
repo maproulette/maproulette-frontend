@@ -1,7 +1,16 @@
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useMemo } from 'react'
-import { api } from '@/api'
+import {
+  challengeOptions,
+  challengeTagsOptions,
+  useCreateChallenge,
+  useDeleteChallenge,
+  useRemoveChallengeKeywords,
+  useUpdateChallenge,
+  useUploadGeoJSON,
+} from '@/api/challenge'
 import type { ChallengeFormValues } from '@/components/Pages/ManagementPages/ManageChallengeNew/ChallengeForm'
 import { isChallengeSourceEditable } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeFormSchema'
 import { removedKeywords } from '@/components/Pages/ManagementPages/ManageChallengeNew/challengeKeywords'
@@ -25,8 +34,8 @@ interface ChallengeFormContextType {
 const ChallengeFormContext = createContext<ChallengeFormContextType | undefined>(undefined)
 
 const useChallengeWithKeywords = (challengeId: number) => {
-  const { data, isLoading } = api.challenge.getChallenge(challengeId)
-  const keywords = api.challenge.getChallengeTags(challengeId)
+  const { data, isLoading } = useQuery(challengeOptions(challengeId))
+  const keywords = useQuery(challengeTagsOptions(challengeId))
   const challenge = useMemo<Challenge | undefined>(
     () =>
       data && !keywords.isPending
@@ -55,9 +64,9 @@ export const CreateChallengeFormProvider = ({
     () => (cloneSource ? buildCloneFormValues(cloneSource, projectId) : undefined),
     [cloneSource, projectId]
   )
-  const createChallengeMutation = api.challenge.useCreateChallenge()
-  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
-  const deleteChallengeMutation = api.challenge.useDeleteChallenge()
+  const createChallengeMutation = useCreateChallenge()
+  const uploadGeoJSONMutation = useUploadGeoJSON()
+  const deleteChallengeMutation = useDeleteChallenge()
 
   const onSubmit = useCallback(
     async (values: ChallengeFormValues) => {
@@ -153,9 +162,9 @@ export const EditChallengeFormProvider = ({
 }) => {
   const navigate = useNavigate()
   const { challenge, isLoading } = useChallengeWithKeywords(challengeId)
-  const updateChallengeMutation = api.challenge.useUpdateChallenge()
-  const removeKeywordsMutation = api.challenge.useRemoveChallengeKeywords()
-  const uploadGeoJSONMutation = api.challenge.useUploadGeoJSON()
+  const updateChallengeMutation = useUpdateChallenge()
+  const removeKeywordsMutation = useRemoveChallengeKeywords()
+  const uploadGeoJSONMutation = useUploadGeoJSON()
 
   const onSubmit = useCallback(
     async (values: ChallengeFormValues) => {
