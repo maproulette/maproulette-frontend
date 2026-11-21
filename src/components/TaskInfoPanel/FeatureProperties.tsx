@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, Crosshair, Eye, EyeOff } from 'lucide-react'
 import { type ReactNode, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { api } from '@/api'
+import { osmElementOptions, osmServerUrl } from '@/api/osm'
 import { useOptionalTaskFeatureContext } from '@/components/Pages/TaskEditPage/contexts/TaskFeatureContext'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 import { useIntl } from '@/i18n'
@@ -151,7 +151,7 @@ export const FeatureProperties = ({
     data: osmElement,
     isLoading: osmLoading,
     isError: osmFailed,
-  } = useQuery({ ...api.osm.elementOptions(osmRef), enabled: open && !!osmRef })
+  } = useQuery({ ...osmElementOptions(osmRef), enabled: open && !!osmRef })
   const osmTags = useMemo(() => (osmElement ? tagsFromOsmElement(osmElement) : {}), [osmElement])
   const osmStatus = osmLoading
     ? t({ id: 'common.loading', defaultMessage: 'Loading…' })
@@ -316,7 +316,7 @@ export const FeatureProperties = ({
                   })}
                 </span>
                 <a
-                  href={`${api.osm.getOSMServerUrl()}/${osmRef}`}
+                  href={`${osmServerUrl}/${osmRef}`}
                   target="_blank"
                   rel="noreferrer"
                   className="text-[10px] text-link hover:underline"

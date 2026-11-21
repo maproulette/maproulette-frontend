@@ -1,4 +1,4 @@
-import { api } from '@/api'
+import { osmUserProfileURL } from '@/api/osm'
 
 type OsmUserLinkProps = Omit<React.ComponentProps<'a'>, 'href'> & {
   username: string
@@ -12,7 +12,7 @@ export const OsmUserLink = ({
   ...props
 }: OsmUserLinkProps) => (
   <a
-    href={api.osm.osmUserProfileURL(username)}
+    href={osmUserProfileURL(username)}
     target="_blank"
     rel="noopener noreferrer"
     className={className}

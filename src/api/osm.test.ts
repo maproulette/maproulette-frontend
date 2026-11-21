@@ -1,6 +1,6 @@
 import { Window } from 'happy-dom'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
-import { osm } from './osm'
+import { fetchOSMElement, osmUserProfileURL } from './osm'
 
 // osm.ts relies on the browser's DOMParser for the XML-based endpoints. The
 // `unit` vitest project runs in a plain Node environment (no DOM), so we
@@ -25,19 +25,13 @@ function stubFetch(implementation: (uri: string) => Promise<Response> | Response
 }
 
 describe('osm', () => {
-  describe('getOSMServerUrl', () => {
-    it('returns the configured (default) OSM server URL', () => {
-      expect(osm.getOSMServerUrl()).toBe(OSM_SERVER)
-    })
-  })
-
   describe('osmUserProfileURL', () => {
     it('builds a profile URL for a simple username', () => {
-      expect(osm.osmUserProfileURL('someuser')).toBe(`${OSM_SERVER}/user/someuser`)
+      expect(osmUserProfileURL('someuser')).toBe(`${OSM_SERVER}/user/someuser`)
     })
 
     it('URL-encodes special characters in the username', () => {
-      expect(osm.osmUserProfileURL('john doe/weird')).toBe(
+      expect(osmUserProfileURL('john doe/weird')).toBe(
         `${OSM_SERVER}/user/${encodeURIComponent('john doe/weird')}`
       )
     })
@@ -50,7 +44,7 @@ describe('osm', () => {
     it('returns a normalized JSON element by default', async () => {
       stubFetch(() => new Response(xml, { status: 200 }))
 
-      const element = await osm.fetchOSMElement('node/123')
+      const element = await fetchOSMElement('node/123')
 
       expect(element).toEqual({
         id: 123,
@@ -68,7 +62,7 @@ describe('osm', () => {
         '<osm><node id="123"><tag k="highway" v="residential"/><tag k="oneway" v="yes"/><tag k="lanes" v="2"/></node></osm>'
       stubFetch(() => new Response(threeTagsXml, { status: 200 }))
 
-      const element = await osm.fetchOSMElement('node/123')
+      const element = await fetchOSMElement('node/123')
 
       expect(element).toEqual({
         id: 123,
@@ -83,7 +77,7 @@ describe('osm', () => {
     it('returns the raw XML Document when asXML is true', async () => {
       stubFetch(() => new Response(xml, { status: 200 }))
 
-      const doc = await osm.fetchOSMElement('node/123', true)
+      const doc = await fetchOSMElement('node/123', true)
 
       expect(doc).not.toBeNull()
       expect((doc as Document).querySelector('node')?.getAttribute('id')).toBe('123')
@@ -92,7 +86,7 @@ describe('osm', () => {
     it('returns null when the requested element type is not present in the response', async () => {
       stubFetch(() => new Response('<osm></osm>', { status: 200 }))
 
-      const element = await osm.fetchOSMElement('way/999')
+      const element = await fetchOSMElement('way/999')
 
       expect(element).toBeNull()
     })
@@ -100,7 +94,7 @@ describe('osm', () => {
     it('fetches from the correct URI using the type/id path', async () => {
       const fetchMock = stubFetch(() => new Response(xml, { status: 200 }))
 
-      await osm.fetchOSMElement('node/123')
+      await fetchOSMElement('node/123')
 
       expect(fetchMock).toHaveBeenCalledWith(`${OSM_API_SERVER}/api/0.6/node/123`)
     })
@@ -122,7 +116,7 @@ describe('osm', () => {
     ] as const)('%s', async (_label, status, statusText, expected) => {
       stubFetch(() => new Response('', { status, statusText }))
 
-      await expect(osm.fetchOSMElement('node/123')).rejects.toThrow(expected)
+      await expect(fetchOSMElement('node/123')).rejects.toThrow(expected)
     })
   })
 })

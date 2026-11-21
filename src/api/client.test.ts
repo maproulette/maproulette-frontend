@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { stubFetch } from '@/test/stubFetch'
-import { apiRequest, convertParamsToSearchParams } from './index'
+import { apiRequest, convertParamsToSearchParams } from './client'
 
 describe('convertParamsToSearchParams', () => {
   it('passes through string values unchanged', () => {
@@ -73,10 +73,8 @@ describe('convertParamsToSearchParams', () => {
   })
 
   it('omits a key whose value matches none of the supported types', () => {
-    // The parameter type only allows string/number/boolean/object/array/null/undefined,
-    // but nothing stops a caller from passing something else at runtime (e.g. a
-    // function). Cast narrowly instead of widening with `as any` to exercise that
-    // fallthrough path, where the key is silently left unset.
+    // The parameter type only allows simple types (string, boolean, array, etc)
+    // but nothing stops a caller from passing something else at runtime.
     const params = { cb: () => {} } as unknown as Parameters<typeof convertParamsToSearchParams>[0]
 
     expect(convertParamsToSearchParams(params)).toEqual({})
@@ -84,9 +82,8 @@ describe('convertParamsToSearchParams', () => {
 })
 
 // window.env's fields are declared read-only (they're meant to be set once at
-// app boot from env.json), but this test needs to simulate a deployment with
-// no configured API base URL, so it writes through a narrow mutable view
-// instead of widening with `as any`.
+// app boot from env.json), but this test needs to mutate it to mock a config
+// with a missing required parameter.
 type MutableEnv = { VITE_API_BASE_URL?: string }
 
 describe('apiRequest beforeRequest hook', () => {
@@ -120,7 +117,7 @@ describe('apiRequest beforeRequest hook', () => {
     vi.resetModules()
 
     try {
-      const { apiRequest: freshApiRequest } = await import('./index')
+      const { apiRequest: freshApiRequest } = await import('./client')
       const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
 
       await freshApiRequest.get('some/path').json()

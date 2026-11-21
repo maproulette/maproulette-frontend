@@ -44,7 +44,7 @@ export const tagChanges = (
 }
 
 /**
- * Pull an element's tags out of the normalized form `api.osm.fetchOSMElement`
+ * Pull an element's tags out of the normalized form `fetchOSMElement`
  * returns, where each `<tag k= v=>` child becomes an object and a lone tag is
  * not wrapped in an array.
  */

@@ -1,7 +1,7 @@
 import { useQueries } from '@tanstack/react-query'
 import { PencilLine, RotateCcw, Wand2 } from 'lucide-react'
 import { useState } from 'react'
-import { api } from '@/api'
+import { osmElementOptions } from '@/api/osm'
 import { useOptionalEditorContext } from '@/components/Pages/TaskEditPage/contexts/EditorContext'
 import { DocsLink } from '@/components/shared/DocsLink'
 import { EntityEditList } from '@/components/shared/EntityEditList'
@@ -32,7 +32,7 @@ export const EditorChangesPanel = ({ task }: { task: Task }) => {
   // Current tags for the elements a tag fix names, so the suggestion can be
   // shown as a real before/after before the editor is even open.
   const elementQueries = useQueries({
-    queries: fixes.map((fix) => api.osm.elementOptions(fix.elementId)),
+    queries: fixes.map((fix) => osmElementOptions(fix.elementId)),
   })
 
   const pendingEdits = editor?.pendingEdits ?? []

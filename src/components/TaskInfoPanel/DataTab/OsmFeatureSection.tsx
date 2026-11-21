@@ -1,5 +1,5 @@
 import { ExternalLink, MapPin } from 'lucide-react'
-import { api } from '@/api'
+import { osmServerUrl } from '@/api/osm'
 import { useIntl } from '@/i18n'
 import type { Task } from '@/types/Task'
 import { parseOsmFeatureFromTask } from '../taskUtils/osmUtils'
@@ -42,7 +42,7 @@ const AreaHistory = ({ task }: { task: Task }) => {
         <div>
           <div className="font-medium text-link text-sm">
             <a
-              href={`${api.osm.getOSMServerUrl()}/history#map=${HISTORY_ZOOM}/${lat}/${lon}`}
+              href={`${osmServerUrl}/history#map=${HISTORY_ZOOM}/${lat}/${lon}`}
               target="_blank"
               rel="noopener noreferrer"
               className="stretched-link"
@@ -72,7 +72,7 @@ const AreaHistory = ({ task }: { task: Task }) => {
 export const OsmFeatureSection = ({ task }: { task: Task }) => {
   const { t } = useIntl()
   const osmFeature = parseOsmFeatureFromTask(task)
-  const osmServer = api.osm.getOSMServerUrl()
+  const osmServer = osmServerUrl
 
   return (
     <div className="space-y-4">

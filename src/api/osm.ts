@@ -81,50 +81,37 @@ const normalizeXMLElement = (element: Element): NormalizedElement => {
   return result
 }
 
-export const osm = {
-  /**
-   * Shared query definition for one OSM element, so every caller hits the same
-   * cache entry. `idString` is `<type>/<id>`, e.g. `way/12345`.
-   */
-  elementOptions: (idString: string | null) =>
-    queryOptions({
-      queryKey: ['osm', 'element', idString],
-      queryFn: () => osm.fetchOSMElement(idString as string),
-      enabled: !!idString,
-      staleTime: 5 * 60 * 1000,
-      retry: false,
-    }),
+export const osmServerUrl = OSM_SERVER
 
-  /**
-   * Get the OSM server URL (for user-facing links)
-   */
-  getOSMServerUrl: (): string => OSM_SERVER,
+export const osmUserProfileURL = (osmUsername: string): string =>
+  `${OSM_SERVER}/user/${encodeURIComponent(osmUsername)}`
 
-  /**
-   * Generates a URL to the given user's OSM profile page
-   */
-  osmUserProfileURL: (osmUsername: string): string => {
-    return `${OSM_SERVER}/user/${encodeURIComponent(osmUsername)}`
-  },
+/**
+ * Retrieve the current OpenStreetMap data for the given element
+ * @param idString Element identifier in format `<type>/<id>` (e.g. `way/12345`)
+ * @param asXML If true, returns the parsed XML Document instead of JSON
+ * @returns Promise resolving to element data (JSON by default, or XML Document if asXML is true)
+ */
+export const fetchOSMElement = async (
+  idString: string,
+  asXML = false
+): Promise<Document | NormalizedElement | null> => {
+  const uri = `${OSM_API_SERVER}/api/0.6/${idString}`
+  const xmlDoc = await fetchXMLData(uri)
+  if (asXML) return xmlDoc
 
-  /**
-   * Retrieve the current OpenStreetMap data for the given element
-   * @param idString Element identifier in format `<type>/<id>` (e.g. `way/12345`)
-   * @param asXML If true, returns the parsed XML Document instead of JSON
-   * @returns Promise resolving to element data (JSON by default, or XML Document if asXML is true)
-   */
-  fetchOSMElement: async (
-    idString: string,
-    asXML = false
-  ): Promise<Document | NormalizedElement | null> => {
-    const uri = `${OSM_API_SERVER}/api/0.6/${idString}`
-    const xmlDoc = await fetchXMLData(uri)
-    if (asXML) return xmlDoc
+  const elementType = idString.split('/')[0]
+  const element = xmlDoc.querySelector(elementType)
+  if (!element) return null
 
-    const elementType = idString.split('/')[0]
-    const element = xmlDoc.querySelector(elementType)
-    if (!element) return null
-
-    return normalizeXMLElement(element)
-  },
+  return normalizeXMLElement(element)
 }
+
+export const osmElementOptions = (idString: string | null) =>
+  queryOptions({
+    queryKey: ['osm', 'element', idString],
+    queryFn: () => fetchOSMElement(idString as string),
+    enabled: !!idString,
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+  })
