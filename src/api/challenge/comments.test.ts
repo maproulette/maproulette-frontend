@@ -48,18 +48,16 @@ describe('challengeComments.getChallengeComments', () => {
 })
 
 describe('challengeComments.getTaskComments', () => {
-  it('returns the task comments map from the response', async () => {
-    const response = { '1': [{ id: 1 }] }
-    const fetchMock = stubFetch(new Response(JSON.stringify(response), { status: 200 }))
+  it('asks for every comment rather than the default first page', async () => {
+    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
 
     const { result } = renderHook(() => challengeComments.getTaskComments(3), {
       wrapper: queryClientWrapper(),
     })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(response)
     const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/challenge/3/comments')
+    expect(new URL(request.url).searchParams.get('limit')).toBe('-1')
   })
 
   it('is disabled when challengeId is falsy', () => {

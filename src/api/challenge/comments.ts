@@ -32,8 +32,8 @@ export const challengeComments = {
         queryKey: ['challenge', 'taskComments', challengeId],
         queryFn: () =>
           apiRequest
-            .get(`api/v2/challenge/${challengeId}/comments`)
-            .json<Record<string, Comment[]>>(),
+            .get(`api/v2/challenge/${challengeId}/comments`, { searchParams: { limit: -1 } })
+            .json<Comment[]>(),
         enabled: !!challengeId,
       })
     ),

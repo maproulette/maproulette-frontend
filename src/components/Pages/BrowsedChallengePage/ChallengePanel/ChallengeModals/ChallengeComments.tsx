@@ -44,7 +44,7 @@ export const ChallengeComments = () => {
 
   const { data: challengeComments = [] } = api.challenge.getChallengeComments(challengeId)
 
-  const { data: taskCommentsData } = api.challenge.getTaskComments(challengeId)
+  const { data: taskComments = [] } = api.challenge.getTaskComments(challengeId)
 
   const allComments: ChallengeComment[] = []
 
@@ -52,12 +52,8 @@ export const ChallengeComments = () => {
     allComments.push(...challengeComments.map((c) => ({ ...c, taskId: undefined })))
   }
 
-  if (showTaskComments && taskCommentsData) {
-    Object.entries(taskCommentsData).forEach(([taskId, comments]) => {
-      if (Array.isArray(comments)) {
-        allComments.push(...comments.map((c) => ({ ...c, taskId: parseInt(taskId, 10) })))
-      }
-    })
+  if (showTaskComments) {
+    allComments.push(...taskComments)
   }
 
   const sortedComments = [...allComments].sort((a, b) => a.created - b.created)
@@ -116,7 +112,7 @@ export const ChallengeComments = () => {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      {taskCommentsData && Object.keys(taskCommentsData).length > 0 && (
+      {taskComments.length > 0 && (
         <div className="mb-4 flex items-center justify-end gap-2">
           <Checkbox
             id={showTaskCommentsId}
