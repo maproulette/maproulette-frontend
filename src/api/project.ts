@@ -103,9 +103,12 @@ export const searchProjectsOptions = ({
 } = {}) =>
   queryOptions({
     queryKey: ['project', 'search', { search, limit }],
-    queryFn: () =>
+    queryFn: ({ signal }) =>
       apiRequest
-        .get('api/v2/projects/search', { searchParams: { search, limit, onlyEnabled: true } })
+        .get('api/v2/projects/search', {
+          searchParams: { search, limit, onlyEnabled: true },
+          signal,
+        })
         .json<Project[]>(),
     enabled: search.length > 0,
     placeholderData: keepPreviousData,

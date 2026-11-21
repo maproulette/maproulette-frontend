@@ -74,9 +74,12 @@ export const searchChallengesOptions = ({
 } = {}) =>
   queryOptions({
     queryKey: ['challenge', 'search', { search, limit }],
-    queryFn: () =>
+    queryFn: ({ signal }) =>
       apiRequest
-        .get('api/v2/challenges/search', { searchParams: { search, limit, onlyEnabled: true } })
+        .get('api/v2/challenges/search', {
+          searchParams: { search, limit, onlyEnabled: true },
+          signal,
+        })
         .json<ChallengeGetResponse[]>(),
     enabled: search.length > 0,
     placeholderData: keepPreviousData,

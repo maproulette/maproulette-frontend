@@ -6,9 +6,9 @@ import { apiRequest } from '../client'
 export const findUsersOptions = (prefix: string, limit = 10) =>
   queryOptions({
     queryKey: ['user', 'search', { prefix, limit }],
-    queryFn: () =>
+    queryFn: ({ signal }) =>
       apiRequest
-        .get(`api/v2/users/find/${encodeURIComponent(prefix)}`, { searchParams: { limit } })
+        .get(`api/v2/users/find/${encodeURIComponent(prefix)}`, { searchParams: { limit }, signal })
         .json<UserSearchResult[]>(),
     enabled: prefix.length > 0,
     staleTime: 30_000,

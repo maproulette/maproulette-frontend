@@ -67,8 +67,10 @@ export const teamChallengesOptions = (teamId: number | undefined) =>
 export const findTeamsOptions = (q: string, limit = 10) =>
   queryOptions({
     queryKey: ['team', 'find', { q, limit }],
-    queryFn: () =>
-      apiRequest.get('api/v2/teams/find', { searchParams: { name: q, limit } }).json<Team[]>(),
+    queryFn: ({ signal }) =>
+      apiRequest
+        .get('api/v2/teams/find', { searchParams: { name: q, limit }, signal })
+        .json<Team[]>(),
     enabled: q.length > 0,
     staleTime: 10_000,
   })

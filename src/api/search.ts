@@ -24,8 +24,10 @@ export interface SearchByIdResult {
 export const searchByIdOptions = (id: number) =>
   queryOptions({
     queryKey: ['search', 'byId', id],
-    queryFn: () =>
-      apiRequest.get('api/v2/search/byId', { searchParams: { id } }).json<SearchByIdResult>(),
+    queryFn: ({ signal }) =>
+      apiRequest
+        .get('api/v2/search/byId', { searchParams: { id }, signal })
+        .json<SearchByIdResult>(),
     enabled: id > 0,
     placeholderData: keepPreviousData,
   })
