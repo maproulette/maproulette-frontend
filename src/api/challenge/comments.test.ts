@@ -21,57 +21,6 @@ const sampleComment = {
   comment: 'nice work',
 }
 
-describe('challengeComments.searchChallengeComments', () => {
-  it('fetches comments matching the search query using the default limit', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([sampleComment]), { status: 200 }))
-
-    const { result } = renderHook(() => challengeComments.searchChallengeComments({ q: 'road' }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([sampleComment])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('q=road')
-    expect(request.url).toContain('limit=10')
-  })
-
-  it('respects a custom limit', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(
-      () => challengeComments.searchChallengeComments({ q: 'road', limit: 25 }),
-      { wrapper: queryClientWrapper() }
-    )
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('limit=25')
-  })
-
-  it('is disabled when enabled is explicitly false', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(
-      () => challengeComments.searchChallengeComments({ q: 'road', enabled: false }),
-      { wrapper: queryClientWrapper() }
-    )
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-
-  it('surfaces an error when the request fails', async () => {
-    stubFetch(new Response('', { status: 500 }))
-
-    const { result } = renderHook(() => challengeComments.searchChallengeComments({ q: 'road' }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isError).toBe(true))
-  })
-})
-
 describe('challengeComments.getChallengeComments', () => {
   it('fetches comments for a challenge id', async () => {
     const fetchMock = stubFetch(new Response(JSON.stringify([sampleComment]), { status: 200 }))

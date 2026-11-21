@@ -29,13 +29,6 @@ export const userAuth = {
       })
     ),
 
-  whoAmIOptions: () =>
-    queryOptions({
-      queryKey: ['user', 'whoami'],
-      queryFn: () => apiRequest.get('api/v2/user/whoami').json<UserWhoamiResponse>(),
-      retry: false,
-    }),
-
   refreshAuth: async (queryClient: QueryClient) => {
     await queryClient.invalidateQueries({ queryKey: ['user', 'whoami'] })
     await queryClient.invalidateQueries({ queryKey: ['user'] })

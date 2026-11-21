@@ -23,15 +23,6 @@ export interface PluginApiContext {
     task: {
       /** Hook to get a task by ID */
       useTask: (taskId: number) => { data: unknown; isLoading: boolean; error: unknown }
-      /** Hook to start a task */
-      useStartTask: (taskId: number) => { data: unknown; isLoading: boolean; error: unknown }
-      /** Hook to get task markers */
-      useTaskMarkers: (params: {
-        statuses: string
-        global?: boolean
-        cluster?: boolean
-        bounds?: string | null
-      }) => { data: unknown; isLoading: boolean; error: unknown }
     }
     /** Challenge API hooks */
     challenge: {

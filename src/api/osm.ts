@@ -81,31 +81,6 @@ const normalizeXMLElement = (element: Element): NormalizedElement => {
   return result
 }
 
-export interface OSMHistoryElement {
-  type: string
-  id: number
-  version: number
-  visible?: boolean
-  changeset: number | { id: number; [key: string]: unknown }
-  timestamp: string
-  user: string
-  uid: number
-  tags?: Record<string, string>
-  [key: string]: unknown
-}
-
-export interface OSMChangeset {
-  id: number
-  created_at?: string
-  closed_at?: string
-  open?: boolean
-  user?: string
-  uid?: number
-  comments_count?: number
-  changes_count?: number
-  [key: string]: unknown
-}
-
 export const osm = {
   /**
    * Shared query definition for one OSM element, so every caller hits the same
@@ -124,11 +99,6 @@ export const osm = {
    * Get the OSM server URL (for user-facing links)
    */
   getOSMServerUrl: (): string => OSM_SERVER,
-
-  /**
-   * Get the OSM API server URL (for API calls)
-   */
-  getOSMApiServerUrl: (): string => OSM_API_SERVER,
 
   /**
    * Generates a URL to the given user's OSM profile page
@@ -156,93 +126,5 @@ export const osm = {
     if (!element) return null
 
     return normalizeXMLElement(element)
-  },
-
-  /**
-   * Retrieve the history for the given OpenStreetMap element
-   * @param idString Element identifier in format `<type>/<id>` (e.g. `way/12345`)
-   * @param includeChangesets If true, fetches full changeset data for each history entry
-   * @returns Promise resolving to array of history elements
-   */
-  fetchOSMElementHistory: async (
-    idString: string,
-    includeChangesets = false
-  ): Promise<OSMHistoryElement[] | null> => {
-    if (!idString) return null
-
-    const uri = `${OSM_API_SERVER}/api/0.6/${idString}/history.json`
-    const response = await fetch(uri)
-    if (!response.ok) {
-      handleOSMError(response)
-    }
-
-    const history = await response.json()
-    const elements: OSMHistoryElement[] = history.elements || []
-
-    if (includeChangesets && elements.length > 0) {
-      const changesetIds = elements.map((e) => e.changeset as number).filter(Boolean)
-      const uniqueChangesetIds = [...new Set(changesetIds)]
-      const changesetMap = await osm.fetchOSMChangesets(uniqueChangesetIds)
-
-      elements.forEach((entry) => {
-        const changesetId = entry.changeset as number
-        if (changesetId) {
-          const changesetData = changesetMap.find((c) => c.id === changesetId)
-          if (changesetData) {
-            const { id: _, ...restChangesetData } = changesetData
-            entry.changeset = {
-              id: changesetId,
-              ...restChangesetData,
-            }
-          }
-        }
-      })
-    }
-
-    return elements
-  },
-
-  /**
-   * Retrieve the specified OpenStreetMap changesets
-   * @param changesetIds Array of changeset IDs to fetch
-   * @returns Promise resolving to array of changeset objects
-   */
-  fetchOSMChangesets: async (changesetIds: number[]): Promise<OSMChangeset[]> => {
-    if (!changesetIds || changesetIds.length === 0) return []
-
-    const uri = `${OSM_API_SERVER}/api/0.6/changesets?changesets=${changesetIds.join(',')}`
-    const xmlDoc = await fetchXMLData(uri)
-
-    const changesets: OSMChangeset[] = []
-    const changesetElements = xmlDoc.querySelectorAll('changeset')
-
-    changesetElements.forEach((element) => {
-      const changeset = normalizeXMLElement(element) as OSMChangeset
-      changesets.push(changeset)
-    })
-
-    return changesets
-  },
-
-  /**
-   * Retrieve OpenStreetMap user data for the user with the given OSM user id
-   * @param osmUserId The OSM user ID (not MapRoulette user ID)
-   * @returns Promise resolving to user data object
-   */
-  fetchOSMUser: async (osmUserId: number): Promise<{ id: number; displayName: string | null }> => {
-    const uri = `${OSM_API_SERVER}/api/0.6/user/${osmUserId}`
-    const response = await fetch(uri)
-
-    if (response.ok) {
-      const xmlData = await response.text()
-      const displayNameMatch = /display_name="([^"]+)"/.exec(xmlData)
-      return { id: osmUserId, displayName: displayNameMatch?.[1] || null }
-    }
-
-    if (response.status === 404) {
-      return { id: osmUserId, displayName: null }
-    }
-
-    return handleOSMError(response)
   },
 }

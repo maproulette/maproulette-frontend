@@ -1,15 +1,6 @@
 import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import type { TaskPropertySearch } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
-import { metaReviewStatusesForApi } from '@/lib/challengeTaskTableSearch'
-import type {
-  TaskGetResponse,
-  TaskMarkersParams,
-  TaskMarkersResponse,
-  TasksBoundingBoxQuery,
-  TasksBoundingBoxResponse,
-  TasksInBoundsParams,
-  TasksInBoundsResponse,
-} from '@/types/Task'
+import type { TaskGetResponse, TasksBoundingBoxResponse } from '@/types/Task'
 import { apiRequest, convertParamsToSearchParams } from '../client'
 
 // Ceiling on how many property matches are pulled back for the explorer's
@@ -20,26 +11,6 @@ const PROPERTY_MATCH_LIMIT = 10000
 // Tasks sampled when collecting the property names to suggest. Big enough to
 // cover a challenge's schema, small enough to stay cheap.
 const PROPERTY_KEY_SAMPLE_SIZE = 100
-
-const tasksBoundingBoxSearchParams = (query: TasksBoundingBoxQuery) => {
-  const mr = metaReviewStatusesForApi(query.reviewStatuses, query.metaReviewStatuses)
-  return convertParamsToSearchParams({
-    limit: query.limit,
-    page: query.page,
-    sort: query.sort,
-    order: query.order,
-    includeTotal: true,
-    excludeLocked: true,
-    includeGeometries: false,
-    includeTags: false,
-    cid: query.challengeId,
-    ca: true,
-    tStatus: query.taskStatuses.join(','),
-    priorities: query.priorities.join(','),
-    trStatus: query.reviewStatuses.join(','),
-    mrStatus: mr.join(','),
-  })
-}
 
 export const taskMultiple = {
   getTasks: (taskIds: number[]) =>
@@ -56,37 +27,6 @@ export const taskMultiple = {
             })
             .json<TaskGetResponse[]>(),
         enabled: taskIds.length > 0,
-      })
-    ),
-
-  getTaskMarkers: (params: TaskMarkersParams) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['task', 'markers', params],
-        queryFn: ({ signal }) =>
-          apiRequest
-            .get(`api/v2/taskMarkers`, {
-              searchParams: params ? convertParamsToSearchParams(params) : undefined,
-              signal,
-            })
-            .json<TaskMarkersResponse>(),
-        placeholderData: keepPreviousData,
-      })
-    ),
-
-  getTasksInBounds: (params: TasksInBoundsParams, options?: { enabled?: boolean }) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['task', 'inBounds', params],
-        queryFn: ({ signal }) =>
-          apiRequest
-            .get('api/v2/tasks/bounds', {
-              searchParams: convertParamsToSearchParams({ ...params }),
-              signal,
-            })
-            .json<TasksInBoundsResponse>(),
-        placeholderData: keepPreviousData,
-        enabled: options?.enabled ?? true,
       })
     ),
 
@@ -167,28 +107,6 @@ export const taskMultiple = {
         },
         staleTime: 5 * 60 * 1000,
         enabled: (options?.enabled ?? true) && !!challengeId,
-      })
-    ),
-
-  /** Paginated tasks in a box with the same filter/sort query params as maproulette3 (PUT tasks/box/...). */
-  getTasksInBoundingBox: (query: TasksBoundingBoxQuery, options?: { enabled?: boolean }) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['task', 'inBoundingBox', query],
-        queryFn: ({ signal }) =>
-          apiRequest
-            .put(`api/v2/tasks/box/${query.left}/${query.bottom}/${query.right}/${query.top}`, {
-              searchParams: tasksBoundingBoxSearchParams(query),
-              // The property filter is a nested rule tree, so it travels in the
-              // body; an empty object means "no property filter".
-              json: query.taskPropertySearch
-                ? { taskPropertySearch: query.taskPropertySearch }
-                : {},
-              signal,
-            })
-            .json<TasksBoundingBoxResponse>(),
-        placeholderData: keepPreviousData,
-        enabled: options?.enabled ?? true,
       })
     ),
 }

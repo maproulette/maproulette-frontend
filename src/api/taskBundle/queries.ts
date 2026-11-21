@@ -45,7 +45,6 @@ export const taskBundleQueries = {
           .json<TaskBundleResponse>(),
       onSuccess: (bundle) => {
         queryClient.setQueryData(['taskBundle', bundle.bundleId, { lockTasks: false }], bundle)
-        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
         invalidateLockedTasks(queryClient)
       },
     })
@@ -65,20 +64,7 @@ export const taskBundleQueries = {
           ['taskBundle', variables.bundleId, { lockTasks: false }],
           updatedBundle
         )
-        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
         invalidateLockedTasks(queryClient)
-      },
-    })
-  },
-
-  useDeleteTaskBundle: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: (bundleId: number) => apiRequest.delete(`api/v2/taskBundle/${bundleId}`).json(),
-      onSuccess: (_data, bundleId) => {
-        queryClient.removeQueries({ queryKey: ['taskBundle', bundleId] })
-
-        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
       },
     })
   },

@@ -155,8 +155,6 @@ const PluginProviderInner = ({
       api: {
         task: {
           useTask: api.task.getTask,
-          useStartTask: api.task.startTask,
-          useTaskMarkers: api.task.getTaskMarkers,
         },
         challenge: {
           useChallenge: api.challenge.getChallenge,

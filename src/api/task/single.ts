@@ -35,41 +35,7 @@ export const invalidateLockedTasks = (queryClient: ReturnType<typeof useQueryCli
   )
 }
 
-export interface TaskSearchResult {
-  id: number
-  name: string
-  status: number | null
-  parent: number
-  challengeName: string
-}
-
 export const taskSingle = {
-  searchTasks: ({ q, limit = 25 }: { q: string; limit?: number }) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['task', 'search', { q, limit }],
-        queryFn: () =>
-          apiRequest
-            .get('api/v2/tasks/search', {
-              searchParams: { q, limit },
-            })
-            .json<TaskSearchResult[]>(),
-        enabled: q.length > 0,
-      })
-    ),
-
-  startTask: (taskId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['taskStart', taskId],
-        queryFn: () => apiRequest.get(`api/v2/task/${taskId}/start`).json<TaskStartResponse>(),
-        enabled: !!taskId,
-        staleTime: Number.POSITIVE_INFINITY,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-      })
-    ),
-
   getTaskOptions: (taskId: number) =>
     queryOptions({
       queryKey: ['task', taskId],
@@ -157,7 +123,6 @@ export const taskSingle = {
             (cached) => cached && { ...cached, lockedBy, lockBundledTasks: lock.lockBundledTasks }
           )
         }
-        queryClient.invalidateQueries({ queryKey: ['task', 'inBounds'] })
         invalidateLockedTasks(queryClient)
       },
     })

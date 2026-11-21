@@ -24,33 +24,6 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('userProfile.getUser', () => {
-  it('fetches a user by id', async () => {
-    const user = { id: 5, osmProfile: { displayName: 'dave' } }
-    const fetchMock = stubFetch(new Response(JSON.stringify(user), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.getUser(5), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(user)
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL(request.url).pathname).toBe('/api/v2/user/5')
-  })
-
-  it('is disabled when userId is 0 (falsy)', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.getUser(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
 describe('userProfile.getPublicUser', () => {
   it('fetches a public user by id', async () => {
     const user = { id: 5, osmProfile: { displayName: 'dave' } }
@@ -229,50 +202,6 @@ describe('userProfile.savedChallenges', () => {
     const fetchMock = stubFetch(new Response('[]', { status: 200 }))
 
     const { result } = renderHook(() => userProfile.savedChallenges(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userProfile.savedTasks', () => {
-  it('fetches saved tasks with default limit/page', async () => {
-    const tasks = [{ id: 3, name: 'Saved Task' }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(tasks), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.savedTasks(9), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(tasks)
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.pathname).toBe('/api/v2/user/9/savedTasks')
-    expect(url.searchParams.get('limit')).toBe('10')
-    expect(url.searchParams.get('page')).toBe('0')
-  })
-
-  it('fetches saved tasks using custom limit/page', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.savedTasks(9, 15, 2), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL(request.url)
-    expect(url.searchParams.get('limit')).toBe('15')
-    expect(url.searchParams.get('page')).toBe('2')
-  })
-
-  it('is disabled when userId is undefined', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => userProfile.savedTasks(undefined), {
       wrapper: queryClientWrapper(),
     })
 

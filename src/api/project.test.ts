@@ -16,49 +16,6 @@ afterEach(() => {
 const projectA = { id: 1, name: 'Project A', enabled: true }
 const projectB = { id: 2, name: 'Project B', enabled: true }
 
-describe('project.featuredProjects', () => {
-  it('fetches featured projects with default params', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([projectA, projectB]), { status: 200 }))
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => project.featuredProjects(), {
-      wrapper: queryClientWrapper(client),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([projectA, projectB])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('limit=10')
-    expect(request.url).toContain('onlyEnabled=true')
-    expect(request.url).toContain('page=0')
-  })
-
-  it('honors explicit limit, onlyEnabled, and page params', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    renderHook(() => project.featuredProjects({ limit: 5, onlyEnabled: false, page: 2 }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('limit=5')
-    expect(request.url).toContain('onlyEnabled=false')
-    expect(request.url).toContain('page=2')
-  })
-
-  it('does not fetch when disabled', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => project.featuredProjects({ enabled: false }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
 describe('project.getProject', () => {
   it('fetches a project by id', async () => {
     stubFetch(new Response(JSON.stringify(projectA), { status: 200 }))
@@ -586,31 +543,6 @@ describe('project.useDeleteProject', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(client.getQueryData(['project', 'managed', 'seed'])).toBeUndefined()
-  })
-})
-
-describe('project.getProjectStats', () => {
-  it('fetches project stats', async () => {
-    const stats = { id: 4, name: 'Project D', actions: { total: 10 } }
-    stubFetch(new Response(JSON.stringify(stats), { status: 200 }))
-
-    const { result } = renderHook(() => project.getProjectStats(4), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(stats)
-  })
-
-  it('is disabled when projectId is undefined', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => project.getProjectStats(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
   })
 })
 

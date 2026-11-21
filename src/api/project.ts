@@ -34,33 +34,6 @@ const invalidateProjectManagers = (
 }
 
 export const project = {
-  featuredProjects: ({
-    limit = 10,
-    onlyEnabled = true,
-    page = 0,
-    enabled = true,
-  }: {
-    limit?: number
-    onlyEnabled?: boolean
-    page?: number
-    enabled?: boolean
-  } = {}) => {
-    return useQuery(
-      queryOptions({
-        queryKey: ['project', 'featured', { limit, onlyEnabled, page }],
-        queryFn: async () => {
-          const projects = await apiRequest
-            .get('api/v2/projects/featured', {
-              searchParams: { limit, onlyEnabled, page },
-            })
-            .json<Project[]>()
-          return projects
-        },
-        enabled,
-      })
-    )
-  },
-
   getProject: (projectId: number | undefined) =>
     useQuery(
       queryOptions({
@@ -287,34 +260,6 @@ export const project = {
       },
     })
   },
-
-  getProjectStats: (projectId: number | undefined) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['project', 'data', projectId],
-        queryFn: async () =>
-          apiRequest.get(`api/v2/data/project/${projectId}`).json<{
-            id?: number
-            name?: string
-            actions?: {
-              total?: number
-              available?: number
-              fixed?: number
-              falsePositive?: number
-              skipped?: number
-              deleted?: number
-              alreadyFixed?: number
-              tooHard?: number
-              answered?: number
-              validated?: number
-              disabled?: number
-              avgTimeSpent?: number
-              tasksWithTime?: number
-            }
-          }>(),
-        enabled: !!projectId,
-      })
-    ),
 
   /** Users managing a project, along with the roles they hold on it. */
   managers: (projectId: number, options?: { enabled?: boolean }) =>

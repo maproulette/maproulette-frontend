@@ -1,10 +1,6 @@
 import type { components, operations, paths } from './openApiTypes'
 
 /* Responses */
-export type PreferredChallengesResponse =
-  paths['/challenges/preferred']['get']['responses']['200']['content']['application/json']
-export type FeaturedChallengesResponse =
-  components['schemas']['org.maproulette.framework.model.BaseChallenge']
 export type ChallengeGetResponse =
   paths['/challenge/{id}']['get']['responses']['200']['content']['application/json']
 
@@ -19,11 +15,7 @@ export type ChallengeListingResponse =
 export type ChallengeListing = ChallengeListingResponse[number]
 
 /*  Parameters  */
-export type PreferredChallengesParams =
-  operations['challenge_preferred_challenges']['parameters']['query']
-export type FeaturedChallengesParams =
-  operations['challenge_featured_challenges']['parameters']['query']
-export type ExploreChallengesParams =
+type ExploreChallengesParams =
   operations['explore_challenge_list_challenges']['parameters']['query']
 export type ChallengeListingFilters = Pick<
   NonNullable<operations['challenge_list_challenges_in_specified_projects']['parameters']['query']>,

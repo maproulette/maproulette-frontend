@@ -35,94 +35,6 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('taskSingle.searchTasks', () => {
-  it('searches with the default limit', async () => {
-    const results = [{ id: 1, name: 'Task 1', status: 0, parent: 10, challengeName: 'Challenge' }]
-    const fetchMock = stubFetch(new Response(JSON.stringify(results), { status: 200 }))
-
-    const { result } = renderHook(() => taskSingle.searchTasks({ q: 'road' }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(results)
-    const [request] = fetchMock.mock.calls[0] as [Request]
-    const url = new URL(request.url)
-    expect(url.pathname).toBe('/api/v2/tasks/search')
-    expect(url.searchParams.get('q')).toBe('road')
-    expect(url.searchParams.get('limit')).toBe('25')
-  })
-
-  it('searches with a custom limit', async () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => taskSingle.searchTasks({ q: 'road', limit: 5 }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0] as [Request]
-    const url = new URL(request.url)
-    expect(url.searchParams.get('limit')).toBe('5')
-  })
-
-  it('is disabled when q is empty', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(() => taskSingle.searchTasks({ q: '' }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('taskSingle.startTask', () => {
-  it('starts a task', async () => {
-    const task = makeTask({ id: 7 })
-    const fetchMock = stubFetch(new Response(JSON.stringify(task), { status: 200 }))
-
-    const { result } = renderHook(() => taskSingle.startTask(7), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(task)
-    const [request] = fetchMock.mock.calls[0] as [Request]
-    expect(new URL(request.url).pathname).toBe('/api/v2/task/7/start')
-  })
-
-  it('does not lock the task again when the task is invalidated', async () => {
-    const fetchMock = vi.fn(
-      async () => new Response(JSON.stringify(makeTask({ id: 7 })), { status: 200 })
-    )
-    vi.stubGlobal('fetch', fetchMock)
-    const queryClient = createTestQueryClient()
-
-    const { result } = renderHook(() => taskSingle.startTask(7), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    await queryClient.invalidateQueries({ queryKey: ['task', 7] })
-    await queryClient.refetchQueries({ stale: true })
-
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-  })
-
-  it('is disabled when taskId is falsy', () => {
-    const fetchMock = stubFetch(new Response('{}', { status: 200 }))
-
-    const { result } = renderHook(() => taskSingle.startTask(0), {
-      wrapper: queryClientWrapper(),
-    })
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
 describe('taskSingle.getTaskOptions', () => {
   it('builds enabled query options for a truthy taskId', () => {
     const options = taskSingle.getTaskOptions(9)
@@ -286,7 +198,6 @@ describe('taskSingle.useLockTaskBundle', () => {
       })
     )
     const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
     const { result } = renderHook(() => taskSingle.useLockTaskBundle(), {
       wrapper: queryClientWrapper(queryClient),
@@ -302,7 +213,6 @@ describe('taskSingle.useLockTaskBundle', () => {
     const url = new URL(request.url)
     expect(url.pathname).toBe('/api/v2/task/1/lockBundle')
     expect(url.searchParams.getAll('taskIds')).toEqual(['2', '3'])
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
 })
 

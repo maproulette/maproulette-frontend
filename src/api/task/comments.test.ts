@@ -27,51 +27,6 @@ const fakeComment = (overrides: Partial<Comment> = {}): Comment => ({
   ...overrides,
 })
 
-describe('taskComments.searchTaskComments', () => {
-  it('searches with the default limit and is enabled by default', async () => {
-    const comments = [fakeComment({ id: 1 })]
-    const fetchMock = stubFetch(new Response(JSON.stringify(comments), { status: 200 }))
-
-    const { result } = renderHook(() => taskComments.searchTaskComments({ q: 'road' }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual(comments)
-    const [request] = fetchMock.mock.calls[0]
-    const url = new URL((request as Request).url)
-    expect(url.pathname).toBe('/api/v2/comments/search')
-    expect(url.searchParams.get('q')).toBe('road')
-    expect(url.searchParams.get('limit')).toBe('10')
-  })
-
-  it('honors a custom limit', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(() => taskComments.searchTaskComments({ q: 'road', limit: 25 }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(new URL((request as Request).url).searchParams.get('limit')).toBe('25')
-  })
-
-  it('does not fetch when enabled is false', () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(
-      () => taskComments.searchTaskComments({ q: 'road', enabled: false }),
-      { wrapper: queryClientWrapper() }
-    )
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
 describe('taskComments.getTaskComments', () => {
   it('fetches comments for a task id', async () => {
     const comments = [fakeComment({ id: 2 })]

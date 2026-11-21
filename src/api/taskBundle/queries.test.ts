@@ -75,7 +75,6 @@ describe('taskBundleQueries.useCreateTaskBundle', () => {
     }
     const fetchMock = stubFetch(new Response(JSON.stringify(bundle), { status: 200 }))
     const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
     const { result } = renderHook(() => taskBundleQueries.useCreateTaskBundle(), {
       wrapper: queryClientWrapper(queryClient),
@@ -91,7 +90,6 @@ describe('taskBundleQueries.useCreateTaskBundle', () => {
     expect(new URL((request as Request).url).pathname).toBe('/api/v2/taskBundle')
     expect(await (request as Request).clone().json()).toEqual({ name: 'my bundle', taskIds: [1] })
     expect(queryClient.getQueryData(['taskBundle', 3, { lockTasks: false }])).toEqual(bundle)
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
 
   it('skips task caching when the created bundle has no tasks', async () => {
@@ -121,7 +119,6 @@ describe('taskBundleQueries.useUpdateTaskBundle', () => {
     }
     const fetchMock = stubFetch(new Response(JSON.stringify(updatedBundle), { status: 200 }))
     const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
 
     const { result } = renderHook(() => taskBundleQueries.useUpdateTaskBundle(), {
       wrapper: queryClientWrapper(queryClient),
@@ -136,7 +133,6 @@ describe('taskBundleQueries.useUpdateTaskBundle', () => {
     expect(url.pathname).toBe('/api/v2/taskBundle/5/update')
     expect(url.searchParams.get('taskIds')).toBe('1,2')
     expect(queryClient.getQueryData(['taskBundle', 5, { lockTasks: false }])).toEqual(updatedBundle)
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
 
   it('skips task caching when the updated bundle has no tasks', async () => {
@@ -153,30 +149,6 @@ describe('taskBundleQueries.useUpdateTaskBundle', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(queryClient.getQueryData(['taskBundle', 6, { lockTasks: false }])).toEqual(updatedBundle)
-  })
-})
-
-describe('taskBundleQueries.useDeleteTaskBundle', () => {
-  it('deletes a bundle, removes its cache entries, and invalidates in-bounds task queries', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify({}), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    queryClient.setQueryData(['taskBundle', 7, { lockTasks: false }], { bundleId: 7 })
-    const removeSpy = vi.spyOn(queryClient, 'removeQueries')
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => taskBundleQueries.useDeleteTaskBundle(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    result.current.mutate(7)
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect((request as Request).method).toBe('DELETE')
-    expect(new URL((request as Request).url).pathname).toBe('/api/v2/taskBundle/7')
-    expect(removeSpy).toHaveBeenCalledWith({ queryKey: ['taskBundle', 7] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['task', 'inBounds'] })
   })
 })
 

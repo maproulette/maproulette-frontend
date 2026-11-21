@@ -6,18 +6,15 @@ describe('user barrel export', () => {
     expect(typeof user.signOut).toBe('function')
     expect(typeof user.callback).toBe('function')
     expect(typeof user.whoAmI).toBe('function')
-    expect(typeof user.whoAmIOptions).toBe('function')
     expect(typeof user.refreshAuth).toBe('function')
     expect(typeof user.clearAuth).toBe('function')
   })
 
   it('re-exports the profile API', () => {
-    expect(typeof user.getUser).toBe('function')
     expect(typeof user.activity).toBe('function')
     expect(typeof user.metrics).toBe('function')
     expect(typeof user.topChallenges).toBe('function')
     expect(typeof user.savedChallenges).toBe('function')
-    expect(typeof user.savedTasks).toBe('function')
     expect(typeof user.lockedTasks).toBe('function')
     expect(typeof user.teamMemberships).toBe('function')
     expect(typeof user.useUpdateUserSettings).toBe('function')

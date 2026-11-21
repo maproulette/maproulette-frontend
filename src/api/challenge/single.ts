@@ -58,14 +58,7 @@ export const patchChallengeTaskMarker = (
  * (`stats`, `activity`, `tags`, `isFavorited`, ...) are deliberately excluded:
  * they carry `id` fields of their own and must not absorb challenge patches.
  */
-const CHALLENGE_LIST_KEYS = new Set([
-  'listing',
-  'explore',
-  'exploreInfinite',
-  'featured',
-  'preferred',
-  'search',
-])
+const CHALLENGE_LIST_KEYS = new Set(['listing', 'exploreInfinite', 'search'])
 
 const holdsChallengeRecords = (queryKey: readonly unknown[]) => {
   if (queryKey[0] === 'project' && queryKey[1] === 'challenges') return true
@@ -180,7 +173,6 @@ const fetchChallengeTagsBatch = (challengeIds: number[]) =>
 const invalidateChallengeListings = (queryClient: QueryClient) => {
   void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
-  void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
   void queryClient.invalidateQueries({ queryKey: ['challenge', 'tags'] })
 }
@@ -522,21 +514,6 @@ export const challengeSingle = {
     })
   },
 
-  useSaveOrUpdateChallenge: () => {
-    const queryClient = useQueryClient()
-    return useMutation({
-      mutationFn: (challenge: Partial<Challenge>) =>
-        apiRequest.post('api/v2/challenge/saveOrUpdate', { json: challenge }).json<Challenge>(),
-      onSuccess: (saved) => {
-        queryClient.setQueryData<ChallengeGetResponse>(['challenge', saved.id], saved)
-        void queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
-        void queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
-        void queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
-        void queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
-      },
-    })
-  },
-
   useUpdatePriorities: () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -739,7 +716,6 @@ export const challengeSingle = {
         queryClient.invalidateQueries({ queryKey: ['challenge', variables.challengeId] })
         queryClient.invalidateQueries({ queryKey: ['project', 'challenges'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'listing'] })
-        queryClient.invalidateQueries({ queryKey: ['challenge', 'explore'] })
         queryClient.invalidateQueries({ queryKey: ['challenge', 'exploreInfinite'] })
       },
     })

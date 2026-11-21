@@ -632,36 +632,6 @@ describe('challengeSingle.useUpdateChallenge', () => {
     // The manage-challenges pages read from ['challenge', 'listing'], so it must be
     // invalidated or their cards keep rendering stale enabled/name values.
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'explore'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'exploreInfinite'] })
-  })
-})
-
-describe('challengeSingle.useSaveOrUpdateChallenge', () => {
-  it('saves or updates a challenge and refreshes related caches', async () => {
-    const saved = { id: 50, name: 'Saved' } as unknown as Challenge
-    const fetchMock = stubFetch(new Response(JSON.stringify(saved), { status: 200 }))
-    const queryClient = createTestQueryClient()
-    const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries')
-
-    const { result } = renderHook(() => challengeSingle.useSaveOrUpdateChallenge(), {
-      wrapper: queryClientWrapper(queryClient),
-    })
-
-    const draft: Partial<Challenge> = { name: 'Saved' }
-    result.current.mutate(draft)
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.method).toBe('POST')
-    const body = await request.clone().json()
-    expect(body).toEqual(draft)
-
-    expect(queryClient.getQueryData(['challenge', 50])).toEqual(saved)
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['project', 'challenges'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'listing'] })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'explore'] })
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['challenge', 'exploreInfinite'] })
   })
 })

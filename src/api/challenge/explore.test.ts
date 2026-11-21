@@ -14,81 +14,6 @@ afterEach(() => {
 const challengeA = { id: 1, name: 'Challenge A' }
 const challengeB = { id: 2, name: 'Challenge B' }
 
-describe('challengeExplore.preferredChallenges', () => {
-  it('fetches preferred challenges with the given params', async () => {
-    const response = { popular: [challengeA], featured: [], newest: [] }
-    const fetchMock = stubFetch(new Response(JSON.stringify(response), { status: 200 }))
-
-    const { result } = renderHook(() => challengeExplore.preferredChallenges({ limit: 5 }), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(response)
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('api/v2/challenges/preferred')
-    expect(request.url).toContain('limit=5')
-  })
-})
-
-describe('challengeExplore.featuredChallenges', () => {
-  it('fetches featured challenges', async () => {
-    stubFetch(new Response(JSON.stringify([challengeA, challengeB]), { status: 200 }))
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(() => challengeExplore.featuredChallenges({ limit: 10 }), {
-      wrapper: queryClientWrapper(client),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([challengeA, challengeB])
-  })
-
-  it('does not fetch when disabled', () => {
-    const fetchMock = stubFetch(new Response('[]', { status: 200 }))
-
-    const { result } = renderHook(
-      () => challengeExplore.featuredChallenges({ limit: 2 }, { enabled: false }),
-      { wrapper: queryClientWrapper() }
-    )
-
-    expect(result.current.fetchStatus).toBe('idle')
-    expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('challengeExplore.exploreChallenges', () => {
-  it('fetches challenges with converted search params', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
-    const client = createTestQueryClient()
-
-    const { result } = renderHook(
-      () => challengeExplore.exploreChallenges({ global: true, limit: 10 }),
-      { wrapper: queryClientWrapper(client) }
-    )
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual([challengeA])
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toContain('global=true')
-    expect(request.url).toContain('limit=10')
-  })
-
-  it('fetches with no search params when params is undefined', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    const { result } = renderHook(() => challengeExplore.exploreChallenges(undefined), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    const [request] = fetchMock.mock.calls[0]
-    expect(request.url).toBe(
-      `${window.env.VITE_API_BASE_URL || 'http://127.0.0.1:9000'}/api/v2/challenges/exploreChallenges`
-    )
-  })
-})
-
 describe('challengeExplore.exploreChallengesInfinite', () => {
   it('fetches the first page and reports a next page when the page is full', async () => {
     const fetchMock = stubFetch(
@@ -278,28 +203,5 @@ describe('challengeExplore.searchChallenges', () => {
     expect(result.current.data).toEqual([challengeA])
     const [request] = fetchMock.mock.calls[0]
     expect(request.url).toContain('search=road')
-  })
-})
-
-describe('challengeExplore.fetchChallengesByDifficulty', () => {
-  it('asks for the most popular global challenges at that difficulty', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([challengeA]), { status: 200 }))
-
-    await expect(challengeExplore.fetchChallengesByDifficulty(2)).resolves.toEqual([challengeA])
-
-    const url = new URL(fetchMock.mock.calls[0][0].url)
-    expect(url.pathname).toBe('/api/v2/challenges/exploreChallenges')
-    expect(url.searchParams.get('difficulty')).toBe('2')
-    expect(url.searchParams.get('sortBy')).toBe('popularity')
-    expect(url.searchParams.get('global')).toBe('true')
-    expect(url.searchParams.get('limit')).toBe('50')
-  })
-
-  it('honours a caller-supplied limit', async () => {
-    const fetchMock = stubFetch(new Response(JSON.stringify([]), { status: 200 }))
-
-    await challengeExplore.fetchChallengesByDifficulty(1, 5)
-
-    expect(new URL(fetchMock.mock.calls[0][0].url).searchParams.get('limit')).toBe('5')
   })
 })

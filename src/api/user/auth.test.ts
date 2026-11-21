@@ -1,6 +1,5 @@
 // @vitest-environment happy-dom
 
-import { useQuery } from '@tanstack/react-query'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient, queryClientWrapper } from '@/test/queryClient'
 import { renderHook } from '@/test/renderHook'
@@ -61,24 +60,6 @@ describe('userAuth.whoAmI', () => {
 
     expect(result.current.fetchStatus).toBe('idle')
     expect(fetchMock).not.toHaveBeenCalled()
-  })
-})
-
-describe('userAuth.whoAmIOptions', () => {
-  it('builds queryOptions usable directly with useQuery, without retrying', async () => {
-    const options = userAuth.whoAmIOptions()
-    expect(options.queryKey).toEqual(['user', 'whoami'])
-    expect(options.retry).toBe(false)
-
-    const whoami = { id: 2, osmProfile: { displayName: 'bob' } }
-    stubFetch(new Response(JSON.stringify(whoami), { status: 200 }))
-
-    const { result } = renderHook(() => useQuery(userAuth.whoAmIOptions()), {
-      wrapper: queryClientWrapper(),
-    })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual(whoami)
   })
 })
 

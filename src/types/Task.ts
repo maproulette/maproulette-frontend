@@ -1,5 +1,4 @@
-import type { TaskPropertySearch } from '@/components/shared/TaskPropertyQueryBuilder/taskPropertySearch'
-import type { components, operations, paths } from './openApiTypes'
+import type { components } from './openApiTypes'
 
 /* Responses */
 export type TaskStartResponse = Task & {
@@ -23,15 +22,6 @@ export type TaskGetResponse = Task & {
   lockedBy?: number | null
   lockBundledTasks?: number[]
 }
-export type TaskMarkersResponse =
-  paths['/taskMarkers']['get']['responses']['200']['content']['application/json']
-export type TasksInBoundsResponse =
-  paths['/tasks/bounds']['get']['responses']['200']['content']['application/json']
-
-/*  Parameters  */
-export type TaskMarkersParams = operations['task_marker_Data']['parameters']['query']
-export type TasksInBoundsParams =
-  operations['task_get_challenge_tasks_in_bounds']['parameters']['query']
 
 /* Types From API */
 export type TaskMarker = components['schemas']['org.maproulette.framework.model.TaskMarker']
@@ -51,29 +41,6 @@ export type Task = Omit<RawTask, 'geometries' | 'location'> & {
 export type TasksBoundingBoxResponse = {
   total: number
   tasks: Task[]
-}
-
-/** Query shape for {@link TasksBoundingBoxResponse} (path + search + filter lists). */
-export type TasksBoundingBoxQuery = {
-  left: number
-  bottom: number
-  right: number
-  top: number
-  challengeId: number
-  limit: number
-  page: number
-  sort: string
-  order: 'ASC' | 'DESC'
-  taskStatuses: number[]
-  priorities: number[]
-  reviewStatuses: number[]
-  metaReviewStatuses: number[]
-  /**
-   * Feature-property filter, sent in the request body rather than the query
-   * string because it is a nested rule tree. Omitted when the manager has not
-   * built a valid rule.
-   */
-  taskPropertySearch?: TaskPropertySearch | null
 }
 
 /* Custom Types */

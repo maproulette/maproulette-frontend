@@ -1,7 +1,6 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Challenge } from '@/types/Challenge'
 import type { components } from '@/types/openApiTypes'
-import type { Task } from '@/types/Task'
 import type {
   PublicUser,
   User,
@@ -25,15 +24,6 @@ export type LeaderboardChallenge =
   components['schemas']['org.maproulette.framework.model.LeaderboardChallenge']
 
 export const userProfile = {
-  getUser: (userId: number) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['user', userId],
-        queryFn: () => apiRequest.get(`api/v2/user/${userId}`).json<User>(),
-        enabled: !!userId,
-      })
-    ),
-
   getPublicUser: (userId: number) =>
     useQuery(
       queryOptions({
@@ -104,20 +94,6 @@ export const userProfile = {
               searchParams: { limit, page },
             })
             .json<Challenge[]>(),
-        enabled: !!userId,
-      })
-    ),
-
-  savedTasks: (userId: number | undefined, limit: number = 10, page: number = 0) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['user', userId, 'savedTasks', { limit, page }],
-        queryFn: () =>
-          apiRequest
-            .get(`api/v2/user/${userId}/savedTasks`, {
-              searchParams: { limit, page },
-            })
-            .json<Task[]>(),
         enabled: !!userId,
       })
     ),
