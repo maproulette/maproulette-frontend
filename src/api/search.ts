@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 import { apiRequest } from './client'
 
 export interface SearchByIdResult {
@@ -21,19 +21,11 @@ export interface SearchByIdResult {
   } | null
 }
 
-export const search = {
-  searchById: ({ id }: { id: number }) =>
-    useQuery(
-      queryOptions({
-        queryKey: ['search', 'byId', id],
-        queryFn: () =>
-          apiRequest
-            .get('api/v2/search/byId', {
-              searchParams: { id },
-            })
-            .json<SearchByIdResult>(),
-        enabled: id > 0,
-        placeholderData: (previousData) => previousData,
-      })
-    ),
-}
+export const searchByIdOptions = (id: number) =>
+  queryOptions({
+    queryKey: ['search', 'byId', id],
+    queryFn: () =>
+      apiRequest.get('api/v2/search/byId', { searchParams: { id } }).json<SearchByIdResult>(),
+    enabled: id > 0,
+    placeholderData: keepPreviousData,
+  })

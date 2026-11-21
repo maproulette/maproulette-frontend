@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
-import { api } from '@/api'
+import { serviceInfoOptions } from '@/api/service'
 import { useIntl } from '@/i18n'
 import { docsUrl } from '@/lib/documentationLinks'
 import { frontendVersion } from '@/lib/version'
@@ -17,7 +18,7 @@ const FooterLink = ({ href, children }: { href: string; children: ReactNode }) =
 
 export const Footer = () => {
   const { t } = useIntl()
-  const { data: serviceInfo } = api.service.info()
+  const { data: serviceInfo } = useQuery(serviceInfoOptions())
   const backendVersion = serviceInfo?.compiletime.version
 
   return (

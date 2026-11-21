@@ -2,8 +2,6 @@ import { challenge } from './challenge'
 import { nominatim } from './nominatim'
 import { osm } from './osm'
 import { project } from './project'
-import { search } from './search'
-import { service } from './service'
 import { task } from './task'
 import { taskBundle } from './taskBundle'
 import { team } from './team'
@@ -18,8 +16,6 @@ export const api = {
   project,
   osm,
   nominatim,
-  search,
-  service,
   team,
   teamImage,
 }

@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { FolderOpen, ListTodo, Search, Target } from 'lucide-react'
 import { useId, useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
+import { searchByIdOptions } from '@/api/search'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/InputGroup'
 import { KbdBinding } from '@/components/ui/Kbd'
 import { Popover, PopoverAnchor, PopoverContent } from '@/components/ui/Popover'
@@ -36,7 +38,7 @@ const useResults = (query: string) => {
 
   const challenges = api.challenge.searchChallenges({ search: name, limit: CHALLENGE_LIMIT })
   const projects = api.project.searchProjects({ search: name, limit: PROJECT_LIMIT })
-  const byId = api.search.searchById({ id })
+  const byId = useQuery(searchByIdOptions(id))
   const taskChallenge = api.challenge.getChallenge(byId.data?.task?.parent ?? 0)
 
   const groups = useMemo(() => {
