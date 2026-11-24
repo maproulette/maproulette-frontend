@@ -11,8 +11,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Categorize the kind of changes being made to decide what checks to run
+  # (docs-only changes skip all checks; translation-only changes skip e2e tests).
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+      lang: ${{ steps.filter.outputs.lang }}
+
+    steps:
+      - name: Checkout repository
+        if: github.event_name == 'push'
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v4
+        with:
+          predicate-quantifier: every
+          filters: |
+            code:
+              - '**'
+              - '!**/*.md'
+              - '!lang/**'
+              - '!LICENSE'
+              - '!transifex.yml'
+              - '!.github/FUNDING.yml'
+              - '!.github/ISSUE_TEMPLATE/**'
+            lang:
+              - 'lang/**'
+
   check:
     name: Lint, format, and typecheck
+    needs: changes
+    if: needs.changes.outputs.code == 'true' || needs.changes.outputs.lang == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -34,6 +70,8 @@ jobs:
 
   build:
     name: Build
+    needs: changes
+    if: needs.changes.outputs.code == 'true' || needs.changes.outputs.lang == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -55,6 +93,8 @@ jobs:
 
   test:
     name: Unit tests
+    needs: changes
+    if: needs.changes.outputs.code == 'true' || needs.changes.outputs.lang == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -79,6 +119,8 @@ jobs:
 
   e2e:
     name: E2E tests
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
