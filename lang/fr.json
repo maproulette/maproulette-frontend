@@ -1,159 +1,153 @@
 {
-  "appLayout.betaBanner.message": {
-    "string": "C'est une version bêta de MapRoulette en développement actif. Certaines fonctionnalités peuvent être indisponibles ou incomplètes."
+  "achievement.challengeCompleted.description": {
+    "string": "Fixed a task in a challenge that was completed."
+  },
+  "achievement.challengeCompleted.title": {
+    "string": "Finished Together"
+  },
+  "achievement.createdChallenge.description": {
+    "string": "Created a challenge."
+  },
+  "achievement.createdChallenge.title": {
+    "string": "Challenge Creator"
+  },
+  "achievement.fixedCoopTask.description": {
+    "string": "Fixed a cooperative task."
+  },
+  "achievement.fixedCoopTask.title": {
+    "string": "Cooperative Fixer"
+  },
+  "achievement.fixedFinalTask.description": {
+    "string": "Finished the final task in a challenge."
+  },
+  "achievement.fixedFinalTask.title": {
+    "string": "Closer"
+  },
+  "achievement.fixedTask.description": {
+    "string": "Fixed your first task."
+  },
+  "achievement.fixedTask.title": {
+    "string": "First Fix"
+  },
+  "achievement.mappedBuildings.description": {
+    "string": "Contributed to mapping buildings."
+  },
+  "achievement.mappedBuildings.title": {
+    "string": "Building Blocks"
+  },
+  "achievement.mappedLanduse.description": {
+    "string": "Contributed to mapping land use."
+  },
+  "achievement.mappedLanduse.title": {
+    "string": "Land Use"
+  },
+  "achievement.mappedPoi.description": {
+    "string": "Contributed to mapping points of interest."
+  },
+  "achievement.mappedPoi.title": {
+    "string": "Landmark Spotter"
+  },
+  "achievement.mappedRoads.description": {
+    "string": "Contributed to mapping roads."
+  },
+  "achievement.mappedRoads.title": {
+    "string": "Road Warrior"
+  },
+  "achievement.mappedTransit.description": {
+    "string": "Contributed to mapping transit."
+  },
+  "achievement.mappedTransit.title": {
+    "string": "Transit Mapper"
+  },
+  "achievement.mappedWater.description": {
+    "string": "Contributed to mapping water features."
+  },
+  "achievement.mappedWater.title": {
+    "string": "Waterways"
+  },
+  "achievement.points100.description": {
+    "string": "Earned 100 points."
+  },
+  "achievement.points100.title": {
+    "string": "100 Points"
+  },
+  "achievement.points1000.description": {
+    "string": "Earned 1,000 points."
+  },
+  "achievement.points1000.title": {
+    "string": "1,000 Points"
+  },
+  "achievement.points10000.description": {
+    "string": "Earned 10,000 points."
+  },
+  "achievement.points10000.title": {
+    "string": "10,000 Points"
+  },
+  "achievement.points100k.description": {
+    "string": "Earned 100,000 points."
+  },
+  "achievement.points100k.title": {
+    "string": "100,000 Points"
+  },
+  "achievement.points1m.description": {
+    "string": "Earned a million points."
+  },
+  "achievement.points1m.title": {
+    "string": "1,000,000 Points"
+  },
+  "achievement.points500.description": {
+    "string": "Earned 500 points."
+  },
+  "achievement.points500.title": {
+    "string": "500 Points"
+  },
+  "achievement.points5000.description": {
+    "string": "Earned 5,000 points."
+  },
+  "achievement.points5000.title": {
+    "string": "5,000 Points"
+  },
+  "achievement.points50000.description": {
+    "string": "Earned 50,000 points."
+  },
+  "achievement.points50000.title": {
+    "string": "50,000 Points"
+  },
+  "achievement.points500k.description": {
+    "string": "Earned 500,000 points."
+  },
+  "achievement.points500k.title": {
+    "string": "500,000 Points"
   },
   "appLayout.dismissibleBanner.dismiss": {
     "string": "Fermer la bannière"
   },
+  "appLayout.footer.backendVersion": {
+    "string": "Backend v{version}"
+  },
+  "appLayout.footer.documentation": {
+    "string": "Documentation"
+  },
+  "appLayout.footer.frontendVersion": {
+    "string": "Frontend v{version}"
+  },
+  "appLayout.footer.github": {
+    "string": "GitHub"
+  },
+  "appLayout.footer.projectOf": {
+    "string": "MapRoulette is a project of <link>OpenStreetMap US</link>"
+  },
   "appLayout.header.appName": {
     "string": "MapRoulette"
   },
-  "appLayout.header.globalSearch.docsLink": {
-    "string": "Search shortcuts and short commands"
-  },
-  "appLayout.header.globalSearch.findById.enterNumericId": {
-    "string": "Saisir un ID numérique"
-  },
-  "appLayout.header.globalSearch.findById.hint": {
-    "string": "Saisir un ID pour trouver un projet, un défi ou une tâche "
-  },
-  "appLayout.header.globalSearch.findById.lookingUpId": {
-    "string": "Recherche de l'ID {id}..."
-  },
-  "appLayout.header.globalSearch.findById.matchCount": {
-    "string": "{count, plural, one {Aucune correspondance} many {# correspondances} other {# correspondances}}"
-  },
-  "appLayout.header.globalSearch.findById.noResults": {
-    "string": "Aucun résultat pour l'ID {id}"
-  },
-  "appLayout.header.globalSearch.findById.noResultsHint": {
-    "string": "Aucun projet, défi, ni tâche trouvés avec cet ID"
-  },
-  "appLayout.header.globalSearch.findById.resultsForId": {
-    "string": "Résultats pour l'ID {id}"
-  },
-  "appLayout.header.globalSearch.findById.typeIdHint": {
-    "string": "Saisir un ID de projet, défi ou tâche"
-  },
-  "appLayout.header.globalSearch.findChallenge.loadingMore": {
-    "string": "Charger plus de défis..."
-  },
-  "appLayout.header.globalSearch.findChallenge.noMoreToLoad": {
-    "string": "Aucun défi supplémentaire à charger"
-  },
-  "appLayout.header.globalSearch.findChallenge.noResultsHint": {
-    "string": "Essayez de modifier vos filtres"
-  },
-  "appLayout.header.globalSearch.findChallenge.resultCount": {
-    "string": "{count, plural, one {# défi} many {# défis} other {# défis}}"
-  },
-  "appLayout.header.globalSearch.findComments.byUser": {
-    "string": "par {username}"
-  },
-  "appLayout.header.globalSearch.findComments.commentCount": {
-    "string": "{count, plural, one {# commentaire} many {# commentaires} other {# commentaires}}"
-  },
-  "appLayout.header.globalSearch.findComments.loading": {
-    "string": "Chargement des commentaires en cours…"
-  },
-  "appLayout.header.globalSearch.findComments.noCommentsMatch": {
-    "string": "No {label} comments match \"{query}\""
-  },
-  "appLayout.header.globalSearch.findComments.noCommentsYet": {
-    "string": "Aucun commentaire {label} pour le moment"
-  },
-  "appLayout.header.globalSearch.findComments.recentComments": {
-    "string": "Recent {label} Comments"
-  },
-  "appLayout.header.globalSearch.findComments.unknownUser": {
-    "string": "Inconnu"
-  },
-  "appLayout.header.globalSearch.findFeatureByName.featuredProjects": {
-    "string": "Projets en vedette"
-  },
-  "appLayout.header.globalSearch.findFeatureByName.nothingMatches": {
-    "string": "Aucune correspondance avec \"{query}\""
-  },
-  "appLayout.header.globalSearch.findFeatureByName.resultCount": {
-    "string": "{count, plural, one {# résultat} many {# résultats} other {# résultats}}"
-  },
-  "appLayout.header.globalSearch.findProject.loading": {
-    "string": "Chargement des projets en cours…"
-  },
-  "appLayout.header.globalSearch.findProject.loadingMore": {
-    "string": "Chargement de plus de projets en cours…"
-  },
-  "appLayout.header.globalSearch.findProject.noMoreToLoad": {
-    "string": "Aucun projet supplémentaire à charger"
-  },
-  "appLayout.header.globalSearch.findProject.noResultsHint": {
-    "string": "Essayez un autre terme de recherche"
-  },
-  "appLayout.header.globalSearch.findProject.resultCount": {
-    "string": "{count, plural, one {# projet} many {# projets} other {# projets}}"
-  },
-  "appLayout.header.globalSearch.findTask.found": {
-    "string": "Tâche trouvée"
-  },
-  "appLayout.header.globalSearch.findTask.hint": {
-    "string": "Saisissez un ID de tâche pour la rechercher"
-  },
-  "appLayout.header.globalSearch.findTask.lookingUp": {
-    "string": "Recherche de la tâche {id}..."
-  },
-  "appLayout.header.globalSearch.findTask.noResults": {
-    "string": "Aucune tâche trouvée avec l'ID {id}"
-  },
-  "appLayout.header.globalSearch.findTask.noResultsHint": {
-    "string": "Essayez une autre ID de tâche"
-  },
-  "appLayout.header.globalSearch.findTask.status.label": {
-    "string": "Statut : {status}"
+  "appLayout.header.globalSearch.idHeading": {
+    "string": "ID {id}"
   },
   "appLayout.header.globalSearch.placeholder": {
     "string": "Rechercher des défis, des tâches ou des projets…"
   },
-  "appLayout.header.globalSearch.types.challenge.description": {
-    "string": "Rechercher des défis de cartographie filtrés par difficultés, localisation et étiquettes"
-  },
-  "appLayout.header.globalSearch.types.challenge.label": {
-    "string": "Trouver un défi"
-  },
-  "appLayout.header.globalSearch.types.challengeComment.description": {
-    "string": "Search through comments on challenges for questions and suggestions"
-  },
-  "appLayout.header.globalSearch.types.challengeComment.label": {
-    "string": "Trouver les commentaires du défi"
-  },
-  "appLayout.header.globalSearch.types.featureByName.description": {
-    "string": "Search for geographic features like roads, buildings, or landmarks by name"
-  },
-  "appLayout.header.globalSearch.types.featureByName.label": {
-    "string": "Trouver une fonctionnalité par Nom"
-  },
-  "appLayout.header.globalSearch.types.id.description": {
-    "string": "Quickly navigate to any resource (project, challenge, or task) using its ID"
-  },
-  "appLayout.header.globalSearch.types.project.description": {
-    "string": "Parcourir les projets comportant plusieurs défis classés par thème ou par zone"
-  },
-  "appLayout.header.globalSearch.types.project.label": {
-    "string": "Trouver un projet"
-  },
-  "appLayout.header.globalSearch.types.task.description": {
-    "string": "Search for individual mapping tasks by ID, status, priority, or location"
-  },
-  "appLayout.header.globalSearch.types.taskComment.description": {
-    "string": "Search through comments left on tasks for discussions and notes"
-  },
-  "appLayout.header.globalSearch.types.taskComment.label": {
-    "string": "Trouver les commentaires de la tâche"
-  },
-  "appLayout.header.globalSearch.unifiedList.goToChallenge": {
-    "string": "Accéder au défi"
-  },
-  "appLayout.header.globalSearch.unifiedList.goToProject": {
-    "string": "Aller au projet"
+  "appLayout.header.globalSearch.taskInChallenge": {
+    "string": "Task {id} in Challenge \"{challenge}\""
   },
   "appLayout.header.nav.dashboard": {
     "string": "Tableau de bord"
@@ -182,17 +176,20 @@
   "appLayout.header.signingIn": {
     "string": "Connexion en cours…"
   },
+  "appLayout.header.themeToggle.toDark": {
+    "string": "Switch to dark theme"
+  },
+  "appLayout.header.themeToggle.toLight": {
+    "string": "Switch to light theme"
+  },
   "appLayout.header.userMenu.accountSettings": {
     "string": "Paramètres du compte"
-  },
-  "appLayout.header.userMenu.backend": {
-    "string": "Backend"
   },
   "appLayout.header.userMenu.documentation": {
     "string": "Documentation"
   },
-  "appLayout.header.userMenu.frontend": {
-    "string": "Frontend"
+  "appLayout.header.userMenu.osmProfile": {
+    "string": "OpenStreetMap profile"
   },
   "appLayout.header.userMenu.signOut": {
     "string": "Déconnexion"
@@ -206,11 +203,17 @@
   "appLayout.header.userMenu.triggerSrOnly": {
     "string": "Menu utilisateur"
   },
-  "appLayout.header.userMenu.viewPublicProfile": {
-    "string": "Voir le profil public"
-  },
   "auth.loginFailed": {
     "string": "La connexion a échoué ou expiré. Merci d'essayer de vous connecter à nouveau."
+  },
+  "auth.sessionExpired": {
+    "string": "Your session has expired."
+  },
+  "auth.signInAgain": {
+    "string": "Sign in again"
+  },
+  "auth.signInUnavailable": {
+    "string": "Couldn't start signing in. Please try again."
   },
   "browsedChallengePage.actionButtons.alreadyReported": {
     "string": "Vous avez déjà signalé ce défi ; il est en attente de vérification"
@@ -362,62 +365,29 @@
   "browsedChallengePage.footer.startChallenge": {
     "string": "Démarrer le Défi"
   },
-  "browsedChallengePage.header.addToFavorites": {
-    "string": "Ajouter aux favoris"
-  },
-  "browsedChallengePage.header.addedToFavorites": {
-    "string": "Ajouté aux favoris"
-  },
   "browsedChallengePage.header.byline": {
     "string": "par <owner>{name}</owner>"
-  },
-  "browsedChallengePage.header.challengeLiked": {
-    "string": "Défi mis en favoris !"
   },
   "browsedChallengePage.header.checkOutChallenge": {
     "string": "Check out this challenge: {name}"
   },
-  "browsedChallengePage.header.failedToShare": {
-    "string": "Échec du partage du défi"
-  },
-  "browsedChallengePage.header.failedToUpdateFavorite": {
-    "string": "Échec de la mise à jour du statut de favoris"
-  },
   "browsedChallengePage.header.failedToUpdateLike": {
     "string": "Échec de la mise à jour du statut de favoris"
+  },
+  "browsedChallengePage.header.failedToUpdateSaved": {
+    "string": "Failed to update saved challenges"
   },
   "browsedChallengePage.header.like": {
     "string": "Mettre en favoris"
   },
-  "browsedChallengePage.header.likeChallenge": {
-    "string": "Mettre en favoris le défi"
-  },
   "browsedChallengePage.header.likeCount": {
     "string": "{count, plural, one {1 favori} many {# favoris} other {# favoris}}"
-  },
-  "browsedChallengePage.header.likeRemoved": {
-    "string": "Favoris retiré"
   },
   "browsedChallengePage.header.liked": {
     "string": "Mis en favoris"
   },
-  "browsedChallengePage.header.pleaseSignInToLike": {
-    "string": "Merci de vous connecter pour mettre un défi en favori"
-  },
-  "browsedChallengePage.header.pleaseSignInToSave": {
-    "string": "Connectez-vous pour enregistrer des défis"
-  },
-  "browsedChallengePage.header.removeFromFavorites": {
-    "string": "Retirer des favoris"
-  },
-  "browsedChallengePage.header.removedFromFavorites": {
-    "string": "Retiré des favoris"
-  },
   "browsedChallengePage.header.saved": {
     "string": "Enregistré"
-  },
-  "browsedChallengePage.header.shareChallenge": {
-    "string": "Partager le défi"
   },
   "browsedChallengePage.header.signInToLike": {
     "string": "Identifiez-vous pour mettre les défis en favoris"
@@ -425,17 +395,26 @@
   "browsedChallengePage.header.signInToSave": {
     "string": "Connectez-vous pour enregistrer des défis"
   },
-  "browsedChallengePage.header.taxonomy.favorite": {
-    "string": "Favoris"
-  },
   "browsedChallengePage.header.taxonomy.undiscoverable": {
     "string": "Non-indexé"
   },
-  "browsedChallengePage.header.unlikeChallenge": {
-    "string": "Retirer ce défi des favoris"
+  "browsedChallengePage.map.tasksAll": {
+    "string": "All"
   },
-  "browsedChallengePage.header.viewComments": {
-    "string": "Voir les commentaires"
+  "browsedChallengePage.map.tasksAvailable": {
+    "string": "Available"
+  },
+  "browsedChallengePage.map.tasksCompleted": {
+    "string": "Completed"
+  },
+  "browsedChallengePage.map.tasksShown": {
+    "string": "Tasks shown"
+  },
+  "browsedChallengePage.progress.avgTimeSpent": {
+    "string": "Average time spent"
+  },
+  "browsedChallengePage.progress.completedOf": {
+    "string": "{total, plural, one {{completed, number} of # task completed} other {{completed, number} of # tasks completed}}"
   },
   "browsedChallengePage.progress.details": {
     "string": "Détails"
@@ -470,14 +449,8 @@
   "challengeForm.errors.projectIdRequired": {
     "string": "Un identifiant de projet est nécessaire pour créer un défi"
   },
-  "challengeProgress.remaining": {
-    "string": "Restants"
-  },
   "challengeProgress.segmentTitle": {
     "string": "{status} : {count, number}"
-  },
-  "commentList.list.empty": {
-    "string": "Aucun commentaire pour le moment"
   },
   "common.accessDenied": {
     "string": "Accès refusé"
@@ -493,9 +466,6 @@
   },
   "common.all": {
     "string": "All ({count})"
-  },
-  "common.allChallenges": {
-    "string": "Tous les défis"
   },
   "common.alreadyFixed": {
     "string": "Déjà résolu"
@@ -551,9 +521,6 @@
   "common.category.water": {
     "string": "Hydrographie"
   },
-  "common.challenge": {
-    "string": "Défi"
-  },
   "common.challengePausedDescription": {
     "string": "Ce défi est actuellement en pause."
   },
@@ -562,9 +529,6 @@
   },
   "common.challengeWithChallengeId": {
     "string": "Défi #{challengeId}"
-  },
-  "common.challengeWithId": {
-    "string": "Défi #{id}"
   },
   "common.challenges": {
     "string": "Défis"
@@ -586,9 +550,6 @@
   },
   "common.closeTask": {
     "string": "Fermer la tâche"
-  },
-  "common.comingSoon": {
-    "string": "À venir prochainement"
   },
   "common.comments": {
     "string": "Commentaires"
@@ -662,9 +623,6 @@
   "common.deleted": {
     "string": "Supprimée"
   },
-  "common.deleted2": {
-    "string": "Supprimée"
-  },
   "common.description": {
     "string": "Description"
   },
@@ -722,12 +680,6 @@
   "common.featured": {
     "string": "En vedette"
   },
-  "common.findATask": {
-    "string": "Trouver une tâche"
-  },
-  "common.findByMaprouletteId": {
-    "string": "Trouver par l'ID MapRoulette"
-  },
   "common.fixed": {
     "string": "Résolu"
   },
@@ -764,9 +716,6 @@
   "common.lastUpdated": {
     "string": "Dernière mise à jour {date}"
   },
-  "common.level": {
-    "string": "Niveau {level}"
-  },
   "common.linkCopiedToClipboard": {
     "string": "Lien copié vers le presse-papier"
   },
@@ -784,9 +733,6 @@
   },
   "common.loadingChallenges": {
     "string": "Chargements des défis…"
-  },
-  "common.loadingNotifications": {
-    "string": "Chargement des notifications…"
   },
   "common.makeDiscoverable": {
     "string": "Rendre découvrable"
@@ -827,17 +773,11 @@
   "common.noMoreTasksInChallenge": {
     "string": "Aucune autre tâche disponible pour ce défi"
   },
-  "common.noNotificationsYet": {
-    "string": "Vous n'avez aucune notifications."
-  },
   "common.noProjectsFound": {
     "string": "Aucun projet trouvé"
   },
   "common.noResultsFound": {
     "string": "Aucun résultat trouvé"
-  },
-  "common.noUnreadNotificationsYet": {
-    "string": "Vous n'avez actuellement aucune notification non lue."
   },
   "common.normal": {
     "string": "Normal"
@@ -847,9 +787,6 @@
   },
   "common.nothingToPreview": {
     "string": "Rien à prévisualiser"
-  },
-  "common.notification": {
-    "string": "Notification"
   },
   "common.notifications": {
     "string": "Notifications"
@@ -932,9 +869,6 @@
   "common.removeWithName": {
     "string": "Retirer {name}"
   },
-  "common.reply": {
-    "string": "Reply"
-  },
   "common.reportChallenge": {
     "string": "Signaler le défi"
   },
@@ -943,9 +877,6 @@
   },
   "common.resetViewToTaskLocation": {
     "string": "Recentrer la vue sur la localisation de la tâche"
-  },
-  "common.results": {
-    "string": "Résultats"
   },
   "common.resumeChallenge": {
     "string": "Continuer le défi"
@@ -1016,9 +947,6 @@
   "common.tagFix": {
     "string": "Correction de tag"
   },
-  "common.task": {
-    "string": "Tâche"
-  },
   "common.taskWithId": {
     "string": "Tâche #{id}"
   },
@@ -1037,6 +965,9 @@
   "common.tasksRemaining": {
     "string": "Tâches disponibles"
   },
+  "common.tasksRemaining2": {
+    "string": "tasks remaining"
+  },
   "common.tasksWithCount": {
     "string": "{count, plural, one {# tâche} many {# tâches} other {# tâches}}"
   },
@@ -1048,12 +979,6 @@
   },
   "common.teams": {
     "string": "Équipes"
-  },
-  "common.thatsAll": {
-    "string": "C'est tout !"
-  },
-  "common.total": {
-    "string": "Total"
   },
   "common.type": {
     "string": "Type"
@@ -1079,9 +1004,6 @@
   "common.unread": {
     "string": "Non lue ({count})"
   },
-  "common.updatingResults": {
-    "string": "Mise à jour des résultats…"
-  },
   "common.users": {
     "string": "Utilisateurs"
   },
@@ -1100,9 +1022,6 @@
   "common.viewChallenges": {
     "string": "Voir les défis"
   },
-  "common.viewManageProjectsSubtitle": {
-    "string": "Voir et gérer tous les projets sur l'ensemble de la plateforme"
-  },
   "common.viewOnOsm": {
     "string": "Voir sur OSM"
   },
@@ -1118,107 +1037,47 @@
   "common.youMustBeLoggedInToComment": {
     "string": "Vous devez vous connecter pour commenter"
   },
-  "common.youreAllUpToDate": {
-    "string": "Vous êtes tous à jour"
-  },
   "common.youveReachedTheEndOfTheList": {
     "string": "Vous avez atteint la fin de la liste"
   },
   "common.zoomToTask": {
     "string": "Zoomer sur la tâche"
   },
-  "congratulateModal.achievement.fallback": {
-    "string": "Vous avez gagné un nouveau badge."
+  "dashboard.activity.empty.description": {
+    "string": "Tasks you work on will show up here"
   },
-  "congratulateModal.achievement.title": {
-    "string": "Succès débloqué !"
+  "dashboard.activity.empty.title": {
+    "string": "No recent activity"
   },
-  "congratulateModal.challengeCompleted.description": {
-    "string": "Il n'y a plus aucune tâche ouverte dans ce défi"
+  "dashboard.activity.lockedTasks.title": {
+    "string": "{count, plural, one {# locked task} other {# locked tasks}}"
   },
-  "congratulateModal.challengeCompleted.findAnother": {
-    "string": "Trouver un autre défi"
+  "dashboard.activity.statusCount": {
+    "string": "{count, plural, one {# task marked {status}} other {# tasks marked {status}}}"
   },
-  "congratulateModal.challengeCompleted.reviewStats": {
-    "string": "Vérifiez vos statistiques"
+  "dashboard.activity.title": {
+    "string": "Recent activity"
   },
-  "congratulateModal.challengeCompleted.title": {
-    "string": "Vous avez terminé {challengeName}"
-  },
-  "congratulateModal.levelUp.description": {
-    "string": "{score, plural, one {Bienvenue au niveau {level}. \nVous avez atteint # point.} many {Bienvenue au niveau {level}. \nVous avez atteint # points.} other {Bienvenue au niveau {level}. \nVous avez atteint # points.}}"
-  },
-  "congratulateModal.levelUp.title": {
-    "string": "Tu as gagné un niveau !"
-  },
-  "congratulateModal.streak.description": {
-    "string": "{count, plural, one {# tâche — Continuez comme ça} many {# tâches d'affilée — Continuez comme ça} other {# tâches d'affilée — Continuez comme ça}}"
-  },
-  "congratulateModal.streak.title": {
-    "string": "Hot streak!"
+  "dashboard.activity.unknownChallenge": {
+    "string": "Challenge {parentId}"
   },
   "dashboard.common.failedToLoad": {
     "string": "Échec du chargement"
   },
-  "dashboard.contributions.empty.description": {
-    "string": "Commencer la cartographie pour suivre la progression"
+  "dashboard.profile.achievements": {
+    "string": "Achievements ({earned, number} of {total, number})"
   },
-  "dashboard.contributions.empty.title": {
-    "string": "Aucune contributions"
+  "dashboard.profile.osmProfile": {
+    "string": "OpenStreetMap profile"
   },
-  "dashboard.contributions.lockedTasks.title": {
-    "string": "Tâches verrouillées"
+  "dashboard.profile.points": {
+    "string": "Points"
   },
-  "dashboard.contributions.statusSetLabel": {
-    "string": "Définir le statut de la tâche en {statusLabel}"
+  "dashboard.profile.tasksCompleted": {
+    "string": "Tasks completed"
   },
-  "dashboard.contributions.title": {
-    "string": "Contributions"
-  },
-  "dashboard.contributions.unknownChallenge": {
-    "string": "Défi {parentId}"
-  },
-  "dashboard.levelModal.calculatedUsing": {
-    "string": "Votre niveau est calculé en utilisant :"
-  },
-  "dashboard.levelModal.description": {
-    "string": "Terminez des défis pour gagner des points et améliorer votre rang de cartographe."
-  },
-  "dashboard.levelModal.howItWorksFooter": {
-    "string": "Each level requires exponentially more points. Keep mapping to climb the ranks."
-  },
-  "dashboard.levelModal.howItWorksTitle": {
-    "string": "Fonctionnement des niveaux"
-  },
-  "dashboard.levelModal.pointsRequired": {
-    "string": "{points, plural, one {# point nécessaire} many {# points nécessaires} other {# points nécessaires}}"
-  },
-  "dashboard.levelModal.pointsToNextLevel": {
-    "string": "{points, plural, one {Plus qu'un point jusqu'au niveau suivant} many {Encore # points jusqu'au niveau suivant} other {Encore # points jusqu'au niveau suivant}}"
-  },
-  "dashboard.levelModal.pointsToUnlock": {
-    "string": "{points, plural, one { point à débloquer} many { points à débloquer} other {# points à débloquer}}"
-  },
-  "dashboard.levelModal.progressToLevel": {
-    "string": "Avancement jusqu'au Niveau {level}"
-  },
-  "dashboard.levelModal.title": {
-    "string": "Système de niveau de cartographe"
-  },
-  "dashboard.levelModal.totalPoints": {
-    "string": "{points, plural, one {# point au total } many {# points au total } other {# points au total }}"
-  },
-  "dashboard.levelModal.yourScore": {
-    "string": "{points, plural, one {Votre score : # point} many {Votre score : # points} other {Votre score : # points}}"
-  },
-  "dashboard.profile.guest": {
-    "string": "Invité"
-  },
-  "dashboard.profile.progressToNext": {
-    "string": "{current, number} / {total, number} jusqu'au niveau suivant"
-  },
-  "dashboard.profile.verified": {
-    "string": "Vérifié"
+  "dashboard.profile.userSince": {
+    "string": "MapRoulette user since"
   },
   "dashboard.savedChallenges.actions.unsave": {
     "string": "Oublier le défi"
@@ -1241,20 +1100,20 @@
   "dashboard.teams.learnMore": {
     "string": "Apprenez-en plus au sujet des équipes"
   },
+  "dashboard.topChallenges.empty.description": {
+    "string": "The challenges you work on most will show up here"
+  },
+  "dashboard.topChallenges.empty.title": {
+    "string": "No challenges yet"
+  },
+  "dashboard.topChallenges.title": {
+    "string": "Top challenges"
+  },
   "dynamicPluginRoute.loading": {
     "string": "Chargement de la page des plugins…"
   },
-  "dynamicPluginRoute.notFoundDescription": {
-    "string": "La page du plugin demandé est introuvable."
-  },
-  "errorBoundary.actions.goBack": {
-    "string": "Retour"
-  },
   "errorBoundary.actions.goHome": {
     "string": "Aller à la page de démarrage"
-  },
-  "errorBoundary.actions.goToLogin": {
-    "string": "Aller à la page de connexion"
   },
   "errorBoundary.actions.tryAgain": {
     "string": "Essayez encore"
@@ -1271,20 +1130,14 @@
   "errorBoundary.genericHttp.title": {
     "string": "Erreur {status}"
   },
-  "errorBoundary.notFound.description": {
-    "string": "La page ou la ressource que vous recherchez n'existe pas."
-  },
-  "errorBoundary.notFound.title": {
-    "string": "404 - Pas trouvé"
-  },
   "errorBoundary.serverError.description": {
     "string": "The server encountered an error. Please try again later."
   },
   "errorBoundary.serverError.title": {
     "string": "Erreur serveur"
   },
-  "errorBoundary.unauthorized.description": {
-    "string": "Vous devez être connecté pour accéder à cette ressource."
+  "errorBoundary.unauthorized.signInDescription": {
+    "string": "You need to sign in to view this page."
   },
   "errorBoundary.unauthorized.title": {
     "string": "401 - Access interdit"
@@ -1298,47 +1151,20 @@
   "exploreChallenges.challengeList.footer.endOfListHint": {
     "string": "Changez vos filtres ou explorez une région différente pour découvrir de nouveaux défis"
   },
-  "exploreChallenges.challengeList.table.author": {
-    "string": "Auteur"
-  },
-  "exploreChallenges.challengeList.table.contributors": {
-    "string": "Contributeurs"
-  },
-  "exploreChallenges.challengeList.table.disabled": {
-    "string": "Désactivé"
-  },
-  "exploreChallenges.challengeList.table.dueDate": {
-    "string": "Due date"
-  },
   "exploreChallenges.challengeList.table.lastUpdated": {
     "string": "Dernière mise à jour"
   },
-  "exploreChallenges.challengeList.table.location": {
-    "string": "Localisation"
-  },
-  "exploreChallenges.challengeList.table.organisation": {
-    "string": "Organisation"
-  },
   "exploreChallenges.challengeList.table.percentMapped": {
     "string": "Pourcentage cartographié"
-  },
-  "exploreChallenges.challengeList.table.percentValidated": {
-    "string": "Pourcentage validé"
-  },
-  "exploreChallenges.challengeList.table.projectLabel": {
-    "string": "Projet {name}"
-  },
-  "exploreChallenges.challengeList.table.published": {
-    "string": "Publié"
-  },
-  "exploreChallenges.challengeList.table.userLabel": {
-    "string": "Utilisateur {owner}"
   },
   "exploreChallenges.filterBar.clearFilters": {
     "string": "Effacer les filtres"
   },
   "exploreChallenges.filterBar.difficulty.any": {
     "string": "N'importe lequel"
+  },
+  "exploreChallenges.filterBar.filtersToggle": {
+    "string": "{count, plural, =0 {Filters} one {Filters (#)} other {Filters (#)}}"
   },
   "exploreChallenges.filterBar.location.clearAriaLabel": {
     "string": "Effacer la localisation"
@@ -1373,6 +1199,9 @@
   "exploreChallenges.filterBar.sortBy.oldest": {
     "string": "Le plus ancien"
   },
+  "exploreChallenges.filterBar.sortBy.recommended": {
+    "string": "Recommended"
+  },
   "exploreChallenges.filterBar.title": {
     "string": "Filtres de la liste de défis"
   },
@@ -1405,9 +1234,6 @@
   },
   "keyboardShortcuts.category.taskActions": {
     "string": "Actions de la tâche"
-  },
-  "keyboardShortcuts.description": {
-    "string": "Utilisez ces raccourcis pour accélérer votre travail."
   },
   "keyboardShortcuts.docsLink": {
     "string": "Voir la liste complète des raccourcis clavier"
@@ -1457,8 +1283,8 @@
   "manageChallengeDetail.detail.statistics.taskCountsByStatus": {
     "string": "Nombre de tâches par statut"
   },
-  "manageChallengeDetail.detail.statisticsLabel": {
-    "string": "Statistiques"
+  "manageChallengeDetail.detail.viewChallengePage": {
+    "string": "View challenge page"
   },
   "manageChallengeDetail.export.button": {
     "string": "Exporter"
@@ -1511,9 +1337,6 @@
   "manageChallengeDetail.miniMap.zoomToAllTasksTooltip": {
     "string": "Afficher toutes les tâches"
   },
-  "manageChallengeDetail.recentActivity.description": {
-    "string": "Avancement des tâches par statut, groupées par jour (même donnée que le widget du tableau de bord \"legacy\")."
-  },
   "manageChallengeDetail.recentActivity.empty": {
     "string": "Aucune activité récente."
   },
@@ -1556,8 +1379,8 @@
   "manageChallengeDetail.statusIndicator.updatingBody": {
     "string": "Les statuts des tâches sont en cours de mise à jour. Cette page se rafraîchit automatiquement pour montrer l'évolution."
   },
-  "manageChallengeDetail.tasksExplorer.clearFiltersTitle": {
-    "string": "Effacez tous les filtres et tris"
+  "manageChallengeDetail.tasksExplorer.clearAllFiltersTitle": {
+    "string": "Clear all filters"
   },
   "manageChallengeDetail.tasksExplorer.columnBundle": {
     "string": "Groupe"
@@ -1565,8 +1388,8 @@
   "manageChallengeDetail.tasksExplorer.deselectRowLabel": {
     "string": "Deselect row for bulk actions"
   },
-  "manageChallengeDetail.tasksExplorer.deselectTaskLabel": {
-    "string": "Désélectionner une tâche"
+  "manageChallengeDetail.tasksExplorer.filterBarLabel": {
+    "string": "Task filters"
   },
   "manageChallengeDetail.tasksExplorer.filtersLabel": {
     "string": "Filtres"
@@ -1604,8 +1427,8 @@
   "manageChallengeDetail.tasksExplorer.selectRowLabel": {
     "string": "Select row for bulk actions"
   },
-  "manageChallengeDetail.tasksExplorer.selectTaskLabel": {
-    "string": "Sélectionner une tâche"
+  "manageChallengeDetail.tasksExplorer.showTaskOnMapLabel": {
+    "string": "Show task {id} on map"
   },
   "manageChallengeDetail.tasksExplorer.sortAscButton": {
     "string": "Asc"
@@ -1624,9 +1447,6 @@
   },
   "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
     "string": "Statut de la tâche"
-  },
-  "manageChallengeEdit.pageDescription": {
-    "string": "Modifiez les informations ci-dessous pour mettre à jour votre défi"
   },
   "manageChallengeEdit.pageTitle": {
     "string": "Éditeur de défi"
@@ -1874,50 +1694,14 @@
   "manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired": {
     "string": "Une URL vers un GeoJSON est nécessaire"
   },
-  "manageChallengeNew.pageDescription": {
-    "string": "Fill in the information below to create your new challenge"
-  },
-  "manageChallenges.content.aboutChallengesBody": {
-    "string": "Challenges contain tasks that mappers work through to improve OpenStreetMap data."
-  },
-  "manageChallenges.content.aboutChallengesTitle": {
-    "string": "À propos des défis"
-  },
   "manageChallenges.content.bulkEditingLink": {
     "string": "Bulk Editing Challenges"
   },
   "manageChallenges.content.challengeCreationGuideLink": {
     "string": "Guide de création des défis"
   },
-  "manageChallenges.content.emptyDescription": {
-    "string": "Vous n'avez créé aucun défi pour le moment"
-  },
-  "manageChallenges.content.manageProjectsLink": {
-    "string": "Gérer le projet"
-  },
-  "manageChallenges.content.quickLinks": {
-    "string": "Liens utiles"
-  },
   "manageChallenges.content.taskPriorityRulesLink": {
     "string": "Task Priority Rules"
-  },
-  "manageChallenges.content.tipMonitorProgressBody": {
-    "string": "Check completion rates and mapper comments. Archive challenges once all tasks are resolved."
-  },
-  "manageChallenges.content.tipMonitorProgressTitle": {
-    "string": "Monitor progress"
-  },
-  "manageChallenges.content.tipSetDifficultyBody": {
-    "string": "Ajustez la difficulté aux compétences nécessaires. Les tâches faciles attirent les nouveaux contributeurs, alors que les tâches expertes sont dirigées vers les contributeurs expérimentés"
-  },
-  "manageChallenges.content.tipSetDifficultyTitle": {
-    "string": "Set appropriate difficulty"
-  },
-  "manageChallenges.content.tipWriteClearInstructionsBody": {
-    "string": "Des consignes claires aident les cartographes à comprendre ce qu'ils doivent corriger et comment s'y prendre. Ajoutez des exemples et des liens vers les pages wiki pertinentes."
-  },
-  "manageChallenges.content.tipWriteClearInstructionsTitle": {
-    "string": "Écrivez des consignes claires."
   },
   "manageChallengesBulkEdit.confirm.cancel": {
     "string": "Annuler la modification"
@@ -2024,15 +1808,6 @@
   "manageChallengesBulkEdit.pageTitle": {
     "string": "Bulk Edit Challenges"
   },
-  "manageHome.challengesDescription": {
-    "string": "Parcourir et gérer tous vos défis"
-  },
-  "manageHome.projectsDescription": {
-    "string": "Créer et gérer vos projets MapRoulette"
-  },
-  "manageHome.tasksDescription": {
-    "string": "Ouvrir une tâche par ID pour la voir ou l'éditer"
-  },
   "manageProjectDetail.challengeSelection.clear": {
     "string": "Nettoyage de la sélection"
   },
@@ -2057,26 +1832,11 @@
   "manageProjectDetail.content.disableProject": {
     "string": "Désactiver le projet"
   },
-  "manageProjectDetail.content.emptyDescription": {
-    "string": "Commencez en créant votre premier défi"
-  },
   "manageProjectDetail.content.enableProject": {
     "string": "Activer le projet"
   },
   "manageProjectDetail.content.playbookDocsLink": {
     "string": "Open project management docs"
-  },
-  "manageProjectDetail.content.playbookTip1": {
-    "string": "Vérifiez que les consignes relatives aux défis et les attentes en matière de l'Assurance Qualité sont précises et vérifiables."
-  },
-  "manageProjectDetail.content.playbookTip2": {
-    "string": "Trier les défis pour que les cartographieurs puissent traiter les tâches de la plus simple à la plus compliquée."
-  },
-  "manageProjectDetail.content.playbookTip3": {
-    "string": "Assign at least one co-manager for triage, support, and archival continuity."
-  },
-  "manageProjectDetail.content.playbookTitle": {
-    "string": "Project Playbook"
   },
   "manageProjectDetail.content.viewProjectPage": {
     "string": "Voir la page du projet"
@@ -2096,14 +1856,8 @@
   "manageProjectDetail.managers.title": {
     "string": "Gestionnaires du projet"
   },
-  "manageProjectEdit.pageDescription": {
-    "string": "Modify the information below to update your project"
-  },
   "manageProjectEdit.pageTitle": {
     "string": "Détails du projet"
-  },
-  "manageProjectNew.pageDescription": {
-    "string": "Renseignez les informations ci-dessous pour créer votre nouveau projet"
   },
   "manageProjectNew.projectForm.createSuccessToast": {
     "string": "Project created successfully"
@@ -2113,9 +1867,6 @@
   },
   "manageProjectNew.projectForm.descriptionPlaceholder": {
     "string": "Donnez une description du projet…"
-  },
-  "manageProjectNew.projectForm.detailsSectionDescription": {
-    "string": "Basic identifying information for this project."
   },
   "manageProjectNew.projectForm.detailsSectionTitle": {
     "string": "Détails du projet"
@@ -2165,56 +1916,14 @@
   "manageProjectNew.projectForm.validation.nameRequired": {
     "string": "Un nom de projet est nécessaire"
   },
-  "manageProjectNew.projectForm.visibilitySectionDescription": {
-    "string": "Control how this project appears across MapRoulette."
-  },
   "manageProjectNew.projectForm.visibilitySectionTitle": {
     "string": "Visibilité"
-  },
-  "manageProjects.content.aboutDescription": {
-    "string": "Good project structure improves mapper clarity, QA consistency, and long-term maintenance."
-  },
-  "manageProjects.content.aboutTitle": {
-    "string": "À propos des projets"
-  },
-  "manageProjects.content.challengeCreation": {
-    "string": "Création de défi"
   },
   "manageProjects.content.deleteProjectDescription": {
     "string": "Le projet \"{projectName}\" et tous ses défis et ses tâches vont être supprimés. Cette action ne peut pas être annulée."
   },
-  "manageProjects.content.helpfulDocs": {
-    "string": "Doc utile"
-  },
-  "manageProjects.content.learnHub": {
-    "string": "Centre d'apprentissage"
-  },
-  "manageProjects.content.noProjectsDescription": {
-    "string": "Commencez en créant votre premier projet."
-  },
-  "manageProjects.content.noProjectsDescriptionShort": {
-    "string": "Commencez en créant votre premier projet"
-  },
   "manageProjects.content.projectManagement": {
     "string": "Gestion de projet"
-  },
-  "manageProjects.content.tipOwnershipBody": {
-    "string": "Add co-managers before launch so triage, support, and archival responsibilities are covered."
-  },
-  "manageProjects.content.tipOwnershipTitle": {
-    "string": "Share ownership"
-  },
-  "manageProjects.content.tipPublishBody": {
-    "string": "Gardez les projets dans le statut non-découvrable pendant la phase d'itération. Ne les rendez découvrable qu'après avoir validé les consignes et les contrôles d'Assurance Qualité."
-  },
-  "manageProjects.content.tipPublishTitle": {
-    "string": "Publish intentionally"
-  },
-  "manageProjects.content.tipScopeBody": {
-    "string": "Use a stable naming pattern (region, theme, version) and keep each project focused on one clear objective."
-  },
-  "manageProjects.content.tipScopeTitle": {
-    "string": "Define scope early"
   },
   "manageTaskEdit.form.geoJSONInvalid": {
     "string": "Le GeoJSON doit être un JSON valide"
@@ -2231,17 +1940,11 @@
   "manageTaskEdit.form.instructionsPlaceholder": {
     "string": "Consignes spécifiques à cette tâche (remplacera les instructions du défi)"
   },
-  "manageTaskEdit.form.nameDescription": {
-    "string": "Nom de la tâche"
-  },
   "manageTaskEdit.form.namePlaceholder": {
     "string": "Nom de Tâche"
   },
   "manageTaskEdit.form.nameTooShort": {
     "string": "{min, plural, one {Le nom doit comporter au moins 1 caractère} many {Le nom doit comporter au moins # caractères} other {Le nom doit comporter au moins # caractères}}"
-  },
-  "manageTaskEdit.form.statusDescription": {
-    "string": "Statut actuel de la tâche"
   },
   "manageTaskEdit.form.statusPlaceholder": {
     "string": "Sélectionnez le statut"
@@ -2255,23 +1958,14 @@
   "manageTaskEdit.index.accessDeniedDescription": {
     "string": "Seuls les créateurs de défis et les admins peuvent éditer les tâches."
   },
-  "manageTaskEdit.index.noPermission": {
-    "string": "Vous n'avez pas la permission d'éditer cette tâche."
+  "manageTaskEdit.index.loadErrorDescription": {
+    "string": "This task could not be loaded. It may have been deleted."
   },
-  "manageTaskEdit.index.taskDetailsDescription": {
-    "string": "Modify the fields below and save to update the task"
+  "manageTaskEdit.index.loadErrorTitle": {
+    "string": "Task not found"
   },
   "manageTaskEdit.index.taskDetailsTitle": {
     "string": "Détails de la tâche"
-  },
-  "manageTaskNew.body": {
-    "string": "Tasks are typically created in bulk through challenges. Individual task creation will be available in a future update."
-  },
-  "manageTaskNew.description": {
-    "string": "Task management functionality is under development"
-  },
-  "manageTaskNew.title": {
-    "string": "Nouvelle tâche"
   },
   "manageTasksOpen.cardDescription": {
     "string": "Saisir l'ID d'une tâche ci-dessous. Vous pouvez trouver l'ID d'une tâche en traitant une tâche (dans l'URL ou l'en-tête) ou depuis vos tâches enregistrées/verrouillées du tableau de bord"
@@ -2360,6 +2054,9 @@
   "managementPages.bulkActionsToolbar.updatedToast": {
     "string": "{count, plural, one {# tâche mise à jour} many {# tâches mises à jour} other {# tâches mises à jour}}"
   },
+  "managementPages.manageInfoPanel.documentation": {
+    "string": "Documentation"
+  },
   "managementPages.rebuildTasksDialog.dataOriginDate": {
     "string": "Date data was sourced (optional)"
   },
@@ -2444,17 +2141,11 @@
   "managers.teamsDescription": {
     "string": "Ce que chaque personne peut faire ici dépend de leur rôle dans l'équipe : les propriétaires et administrateurs gèrent l'équipe, les gestionnaires peuvent l'éditer et les simples équipiers n'ont aucune action possible."
   },
-  "map.controls.hideControls": {
-    "string": "Masquer les contrôles"
+  "map.controls.mapSettings": {
+    "string": "Map settings"
   },
   "map.controls.mapStyle": {
     "string": "Style de carte"
-  },
-  "map.controls.resetView": {
-    "string": "Réinitialiser la vue"
-  },
-  "map.controls.showControls": {
-    "string": "Afficher les contrôles"
   },
   "map.controls.zoomIn": {
     "string": "Zoom +"
@@ -2473,6 +2164,12 @@
   },
   "map.scaleBar.miles": {
     "string": "{value, number, ::.#} mi"
+  },
+  "map.settings.directionIndicators": {
+    "string": "Direction indicators"
+  },
+  "map.settings.overlays": {
+    "string": "Overlays"
   },
   "map.styleSwitcher.addCustom": {
     "string": "Ajoutez votre propre couche"
@@ -2495,14 +2192,11 @@
   "map.styleSwitcher.xyzUrlLabel": {
     "string": "URL de tuile"
   },
-  "map.taskMarkers.clusterToggle.enforcedWarning": {
-    "string": "Le regroupement est actif pour plus de 500 tâches"
+  "map.taskMarkers.clusterToggle.forcedTooltip": {
+    "string": "You cannot disable clustering at this zoom level."
   },
   "map.taskMarkers.clusterToggle.label": {
     "string": "Regrouper les marqueurs"
-  },
-  "map.taskMarkers.clusterToggle.tooLargeWarning": {
-    "string": "Il y a trop de marqueurs pour pouvoir les regrouper, veuillez zoomer plus proche pour voir les tâches"
   },
   "map.taskPicker.heading": {
     "string": "{count, plural, one {1 tâche ici} many {# tâches ici} other {# tâches ici}}"
@@ -2549,59 +2243,50 @@
   "notificationSubscriptions.level.noEmail": {
     "string": "Notifier dans l'appli"
   },
-  "notifications.actions.markedAsRead": {
-    "string": "marqué comme lu"
+  "notifications.empty.all": {
+    "string": "No notifications yet"
   },
-  "notifications.actions.markedAsUnread": {
-    "string": "marqué comme non lu"
+  "notifications.empty.unread": {
+    "string": "No unread notifications"
   },
-  "notifications.toast.actionError": {
-    "string": "Échec de la {verb} de la notification : {message}"
+  "notifications.item.challengeComment": {
+    "string": "<b>{user}</b> commented on <b>{challenge}</b>"
   },
   "notificationsPage.content.description": {
     "string": "Voir et gérer vos notifications"
   },
-  "notificationsPage.content.groupByTask": {
-    "string": "Regroupement par tâche"
+  "notifications.item.mentionOnChallenge": {
+    "string": "<b>{user}</b> mentioned you on <b>{challenge}</b>"
   },
-  "notificationsPage.content.groupByTaskHint": {
-    "string": "Notifications for the same task are grouped together"
+  "notifications.item.mentionOnTask": {
+    "string": "<b>{user}</b> mentioned you on task {taskId}"
   },
-  "notificationsPage.filters.allSenders": {
-    "string": "All Senders"
+  "notifications.item.reviewed": {
+    "string": "<b>{user}</b> reviewed task {taskId}"
   },
-  "notificationsPage.filters.allTasks": {
-    "string": "All Tasks"
+  "notifications.item.someone": {
+    "string": "Someone"
   },
-  "notificationsPage.filters.allTypes": {
-    "string": "All Types"
+  "notifications.item.teamInvite": {
+    "string": "<b>{user}</b> invited you to join <b>{team}</b>"
   },
-  "notificationsPage.filters.category.all": {
-    "string": "Tout"
+  "notifications.item.unlockRequested": {
+    "string": "<b>{user}</b> asked you to unlock task {taskId}"
   },
-  "notificationsPage.filters.category.system": {
-    "string": "Système"
+  "notifications.toast.deleteFailed": {
+    "string": "Couldn't delete notifications: {message}"
   },
-  "notificationsPage.filters.clearFilters": {
-    "string": "Effacer les filtres"
+  "notifications.toast.markReadFailed": {
+    "string": "Couldn't mark notifications as read: {message}"
   },
-  "notificationsPage.filters.fromPlaceholder": {
-    "string": "De"
+  "notifications.toast.markUnreadFailed": {
+    "string": "Couldn't mark notifications as unread: {message}"
   },
-  "notificationsPage.filters.status.all": {
-    "string": "All"
+  "notificationsPage.deleteConfirm.description": {
+    "string": "This can't be undone."
   },
-  "notificationsPage.filters.status.read": {
-    "string": "Lire"
-  },
-  "notificationsPage.filters.status.unread": {
-    "string": "Non lue"
-  },
-  "notificationsPage.filters.typeOptionFallback": {
-    "string": "Type {typeId}"
-  },
-  "notificationsPage.item.challengeLabel": {
-    "string": "Défi :"
+  "notificationsPage.deleteConfirm.title": {
+    "string": "{count, plural, one {Delete # notification?} other {Delete # notifications?}}"
   },
   "notificationsPage.item.deleteNotification": {
     "string": "Supprimer la notification"
@@ -2612,68 +2297,14 @@
   "notificationsPage.item.markAsUnread": {
     "string": "Marquer comme non lu"
   },
-  "notificationsPage.item.openThread": {
-    "string": "Ouvrir la notification"
+  "notificationsPage.item.select": {
+    "string": "Select notification"
   },
-  "notificationsPage.item.projectRef": {
-    "string": "Project #{projectId}"
+  "notificationsPage.item.unread": {
+    "string": "Unread"
   },
-  "notificationsPage.item.selectFrom": {
-    "string": "Select notification from {from}"
-  },
-  "notificationsPage.item.unknownSender": {
-    "string": "unknown"
-  },
-  "notificationsPage.item.unreadTitle": {
-    "string": "Notification non lue"
-  },
-  "notificationsPage.savedViews.applied": {
-    "string": "Activer la vue \"{name}\""
-  },
-  "notificationsPage.savedViews.cancelRename": {
-    "string": "Cancel rename"
-  },
-  "notificationsPage.savedViews.cancelSave": {
-    "string": "Cancel save"
-  },
-  "notificationsPage.savedViews.deleteAction": {
-    "string": "Delete {name}"
-  },
-  "notificationsPage.savedViews.deleteFailed": {
-    "string": "Échec de la suppression de la vue"
-  },
-  "notificationsPage.savedViews.deleted": {
-    "string": "Vue supprimée"
-  },
-  "notificationsPage.savedViews.empty": {
-    "string": "Aucune vue n'est encore enregistrée."
-  },
-  "notificationsPage.savedViews.namePlaceholder": {
-    "string": "Nom de la vue"
-  },
-  "notificationsPage.savedViews.nameRequired": {
-    "string": "Le nom de la vue est requis"
-  },
-  "notificationsPage.savedViews.newNameLabel": {
-    "string": "Enregistrer le nom de la vue"
-  },
-  "notificationsPage.savedViews.renameAction": {
-    "string": "Rename {name}"
-  },
-  "notificationsPage.savedViews.renameFailed": {
-    "string": "Échec du renommage de la vue"
-  },
-  "notificationsPage.savedViews.renameInputLabel": {
-    "string": "Renommer la vue enregistrée"
-  },
-  "notificationsPage.savedViews.renamed": {
-    "string": "Vue renommée"
-  },
-  "notificationsPage.savedViews.saveCurrentAs": {
-    "string": "Enregistrer en tant que…"
-  },
-  "notificationsPage.savedViews.saveFailed": {
-    "string": "Échec de l'enregistrement de la vue"
+  "notificationsPage.selectAll": {
+    "string": "Select all notifications"
   },
   "notificationsPage.savedViews.saveName": {
     "string": "Enregistrer le nom"
@@ -2792,63 +2423,6 @@
   "plugins.errors.removeFailed": {
     "string": "Échec de la suppression du plugin"
   },
-  "profilePage.achievements.earnedCount": {
-    "string": "{earned, number} of {total, number} earned"
-  },
-  "profilePage.achievements.title": {
-    "string": "Succès"
-  },
-  "profilePage.header.osmChaLink": {
-    "string": "OSMCha"
-  },
-  "profilePage.header.osmProfileLink": {
-    "string": "Profil OSM"
-  },
-  "profilePage.header.userSince": {
-    "string": "User since: {date}"
-  },
-  "profilePage.index.loadError": {
-    "string": "Couldn't load that user's profile."
-  },
-  "profilePage.index.loginRequired": {
-    "string": "Veuillez vous identifier pour voir votre profil"
-  },
-  "profilePage.metrics.title": {
-    "string": "Metrics"
-  },
-  "profilePage.taskStats.loadError": {
-    "string": "Couldn't load task stats."
-  },
-  "profilePage.taskStats.totalCompleted": {
-    "string": "Total résolu"
-  },
-  "profilePage.taskStats.totalCompletedValue": {
-    "string": "{count, plural, one {1 tâche} many {# tâches} other {# tâches}}"
-  },
-  "profilePage.timeRange.all": {
-    "string": "All"
-  },
-  "profilePage.timeRange.ariaLabel": {
-    "string": "Time range"
-  },
-  "profilePage.timeRange.nineMonths": {
-    "string": "9m"
-  },
-  "profilePage.timeRange.oneMonth": {
-    "string": "1m"
-  },
-  "profilePage.timeRange.sixMonths": {
-    "string": "6m"
-  },
-  "profilePage.timeRange.threeMonths": {
-    "string": "3m"
-  },
-  "profilePage.timeRange.twelveMonths": {
-    "string": "12m"
-  },
-  "profilePage.topChallenges.title": {
-    "string": "Top défis"
-  },
   "projectRoles.admin": {
     "string": "Admin"
   },
@@ -2876,24 +2450,6 @@
   "settings.account.title": {
     "string": "Compte"
   },
-  "settings.api.description": {
-    "string": "Gérer vos préférences d'API"
-  },
-  "settings.apiKey.copyLabel": {
-    "string": "Copier la clef d'API"
-  },
-  "settings.apiKey.keyLabel": {
-    "string": "Clef"
-  },
-  "settings.apiKey.label": {
-    "string": "Clef d'API"
-  },
-  "settings.apiKey.regenerate": {
-    "string": "Regénérer"
-  },
-  "settings.apiKey.regenerateLabel": {
-    "string": "Regénérer la clef d\"API"
-  },
   "settings.general.basemapCustom": {
     "string": "Couche de tuiles personnalisée…"
   },
@@ -2917,9 +2473,6 @@
   },
   "settings.general.customBasemapRequired": {
     "string": "Saisir une URL de tuile pour votre fond de carte personnalisé"
-  },
-  "settings.general.description": {
-    "string": "Update your general account settings and preferences."
   },
   "settings.general.editorDescription": {
     "string": "Choisissez votre éditeur préféré pour cartographier les tâches."
@@ -3011,27 +2564,6 @@
   "settings.plugins.workshopTitle": {
     "string": "Plugins Workshop"
   },
-  "settings.regenerateApiKey.confirmDescription": {
-    "string": "Votre clef d'API actuelle cessera de fonctionner immédiatement. Tous les scripts ou intégrations utilisant l'ancienne clef devront être mis à jour."
-  },
-  "settings.regenerateApiKey.confirmSaved": {
-    "string": "J'ai enregistré cette clef"
-  },
-  "settings.regenerateApiKey.confirmTitle": {
-    "string": "Regénérer la clef d'API ?"
-  },
-  "settings.regenerateApiKey.copyKey": {
-    "string": "Copier la clef"
-  },
-  "settings.regenerateApiKey.error": {
-    "string": "Échec de la regénération de la clef d'API."
-  },
-  "settings.regenerateApiKey.newKeyDescription": {
-    "string": "Copiez-la dès maintenant — une fois cette boîte de dialogue fermée, vous ne pourrez plus la consulter. Si vous la perdez, vous devrez en regénérer une autre."
-  },
-  "settings.regenerateApiKey.newKeyTitle": {
-    "string": "Votre nouvelle clef d'API"
-  },
   "settings.remotePlugins.addButton": {
     "string": "Ajouter le plugin"
   },
@@ -3052,9 +2584,6 @@
   },
   "settings.remotePlugins.title": {
     "string": "Remote Plugins"
-  },
-  "settings.remotePlugins.urlDescription": {
-    "string": "Enter the full URL to a plugin module (ESM format). The plugin will be searched and added to your plugins."
   },
   "settings.remotePlugins.urlLabel": {
     "string": "Plugin Module URL"
@@ -3089,44 +2618,23 @@
   "shared.achievementBadge.notYetEarned": {
     "string": "Pas gagné pour le moment"
   },
+  "shared.challengeCard.actionsLabel": {
+    "string": "Actions for {name}"
+  },
   "shared.challengeCard.project": {
     "string": "{name}"
   },
   "shared.clearManageFiltersButton.label": {
     "string": "Effacer les filtres"
   },
-  "shared.commentComposer.mention.userSuggestions": {
-    "string": "User suggestions"
-  },
-  "shared.commentComposer.placeholder": {
-    "string": "Write a comment…"
-  },
-  "shared.commentComposer.posting": {
-    "string": "Posting…"
-  },
-  "shared.commentComposer.submitLabel": {
-    "string": "Post"
-  },
-  "shared.digitDisplay.pointsLabel": {
-    "string": "{value, plural, one {# point} many {# points} other {# points}}"
-  },
   "shared.mapLoadingIndicator.loading": {
     "string": "Chargement des marqueurs de tâche…"
-  },
-  "shared.notFound.backHome": {
-    "string": "Head back home"
   },
   "shared.notFound.description": {
     "string": "The page you are looking for does not exist."
   },
-  "shared.projectCard.challengesRemaining": {
-    "string": "challenges remaining"
-  },
   "shared.projectCard.completed": {
     "string": "Terminé : {count}"
-  },
-  "shared.projectCard.pinned": {
-    "string": "Pinned: {count}"
   },
   "shared.projectCard.totalChallenges": {
     "string": "Total Challenges: {count}"
@@ -3158,12 +2666,6 @@
   "shared.statusBadge.notDiscoverable": {
     "string": "Non découvrable"
   },
-  "statusBreakdownBar.bar.label": {
-    "string": "Répartition par statut"
-  },
-  "statusBreakdownBar.bar.noTasks": {
-    "string": "Aucune tâche pour le moment"
-  },
   "statusBreakdownBar.status.alreadyFixed": {
     "string": "Déjà corrigé"
   },
@@ -3178,18 +2680,6 @@
   },
   "statusLegend.priorityMedium": {
     "string": "Priorité Moyenne"
-  },
-  "superAdmin.analytics.comingSoonDescription": {
-    "string": "We're working on bringing you comprehensive platform analytics. Check back soon."
-  },
-  "superAdmin.analytics.comingSoonTitle": {
-    "string": "Analytics dashboard coming soon"
-  },
-  "superAdmin.analytics.description": {
-    "string": "View comprehensive analytics and metrics across the platform."
-  },
-  "superAdmin.analytics.title": {
-    "string": "Platform Analytics"
   },
   "superAdmin.layout.breadcrumbRoot": {
     "string": "super admin"
@@ -3209,9 +2699,6 @@
   "superAdminChallengeReports.dismissedSuccess": {
     "string": "Signalement rejeté"
   },
-  "superAdminChallengeReports.emptyDescription": {
-    "string": "Aucun signalement de défi ne correspond à ces filtres."
-  },
   "superAdminChallengeReports.markActioned": {
     "string": "Indiqué comme traité"
   },
@@ -3221,20 +2708,8 @@
   "superAdminChallengeReports.resolvedMeta": {
     "string": "{status} par {user} le {date}"
   },
-  "superAdminChallengeReports.subtitle": {
-    "string": "Signalements que le défi n'est pas bien configuré et qu'il entraîne des contributions incorrectes. Indiquez un défi comme étant traité une fois le problème résolu — par exemple en l'archivant —."
-  },
   "superAdminChallengeReports.title": {
     "string": "Signalements du défi"
-  },
-  "superAdminChallenges.comingSoon.description": {
-    "string": "Nous sommes en train de construire un outil de gestion des défis pour les super-admins. Revenez bientôt."
-  },
-  "superAdminChallenges.comingSoon.title": {
-    "string": "Challenge management coming soon"
-  },
-  "superAdminChallenges.subtitle": {
-    "string": "Parcourir et gérer tous les défis sur la plateforme"
   },
   "superAdminGuard.accessDenied.message": {
     "string": "Vous n'êtes pas autorisé à accéder à cette section. Des droits de super admin sont requis."
@@ -3242,89 +2717,14 @@
   "superAdminGuard.accessDenied.title": {
     "string": "Accès refusé"
   },
-  "superAdminHome.cards.analytics.button": {
-    "string": "Voir les statistiques"
-  },
-  "superAdminHome.cards.analytics.description": {
-    "string": "View platform-wide analytics and metrics"
-  },
-  "superAdminHome.cards.analytics.title": {
-    "string": "Statistiques"
-  },
-  "superAdminHome.cards.challengeReports.button": {
-    "string": "Voir les signalement du défi"
-  },
-  "superAdminHome.cards.challengeReports.description": {
-    "string": "Triage reports that a challenge is causing incorrect edits"
-  },
   "superAdminHome.cards.challengeReports.title": {
     "string": "Signalements du défi"
-  },
-  "superAdminHome.cards.challenges.description": {
-    "string": "Parcourir et gérer tous les défis"
-  },
-  "superAdminHome.cards.database.description": {
-    "string": "Gestion et maintenance de la base de données"
-  },
-  "superAdminHome.cards.database.title": {
-    "string": "Base de données"
-  },
-  "superAdminHome.cards.plugins.button": {
-    "string": "Voir les plugins"
-  },
-  "superAdminHome.cards.plugins.description": {
-    "string": "Gérer les plugins et intégrations"
-  },
-  "superAdminHome.cards.settings.button": {
-    "string": "Voir les paramètres"
-  },
-  "superAdminHome.cards.settings.description": {
-    "string": "Paramètres et configuration de la plateforme"
-  },
-  "superAdminHome.cards.settings.title": {
-    "string": "Paramètres"
-  },
-  "superAdminHome.cards.teamImages.button": {
-    "string": "Vérifier les images"
-  },
-  "superAdminHome.cards.teamImages.description": {
-    "string": "Review challenge images teams have requested"
   },
   "superAdminHome.cards.teamImages.title": {
     "string": "Images de l'équipe"
   },
-  "superAdminHome.cards.users.button": {
-    "string": "Voir les utilisateurs"
-  },
-  "superAdminHome.cards.users.description": {
-    "string": "Manage all platform users and permissions"
-  },
-  "superAdminHome.subtitle": {
-    "string": "Manage all aspects of the MapRoulette platform."
-  },
   "superAdminHome.title": {
     "string": "Tableau de bord du Super Admin"
-  },
-  "superAdminPlugins.comingSoon.description": {
-    "string": "La gestion des plugins est non disponible pour le moment. Il n'existe actuellement aucun plugin d'API permettant d'installer, de configurer ou de parcourir les plugins ; cette page sert donc de page de remplacement en attendant la mise en place de cette fonctionnalité."
-  },
-  "superAdminPlugins.comingSoon.title": {
-    "string": "À venir"
-  },
-  "superAdminPlugins.subtitle": {
-    "string": "Gérer les plugins et intégrations avec la plateforme"
-  },
-  "superAdminPlugins.title": {
-    "string": "Gestion des plugins"
-  },
-  "superAdminProjects.comingSoon.description": {
-    "string": "Nous construisons des outils de gestion de projet pour les super-admins. Revérifiez bientôt"
-  },
-  "superAdminProjects.comingSoon.title": {
-    "string": "Gestion de projet bientôt là"
-  },
-  "superAdminProjects.title": {
-    "string": "Tous les projets"
   },
   "superAdminReview.commentLabel": {
     "string": "Note de vérification"
@@ -3338,161 +2738,11 @@
   "superAdminReview.reviewError": {
     "string": "Impossible d'enregistrer cette décision"
   },
-  "superAdminSettings.appearance.darkMode": {
-    "string": "Mode sombre par défaut"
-  },
-  "superAdminSettings.appearance.darkModeDescription": {
-    "string": "Définir le mode sombre par défaut pour les nouveaux utilisateurs"
-  },
-  "superAdminSettings.appearance.description": {
-    "string": "Personnaliser l'apparence de la plateforme"
-  },
-  "superAdminSettings.appearance.logoUrl": {
-    "string": "URL du logo"
-  },
-  "superAdminSettings.appearance.primaryColor": {
-    "string": "Couleur primaire de la marque"
-  },
-  "superAdminSettings.appearance.title": {
-    "string": "Paramètres d'apparence"
-  },
-  "superAdminSettings.comingSoon": {
-    "string": "La gestion des paramètres de la plateforme est indisponible pour le moment"
-  },
-  "superAdminSettings.database.autoBackup": {
-    "string": "Sauvegardes automatiques"
-  },
-  "superAdminSettings.database.autoBackupDescription": {
-    "string": "Activer les sauvegardes automatiques quotidiennes de la base de données"
-  },
-  "superAdminSettings.database.createBackup": {
-    "string": "Créer une sauvegarde"
-  },
-  "superAdminSettings.database.description": {
-    "string": "Configuration et maintenance de la base de données"
-  },
-  "superAdminSettings.database.host": {
-    "string": "Hébergement de la base de données"
-  },
-  "superAdminSettings.database.port": {
-    "string": "Port de la base de données"
-  },
-  "superAdminSettings.database.runMaintenance": {
-    "string": "Lancer la maintenance"
-  },
-  "superAdminSettings.database.title": {
-    "string": "Paramètres de la base de données"
-  },
-  "superAdminSettings.email.description": {
-    "string": "Configurer les notifications de mails et SMTP"
-  },
-  "superAdminSettings.email.enableNotifications": {
-    "string": "Activer les notifications par mail"
-  },
-  "superAdminSettings.email.enableNotificationsDescription": {
-    "string": "Envoyer des notifications par mail aux utilisateurs"
-  },
-  "superAdminSettings.email.fromEmail": {
-    "string": "Depuis l'adresse mail"
-  },
-  "superAdminSettings.email.smtpHost": {
-    "string": "Hôte SMTP"
-  },
-  "superAdminSettings.email.smtpPort": {
-    "string": "Port SMTP"
-  },
-  "superAdminSettings.email.title": {
-    "string": "Paramètres de mail"
-  },
-  "superAdminSettings.general.description": {
-    "string": "Configuration basique de la plateforme"
-  },
-  "superAdminSettings.general.maintenanceMode": {
-    "string": "Mode maintenance"
-  },
-  "superAdminSettings.general.maintenanceModeDescription": {
-    "string": "Activer le mode maintenance pour empêcher l'accès des utilisateurs"
-  },
-  "superAdminSettings.general.siteDescription": {
-    "string": "Description du Site"
-  },
-  "superAdminSettings.general.siteName": {
-    "string": "Nom du site"
-  },
-  "superAdminSettings.general.siteUrl": {
-    "string": "URL du site"
-  },
-  "superAdminSettings.general.title": {
-    "string": "Paramètres généraux"
-  },
-  "superAdminSettings.notifications.description": {
-    "string": "Configurer les préférences de notification de la plateforme"
-  },
-  "superAdminSettings.notifications.errors": {
-    "string": "Notifications d'erreur"
-  },
-  "superAdminSettings.notifications.errorsDescription": {
-    "string": "Notifier les admins quand une erreur système survient"
-  },
-  "superAdminSettings.notifications.newProject": {
-    "string": "New Project Notifications"
-  },
-  "superAdminSettings.notifications.newProjectDescription": {
-    "string": "Notifier les admins lorsque de nouveaux projets sont créés"
-  },
-  "superAdminSettings.notifications.newUser": {
-    "string": "Notifications d'un nouvel utilisateur"
-  },
-  "superAdminSettings.notifications.newUserDescription": {
-    "string": "Notifier les admins lorsque de nouveaux utilisateurs sont créés"
-  },
-  "superAdminSettings.notifications.title": {
-    "string": "Paramètres de notification"
-  },
-  "superAdminSettings.saveButton": {
-    "string": "Enregistrer tous les paramètres"
-  },
-  "superAdminSettings.security.description": {
-    "string": "Configurer la sécurité et l'authentification"
-  },
-  "superAdminSettings.security.passwordPolicy": {
-    "string": "Strict Password Policy"
-  },
-  "superAdminSettings.security.passwordPolicyDescription": {
-    "string": "Require strong passwords (min 12 chars, special chars)"
-  },
-  "superAdminSettings.security.requireVerification": {
-    "string": "Nécessite la vérification du mail"
-  },
-  "superAdminSettings.security.requireVerificationDescription": {
-    "string": "Les utilisateurs doivent valider leur adresse mail avant de pouvoir accéder à la plateforme"
-  },
-  "superAdminSettings.security.sessionTimeout": {
-    "string": "Session Timeout (minutes)"
-  },
-  "superAdminSettings.security.title": {
-    "string": "Paramètres de sécurité"
-  },
-  "superAdminSettings.security.twoFactor": {
-    "string": "Activer l’authentification à deux facteurs"
-  },
-  "superAdminSettings.security.twoFactorDescription": {
-    "string": "Permettre aux utilisateurs d'activer l’authentification à deux facteurs (2FA) pour leurs comptes."
-  },
-  "superAdminSettings.subtitle": {
-    "string": "Configure platform-wide settings and preferences"
-  },
-  "superAdminSettings.title": {
-    "string": "Paramètres de la plateforme"
-  },
   "superAdminTeamImages.approve": {
     "string": "Approuver"
   },
   "superAdminTeamImages.approveSuccess": {
     "string": "Image approuvée"
-  },
-  "superAdminTeamImages.emptyDescription": {
-    "string": "Aucune équipe n'attend actuellement la validation d'une image."
   },
   "superAdminTeamImages.loadError": {
     "string": "Impossible de charger la liste de vérification."
@@ -3506,41 +2756,8 @@
   "superAdminTeamImages.requestMeta": {
     "string": "{team} · requested by {user} on {date}"
   },
-  "superAdminTeamImages.subtitle": {
-    "string": "Images teams have requested for their challenges. A team carries a single image, so approving a request replaces the one that team is using, including on the challenges already showing it."
-  },
   "superAdminTeamImages.title": {
     "string": "Team challenge images"
-  },
-  "superAdminUsers.empty.description": {
-    "string": "This search only covers the users currently loaded on this page, not all users in the system. Try the next page or a different search term."
-  },
-  "superAdminUsers.empty.title": {
-    "string": "No matching users on this page"
-  },
-  "superAdminUsers.searchPlaceholder": {
-    "string": "Search this page by name or email..."
-  },
-  "superAdminUsers.stats.basedOnSearch": {
-    "string": "Basé sur la recherche actuelle"
-  },
-  "superAdminUsers.stats.filteredResults": {
-    "string": "Résultats filtrés"
-  },
-  "superAdminUsers.stats.perPage": {
-    "string": "Afficher {limit} par page"
-  },
-  "superAdminUsers.stats.platformWide": {
-    "string": "Platform-wide"
-  },
-  "superAdminUsers.stats.superAdmins": {
-    "string": "Super Admins"
-  },
-  "superAdminUsers.stats.usersOnPage": {
-    "string": "Utilisateurs sur la Page"
-  },
-  "superAdminUsers.subtitle": {
-    "string": "Manage all users and their permissions across the platform"
   },
   "superAdminUsers.table.columns.osmId": {
     "string": "Identifiant OSM"
@@ -3728,9 +2945,6 @@
   "taskEditPage.taskActionModal.completeAndContinue": {
     "string": "Terminer et continuer"
   },
-  "taskEditPage.taskActionModal.description": {
-    "string": "Mettez à jour le statut de la tâche et, si vous le souhaitez, ajoutez un commentaire"
-  },
   "taskEditPage.taskActionModal.nearbyTask.description": {
     "string": "Sélectionner une tâche à proximité de l'actuelle, ou sélectionner automatiquement la plus proche"
   },
@@ -3767,6 +2981,12 @@
   "taskEditPage.taskActionModal.toast.updateFailed": {
     "string": "Échec de la mise à jour de la tâche. Veuillez réessayer."
   },
+  "taskEditPage.taskActions.editorButton.changeFileJosmOnly": {
+    "string": "This task's changes can only be opened in JOSM"
+  },
+  "taskEditPage.taskActions.editorButton.checkJosm": {
+    "string": "Task sent to JOSM. Check your JOSM editor."
+  },
   "taskEditPage.taskActions.editorButton.chooseEditor": {
     "string": "Ouvrir dans un autre éditeur, ou changer l'éditeur Par défaut"
   },
@@ -3799,6 +3019,9 @@
   },
   "taskEditPage.taskActions.editorButton.openingTaskIn": {
     "string": "Ouverture en cours de la tâche dans {editor}"
+  },
+  "taskEditPage.taskActions.editorButton.sendingTaskTo": {
+    "string": "Sending task to {editor}…"
   },
   "taskEditPage.taskActions.editorButton.setDefaultEditor": {
     "string": "Définir l'éditeur par défaut :"
@@ -3866,6 +3089,9 @@
   "taskEditPage.taskActions.main.pausedMessage": {
     "string": "Ce défi est actuellement en pause. Les tâches ne peuvent être complétées tant qu'il n'est pas relancé."
   },
+  "taskEditPage.taskActions.main.submitTask": {
+    "string": "Submit Task"
+  },
   "taskEditPage.taskActions.navigation.loadNearbyFailed": {
     "string": "Échec du chargement des tâches à proximité"
   },
@@ -3908,6 +3134,9 @@
   "taskEditPage.taskBundle.lockUpdateFailed": {
     "string": "Impossible de mettre à jour les tâches qui étaient verrouillées avec ce groupe."
   },
+  "taskEditPage.taskInfoHeader.bundled": {
+    "string": "Bundled"
+  },
   "taskEditPage.taskInfoHeader.noChallengeDescription": {
     "string": "Ce défi n'a pas de description"
   },
@@ -3916,6 +3145,9 @@
   },
   "taskEditPage.taskInfoHeader.readChallengeDescription": {
     "string": "Assurez-vous d'avoir bien lu la description du défi, car elle peut contenir des informations importantes qui ne sont pas dans les consignes de la tâche."
+  },
+  "taskEditPage.taskInfoHeader.selected": {
+    "string": "Selected"
   },
   "taskEditPage.taskInfoHeader.viewChallengeDescription": {
     "string": "Voir la description du défi"
@@ -3955,9 +3187,6 @@
   },
   "taskInfoPanel.comments.emptyState": {
     "string": "Aucune activité pour le moment. Soyez le premier à commenter !"
-  },
-  "taskInfoPanel.comments.emptyStateReadOnly": {
-    "string": "Aucune activité pour le moment."
   },
   "taskInfoPanel.comments.markedAs": {
     "string": "marqué comme"
@@ -4124,33 +3353,6 @@
   "taskMap.controls.centerToTask": {
     "string": "Center sur la tâche"
   },
-  "taskMap.controls.hideAllMarkers": {
-    "string": "Masquer tous les marqueurs"
-  },
-  "taskMap.controls.hideDirectionIndicators": {
-    "string": "Masquer les indicateurs de direction"
-  },
-  "taskMap.controls.hideOtherChallenges": {
-    "string": "Masquer les tâches des autres défis"
-  },
-  "taskMap.controls.showAllMarkers": {
-    "string": "Afficher tous les marqueurs"
-  },
-  "taskMap.controls.showAllTasks": {
-    "string": "Montrer toutes les tâches"
-  },
-  "taskMap.controls.showDirectionIndicators": {
-    "string": "Montrer les indicateurs de directions"
-  },
-  "taskMap.controls.showOtherChallenges": {
-    "string": "Montrer les tâches des autres défis"
-  },
-  "taskMap.controls.showPrimaryOnly": {
-    "string": "Show primary task only"
-  },
-  "taskMap.controls.showSelectedOnly": {
-    "string": "Ne montrer que les tâches sélectionnées"
-  },
   "taskMap.multiTaskPanel.clearAll": {
     "string": "Ne travailler que sur la première tâche"
   },
@@ -4177,6 +3379,24 @@
   },
   "taskMap.multiTaskPanel.workingOnTasks": {
     "string": "{count, plural, one {Travaillant sur une tâche} many {Travaillant sur # tâches} other {Travaillant sur # tâches}}"
+  },
+  "taskMap.settings.markers": {
+    "string": "Task markers"
+  },
+  "taskMap.settings.markersAll": {
+    "string": "All tasks"
+  },
+  "taskMap.settings.markersNone": {
+    "string": "None"
+  },
+  "taskMap.settings.markersPrimary": {
+    "string": "This task only"
+  },
+  "taskMap.settings.markersSelected": {
+    "string": "Selected tasks only"
+  },
+  "taskMap.settings.otherChallenges": {
+    "string": "Tasks from other challenges"
   },
   "taskMap.shortcuts.cancelDrawing": {
     "string": "Annuler le dessin"
@@ -4288,9 +3508,6 @@
   },
   "taskPrioritizationPage.warnings.noRules": {
     "string": "Aucune règle configuré — toutes les tâches utiliseront la priorité par défaut."
-  },
-  "taskPrioritizationPage.warnings.swallowedDefault": {
-    "string": "Default is High with no High rules — medium/low rules may never apply."
   },
   "taskPropertyQueryBuilder.ruleGroup.addGroup": {
     "string": "Groupe"
@@ -4484,9 +3701,6 @@
   "teams.detail.statusJoined": {
     "string": "Rejoins"
   },
-  "teams.editTeam.description": {
-    "string": "Mettre à jour les informations pour cette équipe"
-  },
   "teams.editTeam.title": {
     "string": "Modifier l'équipe"
   },
@@ -4519,9 +3733,6 @@
   },
   "teams.form.descriptionDescription": {
     "string": "Une brève description de l'équipe"
-  },
-  "teams.form.detailsSectionDescription": {
-    "string": "Informations d'identification de base pour cette équipe."
   },
   "teams.form.detailsSectionTitle": {
     "string": "Détails de l'équipe"
@@ -4559,9 +3770,6 @@
   "teams.inviteMember.title": {
     "string": "Inviter un équipier"
   },
-  "teams.newTeam.description": {
-    "string": "Remplissez les informations ci-dessous pour créer votre nouvelle équipe"
-  },
   "teams.newTeam.title": {
     "string": "Créer une équipe"
   },
@@ -4594,15 +3802,6 @@
   },
   "theme.options.system": {
     "string": "Thème du système"
-  },
-  "topChallenges.list.emptyDescription": {
-    "string": "Une fois que vous commencez à travailler sur les défis, les Top défis s'afficheront ici"
-  },
-  "topChallenges.list.emptyTitle": {
-    "string": "Aucune contribution pour le moment"
-  },
-  "topChallenges.list.loadError": {
-    "string": "Impossible de charger les Top défis"
   },
   "ui.spinner.loading": {
     "string": "Chargement en cours"
