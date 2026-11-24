@@ -2913,7 +2913,7 @@
     "string": "This task's changes can only be opened in JOSM"
   },
   "taskEditPage.taskActions.editorButton.checkJosm": {
-    "string": "Task sent to JOSM. Check your JOSM editor."
+    "string": "Tâche envoyée à JOSM. Ouvrez votre logiciel JOSM."
   },
   "taskEditPage.taskActions.editorButton.chooseEditor": {
     "string": "Ouvrir dans un autre éditeur, ou changer l'éditeur Par défaut"
@@ -2949,7 +2949,7 @@
     "string": "Ouverture en cours de la tâche dans {editor}"
   },
   "taskEditPage.taskActions.editorButton.sendingTaskTo": {
-    "string": "Sending task to {editor}…"
+    "string": "Envoi de la tâche à l'éditeur {editor}…"
   },
   "taskEditPage.taskActions.editorButton.setDefaultEditor": {
     "string": "Définir l'éditeur par défaut :"
@@ -3105,7 +3105,7 @@
     "string": "Tâche #{id} sélectionnée"
   },
   "taskEditPage.taskStatusModal.discardUnsavedChanges": {
-    "string": "Vous avez des modifications non enregistrées dans iD qui seront perdues. Voulez-vous vraiment continuer ?"
+    "string": "Vous avez des modifications non-enregistrées dans iD qui seront perdues. Voulez-vous vraiment continuer ?"
   },
   "taskInfoPanel.comments.addSuccess": {
     "string": "Commentaire ajouté"
@@ -3234,7 +3234,7 @@
     "string": "Ignorer et réinitialiser"
   },
   "taskInfoPanel.resetToSuggestion.description": {
-    "string": "{count, plural, one {The # unsaved edit in the editor is discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.} other {All # unsaved edits in the editor are discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.}}"
+    "string": "{count, plural, one {# modification non-enregistrée dans l’éditeur est abandonnée, et la modification suggérée revient exactement à ce que MapRoulette a appliqué. Les éléments déjà enregistrés dans OpenStreetMap ne sont pas affectés.} many {Toutes les # modifications non-enregistrées dans l’éditeur sont abandonnées, et la modification suggérée revient exactement à ce que MapRoulette a appliqué. Les éléments déjà enregistrés dans OpenStreetMap ne sont pas affectés.} other {Toutes les # modifications non-enregistrées dans l’éditeur sont abandonnées, et la modification suggérée revient exactement à ce que MapRoulette a appliqué. Les éléments déjà enregistrés dans OpenStreetMap ne sont pas affectés.}}"
   },
   "taskInfoPanel.resetToSuggestion.title": {
     "string": "Reset to the challenge's suggestion?"
