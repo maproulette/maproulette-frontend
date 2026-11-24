@@ -1,14 +1,16 @@
-import { Languages } from 'lucide-react'
+import { ExternalLink, Languages } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpdateUserSettings } from '@/api/user'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu'
-import { type Locale, localeOptions, useIntl } from '@/i18n'
+import { type Locale, localeOptions, translateUrl, useIntl } from '@/i18n'
 import type { User } from '@/types/User'
 
 export const DropdownMenuLanguage = ({ user }: { user?: User }) => {
@@ -43,7 +45,7 @@ export const DropdownMenuLanguage = ({ user }: { user?: User }) => {
         <Languages className="size-5" aria-hidden="true" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="max-h-(--radix-dropdown-menu-content-available-height) w-56 overflow-y-auto"
+        className="max-h-(--radix-dropdown-menu-content-available-height) w-64 overflow-y-auto"
         sideOffset={10}
         align="end"
       >
@@ -57,6 +59,16 @@ export const DropdownMenuLanguage = ({ user }: { user?: User }) => {
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <a href={translateUrl} target="_blank" rel="noopener noreferrer">
+            {t({
+              id: 'appLayout.header.languageMenu.translate',
+              defaultMessage: 'Translate into your language',
+            })}
+            <ExternalLink className="ml-auto size-4" aria-hidden="true" />
+          </a>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
