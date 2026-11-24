@@ -12,7 +12,7 @@
     "string": "Challenge Creator"
   },
   "achievement.fixedCoopTask.description": {
-    "string": "Fixed a cooperative task."
+    "string": "Vous avez fixé une tâche coopérative."
   },
   "achievement.fixedCoopTask.title": {
     "string": "Cooperative Fixer"
@@ -233,15 +233,6 @@
   "browsedChallengePage.actionButtons.reportChallengeTitle": {
     "string": "Signaler le défi"
   },
-  "browsedChallengePage.challengeModals.actions.avgTimeSpent": {
-    "string": "Temps moyen passé"
-  },
-  "browsedChallengePage.challengeModals.actions.title": {
-    "string": "Activité de la tâche"
-  },
-  "browsedChallengePage.challengeModals.actions.unavailable": {
-    "string": "Activité de tâche non disponible pour ce défi"
-  },
   "browsedChallengePage.challengeModals.comments.addSuccess": {
     "string": "Commentaire ajouté avec succès"
   },
@@ -445,6 +436,9 @@
   },
   "browsedProjectPage.projectDetail.shareError": {
     "string": "Échec de partage du projet"
+  },
+  "challengeCard.progress": {
+    "string": "{count, plural, one {<b>{count, number}</b> task · <b>{percent, number, percent}</b> complete} other {<b>{count, number}</b> tasks · <b>{percent, number, percent}</b> complete}}"
   },
   "challengeForm.errors.projectIdRequired": {
     "string": "Un identifiant de projet est nécessaire pour créer un défi"
@@ -1430,20 +1424,8 @@
   "manageChallengeDetail.tasksExplorer.showTaskOnMapLabel": {
     "string": "Show task {id} on map"
   },
-  "manageChallengeDetail.tasksExplorer.sortAscButton": {
-    "string": "Asc"
-  },
-  "manageChallengeDetail.tasksExplorer.sortAscTitle": {
-    "string": "Ordre croissant — Cliquer pour ordre décroissant"
-  },
-  "manageChallengeDetail.tasksExplorer.sortDescButton": {
-    "string": "Desc"
-  },
-  "manageChallengeDetail.tasksExplorer.sortDescTitle": {
-    "string": "Ordre décroissant— Cliquer pour ordre croissant"
-  },
-  "manageChallengeDetail.tasksExplorer.sortLabel": {
-    "string": "Trier"
+  "manageChallengeDetail.tasksExplorer.showingCount": {
+    "string": "{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}"
   },
   "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
     "string": "Statut de la tâche"
@@ -1706,6 +1688,9 @@
   "manageChallengesBulkEdit.confirm.cancel": {
     "string": "Annuler la modification"
   },
+  "manageChallengesBulkEdit.confirm.description": {
+    "string": "{count, plural, one {These values will overwrite the current ones on # challenge.} other {These values will overwrite the current ones on # challenges.}}"
+  },
   "manageChallengesBulkEdit.confirm.noRule": {
     "string": "Aucune règle"
   },
@@ -1717,6 +1702,9 @@
   },
   "manageChallengesBulkEdit.context.saveError": {
     "string": "Le défi n'a pas pu être enregistré."
+  },
+  "manageChallengesBulkEdit.context.saveSuccess": {
+    "string": "{count, plural, one {Updated # challenge} other {Updated # challenges}}"
   },
   "manageChallengesBulkEdit.field.additionalKeywords": {
     "string": "Additional keywords"
@@ -1810,6 +1798,9 @@
   },
   "manageProjectDetail.challengeSelection.clear": {
     "string": "Nettoyage de la sélection"
+  },
+  "manageProjectDetail.challengeSelection.editSelected": {
+    "string": "{count, plural, =0 {Edit selected challenges} one {Edit # selected challenge} other {Edit # selected challenges}}"
   },
   "manageProjectDetail.challengeSelection.noneSelected": {
     "string": "Select challenges in the list to edit them together"
@@ -2204,6 +2195,9 @@
   "map.taskPicker.label": {
     "string": "Tâches à cet endroit"
   },
+  "map.taskPicker.more": {
+    "string": "{count, plural, one {# more task not listed} other {# more tasks not listed}}"
+  },
   "moveChallengeModal.description": {
     "string": "Choose a project to move \"{challengeName}\" to. The challenge will be removed from the current project."
   },
@@ -2252,8 +2246,11 @@
   "notifications.item.challengeComment": {
     "string": "<b>{user}</b> commented on <b>{challenge}</b>"
   },
-  "notificationsPage.content.description": {
-    "string": "Voir et gérer vos notifications"
+  "notifications.item.challengeCompleted": {
+    "string": "Your challenge <b>{challenge}</b> is complete"
+  },
+  "notifications.item.mapperChallengeCompleted": {
+    "string": "A challenge you worked on is complete: <b>{challenge}</b>"
   },
   "notifications.item.mentionOnChallenge": {
     "string": "<b>{user}</b> mentioned you on <b>{challenge}</b>"
@@ -2306,80 +2303,8 @@
   "notificationsPage.selectAll": {
     "string": "Select all notifications"
   },
-  "notificationsPage.savedViews.saveName": {
-    "string": "Enregistrer le nom"
-  },
-  "notificationsPage.savedViews.saveView": {
-    "string": "Enregistrer la vue"
-  },
-  "notificationsPage.savedViews.saved": {
-    "string": "Enregistrer la vue \"{name}\""
-  },
-  "notificationsPage.savedViews.title": {
-    "string": "Enregistrer les vues"
-  },
-  "notificationsPage.selectAll.ariaLabel": {
-    "string": "Sélectionner toutes les notifications"
-  },
-  "notificationsPage.selectAll.selectAll": {
-    "string": "Select all"
-  },
-  "notificationsPage.selectAll.selectedCount": {
-    "string": "{selection} parmi {total} sélectionnés"
-  },
-  "notificationsPage.thread.commentsHeading": {
-    "string": "Comments on this task"
-  },
-  "notificationsPage.thread.commentsSectionLabel": {
-    "string": "Le fil des commentaires de la tâche"
-  },
-  "notificationsPage.thread.description.groupedForTask": {
-    "string": "Grouped together for {ref}"
-  },
-  "notificationsPage.thread.description.thisThread": {
-    "string": "ce fil"
-  },
-  "notificationsPage.thread.description.viewDetails": {
-    "string": "Voir le détail de la notification"
-  },
-  "notificationsPage.thread.markThreadRead": {
-    "string": "Marquer le fil comme étant lu"
-  },
-  "notificationsPage.thread.markThreadReadCount": {
-    "string": "Marquer le fil comme étant lu ({count})"
-  },
-  "notificationsPage.thread.noComments": {
-    "string": "Aucun commentaire sur cette tâche pour le moment"
-  },
-  "notificationsPage.thread.openTask": {
-    "string": "Open task"
-  },
-  "notificationsPage.thread.replyFailed": {
-    "string": "Échec de l'envoi de la réponse"
-  },
-  "notificationsPage.thread.replyPlaceholder": {
-    "string": "Reply on Task #{taskId}…"
-  },
-  "notificationsPage.thread.replyPosted": {
-    "string": "Reply posted"
-  },
-  "notificationsPage.thread.signInToReply": {
-    "string": "Connectez-vous pour répondre"
-  },
-  "notificationsPage.thread.title.task": {
-    "string": "Notification for Task #{taskId}"
-  },
-  "notificationsPage.toolbar.markAllUnread": {
-    "string": "Marquer tout comme non lu"
-  },
-  "notificationsPage.toolbar.markSelectedRead": {
-    "string": "Marquer {count, number} comme étant lu"
-  },
-  "notificationsPage.toolbar.markSelectedUnread": {
-    "string": "Marquer {count, number} comme non-lu"
-  },
-  "notificationsPage.toolbar.marking": {
-    "string": "Marquage..."
+  "notificationsPage.selectedCount": {
+    "string": "{count, plural, one {# selected} other {# selected}}"
   },
   "ownerTeam.goToTeams": {
     "string": "Vos équipes"
@@ -3170,6 +3095,9 @@
   "taskEditPage.taskMap.showAllFeatures": {
     "string": "Tout afficher"
   },
+  "taskEditPage.taskNearbyMap.nearbyCount": {
+    "string": "{count, plural, one {# nearby task} other {# nearby tasks}}"
+  },
   "taskEditPage.taskNearbyMap.selectedTask": {
     "string": "Tâche #{id} sélectionnée"
   },
@@ -3257,6 +3185,9 @@
   "taskInfoPanel.editorChanges.title": {
     "string": "Vos modifications non-enregistrées"
   },
+  "taskInfoPanel.features.featureCount": {
+    "string": "{count, plural, one {# feature} other {# features}}"
+  },
   "taskInfoPanel.features.noFeatures": {
     "string": "This task carries no features."
   },
@@ -3265,6 +3196,9 @@
   },
   "taskInfoPanel.instructions.copy": {
     "string": "Copy \"{text}\" to the clipboard"
+  },
+  "taskInfoPanel.properties.childCount": {
+    "string": "{count, plural, one {# geometry} other {# geometries}}"
   },
   "taskInfoPanel.properties.featureEmpty": {
     "string": "Pas de propriétés pour cette fonctionnalité."
@@ -3295,6 +3229,9 @@
   },
   "taskInfoPanel.resetToSuggestion.confirm": {
     "string": "Ignorer et réinitialiser"
+  },
+  "taskInfoPanel.resetToSuggestion.description": {
+    "string": "{count, plural, one {The # unsaved edit in the editor is discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.} other {All # unsaved edits in the editor are discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.}}"
   },
   "taskInfoPanel.resetToSuggestion.title": {
     "string": "Reset to the challenge's suggestion?"
@@ -3343,6 +3280,9 @@
   },
   "taskMap.clearBundleDialog.confirm": {
     "string": "Supprimer le regroupement"
+  },
+  "taskMap.clearBundleDialog.description": {
+    "string": "{taskCount, plural, one {This will unbundle all # task. The tasks themselves will not be deleted, only separated. This action cannot be undone.} other {This will unbundle all # tasks. The tasks themselves will not be deleted, only separated. This action cannot be undone.}}"
   },
   "taskMap.clearBundleDialog.title": {
     "string": "Clear Task Bundle?"
