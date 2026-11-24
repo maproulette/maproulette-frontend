@@ -63,61 +63,61 @@
     "string": "Contributed to mapping water features."
   },
   "achievement.mappedWater.title": {
-    "string": "Waterways"
+    "string": "Voies d'eau"
   },
   "achievement.points100.description": {
-    "string": "Vous avez gagné 100 points."
+    "string": "100 points gagnés."
   },
   "achievement.points100.title": {
     "string": "100 points"
   },
   "achievement.points1000.description": {
-    "string": "Vous avez gagné 1 000 points."
+    "string": "1 000 points gagnés."
   },
   "achievement.points1000.title": {
     "string": "1 000 points"
   },
   "achievement.points10000.description": {
-    "string": "Vous avez gagné 10 000 points."
+    "string": "10 000 points gagnés."
   },
   "achievement.points10000.title": {
-    "string": "10,000 Points"
+    "string": "10 000 points"
   },
   "achievement.points100k.description": {
-    "string": "Vous avez gagné 100 000 points."
+    "string": "100 000 points gagnés."
   },
   "achievement.points100k.title": {
-    "string": "100,000 Points"
+    "string": "100 000 points"
   },
   "achievement.points1m.description": {
-    "string": "Vous avez gagné un million de points."
+    "string": "Un million de points gagnés."
   },
   "achievement.points1m.title": {
-    "string": "1,000,000 Points"
+    "string": "1 000 000 points"
   },
   "achievement.points500.description": {
-    "string": "Vous avez gagné 500 points."
+    "string": "500 points gagnés."
   },
   "achievement.points500.title": {
-    "string": "500 Points"
+    "string": "500 points"
   },
   "achievement.points5000.description": {
-    "string": "Vous avez gagné 5 000 points."
+    "string": "5 000 points gagnés."
   },
   "achievement.points5000.title": {
-    "string": "5,000 Points"
+    "string": "5 000 points"
   },
   "achievement.points50000.description": {
-    "string": "Vous avez gagné 50 000 points."
+    "string": "50 000 points gagnés."
   },
   "achievement.points50000.title": {
-    "string": "50,000 Points"
+    "string": "50 000 points"
   },
   "achievement.points500k.description": {
-    "string": "Vous avez gagné 500 000 points."
+    "string": "500 000 points gagnés."
   },
   "achievement.points500k.title": {
-    "string": "500,000 Points"
+    "string": "500 000 points"
   },
   "appLayout.dismissibleBanner.dismiss": {
     "string": "Fermer la bannière"
@@ -135,7 +135,7 @@
     "string": "GitHub"
   },
   "appLayout.footer.projectOf": {
-    "string": "MapRoulette is a project of <link>OpenStreetMap US</link>"
+    "string": "MapRoulette est un projet de <link>OpenStreetMap US</link>"
   },
   "appLayout.header.appName": {
     "string": "MapRoulette"
@@ -147,10 +147,10 @@
     "string": "Rechercher des défis, des tâches ou des projets…"
   },
   "appLayout.header.globalSearch.taskInChallenge": {
-    "string": "Task {id} in Challenge \"{challenge}\""
+    "string": "Tâche {id} du défi \"{challenge}\""
   },
   "appLayout.header.languageMenu.translate": {
-    "string": "Translate into your language"
+    "string": "Traduire dans votre langue"
   },
   "appLayout.header.nav.dashboard": {
     "string": "Tableau de bord"
@@ -180,10 +180,10 @@
     "string": "Connexion en cours…"
   },
   "appLayout.header.themeToggle.toDark": {
-    "string": "Switch to dark theme"
+    "string": "passer au thème sombre"
   },
   "appLayout.header.themeToggle.toLight": {
-    "string": "Switch to light theme"
+    "string": "Passer au thème clair"
   },
   "appLayout.header.userMenu.accountSettings": {
     "string": "Paramètres du compte"
@@ -210,7 +210,7 @@
     "string": "La connexion a échoué ou expiré. Merci d'essayer de vous connecter à nouveau."
   },
   "auth.sessionExpired": {
-    "string": "Your session has expired."
+    "string": "Votre session a expiré."
   },
   "auth.signInAgain": {
     "string": "Sign in again"
@@ -396,7 +396,7 @@
     "string": "All"
   },
   "browsedChallengePage.map.tasksAvailable": {
-    "string": "Available"
+    "string": "Disponible"
   },
   "browsedChallengePage.map.tasksCompleted": {
     "string": "Completed"
@@ -2424,7 +2424,7 @@
     "string": "Option de langue invalide"
   },
   "settings.general.languageDescription": {
-    "string": "Choose your preferred language for the interface. MapRoulette is translated by volunteers; if your language is missing or incomplete, you can <link>help translate it</link>."
+    "string": "Choisissez votre langue préférée pour l'interface. MapRoulette est traduit par des bénévoles. Si votre langue est manquante ou incomplète, vous pouvez <link>aider à la traduire</link>."
   },
   "settings.general.languageLabel": {
     "string": "Langue"
