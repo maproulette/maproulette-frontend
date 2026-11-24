@@ -103,7 +103,7 @@
     "openapi-typescript": "^7.10.1",
     "playwright": "^1.64.0",
     "source-map-explorer": "^2.5.3",
-    "storybook": "^10.6.0",
+    "storybook": "^10.6.2",
     "storybook-dark-mode": "^5.0.0",
     "style-dictionary": "^5.5.5",
     "tailwindcss": "^4.1.13",
