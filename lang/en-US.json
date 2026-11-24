@@ -1,0 +1,3752 @@
+{
+  "achievement.challengeCompleted.description": {
+    "string": "Fixed a task in a challenge that was completed."
+  },
+  "achievement.challengeCompleted.title": {
+    "string": "Finished Together"
+  },
+  "achievement.createdChallenge.description": {
+    "string": "Created a challenge."
+  },
+  "achievement.createdChallenge.title": {
+    "string": "Challenge Creator"
+  },
+  "achievement.fixedCoopTask.description": {
+    "string": "Fixed a cooperative task."
+  },
+  "achievement.fixedCoopTask.title": {
+    "string": "Cooperative Fixer"
+  },
+  "achievement.fixedFinalTask.description": {
+    "string": "Finished the final task in a challenge."
+  },
+  "achievement.fixedFinalTask.title": {
+    "string": "Closer"
+  },
+  "achievement.fixedTask.description": {
+    "string": "Fixed your first task."
+  },
+  "achievement.fixedTask.title": {
+    "string": "First Fix"
+  },
+  "achievement.mappedBuildings.description": {
+    "string": "Contributed to mapping buildings."
+  },
+  "achievement.mappedBuildings.title": {
+    "string": "Building Blocks"
+  },
+  "achievement.mappedLanduse.description": {
+    "string": "Contributed to mapping land use."
+  },
+  "achievement.mappedLanduse.title": {
+    "string": "Land Use"
+  },
+  "achievement.mappedPoi.description": {
+    "string": "Contributed to mapping points of interest."
+  },
+  "achievement.mappedPoi.title": {
+    "string": "Landmark Spotter"
+  },
+  "achievement.mappedRoads.description": {
+    "string": "Contributed to mapping roads."
+  },
+  "achievement.mappedRoads.title": {
+    "string": "Road Warrior"
+  },
+  "achievement.mappedTransit.description": {
+    "string": "Contributed to mapping transit."
+  },
+  "achievement.mappedTransit.title": {
+    "string": "Transit Mapper"
+  },
+  "achievement.mappedWater.description": {
+    "string": "Contributed to mapping water features."
+  },
+  "achievement.mappedWater.title": {
+    "string": "Waterways"
+  },
+  "achievement.points100.description": {
+    "string": "Earned 100 points."
+  },
+  "achievement.points100.title": {
+    "string": "100 Points"
+  },
+  "achievement.points1000.description": {
+    "string": "Earned 1,000 points."
+  },
+  "achievement.points1000.title": {
+    "string": "1,000 Points"
+  },
+  "achievement.points10000.description": {
+    "string": "Earned 10,000 points."
+  },
+  "achievement.points10000.title": {
+    "string": "10,000 Points"
+  },
+  "achievement.points100k.description": {
+    "string": "Earned 100,000 points."
+  },
+  "achievement.points100k.title": {
+    "string": "100,000 Points"
+  },
+  "achievement.points1m.description": {
+    "string": "Earned a million points."
+  },
+  "achievement.points1m.title": {
+    "string": "1,000,000 Points"
+  },
+  "achievement.points500.description": {
+    "string": "Earned 500 points."
+  },
+  "achievement.points500.title": {
+    "string": "500 Points"
+  },
+  "achievement.points5000.description": {
+    "string": "Earned 5,000 points."
+  },
+  "achievement.points5000.title": {
+    "string": "5,000 Points"
+  },
+  "achievement.points50000.description": {
+    "string": "Earned 50,000 points."
+  },
+  "achievement.points50000.title": {
+    "string": "50,000 Points"
+  },
+  "achievement.points500k.description": {
+    "string": "Earned 500,000 points."
+  },
+  "achievement.points500k.title": {
+    "string": "500,000 Points"
+  },
+  "appLayout.dismissibleBanner.dismiss": {
+    "string": "Dismiss banner"
+  },
+  "appLayout.footer.backendVersion": {
+    "string": "Backend v{version}"
+  },
+  "appLayout.footer.documentation": {
+    "string": "Documentation"
+  },
+  "appLayout.footer.frontendVersion": {
+    "string": "Frontend v{version}"
+  },
+  "appLayout.footer.github": {
+    "string": "GitHub"
+  },
+  "appLayout.footer.projectOf": {
+    "string": "MapRoulette is a project of <link>OpenStreetMap US</link>"
+  },
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.globalSearch.idHeading": {
+    "string": "ID {id}"
+  },
+  "appLayout.header.globalSearch.placeholder": {
+    "string": "Search challenges and projects, or enter an ID"
+  },
+  "appLayout.header.globalSearch.taskInChallenge": {
+    "string": "Task {id} in Challenge \"{challenge}\""
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "Dashboard"
+  },
+  "appLayout.header.nav.donate": {
+    "string": "Donate"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "Explore Challenges"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "Learn"
+  },
+  "appLayout.header.nav.mobile": {
+    "string": "Mobile navigation"
+  },
+  "appLayout.header.nav.openInNewTab": {
+    "string": "Open {label} in a new tab"
+  },
+  "appLayout.header.notifications.triggerLabel": {
+    "string": "Notifications for {name}"
+  },
+  "appLayout.header.notifications.unreadSrOnly": {
+    "string": "You have unread notifications"
+  },
+  "appLayout.header.signingIn": {
+    "string": "Signing in..."
+  },
+  "appLayout.header.themeToggle.toDark": {
+    "string": "Switch to dark theme"
+  },
+  "appLayout.header.themeToggle.toLight": {
+    "string": "Switch to light theme"
+  },
+  "appLayout.header.userMenu.accountSettings": {
+    "string": "Account Settings"
+  },
+  "appLayout.header.userMenu.documentation": {
+    "string": "Documentation"
+  },
+  "appLayout.header.userMenu.osmProfile": {
+    "string": "OpenStreetMap profile"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "Sign out"
+  },
+  "appLayout.header.userMenu.superAdmin": {
+    "string": "Super Admin"
+  },
+  "appLayout.header.userMenu.theme": {
+    "string": "Theme"
+  },
+  "appLayout.header.userMenu.triggerSrOnly": {
+    "string": "User menu"
+  },
+  "auth.loginFailed": {
+    "string": "Sign-in failed or expired. Please try signing in again."
+  },
+  "auth.sessionExpired": {
+    "string": "Your session has expired."
+  },
+  "auth.signInAgain": {
+    "string": "Sign in again"
+  },
+  "auth.signInUnavailable": {
+    "string": "Couldn't start signing in. Please try again."
+  },
+  "browsedChallengePage.actionButtons.alreadyReported": {
+    "string": "You have already reported this challenge; it is awaiting review"
+  },
+  "browsedChallengePage.actionButtons.challengeActions": {
+    "string": "Challenge actions"
+  },
+  "browsedChallengePage.actionButtons.challengeReported": {
+    "string": "Challenge Reported"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "Manage Challenge"
+  },
+  "browsedChallengePage.actionButtons.mustLoginToReport": {
+    "string": "You must be logged in to report a challenge"
+  },
+  "browsedChallengePage.actionButtons.reportChallengeTitle": {
+    "string": "Report challenge"
+  },
+  "browsedChallengePage.challengeModals.comments.addSuccess": {
+    "string": "Comment added successfully"
+  },
+  "browsedChallengePage.challengeModals.comments.characterCount": {
+    "string": "{max, plural, one {{count, number}/# character} other {{count, number}/# characters}}"
+  },
+  "browsedChallengePage.challengeModals.comments.empty": {
+    "string": "No comments"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "Owner"
+  },
+  "browsedChallengePage.challengeModals.comments.reTask": {
+    "string": "Re: Task {taskId}"
+  },
+  "browsedChallengePage.challengeModals.comments.send": {
+    "string": "Send"
+  },
+  "browsedChallengePage.challengeModals.comments.sending": {
+    "string": "Sending..."
+  },
+  "browsedChallengePage.challengeModals.comments.showTaskComments": {
+    "string": "Show task comments"
+  },
+  "browsedChallengePage.challengeModals.comments.signInRequired": {
+    "string": "Please sign in to add comments"
+  },
+  "browsedChallengePage.challengeModals.commentsModal.title": {
+    "string": "Challenge Comments"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.awaitingReview": {
+    "string": "Awaiting review by the MapRoulette administrators."
+  },
+  "browsedChallengePage.challengeModals.reportHistory.description": {
+    "string": "Reports filed against this challenge and where each one stands. The MapRoulette administrators review every report."
+  },
+  "browsedChallengePage.challengeModals.reportHistory.empty": {
+    "string": "No one has reported this challenge."
+  },
+  "browsedChallengePage.challengeModals.reportHistory.reportedBy": {
+    "string": "Reported by <link>{user}</link> on {date}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.resolved": {
+    "string": "Marked {status}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.resolvedOn": {
+    "string": "Marked {status} on {date}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.actioned": {
+    "string": "Actioned"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.dismissed": {
+    "string": "Dismissed"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "Open"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.title": {
+    "string": "Reports on This Challenge"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.you": {
+    "string": "you"
+  },
+  "browsedChallengePage.challengeModals.reportModal.checkboxError": {
+    "string": "Confirm that you've tried contacting the challenge creator."
+  },
+  "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
+    "string": "I have attempted to contact the Challenge creator"
+  },
+  "browsedChallengePage.challengeModals.reportModal.description": {
+    "string": "You are about to report a Challenge. Your report goes to the MapRoulette administrators for review, and a comment naming you is posted on the Challenge so its creator knows it was raised. Reporting a Challenge does not disable it immediately. Please explain in detail what your issue is with this challenge, if possible linking to specific OSM changesets."
+  },
+  "browsedChallengePage.challengeModals.reportModal.emailLabel": {
+    "string": "Email (optional)"
+  },
+  "browsedChallengePage.challengeModals.reportModal.emailPlaceholder": {
+    "string": "Enter your email"
+  },
+  "browsedChallengePage.challengeModals.reportModal.invalidEmailError": {
+    "string": "Please enter a valid email address"
+  },
+  "browsedChallengePage.challengeModals.reportModal.minLengthError": {
+    "string": "{min, plural, one {Report must be at least # character} other {Report must be at least # characters}}"
+  },
+  "browsedChallengePage.challengeModals.reportModal.submitButton": {
+    "string": "Submit Report"
+  },
+  "browsedChallengePage.challengeModals.reportModal.submitError": {
+    "string": "Failed to submit report. Please try again."
+  },
+  "browsedChallengePage.challengeModals.reportModal.submitSuccess": {
+    "string": "Report submitted successfully"
+  },
+  "browsedChallengePage.challengeModals.reportModal.textPlaceholder": {
+    "string": "Enter text here"
+  },
+  "browsedChallengePage.footer.challengePausedMessage": {
+    "string": "This challenge is currently paused. New tasks cannot be started until it is resumed."
+  },
+  "browsedChallengePage.footer.failedToLoadTask": {
+    "string": "Failed to load task"
+  },
+  "browsedChallengePage.footer.hideMap": {
+    "string": "Hide Map"
+  },
+  "browsedChallengePage.footer.noTasksAvailable": {
+    "string": "No tasks available for this challenge"
+  },
+  "browsedChallengePage.footer.noTasksToBrowse": {
+    "string": "This challenge has no tasks"
+  },
+  "browsedChallengePage.footer.reportedIssueMessage": {
+    "string": "This challenge has been reported. Click to view the reports."
+  },
+  "browsedChallengePage.footer.reportedIssueTooltip": {
+    "string": "View the reports on this challenge"
+  },
+  "browsedChallengePage.footer.showMap": {
+    "string": "Show Map"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "Start Challenge"
+  },
+  "browsedChallengePage.header.byline": {
+    "string": "by <owner>{name}</owner>"
+  },
+  "browsedChallengePage.header.checkOutChallenge": {
+    "string": "Check out this challenge: {name}"
+  },
+  "browsedChallengePage.header.failedToUpdateLike": {
+    "string": "Failed to update like status"
+  },
+  "browsedChallengePage.header.failedToUpdateSaved": {
+    "string": "Failed to update saved challenges"
+  },
+  "browsedChallengePage.header.like": {
+    "string": "Like"
+  },
+  "browsedChallengePage.header.likeCount": {
+    "string": "{count, plural, one {# like} other {# likes}}"
+  },
+  "browsedChallengePage.header.liked": {
+    "string": "Liked"
+  },
+  "browsedChallengePage.header.saved": {
+    "string": "Saved"
+  },
+  "browsedChallengePage.header.signInToLike": {
+    "string": "Sign in to like challenges"
+  },
+  "browsedChallengePage.header.signInToSave": {
+    "string": "Sign in to save challenges"
+  },
+  "browsedChallengePage.header.taxonomy.undiscoverable": {
+    "string": "Undiscoverable"
+  },
+  "browsedChallengePage.map.tasksAll": {
+    "string": "All"
+  },
+  "browsedChallengePage.map.tasksAvailable": {
+    "string": "Available"
+  },
+  "browsedChallengePage.map.tasksCompleted": {
+    "string": "Completed"
+  },
+  "browsedChallengePage.map.tasksShown": {
+    "string": "Tasks shown"
+  },
+  "browsedChallengePage.progress.avgTimeSpent": {
+    "string": "Average time spent"
+  },
+  "browsedChallengePage.progress.completedOf": {
+    "string": "{total, plural, one {{completed, number} of # task completed} other {{completed, number} of # tasks completed}}"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "Details"
+  },
+  "browsedChallengePage.progress.progress": {
+    "string": "Progress"
+  },
+  "browsedChallengePage.scrollIndicator.scrollForMore": {
+    "string": "Scroll for more"
+  },
+  "browsedProjectPage.challengesList.emptyDescription": {
+    "string": "This project has no challenges yet."
+  },
+  "browsedProjectPage.challengesList.emptyDescriptionFiltered": {
+    "string": "Try clearing the filters to see more results."
+  },
+  "browsedProjectPage.challengesList.showCompletedFilter": {
+    "string": "Show completed"
+  },
+  "browsedProjectPage.challengesTable.complete": {
+    "string": "Complete"
+  },
+  "browsedProjectPage.projectDetail.byOwner": {
+    "string": "by {owner}"
+  },
+  "browsedProjectPage.projectDetail.percentComplete": {
+    "string": "{percent}% complete"
+  },
+  "browsedProjectPage.projectDetail.shareError": {
+    "string": "Failed to share project"
+  },
+  "challengeCard.progress": {
+    "string": "{count, plural, one {<b>{count, number}</b> task · <b>{percent, number, percent}</b> complete} other {<b>{count, number}</b> tasks · <b>{percent, number, percent}</b> complete}}"
+  },
+  "challengeForm.errors.projectIdRequired": {
+    "string": "Project ID is required to create a challenge"
+  },
+  "challengeProgress.segmentTitle": {
+    "string": "{status}: {count, number}"
+  },
+  "common.accessDenied": {
+    "string": "Access denied"
+  },
+  "common.actions": {
+    "string": "Actions"
+  },
+  "common.addAComment": {
+    "string": "Add a comment..."
+  },
+  "common.addChallenge": {
+    "string": "Add challenge"
+  },
+  "common.all": {
+    "string": "All ({count})"
+  },
+  "common.alreadyFixed": {
+    "string": "Already Fixed"
+  },
+  "common.answered": {
+    "string": "Answered"
+  },
+  "common.apply": {
+    "string": "Apply"
+  },
+  "common.archiveChallenge": {
+    "string": "Archive challenge"
+  },
+  "common.archiveProject": {
+    "string": "Archive project"
+  },
+  "common.archived": {
+    "string": "Archived"
+  },
+  "common.available": {
+    "string": "Available"
+  },
+  "common.browseChallenge": {
+    "string": "Browse challenge"
+  },
+  "common.browseChallengeButton": {
+    "string": "Browse Challenge"
+  },
+  "common.bundledTasks": {
+    "string": "Bundled Tasks ({count})"
+  },
+  "common.cancel": {
+    "string": "Cancel"
+  },
+  "common.cantComplete": {
+    "string": "Can't Complete"
+  },
+  "common.category.buildings": {
+    "string": "Buildings"
+  },
+  "common.category.landUse": {
+    "string": "Land Use / Administrative Boundaries"
+  },
+  "common.category.navigation": {
+    "string": "Roads / Pedestrian / Cycleways"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "Points / Areas of Interest"
+  },
+  "common.category.transit": {
+    "string": "Transit"
+  },
+  "common.category.water": {
+    "string": "Water"
+  },
+  "common.challengePausedDescription": {
+    "string": "This challenge is currently paused."
+  },
+  "common.challengePausedTitle": {
+    "string": "Challenge Paused"
+  },
+  "common.challengeWithChallengeId": {
+    "string": "Challenge #{challengeId}"
+  },
+  "common.challenges": {
+    "string": "Challenges"
+  },
+  "common.challenges2": {
+    "string": "challenges"
+  },
+  "common.clear": {
+    "string": "Clear"
+  },
+  "common.cloneChallenge": {
+    "string": "Clone Challenge"
+  },
+  "common.cloneChallenge2": {
+    "string": "Clone challenge"
+  },
+  "common.close": {
+    "string": "Close"
+  },
+  "common.closeTask": {
+    "string": "Close task"
+  },
+  "common.comments": {
+    "string": "Comments"
+  },
+  "common.completed": {
+    "string": "Completed"
+  },
+  "common.cooperative": {
+    "string": "Cooperative"
+  },
+  "common.copied": {
+    "string": "Copied"
+  },
+  "common.copiedToClipboard": {
+    "string": "Copied to clipboard"
+  },
+  "common.copy": {
+    "string": "Copy"
+  },
+  "common.copyLink": {
+    "string": "Copy link"
+  },
+  "common.copyUrl": {
+    "string": "Copy URL"
+  },
+  "common.couldNotUpdateVisibility": {
+    "string": "Could not update visibility"
+  },
+  "common.createChallenge": {
+    "string": "Create Challenge"
+  },
+  "common.createManage": {
+    "string": "create & manage"
+  },
+  "common.createNewChallenge": {
+    "string": "Create New Challenge"
+  },
+  "common.createNewProject": {
+    "string": "Create New Project"
+  },
+  "common.createProject": {
+    "string": "Create Project"
+  },
+  "common.createTeam": {
+    "string": "Create team"
+  },
+  "common.created": {
+    "string": "Created"
+  },
+  "common.current": {
+    "string": "Current"
+  },
+  "common.delete": {
+    "string": "Delete"
+  },
+  "common.deleteChallenge": {
+    "string": "Delete challenge"
+  },
+  "common.deleteChallenge2": {
+    "string": "Delete challenge?"
+  },
+  "common.deleteChallengeWarning": {
+    "string": "This will delete this challenge and all its tasks. This action cannot be undone."
+  },
+  "common.deleteProject": {
+    "string": "Delete project"
+  },
+  "common.deleteProject2": {
+    "string": "Delete project?"
+  },
+  "common.deleted": {
+    "string": "Deleted"
+  },
+  "common.description": {
+    "string": "Description"
+  },
+  "common.difficulty": {
+    "string": "Difficulty"
+  },
+  "common.disableChallenge": {
+    "string": "Disable challenge"
+  },
+  "common.disabled": {
+    "string": "Disabled"
+  },
+  "common.discoverable": {
+    "string": "Discoverable"
+  },
+  "common.easy": {
+    "string": "Easy"
+  },
+  "common.edit": {
+    "string": "Edit"
+  },
+  "common.editChallenge": {
+    "string": "Edit challenge"
+  },
+  "common.editProject": {
+    "string": "Edit project"
+  },
+  "common.editTask": {
+    "string": "Edit task"
+  },
+  "common.email": {
+    "string": "Email"
+  },
+  "common.enableChallenge": {
+    "string": "Enable challenge"
+  },
+  "common.enabled": {
+    "string": "Enabled"
+  },
+  "common.error": {
+    "string": "Something went wrong"
+  },
+  "common.expert": {
+    "string": "Expert"
+  },
+  "common.exportCsv": {
+    "string": "Export CSV"
+  },
+  "common.failedToAddComment": {
+    "string": "Failed to add comment"
+  },
+  "common.failedToLoadNextTask": {
+    "string": "Failed to load next task"
+  },
+  "common.featured": {
+    "string": "Featured"
+  },
+  "common.fixed": {
+    "string": "Fixed"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.geojsonUrl": {
+    "string": "GeoJSON URL"
+  },
+  "common.global": {
+    "string": "Global"
+  },
+  "common.gridView": {
+    "string": "Grid view"
+  },
+  "common.hidePanel": {
+    "string": "Hide panel"
+  },
+  "common.id": {
+    "string": "ID"
+  },
+  "common.idNumber": {
+    "string": "ID {id}"
+  },
+  "common.instructions": {
+    "string": "Instructions"
+  },
+  "common.invited": {
+    "string": "Invited"
+  },
+  "common.joined": {
+    "string": "Joined"
+  },
+  "common.lastUpdated": {
+    "string": "Last updated {date}"
+  },
+  "common.linkCopiedToClipboard": {
+    "string": "Link copied to clipboard"
+  },
+  "common.listView": {
+    "string": "List view"
+  },
+  "common.loadMore": {
+    "string": "Load More"
+  },
+  "common.loading": {
+    "string": "Loading…"
+  },
+  "common.loading2": {
+    "string": "Loading..."
+  },
+  "common.loadingChallenges": {
+    "string": "Loading challenges..."
+  },
+  "common.makeDiscoverable": {
+    "string": "Make discoverable"
+  },
+  "common.makeNotDiscoverable": {
+    "string": "Make not discoverable"
+  },
+  "common.manage": {
+    "string": "Manage"
+  },
+  "common.manageChallenge": {
+    "string": "Manage challenge"
+  },
+  "common.map": {
+    "string": "Map"
+  },
+  "common.markAllAsRead": {
+    "string": "Mark all as read"
+  },
+  "common.mentions": {
+    "string": "Mentions"
+  },
+  "common.modified": {
+    "string": "Modified"
+  },
+  "common.moveChallenge": {
+    "string": "Move challenge"
+  },
+  "common.name": {
+    "string": "Name"
+  },
+  "common.newest": {
+    "string": "Newest"
+  },
+  "common.noChallengesFound": {
+    "string": "No challenges found"
+  },
+  "common.noMoreTasksInChallenge": {
+    "string": "No more tasks available in this challenge"
+  },
+  "common.noProjectsFound": {
+    "string": "No projects found"
+  },
+  "common.noResultsFound": {
+    "string": "No results found"
+  },
+  "common.normal": {
+    "string": "Normal"
+  },
+  "common.notAnIssue": {
+    "string": "Not an Issue"
+  },
+  "common.nothingToPreview": {
+    "string": "Nothing to preview"
+  },
+  "common.notifications": {
+    "string": "Notifications"
+  },
+  "common.openMenu": {
+    "string": "Open menu"
+  },
+  "common.openTaskById": {
+    "string": "Open task by ID"
+  },
+  "common.overpassQuery": {
+    "string": "Overpass Query"
+  },
+  "common.owned": {
+    "string": "Owned"
+  },
+  "common.pageNotFound": {
+    "string": "Page Not Found"
+  },
+  "common.pauseChallenge": {
+    "string": "Pause challenge"
+  },
+  "common.paused": {
+    "string": "Paused"
+  },
+  "common.pinChallenge": {
+    "string": "Pin challenge"
+  },
+  "common.pinProject": {
+    "string": "Pin project"
+  },
+  "common.pinned": {
+    "string": "Pinned"
+  },
+  "common.pleaseEnterAComment": {
+    "string": "Please enter a comment"
+  },
+  "common.pleaseSelectAProject": {
+    "string": "Please select a project"
+  },
+  "common.plugins": {
+    "string": "Plugins"
+  },
+  "common.popular": {
+    "string": "Popular"
+  },
+  "common.preview": {
+    "string": "Preview"
+  },
+  "common.primary": {
+    "string": "Primary"
+  },
+  "common.priority": {
+    "string": "Priority"
+  },
+  "common.project": {
+    "string": "Project"
+  },
+  "common.projectWithId": {
+    "string": "Project #{id}"
+  },
+  "common.projects": {
+    "string": "Projects"
+  },
+  "common.projects2": {
+    "string": "projects"
+  },
+  "common.rebuildTasks": {
+    "string": "Rebuild tasks"
+  },
+  "common.rebuildTasksFailed": {
+    "string": "Could not rebuild tasks"
+  },
+  "common.recentActivity": {
+    "string": "Recent Activity"
+  },
+  "common.remove": {
+    "string": "Remove"
+  },
+  "common.removeWithName": {
+    "string": "Remove {name}"
+  },
+  "common.reportChallenge": {
+    "string": "Report Challenge"
+  },
+  "common.reportsLoadError": {
+    "string": "Could not load the reports."
+  },
+  "common.resetViewToTaskLocation": {
+    "string": "Reset view to task location"
+  },
+  "common.resumeChallenge": {
+    "string": "Resume challenge"
+  },
+  "common.role": {
+    "string": "Role"
+  },
+  "common.save": {
+    "string": "Save"
+  },
+  "common.saving": {
+    "string": "Saving…"
+  },
+  "common.saving2": {
+    "string": "Saving..."
+  },
+  "common.scrollToTop": {
+    "string": "Scroll to top"
+  },
+  "common.searchChallenges": {
+    "string": "Search challenges…"
+  },
+  "common.searchChallenges2": {
+    "string": "Search challenges..."
+  },
+  "common.searchOsmUsername": {
+    "string": "Search OSM username"
+  },
+  "common.searchProjects": {
+    "string": "Search projects..."
+  },
+  "common.selectAProject": {
+    "string": "Select a project"
+  },
+  "common.share": {
+    "string": "Share"
+  },
+  "common.shareTask": {
+    "string": "Share task"
+  },
+  "common.showPanel": {
+    "string": "Show panel"
+  },
+  "common.shown": {
+    "string": "Shown"
+  },
+  "common.signIn": {
+    "string": "Sign in"
+  },
+  "common.signInToMapTask": {
+    "string": "Sign in to map this task"
+  },
+  "common.skipped": {
+    "string": "Skipped"
+  },
+  "common.startChallenge": {
+    "string": "Start challenge"
+  },
+  "common.status": {
+    "string": "Status"
+  },
+  "common.statusWithStatus": {
+    "string": "Status {status}"
+  },
+  "common.submitting": {
+    "string": "Submitting..."
+  },
+  "common.tagFix": {
+    "string": "Tag Fix"
+  },
+  "common.taskWithId": {
+    "string": "Task #{id}"
+  },
+  "common.taskWithName": {
+    "string": "Task: {name}"
+  },
+  "common.taskWithTaskId": {
+    "string": "Task #{taskId}"
+  },
+  "common.tasks": {
+    "string": "Tasks"
+  },
+  "common.tasksRebuilt": {
+    "string": "Tasks rebuilt"
+  },
+  "common.tasksRemaining": {
+    "string": "Tasks remaining"
+  },
+  "common.tasksRemaining2": {
+    "string": "tasks remaining"
+  },
+  "common.tasksWithCount": {
+    "string": "{count, plural, one {# task} other {# tasks}}"
+  },
+  "common.team": {
+    "string": "Team #{teamId}"
+  },
+  "common.teamNotFound": {
+    "string": "Team not found."
+  },
+  "common.teams": {
+    "string": "Teams"
+  },
+  "common.type": {
+    "string": "Type"
+  },
+  "common.unarchiveChallenge": {
+    "string": "Unarchive challenge"
+  },
+  "common.unarchiveProject": {
+    "string": "Unarchive project"
+  },
+  "common.unexpectedErrorTryAgain": {
+    "string": "An unexpected error occurred. Please try again."
+  },
+  "common.unknown": {
+    "string": "Unknown"
+  },
+  "common.unpinChallenge": {
+    "string": "Unpin challenge"
+  },
+  "common.unpinProject": {
+    "string": "Unpin project"
+  },
+  "common.unread": {
+    "string": "Unread ({count})"
+  },
+  "common.users": {
+    "string": "Users"
+  },
+  "common.validated": {
+    "string": "Validated"
+  },
+  "common.view": {
+    "string": "View"
+  },
+  "common.viewAllNotifications": {
+    "string": "View all notifications"
+  },
+  "common.viewChallenge": {
+    "string": "View challenge"
+  },
+  "common.viewChallenges": {
+    "string": "View Challenges"
+  },
+  "common.viewOnOsm": {
+    "string": "View on OSM"
+  },
+  "common.viewProject": {
+    "string": "View project"
+  },
+  "common.viewProjects": {
+    "string": "View Projects"
+  },
+  "common.write": {
+    "string": "Write"
+  },
+  "common.youMustBeLoggedInToComment": {
+    "string": "You must be logged in to comment"
+  },
+  "common.youveReachedTheEndOfTheList": {
+    "string": "You've reached the end of the list"
+  },
+  "common.zoomToTask": {
+    "string": "Zoom to task"
+  },
+  "dashboard.activity.empty.description": {
+    "string": "Tasks you work on will show up here"
+  },
+  "dashboard.activity.empty.title": {
+    "string": "No recent activity"
+  },
+  "dashboard.activity.lockedTasks.title": {
+    "string": "{count, plural, one {# locked task} other {# locked tasks}}"
+  },
+  "dashboard.activity.statusCount": {
+    "string": "{count, plural, one {# task marked {status}} other {# tasks marked {status}}}"
+  },
+  "dashboard.activity.title": {
+    "string": "Recent activity"
+  },
+  "dashboard.activity.unknownChallenge": {
+    "string": "Challenge {parentId}"
+  },
+  "dashboard.common.failedToLoad": {
+    "string": "Failed to load"
+  },
+  "dashboard.profile.achievements": {
+    "string": "Achievements ({earned, number} of {total, number})"
+  },
+  "dashboard.profile.osmProfile": {
+    "string": "OpenStreetMap profile"
+  },
+  "dashboard.profile.points": {
+    "string": "Points"
+  },
+  "dashboard.profile.tasksCompleted": {
+    "string": "Tasks completed"
+  },
+  "dashboard.profile.userSince": {
+    "string": "MapRoulette user since"
+  },
+  "dashboard.savedChallenges.actions.unsave": {
+    "string": "Unsave challenge"
+  },
+  "dashboard.savedChallenges.empty.description": {
+    "string": "Save challenges to work on later"
+  },
+  "dashboard.savedChallenges.empty.title": {
+    "string": "No saved challenges"
+  },
+  "dashboard.savedChallenges.title": {
+    "string": "Saved Challenges"
+  },
+  "dashboard.teams.empty.description": {
+    "string": "Join a team to collaborate"
+  },
+  "dashboard.teams.empty.title": {
+    "string": "No teams"
+  },
+  "dashboard.teams.learnMore": {
+    "string": "Learn more about teams"
+  },
+  "dashboard.topChallenges.empty.description": {
+    "string": "The challenges you work on most will show up here"
+  },
+  "dashboard.topChallenges.empty.title": {
+    "string": "No challenges yet"
+  },
+  "dashboard.topChallenges.title": {
+    "string": "Top challenges"
+  },
+  "dynamicPluginRoute.loading": {
+    "string": "Loading plugin page..."
+  },
+  "errorBoundary.actions.goHome": {
+    "string": "Go Home"
+  },
+  "errorBoundary.actions.tryAgain": {
+    "string": "Try Again"
+  },
+  "errorBoundary.forbidden.description": {
+    "string": "You don't have permission to access this resource."
+  },
+  "errorBoundary.forbidden.title": {
+    "string": "403 - Forbidden"
+  },
+  "errorBoundary.genericHttp.description": {
+    "string": "An unexpected error occurred while loading this page."
+  },
+  "errorBoundary.genericHttp.title": {
+    "string": "Error {status}"
+  },
+  "errorBoundary.serverError.description": {
+    "string": "The server encountered an error. Please try again later."
+  },
+  "errorBoundary.serverError.title": {
+    "string": "Server Error"
+  },
+  "errorBoundary.unauthorized.signInDescription": {
+    "string": "You need to sign in to view this page."
+  },
+  "errorBoundary.unauthorized.title": {
+    "string": "401 - Unauthorized"
+  },
+  "exploreChallenges.challengeList.emptyDescription": {
+    "string": "Try adjusting your search filters or map bounds."
+  },
+  "exploreChallenges.challengeList.errorTitle": {
+    "string": "Failed to load challenges"
+  },
+  "exploreChallenges.challengeList.footer.endOfListHint": {
+    "string": "Adjust your filters or explore a different area for more challenges"
+  },
+  "exploreChallenges.challengeList.table.lastUpdated": {
+    "string": "Last updated"
+  },
+  "exploreChallenges.challengeList.table.percentMapped": {
+    "string": "Percent mapped"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "Clear filters"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "Any"
+  },
+  "exploreChallenges.filterBar.filtersToggle": {
+    "string": "{count, plural, =0 {Filters} one {Filters (#)} other {Filters (#)}}"
+  },
+  "exploreChallenges.filterBar.location.clearAriaLabel": {
+    "string": "Clear location"
+  },
+  "exploreChallenges.filterBar.location.geometryLoadFailed": {
+    "string": "Failed to load location geometry"
+  },
+  "exploreChallenges.filterBar.location.loadFailed": {
+    "string": "Failed to load location"
+  },
+  "exploreChallenges.filterBar.location.networkError": {
+    "string": "Network error. Please check your connection."
+  },
+  "exploreChallenges.filterBar.location.noOsmId": {
+    "string": "Selected location has no OSM identifier"
+  },
+  "exploreChallenges.filterBar.location.noResults": {
+    "string": "No locations found. Try a different search term."
+  },
+  "exploreChallenges.filterBar.location.notFound": {
+    "string": "Location not found"
+  },
+  "exploreChallenges.filterBar.location.searchPlaceholder": {
+    "string": "Search location..."
+  },
+  "exploreChallenges.filterBar.location.suggestionsAriaLabel": {
+    "string": "Location suggestions"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "Sort by"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "Oldest"
+  },
+  "exploreChallenges.filterBar.sortBy.recommended": {
+    "string": "Recommended"
+  },
+  "exploreChallenges.filterBar.title": {
+    "string": "Challenge List Filters"
+  },
+  "exploreChallenges.filterBar.viewMode.gridMap": {
+    "string": "Grid with map view"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "Anything"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "Work on"
+  },
+  "exploreChallenges.map.locationIndicator.recenter": {
+    "string": "Recenter on the outlined area: {name}"
+  },
+  "exploreChallenges.results.tabList": {
+    "string": "List"
+  },
+  "header.globalSearch.shortcut": {
+    "string": "Search MapRoulette"
+  },
+  "keyboardShortcuts.category.editors": {
+    "string": "Editors"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "General"
+  },
+  "keyboardShortcuts.category.multiTask": {
+    "string": "Multi-task"
+  },
+  "keyboardShortcuts.category.taskActions": {
+    "string": "Task actions"
+  },
+  "keyboardShortcuts.docsLink": {
+    "string": "See the full list of keyboard shortcuts"
+  },
+  "keyboardShortcuts.showShortcuts": {
+    "string": "Show this list of keyboard shortcuts"
+  },
+  "keyboardShortcuts.title": {
+    "string": "Keyboard Shortcuts"
+  },
+  "keyboardShortcuts.unavailable.alreadyDrawing": {
+    "string": "Already drawing"
+  },
+  "keyboardShortcuts.unavailable.noSelection": {
+    "string": "Select more than one task first"
+  },
+  "keyboardShortcuts.unavailable.notEditable": {
+    "string": "This task is not editable"
+  },
+  "keyboardShortcuts.unavailable.notMapping": {
+    "string": "Start mapping this task first"
+  },
+  "keyboardShortcuts.unavailable.paused": {
+    "string": "This challenge is paused"
+  },
+  "keyboardShortcuts.unavailable.statusNotAllowed": {
+    "string": "Not available for this task"
+  },
+  "manageChallengeDetail.detail.configurePrioritization": {
+    "string": "Configure prioritization"
+  },
+  "manageChallengeDetail.detail.featuredError": {
+    "string": "Could not update featured state"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "Managers"
+  },
+  "manageChallengeDetail.detail.pausedError": {
+    "string": "Could not update paused state"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "Completion"
+  },
+  "manageChallengeDetail.detail.statistics.lastModified": {
+    "string": "Last modified"
+  },
+  "manageChallengeDetail.detail.statistics.taskCountsByStatus": {
+    "string": "Task counts by status"
+  },
+  "manageChallengeDetail.detail.viewChallengePage": {
+    "string": "View challenge page"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "Export"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "Download"
+  },
+  "manageChallengeDetail.export.description": {
+    "string": "The export applies the table's status, priority and property filters, but covers the whole challenge rather than the current map view."
+  },
+  "manageChallengeDetail.export.docsLink": {
+    "string": "About challenge exports"
+  },
+  "manageChallengeDetail.export.failed": {
+    "string": "Could not export this challenge"
+  },
+  "manageChallengeDetail.export.formatCsv": {
+    "string": "CSV — one row per task"
+  },
+  "manageChallengeDetail.export.formatGeoJSON": {
+    "string": "GeoJSON — task geometries and properties"
+  },
+  "manageChallengeDetail.export.formatLabel": {
+    "string": "Format"
+  },
+  "manageChallengeDetail.export.preparing": {
+    "string": "Preparing..."
+  },
+  "manageChallengeDetail.export.timezoneLabel": {
+    "string": "Timestamp timezone"
+  },
+  "manageChallengeDetail.export.title": {
+    "string": "Export tasks"
+  },
+  "manageChallengeDetail.managers.added": {
+    "string": "{name} can now manage this challenge"
+  },
+  "manageChallengeDetail.managers.description": {
+    "string": "Give someone a role on this challenge alone. Anyone who manages the parent project, or the team that owns this challenge, already has access and is not listed here."
+  },
+  "manageChallengeDetail.managers.removeFailed": {
+    "string": "Could not remove that manager"
+  },
+  "manageChallengeDetail.managers.removed": {
+    "string": "{name} can no longer manage this challenge"
+  },
+  "manageChallengeDetail.managers.title": {
+    "string": "Challenge managers"
+  },
+  "manageChallengeDetail.miniMap.zoomToAllTasksTooltip": {
+    "string": "Zoom to all tasks"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "No recent activity."
+  },
+  "manageChallengeDetail.recentActivity.loadError": {
+    "string": "Could not load activity."
+  },
+  "manageChallengeDetail.statusIndicator.buildingBody": {
+    "string": "Tasks are being generated. This page will automatically refresh to show progress."
+  },
+  "manageChallengeDetail.statusIndicator.deletingBody": {
+    "string": "Tasks are being deleted. Please wait..."
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "Deleting Tasks..."
+  },
+  "manageChallengeDetail.statusIndicator.elapsedTimeLabel": {
+    "string": "Elapsed time:"
+  },
+  "manageChallengeDetail.statusIndicator.failedBody": {
+    "string": "The challenge failed to build tasks. Please check the challenge configuration and try again."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "Tasks Failed to Build"
+  },
+  "manageChallengeDetail.statusIndicator.partiallyLoadedBody": {
+    "string": "This challenge is partially loaded. Some tasks may not be available yet."
+  },
+  "manageChallengeDetail.statusIndicator.partiallyLoadedTitle": {
+    "string": "Challenge Partially Loaded"
+  },
+  "manageChallengeDetail.statusIndicator.refreshingInLabel": {
+    "string": "Refreshing in:"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "Tasks Building..."
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "Tasks Updating..."
+  },
+  "manageChallengeDetail.statusIndicator.updatingBody": {
+    "string": "Task statuses are being updated. This page will automatically refresh to show progress."
+  },
+  "manageChallengeDetail.tasksExplorer.clearAllFiltersTitle": {
+    "string": "Clear all filters"
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "Bundle"
+  },
+  "manageChallengeDetail.tasksExplorer.deselectRowLabel": {
+    "string": "Deselect row for bulk actions"
+  },
+  "manageChallengeDetail.tasksExplorer.filterBarLabel": {
+    "string": "Task filters"
+  },
+  "manageChallengeDetail.tasksExplorer.filtersLabel": {
+    "string": "Filters"
+  },
+  "manageChallengeDetail.tasksExplorer.loadingTasks": {
+    "string": "Loading tasks…"
+  },
+  "manageChallengeDetail.tasksExplorer.noTasksMatch": {
+    "string": "No tasks match the current filters."
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "High"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "Low"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "Medium"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "Learn more"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterHelp": {
+    "string": "Combine property comparisons with AND/OR. Tasks matching the rule are shown in the table and on the map."
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterLabel": {
+    "string": "Filter by property"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterTitle": {
+    "string": "Filter tasks by feature property"
+  },
+  "manageChallengeDetail.tasksExplorer.selectAllVisibleLabel": {
+    "string": "Select all visible tasks"
+  },
+  "manageChallengeDetail.tasksExplorer.selectRowLabel": {
+    "string": "Select row for bulk actions"
+  },
+  "manageChallengeDetail.tasksExplorer.showTaskOnMapLabel": {
+    "string": "Show task {id} on map"
+  },
+  "manageChallengeDetail.tasksExplorer.showingCount": {
+    "string": "{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "Task status"
+  },
+  "manageChallengeEdit.pageTitle": {
+    "string": "Challenge Editor"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "You can optionally provide additional keywords that can be used to aid discovery of your challenge."
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "Additional Categorization Keywords"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "I have read and understand the OSM Automated Edits code of conduct"
+  },
+  "manageChallengeNew.challengeForm.agreementDescription": {
+    "string": "You are about to create a MapRoulette challenge. With this power comes responsibility. Make sure that your Challenge is designed to encourage careful human attention to each task, in the spirit of OpenStreetMap's <link>Automated Edits code of conduct</link>. Please read this document carefully. By checking the box below, you acknowledge that you understand and accept this responsibility."
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "Automated Edits Code of Conduct Agreement"
+  },
+  "manageChallengeNew.challengeForm.basemapCurrent": {
+    "string": "Keep the current basemap"
+  },
+  "manageChallengeNew.challengeForm.basemapCustom": {
+    "string": "Custom tile layer…"
+  },
+  "manageChallengeNew.challengeForm.basemapDescription": {
+    "string": "Force a base layer for this challenge's maps, overriding the mapper's own choice."
+  },
+  "manageChallengeNew.challengeForm.basemapDocsLink": {
+    "string": "About challenge basemaps"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "Challenge basemap"
+  },
+  "manageChallengeNew.challengeForm.basemapNone": {
+    "string": "Don't override — mappers use their own"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "Basemap"
+  },
+  "manageChallengeNew.challengeForm.basemapUrlDescription": {
+    "string": "An XYZ tile template. Leave it blank and the challenge falls back to no override."
+  },
+  "manageChallengeNew.challengeForm.basemapUrlLabel": {
+    "string": "Custom basemap URL"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "Other"
+  },
+  "manageChallengeNew.challengeForm.categoryDescription": {
+    "string": "Selecting an appropriate category for your challenge can help users discover challenges that match their interests. Choose the Other category if nothing seems appropriate."
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "How should your Challenge be Categorized?"
+  },
+  "manageChallengeNew.challengeForm.changesetSectionDescription": {
+    "string": "Pre-filled in the editor when a mapper saves their changes to OpenStreetMap."
+  },
+  "manageChallengeNew.challengeForm.changesetSectionTitle": {
+    "string": "OpenStreetMap changeset"
+  },
+  "manageChallengeNew.challengeForm.checkinCommentCreateDescription": {
+    "string": "Describes the changes mappers make. The #maproulette hashtag is appended if missing, and a link back to the task is added automatically."
+  },
+  "manageChallengeNew.challengeForm.checkinCommentEditDescription": {
+    "string": "Describes the changes mappers make. A link back to the task is added automatically."
+  },
+  "manageChallengeNew.challengeForm.checkinCommentLabel": {
+    "string": "Changeset comment"
+  },
+  "manageChallengeNew.challengeForm.checkinCommentPlaceholder": {
+    "string": "Fixed disconnected highways"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceDescription": {
+    "string": "The imagery or data mappers are expected to use, separated by semicolons."
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "Changeset source"
+  },
+  "manageChallengeNew.challengeForm.checkinSourcePlaceholder": {
+    "string": "Bing; survey"
+  },
+  "manageChallengeNew.challengeForm.createErrorTitle": {
+    "string": "Challenge could not be created"
+  },
+  "manageChallengeNew.challengeForm.createSuccessToast": {
+    "string": "Challenge created successfully"
+  },
+  "manageChallengeNew.challengeForm.descriptionPlaceholder": {
+    "string": "Describe what this challenge is about..."
+  },
+  "manageChallengeNew.challengeForm.difficultyPlaceholder": {
+    "string": "Select difficulty"
+  },
+  "manageChallengeNew.challengeForm.fieldErrorsAriaLabel": {
+    "string": "Fields that need attention"
+  },
+  "manageChallengeNew.challengeForm.fieldErrorsTitle": {
+    "string": "{count, plural, one {# field needs attention} other {# fields need attention}}"
+  },
+  "manageChallengeNew.challengeForm.geoJSONFileDescription": {
+    "string": "Upload a GeoJSON file from your computer. Standard GeoJSON and <docs>line-by-line GeoJSON format</docs> are supported."
+  },
+  "manageChallengeNew.challengeForm.geoJSONFileLabel": {
+    "string": "GeoJSON File"
+  },
+  "manageChallengeNew.challengeForm.geoJSONFileSelected": {
+    "string": "Selected: {name} ({size, number, ::.00} KB)"
+  },
+  "manageChallengeNew.challengeForm.instructionsDescription": {
+    "string": "Shown to mappers with every task. Instructions support <markdown>Markdown</markdown> and <mustache>mustache tag replacement</mustache> so each task can show details from its own feature properties."
+  },
+  "manageChallengeNew.challengeForm.instructionsPlaceholder": {
+    "string": "Instructions for completing tasks..."
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionDescription": {
+    "string": "Upload a GeoJSON file from your computer"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "I want to upload a GeoJSON file"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONReadOnlyBody": {
+    "string": "This challenge was built from an uploaded GeoJSON file, which can't be shown here. To replace it with fresh GeoJSON, use Rebuild Tasks when managing your challenge."
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONReadOnlyLabel": {
+    "string": "Uploaded GeoJSON file"
+  },
+  "manageChallengeNew.challengeForm.namePlaceholder": {
+    "string": "{user}'s Challenge"
+  },
+  "manageChallengeNew.challengeForm.nameTaken": {
+    "string": "A challenge with this name already exists in this project"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyDescription": {
+    "string": "The feature property holding each task's identifier. Leave blank to let MapRoulette detect it."
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyDocsLink": {
+    "string": "About task identifiers"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/External Id Property"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionDescription": {
+    "string": "Use Overpass QL to automatically generate tasks from OpenStreetMap data"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "I want to provide an Overpass query"
+  },
+  "manageChallengeNew.challengeForm.overpassQLDescription": {
+    "string": "Overpass query language to automatically generate tasks for this challenge. Please see the <docs>docs</docs> for important details and common pitfalls when creating challenges using Overpass queries."
+  },
+  "manageChallengeNew.challengeForm.overpassQLLabel": {
+    "string": "Overpass QL"
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyBody": {
+    "string": "Overpass queries cannot be edited here. Use Rebuild Tasks when managing your challenge to re-run the query and refresh your tasks."
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
+    "string": "Overpass query"
+  },
+  "manageChallengeNew.challengeForm.projectPicker.description": {
+    "string": "Select the project this challenge belongs to"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONDescription": {
+    "string": "Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file."
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONDocs": {
+    "string": "<docs>Hosting your GeoJSON in a GitHub gist</docs> is one way to do that."
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription": {
+    "string": "Provide a URL pointing to a GeoJSON file"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "I have a URL to the GeoJSON data"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyBody": {
+    "string": "Remote URLs cannot be edited here. Use Rebuild Tasks when managing your challenge to re-download the GeoJSON and refresh your tasks."
+  },
+  "manageChallengeNew.challengeForm.saveErrorToast": {
+    "string": "Failed to save challenge. Please try again."
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyDescription": {
+    "string": "The feature property to treat as a bundle id. Features sharing a value become a single task with multiple features; features without the property stay as separate tasks. Leave blank for one task per feature."
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyLabel": {
+    "string": "Task Bundle Id Property"
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning": {
+    "string": "Grouping features into one task is not available for Overpass queries. Choose a GeoJSON source to use it."
+  },
+  "manageChallengeNew.challengeForm.taskDataDescription": {
+    "string": "Choose how you want to provide task data for this challenge."
+  },
+  "manageChallengeNew.challengeForm.taskDataReadOnlyDescription": {
+    "string": "The data source is set when the challenge is created. To regenerate tasks from updated data, use Rebuild Tasks when managing the challenge."
+  },
+  "manageChallengeNew.challengeForm.taskDataTitle": {
+    "string": "Task data"
+  },
+  "manageChallengeNew.challengeForm.taskSettingsDescription": {
+    "string": "How tasks in this challenge are identified and grouped."
+  },
+  "manageChallengeNew.challengeForm.taskSettingsTitle": {
+    "string": "Task settings"
+  },
+  "manageChallengeNew.challengeForm.teamDescription": {
+    "string": "An optional team to own this challenge. Everyone who manages that team can edit it, and the team's image becomes the picture on its card."
+  },
+  "manageChallengeNew.challengeForm.teamNoneAvailable": {
+    "string": "You don't manage any teams yet. Only a team's owners, admins and managers can give it a challenge."
+  },
+  "manageChallengeNew.challengeForm.updateButton": {
+    "string": "Update Challenge"
+  },
+  "manageChallengeNew.challengeForm.updateErrorTitle": {
+    "string": "Challenge could not be updated"
+  },
+  "manageChallengeNew.challengeForm.updateSuccessToast": {
+    "string": "Challenge updated successfully"
+  },
+  "manageChallengeNew.challengeForm.validation.agreementRequired": {
+    "string": "You must read and accept the Automated Edits code of conduct"
+  },
+  "manageChallengeNew.challengeForm.validation.checkinCommentRequired": {
+    "string": "A changeset comment is required"
+  },
+  "manageChallengeNew.challengeForm.validation.checkinSourceRequired": {
+    "string": "A changeset source is required"
+  },
+  "manageChallengeNew.challengeForm.validation.descriptionRequired": {
+    "string": "Description is required"
+  },
+  "manageChallengeNew.challengeForm.validation.instructionRequired": {
+    "string": "Instructions are required"
+  },
+  "manageChallengeNew.challengeForm.validation.localGeoJSONRequired": {
+    "string": "Please upload a GeoJSON file"
+  },
+  "manageChallengeNew.challengeForm.validation.nameMinLength": {
+    "string": "Challenge name must be at least 3 characters"
+  },
+  "manageChallengeNew.challengeForm.validation.overpassRequired": {
+    "string": "An Overpass query is required"
+  },
+  "manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired": {
+    "string": "A GeoJSON URL is required"
+  },
+  "manageChallenges.content.bulkEditingLink": {
+    "string": "Bulk Editing Challenges"
+  },
+  "manageChallenges.content.challengeCreationGuideLink": {
+    "string": "Challenge Creation Guide"
+  },
+  "manageChallenges.content.taskPriorityRulesLink": {
+    "string": "Task Priority Rules"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "Cancel edit"
+  },
+  "manageChallengesBulkEdit.confirm.description": {
+    "string": "{count, plural, one {These values will overwrite the current ones on # challenge.} other {These values will overwrite the current ones on # challenges.}}"
+  },
+  "manageChallengesBulkEdit.confirm.noRule": {
+    "string": "No rule"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "Submit bulk edit"
+  },
+  "manageChallengesBulkEdit.confirm.title": {
+    "string": "Confirm bulk edit"
+  },
+  "manageChallengesBulkEdit.context.saveError": {
+    "string": "The challenge could not be saved."
+  },
+  "manageChallengesBulkEdit.context.saveSuccess": {
+    "string": "{count, plural, one {Updated # challenge} other {Updated # challenges}}"
+  },
+  "manageChallengesBulkEdit.field.additionalKeywords": {
+    "string": "Additional keywords"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "Basemap"
+  },
+  "manageChallengesBulkEdit.field.dataOriginDate": {
+    "string": "Data origin date"
+  },
+  "manageChallengesBulkEdit.field.exportableProperties": {
+    "string": "Exportable properties"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "Instructions"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "Priorities"
+  },
+  "manageChallengesBulkEdit.form.additionalKeywordsDescription": {
+    "string": "Comma-separated. Replaces each challenge's additional keywords; its category is kept."
+  },
+  "manageChallengesBulkEdit.form.backToProject": {
+    "string": "Back to {project}"
+  },
+  "manageChallengesBulkEdit.form.basemapUnchanged": {
+    "string": "Leave each challenge's basemap as it is"
+  },
+  "manageChallengesBulkEdit.form.basemapUrlRequired": {
+    "string": "Enter a tile URL for the custom basemap"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "Cancel"
+  },
+  "manageChallengesBulkEdit.form.dataOriginDateDescription": {
+    "string": "The date the task data was sourced."
+  },
+  "manageChallengesBulkEdit.form.discoveryTitle": {
+    "string": "Discovery and exports"
+  },
+  "manageChallengesBulkEdit.form.exportablePropertiesDescription": {
+    "string": "Comma-separated task properties to include in CSV and GeoJSON exports."
+  },
+  "manageChallengesBulkEdit.form.failureNoneSaved": {
+    "string": "No challenges were changed."
+  },
+  "manageChallengesBulkEdit.form.failureSaved": {
+    "string": "Saved before the error: {names}. The rest were not changed."
+  },
+  "manageChallengesBulkEdit.form.failureTitle": {
+    "string": "\"{name}\" could not be saved"
+  },
+  "manageChallengesBulkEdit.form.instructionDescription": {
+    "string": "Markdown is supported."
+  },
+  "manageChallengesBulkEdit.form.noChallenges": {
+    "string": "Select at least one challenge to edit"
+  },
+  "manageChallengesBulkEdit.form.noChanges": {
+    "string": "Fill in at least one field to change"
+  },
+  "manageChallengesBulkEdit.form.noneSelected": {
+    "string": "No challenges are selected. Go back to the project and select the challenges to edit."
+  },
+  "manageChallengesBulkEdit.form.removeChallenge": {
+    "string": "Remove {name} from this edit"
+  },
+  "manageChallengesBulkEdit.form.replacePriorities": {
+    "string": "Replace the default priority and all three priority rules. Location bounds are kept."
+  },
+  "manageChallengesBulkEdit.form.review": {
+    "string": "Review changes"
+  },
+  "manageChallengesBulkEdit.form.saving": {
+    "string": "Saving {saved} of {total}"
+  },
+  "manageChallengesBulkEdit.form.selectedTitle": {
+    "string": "{count, plural, one {Editing # challenge} other {Editing # challenges}}"
+  },
+  "manageChallengesBulkEdit.form.warningDescription": {
+    "string": "Any field you fill in replaces that field's current value on every selected challenge, and you can't see here what you are overwriting. Fields you leave blank keep each challenge's own value."
+  },
+  "manageChallengesBulkEdit.form.warningTitle": {
+    "string": "Filled-in fields overwrite each challenge"
+  },
+  "manageChallengesBulkEdit.pageDescription": {
+    "string": "Change several challenges in this project at once"
+  },
+  "manageChallengesBulkEdit.pageTitle": {
+    "string": "Bulk Edit Challenges"
+  },
+  "manageProjectDetail.challengeSelection.clear": {
+    "string": "Clear selection"
+  },
+  "manageProjectDetail.challengeSelection.editSelected": {
+    "string": "{count, plural, =0 {Edit selected challenges} one {Edit # selected challenge} other {Edit # selected challenges}}"
+  },
+  "manageProjectDetail.challengeSelection.noneSelected": {
+    "string": "Select challenges in the list to edit them together"
+  },
+  "manageProjectDetail.challengeSelection.selectAll": {
+    "string": "Select all challenges"
+  },
+  "manageProjectDetail.challengeSelection.selectChallenge": {
+    "string": "Select {name}"
+  },
+  "manageProjectDetail.challengesTable.columnTasksLeft": {
+    "string": "Tasks Left"
+  },
+  "manageProjectDetail.content.createChallenge": {
+    "string": "Create challenge"
+  },
+  "manageProjectDetail.content.deleteProjectDescription": {
+    "string": "This will delete this project and all its challenges and tasks. This action cannot be undone."
+  },
+  "manageProjectDetail.content.disableProject": {
+    "string": "Disable project"
+  },
+  "manageProjectDetail.content.enableProject": {
+    "string": "Enable project"
+  },
+  "manageProjectDetail.content.playbookDocsLink": {
+    "string": "Open project management docs"
+  },
+  "manageProjectDetail.content.viewProjectPage": {
+    "string": "View project page"
+  },
+  "manageProjectDetail.managers.added": {
+    "string": "{name} can now manage this project"
+  },
+  "manageProjectDetail.managers.docsLink": {
+    "string": "About project roles"
+  },
+  "manageProjectDetail.managers.modalDescription": {
+    "string": "Who can manage this project, and at what level."
+  },
+  "manageProjectDetail.managers.modalTitle": {
+    "string": "Managers and teams"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "Project managers"
+  },
+  "manageProjectEdit.pageTitle": {
+    "string": "Project Details"
+  },
+  "manageProjectNew.projectForm.createSuccessToast": {
+    "string": "Project created successfully"
+  },
+  "manageProjectNew.projectForm.descriptionDescription": {
+    "string": "A brief description of the project"
+  },
+  "manageProjectNew.projectForm.descriptionPlaceholder": {
+    "string": "Describe what this project is about..."
+  },
+  "manageProjectNew.projectForm.detailsSectionTitle": {
+    "string": "Project details"
+  },
+  "manageProjectNew.projectForm.displayNameDescription": {
+    "string": "The display name shown to users"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "Display Name"
+  },
+  "manageProjectNew.projectForm.displayNamePlaceholder": {
+    "string": "My Project"
+  },
+  "manageProjectNew.projectForm.enabledDescription": {
+    "string": "Make this project visible and accessible to users"
+  },
+  "manageProjectNew.projectForm.featuredDescription": {
+    "string": "Mark this project as featured"
+  },
+  "manageProjectNew.projectForm.nameDescription": {
+    "string": "A unique identifier for the project"
+  },
+  "manageProjectNew.projectForm.nameLabel": {
+    "string": "Project Name"
+  },
+  "manageProjectNew.projectForm.namePlaceholder": {
+    "string": "my-project"
+  },
+  "manageProjectNew.projectForm.saveErrorToast": {
+    "string": "Failed to save project. Please try again."
+  },
+  "manageProjectNew.projectForm.teamDescription": {
+    "string": "An optional team to own this project. Everyone who manages that team can run it, and the team's image becomes the picture on its card."
+  },
+  "manageProjectNew.projectForm.teamNoneAvailable": {
+    "string": "You don't manage any teams yet. Only a team's owners, admins and managers can give it a project."
+  },
+  "manageProjectNew.projectForm.updateButton": {
+    "string": "Update Project"
+  },
+  "manageProjectNew.projectForm.updateSuccessToast": {
+    "string": "Project updated successfully"
+  },
+  "manageProjectNew.projectForm.validation.displayNameRequired": {
+    "string": "Display name is required"
+  },
+  "manageProjectNew.projectForm.validation.nameRequired": {
+    "string": "Project name is required"
+  },
+  "manageProjectNew.projectForm.visibilitySectionTitle": {
+    "string": "Visibility"
+  },
+  "manageProjects.content.deleteProjectDescription": {
+    "string": "This will delete the project \"{projectName}\" and all its challenges and tasks. This action cannot be undone."
+  },
+  "manageProjects.content.projectManagement": {
+    "string": "Project Management"
+  },
+  "manageTaskEdit.form.geoJSONInvalid": {
+    "string": "GeoJSON must be valid JSON"
+  },
+  "manageTaskEdit.form.geoJSONRequired": {
+    "string": "GeoJSON is required"
+  },
+  "manageTaskEdit.form.geoJsonDescription": {
+    "string": "GeoJSON for this task (point, line or polygon). Must be valid JSON."
+  },
+  "manageTaskEdit.form.instructionsDescription": {
+    "string": "Instructions for users doing this specific task"
+  },
+  "manageTaskEdit.form.instructionsPlaceholder": {
+    "string": "Instructions for this task (overrides challenge instructions)"
+  },
+  "manageTaskEdit.form.namePlaceholder": {
+    "string": "Task name"
+  },
+  "manageTaskEdit.form.nameTooShort": {
+    "string": "{min, plural, one {Name must be at least # character} other {Name must be at least # characters}}"
+  },
+  "manageTaskEdit.form.statusPlaceholder": {
+    "string": "Select status"
+  },
+  "manageTaskEdit.form.updateError": {
+    "string": "Failed to save task. Please try again."
+  },
+  "manageTaskEdit.form.updateSuccess": {
+    "string": "Task updated successfully"
+  },
+  "manageTaskEdit.index.accessDeniedDescription": {
+    "string": "Only this challenge's managers can edit its tasks."
+  },
+  "manageTaskEdit.index.loadErrorDescription": {
+    "string": "This task could not be loaded. It may have been deleted."
+  },
+  "manageTaskEdit.index.loadErrorTitle": {
+    "string": "Task not found"
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "Task Details"
+  },
+  "manageTasksOpen.cardDescription": {
+    "string": "You can find a task ID in the URL or header while working on it."
+  },
+  "manageTasksOpen.description": {
+    "string": "Open a task by ID to view details or edit it (name, instructions, status, etc.)."
+  },
+  "manageTasksOpen.findChallenge": {
+    "string": "Or go to <projects>Projects</projects> or <challenges>Challenges</challenges> to find a challenge, then browse it to open a task and get its ID from the URL."
+  },
+  "manageTasksOpen.taskIdLabel": {
+    "string": "Task ID"
+  },
+  "manageTasksOpen.taskIdPlaceholder": {
+    "string": "e.g. 12345"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "View task"
+  },
+  "managementPages.actionErrors.challengeArchive": {
+    "string": "Unable to update archive status"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "Unable to delete challenge."
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "Unable to save your changes."
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "Unable to delete project."
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "Unable to save your changes"
+  },
+  "managementPages.bulkActionsToolbar.archive": {
+    "string": "Archive"
+  },
+  "managementPages.bulkActionsToolbar.archiveError": {
+    "string": "Could not archive tasks"
+  },
+  "managementPages.bulkActionsToolbar.archivedToast": {
+    "string": "{count, plural, one {Archived # task} other {Archived # tasks}}"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "Change status"
+  },
+  "managementPages.bulkActionsToolbar.deleteDialog.deleting": {
+    "string": "Deleting…"
+  },
+  "managementPages.bulkActionsToolbar.deleteDialog.description": {
+    "string": "This cannot be undone. Tasks and their comments and tags are permanently removed."
+  },
+  "managementPages.bulkActionsToolbar.deleteDialog.title": {
+    "string": "{count, plural, one {Delete # task?} other {Delete # tasks?}}"
+  },
+  "managementPages.bulkActionsToolbar.deleteError": {
+    "string": "Could not delete tasks"
+  },
+  "managementPages.bulkActionsToolbar.deleteSuccess": {
+    "string": "{count, plural, one {Deleted # task} other {Deleted # tasks}}"
+  },
+  "managementPages.bulkActionsToolbar.deleteWarning": {
+    "string": "{deleted, plural, one {Deleted # task; {denied, number} could not be deleted} other {Deleted # tasks; {denied, number} could not be deleted}}"
+  },
+  "managementPages.bulkActionsToolbar.pickStatus": {
+    "string": "Pick a status…"
+  },
+  "managementPages.bulkActionsToolbar.selectedCount": {
+    "string": "{count} selected"
+  },
+  "managementPages.bulkActionsToolbar.statusDialog.description": {
+    "string": "Updates every selected task to the chosen status."
+  },
+  "managementPages.bulkActionsToolbar.statusDialog.title": {
+    "string": "Change task status"
+  },
+  "managementPages.bulkActionsToolbar.unarchive": {
+    "string": "Unarchive"
+  },
+  "managementPages.bulkActionsToolbar.unarchivedToast": {
+    "string": "{count, plural, one {Unarchived # task} other {Unarchived # tasks}}"
+  },
+  "managementPages.bulkActionsToolbar.updateError": {
+    "string": "Could not update tasks"
+  },
+  "managementPages.bulkActionsToolbar.updatedToast": {
+    "string": "{count, plural, one {Updated # task} other {Updated # tasks}}"
+  },
+  "managementPages.manageInfoPanel.documentation": {
+    "string": "Documentation"
+  },
+  "managementPages.rebuildTasksDialog.dataOriginDate": {
+    "string": "Date data was sourced (optional)"
+  },
+  "managementPages.rebuildTasksDialog.descriptionDefault": {
+    "string": "Rebuild the challenge tasks from its source data."
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "Rebuilding will allow you to upload a new local file with the latest GeoJSON data and rebuild the challenge tasks:"
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "Rebuilding will re-run the Overpass query and rebuild the challenge tasks with the latest data:"
+  },
+  "managementPages.rebuildTasksDialog.introRemote": {
+    "string": "Rebuilding will re-download the GeoJSON data from the challenge's remote URL and rebuild the challenge tasks with the latest data:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "Learn More"
+  },
+  "managementPages.rebuildTasksDialog.listAdded": {
+    "string": "New tasks will be added"
+  },
+  "managementPages.rebuildTasksDialog.listKeepAsIs": {
+    "string": "If you do not first remove incomplete tasks, they will be left as-is, possibly leaving tasks that have already been addressed outside of MapRoulette"
+  },
+  "managementPages.rebuildTasksDialog.listRemoveIncomplete": {
+    "string": "If you choose to first remove incomplete tasks (below), existing <strong>incomplete</strong> tasks will first be removed"
+  },
+  "managementPages.rebuildTasksDialog.listUpdated": {
+    "string": "Existing tasks included in the latest data will be updated"
+  },
+  "managementPages.rebuildTasksDialog.newGeoJsonFile": {
+    "string": "New GeoJSON file"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "Proceed"
+  },
+  "managementPages.rebuildTasksDialog.rebuilding": {
+    "string": "Rebuilding…"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "First remove incomplete tasks"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "Rebuild Challenge Tasks"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "Rebuilding can duplicate tasks if your feature IDs don't line up, or if old and new data can't be matched."
+  },
+  "managers.addFailed": {
+    "string": "Could not add that manager"
+  },
+  "managers.addLabel": {
+    "string": "Add a manager"
+  },
+  "managers.addTeamFailed": {
+    "string": "Could not add that team"
+  },
+  "managers.addTeamLabel": {
+    "string": "Add a team"
+  },
+  "managers.loading": {
+    "string": "Loading managers..."
+  },
+  "managers.noMatches": {
+    "string": "No matching users"
+  },
+  "managers.noTeamMatches": {
+    "string": "No matching teams"
+  },
+  "managers.noTeams": {
+    "string": "No teams yet."
+  },
+  "managers.none": {
+    "string": "No managers yet."
+  },
+  "managers.searchPlaceholder": {
+    "string": "OpenStreetMap username"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "Team name"
+  },
+  "managers.teamsDescription": {
+    "string": "Team owners and admins get admin access, and team managers get write access. Other team members get no access."
+  },
+  "map.controls.mapSettings": {
+    "string": "Map settings"
+  },
+  "map.controls.mapStyle": {
+    "string": "Map style"
+  },
+  "map.controls.zoomIn": {
+    "string": "Zoom in"
+  },
+  "map.controls.zoomOut": {
+    "string": "Zoom out"
+  },
+  "map.scaleBar.feet": {
+    "string": "{value, number} ft"
+  },
+  "map.scaleBar.kilometers": {
+    "string": "{value, number, ::.#} km"
+  },
+  "map.scaleBar.meters": {
+    "string": "{value, number} m"
+  },
+  "map.scaleBar.miles": {
+    "string": "{value, number, ::.#} mi"
+  },
+  "map.settings.directionIndicators": {
+    "string": "Direction indicators"
+  },
+  "map.settings.overlays": {
+    "string": "Overlays"
+  },
+  "map.styleSwitcher.addCustom": {
+    "string": "Add your own layer"
+  },
+  "map.styleSwitcher.addLayer": {
+    "string": "Add layer"
+  },
+  "map.styleSwitcher.namePlaceholder": {
+    "string": "My imagery"
+  },
+  "map.styleSwitcher.typeXyz": {
+    "string": "XYZ tiles"
+  },
+  "map.styleSwitcher.wmsLayersLabel": {
+    "string": "WMS layers"
+  },
+  "map.styleSwitcher.wmsUrlLabel": {
+    "string": "WMS endpoint"
+  },
+  "map.styleSwitcher.xyzUrlLabel": {
+    "string": "Tile URL"
+  },
+  "map.taskMarkers.clusterToggle.forcedTooltip": {
+    "string": "You cannot disable clustering at this zoom level."
+  },
+  "map.taskMarkers.clusterToggle.label": {
+    "string": "Cluster Markers"
+  },
+  "map.taskPicker.heading": {
+    "string": "{count, plural, one {# task here} other {# tasks here}}"
+  },
+  "map.taskPicker.label": {
+    "string": "Tasks at this spot"
+  },
+  "map.taskPicker.more": {
+    "string": "{count, plural, one {# more task not listed} other {# more tasks not listed}}"
+  },
+  "moveChallengeModal.description": {
+    "string": "Choose a project to move \"{challengeName}\" to. The challenge will be removed from the current project."
+  },
+  "moveChallengeModal.moveError": {
+    "string": "Failed to move challenge. You may not have permission to move to that project."
+  },
+  "moveChallengeModal.title": {
+    "string": "Move Challenge"
+  },
+  "notificationSubscriptions.field.challengeCompleted.description": {
+    "string": "When a challenge you manage or worked on is completed"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "Challenge completed"
+  },
+  "notificationSubscriptions.field.mention.description": {
+    "string": "When someone @mentions you in a comment"
+  },
+  "notificationSubscriptions.field.system.description": {
+    "string": "Announcements from MapRoulette itself"
+  },
+  "notificationSubscriptions.field.system.label": {
+    "string": "System messages"
+  },
+  "notificationSubscriptions.field.team.description": {
+    "string": "Team invitations and membership changes"
+  },
+  "notificationSubscriptions.level.digestEmail": {
+    "string": "Notify and include in daily digest"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "Ignore"
+  },
+  "notificationSubscriptions.level.immediateEmail": {
+    "string": "Notify and email immediately"
+  },
+  "notificationSubscriptions.level.noEmail": {
+    "string": "Notify in app"
+  },
+  "notifications.empty.all": {
+    "string": "No notifications yet"
+  },
+  "notifications.empty.unread": {
+    "string": "No unread notifications"
+  },
+  "notifications.item.challengeComment": {
+    "string": "<b>{user}</b> commented on <b>{challenge}</b>"
+  },
+  "notifications.item.challengeCompleted": {
+    "string": "Your challenge <b>{challenge}</b> is complete"
+  },
+  "notifications.item.mapperChallengeCompleted": {
+    "string": "A challenge you worked on is complete: <b>{challenge}</b>"
+  },
+  "notifications.item.mentionOnChallenge": {
+    "string": "<b>{user}</b> mentioned you on <b>{challenge}</b>"
+  },
+  "notifications.item.mentionOnTask": {
+    "string": "<b>{user}</b> mentioned you on task {taskId}"
+  },
+  "notifications.item.reviewed": {
+    "string": "<b>{user}</b> reviewed task {taskId}"
+  },
+  "notifications.item.someone": {
+    "string": "Someone"
+  },
+  "notifications.item.teamInvite": {
+    "string": "<b>{user}</b> invited you to join <b>{team}</b>"
+  },
+  "notifications.item.unlockRequested": {
+    "string": "<b>{user}</b> asked you to unlock task {taskId}"
+  },
+  "notifications.toast.deleteFailed": {
+    "string": "Couldn't delete notifications: {message}"
+  },
+  "notifications.toast.markReadFailed": {
+    "string": "Couldn't mark notifications as read: {message}"
+  },
+  "notifications.toast.markUnreadFailed": {
+    "string": "Couldn't mark notifications as unread: {message}"
+  },
+  "notificationsPage.deleteConfirm.description": {
+    "string": "This can't be undone."
+  },
+  "notificationsPage.deleteConfirm.title": {
+    "string": "{count, plural, one {Delete # notification?} other {Delete # notifications?}}"
+  },
+  "notificationsPage.item.deleteNotification": {
+    "string": "Delete notification"
+  },
+  "notificationsPage.item.markAsRead": {
+    "string": "Mark as read"
+  },
+  "notificationsPage.item.markAsUnread": {
+    "string": "Mark as unread"
+  },
+  "notificationsPage.item.select": {
+    "string": "Select notification"
+  },
+  "notificationsPage.item.unread": {
+    "string": "Unread"
+  },
+  "notificationsPage.selectAll": {
+    "string": "Select all notifications"
+  },
+  "notificationsPage.selectedCount": {
+    "string": "{count, plural, one {# selected} other {# selected}}"
+  },
+  "ownerTeam.goToTeams": {
+    "string": "Your teams"
+  },
+  "ownerTeam.loadError": {
+    "string": "Could not load your teams."
+  },
+  "ownerTeam.noneOption": {
+    "string": "No team"
+  },
+  "ownerTeam.title": {
+    "string": "Team"
+  },
+  "pluginErrorBoundary.consoleDetails": {
+    "string": "Details were written to the browser console."
+  },
+  "pluginErrorBoundary.contribution": {
+    "string": "contribution: {contributionId}"
+  },
+  "pluginErrorBoundary.retry": {
+    "string": "Retry"
+  },
+  "pluginErrorBoundary.title": {
+    "string": "Plugin failed to render"
+  },
+  "pluginErrorBoundary.titleWithSource": {
+    "string": "Plugin {source} failed"
+  },
+  "plugins.errors.loadPluginFailed": {
+    "string": "Failed to load plugin: {error}"
+  },
+  "plugins.errors.loadPreferencesFailed": {
+    "string": "Failed to load plugin preferences"
+  },
+  "plugins.errors.notAuthenticated": {
+    "string": "Not authenticated"
+  },
+  "plugins.errors.registerFailed": {
+    "string": "Failed to register plugin"
+  },
+  "plugins.errors.removeFailed": {
+    "string": "Failed to remove plugin"
+  },
+  "projectRoles.admin": {
+    "string": "Admin"
+  },
+  "projectRoles.adminDescription": {
+    "string": "Full control, including managing other managers"
+  },
+  "projectRoles.read": {
+    "string": "Read"
+  },
+  "projectRoles.readDescription": {
+    "string": "View the project and its challenges"
+  },
+  "projectRoles.write": {
+    "string": "Write"
+  },
+  "projectRoles.writeDescription": {
+    "string": "Create and edit challenges"
+  },
+  "settings.account.saveError": {
+    "string": "Failed to update user settings"
+  },
+  "settings.account.saveSuccess": {
+    "string": "User settings updated"
+  },
+  "settings.account.title": {
+    "string": "Account"
+  },
+  "settings.general.basemapCustom": {
+    "string": "Custom tile layer…"
+  },
+  "settings.general.basemapDescription": {
+    "string": "Choose the default map background for your tasks."
+  },
+  "settings.general.basemapDocsLink": {
+    "string": "Learn about base layers"
+  },
+  "settings.general.basemapKeepCurrent": {
+    "string": "Keep current basemap"
+  },
+  "settings.general.basemapLabel": {
+    "string": "Default Basemap"
+  },
+  "settings.general.basemapPlaceholder": {
+    "string": "Select a default basemap"
+  },
+  "settings.general.customBasemapLabel": {
+    "string": "Custom Basemap URL"
+  },
+  "settings.general.customBasemapRequired": {
+    "string": "Enter a tile URL for your custom basemap"
+  },
+  "settings.general.editorDescription": {
+    "string": "Choose your preferred editor for mapping tasks."
+  },
+  "settings.general.editorDocsLink": {
+    "string": "Learn about the editor choices"
+  },
+  "settings.general.editorLabel": {
+    "string": "Default Editor"
+  },
+  "settings.general.editorPlaceholder": {
+    "string": "Select a default editor"
+  },
+  "settings.general.invalidBasemap": {
+    "string": "Invalid basemap option"
+  },
+  "settings.general.invalidEditor": {
+    "string": "Invalid editor option"
+  },
+  "settings.general.invalidLanguage": {
+    "string": "Invalid language option"
+  },
+  "settings.general.languageDescription": {
+    "string": "Choose your preferred language (locale) for the interface."
+  },
+  "settings.general.languageLabel": {
+    "string": "Language"
+  },
+  "settings.general.languagePlaceholder": {
+    "string": "Select a default language"
+  },
+  "settings.general.title": {
+    "string": "General"
+  },
+  "settings.notifications.description": {
+    "string": "Choose which notifications you receive, and whether they're also emailed to you (immediately or as a daily digest)."
+  },
+  "settings.notifications.docsLink": {
+    "string": "Learn about notifications and email"
+  },
+  "settings.notifications.emailDescription": {
+    "string": "If you request emails below, they will be sent here."
+  },
+  "settings.notifications.loadError": {
+    "string": "Notification preferences could not be loaded."
+  },
+  "settings.notifications.loading": {
+    "string": "Loading notification preferences..."
+  },
+  "settings.notifications.notifyMeAbout": {
+    "string": "Notify me about"
+  },
+  "settings.plugins.addButton": {
+    "string": "Add"
+  },
+  "settings.plugins.addError": {
+    "string": "Failed to add plugin"
+  },
+  "settings.plugins.allAddedDescription": {
+    "string": "You've added all available workshop plugins."
+  },
+  "settings.plugins.allAddedTitle": {
+    "string": "All plugins added"
+  },
+  "settings.plugins.byAuthor": {
+    "string": "• by {author}"
+  },
+  "settings.plugins.description": {
+    "string": "Enable or disable plugins to customize your MapRoulette experience. Plugin navigation items will appear in the main navigation menu."
+  },
+  "settings.plugins.discoverDescription": {
+    "string": "Browse and add curated plugins from the community"
+  },
+  "settings.plugins.discoverTitle": {
+    "string": "Discover Plugins"
+  },
+  "settings.plugins.emptyDescription": {
+    "string": "Visit the Plugins Workshop to discover and add plugins"
+  },
+  "settings.plugins.emptyTitle": {
+    "string": "No plugins yet"
+  },
+  "settings.plugins.loading": {
+    "string": "Loading plugins..."
+  },
+  "settings.plugins.myPluginsTitle": {
+    "string": "My Plugins"
+  },
+  "settings.plugins.workshopTitle": {
+    "string": "Plugins Workshop"
+  },
+  "settings.remotePlugins.addButton": {
+    "string": "Add Plugin"
+  },
+  "settings.remotePlugins.description": {
+    "string": "Load plugins dynamically from external URLs. Make sure you trust the source before adding any plugin."
+  },
+  "settings.remotePlugins.loadedTitle": {
+    "string": "Loaded Remote Plugins"
+  },
+  "settings.remotePlugins.pluginFound": {
+    "string": "Plugin Found!"
+  },
+  "settings.remotePlugins.securityWarningDescription": {
+    "string": "Only load plugins from trusted sources. Remote plugins have access to your application and data. Always verify the source before adding a plugin."
+  },
+  "settings.remotePlugins.securityWarningTitle": {
+    "string": "Security Warning"
+  },
+  "settings.remotePlugins.title": {
+    "string": "Remote Plugins"
+  },
+  "settings.remotePlugins.urlLabel": {
+    "string": "Plugin Module URL"
+  },
+  "settings.submit.noChanges": {
+    "string": "No changes to save"
+  },
+  "settings.submit.saveChanges": {
+    "string": "Save Changes"
+  },
+  "shareLink.popover.hideQr": {
+    "string": "Hide QR"
+  },
+  "shareLink.popover.qrCanvas": {
+    "string": "QR code for share URL"
+  },
+  "shareLink.popover.qrCode": {
+    "string": "QR code"
+  },
+  "shareLink.popover.shareUrl": {
+    "string": "Share URL"
+  },
+  "shareLink.popover.shareVia": {
+    "string": "Share via…"
+  },
+  "shareLink.popover.title": {
+    "string": "Share this link"
+  },
+  "shared.achievementBadge.lockedLabel": {
+    "string": "{title} (locked)"
+  },
+  "shared.achievementBadge.notYetEarned": {
+    "string": "Not yet earned"
+  },
+  "shared.challengeCard.actionsLabel": {
+    "string": "Actions for {name}"
+  },
+  "shared.challengeCard.project": {
+    "string": "{name}"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "Clear filters"
+  },
+  "shared.mapLoadingIndicator.loading": {
+    "string": "Loading task markers..."
+  },
+  "shared.notFound.description": {
+    "string": "The page you are looking for does not exist."
+  },
+  "shared.projectCard.completed": {
+    "string": "Completed: {count}"
+  },
+  "shared.projectCard.totalChallenges": {
+    "string": "Total Challenges: {count}"
+  },
+  "shared.projectPickerModal.description": {
+    "string": "Choose the project this challenge belongs to."
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "No projects found."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "Search..."
+  },
+  "shared.sectionHeader.create": {
+    "string": "create"
+  },
+  "shared.sectionHeader.createCapitalized": {
+    "string": "Create"
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "tasks"
+  },
+  "shared.signIn.description": {
+    "string": "You need to be signed in to manage your account."
+  },
+  "shared.signIn.title": {
+    "string": "Please sign in"
+  },
+  "shared.statusBadge.notDiscoverable": {
+    "string": "Not discoverable"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "Already fixed"
+  },
+  "statusLegend.legend": {
+    "string": "Legend"
+  },
+  "statusLegend.priorityHigh": {
+    "string": "High priority"
+  },
+  "statusLegend.priorityLow": {
+    "string": "Low priority"
+  },
+  "statusLegend.priorityMedium": {
+    "string": "Medium priority"
+  },
+  "superAdmin.layout.breadcrumbRoot": {
+    "string": "super admin"
+  },
+  "superAdminChallengeReports.actionedSuccess": {
+    "string": "Report marked actioned"
+  },
+  "superAdminChallengeReports.activeOnlyLabel": {
+    "string": "Only challenges that are still active"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "Archived"
+  },
+  "superAdminChallengeReports.dismiss": {
+    "string": "Dismiss"
+  },
+  "superAdminChallengeReports.dismissedSuccess": {
+    "string": "Report dismissed"
+  },
+  "superAdminChallengeReports.markActioned": {
+    "string": "Mark actioned"
+  },
+  "superAdminChallengeReports.reportMeta": {
+    "string": "{project} · reported by <link>{user}</link> on {date}"
+  },
+  "superAdminChallengeReports.resolvedMeta": {
+    "string": "{status} by <link>{user}</link> on {date}"
+  },
+  "superAdminChallengeReports.title": {
+    "string": "Challenge reports"
+  },
+  "superAdminGuard.accessDenied.message": {
+    "string": "You do not have permission to access this area. Super admin privileges are required."
+  },
+  "superAdminGuard.accessDenied.title": {
+    "string": "Access Denied"
+  },
+  "superAdminHome.cards.challengeReports.title": {
+    "string": "Challenge Reports"
+  },
+  "superAdminHome.cards.teamImages.title": {
+    "string": "Team Images"
+  },
+  "superAdminHome.title": {
+    "string": "Super Admin Dashboard"
+  },
+  "superAdminReview.commentLabel": {
+    "string": "Review note"
+  },
+  "superAdminReview.commentPlaceholder": {
+    "string": "Note (optional)"
+  },
+  "superAdminReview.emptyTitle": {
+    "string": "Nothing to review"
+  },
+  "superAdminReview.reviewError": {
+    "string": "Could not record that decision"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Approve"
+  },
+  "superAdminTeamImages.approveSuccess": {
+    "string": "Image approved"
+  },
+  "superAdminTeamImages.loadError": {
+    "string": "Could not load the review queue."
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Reject"
+  },
+  "superAdminTeamImages.rejectSuccess": {
+    "string": "Image rejected"
+  },
+  "superAdminTeamImages.requestMeta": {
+    "string": "{team} · requested by <link>{user}</link> on {date}"
+  },
+  "superAdminTeamImages.title": {
+    "string": "Team challenge images"
+  },
+  "superAdminUsers.table.columns.osmId": {
+    "string": "OSM ID"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "Score"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "User"
+  },
+  "superAdminUsers.table.loading": {
+    "string": "Loading users..."
+  },
+  "superAdminUsers.table.next": {
+    "string": "Next"
+  },
+  "superAdminUsers.table.notAvailable": {
+    "string": "N/A"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "Previous"
+  },
+  "superAdminUsers.table.subtitle": {
+    "string": "Page {page, number}"
+  },
+  "superAdminUsers.table.title": {
+    "string": "All Users"
+  },
+  "superAdminUsers.title": {
+    "string": "User Management"
+  },
+  "taskEditPage.descriptionPanel.backToTask": {
+    "string": "Back to task"
+  },
+  "taskEditPage.descriptionPanel.challengeTitle": {
+    "string": "About this challenge"
+  },
+  "taskEditPage.descriptionPanel.noChallengeDescription": {
+    "string": "This challenge has no description."
+  },
+  "taskEditPage.descriptionPanel.noProjectDescription": {
+    "string": "This project has no description."
+  },
+  "taskEditPage.descriptionPanel.projectTitle": {
+    "string": "About this project"
+  },
+  "taskEditPage.idEditor.closeEditor": {
+    "string": "Close editor"
+  },
+  "taskEditPage.idEditor.closeEditorTitle": {
+    "string": "Close editor and return to task map"
+  },
+  "taskEditPage.idEditor.collapsePanel": {
+    "string": "Collapse panel"
+  },
+  "taskEditPage.idEditor.dragPanel": {
+    "string": "Drag to move these controls"
+  },
+  "taskEditPage.idEditor.expandPanel": {
+    "string": "Expand panel"
+  },
+  "taskEditPage.idEditor.focus": {
+    "string": "Focus"
+  },
+  "taskEditPage.idEditor.focusTitle": {
+    "string": "Dim other features to focus on tasks"
+  },
+  "taskEditPage.idEditor.loading": {
+    "string": "Loading iD Editor..."
+  },
+  "taskEditPage.idEditor.reCenter": {
+    "string": "Re-Center"
+  },
+  "taskEditPage.idEditor.reviewChanges": {
+    "string": "Review the unsaved changes"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "Select Tasks"
+  },
+  "taskEditPage.idEditor.selectTasksTitle": {
+    "string": "Select task features in iD"
+  },
+  "taskEditPage.idEditor.showAll": {
+    "string": "Show All"
+  },
+  "taskEditPage.idEditor.showAllTitle": {
+    "string": "Show all map features"
+  },
+  "taskEditPage.idEditor.unsavedChanges": {
+    "string": "{count, plural, one {# unsaved change} other {# unsaved changes}}"
+  },
+  "taskEditPage.lockConflictDialog.confirm": {
+    "string": "Release other lock & continue"
+  },
+  "taskEditPage.lockConflictDialog.description": {
+    "string": "You still hold the lock on task #{taskId}. Release it to lock this task instead."
+  },
+  "taskEditPage.lockConflictDialog.descriptionWithChallenge": {
+    "string": "You still hold the lock on task #{taskId} in \"{challengeName}\". Release it to lock this task instead."
+  },
+  "taskEditPage.lockConflictDialog.goBack": {
+    "string": "Go back to previous task"
+  },
+  "taskEditPage.lockConflictDialog.inspect": {
+    "string": "Inspect this task"
+  },
+  "taskEditPage.lockConflictDialog.lockedSince": {
+    "string": "(locked {time})"
+  },
+  "taskEditPage.lockConflictDialog.switching": {
+    "string": "Switching…"
+  },
+  "taskEditPage.lockConflictModal.bundleNote": {
+    "string": "{count, plural, one {This will also release # bundled task.} other {This will also release # bundled tasks.}}"
+  },
+  "taskEditPage.lockConflictModal.confirm": {
+    "string": "Unlock and continue"
+  },
+  "taskEditPage.lockConflictModal.description": {
+    "string": "You currently have another task locked. Unlock it and lock this task instead?"
+  },
+  "taskEditPage.lockConflictModal.descriptionWithParent": {
+    "string": "You currently have a task locked in \"{parentName}\". Unlock it and lock this task instead?"
+  },
+  "taskEditPage.lockConflictModal.title": {
+    "string": "You already have a task locked"
+  },
+  "taskEditPage.lockConflictModal.unlocking": {
+    "string": "Unlocking…"
+  },
+  "taskEditPage.lockFailedDialog.genericLockFailure": {
+    "string": "Task lock could not be acquired"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "Preview Task"
+  },
+  "taskEditPage.lockFailedDialog.previewAvailable": {
+    "string": "You can still preview it read-only."
+  },
+  "taskEditPage.lockFailedDialog.requestSent": {
+    "string": "Unlock requested"
+  },
+  "taskEditPage.lockFailedDialog.requestUnlock": {
+    "string": "Request Unlock"
+  },
+  "taskEditPage.lockFailedDialog.requestUnlockFailed": {
+    "string": "Could not request unlock"
+  },
+  "taskEditPage.lockFailedDialog.retryLock": {
+    "string": "Retry Lock"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "Unable to Lock Task"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "Created"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "Deleted"
+  },
+  "taskEditPage.pendingEdits.description": {
+    "string": "What is currently pending in the editor. Save from the editor to send it to OpenStreetMap."
+  },
+  "taskEditPage.pendingEdits.geometryOnly": {
+    "string": "Geometry changed; no tags were altered."
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "Modified"
+  },
+  "taskEditPage.pendingEdits.none": {
+    "string": "Nothing is pending."
+  },
+  "taskEditPage.pendingEdits.title": {
+    "string": "Unsaved changes"
+  },
+  "taskEditPage.shortcuts.backToMap": {
+    "string": "Close the editor"
+  },
+  "taskEditPage.taskActionModal.commentLabel": {
+    "string": "Comment (Optional)"
+  },
+  "taskEditPage.taskActionModal.commentPlaceholder": {
+    "string": "Add any notes or comments about this task..."
+  },
+  "taskEditPage.taskActionModal.completeAndContinue": {
+    "string": "Complete & Continue"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.description": {
+    "string": "Select a task near the current one, or auto-select the nearest"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "Nearby Task"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "Next Task"
+  },
+  "taskEditPage.taskActionModal.randomTask.description": {
+    "string": "Load the next highest priority task from this challenge"
+  },
+  "taskEditPage.taskActionModal.randomTask.label": {
+    "string": "Random High Priority Task"
+  },
+  "taskEditPage.taskActionModal.statusChange": {
+    "string": "Status Change"
+  },
+  "taskEditPage.taskActionModal.submitShortcut": {
+    "string": "Submit this confirmation"
+  },
+  "taskEditPage.taskActionModal.title": {
+    "string": "Complete Task #{id}"
+  },
+  "taskEditPage.taskActionModal.toast.commentFailed": {
+    "string": "The task status was saved, but your comment could not be."
+  },
+  "taskEditPage.taskActionModal.toast.loadingNext": {
+    "string": "Loading next task..."
+  },
+  "taskEditPage.taskActionModal.toast.markedAs": {
+    "string": "Task marked as {status}"
+  },
+  "taskEditPage.taskActionModal.toast.updateFailed": {
+    "string": "Failed to update task. Please try again."
+  },
+  "taskEditPage.taskActions.editorButton.changeFileJosmOnly": {
+    "string": "This task's changes can only be opened in JOSM"
+  },
+  "taskEditPage.taskActions.editorButton.checkJosm": {
+    "string": "Task sent to JOSM. Check your JOSM editor."
+  },
+  "taskEditPage.taskActions.editorButton.chooseEditor": {
+    "string": "Open in another editor, or change the default"
+  },
+  "taskEditPage.taskActions.editorButton.defaultUpdateFailed": {
+    "string": "Failed to update default editor"
+  },
+  "taskEditPage.taskActions.editorButton.defaultUpdated": {
+    "string": "Default editor updated"
+  },
+  "taskEditPage.taskActions.editorButton.editorFallback": {
+    "string": "editor"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "JOSM didn't respond. Is it running with Remote Control enabled?"
+  },
+  "taskEditPage.taskActions.editorButton.noBounds": {
+    "string": "Task bounds not available"
+  },
+  "taskEditPage.taskActions.editorButton.noOsmFeatures": {
+    "string": "Task has no OSM feature IDs to load"
+  },
+  "taskEditPage.taskActions.editorButton.openFailed": {
+    "string": "Failed to open editor"
+  },
+  "taskEditPage.taskActions.editorButton.openIn": {
+    "string": "Open this task in:"
+  },
+  "taskEditPage.taskActions.editorButton.openTaskIn": {
+    "string": "Open task in {editor}"
+  },
+  "taskEditPage.taskActions.editorButton.openingTaskIn": {
+    "string": "Opening task in {editor}"
+  },
+  "taskEditPage.taskActions.editorButton.sendingTaskTo": {
+    "string": "Sending task to {editor}…"
+  },
+  "taskEditPage.taskActions.editorButton.setDefaultEditor": {
+    "string": "Set Default Editor:"
+  },
+  "taskEditPage.taskActions.editorButton.short.id": {
+    "string": "iD"
+  },
+  "taskEditPage.taskActions.editorButton.short.josm": {
+    "string": "JOSM"
+  },
+  "taskEditPage.taskActions.editorButton.short.josmFeatures": {
+    "string": "JOSM Features"
+  },
+  "taskEditPage.taskActions.editorButton.short.josmLayer": {
+    "string": "JOSM Layer"
+  },
+  "taskEditPage.taskActions.editorButton.short.level0": {
+    "string": "Level0"
+  },
+  "taskEditPage.taskActions.editorButton.short.rapid": {
+    "string": "Rapid"
+  },
+  "taskEditPage.taskActions.lockButton.lock": {
+    "string": "Lock"
+  },
+  "taskEditPage.taskActions.lockButton.lockTask": {
+    "string": "Lock task"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "Task locked"
+  },
+  "taskEditPage.taskActions.lockButton.pausedMessage": {
+    "string": "This challenge is currently paused. Tasks cannot be locked until it is resumed."
+  },
+  "taskEditPage.taskActions.lockButton.signInToLock": {
+    "string": "Sign in to lock tasks"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "Unlock"
+  },
+  "taskEditPage.taskActions.lockButton.unlockFailed": {
+    "string": "Failed to unlock task"
+  },
+  "taskEditPage.taskActions.lockButton.unlockTask": {
+    "string": "Unlock task"
+  },
+  "taskEditPage.taskActions.lockButton.unlocked": {
+    "string": "Task unlocked"
+  },
+  "taskEditPage.taskActions.main.completionHeading": {
+    "string": "Completion: Set Task Status"
+  },
+  "taskEditPage.taskActions.main.markAlreadyFixedTitle": {
+    "string": "Mark as Already Fixed"
+  },
+  "taskEditPage.taskActions.main.markCantCompleteTitle": {
+    "string": "Mark as Can't Complete"
+  },
+  "taskEditPage.taskActions.main.markFixedTitle": {
+    "string": "Mark as Fixed"
+  },
+  "taskEditPage.taskActions.main.markNotAnIssueTitle": {
+    "string": "Mark as Not an Issue"
+  },
+  "taskEditPage.taskActions.main.pausedMessage": {
+    "string": "This challenge is currently paused. Tasks cannot be completed until it is resumed."
+  },
+  "taskEditPage.taskActions.main.submitTask": {
+    "string": "Submit Task"
+  },
+  "taskEditPage.taskActions.navigation.loadNearbyFailed": {
+    "string": "Failed to load nearby task"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "Nearby task"
+  },
+  "taskEditPage.taskActions.navigation.noNearbyTasks": {
+    "string": "No nearby tasks available"
+  },
+  "taskEditPage.taskActions.navigation.randomTask": {
+    "string": "Random task"
+  },
+  "taskEditPage.taskActions.navigation.wantToMap": {
+    "string": "Map this challenge"
+  },
+  "taskEditPage.taskActions.skipButton.label": {
+    "string": "Skip this task"
+  },
+  "taskEditPage.taskActions.skipButton.skipFailed": {
+    "string": "Could not skip this task"
+  },
+  "taskEditPage.taskActions.skipButton.title": {
+    "string": "Skip this task (preserves status)"
+  },
+  "taskEditPage.taskActions.startMapping.differentTask": {
+    "string": "Different task"
+  },
+  "taskEditPage.taskActions.startMapping.mapThisTask": {
+    "string": "Map this task"
+  },
+  "taskEditPage.taskActions.startMapping.starting": {
+    "string": "Starting..."
+  },
+  "taskEditPage.taskBundle.addFailed": {
+    "string": "Could not lock that task, so it was not added to the bundle."
+  },
+  "taskEditPage.taskBundle.clearedSuccess": {
+    "string": "Now working on only the primary task"
+  },
+  "taskEditPage.taskBundle.lockUpdateFailed": {
+    "string": "Could not update the tasks that were locked with this bundle."
+  },
+  "taskEditPage.taskInfoHeader.bundled": {
+    "string": "Bundled"
+  },
+  "taskEditPage.taskInfoHeader.noChallengeDescription": {
+    "string": "This challenge has no description"
+  },
+  "taskEditPage.taskInfoHeader.noProjectDescription": {
+    "string": "This project has no description"
+  },
+  "taskEditPage.taskInfoHeader.readChallengeDescription": {
+    "string": "Make sure that you have read the challenge description as it could have important information not mentioned in the task instructions"
+  },
+  "taskEditPage.taskInfoHeader.selected": {
+    "string": "Selected"
+  },
+  "taskEditPage.taskInfoHeader.viewChallengeDescription": {
+    "string": "View challenge description"
+  },
+  "taskEditPage.taskInfoHeader.viewProjectDescription": {
+    "string": "View project description"
+  },
+  "taskEditPage.taskMap.drawingModeHint": {
+    "string": "Click and drag to select tasks • ESC to cancel"
+  },
+  "taskEditPage.taskMap.editInId": {
+    "string": "Edit in iD (inline)"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "Edit in iD"
+  },
+  "taskEditPage.taskMap.focusedFeatureHint": {
+    "string": "Showing one feature of this task"
+  },
+  "taskEditPage.taskMap.showAllFeatures": {
+    "string": "Show all"
+  },
+  "taskEditPage.taskNearbyMap.nearbyCount": {
+    "string": "{count, plural, one {# nearby task} other {# nearby tasks}}"
+  },
+  "taskEditPage.taskNearbyMap.selectedTask": {
+    "string": "Task #{id} selected"
+  },
+  "taskEditPage.taskStatusModal.discardUnsavedChanges": {
+    "string": "You have unsaved changes in iD which will be discarded. Are you sure you want to proceed?"
+  },
+  "taskInfoPanel.comments.addSuccess": {
+    "string": "Comment added"
+  },
+  "taskInfoPanel.comments.changedStatus": {
+    "string": "changed status"
+  },
+  "taskInfoPanel.comments.cleared": {
+    "string": "cleared"
+  },
+  "taskInfoPanel.comments.emptyState": {
+    "string": "No activity"
+  },
+  "taskInfoPanel.comments.markedAs": {
+    "string": "marked as"
+  },
+  "taskInfoPanel.comments.send": {
+    "string": "Send comment"
+  },
+  "taskInfoPanel.comments.signInPrompt": {
+    "string": "Sign in to add comments"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "System"
+  },
+  "taskInfoPanel.data.areaHistory": {
+    "string": "Area History"
+  },
+  "taskInfoPanel.data.areaHistoryDescription": {
+    "string": "View recent changes in the area around this task"
+  },
+  "taskInfoPanel.data.noOsmFeature": {
+    "string": "This task's geometry does not reference an OSM element (like @id: \"way/12345\")."
+  },
+  "taskInfoPanel.data.osmFeature": {
+    "string": "OSM feature"
+  },
+  "taskInfoPanel.data.osmHistoryAtLocation": {
+    "string": "OSM History at Location"
+  },
+  "taskInfoPanel.data.recentEditsNear": {
+    "string": "Recent edits near {location}"
+  },
+  "taskInfoPanel.data.viewOnOsm": {
+    "string": "View {type} on OpenStreetMap"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "Start Task"
+  },
+  "taskInfoPanel.editorChanges.description": {
+    "string": "Everything currently pending in the editor. Save from the editor to send it to OpenStreetMap."
+  },
+  "taskInfoPanel.editorChanges.diverged": {
+    "string": "You have edited since the challenge's suggestion was applied."
+  },
+  "taskInfoPanel.editorChanges.docsLink": {
+    "string": "About tag fix challenges"
+  },
+  "taskInfoPanel.editorChanges.matches": {
+    "string": "The editor holds the challenge's suggestion and nothing else."
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "Reset"
+  },
+  "taskInfoPanel.editorChanges.resetDisabledTitle": {
+    "string": "Nothing to reset — the editor already holds exactly what the challenge suggests"
+  },
+  "taskInfoPanel.editorChanges.resetTitle": {
+    "string": "Discard everything unsaved and go back to the challenge's suggestion"
+  },
+  "taskInfoPanel.editorChanges.suggestionDescription": {
+    "string": "What this challenge suggests changing. Opening the editor applies it for you to review."
+  },
+  "taskInfoPanel.editorChanges.suggestionTitle": {
+    "string": "Suggested tag changes"
+  },
+  "taskInfoPanel.editorChanges.tagFixDescription": {
+    "string": "The challenge's suggested tags were applied for you and are included below. Save from the editor to send everything to OpenStreetMap."
+  },
+  "taskInfoPanel.editorChanges.title": {
+    "string": "Your unsaved edits"
+  },
+  "taskInfoPanel.features.featureCount": {
+    "string": "{count, plural, one {# feature} other {# features}}"
+  },
+  "taskInfoPanel.features.noFeatures": {
+    "string": "This task carries no features."
+  },
+  "taskInfoPanel.features.openTask": {
+    "string": "Open Task #{id}"
+  },
+  "taskInfoPanel.instructions.copy": {
+    "string": "Copy \"{text}\" to the clipboard"
+  },
+  "taskInfoPanel.properties.childCount": {
+    "string": "{count, plural, one {# geometry} other {# geometries}}"
+  },
+  "taskInfoPanel.properties.featureEmpty": {
+    "string": "No properties on this feature."
+  },
+  "taskInfoPanel.properties.featureLabel": {
+    "string": "Feature {number}"
+  },
+  "taskInfoPanel.properties.focusFeature": {
+    "string": "Show only this feature on the map"
+  },
+  "taskInfoPanel.properties.osmTags": {
+    "string": "Current OSM tags"
+  },
+  "taskInfoPanel.properties.osmTagsEmpty": {
+    "string": "No tags on this element."
+  },
+  "taskInfoPanel.properties.osmTagsFailed": {
+    "string": "Could not load this element from OpenStreetMap."
+  },
+  "taskInfoPanel.properties.propertyCount": {
+    "string": "{count, plural, one {# property} other {# properties}}"
+  },
+  "taskInfoPanel.properties.showAllFeatures": {
+    "string": "Show the task's other features again"
+  },
+  "taskInfoPanel.properties.zoomToFeature": {
+    "string": "Zoom to this feature"
+  },
+  "taskInfoPanel.resetToSuggestion.confirm": {
+    "string": "Discard and reset"
+  },
+  "taskInfoPanel.resetToSuggestion.description": {
+    "string": "{count, plural, one {The # unsaved edit in the editor is discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.} other {All # unsaved edits in the editor are discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.}}"
+  },
+  "taskInfoPanel.resetToSuggestion.title": {
+    "string": "Reset to the challenge's suggestion?"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "add"
+  },
+  "taskInfoPanel.suggested.alreadyApplied": {
+    "string": "This element already carries the suggested tags."
+  },
+  "taskInfoPanel.suggested.change": {
+    "string": "change"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "remove"
+  },
+  "taskInfoPanel.tabs.comments": {
+    "string": "Comments ({count})"
+  },
+  "taskInfoPanel.tabs.data": {
+    "string": "Data"
+  },
+  "taskInfoPanel.tabs.features": {
+    "string": "Features ({count})"
+  },
+  "taskInfoPanel.taskTab.bundleList.selectAll": {
+    "string": "Select All"
+  },
+  "taskInfoPanel.taskTab.bundleList.selectAllTitle": {
+    "string": "Select all bundled tasks in iD editor"
+  },
+  "taskInfoPanel.taskTab.bundleList.selectTaskTitle": {
+    "string": "Select Task #{id} in iD editor"
+  },
+  "taskInfoPanel.taskTab.bundleState.addToBundle": {
+    "string": "Add to Bundle"
+  },
+  "taskInfoPanel.taskTab.bundleState.addingToBundle": {
+    "string": "Locking task..."
+  },
+  "taskInfoPanel.taskTab.bundleState.inBundle": {
+    "string": "In bundle"
+  },
+  "taskInfoPanel.taskTab.bundleState.removeFromBundle": {
+    "string": "Remove from Bundle"
+  },
+  "taskMap.clearBundleDialog.confirm": {
+    "string": "Clear Bundle"
+  },
+  "taskMap.clearBundleDialog.description": {
+    "string": "{taskCount, plural, one {This will unbundle all # task. The tasks themselves will not be deleted, only separated. This action cannot be undone.} other {This will unbundle all # tasks. The tasks themselves will not be deleted, only separated. This action cannot be undone.}}"
+  },
+  "taskMap.clearBundleDialog.title": {
+    "string": "Clear Task Bundle?"
+  },
+  "taskMap.controls.centerToBundle": {
+    "string": "Center to Bundle"
+  },
+  "taskMap.controls.centerToTask": {
+    "string": "Center to Task"
+  },
+  "taskMap.multiTaskPanel.clearAll": {
+    "string": "Work on only the primary task"
+  },
+  "taskMap.multiTaskPanel.docsLink": {
+    "string": "Learn about solving multiple tasks together"
+  },
+  "taskMap.multiTaskPanel.drawButton": {
+    "string": "Draw to add tasks"
+  },
+  "taskMap.multiTaskPanel.drawing": {
+    "string": "Drawing..."
+  },
+  "taskMap.multiTaskPanel.maxBadge": {
+    "string": "({max} max)"
+  },
+  "taskMap.multiTaskPanel.maxReached": {
+    "string": "Maximum tasks reached"
+  },
+  "taskMap.multiTaskPanel.resetBundle": {
+    "string": "Reset to initial bundle"
+  },
+  "taskMap.multiTaskPanel.title": {
+    "string": "Work on multiple tasks"
+  },
+  "taskMap.multiTaskPanel.workingOnTasks": {
+    "string": "{count, plural, one {Working on # task} other {Working on # tasks}}"
+  },
+  "taskMap.settings.markers": {
+    "string": "Task markers"
+  },
+  "taskMap.settings.markersAll": {
+    "string": "All tasks"
+  },
+  "taskMap.settings.markersNone": {
+    "string": "None"
+  },
+  "taskMap.settings.markersPrimary": {
+    "string": "This task only"
+  },
+  "taskMap.settings.markersSelected": {
+    "string": "Selected tasks only"
+  },
+  "taskMap.settings.otherChallenges": {
+    "string": "Tasks from other challenges"
+  },
+  "taskMap.shortcuts.cancelDrawing": {
+    "string": "Cancel drawing"
+  },
+  "taskMap.shortcuts.exitMultiTask": {
+    "string": "Exit multi-task mode"
+  },
+  "taskMap.shortcuts.startDrawing": {
+    "string": "Start drawing to add tasks"
+  },
+  "taskMap.shortcuts.toggleDirectionIndicators": {
+    "string": "Toggle direction indicators on task geometry"
+  },
+  "taskMap.shortcuts.toggleExploreLayer": {
+    "string": "Toggle tasks from other challenges"
+  },
+  "taskMap.shortcuts.toggleFilter": {
+    "string": "Toggle filter (show bundled tasks only)"
+  },
+  "taskMap.shortcuts.toggleMarkers": {
+    "string": "Toggle all markers visibility"
+  },
+  "taskPrioritizationPage.boundsDrawControl.clearAll": {
+    "string": "Clear all"
+  },
+  "taskPrioritizationPage.boundsDrawControl.clearAllTitle": {
+    "string": "Remove every shape in this tier"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelected": {
+    "string": "Delete selected"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelectedTitle": {
+    "string": "Delete the currently selected shape"
+  },
+  "taskPrioritizationPage.boundsDrawControl.drawPolygonAriaLabel": {
+    "string": "Draw polygon for {tier} priority"
+  },
+  "taskPrioritizationPage.boundsDrawControl.drawRectangleAriaLabel": {
+    "string": "Draw rectangle for {tier} priority"
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpIdle": {
+    "string": "Pan and zoom the map. Pick a tool to draw or edit this tier’s bounds."
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpPolygon": {
+    "string": "Click to drop each vertex; double-click or press Enter to finish. Use this for any non-rectangular area."
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpRectangle": {
+    "string": "Click and drag to draw an axis-aligned rectangle."
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpSelect": {
+    "string": "Click a shape to select it, then drag a vertex to reshape, a midpoint to insert a new vertex, or the whole shape to move it. Right-click a vertex to delete it."
+  },
+  "taskPrioritizationPage.boundsDrawControl.pan": {
+    "string": "Pan"
+  },
+  "taskPrioritizationPage.boundsDrawControl.panAriaLabel": {
+    "string": "Pan mode (no tool active)"
+  },
+  "taskPrioritizationPage.boundsDrawControl.panTitle": {
+    "string": "Pan the map with no drawing tool active"
+  },
+  "taskPrioritizationPage.boundsDrawControl.polygon": {
+    "string": "Polygon"
+  },
+  "taskPrioritizationPage.boundsDrawControl.rectangle": {
+    "string": "Rectangle"
+  },
+  "taskPrioritizationPage.boundsDrawControl.select": {
+    "string": "Select"
+  },
+  "taskPrioritizationPage.boundsDrawControl.selectAriaLabel": {
+    "string": "Select and edit an existing shape"
+  },
+  "taskPrioritizationPage.content.discard": {
+    "string": "Discard"
+  },
+  "taskPrioritizationPage.content.docsLink": {
+    "string": "How priority rules work"
+  },
+  "taskPrioritizationPage.content.rulesHint": {
+    "string": "{name} — rules run top-down; the first tier to match wins."
+  },
+  "taskPrioritizationPage.content.saveError": {
+    "string": "Could not save priorities"
+  },
+  "taskPrioritizationPage.content.saveSuccess": {
+    "string": "Priorities saved"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "Default priority"
+  },
+  "taskPrioritizationPage.index.loadError": {
+    "string": "Could not load challenge."
+  },
+  "taskPrioritizationPage.previewMap.updatingPreview": {
+    "string": "Updating preview…"
+  },
+  "taskPrioritizationPage.tierWarningBadges.matchesAll": {
+    "string": "Matches all"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "No matches"
+  },
+  "taskPrioritizationPage.warnings.allMatch": {
+    "string": "Every task matches — lower tiers become unreachable."
+  },
+  "taskPrioritizationPage.warnings.deadRule": {
+    "string": "No tasks match these rules — the tier is unreachable."
+  },
+  "taskPrioritizationPage.warnings.noRules": {
+    "string": "No rules configured — every task will use the default priority."
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "Group"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addRule": {
+    "string": "Rule"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "AND"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "OR"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.removeGroup": {
+    "string": "Remove group"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.commaSeparate": {
+    "string": "Comma-separated values"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
+    "string": "property"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.removeRule": {
+    "string": "Remove rule"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeDouble": {
+    "string": "double"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeInteger": {
+    "string": "integer"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeLong": {
+    "string": "long"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "number"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeString": {
+    "string": "string"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "value"
+  },
+  "teamImages.currentHeading": {
+    "string": "In use"
+  },
+  "teamImages.deleteDisabledReason": {
+    "string": "Only a team admin, or the requester of an image still awaiting review, can remove it"
+  },
+  "teamImages.deleteError": {
+    "string": "Could not remove image"
+  },
+  "teamImages.deleteLabel": {
+    "string": "Remove {name}"
+  },
+  "teamImages.deleteSuccess": {
+    "string": "Image removed"
+  },
+  "teamImages.description": {
+    "string": "The image this team can put on its challenges. A team has one image: anyone on the team can request a replacement, and once a super admin approves it, it takes over from the current one on every challenge using it."
+  },
+  "teamImages.empty": {
+    "string": "This team has no challenge image yet."
+  },
+  "teamImages.fileHint": {
+    "string": "PNG, JPEG, WebP or GIF, up to {max}MB. Square images look best."
+  },
+  "teamImages.fileLabel": {
+    "string": "Image file"
+  },
+  "teamImages.heading": {
+    "string": "Challenge image"
+  },
+  "teamImages.loadError": {
+    "string": "Could not load this team's image."
+  },
+  "teamImages.nameLabel": {
+    "string": "Name (optional)"
+  },
+  "teamImages.namePlaceholder": {
+    "string": "Our logo"
+  },
+  "teamImages.pendingFirst": {
+    "string": "It becomes the team's image once a super admin approves it."
+  },
+  "teamImages.pendingHeading": {
+    "string": "Awaiting review"
+  },
+  "teamImages.pendingReplaces": {
+    "string": "If a super admin approves this, it replaces the image in use above."
+  },
+  "teamImages.rejectedHeading": {
+    "string": "Not approved"
+  },
+  "teamImages.replaceButton": {
+    "string": "Request replacement"
+  },
+  "teamImages.requestButton": {
+    "string": "Request image"
+  },
+  "teamImages.requestDisabledReason": {
+    "string": "This team already has an image awaiting review. Withdraw it before requesting a different one."
+  },
+  "teamImages.requestError": {
+    "string": "Could not submit the image"
+  },
+  "teamImages.requestSuccess": {
+    "string": "Image submitted — a super admin will review it before it can be used"
+  },
+  "teamImages.requestedBy": {
+    "string": "Requested by <link>{name}</link>"
+  },
+  "teamImages.requestedByUnknown": {
+    "string": "Requester no longer available"
+  },
+  "teamImages.status.approved": {
+    "string": "Approved"
+  },
+  "teamImages.status.rejected": {
+    "string": "Rejected"
+  },
+  "teamImages.status.unknown": {
+    "string": "Unknown"
+  },
+  "teamImages.validation.fileSize": {
+    "string": "Image must be smaller than {max}MB"
+  },
+  "teamImages.validation.fileType": {
+    "string": "Image must be a PNG, JPEG, WebP or GIF file"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "Delete team"
+  },
+  "teams.detail.deleteConfirmDescription": {
+    "string": "This cannot be undone. All members will lose access."
+  },
+  "teams.detail.deleteConfirmTitle": {
+    "string": "Delete this team?"
+  },
+  "teams.detail.deleteDisabledReason": {
+    "string": "Only an owner of the team can delete it"
+  },
+  "teams.detail.deleteError": {
+    "string": "Could not delete team"
+  },
+  "teams.detail.deleteSuccess": {
+    "string": "Team deleted"
+  },
+  "teams.detail.inviteButton": {
+    "string": "Invite"
+  },
+  "teams.detail.lastOwnerReason": {
+    "string": "A team needs an owner. Make someone else an owner before changing this one."
+  },
+  "teams.detail.lastOwnerRemoveReason": {
+    "string": "A team needs an owner. Make someone else an owner before removing this one."
+  },
+  "teams.detail.memberCount": {
+    "string": "{count, plural, one {# member} other {# members}}"
+  },
+  "teams.detail.memberRemoveError": {
+    "string": "Could not remove member"
+  },
+  "teams.detail.memberRemoveSuccess": {
+    "string": "Member removed"
+  },
+  "teams.detail.noChallengesDescription": {
+    "string": "No challenge has been given to this team yet."
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "No challenges"
+  },
+  "teams.detail.noMembers": {
+    "string": "This team has no members yet."
+  },
+  "teams.detail.noProjectsDescription": {
+    "string": "This team has not been given a role on any project."
+  },
+  "teams.detail.noProjectsTitle": {
+    "string": "No projects"
+  },
+  "teams.detail.removeMemberAriaLabel": {
+    "string": "Remove member"
+  },
+  "teams.detail.roleUpdateError": {
+    "string": "Could not update role"
+  },
+  "teams.detail.roleUpdateSuccess": {
+    "string": "Role updated"
+  },
+  "teams.detail.statusJoined": {
+    "string": "Joined"
+  },
+  "teams.editTeam.title": {
+    "string": "Edit team"
+  },
+  "teams.form.avatarError": {
+    "string": "Team saved, but its avatar could not be updated"
+  },
+  "teams.form.avatarFileLabel": {
+    "string": "Avatar image file"
+  },
+  "teams.form.avatarLabel": {
+    "string": "Avatar (optional)"
+  },
+  "teams.form.avatarPending": {
+    "string": "{name} will be uploaded when you save"
+  },
+  "teams.form.avatarReplace": {
+    "string": "Replace image"
+  },
+  "teams.form.avatarUpload": {
+    "string": "Upload image"
+  },
+  "teams.form.avatarUrlDescription": {
+    "string": "An image URL to represent the team, if you would rather link one than upload it"
+  },
+  "teams.form.avatarUrlLabel": {
+    "string": "Or link to an image"
+  },
+  "teams.form.createSuccess": {
+    "string": "Team created"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "A brief description of the team"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "Team details"
+  },
+  "teams.form.invalidUrl": {
+    "string": "Must be a valid URL"
+  },
+  "teams.form.nameDescription": {
+    "string": "The unique name of the team"
+  },
+  "teams.form.nameRequired": {
+    "string": "Name is required"
+  },
+  "teams.form.saveError": {
+    "string": "Could not save team"
+  },
+  "teams.form.tooLong": {
+    "string": "{max, plural, one {Keep it under # character} other {Keep it under # characters}}"
+  },
+  "teams.form.updateSuccess": {
+    "string": "Team updated"
+  },
+  "teams.inviteMember.description": {
+    "string": "Search for an OSM user and pick a role for them."
+  },
+  "teams.inviteMember.sendButton": {
+    "string": "Send invitation"
+  },
+  "teams.inviteMember.sendError": {
+    "string": "Could not send invitation"
+  },
+  "teams.inviteMember.sentSuccess": {
+    "string": "Invitation sent"
+  },
+  "teams.inviteMember.title": {
+    "string": "Invite a team member"
+  },
+  "teams.newTeam.title": {
+    "string": "Create a team"
+  },
+  "teams.pendingInvites.acceptButton": {
+    "string": "Accept"
+  },
+  "teams.pendingInvites.acceptError": {
+    "string": "Could not accept invitation"
+  },
+  "teams.pendingInvites.acceptSuccess": {
+    "string": "Invitation accepted"
+  },
+  "teams.pendingInvites.count": {
+    "string": "{count, plural, one {You have # pending invitation} other {You have # pending invitations}}"
+  },
+  "teams.pendingInvites.declineButton": {
+    "string": "Decline"
+  },
+  "teams.pendingInvites.declineError": {
+    "string": "Could not decline invitation"
+  },
+  "teams.pendingInvites.declineSuccess": {
+    "string": "Invitation declined"
+  },
+  "theme.options.dark": {
+    "string": "Dark theme"
+  },
+  "theme.options.light": {
+    "string": "Light theme"
+  },
+  "theme.options.system": {
+    "string": "System theme"
+  },
+  "ui.spinner.loading": {
+    "string": "Loading"
+  },
+  "ui.table.resizeColumn": {
+    "string": "Resize column"
+  }
+}

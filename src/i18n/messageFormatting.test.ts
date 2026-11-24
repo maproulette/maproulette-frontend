@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { Locale } from './locales'
-import { loadCatalog } from './messageFormatting'
-import enUS from './messages/en-US.json'
+import { baseCatalog, loadCatalog } from './messageFormatting'
 
-const baseCatalog = enUS as Record<string, string>
 // A key known to exist in the real en-US catalog, used to assert base-catalog
 // fallback behavior when a locale override doesn't touch it.
 const [existingKey] = Object.entries(baseCatalog)[0]
@@ -20,7 +18,10 @@ describe('loadCatalog', () => {
 
   it('merges a locale override on top of the base catalog, override winning on conflicts', async () => {
     const loadOverride = vi.fn().mockResolvedValue({
-      default: { [existingKey]: 'overridden value', 'fr.onlyKey': 'bonjour' },
+      default: {
+        [existingKey]: { string: 'overridden value' },
+        'fr.onlyKey': { string: 'bonjour' },
+      },
     })
 
     const result = await loadCatalog('fr', loadOverride)
@@ -47,7 +48,7 @@ describe('loadCatalog', () => {
 
   it('falls back to the base catalog for a completely missing locale using the real loader', async () => {
     // Translated catalogs now ship for every locale that has Transifex
-    // coverage, so this needs a tag that is genuinely absent from messages/ to
+    // coverage, so this needs a tag that is genuinely absent from lang/ to
     // make the default loader reject and exercise the real import() path.
     const missingLocale = 'xx-XX' as unknown as Locale
 

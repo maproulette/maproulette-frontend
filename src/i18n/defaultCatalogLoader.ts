@@ -7,4 +7,4 @@ import type { CatalogLoader } from './messageFormatting'
 // source line. Isolated in its own file — like this project's other
 // tooling-limited exclusions in vite.config.ts — since v8 always reports it
 // as 0% regardless of test coverage.
-export const defaultCatalogLoader: CatalogLoader = (locale) => import(`./messages/${locale}.json`)
+export const defaultCatalogLoader: CatalogLoader = (locale) => import(`../../lang/${locale}.json`)

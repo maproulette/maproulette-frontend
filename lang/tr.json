@@ -1,0 +1,830 @@
+{
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.globalSearch.unifiedList.goToChallenge": {
+    "string": "Meydan Okumaya Git"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "Gösterge Paneli"
+  },
+  "appLayout.header.nav.donate": {
+    "string": "Bağış Yap"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "Explore Challenges"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "Öğren"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "Çıkış yap"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "Görevi Yönet"
+  },
+  "browsedChallengePage.actionButtons.reportChallengeTitle": {
+    "string": "Meydan Okumayı Rapor Et"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "Sahip"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "Açık"
+  },
+  "browsedChallengePage.challengeModals.reportModal.checkboxError": {
+    "string": "Devam etmeden önce lütfen onay kutusunun işaretli olduğundan emin olun"
+  },
+  "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
+    "string": "Meydan okuma yaratıcısıyla iletişime geçmeye çalıştım"
+  },
+  "browsedChallengePage.footer.hideMap": {
+    "string": "Haritayı Gizle"
+  },
+  "browsedChallengePage.footer.showMap": {
+    "string": "Haritayı Görüntüle"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "Göreve Başla"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "Favorilerden kaldır"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "Favori"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "Detaylar"
+  },
+  "common.actions": {
+    "string": "Eylemler"
+  },
+  "common.addChallenge": {
+    "string": "Görev Ekle"
+  },
+  "common.allChallenges": {
+    "string": "Tüm görevler"
+  },
+  "common.alreadyFixed": {
+    "string": "Önceden düzeltilmiş"
+  },
+  "common.archiveChallenge": {
+    "string": "Görevleri Arşivle"
+  },
+  "common.archiveProject": {
+    "string": "Projeyi Arşivle"
+  },
+  "common.archived": {
+    "string": "Arşivlendi"
+  },
+  "common.available": {
+    "string": "Mevcut"
+  },
+  "common.browseChallenge": {
+    "string": "Görevlere göz at"
+  },
+  "common.browseChallengeButton": {
+    "string": "Görevlere göz at"
+  },
+  "common.cancel": {
+    "string": "İptal Et"
+  },
+  "common.cantComplete": {
+    "string": "Tamamlanamıyor"
+  },
+  "common.category.buildings": {
+    "string": "Binalar"
+  },
+  "common.category.landUse": {
+    "string": "Alan Kullanımı / İdari Sınırlar"
+  },
+  "common.category.navigation": {
+    "string": "Yollar / Yayalar / Bisiklet Yolları"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "Noktalar / İlgi Alanları"
+  },
+  "common.category.transit": {
+    "string": "Transit"
+  },
+  "common.category.water": {
+    "string": "Su"
+  },
+  "common.challenge": {
+    "string": "Görev"
+  },
+  "common.challenges": {
+    "string": "Görevler"
+  },
+  "common.challenges2": {
+    "string": "Görevler"
+  },
+  "common.clear": {
+    "string": "Temizle"
+  },
+  "common.cloneChallenge": {
+    "string": "Görevi klonla"
+  },
+  "common.cloneChallenge2": {
+    "string": "Görevi klonla"
+  },
+  "common.comments": {
+    "string": "Yorumlar"
+  },
+  "common.completed": {
+    "string": "Tamamlandı"
+  },
+  "common.cooperative": {
+    "string": "İşbirlikçi"
+  },
+  "common.copy": {
+    "string": "Kopyala"
+  },
+  "common.copyUrl": {
+    "string": "URL'i kopyala"
+  },
+  "common.createManage": {
+    "string": "Oluştur ve Yönet"
+  },
+  "common.created": {
+    "string": "Oluşturuldu"
+  },
+  "common.current": {
+    "string": "Mevcut"
+  },
+  "common.delete": {
+    "string": "Sil"
+  },
+  "common.deleteChallenge": {
+    "string": "Görevi sil"
+  },
+  "common.deleteProject": {
+    "string": "Projeyi Sil"
+  },
+  "common.deleted": {
+    "string": "Silindi"
+  },
+  "common.deleted2": {
+    "string": "Silindi"
+  },
+  "common.description": {
+    "string": "Tanıtım"
+  },
+  "common.difficulty": {
+    "string": "Zorluk"
+  },
+  "common.disabled": {
+    "string": "Devre Dışı"
+  },
+  "common.discoverable": {
+    "string": "Keşfedilebilir"
+  },
+  "common.easy": {
+    "string": "Kolay"
+  },
+  "common.edit": {
+    "string": "Düzenle"
+  },
+  "common.editChallenge": {
+    "string": "Görevi düzenle"
+  },
+  "common.editProject": {
+    "string": "Projeyi Düzenle"
+  },
+  "common.editTask": {
+    "string": "Görevi düzenle"
+  },
+  "common.email": {
+    "string": "E posta"
+  },
+  "common.expert": {
+    "string": "Uzman Düzeyi"
+  },
+  "common.exportCsv": {
+    "string": "CSV olarak dışa aktar"
+  },
+  "common.featured": {
+    "string": "Özellikli"
+  },
+  "common.fixed": {
+    "string": "Düzeltildi"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "Talimatlar"
+  },
+  "common.invited": {
+    "string": "Davet Edildi"
+  },
+  "common.loadMore": {
+    "string": "Daha Çok Yükle"
+  },
+  "common.manage": {
+    "string": "Yönet"
+  },
+  "common.manageChallenge": {
+    "string": "Görevi Yönet"
+  },
+  "common.modified": {
+    "string": "Değiştirildi"
+  },
+  "common.moveChallenge": {
+    "string": "Görevi taşı"
+  },
+  "common.name": {
+    "string": "Ad"
+  },
+  "common.newest": {
+    "string": "En Yeni"
+  },
+  "common.noProjectsFound": {
+    "string": "Proje bulunamadı"
+  },
+  "common.normal": {
+    "string": "Normal"
+  },
+  "common.notAnIssue": {
+    "string": "Hata bulunamadı"
+  },
+  "common.notification": {
+    "string": "Bildirim"
+  },
+  "common.notifications": {
+    "string": "Bildirimler"
+  },
+  "common.overpassQuery": {
+    "string": "Overpass Sorgusu"
+  },
+  "common.owned": {
+    "string": "Sahipli"
+  },
+  "common.pinProject": {
+    "string": "Projeyi Sabitle"
+  },
+  "common.pinned": {
+    "string": "Sabitlendi"
+  },
+  "common.popular": {
+    "string": "Popüler"
+  },
+  "common.preview": {
+    "string": "Ön izleme"
+  },
+  "common.priority": {
+    "string": "Öncelik"
+  },
+  "common.project": {
+    "string": "Proje"
+  },
+  "common.projects": {
+    "string": "Projeler"
+  },
+  "common.projects2": {
+    "string": "Projeler"
+  },
+  "common.rebuildTasks": {
+    "string": "Görevleri Yeniden Oluştur"
+  },
+  "common.recentActivity": {
+    "string": "Son Etkinlik"
+  },
+  "common.remove": {
+    "string": "Kaldır"
+  },
+  "common.reportChallenge": {
+    "string": "Meydan Okumayı Rapor Et"
+  },
+  "common.role": {
+    "string": "Rol"
+  },
+  "common.save": {
+    "string": "Kaydet"
+  },
+  "common.share": {
+    "string": "Paylaş"
+  },
+  "common.shown": {
+    "string": "Gösterilen"
+  },
+  "common.signIn": {
+    "string": "Giriş yap"
+  },
+  "common.skipped": {
+    "string": "Atlanmış"
+  },
+  "common.startChallenge": {
+    "string": "Göreve Başla"
+  },
+  "common.status": {
+    "string": "Durum"
+  },
+  "common.tagFix": {
+    "string": "Etiketi düzenle"
+  },
+  "common.task": {
+    "string": "Görev"
+  },
+  "common.tasks": {
+    "string": "ler"
+  },
+  "common.tasksRemaining": {
+    "string": "Kalan Görevler"
+  },
+  "common.teams": {
+    "string": "Takımlar"
+  },
+  "common.type": {
+    "string": "Tür"
+  },
+  "common.unarchiveChallenge": {
+    "string": "Meydan Okumayı Arşivden Çıkar"
+  },
+  "common.unarchiveProject": {
+    "string": "Projeyi Arşivden Çıkart"
+  },
+  "common.unpinProject": {
+    "string": "Projeyi Sabitlemeyi Kaldır"
+  },
+  "common.users": {
+    "string": "Kullanıcılar"
+  },
+  "common.view": {
+    "string": "Görüntüle"
+  },
+  "common.viewChallenge": {
+    "string": "Meydan Okumayı Görüntüle"
+  },
+  "common.viewProject": {
+    "string": "Projeyi Görüntüle"
+  },
+  "common.write": {
+    "string": "Yaz"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "Geri Dön"
+  },
+  "exploreChallenges.challengeList.table.contributors": {
+    "string": "Katkıda Bulunanlar"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "Devre Dışı"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "Konum"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "Filtreleri kaldır"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "herhangi biri"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "Göre sırala"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "En Eski"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "Hiçbir Şey"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "Üzerinde çalış"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "Genel"
+  },
+  "keyboardShortcuts.title": {
+    "string": "Klavye Kısayolları"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "Yöneticiler"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "Tamamlama"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "Dışa Aktar"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "İndir"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "Son etkinlik yok."
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "Görevler Siliniyor..."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "Oluşturulamayan Görevler"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "Görev Oluşturuluyor..."
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "Görevler Güncelleniyor..."
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "Paket"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "Yüksek"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "Alçak"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "Orta düzey"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "Daha Fazla Bilgi Edin"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "Görev Durumu"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "İsterseniz görevinizin keşfine yardım etmek için kullanılabilecek ek anahtar kelimeler sağlayabilirsiniz."
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "Ek Kategorizasyon Anahtar Kelimeleri"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "OSM Otomatik Düzenlemeler davranış kurallarını okudum ve anladım"
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "Otomatik Düzenlemeler Davranış Kuralları Sözleşmesi"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "Görev altlık haritası"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "Altlık Harita"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "Diğer"
+  },
+  "manageChallengeNew.challengeForm.categoryDescription": {
+    "string": "Göreviniz için uygun bir kategori seçmek, kullanıcıların kendi ilgi alanlarına uygun görevleri keşfetmelerine yardımcı olabilir. Eğer hiçbir şey uygun görünmezse Diğer kategorisini seçin."
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "Göreviniz nasıl Kategorilenmeli?"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "Değişiklik Kümesi Kaynağı"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "Bir GeoJSON dosya yüklemek istiyorum."
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/Harici Kimlik Özelliği"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "Bir Overpass sorgusu sağlamak istiyorum"
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
+    "string": "Overpass Sorgusu"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "GeoJSON verileri için bir URL’m var"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "Düzenlemeyi iptal et"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "Toplu Düzenlemeyi Kaydet"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "Altlık Harita"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "Talimatlar"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "Öncelikler"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "İptal et"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "Proje Yöneticileri"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "Görüntülenen başlık"
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "Projeler Hakkında"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "Görevin adı"
+  },
+  "manageTaskEdit.form.namePlaceholder": {
+    "string": "Görev Adı"
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "Görev Detayları"
+  },
+  "manageTaskNew.title": {
+    "string": "Yeni Görev"
+  },
+  "manageTasksOpen.taskIdLabel": {
+    "string": "Görev Id"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "Görevi Görüntüle"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "Görev silinemiyor."
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "Değişiklikler kaydedilemiyor."
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "Proje silinemiyor."
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "Değişiklikler kaydedilemiyor"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "Durumu değiştir"
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "Yeniden oluşturma, en son GeoJSON verileriyle yeni bir yerel dosya yüklemenize ve görev görevlerini yeniden oluşturmanıza olanak tanır:"
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "Yeniden oluşturma, Üstgeçit sorgusunu yeniden çalıştıracak ve en son verilerle meydan okuma görevlerini yeniden oluşturacaktır:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "Daha Fazla Bilgi Edin"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "Devam et"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "Önce tamamlanmamış görevleri kaldır"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "Görev Görevlerini Yeniden Oluştur"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "Uyarı: Yeniden oluşturma, özellik kimlikleriniz doğru ayarlanmadıysa veya eski veriler yeni veriler ile başarılı eşleşmiyorsa görev yinelemesine neden olabilir. Bu işlem geri alınamaz!"
+  },
+  "managers.searchPlaceholder": {
+    "string": "OpenStreetMap kullanıcı adı"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "Takım adı"
+  },
+  "map.controls.zoomIn": {
+    "string": "Yakınlaştır"
+  },
+  "map.controls.zoomOut": {
+    "string": "Uzaklaştır"
+  },
+  "moveChallengeModal.title": {
+    "string": "Görevi taşı"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "Görev Tamamlandı"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "Yoksay"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "Göreve göre Grupla"
+  },
+  "notificationsPage.filters.category.system": {
+    "string": "Sistem"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "Filtreleri kaldır"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "itibaren"
+  },
+  "notificationsPage.filters.status.read": {
+    "string": "Oku"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "Görev:"
+  },
+  "ownerTeam.title": {
+    "string": "Takım"
+  },
+  "profilePage.achievements.title": {
+    "string": "Başarılar"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "OSM Profile"
+  },
+  "profilePage.metrics.title": {
+    "string": "Metrikler"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "Popüler Görevler"
+  },
+  "projectRoles.admin": {
+    "string": "Yönetici"
+  },
+  "projectRoles.read": {
+    "string": "Oku"
+  },
+  "projectRoles.write": {
+    "string": "Yaz"
+  },
+  "settings.apiKey.label": {
+    "string": "Mapillary katmanını aktifleştir."
+  },
+  "settings.general.basemapLabel": {
+    "string": "Varsayılan temel harita"
+  },
+  "settings.general.title": {
+    "string": "Genel"
+  },
+  "settings.notifications.description": {
+    "string": "Hangi MapRoulette bildirimlerini almak istediğinize ve bu bildirimi size bildiren bir e-posta göndermek isteyip istemediğinize karar verin (hemen veya günlük özet olarak)."
+  },
+  "settings.plugins.addButton": {
+    "string": "Ekle"
+  },
+  "settings.submit.saveChanges": {
+    "string": "Değişiklikleri Kaydet"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "Filtreleri kaldır"
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "Proje bulunamadı."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "Ara..."
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "ler"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "Önceden düzenlenmiş"
+  },
+  "statusLegend.priorityHigh": {
+    "string": "Yüksek Öncelik"
+  },
+  "statusLegend.priorityLow": {
+    "string": "Düşük Öncelik"
+  },
+  "statusLegend.priorityMedium": {
+    "string": "Orta Öncelikli"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "Arşivlendi"
+  },
+  "superAdminProjects.title": {
+    "string": "Bütün Projeler"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Onayla"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Reddet"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "Skor"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "Kullanıcı"
+  },
+  "superAdminUsers.table.next": {
+    "string": "Sonraki"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "Önceki"
+  },
+  "taskEditPage.idEditor.expandPanel": {
+    "string": "Paneli genişlet"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "Görev Seç"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "Görevi Ön İzle"
+  },
+  "taskEditPage.lockFailedDialog.requestUnlock": {
+    "string": "Kilidi Açma İsteği"
+  },
+  "taskEditPage.lockFailedDialog.retryLock": {
+    "string": "Kilitlemeyi Yeniden Dene"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "Görev Kilitlenemiyor"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "Oluşturuldu"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "Silindi"
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "Değiştirildi"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "Yakındaki Görev"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "Sonraki Görev"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "OSM uzaktan kumanda yanıt vermedi. Uzaktan Kumanda etkinken çalışan JOSM'niz var mı?"
+  },
+  "taskEditPage.taskActions.editorButton.setDefaultEditor": {
+    "string": "Varsayılan Düzenleyiciyi Ayarla:"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "Görev kilitlendi"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "Kilidini Aç"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "Yakındaki Görev"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "iD Editör ile Düzenle"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "Sistem"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "Göreve Başla"
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "Yeniden ayarla"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "Ekle"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "Kaldır"
+  },
+  "taskInfoPanel.taskTab.bundleState.addToBundle": {
+    "string": "Paket Ekle"
+  },
+  "taskInfoPanel.taskTab.bundleState.removeFromBundle": {
+    "string": "Paketten çıkar"
+  },
+  "taskPrioritizationPage.boundsDrawControl.clearAll": {
+    "string": "Tümünü Temizle"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelected": {
+    "string": "Seçileni Sil"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "Varsayılan öncelik"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "Eşleşme yok"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "Grup"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "ve"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "veya"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
+    "string": "Özellik"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.removeRule": {
+    "string": "Kuralı Kaldır"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "Numara"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "değer"
+  },
+  "teamImages.status.approved": {
+    "string": "Onaylandı"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "Takımı Sil"
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "Görev bulunamadı"
+  },
+  "teams.editTeam.title": {
+    "string": "Takımı Düzenle"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "Takımın kısa bir tanımı"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "Takım Detayları"
+  },
+  "teams.form.nameDescription": {
+    "string": "Takımın özel adı"
+  }
+}

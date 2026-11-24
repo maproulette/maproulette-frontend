@@ -1,0 +1,683 @@
+{
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "Личный кабинет"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "Explore Challenges"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "Изучить"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "Выход"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "Управлять вызовом"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "Владелец"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "Открыть"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "Начать Вызов"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "Удалить из избранного"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "Избранное"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "Подробности"
+  },
+  "common.actions": {
+    "string": "Действия"
+  },
+  "common.addChallenge": {
+    "string": "Добавить Вызов"
+  },
+  "common.allChallenges": {
+    "string": "Все Вызовы"
+  },
+  "common.alreadyFixed": {
+    "string": "Уже исправлено"
+  },
+  "common.archiveChallenge": {
+    "string": "Архивный вызов"
+  },
+  "common.archiveProject": {
+    "string": "Архивировать проект"
+  },
+  "common.available": {
+    "string": "Доступно"
+  },
+  "common.cancel": {
+    "string": "Отмена"
+  },
+  "common.cantComplete": {
+    "string": "Не удается завершить"
+  },
+  "common.category.buildings": {
+    "string": "Строения"
+  },
+  "common.category.landUse": {
+    "string": "Использование земель / Административные границы"
+  },
+  "common.category.navigation": {
+    "string": "Дороги / Пешеходные дороги / Велосипедные дорожки"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "Точки / Области интересов"
+  },
+  "common.category.transit": {
+    "string": "Transit"
+  },
+  "common.category.water": {
+    "string": "Вода"
+  },
+  "common.challenge": {
+    "string": "Вызов"
+  },
+  "common.challenges": {
+    "string": "Вызовы"
+  },
+  "common.challenges2": {
+    "string": "Вызовы"
+  },
+  "common.clear": {
+    "string": "Очистить"
+  },
+  "common.cloneChallenge": {
+    "string": "Клонировать Вызов"
+  },
+  "common.cloneChallenge2": {
+    "string": "Клонировать Вызов"
+  },
+  "common.comments": {
+    "string": "Комментарии"
+  },
+  "common.cooperative": {
+    "string": "Cooperative"
+  },
+  "common.copy": {
+    "string": "Копировать"
+  },
+  "common.copyUrl": {
+    "string": "Копировать URL"
+  },
+  "common.createManage": {
+    "string": "Создать и управлять"
+  },
+  "common.created": {
+    "string": "Создано"
+  },
+  "common.current": {
+    "string": "Текущий"
+  },
+  "common.delete": {
+    "string": "Удалить"
+  },
+  "common.deleteChallenge": {
+    "string": "Удалить Вызов"
+  },
+  "common.deleteProject": {
+    "string": "Удалить проект"
+  },
+  "common.deleted": {
+    "string": "Удалено"
+  },
+  "common.deleted2": {
+    "string": "Удалено"
+  },
+  "common.description": {
+    "string": "Описание"
+  },
+  "common.difficulty": {
+    "string": "Сложность"
+  },
+  "common.disabled": {
+    "string": "Выключено"
+  },
+  "common.easy": {
+    "string": "Легкий"
+  },
+  "common.edit": {
+    "string": "Редактировать"
+  },
+  "common.editChallenge": {
+    "string": "Редактировать Вызов"
+  },
+  "common.editProject": {
+    "string": "Изменить Проект"
+  },
+  "common.editTask": {
+    "string": "Редактировать задачу"
+  },
+  "common.expert": {
+    "string": "Экспертный"
+  },
+  "common.exportCsv": {
+    "string": "Экспорт CSV"
+  },
+  "common.featured": {
+    "string": "Рекомендованные"
+  },
+  "common.fixed": {
+    "string": "Исправлено"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "Инструкции"
+  },
+  "common.invited": {
+    "string": "Приглашенный"
+  },
+  "common.loadMore": {
+    "string": "Загрузить больше"
+  },
+  "common.manage": {
+    "string": "Управлять"
+  },
+  "common.manageChallenge": {
+    "string": "Управлять вызовом"
+  },
+  "common.modified": {
+    "string": "Изменено"
+  },
+  "common.moveChallenge": {
+    "string": "Переместить Вызов"
+  },
+  "common.name": {
+    "string": "Название"
+  },
+  "common.newest": {
+    "string": "Новейшее"
+  },
+  "common.noProjectsFound": {
+    "string": "Не найдено проектов"
+  },
+  "common.normal": {
+    "string": "Нормальный"
+  },
+  "common.notAnIssue": {
+    "string": "Не требует правок"
+  },
+  "common.notification": {
+    "string": "Уведомления"
+  },
+  "common.notifications": {
+    "string": "Уведомления"
+  },
+  "common.pinProject": {
+    "string": "Прикрепить Проект"
+  },
+  "common.pinned": {
+    "string": "Закрепленный"
+  },
+  "common.popular": {
+    "string": "Популярное"
+  },
+  "common.priority": {
+    "string": "Приоритет"
+  },
+  "common.project": {
+    "string": "Проект"
+  },
+  "common.projects": {
+    "string": "Проекты"
+  },
+  "common.projects2": {
+    "string": "Проекты"
+  },
+  "common.rebuildTasks": {
+    "string": "Восстановить задачи"
+  },
+  "common.recentActivity": {
+    "string": "Недавняя активность"
+  },
+  "common.remove": {
+    "string": "Удалить"
+  },
+  "common.role": {
+    "string": "Роль"
+  },
+  "common.save": {
+    "string": "Сохранить"
+  },
+  "common.share": {
+    "string": "Поделиться"
+  },
+  "common.shown": {
+    "string": "Показывается"
+  },
+  "common.signIn": {
+    "string": "Войти"
+  },
+  "common.skipped": {
+    "string": "Пропущено"
+  },
+  "common.startChallenge": {
+    "string": "Начать Вызов"
+  },
+  "common.status": {
+    "string": "Статус"
+  },
+  "common.tagFix": {
+    "string": "Исправление тега"
+  },
+  "common.task": {
+    "string": "Задача"
+  },
+  "common.tasks": {
+    "string": "Задачи"
+  },
+  "common.tasksRemaining": {
+    "string": "Задачи к выполнению"
+  },
+  "common.teams": {
+    "string": "Команды"
+  },
+  "common.type": {
+    "string": "Тип"
+  },
+  "common.unarchiveChallenge": {
+    "string": "Вернуть из архива вызов"
+  },
+  "common.unarchiveProject": {
+    "string": "Вернуть проект из архива"
+  },
+  "common.unpinProject": {
+    "string": "Открепить Проект"
+  },
+  "common.users": {
+    "string": "Пользователи"
+  },
+  "common.view": {
+    "string": "Показать"
+  },
+  "common.viewProject": {
+    "string": "Просмотреть проект"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "Вернуться"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "Выключено"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "Локация"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "Сбросить фильтры"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "Любой"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "Сортировать по"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "Старейшее"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "Все объекты"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "Работать над"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "Основные"
+  },
+  "keyboardShortcuts.title": {
+    "string": "Клавиатурные сокращения"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "Менеджеры"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "Выполнение"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "Экспорт"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "Загрузить"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "Нет недавней активности."
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "Удаление задач..."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "Не удалось построить задачи"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "Создание задач..."
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "Обновление задач..."
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "Пакет"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "Высокий"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "Низкий"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "Средний"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "Изучить больше"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "Статус задачи"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "При желании вы можете указать дополнительные ключевые слова, которые помогут обнаружить ваш вызов."
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "Дополнительные ключевые слова категоризации"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "Я прочитал и понимаю кодекс по автоматическому редактированию OSM"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "Основа для Вызова"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "Basemap"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "Другое"
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "Как должен быть классифицирован ваш вызов?"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "Источник набора изменений"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "Я хочу подгрузить GeoJSON-файл"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "Параметры OSM/External Id"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "У меня есть URL-адрес данных GeoJSON"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "Отменить изменения"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "Подтверждать массовое редактирование"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "Инструкции"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "Приоритеты"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "Отмена"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "Менеджеры проекта"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "Отображаемое название"
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "О проектах"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "Название задачи"
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "Подробность задачи"
+  },
+  "manageTaskNew.title": {
+    "string": "Новая задача"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "Показать задачу"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "Невозможно удалить вызов."
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "Невозможно сохранить изменения."
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "Невозможно удалить проект."
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "Невозможно сохранить изменения"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "Изменить статус"
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "Восстановление позволит вам наполнить новый локальный файл свежими данными GeoJSON и восстановить задачи вызова:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "Изучить больше"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "В процессе"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "Сначала удалите невыполненные задачи"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "Восстановить задачи вызова"
+  },
+  "managers.searchPlaceholder": {
+    "string": "логин OpenStreetMap"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "Название команды"
+  },
+  "moveChallengeModal.title": {
+    "string": "Переместить Вызов"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "Вызов завершен"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "Игнорировать"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "Группировка по Заданиям"
+  },
+  "notificationsPage.filters.category.system": {
+    "string": "Система"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "Сбросить фильтры"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "От"
+  },
+  "notificationsPage.filters.status.read": {
+    "string": "Читать"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "Вызов:"
+  },
+  "ownerTeam.title": {
+    "string": "Команда"
+  },
+  "profilePage.achievements.title": {
+    "string": "Достижения"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "Профиль OSM"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "Топ вызовов"
+  },
+  "projectRoles.admin": {
+    "string": "Админ"
+  },
+  "projectRoles.read": {
+    "string": "Читать"
+  },
+  "settings.apiKey.label": {
+    "string": "API ключ"
+  },
+  "settings.general.basemapLabel": {
+    "string": "Основа по умолчанию"
+  },
+  "settings.general.title": {
+    "string": "Основные"
+  },
+  "settings.notifications.description": {
+    "string": "Решите, какие уведомления MapRoulette вы хотите получать, вместе с тем, хотите ли вы получить электронное письмо с уведомлением об уведомлении (немедленно или в качестве еженедельной рассылки)."
+  },
+  "settings.plugins.addButton": {
+    "string": "Добавить"
+  },
+  "settings.submit.saveChanges": {
+    "string": "Сохранить изменения"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "Сбросить фильтры"
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "Не найдено проектов."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "Поиск..."
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "Задачи"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "Уже исправлено"
+  },
+  "superAdminProjects.title": {
+    "string": "Все Проекты"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Одобрить"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Отклонить"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "Пользователь"
+  },
+  "superAdminUsers.table.next": {
+    "string": "Следующий"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "Выбрать задания"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "Предпросмотр задачи"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "Невозможно заблокировать Задание"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "Создано"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "Удалено"
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "Изменено"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "Ближайшая задача"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "Следующая задача"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "Удаленное управление OSM не отвечает. У вас работает JOSM с разрешенным удаленным управлением?"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "Задание заблокировано"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "Разблокировать"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "Ближайшая задача"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "Изменить в iD"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "Система"
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "Сбросить"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "Добавить"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "Удалить"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelected": {
+    "string": "Удалить выбранные"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "Приоритет по умолчанию"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "Нет соответствий"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "Группа"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "и"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "или"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "число"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "значение"
+  },
+  "teamImages.status.approved": {
+    "string": "Одобрено"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "Удалить Команду"
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "Нет Вызовов"
+  },
+  "teams.editTeam.title": {
+    "string": "Изменить Команду"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "Краткое описание команды"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "Подробно о команде"
+  },
+  "teams.form.nameDescription": {
+    "string": "Уникальное название команды"
+  }
+}

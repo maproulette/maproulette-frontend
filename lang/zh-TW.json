@@ -1,0 +1,1007 @@
+{
+  "appLayout.dismissibleBanner.dismiss": {
+    "string": "關閉置頂佈告"
+  },
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.globalSearch.docsLink": {
+    "string": "搜尋快速鐋以及簡短指令"
+  },
+  "appLayout.header.globalSearch.findById.enterNumericId": {
+    "string": "輸入數字編號"
+  },
+  "appLayout.header.globalSearch.findComments.unknownUser": {
+    "string": "未知"
+  },
+  "appLayout.header.globalSearch.unifiedList.goToChallenge": {
+    "string": "到挑戰"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "儀表板"
+  },
+  "appLayout.header.nav.donate": {
+    "string": "捐款"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "探索挑戰"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "學習"
+  },
+  "appLayout.header.userMenu.documentation": {
+    "string": "說明文件"
+  },
+  "appLayout.header.userMenu.frontend": {
+    "string": "前端"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "登出"
+  },
+  "appLayout.header.userMenu.superAdmin": {
+    "string": "超級管理員"
+  },
+  "appLayout.header.userMenu.theme": {
+    "string": "主題"
+  },
+  "appLayout.header.userMenu.triggerSrOnly": {
+    "string": "使用者手冊"
+  },
+  "auth.loginFailed": {
+    "string": "登入失敗或是無效，請再試著登入看看。"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "管理挑戰"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "擁有者"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.awaitingReview": {
+    "string": "等待 MapRoulette 管理員的審核。"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.description": {
+    "string": "回報會對這一挑戰提出質疑，MapRoulette 管理員會審核每一份回報。"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.empty": {
+    "string": "還沒有人回報這挑戰。"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.reportedBy": {
+    "string": "在 {date} 由 {user} 回報"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.resolved": {
+    "string": "標示為 {status}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.resolvedOn": {
+    "string": "在 {date} 標示為 {status}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.actioned": {
+    "string": "已經採取行動"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.dismissed": {
+    "string": "已經完成"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "開啟"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.title": {
+    "string": "回報這個挑戰"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.you": {
+    "string": "您"
+  },
+  "browsedChallengePage.challengeModals.reportModal.emailPlaceholder": {
+    "string": "輸入您的電子郵件"
+  },
+  "browsedChallengePage.challengeModals.reportModal.textPlaceholder": {
+    "string": "這裡輸入文字"
+  },
+  "browsedChallengePage.footer.hideMap": {
+    "string": "隱藏地圖"
+  },
+  "browsedChallengePage.footer.reportedIssueMessage": {
+    "string": "這挑戰已經有人回報了，請點一下檢視回報。"
+  },
+  "browsedChallengePage.footer.reportedIssueTooltip": {
+    "string": "檢視這挑戰的報名"
+  },
+  "browsedChallengePage.footer.showMap": {
+    "string": "顯示地圖"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "開始挑戰"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "從最愛移除"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "最愛"
+  },
+  "browsedChallengePage.header.viewComments": {
+    "string": "檢視留言"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "詳細資訊"
+  },
+  "common.actions": {
+    "string": "操作"
+  },
+  "common.addChallenge": {
+    "string": "新增挑戰"
+  },
+  "common.allChallenges": {
+    "string": "所有挑戰"
+  },
+  "common.alreadyFixed": {
+    "string": "已修正"
+  },
+  "common.apply": {
+    "string": "套用"
+  },
+  "common.archiveChallenge": {
+    "string": "封存挑戰"
+  },
+  "common.archiveProject": {
+    "string": "封存專案"
+  },
+  "common.archived": {
+    "string": "已封存"
+  },
+  "common.available": {
+    "string": "可以使用"
+  },
+  "common.browseChallenge": {
+    "string": "瀏覽挑戰"
+  },
+  "common.browseChallengeButton": {
+    "string": "瀏覽挑戰"
+  },
+  "common.cancel": {
+    "string": "取消"
+  },
+  "common.category.buildings": {
+    "string": "建築物"
+  },
+  "common.category.landUse": {
+    "string": "土地利用 / 行政邊界"
+  },
+  "common.category.navigation": {
+    "string": "道路 / 人行道 / 單車道"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "點 / 興趣點"
+  },
+  "common.category.transit": {
+    "string": "交通"
+  },
+  "common.category.water": {
+    "string": "水域"
+  },
+  "common.challenge": {
+    "string": "挑戰"
+  },
+  "common.challenges": {
+    "string": "挑戰"
+  },
+  "common.challenges2": {
+    "string": "挑戰"
+  },
+  "common.clear": {
+    "string": "清除"
+  },
+  "common.cloneChallenge": {
+    "string": "複製挑戰"
+  },
+  "common.cloneChallenge2": {
+    "string": "複製挑戰"
+  },
+  "common.comments": {
+    "string": "留言"
+  },
+  "common.cooperative": {
+    "string": "合作的"
+  },
+  "common.copy": {
+    "string": "複製"
+  },
+  "common.copyLink": {
+    "string": "複製連結"
+  },
+  "common.copyUrl": {
+    "string": "複製網址"
+  },
+  "common.createManage": {
+    "string": "建立 & 管理"
+  },
+  "common.created": {
+    "string": "已建立"
+  },
+  "common.current": {
+    "string": "目前"
+  },
+  "common.delete": {
+    "string": "刪除"
+  },
+  "common.deleteChallenge": {
+    "string": "刪除挑戰"
+  },
+  "common.deleteProject": {
+    "string": "刪除專案"
+  },
+  "common.deleted": {
+    "string": "已刪除"
+  },
+  "common.deleted2": {
+    "string": "已刪除"
+  },
+  "common.description": {
+    "string": "說明"
+  },
+  "common.difficulty": {
+    "string": "難易度"
+  },
+  "common.disabled": {
+    "string": "已停用"
+  },
+  "common.discoverable": {
+    "string": "可發現"
+  },
+  "common.easy": {
+    "string": "簡單"
+  },
+  "common.edit": {
+    "string": "編輯"
+  },
+  "common.editChallenge": {
+    "string": "編輯挑戰"
+  },
+  "common.editProject": {
+    "string": "編輯專案"
+  },
+  "common.editTask": {
+    "string": "編輯任務"
+  },
+  "common.email": {
+    "string": "電子郵件"
+  },
+  "common.expert": {
+    "string": "專家"
+  },
+  "common.exportCsv": {
+    "string": "匯出 CSV"
+  },
+  "common.featured": {
+    "string": "精選"
+  },
+  "common.fixed": {
+    "string": "已修正"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "指示"
+  },
+  "common.invited": {
+    "string": "已邀請"
+  },
+  "common.loadMore": {
+    "string": "載入更多"
+  },
+  "common.manage": {
+    "string": "管理"
+  },
+  "common.manageChallenge": {
+    "string": "管理挑戰"
+  },
+  "common.modified": {
+    "string": "已變動"
+  },
+  "common.moveChallenge": {
+    "string": "移動挑戰"
+  },
+  "common.name": {
+    "string": "名稱"
+  },
+  "common.newest": {
+    "string": "最新"
+  },
+  "common.noProjectsFound": {
+    "string": "找不到專案"
+  },
+  "common.normal": {
+    "string": "普通"
+  },
+  "common.notAnIssue": {
+    "string": "並非問題"
+  },
+  "common.notification": {
+    "string": "通知"
+  },
+  "common.notifications": {
+    "string": "通知"
+  },
+  "common.owned": {
+    "string": "擁有"
+  },
+  "common.paused": {
+    "string": "已暫停："
+  },
+  "common.pinProject": {
+    "string": "釘選專案"
+  },
+  "common.pinned": {
+    "string": "已釘選"
+  },
+  "common.popular": {
+    "string": "熱門"
+  },
+  "common.priority": {
+    "string": "優先度"
+  },
+  "common.project": {
+    "string": "專案"
+  },
+  "common.projects": {
+    "string": "專案"
+  },
+  "common.projects2": {
+    "string": "專案"
+  },
+  "common.rebuildTasks": {
+    "string": "重建任務"
+  },
+  "common.recentActivity": {
+    "string": "近期活動"
+  },
+  "common.remove": {
+    "string": "移除"
+  },
+  "common.removeWithName": {
+    "string": "移除 {name}"
+  },
+  "common.reportsLoadError": {
+    "string": "無法載入回報。"
+  },
+  "common.role": {
+    "string": "角色"
+  },
+  "common.save": {
+    "string": "儲存"
+  },
+  "common.share": {
+    "string": "分享"
+  },
+  "common.shown": {
+    "string": "已顯示"
+  },
+  "common.signIn": {
+    "string": "登入"
+  },
+  "common.startChallenge": {
+    "string": "開始挑戰"
+  },
+  "common.status": {
+    "string": "狀態"
+  },
+  "common.tagFix": {
+    "string": "修復標籤"
+  },
+  "common.task": {
+    "string": "任務"
+  },
+  "common.tasks": {
+    "string": "任務"
+  },
+  "common.tasksRebuilt": {
+    "string": "任務重構"
+  },
+  "common.tasksRemaining": {
+    "string": "剩餘任務"
+  },
+  "common.teams": {
+    "string": "團隊"
+  },
+  "common.type": {
+    "string": "類型"
+  },
+  "common.unarchiveChallenge": {
+    "string": "取消封存挑戰"
+  },
+  "common.unarchiveProject": {
+    "string": "取消封存專案"
+  },
+  "common.unpinProject": {
+    "string": "取消釘選專案"
+  },
+  "common.users": {
+    "string": "使用者"
+  },
+  "common.view": {
+    "string": "檢視"
+  },
+  "common.viewProject": {
+    "string": "檢視專案"
+  },
+  "common.write": {
+    "string": "撰寫"
+  },
+  "dashboard.levelModal.totalPoints": {
+    "string": "{points, plural, other {# 總計分數}}"
+  },
+  "dashboard.profile.progressToNext": {
+    "string": "{current, number} / {total, number} 到下一等級"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "返回"
+  },
+  "exploreChallenges.challengeList.table.contributors": {
+    "string": "貢獻者"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "已停用"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "位置"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "濟除篩選"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "任意"
+  },
+  "exploreChallenges.filterBar.location.suggestionsAriaLabel": {
+    "string": "地點建議"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "排序方式"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "最舊"
+  },
+  "exploreChallenges.filterBar.title": {
+    "string": "挑戰清單篩選"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "任何"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "工作上"
+  },
+  "exploreChallenges.map.locationIndicator.recenter": {
+    "string": "重新置中到強調的地區：{name}"
+  },
+  "header.globalSearch.shortcut": {
+    "string": "搜尋 MapRoulette"
+  },
+  "keyboardShortcuts.category.editors": {
+    "string": "編輯器"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "一般"
+  },
+  "keyboardShortcuts.category.multiTask": {
+    "string": "多重任務"
+  },
+  "keyboardShortcuts.category.taskActions": {
+    "string": "任務行動"
+  },
+  "keyboardShortcuts.title": {
+    "string": "鍵盤快捷鍵"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "管理者"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "完成"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "匯出"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "下載"
+  },
+  "manageChallengeDetail.managers.added": {
+    "string": "{name} 如今可以管理挑戰"
+  },
+  "manageChallengeDetail.managers.removeFailed": {
+    "string": "無法移除該名管理者"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "最近沒有活動."
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "正在刪除任務..."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "任務無法建構"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "任務建構中…"
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "上傳任務中…"
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "捆綁"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "高"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "低"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "中"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "瞭解更多"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "任務狀態"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "您可以選擇性提供額外的關鍵字來協助其他人發現您的挑戰。"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "額外的類別關鍵字"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "我已經閱讀以及瞭解 OSM 自動化編輯行為準則"
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "自動化編輯行為準則同意書"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "挑戰底圖"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "底圖"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "其他"
+  },
+  "manageChallengeNew.challengeForm.categoryDescription": {
+    "string": "選擇您挑戰所屬的適當類別，能更容易讓人發現他們感興趣的挑戰。如果沒有適合的則選擇其他類別。"
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "您的挑戰該如何被歸類？"
+  },
+  "manageChallengeNew.challengeForm.changesetSectionTitle": {
+    "string": "開放街圖變更集"
+  },
+  "manageChallengeNew.challengeForm.checkinCommentLabel": {
+    "string": "變更集討論"
+  },
+  "manageChallengeNew.challengeForm.checkinCommentPlaceholder": {
+    "string": "修正斷裂的道路"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "變更集來源"
+  },
+  "manageChallengeNew.challengeForm.checkinSourcePlaceholder": {
+    "string": "Bing; 現地踏察"
+  },
+  "manageChallengeNew.challengeForm.fieldErrorsAriaLabel": {
+    "string": "需要注意的欄位"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "我想要上傳 GeoJSON 檔案"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/External Id Property"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "我想提供 Overpass 檢索"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "I have a URL to the GeoJSON data"
+  },
+  "manageChallengeNew.challengeForm.teamNoneAvailable": {
+    "string": "您還未管理任何團隊，只有團隊擁有者、管理員以及管理者能指定挑戰。"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "取消編輯"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "提交大量編輯"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "底圖"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "指示"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "優先度"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "取消"
+  },
+  "manageProjectDetail.challengeSelection.clear": {
+    "string": "清除選取"
+  },
+  "manageProjectDetail.managers.added": {
+    "string": "{name} 如今可以管理這個專案"
+  },
+  "manageProjectDetail.managers.modalDescription": {
+    "string": "誰可以管理這個專案，以及其管理層級。"
+  },
+  "manageProjectDetail.managers.modalTitle": {
+    "string": "管理員與團隊"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "專案管理者"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "顯示名稱"
+  },
+  "manageProjectNew.projectForm.teamDescription": {
+    "string": "其他成員能擁有這個專案，團隊中每一位有管理權限的成員能夠執行，而團隊的影像變成卡片上的圖片。"
+  },
+  "manageProjectNew.projectForm.teamNoneAvailable": {
+    "string": "你還沒有管理任何團隊，只有團隊擁有者、管理員、板主可以授予團隊的管理權限。"
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "關於專案"
+  },
+  "manageTaskEdit.form.geoJSONInvalid": {
+    "string": "GeoJSON 檔案必須是有效的 JSON 檔案"
+  },
+  "manageTaskEdit.form.geoJSONRequired": {
+    "string": "需要 GeoJSON 檔案"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "任務名稱"
+  },
+  "manageTaskEdit.form.namePlaceholder": {
+    "string": "任務名稱："
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "任務詳情"
+  },
+  "manageTaskNew.title": {
+    "string": "新任務"
+  },
+  "manageTasksOpen.taskIdLabel": {
+    "string": "任務編號："
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "檢視任務"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "無法刪除挑戰。"
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "無法儲存您的更動。"
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "無法刪除專案。"
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "無法儲存您的變動"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "更改狀態"
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "重新建構允許你用新的本地最新 GeoJSON 檔案的資料，重新建構挑戰任務："
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "重新建構會重新執行 Overpass 檢索，採用最新資料重新建構挑戰："
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "瞭解更多"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "繼續"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "先移除不完整的任務"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "重新建構挑戰任務"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "警告：如果你的圖徵編號沒有設定好，或是新舊資料比對出錯，重新建構可能導致重覆。這項操作無法復原"
+  },
+  "managers.addFailed": {
+    "string": "無法新增管理者"
+  },
+  "managers.addLabel": {
+    "string": "新增管理者"
+  },
+  "managers.addTeamFailed": {
+    "string": "無法新增到該團隊"
+  },
+  "managers.addTeamLabel": {
+    "string": "新增團隊"
+  },
+  "managers.noMatches": {
+    "string": "沒有吻合的使用者"
+  },
+  "managers.noTeamMatches": {
+    "string": "沒有符合的團隊"
+  },
+  "managers.noTeams": {
+    "string": "還沒有所屬團隊。"
+  },
+  "managers.none": {
+    "string": "還沒有管理者。"
+  },
+  "managers.searchPlaceholder": {
+    "string": "開放街圖使用者名稱"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "團隊名稱"
+  },
+  "managers.teamsDescription": {
+    "string": "每一位成員能做的事情與其團隊中的角色有關：擁有者與管理員能夠管理，管理員能夠編輯，一般成員則無法。"
+  },
+  "map.controls.zoomIn": {
+    "string": "放大"
+  },
+  "map.controls.zoomOut": {
+    "string": "縮小"
+  },
+  "moveChallengeModal.title": {
+    "string": "移動挑戰"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "挑戰完成"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "忽略"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "以任務分組"
+  },
+  "notificationsPage.filters.category.system": {
+    "string": "系統"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "濟除篩選"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "從"
+  },
+  "notificationsPage.filters.status.read": {
+    "string": "閱讀"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "挑戰："
+  },
+  "ownerTeam.goToTeams": {
+    "string": "你所屬的團隊"
+  },
+  "ownerTeam.loadError": {
+    "string": "無法載入你所屬的團隊。"
+  },
+  "ownerTeam.noneOption": {
+    "string": "沒有團隊"
+  },
+  "ownerTeam.title": {
+    "string": "團隊"
+  },
+  "profilePage.achievements.title": {
+    "string": "成就"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "OSM 使用者檔案"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "熱門挑戰"
+  },
+  "projectRoles.admin": {
+    "string": "管理員"
+  },
+  "projectRoles.read": {
+    "string": "閱讀"
+  },
+  "projectRoles.write": {
+    "string": "撰寫"
+  },
+  "settings.apiKey.label": {
+    "string": "API 金鑰"
+  },
+  "settings.general.basemapLabel": {
+    "string": "預設底圖"
+  },
+  "settings.general.title": {
+    "string": "一般"
+  },
+  "settings.notifications.description": {
+    "string": "決定在 MapRoulette 要接受那種通知，同時決定是否寄送郵件通知 (即刻還是以每日摘要方式)."
+  },
+  "settings.plugins.addButton": {
+    "string": "新增"
+  },
+  "settings.submit.saveChanges": {
+    "string": "儲存更動"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "濟除篩選"
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "找不到專案."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "搜尋..."
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "任務"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "已修正"
+  },
+  "statusLegend.priorityHigh": {
+    "string": "高優先度"
+  },
+  "statusLegend.priorityLow": {
+    "string": "低優先度"
+  },
+  "statusLegend.priorityMedium": {
+    "string": "中優先度"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "已封存"
+  },
+  "superAdminProjects.title": {
+    "string": "所有專案"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "核准"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "撤回"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "分數"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "使用者"
+  },
+  "superAdminUsers.table.next": {
+    "string": "下一個"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "上一個"
+  },
+  "taskEditPage.idEditor.collapsePanel": {
+    "string": "縮合面板"
+  },
+  "taskEditPage.idEditor.expandPanel": {
+    "string": "展開面板"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "選擇任務"
+  },
+  "taskEditPage.lockFailedDialog.genericLockFailure": {
+    "string": "任務已鎖定無法獲得"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "預覽任務"
+  },
+  "taskEditPage.lockFailedDialog.previewAvailable": {
+    "string": "有唯讀下的審核"
+  },
+  "taskEditPage.lockFailedDialog.retryLock": {
+    "string": "再次嘗試鎖上"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "無法鎖定任務"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "已建立"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "已刪除"
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "已變動"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "鄰近任務"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "下一個任務"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "任務已上鎖"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "解鎖"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "鄰近任務"
+  },
+  "taskEditPage.taskBundle.addFailed": {
+    "string": "無法鎖定該任務，所以無法加入到捆綁包中。"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "系統"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "開始任務"
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "重置"
+  },
+  "taskInfoPanel.properties.childCount": {
+    "string": "{count, plural, other {{count} 圖徵}}"
+  },
+  "taskInfoPanel.properties.osmTags": {
+    "string": "目前 OSM 標籤"
+  },
+  "taskInfoPanel.properties.osmTagsEmpty": {
+    "string": "這個元素還沒有標籤"
+  },
+  "taskInfoPanel.properties.osmTagsFailed": {
+    "string": "無法從開放街圖載入這個元素。"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "新增"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "移除"
+  },
+  "taskInfoPanel.taskTab.bundleState.addingToBundle": {
+    "string": "鎖定任務中…"
+  },
+  "taskInfoPanel.taskTab.bundleState.removeFromBundle": {
+    "string": "從整合中移除"
+  },
+  "taskPrioritizationPage.boundsDrawControl.clearAll": {
+    "string": "清除所有"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "預設優先度"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "沒有吻合"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "群組"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "和"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "或"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
+    "string": "屬性"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.removeRule": {
+    "string": "移除規則"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "數字"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "值"
+  },
+  "teamImages.status.approved": {
+    "string": "已核准"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "刪除團隊"
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "無挑戰"
+  },
+  "teams.editTeam.title": {
+    "string": "編輯團隊"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "團隊的簡要說明"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "團隊詳情"
+  },
+  "teams.form.nameDescription": {
+    "string": "團隊的獨特名稱"
+  }
+}

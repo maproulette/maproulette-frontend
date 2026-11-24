@@ -1,0 +1,893 @@
+{
+  "appLayout.dismissibleBanner.dismiss": {
+    "string": "Banner ausblenden"
+  },
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.globalSearch.docsLink": {
+    "string": "Tastaturkürzel und Kurzbefehle suchen"
+  },
+  "appLayout.header.globalSearch.findById.enterNumericId": {
+    "string": "Kennzahl eingeben"
+  },
+  "appLayout.header.globalSearch.findById.matchCount": {
+    "string": "{count, plural, one {# Treffer} other {# Treffer}}"
+  },
+  "appLayout.header.globalSearch.findComments.commentCount": {
+    "string": "{count, plural, one {# Kommentar} other {# Kommentare}}"
+  },
+  "appLayout.header.globalSearch.findComments.loading": {
+    "string": "Kommentare laden"
+  },
+  "appLayout.header.globalSearch.findFeatureByName.featuredProjects": {
+    "string": "Empfohlene Projekte"
+  },
+  "appLayout.header.globalSearch.findFeatureByName.resultCount": {
+    "string": "{count, plural, one {# Ergebnis} other {# Ergebnisse}}"
+  },
+  "appLayout.header.globalSearch.findProject.loading": {
+    "string": "Projekte laden..."
+  },
+  "appLayout.header.globalSearch.findProject.loadingMore": {
+    "string": "Weitere Projekte laden..."
+  },
+  "appLayout.header.globalSearch.findProject.noMoreToLoad": {
+    "string": "Keine weiteren Projekte vorhanden"
+  },
+  "appLayout.header.globalSearch.findProject.noResultsHint": {
+    "string": "Anderen Suchbegriff verwenden"
+  },
+  "appLayout.header.globalSearch.findProject.resultCount": {
+    "string": "{count, plural, one {# Projekt} other {# Projekte}}"
+  },
+  "appLayout.header.globalSearch.findTask.status.label": {
+    "string": "Status: {status}"
+  },
+  "appLayout.header.globalSearch.unifiedList.goToChallenge": {
+    "string": "Gehe zur Challenge"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "Übersicht"
+  },
+  "appLayout.header.nav.donate": {
+    "string": "Spenden"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "Kampagnen entdecken"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "Mehr erfahren"
+  },
+  "appLayout.header.userMenu.documentation": {
+    "string": "Dokumentation"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "Abmelden"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "Kampagne verwalten"
+  },
+  "browsedChallengePage.actionButtons.reportChallengeTitle": {
+    "string": "Challenge melden"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "Eigentümer"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "Öffnen"
+  },
+  "browsedChallengePage.challengeModals.reportModal.checkboxError": {
+    "string": "Bitte stelle sicher, dass das Kontrollkästchen aktiviert ist, bevor Du fortfährst."
+  },
+  "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
+    "string": "Ich habe versucht, den Ersteller der Challenge zu kontaktieren"
+  },
+  "browsedChallengePage.challengeModals.reportModal.emailPlaceholder": {
+    "string": "E-Mail Adresse eingeben"
+  },
+  "browsedChallengePage.challengeModals.reportModal.textPlaceholder": {
+    "string": "Text hier eingeben"
+  },
+  "browsedChallengePage.footer.hideMap": {
+    "string": "Karte ausblenden"
+  },
+  "browsedChallengePage.footer.showMap": {
+    "string": "Karte anzeigen"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "Kampagne starten"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "Aus Favoritenliste entfernen"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "Als Favorit"
+  },
+  "browsedChallengePage.header.viewComments": {
+    "string": "Kommentare ansehen"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "Details"
+  },
+  "common.actions": {
+    "string": "Aktionen"
+  },
+  "common.addChallenge": {
+    "string": "Neue Kampagne erstellen"
+  },
+  "common.allChallenges": {
+    "string": "Alle Kampagnen"
+  },
+  "common.alreadyFixed": {
+    "string": "Bereits behoben"
+  },
+  "common.archiveChallenge": {
+    "string": "Kampagne archivieren"
+  },
+  "common.archiveProject": {
+    "string": "Projekt archivieren"
+  },
+  "common.archived": {
+    "string": "Archiviert"
+  },
+  "common.available": {
+    "string": "Verfügbar"
+  },
+  "common.browseChallenge": {
+    "string": "Kampagnen durchsuchen"
+  },
+  "common.browseChallengeButton": {
+    "string": "Kampagnen durchsuchen"
+  },
+  "common.cancel": {
+    "string": "Abbrechen"
+  },
+  "common.cantComplete": {
+    "string": "Zu schwierig"
+  },
+  "common.category.buildings": {
+    "string": "Gebäude"
+  },
+  "common.category.landUse": {
+    "string": "Landnutzung und Grenzen"
+  },
+  "common.category.navigation": {
+    "string": "Straßen und Wege"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "Interessante Orte"
+  },
+  "common.category.transit": {
+    "string": "Verkehr"
+  },
+  "common.category.water": {
+    "string": "Wasser"
+  },
+  "common.challenge": {
+    "string": "Kampagne"
+  },
+  "common.challenges": {
+    "string": "Kampagnen"
+  },
+  "common.challenges2": {
+    "string": "Kampagnen"
+  },
+  "common.clear": {
+    "string": "Löschen"
+  },
+  "common.cloneChallenge": {
+    "string": "Kampagne klonen"
+  },
+  "common.cloneChallenge2": {
+    "string": "Kampagne klonen"
+  },
+  "common.comments": {
+    "string": "Kommentare"
+  },
+  "common.completed": {
+    "string": "Abgeschlossen"
+  },
+  "common.cooperative": {
+    "string": "Team"
+  },
+  "common.copy": {
+    "string": "Kopieren"
+  },
+  "common.copyUrl": {
+    "string": "URL kopieren"
+  },
+  "common.createManage": {
+    "string": "Erstellen & Verwalten"
+  },
+  "common.created": {
+    "string": "Erstellt"
+  },
+  "common.current": {
+    "string": "Aktuell"
+  },
+  "common.delete": {
+    "string": "Löschen"
+  },
+  "common.deleteChallenge": {
+    "string": "Kampagne löschen"
+  },
+  "common.deleteProject": {
+    "string": "Projekt löschen"
+  },
+  "common.deleted": {
+    "string": "Gelöscht"
+  },
+  "common.deleted2": {
+    "string": "Gelöscht"
+  },
+  "common.description": {
+    "string": "Beschreibung"
+  },
+  "common.difficulty": {
+    "string": "Schwierigkeit"
+  },
+  "common.disabled": {
+    "string": "Deaktiviert"
+  },
+  "common.discoverable": {
+    "string": "Auffindbar"
+  },
+  "common.easy": {
+    "string": "Leicht"
+  },
+  "common.edit": {
+    "string": "Bearbeiten"
+  },
+  "common.editChallenge": {
+    "string": "Kampagne bearbeiten"
+  },
+  "common.editProject": {
+    "string": "Projekt bearbeiten"
+  },
+  "common.editTask": {
+    "string": "Aufgabe bearbeiten"
+  },
+  "common.email": {
+    "string": "E-Mail"
+  },
+  "common.expert": {
+    "string": "Experte"
+  },
+  "common.exportCsv": {
+    "string": "Exportiere CSV"
+  },
+  "common.featured": {
+    "string": "Empfohlen"
+  },
+  "common.fixed": {
+    "string": "Behoben"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "Anleitung"
+  },
+  "common.invited": {
+    "string": "Eingeladen"
+  },
+  "common.loadMore": {
+    "string": "Mehr laden"
+  },
+  "common.manage": {
+    "string": "Verwalten"
+  },
+  "common.manageChallenge": {
+    "string": "Kampagne verwalten"
+  },
+  "common.modified": {
+    "string": "Bearbeitet"
+  },
+  "common.moveChallenge": {
+    "string": "Kampagne verschieben"
+  },
+  "common.name": {
+    "string": "Name"
+  },
+  "common.newest": {
+    "string": "Neu"
+  },
+  "common.noProjectsFound": {
+    "string": "Keine Projekte gefunden"
+  },
+  "common.normal": {
+    "string": "Normal"
+  },
+  "common.notAnIssue": {
+    "string": "Kein Fehler"
+  },
+  "common.notification": {
+    "string": "Nachricht"
+  },
+  "common.notifications": {
+    "string": "Nachrichten"
+  },
+  "common.overpassQuery": {
+    "string": "Overpass-Abfrage"
+  },
+  "common.owned": {
+    "string": "Im Besitz"
+  },
+  "common.pinProject": {
+    "string": "Projekt merken"
+  },
+  "common.pinned": {
+    "string": "Angeheftet"
+  },
+  "common.popular": {
+    "string": "Beliebt"
+  },
+  "common.preview": {
+    "string": "Vorschau"
+  },
+  "common.priority": {
+    "string": "Priorität"
+  },
+  "common.project": {
+    "string": "Projekt"
+  },
+  "common.projects": {
+    "string": "Projekte"
+  },
+  "common.projects2": {
+    "string": "Projekte"
+  },
+  "common.rebuildTasks": {
+    "string": "Aufgaben wiederherstellen"
+  },
+  "common.recentActivity": {
+    "string": "Neueste Aktivität"
+  },
+  "common.remove": {
+    "string": "Entfernen"
+  },
+  "common.reportChallenge": {
+    "string": "Challenge melden"
+  },
+  "common.role": {
+    "string": "Rolle"
+  },
+  "common.save": {
+    "string": "Speichern"
+  },
+  "common.share": {
+    "string": "Teilen"
+  },
+  "common.shown": {
+    "string": "Gezeigt"
+  },
+  "common.signIn": {
+    "string": "Anmelden"
+  },
+  "common.skipped": {
+    "string": "Übersprungen"
+  },
+  "common.startChallenge": {
+    "string": "Kampagne starten"
+  },
+  "common.status": {
+    "string": "Status"
+  },
+  "common.tagFix": {
+    "string": "Tag Fix"
+  },
+  "common.task": {
+    "string": "Aufgabe"
+  },
+  "common.tasks": {
+    "string": "Aufgaben"
+  },
+  "common.tasksRemaining": {
+    "string": "Noch verfügbare Aufgaben"
+  },
+  "common.tasksWithCount": {
+    "string": "{count, plural, one {# Aufgabe} other {# Aufgaben}}"
+  },
+  "common.teams": {
+    "string": "Teams"
+  },
+  "common.type": {
+    "string": "Typ"
+  },
+  "common.unarchiveChallenge": {
+    "string": "Kampagne wiederherstellen"
+  },
+  "common.unarchiveProject": {
+    "string": "Projekt wiederherstellen"
+  },
+  "common.unpinProject": {
+    "string": "Projekt vergessen"
+  },
+  "common.users": {
+    "string": "Benutzer"
+  },
+  "common.view": {
+    "string": "Ansehen"
+  },
+  "common.viewChallenge": {
+    "string": "Challenge anzeigen"
+  },
+  "common.viewProject": {
+    "string": "Projekt ansehen"
+  },
+  "common.write": {
+    "string": "Schreiben"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "Zurück"
+  },
+  "exploreChallenges.challengeList.table.contributors": {
+    "string": "Beitragende"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "Deaktiviert"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "Ort"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "Filter löschen"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "Egal"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "Sortieren nach"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "Älteste"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "Alles"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "Thema"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "Allgemein"
+  },
+  "keyboardShortcuts.title": {
+    "string": "Tastenkombinationen"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "Projektleiter"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "Fertigstellung"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "Exportieren"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "Download"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "Keine neueste Aktivität."
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "Lösche Aufgaben..."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "Erstellen von Aufgaben fehlgeschlagen"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "Aufgaben werden erstellt..."
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "Aufgaben aktualisieren..."
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "Gruppe"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "Hoch"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "Niedrig"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "Mittel"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "Mehr erfahren"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "Aufgabenstatus"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "Du kannst zusätzliche Schlagwörter angeben, die bei der Suche nach deiner Kampagne helfen."
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "Zusätzliche Schlagwörter zur Kategorisierung"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "Ich habe den OSM Automated Edits Verhaltenskodex gelesen und verstanden."
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "Vereinbarung über den Verhaltenskodex von automatisierten Änderungen "
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "Kartenhintergrund der Kampagne"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "Kartenhintergrund"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "Andere"
+  },
+  "manageChallengeNew.challengeForm.categoryDescription": {
+    "string": "Die geeignete Kategorie für deine Kampagne hilft Benutzern, Kampagnen zu entdecken, die ihren Interessen entsprechen. Wenn du keine passende Kategorie findest, wähle Andere."
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "Wie soll die Kampagne kategorisiert werden?"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "Quelle des Änderungssatzes"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "GeoJSON-Datei hochladen"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/Externe ID-Eigenschaft"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "Ich möchte eine Overpass-Abfrage stellen"
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
+    "string": "Overpass-Abfrage"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "Ich habe eine URL zu den GeoJSON-Daten"
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyLabel": {
+    "string": "Task Bundle ID Eigenschaft"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "Bearbeiten abbrechen"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "Massenbearbeitung einreichen"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "Kartenhintergrund"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "Anleitung"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "Prioritäten"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "Abbrechen"
+  },
+  "manageProjectDetail.challengeSelection.clear": {
+    "string": "Auswahl löschen"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "Projektleiter"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "Anzeigename"
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "Über Projekte"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "Aufgaben-Name"
+  },
+  "manageTaskEdit.form.namePlaceholder": {
+    "string": "Aufgaben Name"
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "Aufgabendetails"
+  },
+  "manageTaskNew.title": {
+    "string": "Neue Aufgabe"
+  },
+  "manageTasksOpen.taskIdLabel": {
+    "string": "Aufgaben ID"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "Aufgabe ansehen"
+  },
+  "managementPages.actionErrors.challengeArchive": {
+    "string": "Archivstatus kann nicht aktualisiert werden"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "Die Kampagne konnte nicht gelöscht werden."
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "Deine Änderungen konnten nicht gespeichert werden."
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "Das Projekt konnte nicht gelöscht werden."
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "Deine Änderungen konnten nicht gespeichert werden"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "Status ändern"
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "Beim Neuaufbau kann eine neue lokale Datei mit den neuesten GeoJSON-Daten hochgeladen und die Aufgaben der Kampagne aktualisiert werden:"
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "Beim Neuaufbau werden die Overpass-Abfrage wiederholt und die Aufgaben der Kampagne mit den neuesten Daten aktualisiert:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "Mehr erfahren"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "Weiter"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "Zuerst nicht erledigte Aufgaben entfernen"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "Aufgaben der Kampagne wiederherstellen"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "Warnung: Ein Neuaufbau kann zur Doppelung von Aufgaben führen, wenn Objekt-IDs nicht richtig eingerichtet sind oder wenn der Abgleich alter Daten mit neuen Daten nicht erfolgreich ist. Dieser Vorgang kann nicht rückgängig gemacht werden!"
+  },
+  "managers.searchPlaceholder": {
+    "string": "OpenStreetMap-Benutzername"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "Teamname"
+  },
+  "map.controls.zoomIn": {
+    "string": "Reinzoomen"
+  },
+  "map.controls.zoomOut": {
+    "string": "Rauszoomen"
+  },
+  "moveChallengeModal.title": {
+    "string": "Kampagne verschieben"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "Kampagne fertiggestellt"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "Keine Nachrichten"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "Nach Aufgabe gruppieren"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "Filter löschen"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "Von"
+  },
+  "notificationsPage.filters.status.read": {
+    "string": "Lesen"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "Kampagne:"
+  },
+  "profilePage.achievements.title": {
+    "string": "Auszeichnungen"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "OSM Profil"
+  },
+  "profilePage.metrics.title": {
+    "string": "Statistik"
+  },
+  "profilePage.taskStats.totalCompletedValue": {
+    "string": "{count, plural, one {# Aufgabe} other {# Aufgaben}}"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "Top-Kampagnen"
+  },
+  "projectRoles.admin": {
+    "string": "Administrator"
+  },
+  "projectRoles.read": {
+    "string": "Lesen"
+  },
+  "projectRoles.write": {
+    "string": "Schreiben"
+  },
+  "settings.general.basemapLabel": {
+    "string": "Standard Kartenhintergrund"
+  },
+  "settings.general.title": {
+    "string": "Allgemein"
+  },
+  "settings.notifications.description": {
+    "string": "Wähle aus, welche MapRoulette Nachrichten du empfangen willst, und ob die Nachrichten als E-Mail versandt werden sollen (entweder direkt oder als tägliche Zusammenfassung)."
+  },
+  "settings.plugins.addButton": {
+    "string": "Hinzufügen"
+  },
+  "settings.submit.saveChanges": {
+    "string": "Änderungen speichern"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "Filter löschen"
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "Keine Projekte gefunden."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "Suchen..."
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "Aufgaben"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "Bereits behoben"
+  },
+  "statusLegend.priorityHigh": {
+    "string": "Hohe Priorität"
+  },
+  "statusLegend.priorityLow": {
+    "string": "Niedrige Priorität"
+  },
+  "statusLegend.priorityMedium": {
+    "string": "Mittlere Priorität"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "Archiviert"
+  },
+  "superAdminProjects.title": {
+    "string": "Alle Projekte"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Bestätigen"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Verwerfen"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "Punktestand"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "Benutzer"
+  },
+  "superAdminUsers.table.next": {
+    "string": "Nächste"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "Vorherige"
+  },
+  "taskEditPage.idEditor.collapsePanel": {
+    "string": "Panel ausblenden"
+  },
+  "taskEditPage.idEditor.expandPanel": {
+    "string": "Panel einblenden"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "Aufgaben auswählen"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "Vorschau der Aufgabe"
+  },
+  "taskEditPage.lockFailedDialog.previewAvailable": {
+    "string": ". Eine schreibgeschützte Vorschau ist verfügbar."
+  },
+  "taskEditPage.lockFailedDialog.requestUnlock": {
+    "string": "Entsperrung anfragen"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "Aufgabe kann nicht gesperrt werden"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "Erstellt"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "Gelöscht"
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "Bearbeitet"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "Aufgabe in der Nähe"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "Nächste"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "Die OSM Fernsteuerung antwortet nicht. Läuft bei dir JOSM mit aktivierter Fernsteuerung?"
+  },
+  "taskEditPage.taskActions.editorButton.setDefaultEditor": {
+    "string": "Standard-Editor einstellen:"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "Aufgabe gesperrt"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "Freischalten"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "Aufgabe in der Nähe"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "In iD bearbeiten"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "System"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "Aufgabe starten"
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "Zurücksetzen"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "Hinzufügen"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "Entfernen"
+  },
+  "taskInfoPanel.taskTab.bundleState.addToBundle": {
+    "string": "Zum Bündel hinzufügen"
+  },
+  "taskInfoPanel.taskTab.bundleState.removeFromBundle": {
+    "string": "Aus dem Bündel entfernen"
+  },
+  "taskPrioritizationPage.boundsDrawControl.clearAll": {
+    "string": "Alles löschen"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelected": {
+    "string": "Ausgewähltes löschen"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "Standardpriorität"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "Keine Treffer"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "Gruppe"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "und"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "oder"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
+    "string": "Objekt"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.removeRule": {
+    "string": "Regel entfernen"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "Zahl"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "Wert"
+  },
+  "teamImages.status.approved": {
+    "string": "Bestätigt"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "Team löschen"
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "Keine Kampagnen"
+  },
+  "teams.editTeam.title": {
+    "string": "Team bearbeiten"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "Eine Kurzbeschreibung des Teams"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "Teamdetails"
+  },
+  "teams.form.nameDescription": {
+    "string": "Der eindeutige Name des Teams"
+  }
+}

@@ -1,0 +1,812 @@
+{
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.globalSearch.unifiedList.goToChallenge": {
+    "string": "До Виклику"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "Інформаційна панель"
+  },
+  "appLayout.header.nav.donate": {
+    "string": "Пожертвувати"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "Переглянути Виклики"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "Дізнатись"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "Вийти"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "Керувати Викликом"
+  },
+  "browsedChallengePage.actionButtons.reportChallengeTitle": {
+    "string": "Поскаржитись на Виклик"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "Власник"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "Відкрити"
+  },
+  "browsedChallengePage.challengeModals.reportModal.checkboxError": {
+    "string": "Переконайтесь в наявності всіх прапорців перед продовженням"
+  },
+  "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
+    "string": "Я намагався звʼязатися з автором Виклику"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "Розпочати Виклик"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "Вилучити із закладок"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "Закріпити"
+  },
+  "browsedChallengePage.header.viewComments": {
+    "string": "Показати коментарі"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "Деталі"
+  },
+  "common.actions": {
+    "string": "Дії"
+  },
+  "common.addChallenge": {
+    "string": "Додати Виклик"
+  },
+  "common.allChallenges": {
+    "string": "Всі виклики"
+  },
+  "common.alreadyFixed": {
+    "string": "Вже виправлено"
+  },
+  "common.archiveChallenge": {
+    "string": "Заархівувати Виклик"
+  },
+  "common.archiveProject": {
+    "string": "Архівувати проєкт"
+  },
+  "common.archived": {
+    "string": "Заархівовані"
+  },
+  "common.available": {
+    "string": "Наявні"
+  },
+  "common.browseChallenge": {
+    "string": "Переглянути Виклик"
+  },
+  "common.browseChallengeButton": {
+    "string": "Переглянути Виклик"
+  },
+  "common.cancel": {
+    "string": "Скасувати"
+  },
+  "common.cantComplete": {
+    "string": "Не вдається завершити"
+  },
+  "common.category.buildings": {
+    "string": "Будинки"
+  },
+  "common.category.landUse": {
+    "string": "Землекористування / Адміністративні межі"
+  },
+  "common.category.navigation": {
+    "string": "Дороги / Тротуари / Велодоріжки"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "Точки / Території Інтересу"
+  },
+  "common.category.transit": {
+    "string": "Маршрути / Перевезення"
+  },
+  "common.category.water": {
+    "string": "Вода"
+  },
+  "common.challenge": {
+    "string": "Виклик"
+  },
+  "common.challenges": {
+    "string": "Виклики"
+  },
+  "common.challenges2": {
+    "string": "Виклики"
+  },
+  "common.clear": {
+    "string": "Очистити"
+  },
+  "common.cloneChallenge": {
+    "string": "Клонувати Виклик"
+  },
+  "common.cloneChallenge2": {
+    "string": "Клонувати Виклик"
+  },
+  "common.comments": {
+    "string": "Коментарі"
+  },
+  "common.completed": {
+    "string": "Завершено"
+  },
+  "common.cooperative": {
+    "string": "Кооперативний"
+  },
+  "common.copy": {
+    "string": "Копіювати"
+  },
+  "common.copyUrl": {
+    "string": "Копіювати URL"
+  },
+  "common.createManage": {
+    "string": "Створити / Керувати"
+  },
+  "common.created": {
+    "string": "Створено"
+  },
+  "common.current": {
+    "string": "Зараз"
+  },
+  "common.delete": {
+    "string": "Вилучити"
+  },
+  "common.deleteChallenge": {
+    "string": "Вилучити Виклик"
+  },
+  "common.deleteProject": {
+    "string": "Вилучити Проєкт"
+  },
+  "common.deleted": {
+    "string": "Вилучено"
+  },
+  "common.deleted2": {
+    "string": "Вилучено"
+  },
+  "common.description": {
+    "string": "Опис"
+  },
+  "common.difficulty": {
+    "string": "Складність"
+  },
+  "common.disabled": {
+    "string": "Вимкнено"
+  },
+  "common.discoverable": {
+    "string": "Видимий"
+  },
+  "common.easy": {
+    "string": "Легко"
+  },
+  "common.edit": {
+    "string": "Змінити"
+  },
+  "common.editChallenge": {
+    "string": "Змінити Виклик"
+  },
+  "common.editProject": {
+    "string": "Змінити Проєкт"
+  },
+  "common.editTask": {
+    "string": "Змінити Завдання"
+  },
+  "common.email": {
+    "string": "Е-мейл"
+  },
+  "common.expert": {
+    "string": "Експерт"
+  },
+  "common.exportCsv": {
+    "string": "Експорт в CSV"
+  },
+  "common.featured": {
+    "string": "Рекомендований"
+  },
+  "common.fixed": {
+    "string": "Виправлено"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "Інструкції"
+  },
+  "common.invited": {
+    "string": "Запрошено"
+  },
+  "common.loadMore": {
+    "string": "Завантажити ще"
+  },
+  "common.manage": {
+    "string": "Керувати"
+  },
+  "common.manageChallenge": {
+    "string": "Керувати Викликом"
+  },
+  "common.modified": {
+    "string": "Змінено"
+  },
+  "common.moveChallenge": {
+    "string": "Перемістити Виклик"
+  },
+  "common.name": {
+    "string": "Назва"
+  },
+  "common.newest": {
+    "string": "Найновіші"
+  },
+  "common.noProjectsFound": {
+    "string": "Не знайдено жодного проекту"
+  },
+  "common.normal": {
+    "string": "Звичайно"
+  },
+  "common.notAnIssue": {
+    "string": "Не проблема"
+  },
+  "common.notification": {
+    "string": "Сповіщення"
+  },
+  "common.notifications": {
+    "string": "Сповіщення"
+  },
+  "common.overpassQuery": {
+    "string": "Запит Overpass"
+  },
+  "common.owned": {
+    "string": "Власний"
+  },
+  "common.pinProject": {
+    "string": "Закріпити Проєкт"
+  },
+  "common.pinned": {
+    "string": "Пришпилений"
+  },
+  "common.popular": {
+    "string": "Популярні"
+  },
+  "common.preview": {
+    "string": "Перегляд"
+  },
+  "common.priority": {
+    "string": "Пріоритет"
+  },
+  "common.project": {
+    "string": "Проєкт"
+  },
+  "common.projects": {
+    "string": "Проєкти"
+  },
+  "common.projects2": {
+    "string": "Проєкти"
+  },
+  "common.rebuildTasks": {
+    "string": "Перестворити Завдання"
+  },
+  "common.recentActivity": {
+    "string": "Нещодавні дії"
+  },
+  "common.remove": {
+    "string": "Вилучити"
+  },
+  "common.reportChallenge": {
+    "string": "Поскаржитись на Виклик"
+  },
+  "common.role": {
+    "string": "Роль"
+  },
+  "common.save": {
+    "string": "Зберегти"
+  },
+  "common.share": {
+    "string": "Поширити"
+  },
+  "common.shown": {
+    "string": "Показано"
+  },
+  "common.signIn": {
+    "string": "Увійти"
+  },
+  "common.skipped": {
+    "string": "Пропущено"
+  },
+  "common.startChallenge": {
+    "string": "Розпочати Виклик"
+  },
+  "common.status": {
+    "string": "Стан"
+  },
+  "common.tagFix": {
+    "string": "Виправлення теґів"
+  },
+  "common.task": {
+    "string": "Завдання"
+  },
+  "common.tasks": {
+    "string": "Завдання"
+  },
+  "common.tasksRemaining": {
+    "string": "Завдань залишилось"
+  },
+  "common.teams": {
+    "string": "Команди"
+  },
+  "common.type": {
+    "string": "Тип"
+  },
+  "common.unarchiveChallenge": {
+    "string": "Розархівувати Виклик"
+  },
+  "common.unarchiveProject": {
+    "string": "Розархівувати проєкт"
+  },
+  "common.unpinProject": {
+    "string": "Відкріпити Проєкт"
+  },
+  "common.users": {
+    "string": "Користувачі"
+  },
+  "common.view": {
+    "string": "Переглянути"
+  },
+  "common.viewChallenge": {
+    "string": "Переглянути Виклик"
+  },
+  "common.write": {
+    "string": "Створити"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "Повернутись"
+  },
+  "exploreChallenges.challengeList.table.contributors": {
+    "string": "Учасники"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "Вимкнено"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "Місце"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "Скинути фільтри"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "Все"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "Впорядковувати за"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "Найстаріші"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "Будь-що"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "Працювати з"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "Загальне"
+  },
+  "keyboardShortcuts.title": {
+    "string": "Гарячі клавіші"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "Менеджери"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "Виконання"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "Експорт"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "Завантажити"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "Немає останніх дій."
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "Вилучення Завдань..."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "Не вдалося створити Завдання"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "Створення Завдань…"
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "Оновлення Завдань…"
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "Пакунок"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "Високий"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "Низький"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "Звичайний"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "Дізнатись ще"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "Стан завдання"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "Ви можете також зазначити додаткові ключові слова, які можуть використовуватись для пошуку вашого виклику."
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "Додаткові ключові слова"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "Я прочитав і розумію Кодекс  проведення автоматизованих редагувань OSM"
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "Кодекс проведення автоматизованих редагувань"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "Фонова мапа Виклику"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "Фонова мапа"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "Інше"
+  },
+  "manageChallengeNew.challengeForm.categoryDescription": {
+    "string": "Вибір правильної категорії допоможе користувачам швидко знайти ваш виклик відповідно до їх інтересів. Оберіть категорію Інше, якщо не знайшли потрібного значення."
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "Як слід класифікувати ваш виклик?"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "Джерело даних"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "Я бажаю завантажити файл GeoJSON"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/Зовнішній Id "
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "Я бажаю скористатись запитом Overpass"
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
+    "string": "Запит Overpass"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "Я бажаю скористатись URL для отримання GeoJSON даних "
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyLabel": {
+    "string": "Ідентифікатор пакета завдань"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "Скасувати редагування"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "Надіслати пакетне редагування"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "Фонова мапа"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "Інструкції"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "Пріоритети"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "Скасувати"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "Керівники проєкту"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "Назва проєкту"
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "Про Проєкти"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "Назва завдання"
+  },
+  "manageTaskEdit.form.namePlaceholder": {
+    "string": "Завдання, Назва"
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "Деталі завдання"
+  },
+  "manageTaskNew.title": {
+    "string": "Нове Завдання"
+  },
+  "manageTasksOpen.taskIdLabel": {
+    "string": "Завдання, №"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "Переглянути Завдання"
+  },
+  "managementPages.actionErrors.challengeArchive": {
+    "string": "Не вдається оновити статус архіву"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "Неможливо вилучити виклик."
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "Неможливо зберегти ваші зміни."
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "Неможливо вилучити проєкт."
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "Неможливо зберегти ваші зміни"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "Змінити стан"
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "Процес перестворення завдань дозволить вам завантажити новий файл GeoJSON зі свіжими даними для створення наново завдань для Виклику:"
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "Перестворення призведено для перезапуску запиту Overpass та перегенерації завдань Виклику на основі свіжих даних:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "Дізнатись ще"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "Продовжити"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "Спочатку вилучить незакінчені завдання"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "Перестворити Завдання Виклику"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "Попередження: Перестворення завдань може призвести до їх дублювання, якщо ідентифікатори завдань не були (правильно) вказані або порівняння наявних даних із новими пройшло з помилками. Цю дію не можливо буде скасувати!"
+  },
+  "managers.searchPlaceholder": {
+    "string": "Логін OpenStreetMap"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "Назва команди"
+  },
+  "moveChallengeModal.title": {
+    "string": "Перемістити Виклик"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "Завершення Виклику"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "Ігнорувати"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "Гуртувати за завданнями"
+  },
+  "notificationsPage.filters.category.system": {
+    "string": "Системні"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "Скинути фільтри"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "Від"
+  },
+  "notificationsPage.filters.status.read": {
+    "string": "Читання"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "Виклик:"
+  },
+  "ownerTeam.title": {
+    "string": "Команда"
+  },
+  "profilePage.achievements.title": {
+    "string": "Досягнення"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "Профіль OSM"
+  },
+  "profilePage.metrics.title": {
+    "string": "Метрики"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "Основні виклики"
+  },
+  "projectRoles.admin": {
+    "string": "Адмін"
+  },
+  "projectRoles.read": {
+    "string": "Читання"
+  },
+  "projectRoles.write": {
+    "string": "Створити"
+  },
+  "settings.apiKey.label": {
+    "string": "Ключ API"
+  },
+  "settings.general.basemapLabel": {
+    "string": "Типова фонова мапа"
+  },
+  "settings.general.title": {
+    "string": "Загальне"
+  },
+  "settings.notifications.description": {
+    "string": "Оберіть які сповіщення від MapRoulette ви бажаєте отримувати, разом із тим, чи хочете ви отримувати листи зі сповіщеннями (негайно або у вигляді щоденного дайджесту)."
+  },
+  "settings.plugins.addButton": {
+    "string": "Додати"
+  },
+  "settings.submit.saveChanges": {
+    "string": "Зберегти зміни"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "Скинути фільтри"
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "Не знайдено жодного проекту."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "Пошук..."
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "Завдання"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "Вже виправлено"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "Заархівовані"
+  },
+  "superAdminProjects.title": {
+    "string": "Всі проєкти"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Ухвалити"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Відхилити"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "Бали"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "Користувач"
+  },
+  "superAdminUsers.table.next": {
+    "string": "Далі"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "Назад"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "Виділити завдання"
+  },
+  "taskEditPage.lockFailedDialog.genericLockFailure": {
+    "string": "Блокування завдань не передбачане"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "Переглянути завдання"
+  },
+  "taskEditPage.lockFailedDialog.previewAvailable": {
+    "string": ". Тільки перегляд в режимі \"тільки читання\"."
+  },
+  "taskEditPage.lockFailedDialog.requestUnlock": {
+    "string": "Запит на розблокування"
+  },
+  "taskEditPage.lockFailedDialog.retryLock": {
+    "string": "Спробувати заблокувати знов"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "Неможливо заблокувати завдання"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "Створено"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "Вилучено"
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "Змінено"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "Завдання поруч"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "Наступне Завдання"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "Дистанційне керування OSM не відповідає. Переконайтесь, що ви увімкнули його в JOSM?"
+  },
+  "taskEditPage.taskActions.editorButton.setDefaultEditor": {
+    "string": "Встановити типовий редактор:"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "Завдання заблоковане"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "Розблокувати"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "Завдання поруч"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "Редагувати в iD"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "Системні"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "Розпочати Завдання"
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "Оновити"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "Додати"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "Вилучити"
+  },
+  "taskInfoPanel.taskTab.bundleState.addToBundle": {
+    "string": "Додати до пакету"
+  },
+  "taskInfoPanel.taskTab.bundleState.removeFromBundle": {
+    "string": "Вилучити з набору"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelected": {
+    "string": "Вилучити виділене"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "Типовий Пріоритет"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "Збігів немає"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "Група"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "та"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "або"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
+    "string": "Властивість"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "число"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "значення"
+  },
+  "teamImages.status.approved": {
+    "string": "Ухвалено"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "Вилучити команду"
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "Викликів немає"
+  },
+  "teams.editTeam.title": {
+    "string": "Змінити команду"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "Скорочений опис команди"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "Про команду"
+  },
+  "teams.form.nameDescription": {
+    "string": "Унікальна назва команди"
+  }
+}
