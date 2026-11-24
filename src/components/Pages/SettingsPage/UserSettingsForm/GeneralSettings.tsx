@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select'
 import { baseMapOptions, editorOptions } from '@/data/account.json'
-import { localeOptions, useIntl } from '@/i18n'
+import { localeOptions, translateUrl, useIntl } from '@/i18n'
 import { FieldSubmit } from './FieldSubmit'
 import type { SettingsFormValues } from './formSchema'
 
@@ -64,10 +64,25 @@ export const GeneralSettings = ({
                 </SelectContent>
               </Select>
               <FormDescription>
-                {t({
-                  id: 'settings.general.languageDescription',
-                  defaultMessage: 'Choose your preferred language (locale) for the interface.',
-                })}
+                {t(
+                  {
+                    id: 'settings.general.languageDescription',
+                    defaultMessage:
+                      'Choose your preferred language for the interface. MapRoulette is translated by volunteers; if your language is missing or incomplete, you can <link>help translate it</link>.',
+                  },
+                  {
+                    link: (chunks) => (
+                      <a
+                        href={translateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-link underline-offset-2 hover:underline"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                  }
+                )}
               </FormDescription>
               <FormMessage />
             </FormItem>

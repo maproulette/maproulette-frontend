@@ -17,6 +17,8 @@ export const localeOptions = [
   { value: 'zh-TW', label: '國語' },
 ] as const
 
+export const translateUrl = 'https://explore.transifex.com/osmlab/maproulette/'
+
 export type Locale = (typeof localeOptions)[number]['value']
 
 const supportedLocales: readonly Locale[] = localeOptions.map((option) => option.value)
