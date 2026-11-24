@@ -1,0 +1,791 @@
+{
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.globalSearch.unifiedList.goToChallenge": {
+    "string": "챌린지로 이동"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "대시보드"
+  },
+  "appLayout.header.nav.donate": {
+    "string": "후원"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "도전 탐색"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "배우기"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "로그아웃"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "도전 관리하기"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "소유자"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "열기"
+  },
+  "browsedChallengePage.challengeModals.reportModal.checkboxError": {
+    "string": "계속하기 전에 확인란이 선택되어 있는지 확인하세요."
+  },
+  "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
+    "string": "챌린지 생성자에게 연락을 시도했습니다."
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "시작"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "즐겨찾기에서 삭제하기"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "즐겨찾기"
+  },
+  "browsedChallengePage.header.viewComments": {
+    "string": "댓글 보기"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "자세한 정보"
+  },
+  "common.actions": {
+    "string": "행동"
+  },
+  "common.addChallenge": {
+    "string": "도전 추가"
+  },
+  "common.allChallenges": {
+    "string": "모든 도전"
+  },
+  "common.alreadyFixed": {
+    "string": "이미 수정됨"
+  },
+  "common.archiveChallenge": {
+    "string": "도전 보관"
+  },
+  "common.archiveProject": {
+    "string": "프로젝트 보관"
+  },
+  "common.archived": {
+    "string": "보관됨"
+  },
+  "common.available": {
+    "string": "이용 가능"
+  },
+  "common.browseChallenge": {
+    "string": "도전 둘러보기"
+  },
+  "common.browseChallengeButton": {
+    "string": "도전 둘러보기"
+  },
+  "common.cancel": {
+    "string": "취소"
+  },
+  "common.cantComplete": {
+    "string": "완료할 수 없음"
+  },
+  "common.category.buildings": {
+    "string": "건물"
+  },
+  "common.category.landUse": {
+    "string": "토지 이용/행정 경계"
+  },
+  "common.category.navigation": {
+    "string": "도로/보행자 도로/자전거 도로"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "관심 지점/영역"
+  },
+  "common.category.transit": {
+    "string": "교통"
+  },
+  "common.category.water": {
+    "string": "수역"
+  },
+  "common.challenge": {
+    "string": "작업"
+  },
+  "common.challenges": {
+    "string": "도전"
+  },
+  "common.challenges2": {
+    "string": "도전"
+  },
+  "common.clear": {
+    "string": "초기화"
+  },
+  "common.cloneChallenge": {
+    "string": "도전 복제"
+  },
+  "common.cloneChallenge2": {
+    "string": "도전 복제"
+  },
+  "common.comments": {
+    "string": "댓글"
+  },
+  "common.completed": {
+    "string": "Completed"
+  },
+  "common.cooperative": {
+    "string": "협력하는"
+  },
+  "common.copy": {
+    "string": "복사"
+  },
+  "common.copyUrl": {
+    "string": "URL 복사"
+  },
+  "common.createManage": {
+    "string": "생성&관리"
+  },
+  "common.created": {
+    "string": "생성됨"
+  },
+  "common.current": {
+    "string": "현재"
+  },
+  "common.delete": {
+    "string": "삭제"
+  },
+  "common.deleteChallenge": {
+    "string": "도전 삭제"
+  },
+  "common.deleteProject": {
+    "string": "프로젝트 삭제"
+  },
+  "common.deleted": {
+    "string": "삭제됨"
+  },
+  "common.deleted2": {
+    "string": "삭제됨"
+  },
+  "common.description": {
+    "string": "설명"
+  },
+  "common.difficulty": {
+    "string": "난이도"
+  },
+  "common.disabled": {
+    "string": "비활성화"
+  },
+  "common.discoverable": {
+    "string": "발견 가능"
+  },
+  "common.easy": {
+    "string": "쉬움"
+  },
+  "common.edit": {
+    "string": "편집"
+  },
+  "common.editChallenge": {
+    "string": "수정"
+  },
+  "common.editProject": {
+    "string": "프로젝트 수정"
+  },
+  "common.editTask": {
+    "string": "작업 수정"
+  },
+  "common.email": {
+    "string": "이메일"
+  },
+  "common.expert": {
+    "string": "전문가"
+  },
+  "common.exportCsv": {
+    "string": "CSV 내보내기"
+  },
+  "common.featured": {
+    "string": "대표 도전"
+  },
+  "common.fixed": {
+    "string": "해결됨"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "지시"
+  },
+  "common.invited": {
+    "string": "초대됨"
+  },
+  "common.loadMore": {
+    "string": "더 보기"
+  },
+  "common.manage": {
+    "string": "관리"
+  },
+  "common.manageChallenge": {
+    "string": "도전 관리하기"
+  },
+  "common.modified": {
+    "string": "수정됨"
+  },
+  "common.moveChallenge": {
+    "string": "이동"
+  },
+  "common.name": {
+    "string": "이름"
+  },
+  "common.newest": {
+    "string": "생성 날짜"
+  },
+  "common.noProjectsFound": {
+    "string": "프로젝트 찾을 수 없음"
+  },
+  "common.normal": {
+    "string": "보통"
+  },
+  "common.notAnIssue": {
+    "string": "문제 없음"
+  },
+  "common.notification": {
+    "string": "알림"
+  },
+  "common.notifications": {
+    "string": "Notifications"
+  },
+  "common.overpassQuery": {
+    "string": "오버패스 쿼리"
+  },
+  "common.owned": {
+    "string": "소유함"
+  },
+  "common.pinProject": {
+    "string": "프로젝트 고정"
+  },
+  "common.pinned": {
+    "string": "고정됨"
+  },
+  "common.popular": {
+    "string": "인기"
+  },
+  "common.preview": {
+    "string": "미리보기"
+  },
+  "common.priority": {
+    "string": "우선순위"
+  },
+  "common.project": {
+    "string": "프로젝트"
+  },
+  "common.projects": {
+    "string": "프로젝트"
+  },
+  "common.projects2": {
+    "string": "프로젝트"
+  },
+  "common.rebuildTasks": {
+    "string": "재구축"
+  },
+  "common.recentActivity": {
+    "string": "최근 활동"
+  },
+  "common.remove": {
+    "string": "제거"
+  },
+  "common.reportChallenge": {
+    "string": "Report Challenge"
+  },
+  "common.role": {
+    "string": "역할"
+  },
+  "common.save": {
+    "string": "저장"
+  },
+  "common.share": {
+    "string": "공유하기"
+  },
+  "common.shown": {
+    "string": "표시됨"
+  },
+  "common.signIn": {
+    "string": "로그인"
+  },
+  "common.skipped": {
+    "string": "건너뛰기"
+  },
+  "common.startChallenge": {
+    "string": "시작"
+  },
+  "common.status": {
+    "string": "상태"
+  },
+  "common.tagFix": {
+    "string": "태그 수정"
+  },
+  "common.task": {
+    "string": "작업"
+  },
+  "common.tasks": {
+    "string": "작업"
+  },
+  "common.tasksRemaining": {
+    "string": "남은 작업"
+  },
+  "common.teams": {
+    "string": "팀"
+  },
+  "common.type": {
+    "string": "기입하기"
+  },
+  "common.unarchiveChallenge": {
+    "string": "도전 보관 해제"
+  },
+  "common.unarchiveProject": {
+    "string": "프로젝트 보관 해제"
+  },
+  "common.unpinProject": {
+    "string": "프로젝트 고정 해제"
+  },
+  "common.users": {
+    "string": "사용자"
+  },
+  "common.view": {
+    "string": "보기"
+  },
+  "common.write": {
+    "string": "쓰기"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "뒤로가기"
+  },
+  "exploreChallenges.challengeList.table.contributors": {
+    "string": "기여자"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "비활성화"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "위치"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "필터 초기화"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "아무"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "정렬 기준"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "가장 오래된"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "전부"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "작업 종류"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "기본 설정"
+  },
+  "keyboardShortcuts.title": {
+    "string": "키보드 단축키"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "관리자"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "완료"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "내보내기"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "다운로드"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "최근 활동 없음."
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "작업을 삭제하는 중..."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "작업을 구축하는 데 실패했습니다"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "작업을 구축하는 중..."
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "작업 업데이트 중..."
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "묶음"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "높음"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "낮음"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "중간"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "더 배우기"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "작업 상태"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "도전을 발견하는 데 사용할 수 있는 추가 키워드를 선택적으로 제공할 수 있습니다."
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "추가 분류 키워드"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "OSM 자동 편집 행동 강령을 읽고 이해했습니다."
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "자동 수정 행동 강령 동의서"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "배경 지도"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "베이스지도"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "기타"
+  },
+  "manageChallengeNew.challengeForm.categoryDescription": {
+    "string": "자신의 도전에 적합한 카테고리를 선택하면 사용자의 관심사에 맞는 도전을 발견하는 데 도움이 될 수 있습니다. 적절한 항목이 없으면 기타 카테고리를 선택하십시오."
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "도전을 어떻게 분류하겠습니까?"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "바뀜집합 출처"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "GeoJSON 파일을 업로드하고 싶어요"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/External Id 속성"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "Overpass 쿼리를 제공하고 싶습니다."
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
+    "string": "오버패스 쿼리"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "GeoJSON 데이터에 대한 URL을 가지고 있어요"
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyLabel": {
+    "string": "임무 묶음 Id 속성"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "편집 취소"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "일괄 편집 제출"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "베이스지도"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "지시"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "우선 순위"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "취소"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "프로젝트 관리자"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "표시할 명칭"
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "프로젝트 개요"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "작업의 이름입니다."
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "자세한 정보"
+  },
+  "manageTaskNew.title": {
+    "string": "새 작업"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "작업 보기"
+  },
+  "managementPages.actionErrors.challengeArchive": {
+    "string": "기록 상태를 업데이트 할 수 없습니다."
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "도전을 삭제할 수 없습니다."
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "변경 내역을 저장할 수 없습니다s."
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "프로젝트를 삭제할 수 없습니다."
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "변경 내역을 저장할 수 없습니다s"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "상태 변경"
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "재구축 작업으로 최신 GeoJSON 데이터 파일을 업로드해 도전에 속한 작업들을 최근 데이터로 재구축할 수 있습니다:"
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "재구축 작업은 Overpass 쿼리를 재실행하고 도전에 속한 작업들을 최신 데이터로 재구축합니다:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "더 배우기"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "계속"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "먼저 완성되지 않은 임무를 제거하십시오"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "도전에 속한 작업들을 재구축하는 중"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "경고: 지물 ID가 적절하게 설정되어 있지 않거나 기존 데이터와 새로운 데이터 간의 일치 작업이 제대로 되지 않았을 경우 재구축 작업 시 작업이 복제될 수 있습니다. 이 작업은 되돌릴 수 없습니다!"
+  },
+  "managers.searchPlaceholder": {
+    "string": "오픈스트리트맵 사용자이름"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "팀 이름"
+  },
+  "moveChallengeModal.title": {
+    "string": "이동"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "도전 완료됨"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "무시하기"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "임무별 그룹화"
+  },
+  "notificationsPage.filters.category.system": {
+    "string": "시스템"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "필터 초기화"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "에서"
+  },
+  "notificationsPage.filters.status.read": {
+    "string": "읽기"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "도전:"
+  },
+  "ownerTeam.title": {
+    "string": "팀"
+  },
+  "profilePage.achievements.title": {
+    "string": "성과"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "OSM 프로필"
+  },
+  "profilePage.metrics.title": {
+    "string": "지표"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "상위 도전"
+  },
+  "projectRoles.admin": {
+    "string": "관리자"
+  },
+  "projectRoles.read": {
+    "string": "읽기"
+  },
+  "projectRoles.write": {
+    "string": "쓰기"
+  },
+  "settings.apiKey.label": {
+    "string": "API 키"
+  },
+  "settings.general.basemapLabel": {
+    "string": "기본 배경 지도"
+  },
+  "settings.general.title": {
+    "string": "기본 설정"
+  },
+  "settings.notifications.description": {
+    "string": "구독 알림 이메일을 요청하면 여기로 전송됩니다. \n\n 어떤 MapRoulette의 알림을 받고 싶은 지와 알림을 알리는 이메일을 보낼 지에 대한 여부를 결정하세요. (즉시 받거나 매일 받거나)."
+  },
+  "settings.plugins.addButton": {
+    "string": "추가"
+  },
+  "settings.submit.saveChanges": {
+    "string": "변경사항 저장"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "필터 초기화"
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "프로젝트 찾을 수 없음."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "검색..."
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "작업"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "이미 고쳐짐"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "보관됨"
+  },
+  "superAdminProjects.title": {
+    "string": "모든 프로젝트"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "인가"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "거부"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "점수"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "사용자"
+  },
+  "superAdminUsers.table.next": {
+    "string": "다음"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "이전"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "임무 선택"
+  },
+  "taskEditPage.lockFailedDialog.genericLockFailure": {
+    "string": "임무 잠그기가 불가함"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "임무 미리보기"
+  },
+  "taskEditPage.lockFailedDialog.previewAvailable": {
+    "string": ". 읽기 전용 미리보기 가능함."
+  },
+  "taskEditPage.lockFailedDialog.retryLock": {
+    "string": "잠그기 재시도하기"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "임무 잠금 불가"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "생성됨"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "삭제됨"
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "수정됨"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "가까운 임무"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "다음 작업"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "오픈스트리트맵 원격 조종이 응답하지 않습니다. 원격 제어가 활성화된 상태에서 실행 중인 JOSM이 있습니까?"
+  },
+  "taskEditPage.taskActions.editorButton.setDefaultEditor": {
+    "string": "Set Default Editor:"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "임무 잠김"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "잠금 해제"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "가까운 임무"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "iD에서 편집"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "시스템"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "Start Task"
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "초기화"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "추가"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "제거"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelected": {
+    "string": "선택 항목 삭제"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "기본 우선순위"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "일치하는 결과 없음"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "그룹"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "그리고"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "또는"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
+    "string": "속성"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "숫자"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "값"
+  },
+  "teamImages.status.approved": {
+    "string": "승인됨"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "팀 삭제"
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "도전 없음"
+  },
+  "teams.editTeam.title": {
+    "string": "팀 수정하기"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "팀에 대한 간략한 설명"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "팀 세부사항"
+  },
+  "teams.form.nameDescription": {
+    "string": "팀의 독특한 이름"
+  }
+}

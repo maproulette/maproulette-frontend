@@ -180,19 +180,53 @@ Storybook describes them.
 
 ## Internationalization, Localization, and Translation
 
-Internationalization and localization is performed via
-[react-intl](https://formatjs.github.io/docs/react-intl). Every user-visible
-string is given an id and a default (U.S. English) message where it's used.
+Internationalization and localization is performed via [react-intl].
+Translations are managed through [Transifex].
 
-`npm run i18n:extract` rebuilds `src/i18n/messages/en-US.json` from the
-messages in the source. Run it after adding or removing strings; `npm run
-check` fails if the committed file is out of date.
+In the code, all user-visible string are given an ID and a default value in
+U.S. English:
 
-Translations for other locales are managed through
-[Transifex](https://app.transifex.com/osmlab/maproulette3/), who kindly provides
-us with free service through their Open Source program. Translation files are
-pulled into the code repository automatically and stored in the
-`src/i18n/messages/` directory.
+```ts
+const { t } = useIntl() // from @/i18n
+t({ id: "homepage.welcomeMessage", defaultMessage: "Welcome to MapRoulette!" })
+```
 
-See [src/i18n/TRANSIFEX.md](src/i18n/TRANSIFEX.md) for details, including how
-to add support for a new locale.
+For strings with dynamic parts, use the ICU MessageFormat syntax:
+
+```ts
+t(
+	{
+		id: "tasks.count",
+		defaultMessage:
+			"You've completed {count, plural, one {# task} other {# tasks}}",
+	},
+	{ count },
+);
+```
+
+If a string would be ambiguous to a translator when seen out of context,
+add a `description` to explain how it's used in the UI. Translators see
+this as a comment in the Transifex UI.
+
+```ts
+t({
+	id: "challenge.archive",
+	defaultMessage: "Archive",
+	description: "Button label (verb); clicking it archives the challenge",
+});
+```
+
+After modifying strings in the code, run `npm run i18n:extract` to rebuild
+`lang/en-US.json`, and commit that file along with your code changes.
+
+Transifex's GitHub integration (configured in `transifex.yml`) picks up changes
+to `lang/en-US.json` on `main`, and opens PRs adding translations to `lang/`
+once enough of a language is translated. Don't edit the translated files by
+hand; Transifex is their source of truth.
+
+To support a new locale, enable it in Transifex and add it to `localeOptions` in
+`src/i18n/locales.ts`. Locale ids are BCP 47 tags (`pt-BR`); if Transifex's code
+differs (`pt_BR`), add a `language_mapping` entry in `transifex.yml`.
+
+[react-intl]: https://formatjs.github.io/docs/react-intl
+[Transifex]: https://app.transifex.com/osmlab/maproulette/

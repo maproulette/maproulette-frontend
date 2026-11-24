@@ -1,0 +1,16 @@
+# Config for the Transifex GitHub integration, which pulls new source strings
+# from main and opens PRs with translations.
+filters:
+  - filter_type: file
+    file_format: STRUCTURED_JSON
+    source_language: en
+    source_file: lang/en-US.json
+    translation_files_expression: 'lang/<lang>.json'
+
+settings:
+  # Transifex uses underscores (pt_BR), but the Intl APIs need BCP 47 tags (pt-BR)
+  language_mapping:
+    pt_BR: pt-BR
+    pt_PT: pt-PT
+    ru_RU: ru-RU
+    zh_TW: zh-TW

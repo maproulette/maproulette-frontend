@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import type { APIRequestContext, Page } from '@playwright/test'
+import type { StructuredCatalog } from '@/i18n/messageFormatting'
 import type { UserWhoamiResponse } from '@/types/User'
 import {
   BACKEND_URL,
@@ -25,12 +26,9 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
 const catalogs = new Map<Locale, Record<string, string>>()
 const catalog = (locale: Locale) => {
   if (!catalogs.has(locale)) {
-    catalogs.set(
-      locale,
-      JSON.parse(
-        readFileSync(new URL(`../src/i18n/messages/${locale}.json`, import.meta.url), 'utf8')
-      ) as Record<string, string>
-    )
+    const file = new URL(`../lang/${locale}.json`, import.meta.url)
+    const entries = Object.entries(JSON.parse(readFileSync(file, 'utf8')) as StructuredCatalog)
+    catalogs.set(locale, Object.fromEntries(entries.map(([id, entry]) => [id, entry.string])))
   }
   return catalogs.get(locale) ?? {}
 }

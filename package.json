@@ -28,11 +28,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
-    "i18n:extract": "formatjs extract 'src/**/*.{ts,tsx}' --ignore 'src/**/*.test.{ts,tsx}' --ignore 'src/**/*.d.ts' --additional-function-names t --format simple --preserve-whitespace --throws --out-file src/i18n/messages/en-US.json",
-    "i18n:check": "npm run i18n:extract && git diff --exit-code -- src/i18n/messages/en-US.json",
-    "i18n:push": "tx push -s",
-    "i18n:pull": "tx pull -a --minimum-perc=50 && npm run format -- src/i18n/messages",
-    "i18n:status": "tx status"
+    "i18n:extract": "formatjs extract 'src/**/*.{ts,tsx}' --ignore 'src/**/*.test.{ts,tsx}' --ignore 'src/**/*.d.ts' --additional-function-names t --format transifex --preserve-whitespace --throws --out-file lang/en-US.json",
+    "i18n:check": "npm run i18n:extract && git diff --exit-code -- lang/en-US.json"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

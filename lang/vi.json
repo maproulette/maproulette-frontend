@@ -1,0 +1,215 @@
+{
+  "appLayout.header.nav.dashboard": {
+    "string": "Bảng điều khiển"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "Người chủ"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "Loại bỏ khỏi ưa thích"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "Ưa thích"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "Chi tiết"
+  },
+  "common.actions": {
+    "string": "Hoạt động"
+  },
+  "common.available": {
+    "string": "Có sẵn"
+  },
+  "common.cancel": {
+    "string": "Hủy bỏ"
+  },
+  "common.category.buildings": {
+    "string": "Tòa nhà"
+  },
+  "common.category.landUse": {
+    "string": "Sử dụng đất / Biên giới Hành chính"
+  },
+  "common.category.navigation": {
+    "string": "Đường sá / Đường đi bộ / Đường xe đạp"
+  },
+  "common.category.transit": {
+    "string": "Phương tiện Công cộng"
+  },
+  "common.category.water": {
+    "string": "Đường thủy"
+  },
+  "common.clear": {
+    "string": "Xóa sạch"
+  },
+  "common.comments": {
+    "string": "Nhận xét"
+  },
+  "common.copyUrl": {
+    "string": "Sao chép URL"
+  },
+  "common.createManage": {
+    "string": "Tạo & Quản lý"
+  },
+  "common.delete": {
+    "string": "Xóa"
+  },
+  "common.deleteProject": {
+    "string": "Xóa Dự án"
+  },
+  "common.description": {
+    "string": "Miêu tả"
+  },
+  "common.difficulty": {
+    "string": "Trình độ"
+  },
+  "common.discoverable": {
+    "string": "Tìm được"
+  },
+  "common.easy": {
+    "string": "Dễ dàng"
+  },
+  "common.edit": {
+    "string": "Sửa đổi"
+  },
+  "common.editProject": {
+    "string": "Sửa đổi Dự án"
+  },
+  "common.expert": {
+    "string": "Chuyên môn"
+  },
+  "common.exportCsv": {
+    "string": "Xuất CSV"
+  },
+  "common.featured": {
+    "string": "Nổi bật"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "Hướng dẫn"
+  },
+  "common.manage": {
+    "string": "Quản lý"
+  },
+  "common.name": {
+    "string": "Tên"
+  },
+  "common.newest": {
+    "string": "Mới nhất"
+  },
+  "common.normal": {
+    "string": "Bình thường"
+  },
+  "common.pinProject": {
+    "string": "Ghim Dự án"
+  },
+  "common.pinned": {
+    "string": "Ghim"
+  },
+  "common.priority": {
+    "string": "Mức ưu tiên"
+  },
+  "common.projects": {
+    "string": "Dự án"
+  },
+  "common.projects2": {
+    "string": "Dự án"
+  },
+  "common.remove": {
+    "string": "Loại bỏ"
+  },
+  "common.save": {
+    "string": "Lưu"
+  },
+  "common.status": {
+    "string": "Trạng thái"
+  },
+  "common.tagFix": {
+    "string": "Sửa Thẻ"
+  },
+  "common.unpinProject": {
+    "string": "Gỡ Ghim Dự án"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "Quay lại"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "Vị trí"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "Xóa các Bộ lọc"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "Sắp xếp theo"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "Cũ nhất"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "Tổng quát"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "Xuất"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "Không có Hoạt động Gần đây."
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "Khác"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "Nguồn của Bộ thay đổi"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "Hướng dẫn"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "Hủy bỏ"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "Tên Hiển thị"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "Tiếp tục"
+  },
+  "managers.searchPlaceholder": {
+    "string": "Tên người dùng OpenStreetMap"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "Xóa các Bộ lọc"
+  },
+  "settings.general.title": {
+    "string": "Tổng quát"
+  },
+  "settings.plugins.addButton": {
+    "string": "Thêm"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "Xóa các Bộ lọc"
+  },
+  "shared.searchBar.placeholder": {
+    "string": "Tìm kiếm..."
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Chấp nhận"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Bác bỏ"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "Người dùng"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "Thêm"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "Loại bỏ"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "Mức ưu tiên Mặc định"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "giá trị"
+  }
+}

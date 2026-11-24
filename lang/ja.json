@@ -1,0 +1,671 @@
+{
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "ダッシュボード"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "Explore Challenges"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "ヘルプ"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "サインアウト"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "Manage Challenge"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "所有者"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "開く"
+  },
+  "browsedChallengePage.challengeModals.reportModal.checkboxError": {
+    "string": "Please ensure that checkbox is checked before continue"
+  },
+  "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
+    "string": "I have attempted to contact the Challenge creator"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "開始"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "お気に入りから削除"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "お気に入り"
+  },
+  "browsedChallengePage.header.viewComments": {
+    "string": "コメントを見る"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "詳細"
+  },
+  "common.actions": {
+    "string": "操作"
+  },
+  "common.addChallenge": {
+    "string": "チャレンジを追加"
+  },
+  "common.allChallenges": {
+    "string": "All Challenges"
+  },
+  "common.alreadyFixed": {
+    "string": "Already Fixed"
+  },
+  "common.archived": {
+    "string": "Archived"
+  },
+  "common.available": {
+    "string": "Available"
+  },
+  "common.browseChallengeButton": {
+    "string": "Browse Challenge"
+  },
+  "common.cancel": {
+    "string": "キャンセル"
+  },
+  "common.cantComplete": {
+    "string": "Can't Complete"
+  },
+  "common.category.buildings": {
+    "string": "建物"
+  },
+  "common.category.landUse": {
+    "string": "土地利用 / 行政界"
+  },
+  "common.category.navigation": {
+    "string": "道路 / 歩道 / 自転車道"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "興味深いポイント / エリア"
+  },
+  "common.category.transit": {
+    "string": "公共交通"
+  },
+  "common.category.water": {
+    "string": "水系"
+  },
+  "common.challenge": {
+    "string": "チャレンジ"
+  },
+  "common.challenges": {
+    "string": "チャレンジ"
+  },
+  "common.challenges2": {
+    "string": "チャレンジ"
+  },
+  "common.clear": {
+    "string": "Clear"
+  },
+  "common.cloneChallenge": {
+    "string": "複製"
+  },
+  "common.cloneChallenge2": {
+    "string": "複製"
+  },
+  "common.comments": {
+    "string": "コメント"
+  },
+  "common.completed": {
+    "string": "Completed"
+  },
+  "common.cooperative": {
+    "string": "Cooperative"
+  },
+  "common.copy": {
+    "string": "コピー"
+  },
+  "common.copyUrl": {
+    "string": "URLをコピー"
+  },
+  "common.createManage": {
+    "string": "作成 & 管理"
+  },
+  "common.created": {
+    "string": "作成日"
+  },
+  "common.current": {
+    "string": "Current"
+  },
+  "common.delete": {
+    "string": "削除"
+  },
+  "common.deleteChallenge": {
+    "string": "チャレンジを削除"
+  },
+  "common.deleteProject": {
+    "string": "プロジェクトを削除"
+  },
+  "common.deleted": {
+    "string": "削除日"
+  },
+  "common.deleted2": {
+    "string": "削除日"
+  },
+  "common.description": {
+    "string": "説明"
+  },
+  "common.difficulty": {
+    "string": "難易度"
+  },
+  "common.disabled": {
+    "string": "無効"
+  },
+  "common.discoverable": {
+    "string": "Discoverable"
+  },
+  "common.easy": {
+    "string": "簡単"
+  },
+  "common.edit": {
+    "string": "編集"
+  },
+  "common.editChallenge": {
+    "string": "編集"
+  },
+  "common.editTask": {
+    "string": "タスクを編集"
+  },
+  "common.email": {
+    "string": "Email"
+  },
+  "common.expert": {
+    "string": "高度"
+  },
+  "common.exportCsv": {
+    "string": "CSVをエクスポート"
+  },
+  "common.featured": {
+    "string": "オススメ"
+  },
+  "common.fixed": {
+    "string": "Fixed"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.instructions": {
+    "string": "手順"
+  },
+  "common.invited": {
+    "string": "Invited"
+  },
+  "common.loadMore": {
+    "string": "Load More"
+  },
+  "common.manage": {
+    "string": "管理"
+  },
+  "common.modified": {
+    "string": "更新日"
+  },
+  "common.moveChallenge": {
+    "string": "移動"
+  },
+  "common.name": {
+    "string": "名前"
+  },
+  "common.newest": {
+    "string": "最新"
+  },
+  "common.noProjectsFound": {
+    "string": "プロジェクトがありません"
+  },
+  "common.normal": {
+    "string": "普通"
+  },
+  "common.notAnIssue": {
+    "string": "Not an Issue"
+  },
+  "common.notification": {
+    "string": "通知"
+  },
+  "common.notifications": {
+    "string": "通知"
+  },
+  "common.overpassQuery": {
+    "string": "Overpassクエリ"
+  },
+  "common.owned": {
+    "string": "所有"
+  },
+  "common.pinProject": {
+    "string": "プロジェクトをピン留め"
+  },
+  "common.pinned": {
+    "string": "ピン留め"
+  },
+  "common.popular": {
+    "string": "人気"
+  },
+  "common.preview": {
+    "string": "Preview"
+  },
+  "common.priority": {
+    "string": "優先度"
+  },
+  "common.project": {
+    "string": "プロジェクト"
+  },
+  "common.projects": {
+    "string": "プロジェクト"
+  },
+  "common.projects2": {
+    "string": "プロジェクト"
+  },
+  "common.rebuildTasks": {
+    "string": "再構築"
+  },
+  "common.recentActivity": {
+    "string": "最近の活動"
+  },
+  "common.remove": {
+    "string": "Remove"
+  },
+  "common.reportChallenge": {
+    "string": "Report Challenge"
+  },
+  "common.save": {
+    "string": "保存"
+  },
+  "common.share": {
+    "string": "共有"
+  },
+  "common.shown": {
+    "string": "Shown"
+  },
+  "common.signIn": {
+    "string": "サインイン"
+  },
+  "common.skipped": {
+    "string": "Skipped"
+  },
+  "common.startChallenge": {
+    "string": "開始"
+  },
+  "common.status": {
+    "string": "状態"
+  },
+  "common.tagFix": {
+    "string": "タグ修正"
+  },
+  "common.task": {
+    "string": "タスク"
+  },
+  "common.tasks": {
+    "string": "タスク"
+  },
+  "common.tasksRemaining": {
+    "string": "残タスク"
+  },
+  "common.teams": {
+    "string": "チーム"
+  },
+  "common.type": {
+    "string": "Type"
+  },
+  "common.unpinProject": {
+    "string": "プロジェクトのピン留めを解除"
+  },
+  "common.users": {
+    "string": "Users"
+  },
+  "common.view": {
+    "string": "View"
+  },
+  "common.write": {
+    "string": "Write"
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "戻る"
+  },
+  "exploreChallenges.challengeList.table.contributors": {
+    "string": "Contributors"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "無効"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "位置"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "Any"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "並べ替え"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "最古"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "すべて"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "作業中"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "全般"
+  },
+  "keyboardShortcuts.title": {
+    "string": "キーボードショートカット"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "管理者"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "完了"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "エクスポート"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "ダウンロード"
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "最近の活動がありません."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "構築に失敗したタスク"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "構築中のタスク..."
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "タスクを更新中…"
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "Bundle"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "高"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "低"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "中"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "さらに詳しく"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "タスクの状態"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "I have read and understand the OSM Automated Edits code of conduct"
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "Automated Edits Code of Conduct Agreement"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "チャレンジのベースマップ"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "ベースマップ"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "その他"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "変更セットのソース"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "I want to upload a GeoJSON file"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/External Id Property"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "I want to provide an Overpass query"
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
+    "string": "Overpassクエリ"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "I have a URL to the GeoJSON data"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "ベースマップ"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "手順"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "優先度"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "キャンセル"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "プロジェクト管理者"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "表示名"
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "プロジェクトについて"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "タスクの名前。"
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "タスクの詳細"
+  },
+  "manageTaskNew.title": {
+    "string": "新しいタスク"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "タスクを見る"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "チャレンジを削除できません。"
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "あなたの変更を保存できません。"
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "プロジェクトを削除できません。"
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "あなたの変更を保存できません。"
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "再構築では最新GeoJsonデータで新しいローカルファイルをアップロードしてチャレンジのタスクを再構築できます:"
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "再構築ではOverpassクエリーを再実行し、チャレンジのタスクを最新データで再構築します:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "さらに詳しく"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "進む"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "First remove incomplete tasks"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "チャレンジのタクスを再構築"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "警告: 再構築をすると、地物のIDが正しく設定されていなかったり、新旧データがうまく一致しなかった場合などにタスクの複製が起こる場合があります。この操作は取り消せません！"
+  },
+  "managers.searchPlaceholder": {
+    "string": "OpenStreetMapユーザ名"
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "チーム名"
+  },
+  "moveChallengeModal.title": {
+    "string": "移動"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "チャレンジ完了"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "Group by Task"
+  },
+  "notificationsPage.filters.category.system": {
+    "string": "システム"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "Clear Filters"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "From"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "チャレンジ:"
+  },
+  "ownerTeam.title": {
+    "string": "チーム"
+  },
+  "profilePage.achievements.title": {
+    "string": "Achievements"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "OSM Profile"
+  },
+  "profilePage.metrics.title": {
+    "string": "Metrics"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "トップチャレンジ"
+  },
+  "settings.apiKey.label": {
+    "string": "APIキー"
+  },
+  "settings.general.basemapLabel": {
+    "string": "既定のベースマップ"
+  },
+  "settings.general.title": {
+    "string": "全般"
+  },
+  "settings.plugins.addButton": {
+    "string": "追加"
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "プロジェクトがありません."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "検索..."
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "タスク"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "既に修正済"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "Archived"
+  },
+  "superAdminProjects.title": {
+    "string": "All Projects"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Approve"
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Reject"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "Score"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "ユーザー"
+  },
+  "superAdminUsers.table.next": {
+    "string": "次へ"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "前へ"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "タスクを選択"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "作成日"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "削除日"
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "更新日"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "Nearby Task"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "次のタスク"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "OSMリモート制御が反応しません。JOSMのリモート制御は有効化されていますか？"
+  },
+  "taskEditPage.taskActions.editorButton.setDefaultEditor": {
+    "string": "Set Default Editor:"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "タスクをロック中"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "アンロック"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "iDで編集"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "システム"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "Start Task"
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "リセット"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "追加"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "既定の優先度"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "一致なし"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "グループ"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "number"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "value"
+  },
+  "teamImages.status.approved": {
+    "string": "承認"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "チームを削除"
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "チャレンジがありません"
+  },
+  "teams.editTeam.title": {
+    "string": "チームを編集"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "チームの簡単な説明"
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "チームの詳細"
+  },
+  "teams.form.nameDescription": {
+    "string": "チームの固有名"
+  }
+}

@@ -1,0 +1,4625 @@
+{
+  "appLayout.dismissibleBanner.dismiss": {
+    "string": "Banner negeren"
+  },
+  "appLayout.header.appName": {
+    "string": "MapRoulette"
+  },
+  "appLayout.header.globalSearch.docsLink": {
+    "string": "Sneltoetsen en verkorte opdrachten zoeken"
+  },
+  "appLayout.header.globalSearch.findById.enterNumericId": {
+    "string": "Voer een numerieke ID in"
+  },
+  "appLayout.header.globalSearch.findById.hint": {
+    "string": "Voer een numerieke ID in om een project, uitdaging of taak te zoeken"
+  },
+  "appLayout.header.globalSearch.findById.lookingUpId": {
+    "string": "ID {id} opzoeken..."
+  },
+  "appLayout.header.globalSearch.findById.matchCount": {
+    "string": "{count, plural, one {# overeenkomst} other {# overeenkomsten}}"
+  },
+  "appLayout.header.globalSearch.findById.noResults": {
+    "string": "Geen resultaten voor ID {id}"
+  },
+  "appLayout.header.globalSearch.findById.noResultsHint": {
+    "string": "Geen project, uitdaging of taak met deze ID gevonden"
+  },
+  "appLayout.header.globalSearch.findById.resultsForId": {
+    "string": "Resultaten voor ID {id}"
+  },
+  "appLayout.header.globalSearch.findById.typeIdHint": {
+    "string": "Typ ID-nummer voor een project, uitdaging of taak"
+  },
+  "appLayout.header.globalSearch.findChallenge.loadingMore": {
+    "string": "Meer uitdagingen laden…"
+  },
+  "appLayout.header.globalSearch.findChallenge.noMoreToLoad": {
+    "string": "Geen uitdagingen meer om te laden"
+  },
+  "appLayout.header.globalSearch.findChallenge.noResultsHint": {
+    "string": "Probeer uw filters aan te passen"
+  },
+  "appLayout.header.globalSearch.findChallenge.resultCount": {
+    "string": "{count, plural, one {# uitdaging} other {# uitdagingen}}"
+  },
+  "appLayout.header.globalSearch.findComments.byUser": {
+    "string": "door {username}"
+  },
+  "appLayout.header.globalSearch.findComments.commentCount": {
+    "string": "{count, plural, one {# opmerking} other {# opmerkingen}}"
+  },
+  "appLayout.header.globalSearch.findComments.loading": {
+    "string": "Opmerkingen laden…"
+  },
+  "appLayout.header.globalSearch.findComments.noCommentsMatch": {
+    "string": "Geen opmerking {label} komt overeen met \"{query}\""
+  },
+  "appLayout.header.globalSearch.findComments.noCommentsYet": {
+    "string": "Nog geen opmerkingen {label}"
+  },
+  "appLayout.header.globalSearch.findComments.recentComments": {
+    "string": "Recente opmerkingen {label}"
+  },
+  "appLayout.header.globalSearch.findComments.unknownUser": {
+    "string": "Onbekend"
+  },
+  "appLayout.header.globalSearch.findFeatureByName.featuredProjects": {
+    "string": "Uitgelichte projecten"
+  },
+  "appLayout.header.globalSearch.findFeatureByName.nothingMatches": {
+    "string": "Niets komt overeen met \"{query}\""
+  },
+  "appLayout.header.globalSearch.findFeatureByName.resultCount": {
+    "string": "{count, plural, one {# resultaat} other {# resultaten}}"
+  },
+  "appLayout.header.globalSearch.findProject.loading": {
+    "string": "Projecten laden…"
+  },
+  "appLayout.header.globalSearch.findProject.loadingMore": {
+    "string": "Meer projecten laden…"
+  },
+  "appLayout.header.globalSearch.findProject.noMoreToLoad": {
+    "string": "Geen projecten meer om te laden"
+  },
+  "appLayout.header.globalSearch.findProject.noResultsHint": {
+    "string": "Probeer een andere zoekterm"
+  },
+  "appLayout.header.globalSearch.findProject.resultCount": {
+    "string": "{count, plural, one {# project} other {# projecten}}"
+  },
+  "appLayout.header.globalSearch.findTask.found": {
+    "string": "Taak gevonden"
+  },
+  "appLayout.header.globalSearch.findTask.hint": {
+    "string": "Voer een taak-ID in om op te zoeken"
+  },
+  "appLayout.header.globalSearch.findTask.lookingUp": {
+    "string": "Taak {id} opzoeken…"
+  },
+  "appLayout.header.globalSearch.findTask.noResults": {
+    "string": "Geen taak met ID {id} gevonden"
+  },
+  "appLayout.header.globalSearch.findTask.noResultsHint": {
+    "string": "Probeer een andere taak-ID"
+  },
+  "appLayout.header.globalSearch.findTask.status.label": {
+    "string": "Status: {status}"
+  },
+  "appLayout.header.globalSearch.placeholder": {
+    "string": "Zoeken naar uitdagingen, taken of projecten…"
+  },
+  "appLayout.header.globalSearch.types.challenge.description": {
+    "string": "Zoeken naar uitdagingen om in kaart te brengen met filters voor moeilijkheid, locatie en tags"
+  },
+  "appLayout.header.globalSearch.types.challenge.label": {
+    "string": "Uitdaging zoeken"
+  },
+  "appLayout.header.globalSearch.types.challengeComment.description": {
+    "string": "Zoeken door opmerkingen van uitdagingen voor vragen en suggesties"
+  },
+  "appLayout.header.globalSearch.types.challengeComment.label": {
+    "string": "Opmerkingen voor uitdagingen zoeken"
+  },
+  "appLayout.header.globalSearch.types.featureByName.description": {
+    "string": "Zoeken naar geografische objecten, zoals wegen, gebouwen of landmarkeringen op naam"
+  },
+  "appLayout.header.globalSearch.types.featureByName.label": {
+    "string": "Zoek een object op naam"
+  },
+  "appLayout.header.globalSearch.types.id.description": {
+    "string": "Snel navigeren naar een bron (project, uitdaging or taak) met zijn ID"
+  },
+  "appLayout.header.globalSearch.types.project.description": {
+    "string": "Bladeren door projecten die meerdere uitdagingen bevatten, georganiseerd op thema of gebied"
+  },
+  "appLayout.header.globalSearch.types.project.label": {
+    "string": "Project zoeken"
+  },
+  "appLayout.header.globalSearch.types.task.description": {
+    "string": "Zoeken naar individuele taken voor in kaart brengen op ID, status, prioriteit of locatie"
+  },
+  "appLayout.header.globalSearch.types.taskComment.description": {
+    "string": "Zoeken door opmerkingen die zijn achtergelaten in taken om te bespreken en notities"
+  },
+  "appLayout.header.globalSearch.types.taskComment.label": {
+    "string": "Opmerkingen taken zoeken"
+  },
+  "appLayout.header.globalSearch.unifiedList.goToChallenge": {
+    "string": "Ga naar uitdaging"
+  },
+  "appLayout.header.globalSearch.unifiedList.goToProject": {
+    "string": "Ga naar project"
+  },
+  "appLayout.header.nav.dashboard": {
+    "string": "Dashboard"
+  },
+  "appLayout.header.nav.donate": {
+    "string": "Doneren"
+  },
+  "appLayout.header.nav.exploreChallenges": {
+    "string": "Uitdagingen verkennen"
+  },
+  "appLayout.header.nav.learn": {
+    "string": "Leren"
+  },
+  "appLayout.header.nav.mobile": {
+    "string": "Mobiele navigatie"
+  },
+  "appLayout.header.nav.openInNewTab": {
+    "string": "Open {label} in een nieuwe tab"
+  },
+  "appLayout.header.notifications.triggerLabel": {
+    "string": "Notificaties voor {name}"
+  },
+  "appLayout.header.notifications.unreadSrOnly": {
+    "string": "U heeft ongelezen notificaties"
+  },
+  "appLayout.header.signingIn": {
+    "string": "aanmelden…"
+  },
+  "appLayout.header.userMenu.accountSettings": {
+    "string": "Accountinstellingen"
+  },
+  "appLayout.header.userMenu.backend": {
+    "string": "Backend"
+  },
+  "appLayout.header.userMenu.documentation": {
+    "string": "Documentatie"
+  },
+  "appLayout.header.userMenu.frontend": {
+    "string": "Frontend"
+  },
+  "appLayout.header.userMenu.signOut": {
+    "string": "Afmelden"
+  },
+  "appLayout.header.userMenu.superAdmin": {
+    "string": "Superbeheerder"
+  },
+  "appLayout.header.userMenu.theme": {
+    "string": "Thema"
+  },
+  "appLayout.header.userMenu.triggerSrOnly": {
+    "string": "Menu Gebruiker"
+  },
+  "appLayout.header.userMenu.viewPublicProfile": {
+    "string": "Publieke profiel bekijken"
+  },
+  "auth.loginFailed": {
+    "string": "Aanmelden mislukt of verlopen. Probeer het later nog eens."
+  },
+  "browsedChallengePage.actionButtons.alreadyReported": {
+    "string": "U heeft deze uitdaging al gerapporteerd; die wacht op beoordeling"
+  },
+  "browsedChallengePage.actionButtons.challengeActions": {
+    "string": "Acties uitdaging"
+  },
+  "browsedChallengePage.actionButtons.challengeReported": {
+    "string": "Uitdaging gerapporteerd"
+  },
+  "browsedChallengePage.actionButtons.manageChallenge": {
+    "string": "Uitdaging beheren"
+  },
+  "browsedChallengePage.actionButtons.mustLoginToReport": {
+    "string": "U moet aangemeld zijn om een uitdaging te kunnen rapporteren"
+  },
+  "browsedChallengePage.actionButtons.reportChallengeTitle": {
+    "string": "Uitdaging rapporteren"
+  },
+  "browsedChallengePage.challengeModals.actions.avgTimeSpent": {
+    "string": "Gemiddelde gebruikte tijd:"
+  },
+  "browsedChallengePage.challengeModals.actions.completedOf": {
+    "string": "{total, plural, one {{completed, number} van # taak} other {{completed, number} van # taken}}"
+  },
+  "browsedChallengePage.challengeModals.actions.title": {
+    "string": "Activiteit taak"
+  },
+  "browsedChallengePage.challengeModals.actions.unavailable": {
+    "string": "Activiteit taak is niet beschikbaar voor deze uitdaging."
+  },
+  "browsedChallengePage.challengeModals.comments.addSuccess": {
+    "string": "Opmerking met succes toegevoegd"
+  },
+  "browsedChallengePage.challengeModals.comments.characterCount": {
+    "string": "{max, plural, one {{count, number}/# teken} other {{count, number}/# tekens}}"
+  },
+  "browsedChallengePage.challengeModals.comments.empty": {
+    "string": "Nog geen opmerkingen. Maak de eerste opmerking!"
+  },
+  "browsedChallengePage.challengeModals.comments.owner": {
+    "string": "Eigenaar"
+  },
+  "browsedChallengePage.challengeModals.comments.reTask": {
+    "string": "Re: Taak {taskId}"
+  },
+  "browsedChallengePage.challengeModals.comments.send": {
+    "string": "Verzenden"
+  },
+  "browsedChallengePage.challengeModals.comments.sending": {
+    "string": "Verzenden…"
+  },
+  "browsedChallengePage.challengeModals.comments.showTaskComments": {
+    "string": "Opmerkingen taak weergeven"
+  },
+  "browsedChallengePage.challengeModals.comments.signInRequired": {
+    "string": "Aanmelden om opmerkingen te kunnen toevoegen"
+  },
+  "browsedChallengePage.challengeModals.commentsModal.title": {
+    "string": "Opmerkingen uitdaging"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.awaitingReview": {
+    "string": "Wacht op beoordeling door de beheerders van MapRoulette."
+  },
+  "browsedChallengePage.challengeModals.reportHistory.description": {
+    "string": "Rapporten die zijn ingediend voor deze uitdaging en waar elk daarvan staat. De beheerders van MapRoulette beoordelen elk rapport."
+  },
+  "browsedChallengePage.challengeModals.reportHistory.empty": {
+    "string": "Niemand heeft deze uitdaging gerapporteerd."
+  },
+  "browsedChallengePage.challengeModals.reportHistory.reportedBy": {
+    "string": "Gerapporteerd door {user} op {date}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.resolved": {
+    "string": "Gemarkeerd {status}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.resolvedOn": {
+    "string": "Gemarkeerd {status} op {date}"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.actioned": {
+    "string": "Actie ondernomen"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.dismissed": {
+    "string": "Afgewezen"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.status.open": {
+    "string": "Open"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.title": {
+    "string": "Rapporten voor deze uitdaging"
+  },
+  "browsedChallengePage.challengeModals.reportHistory.you": {
+    "string": "u"
+  },
+  "browsedChallengePage.challengeModals.reportModal.checkboxError": {
+    "string": "Zorg ervoor dat het keuzevak is geselecteerd voordat u doorgaat"
+  },
+  "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
+    "string": "Ik heb geprobeerd contact op te nemen met de maker van de uitdaging"
+  },
+  "browsedChallengePage.challengeModals.reportModal.description": {
+    "string": "U staat op het punt een uitdaging te rapporteren. Uw rapport gaat naar de beheerders van MapRoulette ter beoordeling en een opmerking, waarin u genoemd wordt, wordt in de uitdaging gepost, zodat de maker van de uitdaging weet dat het er is. Rapporteren van een uitdaging schakelt hem niet onmiddellijk uit. Leg in detail uit wat uw probleem is met deze uitdaging, link, indien mogelijk, naar specifieke wijzigingsets van OSM."
+  },
+  "browsedChallengePage.challengeModals.reportModal.emailLabel": {
+    "string": "E-mail (optioneel)"
+  },
+  "browsedChallengePage.challengeModals.reportModal.emailPlaceholder": {
+    "string": "Voer uw -email in"
+  },
+  "browsedChallengePage.challengeModals.reportModal.invalidEmailError": {
+    "string": "Voer een geldig e-mailadres in"
+  },
+  "browsedChallengePage.challengeModals.reportModal.minLengthError": {
+    "string": "{min, plural, one {Rapport moet ten minste # teken bevatten} other {Rapport moet ten minste # tekens bevatten}}"
+  },
+  "browsedChallengePage.challengeModals.reportModal.submitButton": {
+    "string": "Rapport indienen"
+  },
+  "browsedChallengePage.challengeModals.reportModal.submitError": {
+    "string": "Indienen van rapport mislukt. Probeer het opnieuw."
+  },
+  "browsedChallengePage.challengeModals.reportModal.submitSuccess": {
+    "string": "Rapport met succes ingediend"
+  },
+  "browsedChallengePage.challengeModals.reportModal.textPlaceholder": {
+    "string": "Voer hier tekst in"
+  },
+  "browsedChallengePage.footer.challengePausedMessage": {
+    "string": "Deze uitdaging is momenteel gepauzeerd. Nieuwe taken kunnen niet worden gestart totdat die weer wordt voortgezet."
+  },
+  "browsedChallengePage.footer.failedToLoadTask": {
+    "string": "Laden van taak mislukt"
+  },
+  "browsedChallengePage.footer.hideMap": {
+    "string": "Kaart verbergen"
+  },
+  "browsedChallengePage.footer.noTasksAvailable": {
+    "string": "Geen taken beschikbaar voor deze uitdaging."
+  },
+  "browsedChallengePage.footer.noTasksToBrowse": {
+    "string": "Deze uitdaging heeft geen taken"
+  },
+  "browsedChallengePage.footer.reportedIssueMessage": {
+    "string": "Deze uitdaging is gerapporteerd. Klik om de rapporten te bekijken."
+  },
+  "browsedChallengePage.footer.reportedIssueTooltip": {
+    "string": "Bekijk de rapporten voor deze uitdaging"
+  },
+  "browsedChallengePage.footer.showMap": {
+    "string": "Kaart weergeven"
+  },
+  "browsedChallengePage.footer.startChallenge": {
+    "string": "Uitdaging starten"
+  },
+  "browsedChallengePage.header.addToFavorites": {
+    "string": "Toevoegen aan Favorieten"
+  },
+  "browsedChallengePage.header.addedToFavorites": {
+    "string": "Toegevoegd aan Favorieten"
+  },
+  "browsedChallengePage.header.byline": {
+    "string": "door <owner>{name}</owner>"
+  },
+  "browsedChallengePage.header.challengeLiked": {
+    "string": "Uitdaging geliked!"
+  },
+  "browsedChallengePage.header.checkOutChallenge": {
+    "string": "Bekijk deze uitdaging: {name}"
+  },
+  "browsedChallengePage.header.failedToShare": {
+    "string": "Delen van uitdaging mislukt"
+  },
+  "browsedChallengePage.header.failedToUpdateFavorite": {
+    "string": "Bijwerken status Favoriet mislukt"
+  },
+  "browsedChallengePage.header.failedToUpdateLike": {
+    "string": "Bijwerken status Like mislukt"
+  },
+  "browsedChallengePage.header.like": {
+    "string": "Like"
+  },
+  "browsedChallengePage.header.likeChallenge": {
+    "string": "Like uitdaging"
+  },
+  "browsedChallengePage.header.likeCount": {
+    "string": "{count, plural, one {# like} other {# likes}}"
+  },
+  "browsedChallengePage.header.likeRemoved": {
+    "string": "Like verwijderd"
+  },
+  "browsedChallengePage.header.liked": {
+    "string": "Geliked"
+  },
+  "browsedChallengePage.header.pleaseSignInToLike": {
+    "string": "Aanmelden om uitdagingen te kunnen liken"
+  },
+  "browsedChallengePage.header.pleaseSignInToSave": {
+    "string": "Aanmelden om uitdagingen te kunnen opslaan"
+  },
+  "browsedChallengePage.header.removeFromFavorites": {
+    "string": "Verwijderen uit Favorieten"
+  },
+  "browsedChallengePage.header.removedFromFavorites": {
+    "string": "Verwijderd uit Favorieten"
+  },
+  "browsedChallengePage.header.saved": {
+    "string": "Opgeslagen"
+  },
+  "browsedChallengePage.header.shareChallenge": {
+    "string": "Uitdaging delen"
+  },
+  "browsedChallengePage.header.signInToLike": {
+    "string": "Aanmelden om uitdagingen te kunnen liken"
+  },
+  "browsedChallengePage.header.signInToSave": {
+    "string": "Aanmelden om uitdagingen te kunnen opslaan"
+  },
+  "browsedChallengePage.header.taxonomy.favorite": {
+    "string": "Favoriet"
+  },
+  "browsedChallengePage.header.taxonomy.undiscoverable": {
+    "string": "Niet zichtbaar"
+  },
+  "browsedChallengePage.header.unlikeChallenge": {
+    "string": "Uitdaging unliken"
+  },
+  "browsedChallengePage.header.viewComments": {
+    "string": "Opmerkingen bekijken"
+  },
+  "browsedChallengePage.progress.details": {
+    "string": "Details"
+  },
+  "browsedChallengePage.progress.progress": {
+    "string": "Voortgang"
+  },
+  "browsedChallengePage.scrollIndicator.scrollForMore": {
+    "string": "Scrollen voor meer"
+  },
+  "browsedProjectPage.challengesList.emptyDescription": {
+    "string": "Dit project heeft nog geen uitdagingen."
+  },
+  "browsedProjectPage.challengesList.emptyDescriptionFiltered": {
+    "string": "Probeer de filters leeg te maken om meer resultaten te zien."
+  },
+  "browsedProjectPage.challengesList.showCompletedFilter": {
+    "string": "Voltooide weergeven"
+  },
+  "browsedProjectPage.challengesTable.complete": {
+    "string": "Voltooid"
+  },
+  "browsedProjectPage.projectDetail.byOwner": {
+    "string": "door {owner}"
+  },
+  "browsedProjectPage.projectDetail.percentComplete": {
+    "string": "{percent}% voltooid"
+  },
+  "browsedProjectPage.projectDetail.shareError": {
+    "string": "Delen van project mislukt"
+  },
+  "challengeCard.progress": {
+    "string": "{count, plural, one {<b>{count, number}</b> taak · <b>{percent, number, percent}</b> voltooid} other {<b>{count, number}</b> taken · <b>{percent, number, percent}</b> voltooid}}"
+  },
+  "challengeForm.errors.projectIdRequired": {
+    "string": "Project-ID is vereist om een uitdaging te kunnen maken"
+  },
+  "challengeProgress.remaining": {
+    "string": "Resterend"
+  },
+  "challengeProgress.segmentTitle": {
+    "string": "{status}: {count, number}"
+  },
+  "commentList.list.empty": {
+    "string": "Nog geen opmerkingen"
+  },
+  "common.accessDenied": {
+    "string": "Toegang geweigerd"
+  },
+  "common.actions": {
+    "string": "Acties"
+  },
+  "common.addAComment": {
+    "string": "Voeg een opmerking toe…"
+  },
+  "common.addChallenge": {
+    "string": "Uitdaging toevoegen"
+  },
+  "common.all": {
+    "string": "Alle ({count})"
+  },
+  "common.allChallenges": {
+    "string": "Alle uitdagingen"
+  },
+  "common.alreadyFixed": {
+    "string": "Al gerepareerd"
+  },
+  "common.answered": {
+    "string": "Beantwoord"
+  },
+  "common.apply": {
+    "string": "Toepassen"
+  },
+  "common.archiveChallenge": {
+    "string": "Uitdaging archiveren"
+  },
+  "common.archiveProject": {
+    "string": "Project archiveren"
+  },
+  "common.archived": {
+    "string": "Gearchiveerd"
+  },
+  "common.available": {
+    "string": "Beschikbaar"
+  },
+  "common.browseChallenge": {
+    "string": "Door de uitdaging bladeren"
+  },
+  "common.browseChallengeButton": {
+    "string": "Door de uitdaging bladeren"
+  },
+  "common.bundledTasks": {
+    "string": "Gebundelde taken: ({count})"
+  },
+  "common.cancel": {
+    "string": "Annuleren"
+  },
+  "common.cantComplete": {
+    "string": "Kan niet voltooien"
+  },
+  "common.category.buildings": {
+    "string": "Gebouwen"
+  },
+  "common.category.landUse": {
+    "string": "Landgebruik / Administratieve grenzen"
+  },
+  "common.category.navigation": {
+    "string": "Wegen / Wandelpaden / Fietspaden"
+  },
+  "common.category.pointsOfInterest": {
+    "string": "Interessante punten en gebieden"
+  },
+  "common.category.transit": {
+    "string": "Openbaar vervoer"
+  },
+  "common.category.water": {
+    "string": "Water"
+  },
+  "common.challenge": {
+    "string": "Uitdaging"
+  },
+  "common.challengePausedDescription": {
+    "string": "Deze uitdaging is momenteel gepauzeerd"
+  },
+  "common.challengePausedTitle": {
+    "string": "Uitdaging gepauzeerd"
+  },
+  "common.challengeWithChallengeId": {
+    "string": "Uitdaging #{challengeId}"
+  },
+  "common.challengeWithId": {
+    "string": "Uitdaging #{id}"
+  },
+  "common.challenges": {
+    "string": "Uitdagingen"
+  },
+  "common.challenges2": {
+    "string": "uitdagingen"
+  },
+  "common.clear": {
+    "string": "Leegmaken"
+  },
+  "common.cloneChallenge": {
+    "string": "Uitdaging klonen"
+  },
+  "common.cloneChallenge2": {
+    "string": "Uitdaging klonen"
+  },
+  "common.close": {
+    "string": "Sluiten"
+  },
+  "common.closeTask": {
+    "string": "Taak sluiten"
+  },
+  "common.comingSoon": {
+    "string": "Komt eraan"
+  },
+  "common.comments": {
+    "string": "Opmerkingen"
+  },
+  "common.completed": {
+    "string": "Voltooid"
+  },
+  "common.cooperative": {
+    "string": "Coöperatief"
+  },
+  "common.copied": {
+    "string": "Gekopieerd"
+  },
+  "common.copiedToClipboard": {
+    "string": "Naar klembord gekopieerd"
+  },
+  "common.copy": {
+    "string": "Kopiëren"
+  },
+  "common.copyLink": {
+    "string": "Link kopiëren"
+  },
+  "common.copyUrl": {
+    "string": "URL kopiëren"
+  },
+  "common.couldNotUpdateVisibility": {
+    "string": "Kon zichtbaarheid niet bijwerken"
+  },
+  "common.createChallenge": {
+    "string": "Uitdaging maken"
+  },
+  "common.createManage": {
+    "string": "maken & beheren"
+  },
+  "common.createNewChallenge": {
+    "string": "Nieuwe uitdaging maken"
+  },
+  "common.createNewProject": {
+    "string": "Nieuw project maken"
+  },
+  "common.createProject": {
+    "string": "Project maken"
+  },
+  "common.createTeam": {
+    "string": "Team maken"
+  },
+  "common.created": {
+    "string": "Gemaakt"
+  },
+  "common.current": {
+    "string": "Huidige"
+  },
+  "common.delete": {
+    "string": "Verwijderen"
+  },
+  "common.deleteChallenge": {
+    "string": "Uitdaging verwijderen"
+  },
+  "common.deleteChallenge2": {
+    "string": "Uitdaging verwijderen?"
+  },
+  "common.deleteChallengeWarning": {
+    "string": "Dit zal deze uitdaging en al zijn taken verwijderen. Deze actie kan niet ongedaan gemaakt worden."
+  },
+  "common.deleteProject": {
+    "string": "Project verwijderen"
+  },
+  "common.deleteProject2": {
+    "string": "Project verwijderen?"
+  },
+  "common.deleted": {
+    "string": "Verwijderd"
+  },
+  "common.deleted2": {
+    "string": "verwijderd"
+  },
+  "common.description": {
+    "string": "Omschrijving"
+  },
+  "common.difficulty": {
+    "string": "Moeilijkheid"
+  },
+  "common.disableChallenge": {
+    "string": "Uitdaging uitschakelen"
+  },
+  "common.disabled": {
+    "string": "Uitgeschakeld"
+  },
+  "common.discoverable": {
+    "string": "Zichtbaar"
+  },
+  "common.easy": {
+    "string": "Gemakkelijk"
+  },
+  "common.edit": {
+    "string": "Bewerken"
+  },
+  "common.editChallenge": {
+    "string": "Uitdaging bewerken"
+  },
+  "common.editProject": {
+    "string": "Project bewerken"
+  },
+  "common.editTask": {
+    "string": "Taak bewerken"
+  },
+  "common.email": {
+    "string": "E-mail"
+  },
+  "common.enableChallenge": {
+    "string": "Uitdaging uitschakelen"
+  },
+  "common.enabled": {
+    "string": "Ingeschakeld"
+  },
+  "common.error": {
+    "string": "Er ging iets mis"
+  },
+  "common.expert": {
+    "string": "Expert"
+  },
+  "common.exportCsv": {
+    "string": "CSV exporteren"
+  },
+  "common.failedToAddComment": {
+    "string": "Toevoegen van opmerking mislukt"
+  },
+  "common.failedToLoadNextTask": {
+    "string": "Laden van volgende taak mislukt"
+  },
+  "common.featured": {
+    "string": "Uitgelicht"
+  },
+  "common.findATask": {
+    "string": "Taak zoeken"
+  },
+  "common.findByMaprouletteId": {
+    "string": "Zoeken op MapRoulette-ID"
+  },
+  "common.fixed": {
+    "string": "Gerepareerd"
+  },
+  "common.geojson": {
+    "string": "GeoJSON"
+  },
+  "common.geojsonUrl": {
+    "string": "URL GeoJSON"
+  },
+  "common.global": {
+    "string": "Globaal"
+  },
+  "common.gridView": {
+    "string": "Rasterweergave"
+  },
+  "common.hidePanel": {
+    "string": "Paneel verbergen"
+  },
+  "common.id": {
+    "string": "ID"
+  },
+  "common.idNumber": {
+    "string": "ID {id}"
+  },
+  "common.instructions": {
+    "string": "Instructies"
+  },
+  "common.invited": {
+    "string": "Uitgenodigd"
+  },
+  "common.joined": {
+    "string": "Deelnemen"
+  },
+  "common.lastUpdated": {
+    "string": "Laatst bijgewerkt {date}"
+  },
+  "common.level": {
+    "string": "Niveau {level}"
+  },
+  "common.linkCopiedToClipboard": {
+    "string": "Link naar klembord gekopieerd"
+  },
+  "common.listView": {
+    "string": "Lijstweergave"
+  },
+  "common.loadMore": {
+    "string": "Meer laden"
+  },
+  "common.loading": {
+    "string": "Laden…"
+  },
+  "common.loading2": {
+    "string": "Laden…"
+  },
+  "common.loadingChallenges": {
+    "string": "Uitdagingen laden…"
+  },
+  "common.loadingNotifications": {
+    "string": "Notificaties laden…"
+  },
+  "common.makeDiscoverable": {
+    "string": "Zichtbaar maken"
+  },
+  "common.makeNotDiscoverable": {
+    "string": "Onzichtbaar maken"
+  },
+  "common.manage": {
+    "string": "Beheren"
+  },
+  "common.manageChallenge": {
+    "string": "Uitdaging beheren"
+  },
+  "common.map": {
+    "string": "Kaart"
+  },
+  "common.markAllAsRead": {
+    "string": "Alles als gelezen markeren"
+  },
+  "common.mentions": {
+    "string": "Vermeldt"
+  },
+  "common.modified": {
+    "string": "Bewerkt"
+  },
+  "common.moveChallenge": {
+    "string": "Uitdaging verplaatsen"
+  },
+  "common.name": {
+    "string": "Naam"
+  },
+  "common.newest": {
+    "string": "Nieuwste"
+  },
+  "common.noChallengesFound": {
+    "string": "Geen uitdagingen gevonden"
+  },
+  "common.noMoreTasksInChallenge": {
+    "string": "Geen taken meer beschikbaar voor deze uitdaging."
+  },
+  "common.noNotificationsYet": {
+    "string": "U heeft geen notificaties."
+  },
+  "common.noProjectsFound": {
+    "string": "Geen projecten gevonden"
+  },
+  "common.noResultsFound": {
+    "string": "Geen resultaten gevonden"
+  },
+  "common.noUnreadNotificationsYet": {
+    "string": "U heeft op dit moment geen ongelezen notificaties."
+  },
+  "common.normal": {
+    "string": "Normaal"
+  },
+  "common.notAnIssue": {
+    "string": "Niet van toepassing"
+  },
+  "common.nothingToPreview": {
+    "string": "Geen voorbeeld mogelijk"
+  },
+  "common.notification": {
+    "string": "Notificatie"
+  },
+  "common.notifications": {
+    "string": "Notificaties"
+  },
+  "common.openMenu": {
+    "string": "Menu Openen"
+  },
+  "common.openTaskById": {
+    "string": "Taak op ID openen"
+  },
+  "common.overpassQuery": {
+    "string": "Overpass-query"
+  },
+  "common.owned": {
+    "string": "Eigendom"
+  },
+  "common.pageNotFound": {
+    "string": "Pagina niet gevonden"
+  },
+  "common.pauseChallenge": {
+    "string": "Uitdaging pauzeren"
+  },
+  "common.paused": {
+    "string": "Gepauzeerd"
+  },
+  "common.pinChallenge": {
+    "string": "Uitdaging vastzetten"
+  },
+  "common.pinProject": {
+    "string": "Project vastzetten"
+  },
+  "common.pinned": {
+    "string": "Vastgezet"
+  },
+  "common.pleaseEnterAComment": {
+    "string": "Voer een opmerking in"
+  },
+  "common.pleaseSelectAProject": {
+    "string": "Selecteer een project"
+  },
+  "common.plugins": {
+    "string": "Plug-ins"
+  },
+  "common.popular": {
+    "string": "Populair"
+  },
+  "common.preview": {
+    "string": "Voorbeeld"
+  },
+  "common.primary": {
+    "string": "Primair"
+  },
+  "common.priority": {
+    "string": "Prioriteit"
+  },
+  "common.project": {
+    "string": "Project"
+  },
+  "common.projectWithId": {
+    "string": "Project #{id}"
+  },
+  "common.projects": {
+    "string": "Projecten"
+  },
+  "common.projects2": {
+    "string": "projecten"
+  },
+  "common.rebuildTasks": {
+    "string": "Taken opnieuw samenstellen"
+  },
+  "common.rebuildTasksFailed": {
+    "string": "Kon taken niet opnieuw bouwen."
+  },
+  "common.recentActivity": {
+    "string": "Recente activiteit"
+  },
+  "common.remove": {
+    "string": "Verwijderen"
+  },
+  "common.removeWithName": {
+    "string": "Verwijder {name}"
+  },
+  "common.reply": {
+    "string": "Beantwoorden"
+  },
+  "common.reportChallenge": {
+    "string": "Uitdaging rapporteren"
+  },
+  "common.reportsLoadError": {
+    "string": "Kon de rapporten niet laden."
+  },
+  "common.resetViewToTaskLocation": {
+    "string": "Weergave herstellen naar locatie taak"
+  },
+  "common.results": {
+    "string": "Resultaten"
+  },
+  "common.resumeChallenge": {
+    "string": "Uitdaging voortzetten"
+  },
+  "common.role": {
+    "string": "Rol"
+  },
+  "common.save": {
+    "string": "Opslaan"
+  },
+  "common.saving": {
+    "string": "Opslaan…"
+  },
+  "common.saving2": {
+    "string": "Opslaan…"
+  },
+  "common.scrollToTop": {
+    "string": "Scroll naar bovenaan"
+  },
+  "common.searchChallenges": {
+    "string": "Uitdagingen zoeken…"
+  },
+  "common.searchChallenges2": {
+    "string": "Uitdagingen zoeken…"
+  },
+  "common.searchOsmUsername": {
+    "string": "OSM-gebruikersnaam zoeken "
+  },
+  "common.searchProjects": {
+    "string": "Projecten zoeken…"
+  },
+  "common.selectAProject": {
+    "string": "Selecteer een project"
+  },
+  "common.share": {
+    "string": "Delen"
+  },
+  "common.shareTask": {
+    "string": "Taak delen "
+  },
+  "common.showPanel": {
+    "string": "Paneel weergeven"
+  },
+  "common.shown": {
+    "string": "Weergegeven"
+  },
+  "common.signIn": {
+    "string": "Aanmelden"
+  },
+  "common.signInToMapTask": {
+    "string": "Aanmelden om deze taak in kaart te brengen"
+  },
+  "common.skipped": {
+    "string": "Overgeslagen"
+  },
+  "common.startChallenge": {
+    "string": "Uitdaging starten"
+  },
+  "common.status": {
+    "string": "Status"
+  },
+  "common.statusWithStatus": {
+    "string": "Status {status}"
+  },
+  "common.submitting": {
+    "string": "Indienen…"
+  },
+  "common.tagFix": {
+    "string": "Tag repareren"
+  },
+  "common.task": {
+    "string": "Taak"
+  },
+  "common.taskWithId": {
+    "string": "Taak #{id}"
+  },
+  "common.taskWithName": {
+    "string": "Taak: {name}"
+  },
+  "common.taskWithTaskId": {
+    "string": "Taak #{taskId}"
+  },
+  "common.tasks": {
+    "string": "Taken"
+  },
+  "common.tasksRebuilt": {
+    "string": "Taken opnieuw bouwen"
+  },
+  "common.tasksRemaining": {
+    "string": "Resterende taken"
+  },
+  "common.tasksWithCount": {
+    "string": "{count, plural, one {# taak} other {# taken}}"
+  },
+  "common.team": {
+    "string": "Team #{teamId}"
+  },
+  "common.teamNotFound": {
+    "string": "Team niet gevonden"
+  },
+  "common.teams": {
+    "string": "Teams"
+  },
+  "common.thatsAll": {
+    "string": "Dat was alles!"
+  },
+  "common.type": {
+    "string": "Type"
+  },
+  "common.unarchiveChallenge": {
+    "string": "Uitdaging uit archief halen"
+  },
+  "common.unarchiveProject": {
+    "string": "Project uit archief halen"
+  },
+  "common.unexpectedErrorTryAgain": {
+    "string": "Er trad een onverwachte fout op. Probeer het opnieuw."
+  },
+  "common.unknown": {
+    "string": "Onbekend"
+  },
+  "common.unpinChallenge": {
+    "string": "Uitdaging losmaken"
+  },
+  "common.unpinProject": {
+    "string": "Project losmaken"
+  },
+  "common.unread": {
+    "string": "Ongelezen ({count})"
+  },
+  "common.updatingResults": {
+    "string": "Resultaten bijwerken…"
+  },
+  "common.users": {
+    "string": "Gebruikers"
+  },
+  "common.validated": {
+    "string": "Gevalideerd"
+  },
+  "common.view": {
+    "string": "Weergeven"
+  },
+  "common.viewAllNotifications": {
+    "string": "Alle notificaties weergeven"
+  },
+  "common.viewChallenge": {
+    "string": "Uitdaging weergeven"
+  },
+  "common.viewChallenges": {
+    "string": "Uitdagingen weergeven"
+  },
+  "common.viewManageProjectsSubtitle": {
+    "string": "Alle projecten op het platform bekijken en beheren"
+  },
+  "common.viewOnOsm": {
+    "string": "Weergeven op OSM"
+  },
+  "common.viewProject": {
+    "string": "Project weergeven"
+  },
+  "common.viewProjects": {
+    "string": "Projecten weergeven"
+  },
+  "common.write": {
+    "string": "Schrijven"
+  },
+  "common.youMustBeLoggedInToComment": {
+    "string": "U moet aangemeld zijn om een opmerking te kunnen maken"
+  },
+  "common.youreAllUpToDate": {
+    "string": "U bent helemaal bij"
+  },
+  "common.youveReachedTheEndOfTheList": {
+    "string": "U bent aan het einde van de lijst"
+  },
+  "common.zoomToTask": {
+    "string": "Zoom naar taak"
+  },
+  "congratulateModal.achievement.fallback": {
+    "string": "U heeft een nieuwe badge verdiend."
+  },
+  "congratulateModal.achievement.title": {
+    "string": "Medaille ontgrendeld!"
+  },
+  "congratulateModal.challengeCompleted.description": {
+    "string": "Er zijn geen open taken meer in deze uitdaging."
+  },
+  "congratulateModal.challengeCompleted.findAnother": {
+    "string": "Zoek een andere uitdaging"
+  },
+  "congratulateModal.challengeCompleted.reviewStats": {
+    "string": "Beoordeel uw statistieken"
+  },
+  "congratulateModal.challengeCompleted.title": {
+    "string": "U voltooide {challengeName}!"
+  },
+  "congratulateModal.levelUp.description": {
+    "string": "{score, plural, one {Welkom op niveau {level}. U hebt # punt behaald.} other {Welkom op niveau {level}. U hebt # punten behaald.}}"
+  },
+  "congratulateModal.levelUp.title": {
+    "string": "U bent een niveau hoger!"
+  },
+  "congratulateModal.streak.description": {
+    "string": "{count, plural, one {# taak achter elkaar — hou dat vol.} other {# taken achter elkaar — hou dat vol.}}"
+  },
+  "congratulateModal.streak.title": {
+    "string": "Mooie serie!"
+  },
+  "dashboard.common.failedToLoad": {
+    "string": "Laden mislukt"
+  },
+  "dashboard.contributions.empty.description": {
+    "string": "Begin met in kaart brengen om de voortgang bij te houden"
+  },
+  "dashboard.contributions.empty.title": {
+    "string": "Geen bijdragen"
+  },
+  "dashboard.contributions.lockedTasks.title": {
+    "string": "Vergrendelde taken"
+  },
+  "dashboard.contributions.statusSetLabel": {
+    "string": "Status voor taak instellen als {statusLabel}"
+  },
+  "dashboard.contributions.title": {
+    "string": "Bijdragen"
+  },
+  "dashboard.contributions.unknownChallenge": {
+    "string": "Uitdaging {parentId}"
+  },
+  "dashboard.levelModal.calculatedUsing": {
+    "string": "Uw niveau werd berekend met:"
+  },
+  "dashboard.levelModal.description": {
+    "string": "Voltooi uitdagingen om punten te verdienen en uw rang als mapper te verhogen."
+  },
+  "dashboard.levelModal.howItWorksFooter": {
+    "string": "Elk niveau vereist exponentieel meer punten. Blijf in kaart brengen om in rang omhoog te gaan."
+  },
+  "dashboard.levelModal.howItWorksTitle": {
+    "string": "Hoe niveaus werken"
+  },
+  "dashboard.levelModal.pointsRequired": {
+    "string": "{points, plural, one {# punt vereist} other {# punten vereist}}"
+  },
+  "dashboard.levelModal.pointsToNextLevel": {
+    "string": "{points, plural, one {# punt meer tot volgend niveau} other {# punten meer tot volgend niveau}}"
+  },
+  "dashboard.levelModal.pointsToUnlock": {
+    "string": "{points, plural, one {# punt om te ontgrendelen} other {# punten om te ontgrendelen}}"
+  },
+  "dashboard.levelModal.progressToLevel": {
+    "string": "Door naar niveau {level}"
+  },
+  "dashboard.levelModal.title": {
+    "string": "Systeem voor niveaus van mappers"
+  },
+  "dashboard.levelModal.totalPoints": {
+    "string": "{points, plural, one {# totaal punt} other {# totaal punten}}"
+  },
+  "dashboard.levelModal.yourScore": {
+    "string": "{points, plural, one {Uw score: # punt} other {Uw score: # punten}}"
+  },
+  "dashboard.profile.guest": {
+    "string": "Gast"
+  },
+  "dashboard.profile.progressToNext": {
+    "string": "{current} / {total} tot volgend niveau"
+  },
+  "dashboard.profile.verified": {
+    "string": "Geverifieerd"
+  },
+  "dashboard.savedChallenges.actions.unsave": {
+    "string": "Bewaren uitdaging ongedaan maken"
+  },
+  "dashboard.savedChallenges.empty.description": {
+    "string": "Uitdagingen opslaan om later aan te werken"
+  },
+  "dashboard.savedChallenges.empty.title": {
+    "string": "Geen bewaarde uitdagingen"
+  },
+  "dashboard.savedChallenges.title": {
+    "string": "Bewaarde uitdagingen"
+  },
+  "dashboard.teams.empty.description": {
+    "string": "Neem deel in een team om samen te werken"
+  },
+  "dashboard.teams.empty.title": {
+    "string": "Geen teams"
+  },
+  "dashboard.teams.learnMore": {
+    "string": "Meer te weten komen over teams"
+  },
+  "dynamicPluginRoute.loading": {
+    "string": "Pagina van plug-in laden…"
+  },
+  "dynamicPluginRoute.notFoundDescription": {
+    "string": "De gevraagde pagina voor de plug-in is niet te vinden."
+  },
+  "errorBoundary.actions.goBack": {
+    "string": "Ga terug"
+  },
+  "errorBoundary.actions.goHome": {
+    "string": "Ga naar Home"
+  },
+  "errorBoundary.actions.goToLogin": {
+    "string": "Ga naar Aanmelden"
+  },
+  "errorBoundary.actions.tryAgain": {
+    "string": "Probeer opnieuw"
+  },
+  "errorBoundary.forbidden.description": {
+    "string": "U heeft geen rechten voor toegang tot deze bron."
+  },
+  "errorBoundary.forbidden.title": {
+    "string": "403 - Verboden"
+  },
+  "errorBoundary.genericHttp.description": {
+    "string": "Er trad een onverwachte fout op bij het laden van deze pagina."
+  },
+  "errorBoundary.genericHttp.title": {
+    "string": "Fout {status}"
+  },
+  "errorBoundary.notFound.description": {
+    "string": "De pagina of bron, waar u naar zoekt, bestaat niet."
+  },
+  "errorBoundary.notFound.title": {
+    "string": "404 - Niet gevonden"
+  },
+  "errorBoundary.serverError.description": {
+    "string": "De server kwam een fout tegen. Probeer het later nog eens."
+  },
+  "errorBoundary.serverError.title": {
+    "string": "Serverfout"
+  },
+  "errorBoundary.unauthorized.description": {
+    "string": "U moet aangemeld zijn voor toegang tot deze bron."
+  },
+  "errorBoundary.unauthorized.title": {
+    "string": "401 - Niet geautoriseerd"
+  },
+  "exploreChallenges.challengeList.emptyDescription": {
+    "string": "Probeer uw zoekfilters of kaartgrenzen aan te passen"
+  },
+  "exploreChallenges.challengeList.errorTitle": {
+    "string": "Laden van uitdagingen mislukt"
+  },
+  "exploreChallenges.challengeList.footer.endOfListHint": {
+    "string": "Pas uw filters aan of verken een ander gebied om meer uitdagingen te ontdekken"
+  },
+  "exploreChallenges.challengeList.table.author": {
+    "string": "Auteur"
+  },
+  "exploreChallenges.challengeList.table.contributors": {
+    "string": "Deelnemers"
+  },
+  "exploreChallenges.challengeList.table.disabled": {
+    "string": "Uitgeschakeld"
+  },
+  "exploreChallenges.challengeList.table.dueDate": {
+    "string": "Datum verlopen"
+  },
+  "exploreChallenges.challengeList.table.lastUpdated": {
+    "string": "Laatst bijgewerkt"
+  },
+  "exploreChallenges.challengeList.table.location": {
+    "string": "Locatie"
+  },
+  "exploreChallenges.challengeList.table.organisation": {
+    "string": "Organisatie"
+  },
+  "exploreChallenges.challengeList.table.percentMapped": {
+    "string": "Percentage in kaart gebracht"
+  },
+  "exploreChallenges.challengeList.table.percentValidated": {
+    "string": "Percentage gevalideerd"
+  },
+  "exploreChallenges.challengeList.table.projectLabel": {
+    "string": "Project {name}"
+  },
+  "exploreChallenges.challengeList.table.published": {
+    "string": "Gepubliceerd"
+  },
+  "exploreChallenges.challengeList.table.userLabel": {
+    "string": "Gebruiker {owner}"
+  },
+  "exploreChallenges.filterBar.clearFilters": {
+    "string": "Filters leegmaken"
+  },
+  "exploreChallenges.filterBar.difficulty.any": {
+    "string": "Elke"
+  },
+  "exploreChallenges.filterBar.location.clearAriaLabel": {
+    "string": "Locatie leegmaken"
+  },
+  "exploreChallenges.filterBar.location.geometryLoadFailed": {
+    "string": "Laden van geometrie van locatie mislukt"
+  },
+  "exploreChallenges.filterBar.location.loadFailed": {
+    "string": "Laden van locatie mislukt"
+  },
+  "exploreChallenges.filterBar.location.networkError": {
+    "string": "Netwerkfout. Controleer uw verbinding."
+  },
+  "exploreChallenges.filterBar.location.noOsmId": {
+    "string": "Geselecteerde locatie heeft geen identificatie voor OSM"
+  },
+  "exploreChallenges.filterBar.location.noResults": {
+    "string": "Geen locaties gevonden. Probeer een andere zoekterm."
+  },
+  "exploreChallenges.filterBar.location.notFound": {
+    "string": "Locatie niet gevonden"
+  },
+  "exploreChallenges.filterBar.location.searchPlaceholder": {
+    "string": "Locatie zoeken…"
+  },
+  "exploreChallenges.filterBar.location.suggestionsAriaLabel": {
+    "string": "Suggesties locatie"
+  },
+  "exploreChallenges.filterBar.sortBy.label": {
+    "string": "Sorteren op"
+  },
+  "exploreChallenges.filterBar.sortBy.oldest": {
+    "string": "Oudste"
+  },
+  "exploreChallenges.filterBar.title": {
+    "string": "Filters lijst uitdagingen"
+  },
+  "exploreChallenges.filterBar.viewMode.gridMap": {
+    "string": "Raster met kaartweergave"
+  },
+  "exploreChallenges.filterBar.workOn.anything": {
+    "string": "Willekeurig"
+  },
+  "exploreChallenges.filterBar.workOn.label": {
+    "string": "Werk aan"
+  },
+  "exploreChallenges.map.locationIndicator.recenter": {
+    "string": "Recenter voor het betrokken gebied: {name}"
+  },
+  "exploreChallenges.results.tabList": {
+    "string": "Lijst"
+  },
+  "header.globalSearch.shortcut": {
+    "string": "MapRoulette zoeken"
+  },
+  "keyboardShortcuts.category.editors": {
+    "string": "Bewerkers"
+  },
+  "keyboardShortcuts.category.general": {
+    "string": "Algemeen"
+  },
+  "keyboardShortcuts.category.multiTask": {
+    "string": "Meerdere taken"
+  },
+  "keyboardShortcuts.category.taskActions": {
+    "string": "Acties taken"
+  },
+  "keyboardShortcuts.description": {
+    "string": "Gebruik deze sneltoetsen om uw werk te versnellen"
+  },
+  "keyboardShortcuts.docsLink": {
+    "string": "Bekijk de volledige lijst met sneltoetsen voor het toetsenbord"
+  },
+  "keyboardShortcuts.showShortcuts": {
+    "string": "Geef deze lijst met sneltoetsen voor het toetsenbord weer"
+  },
+  "keyboardShortcuts.title": {
+    "string": "Sneltoetsen voor toetsenbord"
+  },
+  "keyboardShortcuts.unavailable.alreadyDrawing": {
+    "string": "Altijd tekenen"
+  },
+  "keyboardShortcuts.unavailable.noSelection": {
+    "string": "Eerst meer dan een taak selecteren"
+  },
+  "keyboardShortcuts.unavailable.notEditable": {
+    "string": "Deze taak kan niet worden bewerkt"
+  },
+  "keyboardShortcuts.unavailable.notMapping": {
+    "string": "Begin eerst met in kaart brengen van deze taak"
+  },
+  "keyboardShortcuts.unavailable.paused": {
+    "string": "Deze uitdaging is gepauzeerd"
+  },
+  "keyboardShortcuts.unavailable.statusNotAllowed": {
+    "string": "Niet beschikbaar voor deze taak."
+  },
+  "manageChallengeDetail.detail.configurePrioritization": {
+    "string": "Prioriteiten configureren "
+  },
+  "manageChallengeDetail.detail.featuredError": {
+    "string": "Kon uitgelichte status niet bijwerken"
+  },
+  "manageChallengeDetail.detail.managersLabel": {
+    "string": "Beheerders"
+  },
+  "manageChallengeDetail.detail.pausedError": {
+    "string": "Kon gepauzeerde status niet bijwerken"
+  },
+  "manageChallengeDetail.detail.statistics.completion": {
+    "string": "Voltooiing"
+  },
+  "manageChallengeDetail.detail.statistics.lastModified": {
+    "string": "Laatst aangepast"
+  },
+  "manageChallengeDetail.detail.statistics.taskCountsByStatus": {
+    "string": "Tellingen van taken op status"
+  },
+  "manageChallengeDetail.export.button": {
+    "string": "Exporteren"
+  },
+  "manageChallengeDetail.export.confirm": {
+    "string": "Downloaden"
+  },
+  "manageChallengeDetail.export.description": {
+    "string": "De filters, die momenteel worden toegepast op de tabel met taken, worden ook bij het exporteren toegepast."
+  },
+  "manageChallengeDetail.export.docsLink": {
+    "string": "Over exporteren van uitdagingen"
+  },
+  "manageChallengeDetail.export.failed": {
+    "string": "Kon deze uitdaging niet exporteren"
+  },
+  "manageChallengeDetail.export.formatCsv": {
+    "string": "CSV — een regel per taak"
+  },
+  "manageChallengeDetail.export.formatGeoJSON": {
+    "string": "GeoJSON — geometrieën en eigenschappen van taak"
+  },
+  "manageChallengeDetail.export.formatLabel": {
+    "string": "Indeling"
+  },
+  "manageChallengeDetail.export.preparing": {
+    "string": "Voorbereiden…"
+  },
+  "manageChallengeDetail.export.timezoneLabel": {
+    "string": "Tijdstempel tijdzone"
+  },
+  "manageChallengeDetail.export.title": {
+    "string": "Taken exporteren"
+  },
+  "manageChallengeDetail.managers.added": {
+    "string": "{name} mag nu dit project beheren"
+  },
+  "manageChallengeDetail.managers.description": {
+    "string": "Geef iemand een rol voor alleen deze uitdaging. Iedereen die het ouderproject beheert, of het team dat eigenaar is van deze uitdaging, heeft al toegang en wordt hier niet vermeld."
+  },
+  "manageChallengeDetail.managers.removeFailed": {
+    "string": "Kon die beheerder niet verwijderen"
+  },
+  "manageChallengeDetail.managers.removed": {
+    "string": "{name} mag dit project niet langer beheren"
+  },
+  "manageChallengeDetail.managers.title": {
+    "string": "Beheerders uitdaging"
+  },
+  "manageChallengeDetail.miniMap.zoomToAllTasksTooltip": {
+    "string": "Zoom naar alle taken"
+  },
+  "manageChallengeDetail.recentActivity.description": {
+    "string": "Voltooide taken op status, gegroepeerd op dag (dezelfde gegevens als de oudere dashboardwidget voor beheer)."
+  },
+  "manageChallengeDetail.recentActivity.empty": {
+    "string": "Geen recente activiteit."
+  },
+  "manageChallengeDetail.recentActivity.loadError": {
+    "string": "Kon activiteit niet laden."
+  },
+  "manageChallengeDetail.statusIndicator.buildingBody": {
+    "string": "Taken worden gemaakt. Deze pagina zal automatisch worden vernieuwd om de voortgang weer te geven."
+  },
+  "manageChallengeDetail.statusIndicator.deletingBody": {
+    "string": "Taken worden verwijderd. Even wachten…"
+  },
+  "manageChallengeDetail.statusIndicator.deletingTitle": {
+    "string": "Taken verwijderen…"
+  },
+  "manageChallengeDetail.statusIndicator.elapsedTimeLabel": {
+    "string": "Verstreken tijd:"
+  },
+  "manageChallengeDetail.statusIndicator.failedBody": {
+    "string": "Samenstellen van taken voor uitdaging mislukt. Controleer de configuratie voor de uitdaging en probeer het opnieuw."
+  },
+  "manageChallengeDetail.statusIndicator.failedTitle": {
+    "string": "Taken die niet konden worden samengesteld"
+  },
+  "manageChallengeDetail.statusIndicator.partiallyLoadedBody": {
+    "string": "Deze uitdaging is gedeeltelijk geladen. Sommige taken zouden nog niet beschikbaar kunnen zijn."
+  },
+  "manageChallengeDetail.statusIndicator.partiallyLoadedTitle": {
+    "string": "Uitdaging gedeeltelijk geladen"
+  },
+  "manageChallengeDetail.statusIndicator.refreshingInLabel": {
+    "string": "Vernieuwen in:"
+  },
+  "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
+    "string": "Taken worden samengesteld…"
+  },
+  "manageChallengeDetail.statusIndicator.tasksUpdatingTitle": {
+    "string": "Taken updaten..."
+  },
+  "manageChallengeDetail.statusIndicator.updatingBody": {
+    "string": "Statussen voor taken worden bijgewerkt. Deze pagina zal automatisch worden vernieuwd om de voortgang weer te geven."
+  },
+  "manageChallengeDetail.tasksExplorer.columnBundle": {
+    "string": "Gebundeld"
+  },
+  "manageChallengeDetail.tasksExplorer.deselectRowLabel": {
+    "string": "Rij deselecteren voor bulkacties"
+  },
+  "manageChallengeDetail.tasksExplorer.filtersLabel": {
+    "string": "Filters"
+  },
+  "manageChallengeDetail.tasksExplorer.loadingTasks": {
+    "string": "Taken laden…"
+  },
+  "manageChallengeDetail.tasksExplorer.noTasksMatch": {
+    "string": "Er komen geen taken overeen met de huidige filters."
+  },
+  "manageChallengeDetail.tasksExplorer.priorityHigh": {
+    "string": "Hoog"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityLow": {
+    "string": "Laag"
+  },
+  "manageChallengeDetail.tasksExplorer.priorityMedium": {
+    "string": "Medium"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterDocsLink": {
+    "string": "Leer meer"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterHelp": {
+    "string": "Combineer vergelijkingen van eigenschappen met AND/OR. Taken die overeenkomen met de regel worden weergegeven in de tabel en op de kaart."
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterLabel": {
+    "string": "Filteren op eigenschap"
+  },
+  "manageChallengeDetail.tasksExplorer.propertyFilterTitle": {
+    "string": "Taklen filteren op eigenschap object"
+  },
+  "manageChallengeDetail.tasksExplorer.selectAllVisibleLabel": {
+    "string": "Alle zichtbare taken selecteren "
+  },
+  "manageChallengeDetail.tasksExplorer.selectRowLabel": {
+    "string": "Rij selecteren voor bulkacties"
+  },
+  "manageChallengeDetail.tasksExplorer.showingCount": {
+    "string": "{total, plural, one {Weergegeven {shown, number} van # taak} other {Weergegeven {shown, number} van # taken}}"
+  },
+  "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
+    "string": "Status taak"
+  },
+  "manageChallengeEdit.pageDescription": {
+    "string": "Pas de informatie hieronder aan om uw uitdaging bij te werken"
+  },
+  "manageChallengeEdit.pageTitle": {
+    "string": "Uitdagingsbewerker"
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsDescription": {
+    "string": "U kunt optioneel aanvullende sleutelwoorden opgeven die kunnen worden gebruikt om te helpen bij het vinden van uw missie."
+  },
+  "manageChallengeNew.challengeForm.additionalKeywordsLabel": {
+    "string": "Aanvullende gecategoriseerde sleutelwoorden"
+  },
+  "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
+    "string": "Ik heb de gedragslijn OSM Automatische bewerkingen (Automated Edits) gelezen en begrepen"
+  },
+  "manageChallengeNew.challengeForm.agreementDescription": {
+    "string": "U staat op het punt een uitdaging voor MapRoulette te maken. Met deze mogelijkheid komt ook verantwoordelijkheid. Zorg ervoor dat uw uitdaging is ontworpen om zorgvuldige menselijke aandacht voor elke taak aan te moedigen, in de geest van OpenStreetMap's <link>gedragslijn Automatische bewerkingen (Automated Edits)</link>. Lees dat document zorgvuldig door. Door het selecteren van het vak hieronder, laat u weten dat u die verantwoordelijkheid begrijpt en accepteert."
+  },
+  "manageChallengeNew.challengeForm.agreementSectionTitle": {
+    "string": "Overeenkomst gedragslijn Automatische bewerkingen"
+  },
+  "manageChallengeNew.challengeForm.basemapCurrent": {
+    "string": "De huidige basiskaart behouden"
+  },
+  "manageChallengeNew.challengeForm.basemapCustom": {
+    "string": "Aangepaste tegellaag…"
+  },
+  "manageChallengeNew.challengeForm.basemapDescription": {
+    "string": "Forceer een basislaag voor de kaarten van deze uitdaging, wat de eigen keuze van de mapper overschrijft."
+  },
+  "manageChallengeNew.challengeForm.basemapDocsLink": {
+    "string": "Over basiskaarten van uitdagingen"
+  },
+  "manageChallengeNew.challengeForm.basemapLabel": {
+    "string": "Basiskaart voor de uitdaging"
+  },
+  "manageChallengeNew.challengeForm.basemapNone": {
+    "string": "Niet overschrijven — mappers gebruiken hun eigen"
+  },
+  "manageChallengeNew.challengeForm.basemapTitle": {
+    "string": "Basiskaart"
+  },
+  "manageChallengeNew.challengeForm.basemapUrlDescription": {
+    "string": "Een sjabloon voor een XYZ-tegel. Laat leeg en de uitdaging valt terug naar Niet overschrijven."
+  },
+  "manageChallengeNew.challengeForm.basemapUrlLabel": {
+    "string": "URL voor aangepaste basiskaart"
+  },
+  "manageChallengeNew.challengeForm.category.other": {
+    "string": "Anders"
+  },
+  "manageChallengeNew.challengeForm.categoryDescription": {
+    "string": "Selecteren van een toepasselijke categorie voor uw missie kan gebruikers helpen missies te vinden die overeenkomen met hun interesses. Kies Anders als er geen toepasselijke categorie lijkt te zijn."
+  },
+  "manageChallengeNew.challengeForm.categoryLabel": {
+    "string": "Hoe zou uw missie moeten worden gecategoriseerd?"
+  },
+  "manageChallengeNew.challengeForm.changesetSectionDescription": {
+    "string": "Vooraf ingevuld in de bewerker als een mapper de wijzigingen opslaat in OpenStreetMap."
+  },
+  "manageChallengeNew.challengeForm.changesetSectionTitle": {
+    "string": "OpenStreetMap wijzigingsset"
+  },
+  "manageChallengeNew.challengeForm.checkinCommentCreateDescription": {
+    "string": "Beschrijft de wijzigingen die mappers maken. De hashtag #maproulette wordt toegevoegd als die ontbreekt, en een link terug naar de taak wordt automatisch toegevoegd."
+  },
+  "manageChallengeNew.challengeForm.checkinCommentEditDescription": {
+    "string": "Beschrijft de wijzigingen die mappers maken. Een link terug naar de taak wordt automatisch toegevoegd."
+  },
+  "manageChallengeNew.challengeForm.checkinCommentLabel": {
+    "string": "Opmerking wijzigingsset"
+  },
+  "manageChallengeNew.challengeForm.checkinCommentPlaceholder": {
+    "string": "Onderbroken wegen gerepareerd"
+  },
+  "manageChallengeNew.challengeForm.checkinSourceDescription": {
+    "string": "De afbeeldingen of gevevens die mappers geacht worden te gebruiken, gescheiden door puntkomma's."
+  },
+  "manageChallengeNew.challengeForm.checkinSourceLabel": {
+    "string": "Gewijzigde bron"
+  },
+  "manageChallengeNew.challengeForm.checkinSourcePlaceholder": {
+    "string": "Bing; onderzoek"
+  },
+  "manageChallengeNew.challengeForm.createErrorTitle": {
+    "string": "Uitdaging kon niet wordne gemaakt"
+  },
+  "manageChallengeNew.challengeForm.createSuccessToast": {
+    "string": "Uitdaging met succes gemaakt"
+  },
+  "manageChallengeNew.challengeForm.descriptionPlaceholder": {
+    "string": "Omschrijf waar deze uitdaging over gaat…"
+  },
+  "manageChallengeNew.challengeForm.difficultyPlaceholder": {
+    "string": "Moeilijkheid selecteren"
+  },
+  "manageChallengeNew.challengeForm.fieldErrorsAriaLabel": {
+    "string": "Velden die aandacht nodig hebben"
+  },
+  "manageChallengeNew.challengeForm.fieldErrorsTitle": {
+    "string": "{count, plural, one {# veld heeft aandacht nodig} other {# velden hebben aandacht nodig}}"
+  },
+  "manageChallengeNew.challengeForm.geoJSONFileDescription": {
+    "string": "Upload een bestand GeoJSON vanaf uw computer. Standaard GeoJSON en de <docs>indeling GEOJSON regel-per-regel</docs> worden ondersteund."
+  },
+  "manageChallengeNew.challengeForm.geoJSONFileLabel": {
+    "string": "GeoJSON-bestand"
+  },
+  "manageChallengeNew.challengeForm.geoJSONFileSelected": {
+    "string": "Geselecteerd: {name} ({size} KB)"
+  },
+  "manageChallengeNew.challengeForm.instructionsDescription": {
+    "string": "Weergegeven aan mappers bij elke taak. Instructies ondersteunen <markdown>Markdown</markdown> en <mustache>vervangen van snortags</mustache>, dus elke taak kan details weergeven uit zijn eigen eigenschappen van de objecten."
+  },
+  "manageChallengeNew.challengeForm.instructionsPlaceholder": {
+    "string": "Instructies voor het voltooien van taken…"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionDescription": {
+    "string": "Upload een bestand GeoJSON vanaf uw computer."
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
+    "string": "Ik wil een bestand GeoJSON uploaden"
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONReadOnlyBody": {
+    "string": "Deze uitdaging werd gebouwd uit een geüpload bestand GeoJSON, dat hier niet kan worden weergegeven. Gebruik Taken opnieuw samenstellen bij het beheren van uw uitdaging om het te vervangen door een verse GeoJSON."
+  },
+  "manageChallengeNew.challengeForm.localGeoJSONReadOnlyLabel": {
+    "string": "Geüpload bestand GeoJSON"
+  },
+  "manageChallengeNew.challengeForm.namePlaceholder": {
+    "string": "{user}'s uitdaging"
+  },
+  "manageChallengeNew.challengeForm.nameTaken": {
+    "string": "Er bestaat al een uitdaging met deze naam in dit project"
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyDescription": {
+    "string": "De eigenschap van het object die de identificatie voor de taak bevat. Laat leeg om MapRoulette het te laten detecteren."
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyDocsLink": {
+    "string": "Over identificatie voor taken "
+  },
+  "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
+    "string": "OSM/Externe ID-eigenschap"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionDescription": {
+    "string": "Gebruik Overpass QL om automatisch taken te maken uit gegevens van OpenStreetMap"
+  },
+  "manageChallengeNew.challengeForm.overpassOptionTitle": {
+    "string": "Ik wil een query voor Overpass opgeven"
+  },
+  "manageChallengeNew.challengeForm.overpassQLDescription": {
+    "string": "Querytaal Overpass om automatisch taken voor deze uitdaging te maken. Bekijk de [documentatie](https://learn.maproulette.org/documentation/using-overpass-to-create-challenges/) voor belangrijke details en algemene valkuilen bij het maken van missies met Overpass query's."
+  },
+  "manageChallengeNew.challengeForm.overpassQLLabel": {
+    "string": "Overpass QL"
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyBody": {
+    "string": "Overpass query's kunnen niet worden aangepast, maar u kunt Taken opnieuw samenstellen kiezen bij het beheren van uw uitdaging om de query opnieuw uit te voeren en de taken te verversen."
+  },
+  "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
+    "string": "Overpass-query"
+  },
+  "manageChallengeNew.challengeForm.projectPicker.description": {
+    "string": "Selecteer het project waartoe deze uitdaging behoort"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONDescription": {
+    "string": "Geef een URL op die wijst naar een bestand GeoJSON. De URL zou direct naar het ruwe bestand van GeoJSON moeten wijzen, niet naar een pagina die een link naar het bestand bevat."
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONDocs": {
+    "string": "<docs>Hosten van uw GeoJSON in een gist van GitHub</docs>is een manier om dat te doen."
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription": {
+    "string": "Geef een URL op die wijst naar een bestand GeoJSON"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
+    "string": "Ik heb een URL voor de gegevens van GeoJSON"
+  },
+  "manageChallengeNew.challengeForm.remoteGeoJSONReadOnlyBody": {
+    "string": "URL's voor locaties op afstand kunnen hier niet worden bewerkt. Gebruik Taken opnieuw samenstellen bij het beheren van uw uitdaging om het bestand GEO-JSON opnieuw te downloaden en uw taken te verversen."
+  },
+  "manageChallengeNew.challengeForm.saveErrorToast": {
+    "string": "Bewaren van uitdaging mislukt. Probeer het opnieuw."
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyDescription": {
+    "string": "De objecteigenschap die als een als een bundel-ID moet worden gebruikt. Objecten die een waarde delen krijgen een enkele taak met meerdere objecten; objecten zonder de eigenschap blijven afzonderlijke taken. Laat leeg voor een taak per object."
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyLabel": {
+    "string": "Taak-eigenschap bundel-ID"
+  },
+  "manageChallengeNew.challengeForm.taskBundleIdPropertyOverpassWarning": {
+    "string": "Groeperen van objecten in een taak is niet beschikbaar voor query's van Overpass. Kies een GeoJSON-bron om het te gebruiken."
+  },
+  "manageChallengeNew.challengeForm.taskDataDescription": {
+    "string": "Kies hoe u gegevens voor taken wilt opgeven voor deze uitdaging."
+  },
+  "manageChallengeNew.challengeForm.taskDataReadOnlyDescription": {
+    "string": "De gegevensbron wordt ingesteld als de uitdaging wordt gemaakt. Gebruik Taken opnieuw samenstellen bij het beheren van uw uitdaging om taken opnieuw samen te stellen met bijgewerkte gegevens."
+  },
+  "manageChallengeNew.challengeForm.taskDataTitle": {
+    "string": "Gegevens voor taken"
+  },
+  "manageChallengeNew.challengeForm.taskSettingsDescription": {
+    "string": "Hoe taken in deze uitdaging worden geïdentificeerd en getagd."
+  },
+  "manageChallengeNew.challengeForm.taskSettingsTitle": {
+    "string": "Instellingen voor taken"
+  },
+  "manageChallengeNew.challengeForm.teamDescription": {
+    "string": "Een optioneel team als eigenaar van deze uitdaging. Iedereen die dat team beheert, mag het bewerken en de afbeelding van het team wordt de afbeelding op zijn kaart."
+  },
+  "manageChallengeNew.challengeForm.teamNoneAvailable": {
+    "string": "U beheert nog geen teams. Alleen de eigenaren van een team, systeembeheerders en beheerders kunnen het een uitdaging geven."
+  },
+  "manageChallengeNew.challengeForm.updateButton": {
+    "string": "Uitdaging bijwerken"
+  },
+  "manageChallengeNew.challengeForm.updateErrorTitle": {
+    "string": "Uitdaging kon niet worden bijgewerkt"
+  },
+  "manageChallengeNew.challengeForm.updateSuccessToast": {
+    "string": "Uitdaging met succes bijgewerkt"
+  },
+  "manageChallengeNew.challengeForm.validation.agreementRequired": {
+    "string": "U moet de gedragslijn OSM Automatische bewerkingen (Automated Edits) lezen en accepteren"
+  },
+  "manageChallengeNew.challengeForm.validation.checkinCommentRequired": {
+    "string": "Opmerking voor een wijzigingsset is vereist"
+  },
+  "manageChallengeNew.challengeForm.validation.checkinSourceRequired": {
+    "string": "Een bron voor een wijzigingsset is vereist"
+  },
+  "manageChallengeNew.challengeForm.validation.descriptionRequired": {
+    "string": "Omschrijving is vereist"
+  },
+  "manageChallengeNew.challengeForm.validation.instructionRequired": {
+    "string": "Instructies zijn vereist"
+  },
+  "manageChallengeNew.challengeForm.validation.localGeoJSONRequired": {
+    "string": "Upload een bestand GeoJSON"
+  },
+  "manageChallengeNew.challengeForm.validation.nameMinLength": {
+    "string": "Naam van de uitdaging moet ten minste 3 tekens zijn"
+  },
+  "manageChallengeNew.challengeForm.validation.overpassRequired": {
+    "string": "Een Overpass-query is vereist"
+  },
+  "manageChallengeNew.challengeForm.validation.remoteGeoJSONRequired": {
+    "string": "Een URL voor GeoJSON is vereist"
+  },
+  "manageChallengeNew.pageDescription": {
+    "string": "Vul de informatie hieronder in om uw nieuwe uitdaging te maken"
+  },
+  "manageChallenges.content.aboutChallengesBody": {
+    "string": "Uitdagingen bevatten taken die mappers verwerken om de gegevens van OpenStreetMap te verbeteren."
+  },
+  "manageChallenges.content.aboutChallengesTitle": {
+    "string": "Over uitdagingen"
+  },
+  "manageChallenges.content.bulkEditingLink": {
+    "string": "Uitdagingen in bulk bewerken"
+  },
+  "manageChallenges.content.challengeCreationGuideLink": {
+    "string": "Richtlijn aanmaken uitdaging"
+  },
+  "manageChallenges.content.emptyDescription": {
+    "string": "U hebt nog geen enkele uitdaging gemaakt."
+  },
+  "manageChallenges.content.manageProjectsLink": {
+    "string": "Projecten beheren"
+  },
+  "manageChallenges.content.quickLinks": {
+    "string": "Snelle links"
+  },
+  "manageChallenges.content.taskPriorityRulesLink": {
+    "string": "Regels voor prioriteit van taken"
+  },
+  "manageChallenges.content.tipMonitorProgressBody": {
+    "string": "Controleer de aantallen voor voltooien en de opmerkingen van mappers. Archiveer uitdagingen als alle taken zijn verwerkt."
+  },
+  "manageChallenges.content.tipMonitorProgressTitle": {
+    "string": "Voortgang monitoren"
+  },
+  "manageChallenges.content.tipSetDifficultyBody": {
+    "string": "Koppel de moeilijkheid aan de gevraagde vaardigheden. Gemakkelijke taken trekken nieuwe mappers aan, terwijl taken voor experts worden doorgeleid naar ervaren deelnemers."
+  },
+  "manageChallenges.content.tipSetDifficultyTitle": {
+    "string": "Toepasselijke moeilijkheid instellen"
+  },
+  "manageChallenges.content.tipWriteClearInstructionsBody": {
+    "string": "Goede instructies voor taken helpen mappers te begrijpen wat moet worden gerepareerd en hoe. Neem voorbeelden op en link naar de relevante wikipagina's."
+  },
+  "manageChallenges.content.tipWriteClearInstructionsTitle": {
+    "string": "Schrijf heldere instructies"
+  },
+  "manageChallengesBulkEdit.confirm.cancel": {
+    "string": "Bewerking annuleren"
+  },
+  "manageChallengesBulkEdit.confirm.description": {
+    "string": "{count, plural, one {Deze waarden zullen de huidige overschrijven in # uitdaging.} other {Deze waarden zullen de huidige overschrijven in # uitdagingen.}}"
+  },
+  "manageChallengesBulkEdit.confirm.noRule": {
+    "string": "Geen regel"
+  },
+  "manageChallengesBulkEdit.confirm.submit": {
+    "string": "Bulk-verwerking indienen"
+  },
+  "manageChallengesBulkEdit.confirm.title": {
+    "string": "Bulk-verwerking bevestigen"
+  },
+  "manageChallengesBulkEdit.context.saveError": {
+    "string": "De uitdaging kon niet worden opgeslagen."
+  },
+  "manageChallengesBulkEdit.context.saveSuccess": {
+    "string": "{count, plural, one {# uitdaging bijgewerkt} other {# uitdagingen bijgewerkt}}"
+  },
+  "manageChallengesBulkEdit.field.additionalKeywords": {
+    "string": "Aanvullende sleutelwoorden"
+  },
+  "manageChallengesBulkEdit.field.basemap": {
+    "string": "Basiskaart"
+  },
+  "manageChallengesBulkEdit.field.dataOriginDate": {
+    "string": "Gegevens datum van origine"
+  },
+  "manageChallengesBulkEdit.field.exportableProperties": {
+    "string": "Te exporteren eigenschappen"
+  },
+  "manageChallengesBulkEdit.field.instruction": {
+    "string": "Instructies"
+  },
+  "manageChallengesBulkEdit.field.priorities": {
+    "string": "Prioriteiten"
+  },
+  "manageChallengesBulkEdit.form.additionalKeywordsDescription": {
+    "string": "Kommagescheiden. Vervangt de aanvullende sleutelwoorden van elke uitdaging; zijn categorie wordt behouden."
+  },
+  "manageChallengesBulkEdit.form.backToProject": {
+    "string": "Terug naar {project}"
+  },
+  "manageChallengesBulkEdit.form.basemapUnchanged": {
+    "string": "Laat de basiskaart van elke uitdaging zoals die is"
+  },
+  "manageChallengesBulkEdit.form.basemapUrlRequired": {
+    "string": "Voer een URL in voor de tegel van de aangepaste basiskaart"
+  },
+  "manageChallengesBulkEdit.form.cancel": {
+    "string": "Annuleren"
+  },
+  "manageChallengesBulkEdit.form.dataOriginDateDescription": {
+    "string": "De datum waarop de taakgegevens werden verkregen"
+  },
+  "manageChallengesBulkEdit.form.discoveryTitle": {
+    "string": "Ontdekken en exporteren"
+  },
+  "manageChallengesBulkEdit.form.exportablePropertiesDescription": {
+    "string": "Kommagescheiden taakeigenschappen om op te nemen bij exporteren van CSV en GeoJSON."
+  },
+  "manageChallengesBulkEdit.form.failureNoneSaved": {
+    "string": "Geen uitdagingen werden gewijzigd."
+  },
+  "manageChallengesBulkEdit.form.failureSaved": {
+    "string": "Opgeslagen voor de fout: {names}. De rest werd niet gewijzigd."
+  },
+  "manageChallengesBulkEdit.form.failureTitle": {
+    "string": "\"{name}\" kon niet worden opgeslagen"
+  },
+  "manageChallengesBulkEdit.form.instructionDescription": {
+    "string": "Markdown wordt ondersteund."
+  },
+  "manageChallengesBulkEdit.form.noChallenges": {
+    "string": "Selecteer ten minste een uitdaging om te bewerken"
+  },
+  "manageChallengesBulkEdit.form.noChanges": {
+    "string": "Vul ten minste een te wijzigen veld"
+  },
+  "manageChallengesBulkEdit.form.noneSelected": {
+    "string": "Geen uitdagingen geselecteerd. Ga terug naar het project en selecteer de te bewerken uitdagingen."
+  },
+  "manageChallengesBulkEdit.form.removeChallenge": {
+    "string": "Verwijder {name} uit deze bewerking"
+  },
+  "manageChallengesBulkEdit.form.replacePriorities": {
+    "string": "Vervang de standaardprioriteit en alle drie regels voor prioriteit. Grenzen voor locaties worden behouden."
+  },
+  "manageChallengesBulkEdit.form.review": {
+    "string": "Wijzigingen beoordelen"
+  },
+  "manageChallengesBulkEdit.form.saving": {
+    "string": "Opslaan {saved} van {total}"
+  },
+  "manageChallengesBulkEdit.form.selectedTitle": {
+    "string": "{count, plural, one {# uitdaging bewerken} other {# uitdagingen bewerken}}"
+  },
+  "manageChallengesBulkEdit.form.warningDescription": {
+    "string": "Elk veld dat u invult vervangt de huidige waarde van het veld voor elke geselecteerde uitdaging, en u kunt hier niet zien wat u overschrijft. Velden die u leeg laat, behouden de eigen waarde van de uitdaging."
+  },
+  "manageChallengesBulkEdit.form.warningTitle": {
+    "string": "Ingevulden velden overschrijven elke uitdaging"
+  },
+  "manageChallengesBulkEdit.pageDescription": {
+    "string": "Verscheidene uitdagingen in dit project in een keer wijzigen"
+  },
+  "manageChallengesBulkEdit.pageTitle": {
+    "string": "Uitdagingen in bulk bewerken"
+  },
+  "manageHome.challengesDescription": {
+    "string": "Door al uw uitdagingen bladeren en ze beheren"
+  },
+  "manageHome.projectsDescription": {
+    "string": "Uw projecten voor MapRoulette maken en beheren"
+  },
+  "manageHome.tasksDescription": {
+    "string": "Open een taak met zijn ID om te bekijken of te bewerken"
+  },
+  "manageProjectDetail.challengeSelection.clear": {
+    "string": "Selectie leegmaken"
+  },
+  "manageProjectDetail.challengeSelection.editSelected": {
+    "string": "{count, plural, =0 {Edit selected challenges} one {Edit # selected challenge} other {Edit # selected challenges}}"
+  },
+  "manageProjectDetail.challengeSelection.noneSelected": {
+    "string": "Selecteer uitdagingen in de lijst om ze tegelijkertijd te bewerken"
+  },
+  "manageProjectDetail.challengeSelection.selectAll": {
+    "string": "Selecteer alle uitdagingen"
+  },
+  "manageProjectDetail.challengeSelection.selectChallenge": {
+    "string": "Selecteer {name}"
+  },
+  "manageProjectDetail.challengesTable.columnTasksLeft": {
+    "string": "Resterende taken"
+  },
+  "manageProjectDetail.content.createChallenge": {
+    "string": "Uitdaging maken"
+  },
+  "manageProjectDetail.content.deleteProjectDescription": {
+    "string": "Dit zal dit project en al zijn uitdagingen en taken verwijderen. Deze actie kan niet ongedaan gemaakt worden."
+  },
+  "manageProjectDetail.content.disableProject": {
+    "string": "Project uitschakelen"
+  },
+  "manageProjectDetail.content.emptyDescription": {
+    "string": "Begin met het maken van uw eerste uitdaging"
+  },
+  "manageProjectDetail.content.enableProject": {
+    "string": "Project inschakelen"
+  },
+  "manageProjectDetail.content.playbookDocsLink": {
+    "string": "Documenten voor beheren van projecten openen"
+  },
+  "manageProjectDetail.content.playbookTip1": {
+    "string": "Bevestig de instructies voor de uitdaging en de verwachtingen voor QA zijn specifiek en te testen."
+  },
+  "manageProjectDetail.content.playbookTip2": {
+    "string": "Controleer de volgorde van de uitdagingen, zodat mappers kunnen verplaatsen van gemakkelijke naar moeilijkere taken."
+  },
+  "manageProjectDetail.content.playbookTip3": {
+    "string": "Wijs ten minste een co-beheerder aan voor triage, ondersteuning en continuïteit voor archiveren."
+  },
+  "manageProjectDetail.content.playbookTitle": {
+    "string": "Project handboek"
+  },
+  "manageProjectDetail.content.viewProjectPage": {
+    "string": "Projectpagina bekijken"
+  },
+  "manageProjectDetail.managers.added": {
+    "string": "{name} mag nu dit project beheren"
+  },
+  "manageProjectDetail.managers.docsLink": {
+    "string": "Over projectrollen"
+  },
+  "manageProjectDetail.managers.modalDescription": {
+    "string": "Wie dit project mag beheren en op welk niveau."
+  },
+  "manageProjectDetail.managers.modalTitle": {
+    "string": "Beheerders en teams"
+  },
+  "manageProjectDetail.managers.title": {
+    "string": "Projectbeheerders"
+  },
+  "manageProjectEdit.pageDescription": {
+    "string": "Pas de informatie hieronder aan om uw project bij te werken"
+  },
+  "manageProjectEdit.pageTitle": {
+    "string": "Projectdetails"
+  },
+  "manageProjectNew.pageDescription": {
+    "string": "Vul de informatie hieronder in om uw nieuwe project te maken"
+  },
+  "manageProjectNew.projectForm.createSuccessToast": {
+    "string": "Project met succes gemaakt"
+  },
+  "manageProjectNew.projectForm.descriptionDescription": {
+    "string": "Een korte omschrijving van het project"
+  },
+  "manageProjectNew.projectForm.descriptionPlaceholder": {
+    "string": "Omschrijf waar dit project over gaat…"
+  },
+  "manageProjectNew.projectForm.detailsSectionDescription": {
+    "string": "Identificerende basisinformatie voor dit project."
+  },
+  "manageProjectNew.projectForm.detailsSectionTitle": {
+    "string": "Projectdetails"
+  },
+  "manageProjectNew.projectForm.displayNameDescription": {
+    "string": "De weergavenaam om aan gebruikers te laten zien"
+  },
+  "manageProjectNew.projectForm.displayNameLabel": {
+    "string": "Weergavenaam"
+  },
+  "manageProjectNew.projectForm.displayNamePlaceholder": {
+    "string": "Mijn project"
+  },
+  "manageProjectNew.projectForm.enabledDescription": {
+    "string": "Maak dit project zichtbaar en toegankelijk voor gebruikers"
+  },
+  "manageProjectNew.projectForm.featuredDescription": {
+    "string": "Licht dit project uit op de thuispagina"
+  },
+  "manageProjectNew.projectForm.nameDescription": {
+    "string": "Een unieke identificatie voor het project (kleine letters, geen spaties)"
+  },
+  "manageProjectNew.projectForm.nameLabel": {
+    "string": "Naam project"
+  },
+  "manageProjectNew.projectForm.namePlaceholder": {
+    "string": "mijn-project"
+  },
+  "manageProjectNew.projectForm.saveErrorToast": {
+    "string": "Bewaren van project mislukt. Probeer het opnieuw."
+  },
+  "manageProjectNew.projectForm.teamDescription": {
+    "string": "Een optioneel team als eigenaar van deze uitdaging. Iedereen die dat team beheert, mag het bewerken en de afbeelding van het team wordt de afbeelding op zijn kaart."
+  },
+  "manageProjectNew.projectForm.teamNoneAvailable": {
+    "string": "U beheert nog geen teams. Alleen de eigenaren van een team, systeembeheerders en beheerders kunnen het een project geven."
+  },
+  "manageProjectNew.projectForm.updateButton": {
+    "string": "Project bijwerken"
+  },
+  "manageProjectNew.projectForm.updateSuccessToast": {
+    "string": "Project met succes bijgewerkt"
+  },
+  "manageProjectNew.projectForm.validation.displayNameRequired": {
+    "string": "Weergavenaam is vereist"
+  },
+  "manageProjectNew.projectForm.validation.nameRequired": {
+    "string": "Naam voor project is vereist"
+  },
+  "manageProjectNew.projectForm.visibilitySectionDescription": {
+    "string": "beheren hoe dit project in MapRoulette verschijnt."
+  },
+  "manageProjectNew.projectForm.visibilitySectionTitle": {
+    "string": "Zichtbaarheid"
+  },
+  "manageProjects.content.aboutDescription": {
+    "string": "Goede projectstructuur verbetert de duidelijkheid voor mappers, consistentie voor QA en onderhoud op de lange termijn."
+  },
+  "manageProjects.content.aboutTitle": {
+    "string": "Over projecten"
+  },
+  "manageProjects.content.challengeCreation": {
+    "string": "Uitdaging maken"
+  },
+  "manageProjects.content.deleteProjectDescription": {
+    "string": "Dit zal het project \"{projectName}\"  en al zijn uitdagingen en taken verwijderen. Deze actie kan niet ongedaan gemaakt worden."
+  },
+  "manageProjects.content.helpfulDocs": {
+    "string": "Nuttige documenten"
+  },
+  "manageProjects.content.learnHub": {
+    "string": "Hub om te leren"
+  },
+  "manageProjects.content.noProjectsDescription": {
+    "string": "Begin met het maken van uw eerste project."
+  },
+  "manageProjects.content.noProjectsDescriptionShort": {
+    "string": "Begin met het maken van uw eerste project."
+  },
+  "manageProjects.content.projectManagement": {
+    "string": "Projectbeheer"
+  },
+  "manageProjects.content.tipOwnershipBody": {
+    "string": "Voeg co-beheerders toe voor het starten, zodat triage, ondersteuning en verantwoordeijkheden voor archiveren zijn afgedekt."
+  },
+  "manageProjects.content.tipOwnershipTitle": {
+    "string": "Deel eigendom"
+  },
+  "manageProjects.content.tipPublishBody": {
+    "string": "Houd project onzichtbaar bij het doorlopen. Schakel zichtbaar alleen in nadat de instructies en controles voor QA zijn gevalideerd."
+  },
+  "manageProjects.content.tipPublishTitle": {
+    "string": "Publiceer bewust"
+  },
+  "manageProjects.content.tipScopeBody": {
+    "string": "Gebruik een stabiel naampatroon (regio, thema, versie) en houd elk project gefocust op een duidelijk doel."
+  },
+  "manageProjects.content.tipScopeTitle": {
+    "string": "Definieer het bereik vroeg"
+  },
+  "manageTaskEdit.form.geoJSONInvalid": {
+    "string": "GeoJSON moet geldige JSON zijn"
+  },
+  "manageTaskEdit.form.geoJSONRequired": {
+    "string": "GeoJSON is vereist"
+  },
+  "manageTaskEdit.form.geoJsonDescription": {
+    "string": "GeoJSON voor deze taak (punt, lijn of polygoon). Moet geldige JSON zijn."
+  },
+  "manageTaskEdit.form.instructionsDescription": {
+    "string": "Instructies voor gebruikers die deze specifieke taak uitvoeren"
+  },
+  "manageTaskEdit.form.instructionsPlaceholder": {
+    "string": "Instructies voor deze taak (overschrijft de instructies voor de uitdaging)"
+  },
+  "manageTaskEdit.form.nameDescription": {
+    "string": "Naam van de taak"
+  },
+  "manageTaskEdit.form.namePlaceholder": {
+    "string": "Naam taak"
+  },
+  "manageTaskEdit.form.nameTooShort": {
+    "string": "{min, plural, one {Naam moet ten minste # teken bevatten} other {Naam moet ten minste # tekens bevatten}}"
+  },
+  "manageTaskEdit.form.statusDescription": {
+    "string": "Huidige status van de taak"
+  },
+  "manageTaskEdit.form.statusPlaceholder": {
+    "string": "Status selecteren"
+  },
+  "manageTaskEdit.form.updateError": {
+    "string": "Bewaren van taak mislukt. Probeer het opnieuw."
+  },
+  "manageTaskEdit.form.updateSuccess": {
+    "string": "Taak met succes bijgewerkt"
+  },
+  "manageTaskEdit.index.accessDeniedDescription": {
+    "string": "Alleen eigenaren en beheerders van uitdagingen kunnen taken bewerken."
+  },
+  "manageTaskEdit.index.noPermission": {
+    "string": "U heeft geen rechten om deze taak te bewerken."
+  },
+  "manageTaskEdit.index.taskDetailsDescription": {
+    "string": "Pas de velden hieronder aan en bewaar ze om de taak bij te werken"
+  },
+  "manageTaskEdit.index.taskDetailsTitle": {
+    "string": "Details taak"
+  },
+  "manageTaskNew.body": {
+    "string": "Taken worden gewoonlijk in bulk gemaakt voor uitdagingen. Individueel maken van een taak zal in een toekomstige uitgave beschikbaar zijn."
+  },
+  "manageTaskNew.description": {
+    "string": "Functionaliteit voor taakbeheer is in ontwikkeling"
+  },
+  "manageTaskNew.title": {
+    "string": "Nieuwe taak"
+  },
+  "manageTasksOpen.cardDescription": {
+    "string": "Voer hieronder een taak-ID in. U kunt zoeken naar taak-ID's bij het werken aan een taak (URL of header) of uit uw bewaarde/vergrendelde taken op het dashboard."
+  },
+  "manageTasksOpen.description": {
+    "string": "Open een taak op ID om details te bekijken of hem te bewerken (naam, instructies, status, etc.)."
+  },
+  "manageTasksOpen.findChallenge": {
+    "string": "Of ga naar <projects>Projecten</projects> of <challenges>Uitdagingen</challenges> om een uitdaging te zoeken, en blader daar dan in om een taak te openen en de ID ervan uit de URL te verkrijgen."
+  },
+  "manageTasksOpen.taskIdLabel": {
+    "string": "ID taak"
+  },
+  "manageTasksOpen.taskIdPlaceholder": {
+    "string": "bijv. 12345"
+  },
+  "manageTasksOpen.viewTask": {
+    "string": "Taak bekijken"
+  },
+  "managementPages.actionErrors.challengeArchive": {
+    "string": "Kan status van archief niet bijwerken"
+  },
+  "managementPages.actionErrors.challengeDelete": {
+    "string": "Kan missie niet verwijderen."
+  },
+  "managementPages.actionErrors.challengeSave": {
+    "string": "Kan uw wijzigingen niet opslaan."
+  },
+  "managementPages.actionErrors.projectDelete": {
+    "string": "Kan project niet verwijderen."
+  },
+  "managementPages.actionErrors.projectSave": {
+    "string": "Kan uw wijzigingen niet opslaan"
+  },
+  "managementPages.bulkActionsToolbar.archive": {
+    "string": "Archiveren"
+  },
+  "managementPages.bulkActionsToolbar.archiveError": {
+    "string": "Kon taken niet archiveren"
+  },
+  "managementPages.bulkActionsToolbar.archivedToast": {
+    "string": "{count, plural, one {Gearchiveerde # taak} other {Gearchiveerde # taken}}"
+  },
+  "managementPages.bulkActionsToolbar.changeStatus": {
+    "string": "Status wijzigen"
+  },
+  "managementPages.bulkActionsToolbar.deleteDialog.deleting": {
+    "string": "Verwijderen…"
+  },
+  "managementPages.bulkActionsToolbar.deleteDialog.description": {
+    "string": "Dit kan niet ongedaan worden gemaakt. Taken en hun opmerkingen, beoordelingen en tags worden permanent verwijderd."
+  },
+  "managementPages.bulkActionsToolbar.deleteDialog.title": {
+    "string": "{count, plural, one {# taak verwijderen?} other {# taken verwijderen?}}"
+  },
+  "managementPages.bulkActionsToolbar.deleteError": {
+    "string": "Kon taken niet verwijderen."
+  },
+  "managementPages.bulkActionsToolbar.deleteSuccess": {
+    "string": "{count, plural, one {# taak verwijderd?} other {# taken verwijderd?}}"
+  },
+  "managementPages.bulkActionsToolbar.deleteWarning": {
+    "string": "{deleted, plural, one {# taak verwijderd; {denied, number} kon niet worden verwijderd} other {# taken verwijderd; {denied, number} konden niet worden verwijderd}}"
+  },
+  "managementPages.bulkActionsToolbar.pickStatus": {
+    "string": "Kies een status…"
+  },
+  "managementPages.bulkActionsToolbar.selectedCount": {
+    "string": "{count} geselecteerd"
+  },
+  "managementPages.bulkActionsToolbar.statusDialog.description": {
+    "string": "Werkt elke geselecteerde taak bij naar de gekozen status."
+  },
+  "managementPages.bulkActionsToolbar.statusDialog.title": {
+    "string": "Status taak wijzigen"
+  },
+  "managementPages.bulkActionsToolbar.unarchive": {
+    "string": "Uit archief halen"
+  },
+  "managementPages.bulkActionsToolbar.unarchivedToast": {
+    "string": "{count, plural, one {# taak uit archief gehaald} other {# taken uit archief gehaald}}"
+  },
+  "managementPages.bulkActionsToolbar.updateError": {
+    "string": "Kon taken niet bijwerken"
+  },
+  "managementPages.bulkActionsToolbar.updatedToast": {
+    "string": "{count, plural, one {# taak bijgewerkt} other {# taken bijgewerkt}}"
+  },
+  "managementPages.rebuildTasksDialog.dataOriginDate": {
+    "string": "Datum waarop de gegevens werden verkregen (optioneel)"
+  },
+  "managementPages.rebuildTasksDialog.descriptionDefault": {
+    "string": "Stel de taken voor de uitdaging opnieuw samen uit de brongegevens."
+  },
+  "managementPages.rebuildTasksDialog.introLocal": {
+    "string": "Opnieuw samenstellen geeft de mogelijkheid opnieuw een lokaal bestand met de laatste GeoJSON data te uploaden en zal de taken voor de missie opnieuw samenstellen:"
+  },
+  "managementPages.rebuildTasksDialog.introOverpass": {
+    "string": "Opnieuw samenstellen zal de Overpass query opnieuw uitvoeren en zal de taken voor de missie opnieuw samenstellen met de nieuwste gegevens:"
+  },
+  "managementPages.rebuildTasksDialog.introRemote": {
+    "string": "Opnieuw samenstellen zal de GeoJSON-gegevens opnieuw downloaden vanaf de URL op afstand voor de uitdaging en zal de taken voor de uitdaging opnieuw samenstellen met de laatste gegevens:"
+  },
+  "managementPages.rebuildTasksDialog.learnMore": {
+    "string": "Leer meer"
+  },
+  "managementPages.rebuildTasksDialog.listAdded": {
+    "string": "Nieuwe taken zullen worden toegevoegd"
+  },
+  "managementPages.rebuildTasksDialog.listKeepAsIs": {
+    "string": "Als u niet eerst onvolledige taken verwijdert, zullen die blijven zoals ze zijn, mogelijk taken behouden die al zijn verwerkt buiten MapRoulette"
+  },
+  "managementPages.rebuildTasksDialog.listRemoveIncomplete": {
+    "string": "Als u ervoor kiest om eerst onvolledige taken te verwijderen (hieronder), zullen bestaande <strong>onvolledige</strong> taken eerst worden verwijderd"
+  },
+  "managementPages.rebuildTasksDialog.listUpdated": {
+    "string": "Bestaande taken, opgenomen in de laatste gegevens, zullen worden bijgewerkt"
+  },
+  "managementPages.rebuildTasksDialog.newGeoJsonFile": {
+    "string": "Nieuw bestand GeoJSON"
+  },
+  "managementPages.rebuildTasksDialog.proceed": {
+    "string": "Doorgaan"
+  },
+  "managementPages.rebuildTasksDialog.rebuilding": {
+    "string": "Taken opnieuw samenstellen…"
+  },
+  "managementPages.rebuildTasksDialog.removeIncomplete": {
+    "string": "Verwijder eerst niet voltooide taken"
+  },
+  "managementPages.rebuildTasksDialog.title": {
+    "string": "Taken van de missie opnieuw samenstellen"
+  },
+  "managementPages.rebuildTasksDialog.warning": {
+    "string": "Waarschuwing: Het opnieuw samenstellen kan leiden tot dubbele taken wanneer de sleutels voor objecten niet correct zijn ingesteld of wanneer oude gegevens niet kunnen worden gecombineerd met nieuwe gegevens. Deze bewerking kan niet ongedaan worden gemaakt!"
+  },
+  "managers.addFailed": {
+    "string": "Kon die beheerder niet toevoegen"
+  },
+  "managers.addLabel": {
+    "string": "Voeg een beheerder toe"
+  },
+  "managers.addTeamFailed": {
+    "string": "Kon dat team niet toevoegen"
+  },
+  "managers.addTeamLabel": {
+    "string": "Een team toevoegen "
+  },
+  "managers.loading": {
+    "string": "Beheerders laden…"
+  },
+  "managers.noMatches": {
+    "string": "Geen overeenkomende gebruikers"
+  },
+  "managers.noTeamMatches": {
+    "string": "Geen overeenkomende teams"
+  },
+  "managers.noTeams": {
+    "string": "Nog geen teams."
+  },
+  "managers.none": {
+    "string": "Nog geen beheerders."
+  },
+  "managers.searchPlaceholder": {
+    "string": "Gebruikersnaam OpenStreetMap "
+  },
+  "managers.teamSearchPlaceholder": {
+    "string": "Teamnaam"
+  },
+  "managers.teamsDescription": {
+    "string": "Wat elke persoon hier mag doen, volgt zijn rol in het team: eigenaren en beheerders beheren het, beheerders kunnen bewerken en gewone leden krijgen niets."
+  },
+  "map.controls.hideControls": {
+    "string": "Besturingselementen verbergen"
+  },
+  "map.controls.mapStyle": {
+    "string": "Kaartstijl"
+  },
+  "map.controls.resetView": {
+    "string": "Weergave herstellen"
+  },
+  "map.controls.showControls": {
+    "string": "Besturingselementen weergeven"
+  },
+  "map.controls.zoomIn": {
+    "string": "Inzoomen"
+  },
+  "map.controls.zoomOut": {
+    "string": "Uitzoomen"
+  },
+  "map.scaleBar.feet": {
+    "string": "{value} ft"
+  },
+  "map.scaleBar.kilometers": {
+    "string": "{value} km"
+  },
+  "map.scaleBar.meters": {
+    "string": "{value} m"
+  },
+  "map.scaleBar.miles": {
+    "string": "{value} mi"
+  },
+  "map.styleSwitcher.addCustom": {
+    "string": "Voeg uw eigen laag toe"
+  },
+  "map.styleSwitcher.addLayer": {
+    "string": "Laag toevoegen"
+  },
+  "map.styleSwitcher.namePlaceholder": {
+    "string": "Mijn afbeeldingen"
+  },
+  "map.styleSwitcher.typeXyz": {
+    "string": "XYZ-tegels"
+  },
+  "map.styleSwitcher.wmsLayersLabel": {
+    "string": "WMS-lagen"
+  },
+  "map.styleSwitcher.wmsUrlLabel": {
+    "string": "WMS-eindpunt"
+  },
+  "map.styleSwitcher.xyzUrlLabel": {
+    "string": "URL tegel"
+  },
+  "map.taskMarkers.clusterToggle.enforcedWarning": {
+    "string": "Clusteren wordt afgedwongen voor 500+ taken"
+  },
+  "map.taskMarkers.clusterToggle.label": {
+    "string": "Markeringen clusters "
+  },
+  "map.taskMarkers.clusterToggle.tooLargeWarning": {
+    "string": "Gegevens zijn te groot om te clusteren, zoom in om taken te bekijken"
+  },
+  "map.taskPicker.heading": {
+    "string": "{count, plural, one {# taak hier} other {# taken hier}}"
+  },
+  "map.taskPicker.label": {
+    "string": "Taken op deze plaats"
+  },
+  "map.taskPicker.more": {
+    "string": "{count, plural, one {# geen taak meer vermeld} other {# geen meer taken vermeld}}"
+  },
+  "moveChallengeModal.description": {
+    "string": "Kies een project waarnaar \"{challengeName}\" moet worden verplaatst. De uitdaging zal uit het huidige project worden verwijderd."
+  },
+  "moveChallengeModal.moveError": {
+    "string": "Verplaatsen van uitdaging mislukt. U zou geen rechten kunnen hebben om dat project te mogen verplaatsen."
+  },
+  "moveChallengeModal.title": {
+    "string": "Missie verplaatsen"
+  },
+  "notificationSubscriptions.field.challengeCompleted.description": {
+    "string": "Wanneer een uitdaging die u beheert is voltooid"
+  },
+  "notificationSubscriptions.field.challengeCompleted.label": {
+    "string": "Uitdaging voltooid"
+  },
+  "notificationSubscriptions.field.mention.description": {
+    "string": "Als iemand @mentions u in een opmerking."
+  },
+  "notificationSubscriptions.field.system.description": {
+    "string": "Aankondigingen van MapRoulette zelf"
+  },
+  "notificationSubscriptions.field.system.label": {
+    "string": "Systeemberichten"
+  },
+  "notificationSubscriptions.field.team.description": {
+    "string": "Teamuitnodigingen en wijzigingen in lidmaatschap"
+  },
+  "notificationSubscriptions.level.digestEmail": {
+    "string": "Notificeren en opnemen in dagelijks overzicht"
+  },
+  "notificationSubscriptions.level.ignore": {
+    "string": "Negeren"
+  },
+  "notificationSubscriptions.level.immediateEmail": {
+    "string": "Notificeren en direct e-mailen"
+  },
+  "notificationSubscriptions.level.noEmail": {
+    "string": "Notificeren in app"
+  },
+  "notifications.actions.markedAsRead": {
+    "string": "gemarkeerd als gelezen "
+  },
+  "notifications.actions.markedAsUnread": {
+    "string": "gemarkeerd als ongelezen "
+  },
+  "notifications.toast.actionError": {
+    "string": "{verb} van notificatie mislukt: {message}"
+  },
+  "notifications.toast.actionSuccess": {
+    "string": "{count, plural, one {# notificatie {action}} other {# notificaties {action}}}"
+  },
+  "notificationsPage.content.description": {
+    "string": "Uw notificaties bekijken en beheren"
+  },
+  "notificationsPage.content.groupByTask": {
+    "string": "Groeperen op taak"
+  },
+  "notificationsPage.content.groupByTaskHint": {
+    "string": "Notificaties voor dezelfde taak worden gegroepeerd"
+  },
+  "notificationsPage.filters.allSenders": {
+    "string": "Alle afzenders"
+  },
+  "notificationsPage.filters.allTasks": {
+    "string": "Alle taken"
+  },
+  "notificationsPage.filters.allTypes": {
+    "string": "Alle typen"
+  },
+  "notificationsPage.filters.category.all": {
+    "string": "Alles"
+  },
+  "notificationsPage.filters.category.system": {
+    "string": "Systeem"
+  },
+  "notificationsPage.filters.clearFilters": {
+    "string": "Filters verwijderen"
+  },
+  "notificationsPage.filters.fromPlaceholder": {
+    "string": "Van"
+  },
+  "notificationsPage.filters.status.all": {
+    "string": "Alles"
+  },
+  "notificationsPage.filters.status.read": {
+    "string": "Lezen"
+  },
+  "notificationsPage.filters.status.unread": {
+    "string": "Niet gelezen"
+  },
+  "notificationsPage.filters.typeOptionFallback": {
+    "string": "Type {typeId}"
+  },
+  "notificationsPage.item.challengeLabel": {
+    "string": "Missie:"
+  },
+  "notificationsPage.item.deleteNotification": {
+    "string": "Notificatie verwijderen"
+  },
+  "notificationsPage.item.markAsRead": {
+    "string": "Als gelezen markeren"
+  },
+  "notificationsPage.item.markAsUnread": {
+    "string": "Als ongelezen markeren"
+  },
+  "notificationsPage.item.openThread": {
+    "string": "Notificatie openen"
+  },
+  "notificationsPage.item.projectRef": {
+    "string": "Project #{projectId}"
+  },
+  "notificationsPage.item.selectFrom": {
+    "string": "Notificatie selecteren uit {from}"
+  },
+  "notificationsPage.item.unknownSender": {
+    "string": "onbekend"
+  },
+  "notificationsPage.item.unreadTitle": {
+    "string": "Ongelezen notificatie"
+  },
+  "notificationsPage.savedViews.applied": {
+    "string": "Toegepaste weergave \"{name}\""
+  },
+  "notificationsPage.savedViews.cancelRename": {
+    "string": "Hernoemen annuleren"
+  },
+  "notificationsPage.savedViews.cancelSave": {
+    "string": "Bewaren annuleren"
+  },
+  "notificationsPage.savedViews.deleteAction": {
+    "string": "Verwijder {name}"
+  },
+  "notificationsPage.savedViews.deleteFailed": {
+    "string": "Verwijderen van weergave mislukt"
+  },
+  "notificationsPage.savedViews.deleted": {
+    "string": "Weergave verwijderd"
+  },
+  "notificationsPage.savedViews.empty": {
+    "string": "Nog geen bewaarde weergaven."
+  },
+  "notificationsPage.savedViews.namePlaceholder": {
+    "string": "Naam weergave"
+  },
+  "notificationsPage.savedViews.nameRequired": {
+    "string": "Naam weergave is vereist"
+  },
+  "notificationsPage.savedViews.newNameLabel": {
+    "string": "Naam weergave bewaard"
+  },
+  "notificationsPage.savedViews.renameAction": {
+    "string": "Hernoemen {name}"
+  },
+  "notificationsPage.savedViews.renameFailed": {
+    "string": "Hernoemen van weergave mislukt"
+  },
+  "notificationsPage.savedViews.renameInputLabel": {
+    "string": "Bewaarde wergave hernoemen"
+  },
+  "notificationsPage.savedViews.renamed": {
+    "string": "Weergave hernoemd"
+  },
+  "notificationsPage.savedViews.saveCurrentAs": {
+    "string": "Huidige bewaren als…"
+  },
+  "notificationsPage.savedViews.saveFailed": {
+    "string": "Bewaren van weergave mislukt"
+  },
+  "notificationsPage.savedViews.saveName": {
+    "string": "Naam bewaren"
+  },
+  "notificationsPage.savedViews.saveView": {
+    "string": "Weergave bewaren"
+  },
+  "notificationsPage.savedViews.saved": {
+    "string": "Weergave \"{name}\" bewaard"
+  },
+  "notificationsPage.savedViews.title": {
+    "string": "Bewaarde weergaven"
+  },
+  "notificationsPage.selectAll.ariaLabel": {
+    "string": "Alle notificaties selecteren"
+  },
+  "notificationsPage.selectAll.selectAll": {
+    "string": "Alles selecteren "
+  },
+  "notificationsPage.selectAll.selectedCount": {
+    "string": "{selected} van {total} geselecteerd"
+  },
+  "notificationsPage.thread.commentsHeading": {
+    "string": "Opmerkingen voor deze taak"
+  },
+  "notificationsPage.thread.commentsSectionLabel": {
+    "string": "Draad voor opmerking taak"
+  },
+  "notificationsPage.thread.description.groupedForTask": {
+    "string": "Gegroepeerd voor {ref}"
+  },
+  "notificationsPage.thread.description.thisThread": {
+    "string": "deze draad"
+  },
+  "notificationsPage.thread.description.viewDetails": {
+    "string": "Details notificatie weergeven"
+  },
+  "notificationsPage.thread.markThreadRead": {
+    "string": "Draad als gelezen markeren"
+  },
+  "notificationsPage.thread.markThreadReadCount": {
+    "string": "Draad als gelezen markeren ({count})"
+  },
+  "notificationsPage.thread.noComments": {
+    "string": "Nog geen opmerkingen voor deze taak"
+  },
+  "notificationsPage.thread.openTask": {
+    "string": "Taak openen"
+  },
+  "notificationsPage.thread.replyFailed": {
+    "string": "Posten van antwoord mislukt"
+  },
+  "notificationsPage.thread.replyPlaceholder": {
+    "string": "Antwoorden op taak #{taskId}…"
+  },
+  "notificationsPage.thread.replyPosted": {
+    "string": "Antwoord gepost"
+  },
+  "notificationsPage.thread.signInToReply": {
+    "string": "Aanmelden om te antwoorden"
+  },
+  "notificationsPage.thread.title.count": {
+    "string": "{count, plural, one {# notificatie} other {# notificaties}}"
+  },
+  "notificationsPage.thread.title.task": {
+    "string": "Notificatie voor taak #{taskId}"
+  },
+  "notificationsPage.toolbar.markAllUnread": {
+    "string": "Alles als ongelezen markeren"
+  },
+  "notificationsPage.toolbar.markSelectedRead": {
+    "string": "{count} als gelezen markeren "
+  },
+  "notificationsPage.toolbar.markSelectedUnread": {
+    "string": "{count} als ongelezen markeren "
+  },
+  "notificationsPage.toolbar.marking": {
+    "string": "Markeren…"
+  },
+  "ownerTeam.goToTeams": {
+    "string": "Uw teams"
+  },
+  "ownerTeam.loadError": {
+    "string": "Kon uw teams niet laden."
+  },
+  "ownerTeam.noneOption": {
+    "string": "Geen team"
+  },
+  "ownerTeam.title": {
+    "string": "Team"
+  },
+  "pluginErrorBoundary.consoleDetails": {
+    "string": "Details werden naar de browserconsole geschreven (bericht, stapel, onderdeelsstapel)."
+  },
+  "pluginErrorBoundary.contribution": {
+    "string": "bijdrage: {contributionId}"
+  },
+  "pluginErrorBoundary.retry": {
+    "string": "Opnieuw proberen"
+  },
+  "pluginErrorBoundary.title": {
+    "string": "Plug-in renderen mislukt"
+  },
+  "pluginErrorBoundary.titleWithSource": {
+    "string": "Plug-in {source} mislukt"
+  },
+  "plugins.errors.loadPluginFailed": {
+    "string": "Laden van plug-in mislukt: {error}"
+  },
+  "plugins.errors.loadPreferencesFailed": {
+    "string": "Laden van voorkeuren voor plug-in mislukt"
+  },
+  "plugins.errors.notAuthenticated": {
+    "string": "Niet geauthenticeerd"
+  },
+  "plugins.errors.registerFailed": {
+    "string": "Registreren van plug-in mislukt"
+  },
+  "plugins.errors.removeFailed": {
+    "string": "Verwijderen van plug-in mislukt"
+  },
+  "profilePage.achievements.earnedCount": {
+    "string": "{earned} van {total} verdiend"
+  },
+  "profilePage.achievements.title": {
+    "string": "Madailles"
+  },
+  "profilePage.header.osmChaLink": {
+    "string": "OSMCha"
+  },
+  "profilePage.header.osmProfileLink": {
+    "string": "OSM-profiel"
+  },
+  "profilePage.header.userSince": {
+    "string": "Gebruiker vanaf: {date}"
+  },
+  "profilePage.index.loadError": {
+    "string": "Kon profiel van die gebruiker niet laden."
+  },
+  "profilePage.index.loginRequired": {
+    "string": "Meld u aan om uw profiel te bekijken"
+  },
+  "profilePage.metrics.title": {
+    "string": "Metrieken"
+  },
+  "profilePage.taskStats.loadError": {
+    "string": "Kon statistieken voor taak niet laden."
+  },
+  "profilePage.taskStats.totalCompleted": {
+    "string": "Totaal voltooid"
+  },
+  "profilePage.taskStats.totalCompletedValue": {
+    "string": "{count, plural, one {# taak} other {# taken}}"
+  },
+  "profilePage.timeRange.all": {
+    "string": "Alles"
+  },
+  "profilePage.timeRange.ariaLabel": {
+    "string": "Tijdsperiode"
+  },
+  "profilePage.timeRange.nineMonths": {
+    "string": "9 m"
+  },
+  "profilePage.timeRange.oneMonth": {
+    "string": "1 m"
+  },
+  "profilePage.timeRange.sixMonths": {
+    "string": "6 m"
+  },
+  "profilePage.timeRange.threeMonths": {
+    "string": "3 m"
+  },
+  "profilePage.timeRange.twelveMonths": {
+    "string": "12 m"
+  },
+  "profilePage.topChallenges.title": {
+    "string": "Top-missies"
+  },
+  "projectRoles.admin": {
+    "string": "Beheerder"
+  },
+  "projectRoles.adminDescription": {
+    "string": "Volledig beheer, inclusief beheren van andere beheerders"
+  },
+  "projectRoles.read": {
+    "string": "Lezen"
+  },
+  "projectRoles.readDescription": {
+    "string": "Bekijk het project en zijn uitdagingen"
+  },
+  "projectRoles.write": {
+    "string": "Schrijven"
+  },
+  "projectRoles.writeDescription": {
+    "string": "Uitdagingen maken en bewerken"
+  },
+  "settings.account.saveError": {
+    "string": "Bijwerken gebruikersinstellingen mislukt"
+  },
+  "settings.account.saveSuccess": {
+    "string": "Gebruikersinstellingen bijgewerkt"
+  },
+  "settings.account.title": {
+    "string": "Account"
+  },
+  "settings.api.description": {
+    "string": "Uw voorkeuren voor de API beheren."
+  },
+  "settings.apiKey.copyLabel": {
+    "string": "API-sleutel kopiëren"
+  },
+  "settings.apiKey.keyLabel": {
+    "string": "Sleutel"
+  },
+  "settings.apiKey.label": {
+    "string": "API-sleutel"
+  },
+  "settings.apiKey.regenerate": {
+    "string": "Opnieuw maken"
+  },
+  "settings.apiKey.regenerateLabel": {
+    "string": "API-sleutel opnieuw maken"
+  },
+  "settings.general.basemapCustom": {
+    "string": "Aangepaste tegellaag…"
+  },
+  "settings.general.basemapDescription": {
+    "string": "Kies de standaard kaartachtergrond voor uw taken."
+  },
+  "settings.general.basemapDocsLink": {
+    "string": "Meer leren over basislagen"
+  },
+  "settings.general.basemapKeepCurrent": {
+    "string": "Huidige basiskaart behouden"
+  },
+  "settings.general.basemapLabel": {
+    "string": "Standaard basiskaart"
+  },
+  "settings.general.basemapPlaceholder": {
+    "string": "Een standaard basiskaart selecteren"
+  },
+  "settings.general.customBasemapLabel": {
+    "string": "URL voor aangepaste basiskaart"
+  },
+  "settings.general.customBasemapRequired": {
+    "string": "Voer een URL in voor de tegel van uw aangepaste basiskaart"
+  },
+  "settings.general.description": {
+    "string": "Uw algemene accountinstellingen en -voorkeuren bijwerken."
+  },
+  "settings.general.editorDescription": {
+    "string": "Kies de bewerker van uw voorkeur voor het in kaart brengen van taken."
+  },
+  "settings.general.editorDocsLink": {
+    "string": "Meer leren over keuzes voor de bewerker"
+  },
+  "settings.general.editorLabel": {
+    "string": "Standaard bewerker"
+  },
+  "settings.general.editorPlaceholder": {
+    "string": "Een standaard bewerker selecteren"
+  },
+  "settings.general.invalidBasemap": {
+    "string": "Ongeldige optie basiskaart"
+  },
+  "settings.general.invalidEditor": {
+    "string": "Ongeldige optie bewerker"
+  },
+  "settings.general.invalidLanguage": {
+    "string": "Ongeldige optie taal"
+  },
+  "settings.general.languageDescription": {
+    "string": "Kies de taal van uw voorkeur (locale) voor de interface."
+  },
+  "settings.general.languageLabel": {
+    "string": "Taal"
+  },
+  "settings.general.languagePlaceholder": {
+    "string": "Een standaardtaal selecteren"
+  },
+  "settings.general.title": {
+    "string": "Algemeen"
+  },
+  "settings.notifications.description": {
+    "string": "Bepaal welke notificaties u van MapRoulette zou willen ontvangen, en daarnaast of u een e-mail zou willen ontvangen die u informeert over de notificatie (direct of als een dagelijkse lijst)."
+  },
+  "settings.notifications.docsLink": {
+    "string": "Meer leren over notificaties en e-mail"
+  },
+  "settings.notifications.emailDescription": {
+    "string": "Als u hieronder e-mails kiest, zullen ze naar hier worden verzonden."
+  },
+  "settings.notifications.loadError": {
+    "string": "Voorkeuren voor notficaties konden niet worden geladen."
+  },
+  "settings.notifications.loading": {
+    "string": "Voorkeuren voor notificaties laden…"
+  },
+  "settings.notifications.notifyMeAbout": {
+    "string": "Notificeer me over"
+  },
+  "settings.plugins.addButton": {
+    "string": "Toevoegen"
+  },
+  "settings.plugins.addError": {
+    "string": "Toevoegen van plug-in mislukt"
+  },
+  "settings.plugins.allAddedDescription": {
+    "string": "U hebt alle beschikbare workshopplug-ins toegevoegd!"
+  },
+  "settings.plugins.allAddedTitle": {
+    "string": "Alle plug-ins toegevoegd"
+  },
+  "settings.plugins.byAuthor": {
+    "string": "• door {author}"
+  },
+  "settings.plugins.description": {
+    "string": "Plug-ins in- of uitschakelen om uw ervaring met MapRoulette aan te passen. Navigatie-items voor plug-ins zullen in het hoofdmenu voor navigatie veschijnen."
+  },
+  "settings.plugins.discoverDescription": {
+    "string": "Bladeren en door de gemeenschap gemaakte plug-ins toevoegen"
+  },
+  "settings.plugins.discoverTitle": {
+    "string": "Plug-ins ontdekken"
+  },
+  "settings.plugins.emptyDescription": {
+    "string": "Bezoek de Workshop Plug-ins om plug-ins te ontdekken en toe te voegen"
+  },
+  "settings.plugins.emptyTitle": {
+    "string": "Nog geen plug-ins"
+  },
+  "settings.plugins.loading": {
+    "string": "Plug-ins laden..."
+  },
+  "settings.plugins.myPluginsTitle": {
+    "string": "Mijn plug-ins"
+  },
+  "settings.plugins.workshopTitle": {
+    "string": "Workshop Plug-ins "
+  },
+  "settings.regenerateApiKey.confirmDescription": {
+    "string": "Uw bestaande API-sleutel zal direct niet meer werken. Alle scripts of integraties, die de oude sleutel gebruiken, moeten worden bijgewerkt."
+  },
+  "settings.regenerateApiKey.confirmSaved": {
+    "string": "Ik heb deze sleutel opgeslagen"
+  },
+  "settings.regenerateApiKey.confirmTitle": {
+    "string": "API-sleutel opnieuw maken?"
+  },
+  "settings.regenerateApiKey.copyKey": {
+    "string": "Sleutel kopiëren"
+  },
+  "settings.regenerateApiKey.error": {
+    "string": "Opnieuw maken API-sleutel mislukt"
+  },
+  "settings.regenerateApiKey.newKeyDescription": {
+    "string": "Kopieer die nu — als u dit dialoogvenster sluit, zult u niet in staat zijn om het opnieuw te bekijken. Als u het verliest, zult u een andere moeten maken."
+  },
+  "settings.regenerateApiKey.newKeyTitle": {
+    "string": "Uw nieuwe API-sleutel"
+  },
+  "settings.remotePlugins.addButton": {
+    "string": "Plug-in toevoegen"
+  },
+  "settings.remotePlugins.description": {
+    "string": "Plug-ins dynamisch laden uit externe URL's. Zorg ervoor dat u de bron vertrouwd, voordat u een plug-in toevoegt."
+  },
+  "settings.remotePlugins.loadedTitle": {
+    "string": "Plug-ins op afstand geladen"
+  },
+  "settings.remotePlugins.pluginFound": {
+    "string": "Plug-in gevonden!"
+  },
+  "settings.remotePlugins.securityWarningDescription": {
+    "string": "Laadt alleen plug-ins vanuit vertrouwde bronnen. Plug-ins op afstand hebben toegang tot uw toepassing en gegevens. Verifieer altijd de bron voordat u een plug-in toevoegt."
+  },
+  "settings.remotePlugins.securityWarningTitle": {
+    "string": "Beveiligingswaarschuwing"
+  },
+  "settings.remotePlugins.title": {
+    "string": "Plug-ins op afstand"
+  },
+  "settings.remotePlugins.urlDescription": {
+    "string": "Voer de volledige URL in naar een module voor een plug-in (ESM-indeling). De plug-in wordt opgezocht en toegevoegd aan uw plug-ins."
+  },
+  "settings.remotePlugins.urlLabel": {
+    "string": "URL voor module van plug-in "
+  },
+  "settings.submit.noChanges": {
+    "string": "Geen wijzigingen om op te slaan"
+  },
+  "settings.submit.saveChanges": {
+    "string": "Wijzigingen opslaan"
+  },
+  "shareLink.popover.hideQr": {
+    "string": "QR verbergen"
+  },
+  "shareLink.popover.qrCanvas": {
+    "string": "QR-code voor delen van URL"
+  },
+  "shareLink.popover.qrCode": {
+    "string": "QR-code"
+  },
+  "shareLink.popover.shareUrl": {
+    "string": "URL delen"
+  },
+  "shareLink.popover.shareVia": {
+    "string": "Delen via…"
+  },
+  "shareLink.popover.title": {
+    "string": "Deel deze link"
+  },
+  "shared.achievementBadge.lockedLabel": {
+    "string": "{title} (vergrendeld)"
+  },
+  "shared.achievementBadge.notYetEarned": {
+    "string": "Nog niet verdiend"
+  },
+  "shared.challengeCard.project": {
+    "string": "{name}"
+  },
+  "shared.clearManageFiltersButton.label": {
+    "string": "FILTERS LEEGMAKEN"
+  },
+  "shared.commentComposer.mention.userSuggestions": {
+    "string": "Suggesties gebruiker"
+  },
+  "shared.commentComposer.placeholder": {
+    "string": "Schrijf een opmerking…"
+  },
+  "shared.commentComposer.posting": {
+    "string": "Posten…"
+  },
+  "shared.commentComposer.submitLabel": {
+    "string": "Posten"
+  },
+  "shared.digitDisplay.pointsLabel": {
+    "string": "{value, plural, one {# punt} other {# punten}}"
+  },
+  "shared.mapLoadingIndicator.loading": {
+    "string": "Markeringen voor taak laden…"
+  },
+  "shared.notFound.backHome": {
+    "string": "Ga naar Home"
+  },
+  "shared.notFound.description": {
+    "string": "De pagina die u zoekt, bestaat niet."
+  },
+  "shared.pointsTicker.viewProfile": {
+    "string": "{score, plural, one {# punt — profiel bekijken} other {# punten — profiel bekijken}}"
+  },
+  "shared.projectCard.challengesRemaining": {
+    "string": "resterende uitdagingen"
+  },
+  "shared.projectCard.completed": {
+    "string": "Voltooid: {count}"
+  },
+  "shared.projectCard.pinned": {
+    "string": "Vastgezet: {count}"
+  },
+  "shared.projectCard.totalChallenges": {
+    "string": "Totaal aantal uitdagingen: {count}"
+  },
+  "shared.projectPickerModal.description": {
+    "string": "Kies het project waartoe deze uitdaging behoort."
+  },
+  "shared.projectPickerModal.noProjectsFound": {
+    "string": "Geen projecten gevonden."
+  },
+  "shared.searchBar.placeholder": {
+    "string": "Zoeken…"
+  },
+  "shared.sectionHeader.create": {
+    "string": "maken"
+  },
+  "shared.sectionHeader.createCapitalized": {
+    "string": "Maken"
+  },
+  "shared.sectionHeader.entityTasks": {
+    "string": "taken"
+  },
+  "shared.signIn.description": {
+    "string": "U moet aangemeld zijn om uw account te kunnen beheren."
+  },
+  "shared.signIn.title": {
+    "string": "Meld u aan"
+  },
+  "shared.statusBadge.notDiscoverable": {
+    "string": "Onzichtbaar"
+  },
+  "statusBreakdownBar.bar.label": {
+    "string": "Statusoverzicht"
+  },
+  "statusBreakdownBar.bar.noTasks": {
+    "string": "Nog geen taken"
+  },
+  "statusBreakdownBar.status.alreadyFixed": {
+    "string": "Al gerepareerd"
+  },
+  "statusLegend.legend": {
+    "string": "Legenda"
+  },
+  "statusLegend.priorityHigh": {
+    "string": "Hoge prioriteit"
+  },
+  "statusLegend.priorityLow": {
+    "string": "Lage prioriteit"
+  },
+  "statusLegend.priorityMedium": {
+    "string": "Gemiddelde prioriteit"
+  },
+  "superAdmin.analytics.comingSoonDescription": {
+    "string": "We werken eraan om u uitgebreide analyses van het platform te laten zien. Controleer snel nog eens."
+  },
+  "superAdmin.analytics.comingSoonTitle": {
+    "string": "Dashboard Analyses komt er snel aan"
+  },
+  "superAdmin.analytics.description": {
+    "string": "Uitgebreide analyses en metrieken over het gehele platform bekijken."
+  },
+  "superAdmin.analytics.title": {
+    "string": "Platform-analyses"
+  },
+  "superAdmin.layout.breadcrumbRoot": {
+    "string": "superbeheerder"
+  },
+  "superAdminChallengeReports.actionedSuccess": {
+    "string": "Rapport gemarkeerd als uitgevoerde actie"
+  },
+  "superAdminChallengeReports.activeOnlyLabel": {
+    "string": "Alleen uitdagingen die nog steeds actief zijn"
+  },
+  "superAdminChallengeReports.archivedBadge": {
+    "string": "Gearchiveerd"
+  },
+  "superAdminChallengeReports.dismiss": {
+    "string": "Negeren"
+  },
+  "superAdminChallengeReports.dismissedSuccess": {
+    "string": "Rapport genegeerd"
+  },
+  "superAdminChallengeReports.emptyDescription": {
+    "string": "Geen rapporten voor uitdagingen komen op dit moment met deze filters overeen."
+  },
+  "superAdminChallengeReports.markActioned": {
+    "string": "Markeren als uitgevoerde actie"
+  },
+  "superAdminChallengeReports.reportMeta": {
+    "string": "{project} · gerapporteerd door {user} op {date}"
+  },
+  "superAdminChallengeReports.resolvedMeta": {
+    "string": "{status} door {user} op {date}"
+  },
+  "superAdminChallengeReports.subtitle": {
+    "string": "Rapporten die stellen dat een uitdaging slecht ontworpen is en onjuiste bewerkingen veroorzaakt. Markeer er een als actie uitgevoerd als u die heeft afgehandeld — bijvoorbeeld door de uitdaging te archiveren — of negeer ze."
+  },
+  "superAdminChallengeReports.title": {
+    "string": "Rapporten uitdagingen"
+  },
+  "superAdminChallenges.comingSoon.description": {
+    "string": "We werken eraan om onze gereedschappen voor het beheren van uitdagingen uit te breiden voor superbeheerders. Controleer snel nog eens."
+  },
+  "superAdminChallenges.comingSoon.title": {
+    "string": "Beheren van uitdagingen komt er snel aan"
+  },
+  "superAdminChallenges.subtitle": {
+    "string": "Alle uiitdagingen op het platform bekijken en beheren"
+  },
+  "superAdminGuard.accessDenied.message": {
+    "string": "U heeft geen rechten voor toegang tot dit gebied. Rechten als superbeheerder zijn vereist."
+  },
+  "superAdminGuard.accessDenied.title": {
+    "string": "Toegang geweigerd"
+  },
+  "superAdminHome.cards.analytics.button": {
+    "string": "Weergave Analyses"
+  },
+  "superAdminHome.cards.analytics.description": {
+    "string": "Bekijk platformbrede analyses en metrieken"
+  },
+  "superAdminHome.cards.analytics.title": {
+    "string": "Analyses"
+  },
+  "superAdminHome.cards.challengeReports.button": {
+    "string": "Weergave Rapporten uitdagingen"
+  },
+  "superAdminHome.cards.challengeReports.description": {
+    "string": "Triageer rapporten die onjuiste bewerkingen in uitdagingen melden"
+  },
+  "superAdminHome.cards.challengeReports.title": {
+    "string": "Rapporten uitdaging"
+  },
+  "superAdminHome.cards.challenges.description": {
+    "string": "Alle uitdagingen doorbladeren en ze beheren"
+  },
+  "superAdminHome.cards.database.description": {
+    "string": "Databasebeheer en onderhoud"
+  },
+  "superAdminHome.cards.database.title": {
+    "string": "Database"
+  },
+  "superAdminHome.cards.plugins.button": {
+    "string": "Weergave Plug-ins"
+  },
+  "superAdminHome.cards.plugins.description": {
+    "string": "Plug-ins en integraties beheren"
+  },
+  "superAdminHome.cards.settings.button": {
+    "string": "Weergave Instellingen"
+  },
+  "superAdminHome.cards.settings.description": {
+    "string": "Platforminstellingen en configuratie"
+  },
+  "superAdminHome.cards.settings.title": {
+    "string": "Instellingen"
+  },
+  "superAdminHome.cards.teamImages.button": {
+    "string": "Afbeeldingen beoordelen"
+  },
+  "superAdminHome.cards.teamImages.description": {
+    "string": "Afbeeldingen beoordelen die teams voor uitdagingen hebben aangevraagd"
+  },
+  "superAdminHome.cards.teamImages.title": {
+    "string": "Teamafbeeldingen"
+  },
+  "superAdminHome.cards.users.button": {
+    "string": "Weergave Gebruikers"
+  },
+  "superAdminHome.cards.users.description": {
+    "string": "Alle platformgebruikers en rechten beheren"
+  },
+  "superAdminHome.subtitle": {
+    "string": "Alle aspecten van het platform MapRoulette beheren."
+  },
+  "superAdminHome.title": {
+    "string": "Dashboard Superbeheerder "
+  },
+  "superAdminPlugins.comingSoon.description": {
+    "string": "Beheren van plug-ins is nog niet beschikbaar. Er zijn momenteel geen API voor plug-ins om te installeren, te configureren of door plug-ins te bladeren, dus deze pagina is een plaatsvervanger totdat die ondersteuning op zijn plek is."
+  },
+  "superAdminPlugins.comingSoon.title": {
+    "string": "Komt eraan"
+  },
+  "superAdminPlugins.subtitle": {
+    "string": "Plug-ins en integraties voor het platform beheren"
+  },
+  "superAdminPlugins.title": {
+    "string": "Plug-inbeheer"
+  },
+  "superAdminProjects.comingSoon.description": {
+    "string": "We werken eraan om onze gereedschappen voor het beheren van projecten uit te breiden voor superbeheerders. Controleer snel nog eens."
+  },
+  "superAdminProjects.comingSoon.title": {
+    "string": "Beheren van projecten komt er snel aan"
+  },
+  "superAdminProjects.title": {
+    "string": "Alle projecten"
+  },
+  "superAdminReview.commentLabel": {
+    "string": "Notitie beoordelen"
+  },
+  "superAdminReview.commentPlaceholder": {
+    "string": "Notitie (optioneel)"
+  },
+  "superAdminReview.emptyTitle": {
+    "string": "Niets te beoordelen"
+  },
+  "superAdminReview.reviewError": {
+    "string": "Kon die beslissing niet vastleggen"
+  },
+  "superAdminSettings.appearance.darkMode": {
+    "string": "Standaard Donkere modus"
+  },
+  "superAdminSettings.appearance.darkModeDescription": {
+    "string": "Stel Donkere modus in als het standaardthema voor nieuwe gebruikers"
+  },
+  "superAdminSettings.appearance.description": {
+    "string": "Uiterlijk van het platform aanpassen"
+  },
+  "superAdminSettings.appearance.logoUrl": {
+    "string": "URL logo"
+  },
+  "superAdminSettings.appearance.primaryColor": {
+    "string": "Primaire merkkleur"
+  },
+  "superAdminSettings.appearance.title": {
+    "string": "Instellingen uiterlijk"
+  },
+  "superAdminSettings.comingSoon": {
+    "string": "Beheren van platforminstellingen is nog niet beschikbaar"
+  },
+  "superAdminSettings.database.autoBackup": {
+    "string": "Automatische back-ups"
+  },
+  "superAdminSettings.database.autoBackupDescription": {
+    "string": "Dagelijkse automatische databaseback-ups inschakelen"
+  },
+  "superAdminSettings.database.createBackup": {
+    "string": "Back-up maken"
+  },
+  "superAdminSettings.database.description": {
+    "string": "Databaseconfiguratie en onderhoud"
+  },
+  "superAdminSettings.database.host": {
+    "string": "Database host"
+  },
+  "superAdminSettings.database.port": {
+    "string": "Database poort"
+  },
+  "superAdminSettings.database.runMaintenance": {
+    "string": "Onderhoud uitvoeren"
+  },
+  "superAdminSettings.database.title": {
+    "string": "Databaseinstellingen"
+  },
+  "superAdminSettings.email.description": {
+    "string": "E-mailnotificaties en SMTP configureren"
+  },
+  "superAdminSettings.email.enableNotifications": {
+    "string": "E-mailnotificaties inschakelen"
+  },
+  "superAdminSettings.email.enableNotificationsDescription": {
+    "string": "E-mailnotificaties naar gebruikers verzenden"
+  },
+  "superAdminSettings.email.fromEmail": {
+    "string": "E-mailadres Van"
+  },
+  "superAdminSettings.email.smtpHost": {
+    "string": "SMTP-host"
+  },
+  "superAdminSettings.email.smtpPort": {
+    "string": "SMTP-poort"
+  },
+  "superAdminSettings.email.title": {
+    "string": "E-mailinstellingen"
+  },
+  "superAdminSettings.general.description": {
+    "string": "Basisconfiguratie platform "
+  },
+  "superAdminSettings.general.maintenanceMode": {
+    "string": "Modus Onderhoud"
+  },
+  "superAdminSettings.general.maintenanceModeDescription": {
+    "string": "Modus Onderhoud inschakelen om toegang door gebruikers te verhinderen"
+  },
+  "superAdminSettings.general.siteDescription": {
+    "string": "Omschrijving site"
+  },
+  "superAdminSettings.general.siteName": {
+    "string": "Naam site "
+  },
+  "superAdminSettings.general.siteUrl": {
+    "string": "URL site"
+  },
+  "superAdminSettings.general.title": {
+    "string": "Algemene instellingen"
+  },
+  "superAdminSettings.notifications.description": {
+    "string": "Voorkeuren voor notificatie op platform configureren"
+  },
+  "superAdminSettings.notifications.errors": {
+    "string": "Fout-notificaties"
+  },
+  "superAdminSettings.notifications.errorsDescription": {
+    "string": "Notificeer beheerders als er een systeemfout optreedt"
+  },
+  "superAdminSettings.notifications.newProject": {
+    "string": "Notificaties Nieuw project"
+  },
+  "superAdminSettings.notifications.newProjectDescription": {
+    "string": "Notificeer beheerders als er een nieuw project wordt gemaakt"
+  },
+  "superAdminSettings.notifications.newUser": {
+    "string": "Notificaties Nieuwe gebruiker"
+  },
+  "superAdminSettings.notifications.newUserDescription": {
+    "string": "Notificeer beheerders als een nieuwe gebruiker zich aanmeldt"
+  },
+  "superAdminSettings.notifications.title": {
+    "string": "Instellingen Notificaties"
+  },
+  "superAdminSettings.saveButton": {
+    "string": "Alle instellingen bewaren"
+  },
+  "superAdminSettings.security.description": {
+    "string": "Beveiliging en authenticatie configureren"
+  },
+  "superAdminSettings.security.passwordPolicy": {
+    "string": "Strikt wachtwoord-beleid"
+  },
+  "superAdminSettings.security.passwordPolicyDescription": {
+    "string": "Sterke wachtwoorden vereisen (min 12 tekens, speciale tekens)"
+  },
+  "superAdminSettings.security.requireVerification": {
+    "string": "E-mailverificatie vereisen"
+  },
+  "superAdminSettings.security.requireVerificationDescription": {
+    "string": "Gebruikers moeten hun e-mail verifiëren voordat ze toegang tot het platform krijgen"
+  },
+  "superAdminSettings.security.sessionTimeout": {
+    "string": "Sessie time-out (minuten)"
+  },
+  "superAdminSettings.security.title": {
+    "string": "Beveiligingsinstellingen"
+  },
+  "superAdminSettings.security.twoFactor": {
+    "string": "Twee-factor-authenticatie inschakelen"
+  },
+  "superAdminSettings.security.twoFactorDescription": {
+    "string": "Gebruikers toestaan 2FA in te schakelen voor hun accounts"
+  },
+  "superAdminSettings.subtitle": {
+    "string": "Platformbrede instellingen en voorkeuren configureren "
+  },
+  "superAdminSettings.title": {
+    "string": "Platforminstellingen"
+  },
+  "superAdminTeamImages.approve": {
+    "string": "Goedkeuren"
+  },
+  "superAdminTeamImages.approveSuccess": {
+    "string": "Afbeelding goedgekeurd"
+  },
+  "superAdminTeamImages.emptyDescription": {
+    "string": "Er is momenteel geen team dat een afbeelding op goedkeuring heeft staan wachten."
+  },
+  "superAdminTeamImages.loadError": {
+    "string": "Kon de wachtrij voor beoordelen niet laden."
+  },
+  "superAdminTeamImages.reject": {
+    "string": "Afwijzen"
+  },
+  "superAdminTeamImages.rejectSuccess": {
+    "string": "Afbeelding afgekeurd"
+  },
+  "superAdminTeamImages.requestMeta": {
+    "string": "{team} · verzocht door {user} op {date}"
+  },
+  "superAdminTeamImages.subtitle": {
+    "string": "Afbeeldingen voor teams zijn voor hun uitdagingen aangevraagd. Een team gebruikt een enkele afbeelding, dus goedkeuren van een verzoek vervangt die welke het team nu gebruikt, inclusief voor de uitdagingen die hem al weergeven."
+  },
+  "superAdminTeamImages.title": {
+    "string": "Afbeelding team uitdaging"
+  },
+  "superAdminUsers.empty.description": {
+    "string": "Deze zoekactie houdt alleen rekening met de gebruikers die momenteel op deze pagina zijn geladen, niet alle gebruikers in het systeem. Probeer de volgende pagina of een andere zoekterm."
+  },
+  "superAdminUsers.empty.title": {
+    "string": "Geen gebruikers gevonden"
+  },
+  "superAdminUsers.searchPlaceholder": {
+    "string": "Gebruikers op naam of e-mail zoeken…"
+  },
+  "superAdminUsers.stats.basedOnSearch": {
+    "string": "Gebaseerd op huidige zoekactie"
+  },
+  "superAdminUsers.stats.filteredResults": {
+    "string": "Gefilterde resultaten"
+  },
+  "superAdminUsers.stats.perPage": {
+    "string": "{limit} per pagina weergegeven"
+  },
+  "superAdminUsers.stats.platformWide": {
+    "string": "Platformbreed"
+  },
+  "superAdminUsers.stats.superAdmins": {
+    "string": "Superbeheerders"
+  },
+  "superAdminUsers.stats.usersOnPage": {
+    "string": "Gebruikers op pagina"
+  },
+  "superAdminUsers.subtitle": {
+    "string": "Alle gebruikers en hun rechten over het gehele platform beheren"
+  },
+  "superAdminUsers.table.columns.osmId": {
+    "string": "OSM-ID"
+  },
+  "superAdminUsers.table.columns.score": {
+    "string": "Score"
+  },
+  "superAdminUsers.table.columns.user": {
+    "string": "Gebruiker"
+  },
+  "superAdminUsers.table.loading": {
+    "string": "Gebruikers laden…"
+  },
+  "superAdminUsers.table.next": {
+    "string": "Volgende"
+  },
+  "superAdminUsers.table.notAvailable": {
+    "string": "N/B"
+  },
+  "superAdminUsers.table.previous": {
+    "string": "Vorige"
+  },
+  "superAdminUsers.table.subtitle": {
+    "string": "Een lijst met alle gebruikers in het systeem (pagina {page})"
+  },
+  "superAdminUsers.table.title": {
+    "string": "Alle gebruikers"
+  },
+  "superAdminUsers.title": {
+    "string": "Gebruikersbeheer"
+  },
+  "taskEditPage.descriptionPanel.backToTask": {
+    "string": "Terug naar taak"
+  },
+  "taskEditPage.descriptionPanel.challengeTitle": {
+    "string": "Over deze uitdaging"
+  },
+  "taskEditPage.descriptionPanel.noChallengeDescription": {
+    "string": "Deze uitdaging heeft geen omschrijving."
+  },
+  "taskEditPage.descriptionPanel.noProjectDescription": {
+    "string": "Dit project heeft geen omschrijving."
+  },
+  "taskEditPage.descriptionPanel.projectTitle": {
+    "string": "Over dit project"
+  },
+  "taskEditPage.idEditor.closeEditor": {
+    "string": "Bewerker sluiten"
+  },
+  "taskEditPage.idEditor.closeEditorTitle": {
+    "string": "Bewerker sluiten en terug naar kaart van de taak"
+  },
+  "taskEditPage.idEditor.collapsePanel": {
+    "string": "Paneel samenvouwen"
+  },
+  "taskEditPage.idEditor.dragPanel": {
+    "string": "Slepen om deze besturingselementen te verplaatsen"
+  },
+  "taskEditPage.idEditor.expandPanel": {
+    "string": "Paneel uitvouwen"
+  },
+  "taskEditPage.idEditor.focus": {
+    "string": "Focus"
+  },
+  "taskEditPage.idEditor.focusTitle": {
+    "string": "Dim andere objecten om te focussen op taken"
+  },
+  "taskEditPage.idEditor.loading": {
+    "string": "iD Editor laden…"
+  },
+  "taskEditPage.idEditor.reCenter": {
+    "string": "Opnieuw middelpunt zoeken"
+  },
+  "taskEditPage.idEditor.reviewChanges": {
+    "string": "De niet-opgeslagen wijzigingen beoordelen"
+  },
+  "taskEditPage.idEditor.selectTasks": {
+    "string": "Taken selecteren"
+  },
+  "taskEditPage.idEditor.selectTasksTitle": {
+    "string": "Objecten taak in iD selecteren"
+  },
+  "taskEditPage.idEditor.showAll": {
+    "string": "Alles weergeven"
+  },
+  "taskEditPage.idEditor.showAllTitle": {
+    "string": "Alle kaartobjecten weergeven"
+  },
+  "taskEditPage.idEditor.unsavedChanges": {
+    "string": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}"
+  },
+  "taskEditPage.lockConflictDialog.confirm": {
+    "string": "Andere vergrendeling losmaken & doorgaan"
+  },
+  "taskEditPage.lockConflictDialog.description": {
+    "string": "U heeft nog steeds de vergrendeling voor de taak #{taskId}. Maak die los om in plaats daarvan deze taak te vergrendelen."
+  },
+  "taskEditPage.lockConflictDialog.descriptionWithChallenge": {
+    "string": "U heeft nog steeds de vergrendeling voor de taak #{taskId} in \"{challengeName}\". Maak die los om in plaats daarvan deze taak te vergrendelen."
+  },
+  "taskEditPage.lockConflictDialog.goBack": {
+    "string": "Ga terug naar de vorige taak"
+  },
+  "taskEditPage.lockConflictDialog.inspect": {
+    "string": "Deze taak inspecteren"
+  },
+  "taskEditPage.lockConflictDialog.lockedSince": {
+    "string": "vergrendeld {time}"
+  },
+  "taskEditPage.lockConflictDialog.switching": {
+    "string": "Schakelen…"
+  },
+  "taskEditPage.lockConflictModal.bundleNote": {
+    "string": "{count, plural, one {Dit zal ook # gebundelde taak losmaken.} other {Dit zal ook # gebundelde taken losmaken.}}"
+  },
+  "taskEditPage.lockConflictModal.confirm": {
+    "string": "Losmaken en doorgaan"
+  },
+  "taskEditPage.lockConflictModal.description": {
+    "string": "U hebt nog steeds een andere taak vergrendeld. Die losmaken en in plaats daarvan deze taak vergrendelen?"
+  },
+  "taskEditPage.lockConflictModal.descriptionWithParent": {
+    "string": "U hebt momenteel een taak vergrendeld in \"{parentName}\". Die losmaken en in plaats daarvan deze taak vergrendelen?"
+  },
+  "taskEditPage.lockConflictModal.title": {
+    "string": "U hebt al een taak vergrendeld"
+  },
+  "taskEditPage.lockConflictModal.unlocking": {
+    "string": "Losmaken…"
+  },
+  "taskEditPage.lockFailedDialog.genericLockFailure": {
+    "string": "Taak kon niet worden vergrendeld"
+  },
+  "taskEditPage.lockFailedDialog.preview": {
+    "string": "Voorbeeld van taak"
+  },
+  "taskEditPage.lockFailedDialog.previewAvailable": {
+    "string": ". Een voorbeeld Alleen-lezen is beschikbaar."
+  },
+  "taskEditPage.lockFailedDialog.requestSent": {
+    "string": "Aanvraag verzonden!"
+  },
+  "taskEditPage.lockFailedDialog.requestUnlock": {
+    "string": "Verzoek tot ontgrendelen"
+  },
+  "taskEditPage.lockFailedDialog.requestUnlockFailed": {
+    "string": "Kon geen ontgrendeling aanvragen"
+  },
+  "taskEditPage.lockFailedDialog.retryLock": {
+    "string": "Opnieuw vergrendelen"
+  },
+  "taskEditPage.lockFailedDialog.title": {
+    "string": "Kan taak niet vergrendelen"
+  },
+  "taskEditPage.pendingEdits.created": {
+    "string": "Gemaakt"
+  },
+  "taskEditPage.pendingEdits.deleted": {
+    "string": "Verwijderd"
+  },
+  "taskEditPage.pendingEdits.description": {
+    "string": "Wat er momenteel openstaat in de bewerker. Bewaar vanuit de bewerker om het te verzenden naar OpenStreetMap."
+  },
+  "taskEditPage.pendingEdits.geometryOnly": {
+    "string": "Geometrie gewijzigd; er werden geen tags gewijzigd."
+  },
+  "taskEditPage.pendingEdits.modified": {
+    "string": "Bewerkt"
+  },
+  "taskEditPage.pendingEdits.none": {
+    "string": "Er staat niets open."
+  },
+  "taskEditPage.pendingEdits.title": {
+    "string": "Niet-opgeslagen wijzigingen"
+  },
+  "taskEditPage.shortcuts.backToMap": {
+    "string": "Bewerker sluiten"
+  },
+  "taskEditPage.taskActionModal.commentLabel": {
+    "string": "Opmerking (optioneel)"
+  },
+  "taskEditPage.taskActionModal.commentPlaceholder": {
+    "string": "Voeg notities of opmerkingen toe voor deze taak…"
+  },
+  "taskEditPage.taskActionModal.completeAndContinue": {
+    "string": "Voltooien & doorgaan"
+  },
+  "taskEditPage.taskActionModal.description": {
+    "string": "Werk de status van de taak bij en voeg optioneel een opmerking toe"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.description": {
+    "string": "Selecteer een taak nabij de huidige, of selecteer automatisch de dichtstbijzijnde"
+  },
+  "taskEditPage.taskActionModal.nearbyTask.label": {
+    "string": "Taak dichtbij"
+  },
+  "taskEditPage.taskActionModal.nextTask": {
+    "string": "Volgende taak"
+  },
+  "taskEditPage.taskActionModal.randomTask.description": {
+    "string": "Laad de volgende taak met de hoogste prioriteit uit deze uitdaging"
+  },
+  "taskEditPage.taskActionModal.randomTask.label": {
+    "string": "Willekeurige taak met hoge prioriteit"
+  },
+  "taskEditPage.taskActionModal.statusChange": {
+    "string": "Status wijzigen"
+  },
+  "taskEditPage.taskActionModal.submitShortcut": {
+    "string": "Dien deze bevestiging in"
+  },
+  "taskEditPage.taskActionModal.title": {
+    "string": "Actie voor taak voltooien"
+  },
+  "taskEditPage.taskActionModal.toast.commentFailed": {
+    "string": "De taakstatus werd opgeslagen, maar voor uw opmerking kon dat niet."
+  },
+  "taskEditPage.taskActionModal.toast.loadingNext": {
+    "string": "Volgende taak laden…"
+  },
+  "taskEditPage.taskActionModal.toast.markedAs": {
+    "string": "Taak gemarkeerd als {status}"
+  },
+  "taskEditPage.taskActionModal.toast.updateFailed": {
+    "string": "Bijwerken van taak mislukt. Probeer het opnieuw."
+  },
+  "taskEditPage.taskActions.editorButton.chooseEditor": {
+    "string": "Openen in een andere bewerker, of wijzig de standaard"
+  },
+  "taskEditPage.taskActions.editorButton.defaultUpdateFailed": {
+    "string": "Bijwerken standaardbewerker mislukt"
+  },
+  "taskEditPage.taskActions.editorButton.defaultUpdated": {
+    "string": "Standaardbewerker bijgewerkt"
+  },
+  "taskEditPage.taskActions.editorButton.editorFallback": {
+    "string": "bewerker"
+  },
+  "taskEditPage.taskActions.editorButton.josmNoResponse": {
+    "string": "Afstandsbediening van OSM reageerde niet. Wordt JOSM uitgevoerd terwijl Afstandsbediening ingeschakeld is?"
+  },
+  "taskEditPage.taskActions.editorButton.noBounds": {
+    "string": "Grenzen voor taken niet beschikbaar"
+  },
+  "taskEditPage.taskActions.editorButton.noOsmFeatures": {
+    "string": "Taak heeft geen ID's van OSM-objecten om te laden"
+  },
+  "taskEditPage.taskActions.editorButton.openFailed": {
+    "string": "Openen standaardbewerker mislukt"
+  },
+  "taskEditPage.taskActions.editorButton.openIn": {
+    "string": "Open deze taak in:"
+  },
+  "taskEditPage.taskActions.editorButton.openTaskIn": {
+    "string": "Taak openen in {editor}"
+  },
+  "taskEditPage.taskActions.editorButton.openingTaskIn": {
+    "string": "Taak openen in {editor}"
+  },
+  "taskEditPage.taskActions.editorButton.setDefaultEditor": {
+    "string": "Standaard bewerker instellen"
+  },
+  "taskEditPage.taskActions.editorButton.short.id": {
+    "string": "iD"
+  },
+  "taskEditPage.taskActions.editorButton.short.josm": {
+    "string": "JOSM"
+  },
+  "taskEditPage.taskActions.editorButton.short.josmFeatures": {
+    "string": "JOSM-objecten"
+  },
+  "taskEditPage.taskActions.editorButton.short.josmLayer": {
+    "string": "JOSM-laag"
+  },
+  "taskEditPage.taskActions.editorButton.short.level0": {
+    "string": "Level0"
+  },
+  "taskEditPage.taskActions.editorButton.short.rapid": {
+    "string": "Snel"
+  },
+  "taskEditPage.taskActions.lockButton.lock": {
+    "string": "Vergrendeling"
+  },
+  "taskEditPage.taskActions.lockButton.lockTask": {
+    "string": "Taak vergrendelen"
+  },
+  "taskEditPage.taskActions.lockButton.locked": {
+    "string": "Taak vergrendeld"
+  },
+  "taskEditPage.taskActions.lockButton.pausedMessage": {
+    "string": "Deze uitdaging is momenteel gepauzeerd. Taken kunnen niet worden vergrendeld totdat die weer wordt voortgezet."
+  },
+  "taskEditPage.taskActions.lockButton.signInToLock": {
+    "string": "Aanmelden om taken te vergrendelen"
+  },
+  "taskEditPage.taskActions.lockButton.unlock": {
+    "string": "Losmaken"
+  },
+  "taskEditPage.taskActions.lockButton.unlockFailed": {
+    "string": "Taak ontgrendelen mislukt"
+  },
+  "taskEditPage.taskActions.lockButton.unlockTask": {
+    "string": "Taak losmaken"
+  },
+  "taskEditPage.taskActions.lockButton.unlocked": {
+    "string": "Taak losgemaakt"
+  },
+  "taskEditPage.taskActions.main.completionHeading": {
+    "string": "Voltooid: Status taak instellen"
+  },
+  "taskEditPage.taskActions.main.markAlreadyFixedTitle": {
+    "string": "Markeren als Al gerepareerd"
+  },
+  "taskEditPage.taskActions.main.markCantCompleteTitle": {
+    "string": "Markeren als Kan niet voltooien"
+  },
+  "taskEditPage.taskActions.main.markFixedTitle": {
+    "string": "Markeren als Gerepareerd"
+  },
+  "taskEditPage.taskActions.main.markNotAnIssueTitle": {
+    "string": "Markeren als Geen probleem"
+  },
+  "taskEditPage.taskActions.main.pausedMessage": {
+    "string": "Deze uitdaging is momenteel gepauzeerd. Taken kunnen niet worden voltooid totdat die weer is voortgezet."
+  },
+  "taskEditPage.taskActions.navigation.loadNearbyFailed": {
+    "string": "Laden van dichtbijgelegen taak mislukt"
+  },
+  "taskEditPage.taskActions.navigation.nearbyTask": {
+    "string": "Dichtbijgelegen taak "
+  },
+  "taskEditPage.taskActions.navigation.noNearbyTasks": {
+    "string": "Geen dichtbijgelegen taken beschikbaar"
+  },
+  "taskEditPage.taskActions.navigation.randomTask": {
+    "string": "Willekeurige taak"
+  },
+  "taskEditPage.taskActions.navigation.wantToMap": {
+    "string": "Wilt u deze uitdaging in kaart brengen?"
+  },
+  "taskEditPage.taskActions.skipButton.label": {
+    "string": "Deze taak overslaan"
+  },
+  "taskEditPage.taskActions.skipButton.skipFailed": {
+    "string": "Kon deze taak niet overslaan"
+  },
+  "taskEditPage.taskActions.skipButton.title": {
+    "string": "Deze taak overslaan (behoud de status)"
+  },
+  "taskEditPage.taskActions.startMapping.differentTask": {
+    "string": "Andere taak"
+  },
+  "taskEditPage.taskActions.startMapping.mapThisTask": {
+    "string": "Deze taak in kaart brengen"
+  },
+  "taskEditPage.taskActions.startMapping.starting": {
+    "string": "Beginnen…"
+  },
+  "taskEditPage.taskBundle.addFailed": {
+    "string": "Kon die taak niet vergrendelen; die werd dus niet toegevoegd aan de bundel."
+  },
+  "taskEditPage.taskBundle.clearedSuccess": {
+    "string": "Nu alleen aan de primaire taak werken"
+  },
+  "taskEditPage.taskBundle.lockUpdateFailed": {
+    "string": "Kon de taken die werden vergrendeld met deze bundel niet bijwerken."
+  },
+  "taskEditPage.taskInfoHeader.noChallengeDescription": {
+    "string": "Deze uitdaging heeft geen omschrijving"
+  },
+  "taskEditPage.taskInfoHeader.noProjectDescription": {
+    "string": "Dit project heeft geen omschrijving"
+  },
+  "taskEditPage.taskInfoHeader.readChallengeDescription": {
+    "string": "Zorg ervoor dat u de omschrijving van de uitdaging hebt gelezen, omdat die belangrijke informatie kan bevatten die niet wordt vermeld in de instructies voor de taak"
+  },
+  "taskEditPage.taskInfoHeader.viewChallengeDescription": {
+    "string": "Omschrijving van uitdaging bekijken"
+  },
+  "taskEditPage.taskInfoHeader.viewProjectDescription": {
+    "string": "Omschrijving van project bekijken"
+  },
+  "taskEditPage.taskMap.drawingModeHint": {
+    "string": "Klikken en slepen om taken te selecteren • ESC om te annuleren"
+  },
+  "taskEditPage.taskMap.editInId": {
+    "string": "Bewerken in iD (inline)"
+  },
+  "taskEditPage.taskMap.editInIdShort": {
+    "string": "Bewerken in iD"
+  },
+  "taskEditPage.taskMap.focusedFeatureHint": {
+    "string": "Een object van deze taak weergeven"
+  },
+  "taskEditPage.taskMap.showAllFeatures": {
+    "string": "Alles weergeven"
+  },
+  "taskEditPage.taskNearbyMap.nearbyCount": {
+    "string": "{count, plural, one {# dichtbijgelegen taak} other {# dichtbijgelegen taken}}"
+  },
+  "taskEditPage.taskNearbyMap.selectedTask": {
+    "string": "Taak #{id} geselecteerd"
+  },
+  "taskEditPage.taskStatusModal.discardUnsavedChanges": {
+    "string": "U hebt nog niet opgeslagen wijzigingen in ID die genegeerd zullen worden. Weet u zeker dat u door wilt gaan?"
+  },
+  "taskInfoPanel.comments.addSuccess": {
+    "string": "Opmerking toegevoegd"
+  },
+  "taskInfoPanel.comments.changedStatus": {
+    "string": "gewijzigde status"
+  },
+  "taskInfoPanel.comments.cleared": {
+    "string": "leeggemaakt"
+  },
+  "taskInfoPanel.comments.emptyState": {
+    "string": "Nog geen activiteiten. Maak de eerste opmerking!"
+  },
+  "taskInfoPanel.comments.emptyStateReadOnly": {
+    "string": "Nog geen activiteiten."
+  },
+  "taskInfoPanel.comments.markedAs": {
+    "string": "gemarkeerd als"
+  },
+  "taskInfoPanel.comments.send": {
+    "string": "Opmerking verzenden"
+  },
+  "taskInfoPanel.comments.signInPrompt": {
+    "string": "Aanmelden om opmerkingen te kunnen toevoegen"
+  },
+  "taskInfoPanel.comments.systemUser": {
+    "string": "Systeem"
+  },
+  "taskInfoPanel.data.areaHistory": {
+    "string": "Geschiedenis gebied"
+  },
+  "taskInfoPanel.data.areaHistoryDescription": {
+    "string": "Bekijk recente wijzigingen in het gebied rondom deze taak"
+  },
+  "taskInfoPanel.data.noOsmFeature": {
+    "string": "De geometrie van deze taak verwijst niet naar een element van OSM (zoals @id: \"way/12345\")."
+  },
+  "taskInfoPanel.data.osmFeature": {
+    "string": "JOSM-object"
+  },
+  "taskInfoPanel.data.osmHistoryAtLocation": {
+    "string": "OSM-geschiedenis op locatie"
+  },
+  "taskInfoPanel.data.recentEditsNear": {
+    "string": "Recente bewerkingen dicht bij {location}"
+  },
+  "taskInfoPanel.data.viewOnOsm": {
+    "string": "Bekijk {type} op OpenStreetMap"
+  },
+  "taskInfoPanel.drawer.startTask": {
+    "string": "Taak beginnen "
+  },
+  "taskInfoPanel.editorChanges.description": {
+    "string": "Alles wat momenteel openstaat in de bewerker. Bewaar vanuit de bewerker om het te verzenden naar OpenStreetMap."
+  },
+  "taskInfoPanel.editorChanges.diverged": {
+    "string": "U heeft bewerkingen gemaakt sinds de suggestie voor de uitdaging werd toegepast."
+  },
+  "taskInfoPanel.editorChanges.docsLink": {
+    "string": "Over uitdagingen om tags te repareren"
+  },
+  "taskInfoPanel.editorChanges.matches": {
+    "string": "De bewerker bevat de suggestie voor de uitdaging en verder niets."
+  },
+  "taskInfoPanel.editorChanges.reset": {
+    "string": "Herstellen"
+  },
+  "taskInfoPanel.editorChanges.resetDisabledTitle": {
+    "string": "Niets te herstellen — de bewerker bevat exact wat de uitdaging voorstelt"
+  },
+  "taskInfoPanel.editorChanges.resetTitle": {
+    "string": "Negeer alles wat niet opgeslagen is en ga terug naar de suggestie voor de uitdaging"
+  },
+  "taskInfoPanel.editorChanges.suggestionDescription": {
+    "string": "Wijzigen wat deze uitdaging voorstelt. Openen van de bewerker past het voor u toe om te beoordelen."
+  },
+  "taskInfoPanel.editorChanges.suggestionTitle": {
+    "string": "Wijzigingen in voorgestelde tags"
+  },
+  "taskInfoPanel.editorChanges.tagFixDescription": {
+    "string": "De door de uitdaging voorgestelde tags werden voor u toegepast en zijn hieronder opgenomen. Bewaar vanuit de bewerker om alles naar OpenStreetMap te verzenden."
+  },
+  "taskInfoPanel.editorChanges.title": {
+    "string": "Uw niet-opgeslagen bewerkingen"
+  },
+  "taskInfoPanel.features.featureCount": {
+    "string": "{count, plural, one {# object} other {# objecten}}"
+  },
+  "taskInfoPanel.features.noFeatures": {
+    "string": "Deze taak heeft geen objecten"
+  },
+  "taskInfoPanel.features.openTask": {
+    "string": "Taak #{id} openen"
+  },
+  "taskInfoPanel.instructions.copy": {
+    "string": "Kopieer \"{text}\" naar het klembord"
+  },
+  "taskInfoPanel.properties.childCount": {
+    "string": "{count, plural, one {# geometrie} other {# geometrieën}}"
+  },
+  "taskInfoPanel.properties.featureEmpty": {
+    "string": "Geen eigenschappen voor dit object"
+  },
+  "taskInfoPanel.properties.featureLabel": {
+    "string": "Object {number}"
+  },
+  "taskInfoPanel.properties.focusFeature": {
+    "string": "Alleen dit object op de kaart weergeven"
+  },
+  "taskInfoPanel.properties.osmTags": {
+    "string": "Huidige tags van OSM"
+  },
+  "taskInfoPanel.properties.osmTagsEmpty": {
+    "string": "Geen tags voor dit element."
+  },
+  "taskInfoPanel.properties.osmTagsFailed": {
+    "string": "Kon dit element niet laden vanaf OpenStreetMap."
+  },
+  "taskInfoPanel.properties.propertyCount": {
+    "string": "{count, plural, one {# eigenschap} other {# eigenschappen}}"
+  },
+  "taskInfoPanel.properties.showAllFeatures": {
+    "string": "De andere objecten van de taak weer weergeven"
+  },
+  "taskInfoPanel.properties.zoomToFeature": {
+    "string": "Zoomen naar dit object"
+  },
+  "taskInfoPanel.resetToSuggestion.confirm": {
+    "string": "Negeren en herstellen"
+  },
+  "taskInfoPanel.resetToSuggestion.description": {
+    "string": "{count, plural, one {De # niet-opgeslagen bewerking in de bewerker wordt genegeerd en de voorgestelde wijziging gaat terug naar exact wat MapRoulette toepaste. Niets wat al is opgeslagen naar OpenStreetMap wordt beïnvloed.} other {Alle # niet-opgeslagen bewerkingen in de bewerker worden genegeerd en de voorgestelde wijzigingen gaan terug naar exact wat MapRoulette toepaste. Niets wat al is opgeslagen naar OpenStreetMap wordt beïnvloed.}}"
+  },
+  "taskInfoPanel.resetToSuggestion.title": {
+    "string": "Herstellen naar de suggestie van de uitdaging?"
+  },
+  "taskInfoPanel.suggested.add": {
+    "string": "toevoegen"
+  },
+  "taskInfoPanel.suggested.alreadyApplied": {
+    "string": "Dit element heeft al de voorgestelde tags."
+  },
+  "taskInfoPanel.suggested.change": {
+    "string": "wijzigen"
+  },
+  "taskInfoPanel.suggested.remove": {
+    "string": "verwijderen"
+  },
+  "taskInfoPanel.tabs.comments": {
+    "string": "Opmerkingen ({count})"
+  },
+  "taskInfoPanel.tabs.data": {
+    "string": "Gegevens"
+  },
+  "taskInfoPanel.tabs.features": {
+    "string": "Objecten ({count})"
+  },
+  "taskInfoPanel.taskTab.bundleList.selectAll": {
+    "string": "Alles selecteren "
+  },
+  "taskInfoPanel.taskTab.bundleList.selectAllTitle": {
+    "string": "Alle gebundelde taken in iD editor selecteren"
+  },
+  "taskInfoPanel.taskTab.bundleList.selectTaskTitle": {
+    "string": "Taak #{id} in iD editor selecteren "
+  },
+  "taskInfoPanel.taskTab.bundleState.addToBundle": {
+    "string": "Aan bundel toevoegen"
+  },
+  "taskInfoPanel.taskTab.bundleState.addingToBundle": {
+    "string": "Taak vergrendelen…"
+  },
+  "taskInfoPanel.taskTab.bundleState.inBundle": {
+    "string": "In bundel"
+  },
+  "taskInfoPanel.taskTab.bundleState.removeFromBundle": {
+    "string": "Verwijderen uit bundel"
+  },
+  "taskMap.clearBundleDialog.confirm": {
+    "string": "Bundel leegmaken"
+  },
+  "taskMap.clearBundleDialog.description": {
+    "string": "{taskCount, plural, one {Dit zal # taak uit de bundel halen. De taak zelf zal niet worden verwijderd, alleen gescheiden. Deze actie kan niet ongedaan worden gemaakt.} other {Dit zal alle # taken uit de bundel halen. De taken zelf zullen niet worden verwijderd, alleen gescheiden. Deze actie kan niet ongedaan worden gemaakt.}}"
+  },
+  "taskMap.clearBundleDialog.title": {
+    "string": "Bundel taken leegmaken?"
+  },
+  "taskMap.controls.centerToBundle": {
+    "string": "Centreren op bundel"
+  },
+  "taskMap.controls.centerToTask": {
+    "string": "Centreren op taak"
+  },
+  "taskMap.controls.hideAllMarkers": {
+    "string": "Alle markeringen verbergen"
+  },
+  "taskMap.controls.hideDirectionIndicators": {
+    "string": "Indicaties voor richtingen verbergen"
+  },
+  "taskMap.controls.hideOtherChallenges": {
+    "string": "Taken uit andere uitdagingen verbergen"
+  },
+  "taskMap.controls.showAllMarkers": {
+    "string": "Alle markeringen weergeven"
+  },
+  "taskMap.controls.showAllTasks": {
+    "string": "Alle taken weergeven"
+  },
+  "taskMap.controls.showDirectionIndicators": {
+    "string": "Indicaties voor richtingen weergeven"
+  },
+  "taskMap.controls.showOtherChallenges": {
+    "string": "Taken uit andere uitdagingen weergeven"
+  },
+  "taskMap.controls.showPrimaryOnly": {
+    "string": "Alleen primaire taak weergeven"
+  },
+  "taskMap.controls.showSelectedOnly": {
+    "string": "Alleen geselecteerde taken weergeven"
+  },
+  "taskMap.multiTaskPanel.clearAll": {
+    "string": "Alleen aan de primaire taak werken"
+  },
+  "taskMap.multiTaskPanel.docsLink": {
+    "string": "Meer leren over het samen oplossen van meerdere taken"
+  },
+  "taskMap.multiTaskPanel.drawButton": {
+    "string": "Tekenen om taken toe te voegen"
+  },
+  "taskMap.multiTaskPanel.drawing": {
+    "string": "Tekenen…"
+  },
+  "taskMap.multiTaskPanel.maxBadge": {
+    "string": "({max} max)"
+  },
+  "taskMap.multiTaskPanel.maxReached": {
+    "string": "Maximale aantal taken bereikt"
+  },
+  "taskMap.multiTaskPanel.resetBundle": {
+    "string": "Herstellen naar initiële bundel"
+  },
+  "taskMap.multiTaskPanel.title": {
+    "string": "Aan meerdere taken werken"
+  },
+  "taskMap.multiTaskPanel.workingOnTasks": {
+    "string": "{count, plural, one {Werken aan # taak} other {Werken aan # taken}}"
+  },
+  "taskMap.shortcuts.cancelDrawing": {
+    "string": "Tekenen annuleren"
+  },
+  "taskMap.shortcuts.exitMultiTask": {
+    "string": "Modus Meerdere taken verlaten"
+  },
+  "taskMap.shortcuts.startDrawing": {
+    "string": "Begin met tekenen om taken toe te voegen"
+  },
+  "taskMap.shortcuts.toggleDirectionIndicators": {
+    "string": "Indicaties voor richtingen op geometrie taak schakelen"
+  },
+  "taskMap.shortcuts.toggleExploreLayer": {
+    "string": "Taken uit andere uitdagingen schakelen"
+  },
+  "taskMap.shortcuts.toggleFilter": {
+    "string": "Filter schakelen (alleen gebundelde taken weergeven)"
+  },
+  "taskMap.shortcuts.toggleMarkers": {
+    "string": "Zichtbaarheid van alle markeringen schakelen"
+  },
+  "taskPrioritizationPage.boundsDrawControl.clearAll": {
+    "string": "Alles leegmaken"
+  },
+  "taskPrioritizationPage.boundsDrawControl.clearAllTitle": {
+    "string": "Elke vorm in deze ronde verwijderen"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelected": {
+    "string": "Geselecteerde verwijderen"
+  },
+  "taskPrioritizationPage.boundsDrawControl.deleteSelectedTitle": {
+    "string": "De momenteel geselecteerde vorm verwijderen"
+  },
+  "taskPrioritizationPage.boundsDrawControl.drawPolygonAriaLabel": {
+    "string": "Polygoon tekenen voor prioriteit {tier}"
+  },
+  "taskPrioritizationPage.boundsDrawControl.drawRectangleAriaLabel": {
+    "string": "Rechthoek tekenen voor prioriteit {tier}"
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpIdle": {
+    "string": "De kaart verschuiven en zoomen. Kies een gereedschap om te tekenen of bewerk de grenzen van deze ronde."
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpPolygon": {
+    "string": "Klik om elk punt neer te zetten; dubbelklik of druk op Enter om te voltooien. Gebruik dit voor elk niet-rechthoekig gebied."
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpRectangle": {
+    "string": "Klik en sleep om een aan de as uitgelijnde rechthoek te tekenen."
+  },
+  "taskPrioritizationPage.boundsDrawControl.helpSelect": {
+    "string": "Klik op een vorm om die te selecteren, en sleep dan een punt om de vorm te veranderen, een middelpunt om een nieuw punt in te voegen, of de gehele vorm om die te verplaatsen. Klik met rechts op een punt om dat te verwijderen."
+  },
+  "taskPrioritizationPage.boundsDrawControl.pan": {
+    "string": "Verschuiven"
+  },
+  "taskPrioritizationPage.boundsDrawControl.panAriaLabel": {
+    "string": "Modus Verschuiven (geen gereedschap actief)"
+  },
+  "taskPrioritizationPage.boundsDrawControl.panTitle": {
+    "string": "Verschuif de kaart zonder een actief tekengereedschap"
+  },
+  "taskPrioritizationPage.boundsDrawControl.polygon": {
+    "string": "Polygoon"
+  },
+  "taskPrioritizationPage.boundsDrawControl.rectangle": {
+    "string": "Rechthoek"
+  },
+  "taskPrioritizationPage.boundsDrawControl.select": {
+    "string": "Selecteren"
+  },
+  "taskPrioritizationPage.boundsDrawControl.selectAriaLabel": {
+    "string": "Een bestaande vorm selecteren en bewerken"
+  },
+  "taskPrioritizationPage.content.discard": {
+    "string": "Negeren"
+  },
+  "taskPrioritizationPage.content.docsLink": {
+    "string": "Hoe regels voor prioriteit werken"
+  },
+  "taskPrioritizationPage.content.rulesHint": {
+    "string": "{name} — regels van boven naar beneden; de eerste vermelding voor overeenkomst wint."
+  },
+  "taskPrioritizationPage.content.saveError": {
+    "string": "Kon prioriteiten niet bewaren"
+  },
+  "taskPrioritizationPage.content.saveSuccess": {
+    "string": "Prioriteiten bewaard"
+  },
+  "taskPrioritizationPage.defaultPrioritySelect.label": {
+    "string": "Standaardprioriteit"
+  },
+  "taskPrioritizationPage.index.loadError": {
+    "string": "Kon de uitdaging niet laden."
+  },
+  "taskPrioritizationPage.previewMap.updatingPreview": {
+    "string": "Voorbeeld bijwerken…"
+  },
+  "taskPrioritizationPage.tierWarningBadges.matchesAll": {
+    "string": "Komt overeen met alles"
+  },
+  "taskPrioritizationPage.tierWarningBadges.noMatches": {
+    "string": "Geen overeenkomsten"
+  },
+  "taskPrioritizationPage.warnings.allMatch": {
+    "string": "Elke taak overeenkomen — lagere vermeldingen worden onbereikbaar."
+  },
+  "taskPrioritizationPage.warnings.deadRule": {
+    "string": "Taken komen niet overeen met deze regels — vermelding is onbereikbaar."
+  },
+  "taskPrioritizationPage.warnings.noRules": {
+    "string": "Geen regels geconfigureerd — elk taak zal de standaardprioriteit gebruiken."
+  },
+  "taskPrioritizationPage.warnings.swallowedDefault": {
+    "string": "Standaard is Hoog zonder regels voor Hoog — regels voor gemiddeld/laag zouden mogelijk nooit kunnen worden toegepast."
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addGroup": {
+    "string": "Groep"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.addRule": {
+    "string": "Regel"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.and": {
+    "string": "EN"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.or": {
+    "string": "OF"
+  },
+  "taskPropertyQueryBuilder.ruleGroup.removeGroup": {
+    "string": "Groep verwijderen"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.commaSeparate": {
+    "string": "Kommagescheiden waarden"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
+    "string": "eigenschap"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.removeRule": {
+    "string": "Regel verwijderen"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeDouble": {
+    "string": "double"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeInteger": {
+    "string": "integer"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeLong": {
+    "string": "long"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeNumber": {
+    "string": "getal"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.typeString": {
+    "string": "tekenreeks"
+  },
+  "taskPropertyQueryBuilder.ruleLeaf.valuePlaceholder": {
+    "string": "waarde"
+  },
+  "teamImages.currentHeading": {
+    "string": "In gebruik"
+  },
+  "teamImages.deleteDisabledReason": {
+    "string": "Alleen een teambeheerder, of de aanvrager van een afbeelding die nog steeds op beoordeling wacht, kan hem verwijderen"
+  },
+  "teamImages.deleteError": {
+    "string": "Kon afbeelding niet verwijderen"
+  },
+  "teamImages.deleteLabel": {
+    "string": "Verwijder {name}"
+  },
+  "teamImages.deleteSuccess": {
+    "string": "Afbeelding verwijderd"
+  },
+  "teamImages.description": {
+    "string": "De afbeelding die dit team op zijn uitdagingen kan plaatsen. Een team heeft slechts een afbeelding: iedereen in het team mag een vervanging aanvragen en als een superbeheerder die eenmaal heeft goedgekeurd, neemt het de plaats van de huidige in en elke uitdaging gebruikt het."
+  },
+  "teamImages.empty": {
+    "string": "Dit team heeft nog geen afbeelding voor uitdagingen."
+  },
+  "teamImages.fileHint": {
+    "string": "PNG, JPEG, WebP of GIF, maximaal {max}MB. Vierkante afbeeldingen zien er het beste uit."
+  },
+  "teamImages.fileLabel": {
+    "string": "Afbeeldingsbestand"
+  },
+  "teamImages.heading": {
+    "string": "Afbeelding uitdaging"
+  },
+  "teamImages.loadError": {
+    "string": "Kon afbeelding voor dit team niet laden."
+  },
+  "teamImages.nameLabel": {
+    "string": "Naam (optioneel)"
+  },
+  "teamImages.namePlaceholder": {
+    "string": "Ons logo"
+  },
+  "teamImages.pendingFirst": {
+    "string": "Het wordt de afbeelding voor het team als een superbeheerder hem eenmaal heeft goedgekeurd."
+  },
+  "teamImages.pendingHeading": {
+    "string": "Wachten op beoordeling"
+  },
+  "teamImages.pendingReplaces": {
+    "string": "Als een superbeheerder dit goedkeurt, vervangt het de in gebruik zijnde afbeelding hierboven."
+  },
+  "teamImages.rejectedHeading": {
+    "string": "Niet goedgekeurd"
+  },
+  "teamImages.replaceButton": {
+    "string": "Vervanging aanvragen"
+  },
+  "teamImages.requestButton": {
+    "string": "Afbeelding aanvragen"
+  },
+  "teamImages.requestDisabledReason": {
+    "string": "Dit team heeft al een afbeelding die wacht op goedkeuring. Trek die in voordat een andere wordt aangevraagd."
+  },
+  "teamImages.requestError": {
+    "string": "Kon de afbeelding niet indienen"
+  },
+  "teamImages.requestSuccess": {
+    "string": "Afbeelding ingediend — een superbeheerder zal die beoordelen voordat deze kan worden gebruikt"
+  },
+  "teamImages.requestedBy": {
+    "string": "Aangevraagd door {name}"
+  },
+  "teamImages.requestedByUnknown": {
+    "string": "Aanvrager is niet langer beschikbaar"
+  },
+  "teamImages.status.approved": {
+    "string": "Goedgekeurd"
+  },
+  "teamImages.status.rejected": {
+    "string": "Afgewezen"
+  },
+  "teamImages.status.unknown": {
+    "string": "Onbekend"
+  },
+  "teamImages.validation.fileSize": {
+    "string": "Afbeelding moet kleiner zijn dan {max}MB"
+  },
+  "teamImages.validation.fileType": {
+    "string": "Afbeelding moet een bestand PNG, JPEG, WebP of GIF zijn"
+  },
+  "teams.detail.deleteConfirmAction": {
+    "string": "Team verwijderen"
+  },
+  "teams.detail.deleteConfirmDescription": {
+    "string": "Dit kan niet ongedaan worden gemaakt. Alle leden zullen hun toegangsrechten verliezen."
+  },
+  "teams.detail.deleteConfirmTitle": {
+    "string": "Dit team verwijderen?"
+  },
+  "teams.detail.deleteDisabledReason": {
+    "string": "Alleen een eigenaar van het team kan het verwijderen"
+  },
+  "teams.detail.deleteError": {
+    "string": "Kon team niet verwijderen."
+  },
+  "teams.detail.deleteSuccess": {
+    "string": "Team verwijderd"
+  },
+  "teams.detail.inviteButton": {
+    "string": "Uitnodigen"
+  },
+  "teams.detail.lastOwnerReason": {
+    "string": "Een team moet een eigenaar hebben. Maak iemand anders eigenaar voordat deze wordt gewijzigd."
+  },
+  "teams.detail.lastOwnerRemoveReason": {
+    "string": "Een team moet een eigenaar hebben. Maak iemand anders eigenaar voordat deze wordt verwijderd."
+  },
+  "teams.detail.memberCount": {
+    "string": "{count, plural, one {# lid} other {# leden}}"
+  },
+  "teams.detail.memberRemoveError": {
+    "string": "Kon lid niet verwijderen"
+  },
+  "teams.detail.memberRemoveSuccess": {
+    "string": "Lid verwijderd"
+  },
+  "teams.detail.noChallengesDescription": {
+    "string": "Dit team heeft nog geen uitdaging gekregen."
+  },
+  "teams.detail.noChallengesTitle": {
+    "string": "Geen uitdagingen"
+  },
+  "teams.detail.noMembers": {
+    "string": "Dit team heeft nog geen leden."
+  },
+  "teams.detail.noProjectsDescription": {
+    "string": "Dit team heeft nog geen rol voor enig project gekregen."
+  },
+  "teams.detail.noProjectsTitle": {
+    "string": "Geen projecten"
+  },
+  "teams.detail.removeMemberAriaLabel": {
+    "string": "Lid verwijderen"
+  },
+  "teams.detail.roleUpdateError": {
+    "string": "Kon rol niet bijwerken"
+  },
+  "teams.detail.roleUpdateSuccess": {
+    "string": "Rol bijgewerkt"
+  },
+  "teams.detail.statusJoined": {
+    "string": "Deelnemen"
+  },
+  "teams.editTeam.description": {
+    "string": "Update de informatie voor dit team"
+  },
+  "teams.editTeam.title": {
+    "string": "Team bewerken"
+  },
+  "teams.form.avatarError": {
+    "string": "Team bewaard, maar de avatar ervan kon niet worden bijgewerkt"
+  },
+  "teams.form.avatarFileLabel": {
+    "string": "Afbeeldingsbestand avatar"
+  },
+  "teams.form.avatarLabel": {
+    "string": "Avatar (optioneel)"
+  },
+  "teams.form.avatarPending": {
+    "string": "{name} zal worden bijgewerkt als u bewaart"
+  },
+  "teams.form.avatarReplace": {
+    "string": "Afbeelding vervangen"
+  },
+  "teams.form.avatarUpload": {
+    "string": "Afbeelding uploaden"
+  },
+  "teams.form.avatarUrlDescription": {
+    "string": "Een URL voor de afbeelding om het team weer te geven, als u liever wilt linken dan er een uploaden"
+  },
+  "teams.form.avatarUrlLabel": {
+    "string": "Of link naar een afbeelding"
+  },
+  "teams.form.createSuccess": {
+    "string": "Team gemaakt"
+  },
+  "teams.form.descriptionDescription": {
+    "string": "Een korte omschrijving van het team"
+  },
+  "teams.form.detailsSectionDescription": {
+    "string": "Identificerende basisinformatie voor dit team."
+  },
+  "teams.form.detailsSectionTitle": {
+    "string": "Teamdetails"
+  },
+  "teams.form.invalidUrl": {
+    "string": "Moet een geldige URL zijn"
+  },
+  "teams.form.nameDescription": {
+    "string": "De unieke naam van het team"
+  },
+  "teams.form.nameRequired": {
+    "string": "Naam is vereist"
+  },
+  "teams.form.saveError": {
+    "string": "Kon team niet bewaren"
+  },
+  "teams.form.tooLong": {
+    "string": "{max, plural, one {Houd het onder # teken} other {Houd het onder # tekens}}"
+  },
+  "teams.form.updateSuccess": {
+    "string": "Team bijgewerkt"
+  },
+  "teams.inviteMember.description": {
+    "string": "Zoeken naar een gebruiker van OSM en daar een rol voor kiezen."
+  },
+  "teams.inviteMember.sendButton": {
+    "string": "Uitnodiging verzenden"
+  },
+  "teams.inviteMember.sendError": {
+    "string": "Kon uitnodiging niet verzenden"
+  },
+  "teams.inviteMember.sentSuccess": {
+    "string": "Uitnodiging verzonden"
+  },
+  "teams.inviteMember.title": {
+    "string": "Een teamlid uitnodigen"
+  },
+  "teams.newTeam.description": {
+    "string": "Vul de informatie hieronder in om uw nieuwe team te maken"
+  },
+  "teams.newTeam.title": {
+    "string": "Een team maken"
+  },
+  "teams.pendingInvites.acceptButton": {
+    "string": "Accepteren"
+  },
+  "teams.pendingInvites.acceptError": {
+    "string": "Kon uitnodiging niet accepteren"
+  },
+  "teams.pendingInvites.acceptSuccess": {
+    "string": "Uitnodiging geaccepteerd"
+  },
+  "teams.pendingInvites.count": {
+    "string": "{count, plural, one {U hebt # openstaande uitnodiging} other {U hebt # openstaande uitnodigingen}}"
+  },
+  "teams.pendingInvites.declineButton": {
+    "string": "Afwijzen"
+  },
+  "teams.pendingInvites.declineError": {
+    "string": "Kon uitnodiging niet afwijzen"
+  },
+  "teams.pendingInvites.declineSuccess": {
+    "string": "Uitnodiging afgewezen"
+  },
+  "theme.options.dark": {
+    "string": "Donker thema"
+  },
+  "theme.options.light": {
+    "string": "Licht thema"
+  },
+  "theme.options.system": {
+    "string": "Systeemthema"
+  },
+  "topChallenges.list.emptyDescription": {
+    "string": "Als u eenmaal bent begonnen met het werken aan uitdagingen, zullen de bovenste hier worden weergegeven."
+  },
+  "topChallenges.list.emptyTitle": {
+    "string": "Nog geen bijdragen"
+  },
+  "topChallenges.list.loadError": {
+    "string": "Kon de bovenste uitdagingen nu niet laden."
+  },
+  "ui.spinner.loading": {
+    "string": "Laden"
+  },
+  "ui.table.resizeColumn": {
+    "string": "Grootte kolom wijzigen"
+  }
+}
