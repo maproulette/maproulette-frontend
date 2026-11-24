@@ -22,7 +22,7 @@ There are other places where the OSM Community talk to one another, such as the 
 
 ### I want to help translate MapRoulette or the documentation
 
-We would love your help! We use Transifex as a translation platform. Using Transifex is pretty intuitive and no technical expertise is required. Head over to the [Transifex site for MapRoulette](https://app.transifex.com/osmlab/maproulette3/) or [the site for the MapRoulette documentation](https://app.transifex.com/maproulette/mr-docs). Chances are that someone has already started work on your language. We already have more than 20 language communities!
+We would love your help! We use Transifex as a translation platform. Using Transifex is pretty intuitive and no technical expertise is required. Head over to the [Transifex site for MapRoulette](https://app.transifex.com/osmlab/maproulette/) or [the site for the MapRoulette documentation](https://app.transifex.com/maproulette/mr-docs). Chances are that someone has already started work on your language. We already have more than 20 language communities!
 
 ### I want to help others use MapRoulette
 
