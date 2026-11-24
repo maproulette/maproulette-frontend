@@ -233,9 +233,6 @@
   "browsedChallengePage.challengeModals.actions.avgTimeSpent": {
     "string": "Temps moyen passé"
   },
-  "browsedChallengePage.challengeModals.actions.completedOf": {
-    "string": "{total, plural, one {{completed, number} of # task} other {{completed, number} of # tasks}}"
-  },
   "browsedChallengePage.challengeModals.actions.title": {
     "string": "Activité de la tâche"
   },
@@ -469,9 +466,6 @@
   },
   "browsedProjectPage.projectDetail.shareError": {
     "string": "Échec de partage du projet"
-  },
-  "challengeCard.progress": {
-    "string": "{count, plural, one {<b>{count, number}</b> task · <b>{percent, number, percent}</b> complete} other {<b>{count, number}</b> tasks · <b>{percent, number, percent}</b> complete}}"
   },
   "challengeForm.errors.projectIdRequired": {
     "string": "Un identifiant de projet est nécessaire pour créer un défi"
@@ -1613,9 +1607,6 @@
   "manageChallengeDetail.tasksExplorer.selectTaskLabel": {
     "string": "Sélectionner une tâche"
   },
-  "manageChallengeDetail.tasksExplorer.showingCount": {
-    "string": "{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}"
-  },
   "manageChallengeDetail.tasksExplorer.sortAscButton": {
     "string": "Asc"
   },
@@ -1931,9 +1922,6 @@
   "manageChallengesBulkEdit.confirm.cancel": {
     "string": "Annuler la modification"
   },
-  "manageChallengesBulkEdit.confirm.description": {
-    "string": "{count, plural, one {These values will overwrite the current ones on # challenge.} other {These values will overwrite the current ones on # challenges.}}"
-  },
   "manageChallengesBulkEdit.confirm.noRule": {
     "string": "Aucune règle"
   },
@@ -1945,9 +1933,6 @@
   },
   "manageChallengesBulkEdit.context.saveError": {
     "string": "Le défi n'a pas pu être enregistré."
-  },
-  "manageChallengesBulkEdit.context.saveSuccess": {
-    "string": "{count, plural, one {Updated # challenge} other {Updated # challenges}}"
   },
   "manageChallengesBulkEdit.field.additionalKeywords": {
     "string": "Additional keywords"
@@ -2050,9 +2035,6 @@
   },
   "manageProjectDetail.challengeSelection.clear": {
     "string": "Nettoyage de la sélection"
-  },
-  "manageProjectDetail.challengeSelection.editSelected": {
-    "string": "{count, plural, =0 {Edit selected challenges} one {Edit # selected challenge} other {Edit # selected challenges}}"
   },
   "manageProjectDetail.challengeSelection.noneSelected": {
     "string": "Select challenges in the list to edit them together"
@@ -2528,9 +2510,6 @@
   "map.taskPicker.label": {
     "string": "Tâches à cet endroit"
   },
-  "map.taskPicker.more": {
-    "string": "{count, plural, one {# more task not listed} other {# more tasks not listed}}"
-  },
   "moveChallengeModal.description": {
     "string": "Choose a project to move \"{challengeName}\" to. The challenge will be removed from the current project."
   },
@@ -2578,9 +2557,6 @@
   },
   "notifications.toast.actionError": {
     "string": "Échec de la {verb} de la notification : {message}"
-  },
-  "notifications.toast.actionSuccess": {
-    "string": "{count, plural, one {# notification {action}} other {# notifications {action}}}"
   },
   "notificationsPage.content.description": {
     "string": "Voir et gérer vos notifications"
@@ -2758,9 +2734,6 @@
   },
   "notificationsPage.thread.signInToReply": {
     "string": "Connectez-vous pour répondre"
-  },
-  "notificationsPage.thread.title.count": {
-    "string": "{count, plural, one {# notification} other {# notifications}}"
   },
   "notificationsPage.thread.title.task": {
     "string": "Notification for Task #{taskId}"
@@ -3145,9 +3118,6 @@
   },
   "shared.notFound.description": {
     "string": "The page you are looking for does not exist."
-  },
-  "shared.pointsTicker.viewProfile": {
-    "string": "{score, plural, one {# point — view profile} other {# points — view profile}}"
   },
   "shared.projectCard.challengesRemaining": {
     "string": "challenges remaining"
@@ -3968,9 +3938,6 @@
   "taskEditPage.taskMap.showAllFeatures": {
     "string": "Tout afficher"
   },
-  "taskEditPage.taskNearbyMap.nearbyCount": {
-    "string": "{count, plural, one {# nearby task} other {# nearby tasks}}"
-  },
   "taskEditPage.taskNearbyMap.selectedTask": {
     "string": "Tâche #{id} sélectionnée"
   },
@@ -4061,9 +4028,6 @@
   "taskInfoPanel.editorChanges.title": {
     "string": "Vos modifications non-enregistrées"
   },
-  "taskInfoPanel.features.featureCount": {
-    "string": "{count, plural, one {# feature} other {# features}}"
-  },
   "taskInfoPanel.features.noFeatures": {
     "string": "This task carries no features."
   },
@@ -4072,9 +4036,6 @@
   },
   "taskInfoPanel.instructions.copy": {
     "string": "Copy \"{text}\" to the clipboard"
-  },
-  "taskInfoPanel.properties.childCount": {
-    "string": "{count, plural, one {# geometry} other {# geometries}}"
   },
   "taskInfoPanel.properties.featureEmpty": {
     "string": "Pas de propriétés pour cette fonctionnalité."
@@ -4105,9 +4066,6 @@
   },
   "taskInfoPanel.resetToSuggestion.confirm": {
     "string": "Ignorer et réinitialiser"
-  },
-  "taskInfoPanel.resetToSuggestion.description": {
-    "string": "{count, plural, one {The # unsaved edit in the editor is discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.} other {All # unsaved edits in the editor are discarded, and the suggested change goes back to exactly what MapRoulette applied. Nothing already saved to OpenStreetMap is affected.}}"
   },
   "taskInfoPanel.resetToSuggestion.title": {
     "string": "Reset to the challenge's suggestion?"
@@ -4156,9 +4114,6 @@
   },
   "taskMap.clearBundleDialog.confirm": {
     "string": "Supprimer le regroupement"
-  },
-  "taskMap.clearBundleDialog.description": {
-    "string": "{taskCount, plural, one {This will unbundle all # task. The tasks themselves will not be deleted, only separated. This action cannot be undone.} other {This will unbundle all # tasks. The tasks themselves will not be deleted, only separated. This action cannot be undone.}}"
   },
   "taskMap.clearBundleDialog.title": {
     "string": "Clear Task Bundle?"
