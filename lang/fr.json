@@ -1,6 +1,6 @@
 {
   "achievement.challengeCompleted.description": {
-    "string": "A corrigé une tâche dans un défi qui est maintenant terminé."
+    "string": "A corrigé une tâche dans un défi qui a été terminé."
   },
   "achievement.challengeCompleted.title": {
     "string": "Terminé ensemble"
@@ -9,106 +9,106 @@
     "string": "A créé un défi."
   },
   "achievement.createdChallenge.title": {
-    "string": "Créateur de défis"
+    "string": "Créateur de défi"
   },
   "achievement.fixedCoopTask.description": {
-    "string": "Vous avez corrigé une tâche coopérative."
+    "string": "A corrigé une tâche coopérative."
   },
   "achievement.fixedCoopTask.title": {
-    "string": "Contributeur coopératif"
+    "string": "Réparateur coopératif"
   },
   "achievement.fixedFinalTask.description": {
-    "string": "Vous avez résolu la dernière tâche d'un défi."
+    "string": "A résolu la dernière tâche d'un défi."
   },
   "achievement.fixedFinalTask.title": {
-    "string": "Fermer<br style=\"\">"
+    "string": "Correcteur"
   },
   "achievement.fixedTask.description": {
-    "string": "Vous avez corrigé votre première tâche."
+    "string": "A corrigé sa première tâche."
   },
   "achievement.fixedTask.title": {
     "string": "Première correction"
   },
   "achievement.mappedBuildings.description": {
-    "string": "Contributed to mapping buildings."
+    "string": "A contribué à la cartographie de bâtiment."
   },
   "achievement.mappedBuildings.title": {
-    "string": "Building Blocks"
+    "string": "Constructeur de bâtiment"
   },
   "achievement.mappedLanduse.description": {
-    "string": "Contributed to mapping land use."
+    "string": "A contribué à la cartographie de l'occupation des sols."
   },
   "achievement.mappedLanduse.title": {
-    "string": "Land Use"
+    "string": "Aménageur de territoire"
   },
   "achievement.mappedPoi.description": {
-    "string": "A contribué à cartographier les points d'intérêts."
+    "string": "A contribué à la cartographie des points d'intérêts."
   },
   "achievement.mappedPoi.title": {
-    "string": "Landmark Spotter"
+    "string": "Arpenteur de repère"
   },
   "achievement.mappedRoads.description": {
-    "string": "Contributed to mapping roads."
+    "string": "A contribué à la cartographie des routes."
   },
   "achievement.mappedRoads.title": {
-    "string": "Road Warrior"
+    "string": "Guerrier des routes"
   },
   "achievement.mappedTransit.description": {
-    "string": "Contributed to mapping transit."
+    "string": "A contribué à la cartographie des transports."
   },
   "achievement.mappedTransit.title": {
-    "string": "Transit Mapper"
+    "string": "Cartographe des transports"
   },
   "achievement.mappedWater.description": {
-    "string": "Contributed to mapping water features."
+    "string": "A contribué à la cartographie des éléments d'eau."
   },
   "achievement.mappedWater.title": {
-    "string": "Voies d'eau"
+    "string": "Cours d'eau"
   },
   "achievement.points100.description": {
-    "string": "100 points gagnés."
+    "string": "A gagné 100 points."
   },
   "achievement.points100.title": {
     "string": "100 points"
   },
   "achievement.points1000.description": {
-    "string": "1 000 points gagnés."
+    "string": "A gagné 1 000 points."
   },
   "achievement.points1000.title": {
     "string": "1 000 points"
   },
   "achievement.points10000.description": {
-    "string": "10 000 points gagnés."
+    "string": "A gagné 10 000 points."
   },
   "achievement.points10000.title": {
     "string": "10 000 points"
   },
   "achievement.points100k.description": {
-    "string": "100 000 points gagnés."
+    "string": "A gagné 100 000 points."
   },
   "achievement.points100k.title": {
     "string": "100 000 points"
   },
   "achievement.points1m.description": {
-    "string": "Un million de points gagnés."
+    "string": "A gagné un million de points."
   },
   "achievement.points1m.title": {
     "string": "1 000 000 points"
   },
   "achievement.points500.description": {
-    "string": "500 points gagnés."
+    "string": "A gagné 500 points."
   },
   "achievement.points500.title": {
     "string": "500 points"
   },
   "achievement.points5000.description": {
-    "string": "5 000 points gagnés."
+    "string": "A gagné 5 000 points."
   },
   "achievement.points5000.title": {
     "string": "5 000 points"
   },
   "achievement.points50000.description": {
-    "string": "50 000 points gagnés."
+    "string": "A gagné 50 000 points."
   },
   "achievement.points50000.title": {
     "string": "50 000 points"
