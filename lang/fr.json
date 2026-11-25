@@ -1,21 +1,21 @@
 {
   "achievement.challengeCompleted.description": {
-    "string": "Fixed a task in a challenge that was completed."
+    "string": "A corrigé une tâche dans un défi qui est maintenant terminé."
   },
   "achievement.challengeCompleted.title": {
-    "string": "Finished Together"
+    "string": "Terminé ensemble"
   },
   "achievement.createdChallenge.description": {
     "string": "A créé un défi."
   },
   "achievement.createdChallenge.title": {
-    "string": "Challenge Creator"
+    "string": "Créateur de défis"
   },
   "achievement.fixedCoopTask.description": {
-    "string": "Vous avez fixé une tâche coopérative."
+    "string": "Vous avez corrigé une tâche coopérative."
   },
   "achievement.fixedCoopTask.title": {
-    "string": "Cooperative Fixer"
+    "string": "Contributeur coopératif"
   },
   "achievement.fixedFinalTask.description": {
     "string": "Finished the final task in a challenge."
@@ -24,10 +24,10 @@
     "string": "Fermer<br style=\"\">"
   },
   "achievement.fixedTask.description": {
-    "string": "Vous avez fixé votre première tâche."
+    "string": "Vous avez corrigé votre première tâche."
   },
   "achievement.fixedTask.title": {
-    "string": "First Fix"
+    "string": "Première correction"
   },
   "achievement.mappedBuildings.description": {
     "string": "Contributed to mapping buildings."
@@ -192,7 +192,7 @@
     "string": "Documentation"
   },
   "appLayout.header.userMenu.osmProfile": {
-    "string": "OpenStreetMap profile"
+    "string": "Profil OpenStreetMap"
   },
   "appLayout.header.userMenu.signOut": {
     "string": "Déconnexion"
@@ -213,7 +213,7 @@
     "string": "Votre session a expiré."
   },
   "auth.signInAgain": {
-    "string": "Sign in again"
+    "string": "Se connecter de nouveau"
   },
   "auth.signInUnavailable": {
     "string": "Couldn't start signing in. Please try again."
@@ -384,7 +384,7 @@
     "string": "Enregistré"
   },
   "browsedChallengePage.header.signInToLike": {
-    "string": "Identifiez-vous pour mettre les défis en favoris"
+    "string": "Connectez-vous pour mettre les défis en favoris"
   },
   "browsedChallengePage.header.signInToSave": {
     "string": "Connectez-vous pour enregistrer des défis"
@@ -393,13 +393,13 @@
     "string": "Non-indexé"
   },
   "browsedChallengePage.map.tasksAll": {
-    "string": "All"
+    "string": "Toutes"
   },
   "browsedChallengePage.map.tasksAvailable": {
     "string": "Disponible"
   },
   "browsedChallengePage.map.tasksCompleted": {
-    "string": "Completed"
+    "string": "Terminées"
   },
   "browsedChallengePage.map.tasksShown": {
     "string": "Tasks shown"
@@ -441,7 +441,7 @@
     "string": "Échec de partage du projet"
   },
   "challengeCard.progress": {
-    "string": "{count, plural, one {<b>{count, number}</b> task · <b>{percent, number, percent}</b> complete} other {<b>{count, number}</b> tasks · <b>{percent, number, percent}</b> complete}}"
+    "string": "{count, plural, one {1{count, number}1 tâche · 2{percent, number, percent}2 terminée} many {1{count, number}1 tâches · 2{percent, number, percent}2 terminées} other {<b>{count, number}</b> tâches · <b>{percent, number, percent}</b> terminées}}"
   },
   "challengeForm.errors.projectIdRequired": {
     "string": "Un identifiant de projet est nécessaire pour créer un défi"
@@ -465,7 +465,7 @@
     "string": "All ({count})"
   },
   "common.alreadyFixed": {
-    "string": "Déjà résolu"
+    "string": "Déjà corrigé"
   },
   "common.answered": {
     "string": "Répondu"
@@ -678,7 +678,7 @@
     "string": "En vedette"
   },
   "common.fixed": {
-    "string": "Résolu"
+    "string": "Corrigé"
   },
   "common.geojson": {
     "string": "GeoJSON"
@@ -1065,16 +1065,16 @@
     "string": "Achievements ({earned, number} of {total, number})"
   },
   "dashboard.profile.osmProfile": {
-    "string": "OpenStreetMap profile"
+    "string": "Profil OpenStreetMap"
   },
   "dashboard.profile.points": {
     "string": "Points"
   },
   "dashboard.profile.tasksCompleted": {
-    "string": "Tasks completed"
+    "string": "Tâches résolues"
   },
   "dashboard.profile.userSince": {
-    "string": "MapRoulette user since"
+    "string": "Utilisateur MapRoulette depuis"
   },
   "dashboard.savedChallenges.actions.unsave": {
     "string": "Oublier le défi"
@@ -1098,13 +1098,13 @@
     "string": "Apprenez-en plus au sujet des équipes"
   },
   "dashboard.topChallenges.empty.description": {
-    "string": "The challenges you work on most will show up here"
+    "string": "Les défis auxquels vous contribuez le plus seront affichés ici"
   },
   "dashboard.topChallenges.empty.title": {
-    "string": "No challenges yet"
+    "string": "Aucun défi pour l'instant"
   },
   "dashboard.topChallenges.title": {
-    "string": "Top challenges"
+    "string": "Top défis"
   },
   "dynamicPluginRoute.loading": {
     "string": "Chargement de la page des plugins…"
@@ -1134,7 +1134,7 @@
     "string": "Erreur serveur"
   },
   "errorBoundary.unauthorized.signInDescription": {
-    "string": "You need to sign in to view this page."
+    "string": "Vous devez vous connecter pour avoir accès à cette page."
   },
   "errorBoundary.unauthorized.title": {
     "string": "401 - Access interdit"
@@ -2250,10 +2250,10 @@
     "string": "<b>{user}</b> commented on <b>{challenge}</b>"
   },
   "notifications.item.challengeCompleted": {
-    "string": "Your challenge <b>{challenge}</b> is complete"
+    "string": "Votre défi <b>{challenge}</b> est terminé"
   },
   "notifications.item.mapperChallengeCompleted": {
-    "string": "A challenge you worked on is complete: <b>{challenge}</b>"
+    "string": "Un défi auquel vous avez contribué est terminé : <b>{challenge}</b>"
   },
   "notifications.item.mentionOnChallenge": {
     "string": "<b>{user}</b> mentioned you on <b>{challenge}</b>"
@@ -2301,13 +2301,13 @@
     "string": "Select notification"
   },
   "notificationsPage.item.unread": {
-    "string": "Unread"
+    "string": "Non-lu"
   },
   "notificationsPage.selectAll": {
-    "string": "Select all notifications"
+    "string": "Sélectionner toutes les notifications"
   },
   "notificationsPage.selectedCount": {
-    "string": "{count, plural, one {# selected} other {# selected}}"
+    "string": "{count, plural, one {# selectionnée} many {# selectionnées} other {# selectionnées}}"
   },
   "ownerTeam.goToTeams": {
     "string": "Vos équipes"
@@ -2547,7 +2547,7 @@
     "string": "Pas gagné pour le moment"
   },
   "shared.challengeCard.actionsLabel": {
-    "string": "Actions for {name}"
+    "string": "Actions pour {name}"
   },
   "shared.challengeCard.project": {
     "string": "{name}"
@@ -2895,7 +2895,7 @@
     "string": "Envoyer cette confirmation"
   },
   "taskEditPage.taskActionModal.title": {
-    "string": "Terminer l'action sur la tâche"
+    "string": "Terminer la tâche #{id}"
   },
   "taskEditPage.taskActionModal.toast.commentFailed": {
     "string": "Le statut de la tâche a été enregistré, mais votre commentaire n'a pas pu l'être"
@@ -3003,7 +3003,7 @@
     "string": "Avancement : définir le statut de la tâche"
   },
   "taskEditPage.taskActions.main.markAlreadyFixedTitle": {
-    "string": "Marquer comme Déjà résolue"
+    "string": "Marquer comme Déjà corrigées"
   },
   "taskEditPage.taskActions.main.markCantCompleteTitle": {
     "string": "Marquer comme Impossible à résoudre"
@@ -3018,7 +3018,7 @@
     "string": "Ce défi est actuellement en pause. Les tâches ne peuvent être complétées tant qu'il n'est pas relancé."
   },
   "taskEditPage.taskActions.main.submitTask": {
-    "string": "Submit Task"
+    "string": "Envoyer la tâche"
   },
   "taskEditPage.taskActions.navigation.loadNearbyFailed": {
     "string": "Échec du chargement des tâches à proximité"
@@ -3063,7 +3063,7 @@
     "string": "Impossible de mettre à jour les tâches qui étaient verrouillées avec ce groupe."
   },
   "taskEditPage.taskInfoHeader.bundled": {
-    "string": "Bundled"
+    "string": "Regroupées"
   },
   "taskEditPage.taskInfoHeader.noChallengeDescription": {
     "string": "Ce défi n'a pas de description"
@@ -3075,7 +3075,7 @@
     "string": "Assurez-vous d'avoir bien lu la description du défi, car elle peut contenir des informations importantes qui ne sont pas dans les consignes de la tâche."
   },
   "taskEditPage.taskInfoHeader.selected": {
-    "string": "Selected"
+    "string": "Sélectionné"
   },
   "taskEditPage.taskInfoHeader.viewChallengeDescription": {
     "string": "Voir la description du défi"
@@ -3099,7 +3099,7 @@
     "string": "Tout afficher"
   },
   "taskEditPage.taskNearbyMap.nearbyCount": {
-    "string": "{count, plural, one {# nearby task} other {# nearby tasks}}"
+    "string": "{count, plural, one {# tâche alentour} many {# tâches alentour} other {# tâches alentour}}"
   },
   "taskEditPage.taskNearbyMap.selectedTask": {
     "string": "Tâche #{id} sélectionnée"
@@ -3189,7 +3189,7 @@
     "string": "Vos modifications non-enregistrées"
   },
   "taskInfoPanel.features.featureCount": {
-    "string": "{count, plural, one {# feature} other {# features}}"
+    "string": "{count, plural, one {# fonctionnalité} many {# fonctionnalités} other {# fonctionnalités}}"
   },
   "taskInfoPanel.features.noFeatures": {
     "string": "This task carries no features."
@@ -3201,7 +3201,7 @@
     "string": "Copy \"{text}\" to the clipboard"
   },
   "taskInfoPanel.properties.childCount": {
-    "string": "{count, plural, one {# geometry} other {# geometries}}"
+    "string": "{count, plural, one {# géométrie} many {# géométries} other {# géométries}}"
   },
   "taskInfoPanel.properties.featureEmpty": {
     "string": "Pas de propriétés pour cette fonctionnalité."
@@ -3285,7 +3285,7 @@
     "string": "Supprimer le regroupement"
   },
   "taskMap.clearBundleDialog.description": {
-    "string": "{taskCount, plural, one {This will unbundle all # task. The tasks themselves will not be deleted, only separated. This action cannot be undone.} other {This will unbundle all # tasks. The tasks themselves will not be deleted, only separated. This action cannot be undone.}}"
+    "string": "{taskCount, plural, one {Cela dégroupera # tâche. La tâche en elle-mêmes ne sera pas supprimée, seulement dégroupée. Cette action est irréversible.} many {Cela dégroupera toutes les # tâches. Les tâches en elles-mêmes ne seront pas supprimées, seulement dégroupées. Cette action est irréversible.} other {Cela dégroupera toutes les # tâches. Les tâches en elles-mêmes ne seront pas supprimées, seulement dégroupées. Cette action est irréversible.}}"
   },
   "taskMap.clearBundleDialog.title": {
     "string": "Clear Task Bundle?"
@@ -3324,22 +3324,22 @@
     "string": "{count, plural, one {Travaillant sur une tâche} many {Travaillant sur # tâches} other {Travaillant sur # tâches}}"
   },
   "taskMap.settings.markers": {
-    "string": "Task markers"
+    "string": "Marqueurs de la tâche"
   },
   "taskMap.settings.markersAll": {
-    "string": "All tasks"
+    "string": "Toutes les tâches"
   },
   "taskMap.settings.markersNone": {
-    "string": "None"
+    "string": "Aucune"
   },
   "taskMap.settings.markersPrimary": {
-    "string": "This task only"
+    "string": "Cette tâche seulement"
   },
   "taskMap.settings.markersSelected": {
-    "string": "Selected tasks only"
+    "string": "Tâches sélectionnées seulement"
   },
   "taskMap.settings.otherChallenges": {
-    "string": "Tasks from other challenges"
+    "string": "Tâches d'autres défis"
   },
   "taskMap.shortcuts.cancelDrawing": {
     "string": "Annuler le dessin"
