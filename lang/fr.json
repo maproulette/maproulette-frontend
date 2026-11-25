@@ -702,7 +702,7 @@
     "string": "ID {id}"
   },
   "common.instructions": {
-    "string": "Consignes pour la tâche"
+    "string": "Consignes"
   },
   "common.invited": {
     "string": "Invité"
@@ -1050,7 +1050,7 @@
     "string": "{count, plural, one {# tâche verrouillée} many {# tâches verrouillées} other {# tâches verrouillées}}"
   },
   "dashboard.activity.statusCount": {
-    "string": "{count, plural, one {# tâche marquée {status}} many {# tâches marquées {status}} other {# tâches marquées {status}}}"
+    "string": "{count, plural, one {# tâche marquée comme {status}} many {# tâches marquées comme {status}} other {# tâches marquées comme {status}}}"
   },
   "dashboard.activity.title": {
     "string": "Activité récente"
@@ -1158,7 +1158,7 @@
     "string": "Effacer les filtres"
   },
   "exploreChallenges.filterBar.difficulty.any": {
-    "string": "N'importe laquelle"
+    "string": "Toute"
   },
   "exploreChallenges.filterBar.filtersToggle": {
     "string": "{count, plural, =0 {Filters} one {Filters (#)} other {Filters (#)}}"
@@ -1185,7 +1185,7 @@
     "string": "Impossible de trouver la localisation "
   },
   "exploreChallenges.filterBar.location.searchPlaceholder": {
-    "string": "Rechercher la localisation..."
+    "string": "Chercher un lieu..."
   },
   "exploreChallenges.filterBar.location.suggestionsAriaLabel": {
     "string": "Suggestions de lieu"
@@ -1209,7 +1209,7 @@
     "string": "Tout"
   },
   "exploreChallenges.filterBar.workOn.label": {
-    "string": "Travaille sur"
+    "string": "Travailler sur"
   },
   "exploreChallenges.map.locationIndicator.recenter": {
     "string": "Recentrer sur le contour de la zone : {name}"
@@ -1722,7 +1722,7 @@
     "string": "Exportable properties"
   },
   "manageChallengesBulkEdit.field.instruction": {
-    "string": "Consignes pour la tâche"
+    "string": "Consignes"
   },
   "manageChallengesBulkEdit.field.priorities": {
     "string": "Priorités"
@@ -2136,16 +2136,16 @@
     "string": "Ce que chaque personne peut faire ici dépend de leur rôle dans l'équipe : les propriétaires et administrateurs gèrent l'équipe, les gestionnaires peuvent l'éditer et les simples équipiers n'ont aucune action possible."
   },
   "map.controls.mapSettings": {
-    "string": "Map settings"
+    "string": "Paramètres de carte"
   },
   "map.controls.mapStyle": {
     "string": "Style de carte"
   },
   "map.controls.zoomIn": {
-    "string": "Zoom +"
+    "string": "Zoom avant"
   },
   "map.controls.zoomOut": {
-    "string": "Zoom -"
+    "string": "Zoom arrière"
   },
   "map.scaleBar.feet": {
     "string": "{value, number} ft"
@@ -3087,10 +3087,10 @@
     "string": "Cliquez et faites glisser pour sélectionner des tâches • ESC pour annuler"
   },
   "taskEditPage.taskMap.editInId": {
-    "string": "Edit in iD (inline)"
+    "string": "Modifier avec iD (sur MapRoulette)"
   },
   "taskEditPage.taskMap.editInIdShort": {
-    "string": "Modifier dans iD"
+    "string": "Modifier avec iD"
   },
   "taskEditPage.taskMap.focusedFeatureHint": {
     "string": "Showing one feature of this task"
