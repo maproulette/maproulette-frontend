@@ -1410,10 +1410,10 @@
     "string": "En savoir plus"
   },
   "manageChallengeDetail.tasksExplorer.propertyFilterHelp": {
-    "string": "Combine property comparisons with AND/OR. Tasks matching the rule are shown in the table and on the map."
+    "string": "Combine prope"
   },
   "manageChallengeDetail.tasksExplorer.propertyFilterLabel": {
-    "string": "Filtrez par propriété"
+    "string": "Filtrer par propriété"
   },
   "manageChallengeDetail.tasksExplorer.propertyFilterTitle": {
     "string": "Filter tasks by feature property"
@@ -1698,7 +1698,7 @@
     "string": "Aucune règle"
   },
   "manageChallengesBulkEdit.confirm.submit": {
-    "string": "Soumettre Bulk Édition"
+    "string": "Submit bulk edit"
   },
   "manageChallengesBulkEdit.confirm.title": {
     "string": "Confirm bulk edit"
@@ -1731,7 +1731,7 @@
     "string": "Comma-separated. Replaces each challenge's additional keywords; its category is kept."
   },
   "manageChallengesBulkEdit.form.backToProject": {
-    "string": "Back to {project}"
+    "string": "Retourner vers {project}"
   },
   "manageChallengesBulkEdit.form.basemapUnchanged": {
     "string": "Laisser chaque fond de carte de défi tel quel"
@@ -1773,7 +1773,7 @@
     "string": "Aucun défi n'a été sélectionné. Retournez au projet et sélectionnez les défis à modifier."
   },
   "manageChallengesBulkEdit.form.removeChallenge": {
-    "string": "Remove {name} from this edit"
+    "string": "Retirer {name} de cette modification"
   },
   "manageChallengesBulkEdit.form.replacePriorities": {
     "string": "Replace the default priority and all three priority rules. Location bounds are kept."
@@ -1857,7 +1857,7 @@
     "string": "Project created successfully"
   },
   "manageProjectNew.projectForm.descriptionDescription": {
-    "string": "A brief description of the project"
+    "string": "Une courte description du projet"
   },
   "manageProjectNew.projectForm.descriptionPlaceholder": {
     "string": "Donnez une description du projet…"
@@ -1866,7 +1866,7 @@
     "string": "Détails du projet"
   },
   "manageProjectNew.projectForm.displayNameDescription": {
-    "string": "The display name shown to users"
+    "string": "Le nom affiché montré aux utilisateurs"
   },
   "manageProjectNew.projectForm.displayNameLabel": {
     "string": "Nom affiché"
@@ -1875,10 +1875,10 @@
     "string": "Mon projet"
   },
   "manageProjectNew.projectForm.enabledDescription": {
-    "string": "Make this project visible and accessible to users"
+    "string": "Rendre ce projet visible et accessible aux utilisateurs"
   },
   "manageProjectNew.projectForm.featuredDescription": {
-    "string": "Mettre en avant ce projet sur la page d'accueil"
+    "string": "Mettre en avant ce projet en En vedette"
   },
   "manageProjectNew.projectForm.nameDescription": {
     "string": "Un identifiant unique pour le projet (en minuscule, sans espaces)"
@@ -1887,7 +1887,7 @@
     "string": "Nom du projet"
   },
   "manageProjectNew.projectForm.namePlaceholder": {
-    "string": "my-project"
+    "string": "mon-projet"
   },
   "manageProjectNew.projectForm.saveErrorToast": {
     "string": "Échec de l'enregistrement du projet. Veuillez réessayer."
@@ -1902,10 +1902,10 @@
     "string": "Update Project"
   },
   "manageProjectNew.projectForm.updateSuccessToast": {
-    "string": "Project updated successfully"
+    "string": "Mise à jour du projet réussi"
   },
   "manageProjectNew.projectForm.validation.displayNameRequired": {
-    "string": "Display name is required"
+    "string": "Un nom d'affichage est nécessaire"
   },
   "manageProjectNew.projectForm.validation.nameRequired": {
     "string": "Un nom de projet est nécessaire"
@@ -1947,7 +1947,7 @@
     "string": "Échec de l'enregistrement de la tâche. Veuillez réessayer."
   },
   "manageTaskEdit.form.updateSuccess": {
-    "string": "Task updated successfully"
+    "string": "Mise à jour de la tâche réussi"
   },
   "manageTaskEdit.index.accessDeniedDescription": {
     "string": "Seuls les créateurs de défis et les admins peuvent éditer les tâches."
@@ -2109,16 +2109,16 @@
     "string": "Impossible d'ajouter cette équipe"
   },
   "managers.addTeamLabel": {
-    "string": "Add a team"
+    "string": "Ajouter une équipe"
   },
   "managers.loading": {
     "string": "Chargement des gestionnaires en cours…"
   },
   "managers.noMatches": {
-    "string": "No matching users"
+    "string": "Aucun utilisateur correspondant"
   },
   "managers.noTeamMatches": {
-    "string": "No matching teams"
+    "string": "Aucune équipe correspondante"
   },
   "managers.noTeams": {
     "string": "Aucune équipe pour le moment"
@@ -2211,7 +2211,7 @@
     "string": "Déplacer le défi"
   },
   "notificationSubscriptions.field.challengeCompleted.description": {
-    "string": "When a challenge you manage finishes"
+    "string": "When a challenge you manage or worked on is completed"
   },
   "notificationSubscriptions.field.challengeCompleted.label": {
     "string": "Défi terminé"
@@ -2322,10 +2322,10 @@
     "string": "Équipe"
   },
   "pluginErrorBoundary.consoleDetails": {
-    "string": "Details were written to the browser console (message, stack, component stack)."
+    "string": "Details were written to the browser console."
   },
   "pluginErrorBoundary.contribution": {
-    "string": "contribution: {contributionId}"
+    "string": "contribution : {contributionId}"
   },
   "pluginErrorBoundary.retry": {
     "string": "Réessayer"
@@ -2481,7 +2481,7 @@
     "string": "Visiter le Plugins Workshop pour découvrir et ajouter des plugins"
   },
   "settings.plugins.emptyTitle": {
-    "string": "Aucun plugins pour le moment"
+    "string": "Aucun plugin pour le moment"
   },
   "settings.plugins.loading": {
     "string": "Chargement des plugins..."
@@ -2559,7 +2559,7 @@
     "string": "Chargement des marqueurs de tâche…"
   },
   "shared.notFound.description": {
-    "string": "The page you are looking for does not exist."
+    "string": "La page que vous cherchez n'existe pas"
   },
   "shared.projectCard.completed": {
     "string": "Terminé : {count}"
@@ -2682,7 +2682,7 @@
     "string": "Image rejetée"
   },
   "superAdminTeamImages.requestMeta": {
-    "string": "{team} · requested by {user} on {date}"
+    "string": "{team} · requested by <link>{user}</link> on {date}"
   },
   "superAdminTeamImages.title": {
     "string": "Team challenge images"
@@ -3114,7 +3114,7 @@
     "string": "statut changé"
   },
   "taskInfoPanel.comments.cleared": {
-    "string": "cleared"
+    "string": "retiré"
   },
   "taskInfoPanel.comments.emptyState": {
     "string": "Aucune activité pour le moment. Soyez le premier à commenter !"
@@ -3132,7 +3132,7 @@
     "string": "Système"
   },
   "taskInfoPanel.data.areaHistory": {
-    "string": "Area History"
+    "string": "Zone d'historique"
   },
   "taskInfoPanel.data.areaHistoryDescription": {
     "string": "Voir les changements récents dans la zone autour de cette tâche"
@@ -3189,28 +3189,28 @@
     "string": "Vos modifications non-enregistrées"
   },
   "taskInfoPanel.features.featureCount": {
-    "string": "{count, plural, one {# fonctionnalité} many {# fonctionnalités} other {# fonctionnalités}}"
+    "string": "{count, plural, one {# fonctionnalité} many {# fonctionnalités} other {# éléments}}"
   },
   "taskInfoPanel.features.noFeatures": {
-    "string": "This task carries no features."
+    "string": "Cette tâche n'a pas d'élément"
   },
   "taskInfoPanel.features.openTask": {
-    "string": "Open Task #{id}"
+    "string": "Ouvrir la tâche #{id}"
   },
   "taskInfoPanel.instructions.copy": {
-    "string": "Copy \"{text}\" to the clipboard"
+    "string": "Copier \"{text}\" vers le presse-papier"
   },
   "taskInfoPanel.properties.childCount": {
     "string": "{count, plural, one {# géométrie} many {# géométries} other {# géométries}}"
   },
   "taskInfoPanel.properties.featureEmpty": {
-    "string": "Pas de propriétés pour cette fonctionnalité."
+    "string": "Aucune propriété pour cet élément."
   },
   "taskInfoPanel.properties.featureLabel": {
-    "string": "Fonctionnalité {number}"
+    "string": "Elément {number}"
   },
   "taskInfoPanel.properties.focusFeature": {
-    "string": "Show only this feature on the map"
+    "string": "Afficher uniquement cet élément sur la carte"
   },
   "taskInfoPanel.properties.osmTags": {
     "string": "Tags OSM actuels"
@@ -3228,7 +3228,7 @@
     "string": "Show the task's other features again"
   },
   "taskInfoPanel.properties.zoomToFeature": {
-    "string": "Zoom to this feature"
+    "string": "Zoomer à cet élément"
   },
   "taskInfoPanel.resetToSuggestion.confirm": {
     "string": "Ignorer et réinitialiser"
@@ -3249,7 +3249,7 @@
     "string": "changer"
   },
   "taskInfoPanel.suggested.remove": {
-    "string": "Supprimer"
+    "string": "retirer"
   },
   "taskInfoPanel.tabs.comments": {
     "string": "Commentaires ({count})"
@@ -3258,7 +3258,7 @@
     "string": "Données"
   },
   "taskInfoPanel.tabs.features": {
-    "string": "Features ({count})"
+    "string": "Eléments ({count})"
   },
   "taskInfoPanel.taskTab.bundleList.selectAll": {
     "string": "Tout sélectionner"
@@ -3474,7 +3474,7 @@
     "string": "Propriété"
   },
   "taskPropertyQueryBuilder.ruleLeaf.removeRule": {
-    "string": "Retirer règle"
+    "string": "Retirer la règle"
   },
   "taskPropertyQueryBuilder.ruleLeaf.typeDouble": {
     "string": "double"
@@ -3498,7 +3498,7 @@
     "string": "En cours d'utilisation"
   },
   "teamImages.deleteDisabledReason": {
-    "string": "Seul.e un.e admin d'équipe ou la personne en attente de vérification de l'image peut supprimer cela"
+    "string": "Seul un admin d'équipe ou la personne en attente de vérification de l'image peut supprimer cela"
   },
   "teamImages.deleteError": {
     "string": "Impossible de supprimer l'image"
