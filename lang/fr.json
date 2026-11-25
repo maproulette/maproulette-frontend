@@ -114,7 +114,7 @@
     "string": "50 000 points"
   },
   "achievement.points500k.description": {
-    "string": "500 000 points gagnés."
+    "string": "A gagné 500 000 points."
   },
   "achievement.points500k.title": {
     "string": "500 000 points"
@@ -216,7 +216,7 @@
     "string": "Se connecter de nouveau"
   },
   "auth.signInUnavailable": {
-    "string": "Couldn't start signing in. Please try again."
+    "string": "Impossible de se connecter. Veuillez réessayer."
   },
   "browsedChallengePage.actionButtons.alreadyReported": {
     "string": "Vous avez déjà signalé ce défi ; il est en attente de vérification"
@@ -369,7 +369,7 @@
     "string": "Échec de la mise à jour du statut de favoris"
   },
   "browsedChallengePage.header.failedToUpdateSaved": {
-    "string": "Failed to update saved challenges"
+    "string": "Échec de la mise à jour des défis enregistrés"
   },
   "browsedChallengePage.header.like": {
     "string": "Mettre en favoris"
@@ -402,7 +402,7 @@
     "string": "Terminées"
   },
   "browsedChallengePage.map.tasksShown": {
-    "string": "Tasks shown"
+    "string": "Tâches affichées"
   },
   "browsedChallengePage.progress.avgTimeSpent": {
     "string": "Temps moyen passé"
@@ -417,10 +417,10 @@
     "string": "Avancement"
   },
   "browsedChallengePage.scrollIndicator.scrollForMore": {
-    "string": "Scroller pour voir plus"
+    "string": "Défiler pour voir plus"
   },
   "browsedProjectPage.challengesList.emptyDescription": {
-    "string": "Ce projet ne contient aucun défi pour le moment."
+    "string": "Ce projet n'a aucun défi pour le moment."
   },
   "browsedProjectPage.challengesList.emptyDescriptionFiltered": {
     "string": "Essayez d'effacer vos filtres pour voir plus de résultats."
@@ -504,7 +504,7 @@
     "string": "Bâtiments"
   },
   "common.category.landUse": {
-    "string": "Utilisation du sol / Frontières administratives"
+    "string": "Occupation du sol / Frontières administratives"
   },
   "common.category.navigation": {
     "string": "Routes / Piétons / Pistes cyclables"
@@ -639,7 +639,7 @@
     "string": "Facile"
   },
   "common.edit": {
-    "string": "Éditer"
+    "string": "Modifier"
   },
   "common.editChallenge": {
     "string": "Modifier le défi"
@@ -720,7 +720,7 @@
     "string": "Vue en liste"
   },
   "common.loadMore": {
-    "string": "Télécharger plus"
+    "string": "Charger plus"
   },
   "common.loading": {
     "string": "Chargement…"
@@ -798,7 +798,7 @@
     "string": "Requête Overpass"
   },
   "common.owned": {
-    "string": "Personnel"
+    "string": "Possédé"
   },
   "common.pageNotFound": {
     "string": "Page introuvable"
@@ -819,7 +819,7 @@
     "string": "Épinglé"
   },
   "common.pleaseEnterAComment": {
-    "string": "Merci d'écrire un commentaire"
+    "string": "Veuillez écrire un commentaire"
   },
   "common.pleaseSelectAProject": {
     "string": "Veuillez choisir un projet"
@@ -834,7 +834,7 @@
     "string": "Prévisualisation"
   },
   "common.primary": {
-    "string": "Primary"
+    "string": "Principal"
   },
   "common.priority": {
     "string": "Priorité"
@@ -861,7 +861,7 @@
     "string": "Activité récente"
   },
   "common.remove": {
-    "string": "Supprimer"
+    "string": "Retirer"
   },
   "common.removeWithName": {
     "string": "Retirer {name}"
@@ -891,7 +891,7 @@
     "string": "Sauvegarde..."
   },
   "common.scrollToTop": {
-    "string": "Scroll to top"
+    "string": "Défiler jusqu'en haut"
   },
   "common.searchChallenges": {
     "string": "Rechercher des défis…"
@@ -900,7 +900,7 @@
     "string": "Rechercher des défis"
   },
   "common.searchOsmUsername": {
-    "string": "Cherchez un nom d'utilisateur OSM"
+    "string": "Rechercher un nom d'utilisateur OSM"
   },
   "common.searchProjects": {
     "string": "Rechercher des projets…"
@@ -939,7 +939,7 @@
     "string": "Statut {status}"
   },
   "common.submitting": {
-    "string": "Submission…"
+    "string": "Envoi en cours..."
   },
   "common.tagFix": {
     "string": "Correction de tag"
@@ -960,10 +960,10 @@
     "string": "Tâches reconstruites"
   },
   "common.tasksRemaining": {
-    "string": "Tâches disponibles"
+    "string": "Tâches restantes"
   },
   "common.tasksRemaining2": {
-    "string": "tasks remaining"
+    "string": "tâches restantes"
   },
   "common.tasksWithCount": {
     "string": "{count, plural, one {# tâche} many {# tâches} other {# tâches}}"
@@ -1044,25 +1044,25 @@
     "string": "Tasks you work on will show up here"
   },
   "dashboard.activity.empty.title": {
-    "string": "No recent activity"
+    "string": "Aucune activité récente"
   },
   "dashboard.activity.lockedTasks.title": {
-    "string": "{count, plural, one {# locked task} other {# locked tasks}}"
+    "string": "{count, plural, one {# tâche verrouillée} many {# tâches verrouillées} other {# tâches verrouillées}}"
   },
   "dashboard.activity.statusCount": {
-    "string": "{count, plural, one {# task marked {status}} other {# tasks marked {status}}}"
+    "string": "{count, plural, one {# tâche marquée {status}} many {# tâches marquées {status}} other {# tâches marquées {status}}}"
   },
   "dashboard.activity.title": {
-    "string": "Recent activity"
+    "string": "Activité récente"
   },
   "dashboard.activity.unknownChallenge": {
-    "string": "Challenge {parentId}"
+    "string": "Défi {parentId}"
   },
   "dashboard.common.failedToLoad": {
     "string": "Échec du chargement"
   },
   "dashboard.profile.achievements": {
-    "string": "Achievements ({earned, number} of {total, number})"
+    "string": "Récompenses ({earned, number} sur {total, number})"
   },
   "dashboard.profile.osmProfile": {
     "string": "Profil OpenStreetMap"
@@ -1128,7 +1128,7 @@
     "string": "Erreur {status}"
   },
   "errorBoundary.serverError.description": {
-    "string": "The server encountered an error. Please try again later."
+    "string": "Le serveur a rencontré une erreur. Veuillez réessayer plus tard."
   },
   "errorBoundary.serverError.title": {
     "string": "Erreur serveur"
@@ -1137,7 +1137,7 @@
     "string": "Vous devez vous connecter pour avoir accès à cette page."
   },
   "errorBoundary.unauthorized.title": {
-    "string": "401 - Access interdit"
+    "string": "401 - Accès interdit"
   },
   "exploreChallenges.challengeList.emptyDescription": {
     "string": "Essayez de modifier vos filtres de recherche ou la zone de la carte."
@@ -1158,7 +1158,7 @@
     "string": "Effacer les filtres"
   },
   "exploreChallenges.filterBar.difficulty.any": {
-    "string": "N'importe lequel"
+    "string": "N'importe laquelle"
   },
   "exploreChallenges.filterBar.filtersToggle": {
     "string": "{count, plural, =0 {Filters} one {Filters (#)} other {Filters (#)}}"
@@ -1173,7 +1173,7 @@
     "string": "Échec du chargement de la localisation"
   },
   "exploreChallenges.filterBar.location.networkError": {
-    "string": "Problème de connexion. Veuillez vérifier votre connexion Internet."
+    "string": "Problème de réseau. Veuillez vérifier votre connexion Internet."
   },
   "exploreChallenges.filterBar.location.noOsmId": {
     "string": "Le lieu sélectionné n'a pas d'identifiant OSM"
@@ -1185,10 +1185,10 @@
     "string": "Impossible de trouver la localisation "
   },
   "exploreChallenges.filterBar.location.searchPlaceholder": {
-    "string": "Chercher la localisation…"
+    "string": "Rechercher la localisation..."
   },
   "exploreChallenges.filterBar.location.suggestionsAriaLabel": {
-    "string": "Location suggestions"
+    "string": "Suggestions de lieu"
   },
   "exploreChallenges.filterBar.sortBy.label": {
     "string": "Trier par"
@@ -1197,7 +1197,7 @@
     "string": "Le plus ancien"
   },
   "exploreChallenges.filterBar.sortBy.recommended": {
-    "string": "Recommended"
+    "string": "Recommandé"
   },
   "exploreChallenges.filterBar.title": {
     "string": "Filtres de la liste de défis"
@@ -1212,7 +1212,7 @@
     "string": "Travaille sur"
   },
   "exploreChallenges.map.locationIndicator.recenter": {
-    "string": "Recenter on the outlined area: {name}"
+    "string": "Recentrer sur le contour de la zone : {name}"
   },
   "exploreChallenges.results.tabList": {
     "string": "Liste"
@@ -1227,7 +1227,7 @@
     "string": "Général"
   },
   "keyboardShortcuts.category.multiTask": {
-    "string": "Multi-task"
+    "string": "Multi-tâche"
   },
   "keyboardShortcuts.category.taskActions": {
     "string": "Actions de la tâche"
@@ -1242,7 +1242,7 @@
     "string": "Raccourcis clavier"
   },
   "keyboardShortcuts.unavailable.alreadyDrawing": {
-    "string": "Already drawing"
+    "string": "Déjà dessiné"
   },
   "keyboardShortcuts.unavailable.noSelection": {
     "string": "Sélectionnez d'abord plus d'une tâche"
@@ -1260,7 +1260,7 @@
     "string": "Non disponible pour cette tâche"
   },
   "manageChallengeDetail.detail.configurePrioritization": {
-    "string": "Configurer les priorités<br style=\"\"><br style=\"\">"
+    "string": "Configurer les priorités"
   },
   "manageChallengeDetail.detail.featuredError": {
     "string": "Impossible de mettre à jour le statut En vedette"
@@ -1269,28 +1269,28 @@
     "string": "Gestionnaires"
   },
   "manageChallengeDetail.detail.pausedError": {
-    "string": "Could not update paused state"
+    "string": "Impossible de mettre à jour le statut En Pause"
   },
   "manageChallengeDetail.detail.statistics.completion": {
-    "string": "Achèvement"
+    "string": "Avancement"
   },
   "manageChallengeDetail.detail.statistics.lastModified": {
-    "string": "Dernière modification"
+    "string": "Dernier modifié"
   },
   "manageChallengeDetail.detail.statistics.taskCountsByStatus": {
     "string": "Nombre de tâches par statut"
   },
   "manageChallengeDetail.detail.viewChallengePage": {
-    "string": "View challenge page"
+    "string": "Voir la page de défi"
   },
   "manageChallengeDetail.export.button": {
     "string": "Exporter"
   },
   "manageChallengeDetail.export.confirm": {
-    "string": "Télécharge"
+    "string": "Télécharger"
   },
   "manageChallengeDetail.export.description": {
-    "string": "The filters currently applied to the task table are applied to the export as well."
+    "string": "The export applies the table's status, priority and property filters, but covers the whole challenge rather than the current map view."
   },
   "manageChallengeDetail.export.docsLink": {
     "string": "À propos des exports de défis"
