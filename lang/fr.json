@@ -18,7 +18,7 @@
     "string": "Contributeur coopératif"
   },
   "achievement.fixedFinalTask.description": {
-    "string": "Finished the final task in a challenge."
+    "string": "Vous avez résolu la dernière tâche d'un défi."
   },
   "achievement.fixedFinalTask.title": {
     "string": "Fermer<br style=\"\">"
@@ -405,7 +405,7 @@
     "string": "Tasks shown"
   },
   "browsedChallengePage.progress.avgTimeSpent": {
-    "string": "Average time spent"
+    "string": "Temps moyen passé"
   },
   "browsedChallengePage.progress.completedOf": {
     "string": "{total, plural, one {{completed, number} of # task completed} other {{completed, number} of # tasks completed}}"
@@ -2265,7 +2265,7 @@
     "string": "<b>{user}</b> reviewed task {taskId}"
   },
   "notifications.item.someone": {
-    "string": "Someone"
+    "string": "Quelqu'un"
   },
   "notifications.item.teamInvite": {
     "string": "<b>{user}</b> invited you to join <b>{team}</b>"
@@ -2274,7 +2274,7 @@
     "string": "<b>{user}</b> asked you to unlock task {taskId}"
   },
   "notifications.toast.deleteFailed": {
-    "string": "Couldn't delete notifications: {message}"
+    "string": "Impossible de supprimer les notifications : {message}"
   },
   "notifications.toast.markReadFailed": {
     "string": "Couldn't mark notifications as read: {message}"
@@ -2283,10 +2283,10 @@
     "string": "Couldn't mark notifications as unread: {message}"
   },
   "notificationsPage.deleteConfirm.description": {
-    "string": "This can't be undone."
+    "string": "Cette action est définitive."
   },
   "notificationsPage.deleteConfirm.title": {
-    "string": "{count, plural, one {Delete # notification?} other {Delete # notifications?}}"
+    "string": "{count, plural, one {Supprimer # notification ?} many {Supprimer # notifications ?} other {Supprimer # notifications ?}}"
   },
   "notificationsPage.item.deleteNotification": {
     "string": "Supprimer la notification"
@@ -2298,7 +2298,7 @@
     "string": "Marquer comme non lu"
   },
   "notificationsPage.item.select": {
-    "string": "Select notification"
+    "string": "Sélectionner la notification"
   },
   "notificationsPage.item.unread": {
     "string": "Non-lu"
@@ -2910,7 +2910,7 @@
     "string": "Échec de la mise à jour de la tâche. Veuillez réessayer."
   },
   "taskEditPage.taskActions.editorButton.changeFileJosmOnly": {
-    "string": "This task's changes can only be opened in JOSM"
+    "string": "Les changements de cette tâche ne peuvent qu'être ouvertes dans JOSM"
   },
   "taskEditPage.taskActions.editorButton.checkJosm": {
     "string": "Tâche envoyée à JOSM. Ouvrez votre logiciel JOSM."
