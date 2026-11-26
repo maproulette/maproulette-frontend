@@ -1377,7 +1377,7 @@
     "string": "Les statuts des tâches sont en cours de mise à jour. Cette page se rafraîchit automatiquement pour montrer l'évolution."
   },
   "manageChallengeDetail.tasksExplorer.clearAllFiltersTitle": {
-    "string": "Clear all filters"
+    "string": "Réinitialiser tous les filtres"
   },
   "manageChallengeDetail.tasksExplorer.columnBundle": {
     "string": "Groupe"
@@ -1386,7 +1386,7 @@
     "string": "Deselect row for bulk actions"
   },
   "manageChallengeDetail.tasksExplorer.filterBarLabel": {
-    "string": "Task filters"
+    "string": "Filtres de tâches"
   },
   "manageChallengeDetail.tasksExplorer.filtersLabel": {
     "string": "Filtres"
@@ -1416,7 +1416,7 @@
     "string": "Filtrer par propriété"
   },
   "manageChallengeDetail.tasksExplorer.propertyFilterTitle": {
-    "string": "Filter tasks by feature property"
+    "string": "Filtrer les tâches par propriété de fonctionnalité"
   },
   "manageChallengeDetail.tasksExplorer.selectAllVisibleLabel": {
     "string": "Sélectionner toutes les tâches visibles"
@@ -1455,7 +1455,7 @@
     "string": "Conserver le fond de carte actuel"
   },
   "manageChallengeNew.challengeForm.basemapCustom": {
-    "string": "Custom tile layer…"
+    "string": "Couche de tuiles personnalisée..."
   },
   "manageChallengeNew.challengeForm.basemapDescription": {
     "string": "Forcer un fond de calque pour les cartes de ce défi, en outrepassant le choix des cartographes."
@@ -1710,7 +1710,7 @@
     "string": "{count, plural, one {Updated # challenge} other {Updated # challenges}}"
   },
   "manageChallengesBulkEdit.field.additionalKeywords": {
-    "string": "Additional keywords"
+    "string": "Mots-clefs additionnels"
   },
   "manageChallengesBulkEdit.field.basemap": {
     "string": "Fond de carte"
@@ -1719,7 +1719,7 @@
     "string": "Data origin date"
   },
   "manageChallengesBulkEdit.field.exportableProperties": {
-    "string": "Exportable properties"
+    "string": "Propriétés exportables"
   },
   "manageChallengesBulkEdit.field.instruction": {
     "string": "Consignes"
@@ -1746,7 +1746,7 @@
     "string": "The date the task data was sourced."
   },
   "manageChallengesBulkEdit.form.discoveryTitle": {
-    "string": "Discovery and exports"
+    "string": "Découverte et exports"
   },
   "manageChallengesBulkEdit.form.exportablePropertiesDescription": {
     "string": "Comma-separated task properties to include in CSV and GeoJSON exports."
@@ -1782,7 +1782,7 @@
     "string": "Vérifiez les changements"
   },
   "manageChallengesBulkEdit.form.saving": {
-    "string": "Saving {saved} of {total}"
+    "string": "Enregistrement de {saved} sur {total}"
   },
   "manageChallengesBulkEdit.form.selectedTitle": {
     "string": "{count, plural, one {Éditer # défi} many {Éditer # défis} other {Éditer # défis}}"
@@ -1842,7 +1842,7 @@
     "string": "À propos des rôles sur un projet"
   },
   "manageProjectDetail.managers.modalDescription": {
-    "string": "Who can manage this project, and at what level."
+    "string": "Qui peut gérer ce projet, et à quel niveau."
   },
   "manageProjectDetail.managers.modalTitle": {
     "string": "Gestionnaires et équipes"
@@ -1854,7 +1854,7 @@
     "string": "Détails du projet"
   },
   "manageProjectNew.projectForm.createSuccessToast": {
-    "string": "Project created successfully"
+    "string": "Projet créé avec succès"
   },
   "manageProjectNew.projectForm.descriptionDescription": {
     "string": "Une courte description du projet"
@@ -1899,7 +1899,7 @@
     "string": "Vous ne gérer aucune équipe pour le moment. Seuls les propriétaires administrateurs et gestionnaires peuvent leur associer un projet."
   },
   "manageProjectNew.projectForm.updateButton": {
-    "string": "Update Project"
+    "string": "Mise à jour du Projet"
   },
   "manageProjectNew.projectForm.updateSuccessToast": {
     "string": "Mise à jour du projet réussi"
@@ -1953,10 +1953,10 @@
     "string": "Seuls les créateurs de défis et les admins peuvent éditer les tâches."
   },
   "manageTaskEdit.index.loadErrorDescription": {
-    "string": "This task could not be loaded. It may have been deleted."
+    "string": "Cette tâche ne peut être chargée. Il est possible qu'elle ait été supprimée."
   },
   "manageTaskEdit.index.loadErrorTitle": {
-    "string": "Task not found"
+    "string": "Tâche non trouvée"
   },
   "manageTaskEdit.index.taskDetailsTitle": {
     "string": "Détails de la tâche"
@@ -2070,7 +2070,7 @@
     "string": "En savoir plus"
   },
   "managementPages.rebuildTasksDialog.listAdded": {
-    "string": "New tasks will be added"
+    "string": "De nouvelles tâches seront ajoutées"
   },
   "managementPages.rebuildTasksDialog.listKeepAsIs": {
     "string": "Si vous ne retirez pas d'abord les tâches incomplètes, elles seront laissées telles-quelles, au risque de conserver des tâches déjà résolues en dehors de Maproulette"
@@ -2160,7 +2160,7 @@
     "string": "{value, number, ::.#} mi"
   },
   "map.settings.directionIndicators": {
-    "string": "Direction indicators"
+    "string": "Indicateurs de direction"
   },
   "map.settings.overlays": {
     "string": "Overlays"
@@ -2187,7 +2187,7 @@
     "string": "URL de tuile"
   },
   "map.taskMarkers.clusterToggle.forcedTooltip": {
-    "string": "You cannot disable clustering at this zoom level."
+    "string": "Impossible de désactiver le regroupement à ce niveau de zoom."
   },
   "map.taskMarkers.clusterToggle.label": {
     "string": "Regrouper les marqueurs"
@@ -2199,7 +2199,7 @@
     "string": "Tâches à cet endroit"
   },
   "map.taskPicker.more": {
-    "string": "{count, plural, one {# more task not listed} other {# more tasks not listed}}"
+    "string": "{count, plural, one {# tâche supplémentaire non-listée} many {# tâches supplémentaires non-listées} other {# tâches supplémentaires non-listées}}"
   },
   "moveChallengeModal.description": {
     "string": "Choose a project to move \"{challengeName}\" to. The challenge will be removed from the current project."
@@ -2241,10 +2241,10 @@
     "string": "Notifier dans l'appli"
   },
   "notifications.empty.all": {
-    "string": "No notifications yet"
+    "string": "Aucune notification"
   },
   "notifications.empty.unread": {
-    "string": "No unread notifications"
+    "string": "Aucune notification non-lue"
   },
   "notifications.item.challengeComment": {
     "string": "<b>{user}</b> commented on <b>{challenge}</b>"
@@ -2343,7 +2343,7 @@
     "string": "Échec du chargement des préférences du plugin"
   },
   "plugins.errors.notAuthenticated": {
-    "string": "Not authenticated"
+    "string": "Non-authentifié.e"
   },
   "plugins.errors.registerFailed": {
     "string": "Échec de l'enregistrement du plugin"
@@ -2475,7 +2475,7 @@
     "string": "Parcourir et ajouter les plugins sélectionnés par la communauté"
   },
   "settings.plugins.discoverTitle": {
-    "string": "Discover Plugins"
+    "string": "Découvrir les Plugins"
   },
   "settings.plugins.emptyDescription": {
     "string": "Visiter le Plugins Workshop pour découvrir et ajouter des plugins"
@@ -2496,25 +2496,25 @@
     "string": "Ajouter le plugin"
   },
   "settings.remotePlugins.description": {
-    "string": "Load plugins dynamically from external URLs. Make sure you trust the source before adding any plugin."
+    "string": "Charger des plugins dynamiquement à partir d'URL externes. N'ajoutez que des plugins issus d'une source de confiance."
   },
   "settings.remotePlugins.loadedTitle": {
-    "string": "Loaded Remote Plugins"
+    "string": "Plugins externes chargés"
   },
   "settings.remotePlugins.pluginFound": {
     "string": "Plugin trouvé !"
   },
   "settings.remotePlugins.securityWarningDescription": {
-    "string": "Only load plugins from trusted sources. Remote plugins have access to your application and data. Always verify the source before adding a plugin."
+    "string": "N'ajoutez que des plugins issus d'une source de confiance. Les plugins externes ont accès à votre application et vos données. Vérifiez toujours la source avant d'ajouter un plugin."
   },
   "settings.remotePlugins.securityWarningTitle": {
     "string": "Avertissement de sécurité"
   },
   "settings.remotePlugins.title": {
-    "string": "Remote Plugins"
+    "string": "Plugins externes"
   },
   "settings.remotePlugins.urlLabel": {
-    "string": "Plugin Module URL"
+    "string": "URL du module de Plugin"
   },
   "settings.submit.noChanges": {
     "string": "Pas de modifications à enregistrer"
@@ -2565,7 +2565,7 @@
     "string": "Terminé : {count}"
   },
   "shared.projectCard.totalChallenges": {
-    "string": "Total Challenges: {count}"
+    "string": "Total des Challenges : {count}"
   },
   "shared.projectPickerModal.description": {
     "string": "Choisir le projet auquel appartient ce défi"
@@ -2793,7 +2793,7 @@
     "string": "Inspecter cette tâche"
   },
   "taskEditPage.lockConflictDialog.lockedSince": {
-    "string": "(locked {time})"
+    "string": "(verrouillé {time})"
   },
   "taskEditPage.lockConflictDialog.switching": {
     "string": "Changement..."
@@ -2850,7 +2850,7 @@
     "string": "What is currently pending in the editor. Save from the editor to send it to OpenStreetMap."
   },
   "taskEditPage.pendingEdits.geometryOnly": {
-    "string": "Geometry changed; no tags were altered."
+    "string": "La géométrie a été changée ; aucun tag n'a été impacté."
   },
   "taskEditPage.pendingEdits.modified": {
     "string": "Modifié"
@@ -3141,10 +3141,10 @@
     "string": "La géométrie de cette tâche ne référence aucun élément OSM (comme @id: \"way/12345\")."
   },
   "taskInfoPanel.data.osmFeature": {
-    "string": "OSM feature"
+    "string": "Fonctionnalité OSM"
   },
   "taskInfoPanel.data.osmHistoryAtLocation": {
-    "string": "OSM History at Location"
+    "string": "Historique et localisation OSM"
   },
   "taskInfoPanel.data.recentEditsNear": {
     "string": "Modifications récentes à proximité de {location}"
@@ -3468,7 +3468,7 @@
     "string": "Supprimer le groupe"
   },
   "taskPropertyQueryBuilder.ruleLeaf.commaSeparate": {
-    "string": "Comma-separated values"
+    "string": "Valeurs séparées par une virgule"
   },
   "taskPropertyQueryBuilder.ruleLeaf.propertyPlaceholder": {
     "string": "Propriété"
