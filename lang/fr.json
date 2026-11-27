@@ -702,7 +702,7 @@
     "string": "ID {id}"
   },
   "common.instructions": {
-    "string": "Consignes"
+    "string": "Instructions"
   },
   "common.invited": {
     "string": "Invité"
@@ -1542,10 +1542,10 @@
     "string": "Sélectionné : {name} ({size, number, ::.00} KB)"
   },
   "manageChallengeNew.challengeForm.instructionsDescription": {
-    "string": "Affiché aux cartographes pour chaque tâche. Les consignes incluent le support du <markdown>Markdown</markdown> et le <mustache>remplacement du tag moustache</mustache> afin que chaque tâche puisse montrer les détails issus de ses propres propriétés de fonctionnalités."
+    "string": "Affiché aux cartographes pour chaque tâche. Les instructions incluent le support du <markdown>Markdown</markdown> et le <mustache>remplacement du tag moustache</mustache> afin que chaque tâche puisse montrer les détails issus de ses propres propriétés de fonctionnalités."
   },
   "manageChallengeNew.challengeForm.instructionsPlaceholder": {
-    "string": "Consignes pour résoudre les tâches…"
+    "string": "Instructions pour résoudre les tâches…"
   },
   "manageChallengeNew.challengeForm.localGeoJSONOptionDescription": {
     "string": "Chargez un fichier GeoJSON depuis votre ordinateur"
@@ -1665,7 +1665,7 @@
     "string": "Une description est nécessaire"
   },
   "manageChallengeNew.challengeForm.validation.instructionRequired": {
-    "string": "Des consignes sont nécessaires"
+    "string": "Des instructions sont nécessaires"
   },
   "manageChallengeNew.challengeForm.validation.localGeoJSONRequired": {
     "string": "Veuillez envoyer un fichier GeoJSON"
@@ -1716,13 +1716,13 @@
     "string": "Fond de carte"
   },
   "manageChallengesBulkEdit.field.dataOriginDate": {
-    "string": "Data origin date"
+    "string": "Date d'origine de la donnée"
   },
   "manageChallengesBulkEdit.field.exportableProperties": {
     "string": "Propriétés exportables"
   },
   "manageChallengesBulkEdit.field.instruction": {
-    "string": "Consignes"
+    "string": "Instructions"
   },
   "manageChallengesBulkEdit.field.priorities": {
     "string": "Priorités"
@@ -1929,10 +1929,10 @@
     "string": "GeoJSON pour cette tâche (point, ligne ou polygone). Doit être un JSON valide."
   },
   "manageTaskEdit.form.instructionsDescription": {
-    "string": "Consignes pour les utilisateurs résolvant cette tâche spécifique"
+    "string": "Instructions pour les utilisateurs faisant cette tâche spécifique"
   },
   "manageTaskEdit.form.instructionsPlaceholder": {
-    "string": "Consignes spécifiques à cette tâche (remplacera les instructions du défi)"
+    "string": "Instructions spécifiques à cette tâche (remplacera les instructions du défi)"
   },
   "manageTaskEdit.form.namePlaceholder": {
     "string": "Nom de Tâche"
@@ -1965,7 +1965,7 @@
     "string": "Saisir l'ID d'une tâche ci-dessous. Vous pouvez trouver l'ID d'une tâche en traitant une tâche (dans l'URL ou l'en-tête) ou depuis vos tâches enregistrées/verrouillées du tableau de bord"
   },
   "manageTasksOpen.description": {
-    "string": "Ouvrez une tâche par son ID pour voir ses détails ou le modifier (nom, consignes, statut, etc.)."
+    "string": "Ouvrez une tâche par son ID pour voir ses détails ou le modifier (nom, instructions, statut, etc.)."
   },
   "manageTasksOpen.findChallenge": {
     "string": "Or go to <projects>Projects</projects> or <challenges>Challenges</challenges> to find a challenge, then browse it to open a task and get its ID from the URL."
@@ -3057,7 +3057,7 @@
     "string": "Impossible de verrouiller cette tâche. Elle n'a donc pas été ajoutée au groupe."
   },
   "taskEditPage.taskBundle.clearedSuccess": {
-    "string": "Travaille maintenant uniquement sur la première tâche"
+    "string": "Maintenant, vous travaillez uniquement sur la première tâche"
   },
   "taskEditPage.taskBundle.lockUpdateFailed": {
     "string": "Impossible de mettre à jour les tâches qui étaient verrouillées avec ce groupe."
@@ -3297,7 +3297,7 @@
     "string": "Center sur la tâche"
   },
   "taskMap.multiTaskPanel.clearAll": {
-    "string": "Ne travailler que sur la première tâche"
+    "string": "Travailler uniquement sur la tâche principale"
   },
   "taskMap.multiTaskPanel.docsLink": {
     "string": "Apprenez-en plus sur la résolution de plusieurs tâches en même temps"
