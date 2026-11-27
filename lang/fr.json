@@ -1320,7 +1320,7 @@
     "string": "{name} peut désormais gérer ce défi"
   },
   "manageChallengeDetail.managers.description": {
-    "string": "Give someone a role on this challenge alone. Anyone who manages the parent project, or the team that owns this challenge, already has access and is not listed here."
+    "string": "Assignez un rôle à quelqu'un pour ce défi en particulier. Chaque personne qui gère déjà le projet parent autant que l'équipe qui gère ce projet ne sont pas listés ici."
   },
   "manageChallengeDetail.managers.removeFailed": {
     "string": "Impossible de retirer ce gestionnaire"
