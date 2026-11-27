@@ -408,7 +408,7 @@
     "string": "Temps moyen passé"
   },
   "browsedChallengePage.progress.completedOf": {
-    "string": "{total, plural, one {{completed, number} of # task completed} other {{completed, number} of # tasks completed}}"
+    "string": "{total, plural, one {{completed, number} d'# tâche résolue} many {{completed, number} de # tâches résolues} other {{completed, number} de # tâches résolues}}"
   },
   "browsedChallengePage.progress.details": {
     "string": "Détails"
@@ -1041,7 +1041,7 @@
     "string": "Zoomer sur la tâche"
   },
   "dashboard.activity.empty.description": {
-    "string": "Tasks you work on will show up here"
+    "string": "Les tâches pour lesquelles vous avez contribué s'afficheront ici"
   },
   "dashboard.activity.empty.title": {
     "string": "Aucune activité récente"
@@ -1161,7 +1161,7 @@
     "string": "Toute"
   },
   "exploreChallenges.filterBar.filtersToggle": {
-    "string": "{count, plural, =0 {Filters} one {Filters (#)} other {Filters (#)}}"
+    "string": "{compter, pluriel, =0 {Filters} un {Filters (#)} autres {Filters (#)}}"
   },
   "exploreChallenges.filterBar.location.clearAriaLabel": {
     "string": "Effacer la localisation"
@@ -1290,7 +1290,7 @@
     "string": "Télécharger"
   },
   "manageChallengeDetail.export.description": {
-    "string": "The export applies the table's status, priority and property filters, but covers the whole challenge rather than the current map view."
+    "string": "L'export applique le statut issu de la table, les filtres de priorité et de propriété. À noter qu'il couvre le périmètre du défi entier et non pas seulement le périmètre affiché sur la carte actuellement."
   },
   "manageChallengeDetail.export.docsLink": {
     "string": "À propos des exports de défis"
@@ -1302,7 +1302,7 @@
     "string": "CSV — une ligne par tâche"
   },
   "manageChallengeDetail.export.formatGeoJSON": {
-    "string": "GeoJSON — task geometries and properties"
+    "string": "GeoJSON — tâche de géométries et de propriétés"
   },
   "manageChallengeDetail.export.formatLabel": {
     "string": "Format"
@@ -1311,7 +1311,7 @@
     "string": "Préparation en cours…"
   },
   "manageChallengeDetail.export.timezoneLabel": {
-    "string": "Timestamp timezone"
+    "string": "Horodatage du fuseau horaire"
   },
   "manageChallengeDetail.export.title": {
     "string": "Exporter les tâches"
@@ -1383,7 +1383,7 @@
     "string": "Groupe"
   },
   "manageChallengeDetail.tasksExplorer.deselectRowLabel": {
-    "string": "Deselect row for bulk actions"
+    "string": "Désélectionner la ligne pour des actions groupées"
   },
   "manageChallengeDetail.tasksExplorer.filterBarLabel": {
     "string": "Filtres de tâches"
@@ -1422,10 +1422,10 @@
     "string": "Sélectionner toutes les tâches visibles"
   },
   "manageChallengeDetail.tasksExplorer.selectRowLabel": {
-    "string": "Select row for bulk actions"
+    "string": "Sélectionner la ligne pour des actions groupées"
   },
   "manageChallengeDetail.tasksExplorer.showTaskOnMapLabel": {
-    "string": "Show task {id} on map"
+    "string": "Montrer la tâche {id} sur la carte"
   },
   "manageChallengeDetail.tasksExplorer.showingCount": {
     "string": "{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}"
@@ -1467,7 +1467,7 @@
     "string": "Fond de carte du défi"
   },
   "manageChallengeNew.challengeForm.basemapNone": {
-    "string": "Don't override — mappers use their own"
+    "string": "Ne pas remplacer — les cartographes utilisent les leurs"
   },
   "manageChallengeNew.challengeForm.basemapTitle": {
     "string": "Fond de carte"
@@ -1494,7 +1494,7 @@
     "string": "Groupe de modifications OpenStreetMap"
   },
   "manageChallengeNew.challengeForm.checkinCommentCreateDescription": {
-    "string": "Describes the changes mappers make. The #maproulette hashtag is appended if missing, and a link back to the task is added automatically."
+    "string": "Décrit les changements effectués par les cartographes. Le hashtag #maproulette est rajouté si manquant et un lien vers la tâche est ajouté automatiquement."
   },
   "manageChallengeNew.challengeForm.checkinCommentEditDescription": {
     "string": "Describes the changes mappers make. A link back to the task is added automatically."
@@ -1542,7 +1542,7 @@
     "string": "Sélectionné : {name} ({size, number, ::.00} KB)"
   },
   "manageChallengeNew.challengeForm.instructionsDescription": {
-    "string": "Shown to mappers with every task. Instructions support <markdown>Markdown</markdown> and <mustache>mustache tag replacement</mustache> so each task can show details from its own feature properties."
+    "string": "Affiché aux cartographes pour chaque tâche. Les consignes incluent le support du <markdown>Markdown</markdown> et le <mustache>remplacement du tag moustache</mustache> afin que chaque tâche puisse montrer les détails issus de ses propres propriétés de fonctionnalités."
   },
   "manageChallengeNew.challengeForm.instructionsPlaceholder": {
     "string": "Consignes pour résoudre les tâches…"
@@ -1581,7 +1581,7 @@
     "string": "Je veux fournir une requête Overpass"
   },
   "manageChallengeNew.challengeForm.overpassQLDescription": {
-    "string": "Overpass query language to automatically generate tasks for this challenge. Please see the <docs>docs</docs> for important details and common pitfalls when creating challenges using Overpass queries."
+    "string": "La requête Overpass générera automatiquement des tâches pour ce défi. Veuillez consulter la <docs>doc</docs> pour éviter les pièges courants lors de la création de défis basée sur des requêtes Overpass."
   },
   "manageChallengeNew.challengeForm.overpassQLLabel": {
     "string": "Overpass QL"
@@ -1599,7 +1599,7 @@
     "string": "Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file."
   },
   "manageChallengeNew.challengeForm.remoteGeoJSONDocs": {
-    "string": "<docs>Hosting your GeoJSON in a GitHub gist</docs> is one way to do that."
+    "string": "<docs>Héberger votre GeoJSON dans un gist GitHub</docs> est une possibilité pour réaliser cela."
   },
   "manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription": {
     "string": "Fournissez un URL vers votre fichier GeoJSON"
@@ -1680,7 +1680,7 @@
     "string": "Une URL vers un GeoJSON est nécessaire"
   },
   "manageChallenges.content.bulkEditingLink": {
-    "string": "Bulk Editing Challenges"
+    "string": "Défi d'édition groupée"
   },
   "manageChallenges.content.challengeCreationGuideLink": {
     "string": "Guide de création des défis"
@@ -1692,22 +1692,22 @@
     "string": "Annuler la modification"
   },
   "manageChallengesBulkEdit.confirm.description": {
-    "string": "{count, plural, one {These values will overwrite the current ones on # challenge.} other {These values will overwrite the current ones on # challenges.}}"
+    "string": "{count, plural, one {Ces valeurs écraseront celles déjà existantes pour # défi.} many {Ces valeurs écraseront celles déjà existantes pour # défis.} other {Ces valeurs écraseront celles déjà existantes pour # défis.}}"
   },
   "manageChallengesBulkEdit.confirm.noRule": {
     "string": "Aucune règle"
   },
   "manageChallengesBulkEdit.confirm.submit": {
-    "string": "Submit bulk edit"
+    "string": "Envoyer l'édition groupée"
   },
   "manageChallengesBulkEdit.confirm.title": {
-    "string": "Confirm bulk edit"
+    "string": "Confirmer l'édition groupée"
   },
   "manageChallengesBulkEdit.context.saveError": {
     "string": "Le défi n'a pas pu être enregistré."
   },
   "manageChallengesBulkEdit.context.saveSuccess": {
-    "string": "{count, plural, one {Updated # challenge} other {Updated # challenges}}"
+    "string": "{count, plural, one {# défi mis-à-jour} many {# défis mis-à-jour} other {# défis mis-à-jour}}"
   },
   "manageChallengesBulkEdit.field.additionalKeywords": {
     "string": "Mots-clefs additionnels"
@@ -1755,7 +1755,7 @@
     "string": "Aucun défi n'a été modifié."
   },
   "manageChallengesBulkEdit.form.failureSaved": {
-    "string": "Saved before the error: {names}. The rest were not changed."
+    "string": "Enregistré avant l'erreur : {names}. Rien d'autre n'a été changé."
   },
   "manageChallengesBulkEdit.form.failureTitle": {
     "string": "\"{name}\" ne peux pas être enregistré"
@@ -1797,13 +1797,13 @@
     "string": "Change several challenges in this project at once"
   },
   "manageChallengesBulkEdit.pageTitle": {
-    "string": "Bulk Edit Challenges"
+    "string": "Défi d'édition groupée"
   },
   "manageProjectDetail.challengeSelection.clear": {
     "string": "Nettoyage de la sélection"
   },
   "manageProjectDetail.challengeSelection.editSelected": {
-    "string": "{count, plural, =0 {Edit selected challenges} one {Edit # selected challenge} other {Edit # selected challenges}}"
+    "string": "{count, plural, =0 {Edit selected challenges} un {Edit # selected challenge} autre {Edit # selected challenges}}"
   },
   "manageProjectDetail.challengeSelection.noneSelected": {
     "string": "Select challenges in the list to edit them together"
@@ -2247,7 +2247,7 @@
     "string": "Aucune notification non-lue"
   },
   "notifications.item.challengeComment": {
-    "string": "<b>{user}</b> commented on <b>{challenge}</b>"
+    "string": "<b>{user}</b> a commenté sur <b>{challenge}</b>"
   },
   "notifications.item.challengeCompleted": {
     "string": "Votre défi <b>{challenge}</b> est terminé"
@@ -2256,31 +2256,31 @@
     "string": "Un défi auquel vous avez contribué est terminé : <b>{challenge}</b>"
   },
   "notifications.item.mentionOnChallenge": {
-    "string": "<b>{user}</b> mentioned you on <b>{challenge}</b>"
+    "string": "<b>{user}</b> vous a mentionné sur <b>{challenge}</b>"
   },
   "notifications.item.mentionOnTask": {
-    "string": "<b>{user}</b> mentioned you on task {taskId}"
+    "string": "<b>{user}</b> vous a mentionné sur la tâche {taskId}"
   },
   "notifications.item.reviewed": {
-    "string": "<b>{user}</b> reviewed task {taskId}"
+    "string": "<b>{user}</b> a vérifié la tâche {taskId}"
   },
   "notifications.item.someone": {
     "string": "Quelqu'un"
   },
   "notifications.item.teamInvite": {
-    "string": "<b>{user}</b> invited you to join <b>{team}</b>"
+    "string": "<b>{user}</b> vous a invité à rejoindre <b>{team}</b>"
   },
   "notifications.item.unlockRequested": {
-    "string": "<b>{user}</b> asked you to unlock task {taskId}"
+    "string": "<b>{user}</b> vous demande de débloquer la tâche {taskId}"
   },
   "notifications.toast.deleteFailed": {
     "string": "Impossible de supprimer les notifications : {message}"
   },
   "notifications.toast.markReadFailed": {
-    "string": "Couldn't mark notifications as read: {message}"
+    "string": "Impossible de marquer les notifications comme lues : {message}"
   },
   "notifications.toast.markUnreadFailed": {
-    "string": "Couldn't mark notifications as unread: {message}"
+    "string": "Impossible de marquer les notifications comme non-lues : {message}"
   },
   "notificationsPage.deleteConfirm.description": {
     "string": "Cette action est définitive."
@@ -2682,7 +2682,7 @@
     "string": "Image rejetée"
   },
   "superAdminTeamImages.requestMeta": {
-    "string": "{team} · requested by <link>{user}</link> on {date}"
+    "string": "{team} · demandé par <link>{user}</link> le {date}"
   },
   "superAdminTeamImages.title": {
     "string": "Team challenge images"
@@ -3180,7 +3180,7 @@
     "string": "Ce que ce défi suggère de changer. L’ouverture de l’éditeur permet d’appliquer l’élément pour que vous puissiez le vérifier."
   },
   "taskInfoPanel.editorChanges.suggestionTitle": {
-    "string": "Suggested tag changes"
+    "string": "Changements de tag suggérés"
   },
   "taskInfoPanel.editorChanges.tagFixDescription": {
     "string": "The challenge's suggested tags were applied for you and are included below. Save from the editor to send everything to OpenStreetMap."
@@ -3288,7 +3288,7 @@
     "string": "{taskCount, plural, one {Cela dégroupera # tâche. La tâche en elle-mêmes ne sera pas supprimée, seulement dégroupée. Cette action est irréversible.} many {Cela dégroupera toutes les # tâches. Les tâches en elles-mêmes ne seront pas supprimées, seulement dégroupées. Cette action est irréversible.} other {Cela dégroupera toutes les # tâches. Les tâches en elles-mêmes ne seront pas supprimées, seulement dégroupées. Cette action est irréversible.}}"
   },
   "taskMap.clearBundleDialog.title": {
-    "string": "Clear Task Bundle?"
+    "string": "Réinitialiser le regroupement de tâches ?"
   },
   "taskMap.controls.centerToBundle": {
     "string": "Centrer sur le regroupement"
@@ -3393,13 +3393,13 @@
     "string": "Click a shape to select it, then drag a vertex to reshape, a midpoint to insert a new vertex, or the whole shape to move it. Right-click a vertex to delete it."
   },
   "taskPrioritizationPage.boundsDrawControl.pan": {
-    "string": "Pan"
+    "string": "Déplacer"
   },
   "taskPrioritizationPage.boundsDrawControl.panAriaLabel": {
-    "string": "Pan mode (no tool active)"
+    "string": "Mode Déplacement (aucun outil actif)"
   },
   "taskPrioritizationPage.boundsDrawControl.panTitle": {
-    "string": "Pan the map with no drawing tool active"
+    "string": "Déplacer la carte sans outil de dessin actif"
   },
   "taskPrioritizationPage.boundsDrawControl.polygon": {
     "string": "Polygone"
@@ -3480,7 +3480,7 @@
     "string": "double"
   },
   "taskPropertyQueryBuilder.ruleLeaf.typeInteger": {
-    "string": "integer"
+    "string": "entier"
   },
   "taskPropertyQueryBuilder.ruleLeaf.typeLong": {
     "string": "long"
