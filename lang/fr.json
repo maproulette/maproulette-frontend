@@ -3072,7 +3072,7 @@
     "string": "Ce projet n'a pas de description"
   },
   "taskEditPage.taskInfoHeader.readChallengeDescription": {
-    "string": "Assurez-vous d'avoir bien lu la description du défi, car elle peut contenir des informations importantes qui ne sont pas dans les consignes de la tâche."
+    "string": "Assurez-vous d'avoir bien lu la description du défi, car elle peut contenir des informations importantes qui ne sont pas dans les instructions de la tâche."
   },
   "taskEditPage.taskInfoHeader.selected": {
     "string": "Sélectionné"
