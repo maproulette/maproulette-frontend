@@ -149,6 +149,9 @@
   "appLayout.header.globalSearch.taskInChallenge": {
     "string": "Task {id} in Challenge \"{challenge}\""
   },
+  "appLayout.header.languageMenu.translate": {
+    "string": "Translate into your language"
+  },
   "appLayout.header.nav.dashboard": {
     "string": "Tablero"
   },
@@ -2421,7 +2424,7 @@
     "string": "Invalid language option"
   },
   "settings.general.languageDescription": {
-    "string": "Choose your preferred language (locale) for the interface."
+    "string": "Choose your preferred language for the interface. MapRoulette is translated by volunteers; if your language is missing or incomplete, you can <link>help translate it</link>."
   },
   "settings.general.languageLabel": {
     "string": "Language"
