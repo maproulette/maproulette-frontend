@@ -60,7 +60,7 @@
     "string": "Cartographe des transports"
   },
   "achievement.mappedWater.description": {
-    "string": "A contribué à la cartographie des éléments d'eau."
+    "string": "A contribué à la cartographie des éléments d'hydrographie."
   },
   "achievement.mappedWater.title": {
     "string": "Cours d'eau"
@@ -1200,7 +1200,7 @@
     "string": "Recommandé"
   },
   "exploreChallenges.filterBar.title": {
-    "string": "Filtres de la liste de défis"
+    "string": "Liste des filtres de défis"
   },
   "exploreChallenges.filterBar.viewMode.gridMap": {
     "string": "Vue avec la carte"
@@ -1275,13 +1275,13 @@
     "string": "Avancement"
   },
   "manageChallengeDetail.detail.statistics.lastModified": {
-    "string": "Dernier modifié"
+    "string": "Dernière modification"
   },
   "manageChallengeDetail.detail.statistics.taskCountsByStatus": {
     "string": "Nombre de tâches par statut"
   },
   "manageChallengeDetail.detail.viewChallengePage": {
-    "string": "Voir la page de défi"
+    "string": "Voir la page du défi"
   },
   "manageChallengeDetail.export.button": {
     "string": "Exporter"
@@ -1302,7 +1302,7 @@
     "string": "CSV — une ligne par tâche"
   },
   "manageChallengeDetail.export.formatGeoJSON": {
-    "string": "GeoJSON — tâche de géométries et de propriétés"
+    "string": "GeoJSON — géométries et propriétés des tâches"
   },
   "manageChallengeDetail.export.formatLabel": {
     "string": "Format"
@@ -1314,13 +1314,13 @@
     "string": "Horodatage du fuseau horaire"
   },
   "manageChallengeDetail.export.title": {
-    "string": "Exporter les tâches"
+    "string": "Export des tâches"
   },
   "manageChallengeDetail.managers.added": {
     "string": "{name} peut désormais gérer ce défi"
   },
   "manageChallengeDetail.managers.description": {
-    "string": "Assignez un rôle à quelqu'un pour ce défi en particulier. Chaque personne qui gère déjà le projet parent, comme l'équipe qui gère ce projet, ne sont pas listés ici."
+    "string": "Assignez un rôle à quelqu'un pour ce défi en particulier. Chaque personne qui gère déjà le projet parent, comme l'équipe qui gère ce projet, n'est pas listé ici."
   },
   "manageChallengeDetail.managers.removeFailed": {
     "string": "Impossible de retirer ce gestionnaire"
@@ -1332,7 +1332,7 @@
     "string": "Gestionnaires du défi"
   },
   "manageChallengeDetail.miniMap.zoomToAllTasksTooltip": {
-    "string": "Afficher toutes les tâches"
+    "string": "Zoomer sur toutes les tâches"
   },
   "manageChallengeDetail.recentActivity.empty": {
     "string": "Aucune activité récente."
@@ -1341,7 +1341,7 @@
     "string": "Impossible de charger l'activité"
   },
   "manageChallengeDetail.statusIndicator.buildingBody": {
-    "string": "Les tâches sont en cours de création. Cette page se rafraîchit automatiquement pour montrer l'évolution."
+    "string": "Les tâches sont en cours de génération. Cette page s'actualisera automatiquement pour afficher la progression."
   },
   "manageChallengeDetail.statusIndicator.deletingBody": {
     "string": "Tâches en cours de suppression. Veuillez patienter…"
@@ -1365,7 +1365,7 @@
     "string": "Défi partiellement chargé"
   },
   "manageChallengeDetail.statusIndicator.refreshingInLabel": {
-    "string": "Rafraîchissement dans :"
+    "string": "Actualisation dans :"
   },
   "manageChallengeDetail.statusIndicator.tasksBuildingTitle": {
     "string": "Création de la tâche ..."
@@ -1374,7 +1374,7 @@
     "string": "Tâche en cours de mise-à-jour…"
   },
   "manageChallengeDetail.statusIndicator.updatingBody": {
-    "string": "Les statuts des tâches sont en cours de mise à jour. Cette page se rafraîchit automatiquement pour montrer l'évolution."
+    "string": "Les statuts des tâches sont en cours de mise à jour. Cette page s'actualisera automatiquement pour afficher la progression."
   },
   "manageChallengeDetail.tasksExplorer.clearAllFiltersTitle": {
     "string": "Effacer tous les filtres"
@@ -1383,7 +1383,7 @@
     "string": "Groupe"
   },
   "manageChallengeDetail.tasksExplorer.deselectRowLabel": {
-    "string": "Désélectionner la ligne pour des actions groupées"
+    "string": "Désélectionner la ligne pour les actions groupées"
   },
   "manageChallengeDetail.tasksExplorer.filterBarLabel": {
     "string": "Filtres de tâches"
@@ -1392,7 +1392,7 @@
     "string": "Filtres"
   },
   "manageChallengeDetail.tasksExplorer.loadingTasks": {
-    "string": "Chargement des tâches en cours…"
+    "string": "Chargement des tâches…"
   },
   "manageChallengeDetail.tasksExplorer.noTasksMatch": {
     "string": "Aucune tâche ne correspond aux filtres appliqués."
@@ -1410,7 +1410,7 @@
     "string": "En savoir plus"
   },
   "manageChallengeDetail.tasksExplorer.propertyFilterHelp": {
-    "string": "Combine prope"
+    "string": "Combinez les propriétés de comparaison avec ET/OU. Les tâches correspondantes à ses règles sont affichées dans le tableau et sur la carte."
   },
   "manageChallengeDetail.tasksExplorer.propertyFilterLabel": {
     "string": "Filtrer par propriété"
@@ -1428,7 +1428,7 @@
     "string": "Montrer la tâche {id} sur la carte"
   },
   "manageChallengeDetail.tasksExplorer.showingCount": {
-    "string": "{total, plural, one {Showing {shown, number} of # task} other {Showing {shown, number} of # tasks}}"
+    "string": "{total, plural, one {Montrer {shown, number} de # tâche} many {Montrer {shown, number} de # tâches} other {Montrer {shown, number} de # tâches}}"
   },
   "manageChallengeDetail.tasksExplorer.taskStatusMenuLabel": {
     "string": "Statut de la tâche"
@@ -1446,7 +1446,7 @@
     "string": "J'ai lu et compris le Code de conduite des Modifications automatisées d'OSM"
   },
   "manageChallengeNew.challengeForm.agreementDescription": {
-    "string": "Vous êtes sur le point de créer un défi MapRoulette. Ce pouvoir implique une responsabilité. Assurez-vous que votre défi soit conçu de manière à encourager une attention humaine particulière à chaque tâche, conformément au Code de conduite des modifications automatisées</link> d'OpenStreetMap<link>. Veuillez lire attentivement ce document. En cochant la case ci-dessous, vous reconnaissez avoir compris et accepté cette responsabilité."
+    "string": "Vous êtes sur le point de créer un défi MapRoulette. Ce pouvoir implique une responsabilité. Assurez-vous que votre défi soit conçu de manière à encourager une attention humaine particulière à chaque tâche, conformément au Code de conduite des Modifications automatisées</link> d'OpenStreetMap<link>. Veuillez lire attentivement ce document. En cochant la case ci-dessous, vous reconnaissez avoir compris et accepté cette responsabilité."
   },
   "manageChallengeNew.challengeForm.agreementSectionTitle": {
     "string": "Accord sur le \"code de conduite\" des modifications automatisées"
