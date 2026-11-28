@@ -579,7 +579,7 @@
     "string": "Créer un défi"
   },
   "common.createManage": {
-    "string": "créer et gérer"
+    "string": "créer & gérer"
   },
   "common.createNewChallenge": {
     "string": "Créer un nouveau défi"
@@ -1449,7 +1449,7 @@
     "string": "Vous êtes sur le point de créer un défi MapRoulette. Ce pouvoir implique une responsabilité. Assurez-vous que votre défi soit conçu de manière à encourager une attention humaine particulière à chaque tâche, conformément au Code de conduite des Modifications automatisées</link> d'OpenStreetMap<link>. Veuillez lire attentivement ce document. En cochant la case ci-dessous, vous reconnaissez avoir compris et accepté cette responsabilité."
   },
   "manageChallengeNew.challengeForm.agreementSectionTitle": {
-    "string": "Accord sur le \"code de conduite\" des modifications automatisées"
+    "string": "Accord sur le Code de conduite des Modifications automatisées"
   },
   "manageChallengeNew.challengeForm.basemapCurrent": {
     "string": "Conserver le fond de carte actuel"
@@ -1473,7 +1473,7 @@
     "string": "Fond de carte"
   },
   "manageChallengeNew.challengeForm.basemapUrlDescription": {
-    "string": "An XYZ tile template. Leave it blank and the challenge falls back to no override."
+    "string": "Un modèle de tuile XYZ. Si vous ne le remplissez pas, le défi revient à l'état par défaut (sans modification)."
   },
   "manageChallengeNew.challengeForm.basemapUrlLabel": {
     "string": "URL de fond de carte personnalisé"
@@ -1482,31 +1482,31 @@
     "string": "Autre"
   },
   "manageChallengeNew.challengeForm.categoryDescription": {
-    "string": "Sélectionner la catégorie appropriée pour votre défi peut aider les contributeurs à la retrouver plus facilement. Optez pour \"Autre\" si rien ne semble approprié."
+    "string": "Choisir la catégorie appropriée à votre défi peut aider les contributeurs à découvrir des défis qui correspondent à leurs centres d'intérêt. Optez pour \"Autre\" si rien ne semble approprié."
   },
   "manageChallengeNew.challengeForm.categoryLabel": {
     "string": "Comment votre défi devrait-il être catégorisé ?"
   },
   "manageChallengeNew.challengeForm.changesetSectionDescription": {
-    "string": "Pre-filled in the editor when a mapper saves their changes to OpenStreetMap."
+    "string": "Pré-rempli automatiquement dans l'éditeur lorsqu'un contributeur enregistre ses modifications sur OpenStreetMap."
   },
   "manageChallengeNew.challengeForm.changesetSectionTitle": {
     "string": "Groupe de modifications OpenStreetMap"
   },
   "manageChallengeNew.challengeForm.checkinCommentCreateDescription": {
-    "string": "Décrit les changements effectués par les cartographes. Le hashtag #maproulette est rajouté si manquant et un lien vers la tâche est ajouté automatiquement."
+    "string": "Décrit les changements effectués par les cartographes. Le hashtag #maproulette est rajouté si manquant, et un lien vers la tâche est ajouté automatiquement."
   },
   "manageChallengeNew.challengeForm.checkinCommentEditDescription": {
-    "string": "Describes the changes mappers make. A link back to the task is added automatically."
+    "string": "Décrit les changements effectués par les cartographes. Un lien vers la tâche est ajouté automatiquement."
   },
   "manageChallengeNew.challengeForm.checkinCommentLabel": {
     "string": "Commentaire de groupe de modifications"
   },
   "manageChallengeNew.challengeForm.checkinCommentPlaceholder": {
-    "string": "Voies discontinues corrigées"
+    "string": "Correction des voies déconnectées"
   },
   "manageChallengeNew.challengeForm.checkinSourceDescription": {
-    "string": "The imagery or data mappers are expected to use, separated by semicolons."
+    "string": "L'imagerie ou la source de donnée que les cartographes devraient utiliser, séparé par des points-virgules."
   },
   "manageChallengeNew.challengeForm.checkinSourceLabel": {
     "string": "Source du groupe de modifications"
