@@ -1524,7 +1524,7 @@
     "string": "Expliquez en quoi consiste ce défi..."
   },
   "manageChallengeNew.challengeForm.difficultyPlaceholder": {
-    "string": "Choisir la difficulté"
+    "string": "Choisissez la difficulté"
   },
   "manageChallengeNew.challengeForm.fieldErrorsAriaLabel": {
     "string": "Champs qui ont besoin de votre attention"
@@ -1548,7 +1548,7 @@
     "string": "Instructions pour résoudre les tâches…"
   },
   "manageChallengeNew.challengeForm.localGeoJSONOptionDescription": {
-    "string": "Chargez un fichier GeoJSON depuis votre ordinateur"
+    "string": "Envoyer un fichier GeoJSON depuis votre ordinateur"
   },
   "manageChallengeNew.challengeForm.localGeoJSONOptionTitle": {
     "string": "Je veux envoyer un fichier GeoJSON"
@@ -1566,16 +1566,16 @@
     "string": "Un défi avec le même nom existe déjà dans ce projet"
   },
   "manageChallengeNew.challengeForm.osmIdPropertyDescription": {
-    "string": "The feature property holding each task's identifier. Leave blank to let MapRoulette detect it."
+    "string": "Propriété contenant l'identifiant de chaque tâche. Laissez ce champ vide pour que MapRoulette le détecte automatiquement."
   },
   "manageChallengeNew.challengeForm.osmIdPropertyDocsLink": {
     "string": "À propos des identifiants de tâches"
   },
   "manageChallengeNew.challengeForm.osmIdPropertyLabel": {
-    "string": "OSM / ID propriété externe"
+    "string": "OSM / id de propriété externe"
   },
   "manageChallengeNew.challengeForm.overpassOptionDescription": {
-    "string": "Use Overpass QL to automatically generate tasks from OpenStreetMap data"
+    "string": "Utiliser une requête Overpass pour générer automatiquement des tâches à partir des données OpenStreetMap"
   },
   "manageChallengeNew.challengeForm.overpassOptionTitle": {
     "string": "Je veux fournir une requête Overpass"
@@ -1584,10 +1584,10 @@
     "string": "La requête Overpass générera automatiquement des tâches pour ce défi. Veuillez consulter la <docs>doc</docs> pour éviter les pièges courants lors de la création de défis basée sur des requêtes Overpass."
   },
   "manageChallengeNew.challengeForm.overpassQLLabel": {
-    "string": "Overpass QL"
+    "string": "Requête Overpass"
   },
   "manageChallengeNew.challengeForm.overpassQueryReadOnlyBody": {
-    "string": "Overpass queries cannot be edited here. Use Rebuild Tasks when managing your challenge to re-run the query and refresh your tasks."
+    "string": "Les requêtes Overpass ne peuvent pas être modifiées ici. Utilisez la Reconstruction de tâches lorsque vous gérez votre défi, relancez la requête et actualisez vos tâches."
   },
   "manageChallengeNew.challengeForm.overpassQueryReadOnlyLabel": {
     "string": "Requête Overpass"
@@ -1596,13 +1596,13 @@
     "string": "Sélectionner le projet auquel appartient ce défi"
   },
   "manageChallengeNew.challengeForm.remoteGeoJSONDescription": {
-    "string": "Provide a URL pointing to a GeoJSON file. The URL should point directly to the raw GeoJSON file, not a page that contains a link to the file."
+    "string": "Fournissez une URL pointant vers le fichier GeoJSON. L'URL doit pointer directement vers le fichier GeoJSON brut, pas vers une page qui contient un lien vers le fichier."
   },
   "manageChallengeNew.challengeForm.remoteGeoJSONDocs": {
     "string": "<docs>Héberger votre GeoJSON dans un gist GitHub</docs> est une possibilité pour réaliser cela."
   },
   "manageChallengeNew.challengeForm.remoteGeoJSONOptionDescription": {
-    "string": "Fournissez un URL vers votre fichier GeoJSON"
+    "string": "Fournir une URL vers votre fichier GeoJSON"
   },
   "manageChallengeNew.challengeForm.remoteGeoJSONOptionTitle": {
     "string": "J'ai une URL vers les données au format GeoJSON."
