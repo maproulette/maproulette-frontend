@@ -420,7 +420,7 @@
     "string": "Défiler pour voir plus"
   },
   "browsedProjectPage.challengesList.emptyDescription": {
-    "string": "Ce projet n'a aucun défi pour le moment."
+    "string": "Ce projet n'a aucun défi pour l'instant."
   },
   "browsedProjectPage.challengesList.emptyDescriptionFiltered": {
     "string": "Essayez d'effacer vos filtres pour voir plus de résultats."
@@ -762,7 +762,7 @@
     "string": "Nom"
   },
   "common.newest": {
-    "string": "Le plus récent"
+    "string": "Plus récent"
   },
   "common.noChallengesFound": {
     "string": "Aucun défi trouvé"
@@ -930,7 +930,7 @@
     "string": "Passée"
   },
   "common.startChallenge": {
-    "string": "Démarrer le Défi"
+    "string": "Démarrer le défi"
   },
   "common.status": {
     "string": "Statut"
@@ -1032,7 +1032,7 @@
     "string": "Écrire"
   },
   "common.youMustBeLoggedInToComment": {
-    "string": "Vous devez vous connecter pour commenter"
+    "string": "Vous devez être connecté pour commenter"
   },
   "common.youveReachedTheEndOfTheList": {
     "string": "Vous avez atteint la fin de la liste"
@@ -1110,10 +1110,10 @@
     "string": "Chargement de la page des plugins…"
   },
   "errorBoundary.actions.goHome": {
-    "string": "Aller à la page de démarrage"
+    "string": "Aller à la page d'accueil"
   },
   "errorBoundary.actions.tryAgain": {
-    "string": "Essayez encore"
+    "string": "Réessayer"
   },
   "errorBoundary.forbidden.description": {
     "string": "Vous n'avez pas la permission d'accéder à cette ressource."
@@ -1122,7 +1122,7 @@
     "string": "403 - Interdit"
   },
   "errorBoundary.genericHttp.description": {
-    "string": "Il y a eu une erreur inattendue lors du chargement de cette page."
+    "string": "Une erreur inattendue s'est produite lors du chargement de cette page."
   },
   "errorBoundary.genericHttp.title": {
     "string": "Erreur {status}"
@@ -1134,19 +1134,19 @@
     "string": "Erreur serveur"
   },
   "errorBoundary.unauthorized.signInDescription": {
-    "string": "Vous devez vous connecter pour avoir accès à cette page."
+    "string": "Vous devez vous connecter pour voir avoir accès à cette page."
   },
   "errorBoundary.unauthorized.title": {
-    "string": "401 - Accès interdit"
+    "string": "401 - Accès non autorisé"
   },
   "exploreChallenges.challengeList.emptyDescription": {
-    "string": "Essayez de modifier vos filtres de recherche ou la zone de la carte."
+    "string": "Essayez d'ajuster vos filtres de recherche ou les limites de carte."
   },
   "exploreChallenges.challengeList.errorTitle": {
     "string": "Échec du chargement des défis"
   },
   "exploreChallenges.challengeList.footer.endOfListHint": {
-    "string": "Changez vos filtres ou explorez une région différente pour découvrir de nouveaux défis"
+    "string": "Ajustez vos filtres ou explorez une région différente pour découvrir de nouveaux défis"
   },
   "exploreChallenges.challengeList.table.lastUpdated": {
     "string": "Dernière mise à jour"
@@ -1194,10 +1194,10 @@
     "string": "Trier par"
   },
   "exploreChallenges.filterBar.sortBy.oldest": {
-    "string": "Le plus ancien"
+    "string": "Plus ancien"
   },
   "exploreChallenges.filterBar.sortBy.recommended": {
-    "string": "Recommandée"
+    "string": "Recommandé"
   },
   "exploreChallenges.filterBar.title": {
     "string": "Filtres de la liste de défis"
@@ -1359,7 +1359,7 @@
     "string": "Échec de la construction de la tâche"
   },
   "manageChallengeDetail.statusIndicator.partiallyLoadedBody": {
-    "string": "Le défi est partiellement chargé. Certaines tâches peuvent être non disponible pour le moment. "
+    "string": "Le défi est partiellement chargé. Certaines tâches peuvent être non disponible pour l'instant."
   },
   "manageChallengeDetail.statusIndicator.partiallyLoadedTitle": {
     "string": "Défi partiellement chargé"
@@ -1443,7 +1443,7 @@
     "string": "Mots-clefs de catégories supplémentaires"
   },
   "manageChallengeNew.challengeForm.agreementCheckboxLabel": {
-    "string": "J'ai lu et compris le code de conduite de Éditions Automatiques d'OSM."
+    "string": "J'ai lu et compris le Code de conduite des Modifications automatisées d'OSM"
   },
   "manageChallengeNew.challengeForm.agreementDescription": {
     "string": "Vous êtes sur le point de créer un défi MapRoulette. Ce pouvoir implique une responsabilité. Assurez-vous que votre défi soit conçu de manière à encourager une attention humaine particulière à chaque tâche, conformément au Code de conduite des modifications automatisées</link> d'OpenStreetMap<link>. Veuillez lire attentivement ce document. En cochant la case ci-dessous, vous reconnaissez avoir compris et accepté cette responsabilité."
@@ -1641,7 +1641,7 @@
     "string": "An optional team to own this challenge. Everyone who manages that team can edit it, and the team's image becomes the picture on its card."
   },
   "manageChallengeNew.challengeForm.teamNoneAvailable": {
-    "string": "Vous ne gérer aucune équipe pour le moment. Seuls les propriétaires administrateurs et gestionnaires peuvent leur associer un défi."
+    "string": "Vous ne gérer aucune équipe pour l'instant. Seuls les propriétaires administrateurs et gestionnaires peuvent leur associer un défi."
   },
   "manageChallengeNew.challengeForm.updateButton": {
     "string": "Mettre à jour le défi"
@@ -1896,7 +1896,7 @@
     "string": "An optional team to own this project. Everyone who manages that team can run it, and the team's image becomes the picture on its card."
   },
   "manageProjectNew.projectForm.teamNoneAvailable": {
-    "string": "Vous ne gérer aucune équipe pour le moment. Seuls les propriétaires administrateurs et gestionnaires peuvent leur associer un projet."
+    "string": "Vous ne gérer aucune équipe pour l'instant. Seuls les propriétaires administrateurs et gestionnaires peuvent leur associer un projet."
   },
   "manageProjectNew.projectForm.updateButton": {
     "string": "Mise à jour du Projet"
@@ -2121,10 +2121,10 @@
     "string": "Aucune équipe correspondante"
   },
   "managers.noTeams": {
-    "string": "Aucune équipe pour le moment"
+    "string": "Aucune équipe pour l'instant."
   },
   "managers.none": {
-    "string": "Aucun gestionnaire pour le moment"
+    "string": "Aucun gestionnaire pour l'instant."
   },
   "managers.searchPlaceholder": {
     "string": "nom d'utilisateur OpenStreetMap"
@@ -2241,7 +2241,7 @@
     "string": "Notifier dans l'appli"
   },
   "notifications.empty.all": {
-    "string": "Aucune notification pour le moment"
+    "string": "Aucune notification pour l'instant"
   },
   "notifications.empty.unread": {
     "string": "Aucune notification non-lue"
@@ -2481,7 +2481,7 @@
     "string": "Visiter le Plugins Workshop pour découvrir et ajouter des plugins"
   },
   "settings.plugins.emptyTitle": {
-    "string": "Aucun plugin pour le moment"
+    "string": "Aucun plugin pour l'instant"
   },
   "settings.plugins.loading": {
     "string": "Chargement des plugins..."
@@ -2544,7 +2544,7 @@
     "string": "{title} (verrouillé)"
   },
   "shared.achievementBadge.notYetEarned": {
-    "string": "Pas gagné pour le moment"
+    "string": "Pas encore obtenu"
   },
   "shared.challengeCard.actionsLabel": {
     "string": "Actions pour {name}"
@@ -2586,7 +2586,7 @@
     "string": "Tâches"
   },
   "shared.signIn.description": {
-    "string": "Vous devez être connecté pour gérer votre compte."
+    "string": "Vous devez vous connecter pour gérer votre compte."
   },
   "shared.signIn.title": {
     "string": "Veuillez vous connecter"
@@ -3513,7 +3513,7 @@
     "string": "L'image que cette équipe peut ajouter à ses défis. Une équipe a une seule image. Chacun dans l'équipe peut demander son remplacement. Une fois qu'un super-administrateur a approuvé cette demande, elle remplace alors l'image précédente dans tous les challenges qui l'utilisent."
   },
   "teamImages.empty": {
-    "string": "Cette équipe n'a pas d'image de défi pour le moment."
+    "string": "Cette équipe n'a pas d'image de défi pour l'instant."
   },
   "teamImages.fileHint": {
     "string": "PNG, JPEG, WebP ou GIF, jusqu'à {max}MB. Les images carrées rendent le mieux."
@@ -3618,13 +3618,13 @@
     "string": "Équipier supprimé"
   },
   "teams.detail.noChallengesDescription": {
-    "string": "Aucun défi n'a été attribué à cette équipe pour le moment."
+    "string": "Aucun défi n'a été attribué à cette équipe pour l'instant."
   },
   "teams.detail.noChallengesTitle": {
     "string": "Aucun Défi"
   },
   "teams.detail.noMembers": {
-    "string": "Cette équipe n'a aucun équipier pour le moment."
+    "string": "Cette équipe n'a aucun équipier pour l'instant."
   },
   "teams.detail.noProjectsDescription": {
     "string": "Aucun role sur un projet n'a encore été assigné à cette équipe"
