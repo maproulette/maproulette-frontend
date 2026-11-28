@@ -261,7 +261,7 @@
     "string": "Voir les commentaires de la tâche"
   },
   "browsedChallengePage.challengeModals.comments.signInRequired": {
-    "string": "Merci de vous connecter pour ajouter des commentaires"
+    "string": "Veuillez vous connecter pour ajouter des commentaires"
   },
   "browsedChallengePage.challengeModals.commentsModal.title": {
     "string": "Commentaires du défi"
@@ -270,13 +270,13 @@
     "string": "En attente de vérification par les administrateurs de MapRoulette."
   },
   "browsedChallengePage.challengeModals.reportHistory.description": {
-    "string": "Reports filed against this challenge and where each one stands. The MapRoulette administrators review every report."
+    "string": "Signalements déposés concernant ce défi et où ils se trouvent. Les administrateurs de MapRoulette vérifient chaque signalement."
   },
   "browsedChallengePage.challengeModals.reportHistory.empty": {
     "string": "Personne n'a signalé ce défi."
   },
   "browsedChallengePage.challengeModals.reportHistory.reportedBy": {
-    "string": "Signalée par {user} le {date}"
+    "string": "Signalée par <link>{user}</link> le {date}"
   },
   "browsedChallengePage.challengeModals.reportHistory.resolved": {
     "string": "Marquée {status}"
@@ -288,7 +288,7 @@
     "string": "Traité"
   },
   "browsedChallengePage.challengeModals.reportHistory.status.dismissed": {
-    "string": "Dismissed"
+    "string": "Rejeté"
   },
   "browsedChallengePage.challengeModals.reportHistory.status.open": {
     "string": "Ouvrir"
@@ -300,7 +300,7 @@
     "string": "vous"
   },
   "browsedChallengePage.challengeModals.reportModal.checkboxError": {
-    "string": "Veuillez vous assurer que la case à cocher est cochée avant de continuer"
+    "string": "Confirmez que vous avez bien essayé de contacter le créateur du défi."
   },
   "browsedChallengePage.challengeModals.reportModal.confirmLabel": {
     "string": "J'ai essayé de contacter le créateur du défi"
@@ -315,7 +315,7 @@
     "string": "Saisissez votre mail"
   },
   "browsedChallengePage.challengeModals.reportModal.invalidEmailError": {
-    "string": "Merci de saisir une adresse mail valide"
+    "string": "Veuillez saisir une adresse mail valide"
   },
   "browsedChallengePage.challengeModals.reportModal.minLengthError": {
     "string": "{min, plural, one {Le signalement doit être long d'au moins # caractère} many {Le signalement doit être long d'au moins # caractères} other {Le signalement doit être long d'au moins # caractères}}"
@@ -342,10 +342,10 @@
     "string": "Masquer la carte"
   },
   "browsedChallengePage.footer.noTasksAvailable": {
-    "string": "Pas de tâche disponible pour ce défi"
+    "string": "Aucune tâche disponible pour ce défi"
   },
   "browsedChallengePage.footer.noTasksToBrowse": {
-    "string": "Ce défi n'a pas de tâches."
+    "string": "Ce défi n'a aucune tâche."
   },
   "browsedChallengePage.footer.reportedIssueMessage": {
     "string": "Ce défi a été signalé. Cliquez pour voir les signalements."
@@ -357,13 +357,13 @@
     "string": "Afficher la Carte"
   },
   "browsedChallengePage.footer.startChallenge": {
-    "string": "Démarrer le Défi"
+    "string": "Démarrer le défi"
   },
   "browsedChallengePage.header.byline": {
     "string": "par <owner>{name}</owner>"
   },
   "browsedChallengePage.header.checkOutChallenge": {
-    "string": "Check out this challenge: {name}"
+    "string": "Découvrez ce défi : {name}"
   },
   "browsedChallengePage.header.failedToUpdateLike": {
     "string": "Échec de la mise à jour du statut de favoris"
@@ -390,13 +390,13 @@
     "string": "Connectez-vous pour enregistrer des défis"
   },
   "browsedChallengePage.header.taxonomy.undiscoverable": {
-    "string": "Non-indexé"
+    "string": "Non découvrable"
   },
   "browsedChallengePage.map.tasksAll": {
     "string": "Toutes"
   },
   "browsedChallengePage.map.tasksAvailable": {
-    "string": "Disponible"
+    "string": "Disponibles"
   },
   "browsedChallengePage.map.tasksCompleted": {
     "string": "Terminées"
@@ -459,7 +459,7 @@
     "string": "Ajoutez un commentaire…"
   },
   "common.addChallenge": {
-    "string": "Créer un nouveau défi"
+    "string": "Ajouter un défi"
   },
   "common.all": {
     "string": "All ({count})"
@@ -471,7 +471,7 @@
     "string": "Répondu"
   },
   "common.apply": {
-    "string": "Valider"
+    "string": "Appliquer"
   },
   "common.archiveChallenge": {
     "string": "Archiver le défi"
@@ -510,7 +510,7 @@
     "string": "Routes / Piétons / Pistes cyclables"
   },
   "common.category.pointsOfInterest": {
-    "string": "Points / Aires d'intérêt"
+    "string": "Points / Zones d'intérêt"
   },
   "common.category.transit": {
     "string": "Transport"
@@ -531,7 +531,7 @@
     "string": "Défis"
   },
   "common.challenges2": {
-    "string": "Défis"
+    "string": "défis"
   },
   "common.clear": {
     "string": "Effacer"
@@ -579,7 +579,7 @@
     "string": "Créer un défi"
   },
   "common.createManage": {
-    "string": "Créer et Gérer"
+    "string": "créer et gérer"
   },
   "common.createNewChallenge": {
     "string": "Créer un nouveau défi"
@@ -870,7 +870,7 @@
     "string": "Signaler le défi"
   },
   "common.reportsLoadError": {
-    "string": "Impossible de charger les rapports."
+    "string": "Impossible de charger les signalements."
   },
   "common.resetViewToTaskLocation": {
     "string": "Recentrer la vue sur la localisation de la tâche"
@@ -1182,7 +1182,7 @@
     "string": "Aucun lieu trouvé. Essayez d'autres termes de recherche."
   },
   "exploreChallenges.filterBar.location.notFound": {
-    "string": "Impossible de trouver la localisation "
+    "string": "Impossible de trouver le lieu"
   },
   "exploreChallenges.filterBar.location.searchPlaceholder": {
     "string": "Chercher un lieu..."
@@ -1320,7 +1320,7 @@
     "string": "{name} peut désormais gérer ce défi"
   },
   "manageChallengeDetail.managers.description": {
-    "string": "Assignez un rôle à quelqu'un pour ce défi en particulier. Chaque personne qui gère déjà le projet parent autant que l'équipe qui gère ce projet ne sont pas listés ici."
+    "string": "Assignez un rôle à quelqu'un pour ce défi en particulier. Chaque personne qui gère déjà le projet parent, comme l'équipe qui gère ce projet, ne sont pas listés ici."
   },
   "manageChallengeDetail.managers.removeFailed": {
     "string": "Impossible de retirer ce gestionnaire"
@@ -1353,10 +1353,10 @@
     "string": "Temps passé :"
   },
   "manageChallengeDetail.statusIndicator.failedBody": {
-    "string": "Échec de la création des tâches du défi. Vérifiez la configuration du défi et réessayez."
+    "string": "Échec de la création des tâches du défi. Veuillez vérifier la configuration du défi et réessayer."
   },
   "manageChallengeDetail.statusIndicator.failedTitle": {
-    "string": "La tâche n'a pas réussi à être créée"
+    "string": "Échec de la construction de la tâche"
   },
   "manageChallengeDetail.statusIndicator.partiallyLoadedBody": {
     "string": "Le défi est partiellement chargé. Certaines tâches peuvent être non disponible pour le moment. "
@@ -1377,7 +1377,7 @@
     "string": "Les statuts des tâches sont en cours de mise à jour. Cette page se rafraîchit automatiquement pour montrer l'évolution."
   },
   "manageChallengeDetail.tasksExplorer.clearAllFiltersTitle": {
-    "string": "Réinitialiser tous les filtres"
+    "string": "Effacer tous les filtres"
   },
   "manageChallengeDetail.tasksExplorer.columnBundle": {
     "string": "Groupe"
@@ -1611,7 +1611,7 @@
     "string": "Remote URLs cannot be edited here. Use Rebuild Tasks when managing your challenge to re-download the GeoJSON and refresh your tasks."
   },
   "manageChallengeNew.challengeForm.saveErrorToast": {
-    "string": "Échec de l'enregistrement du défi. Merci de réessayer"
+    "string": "Échec de l'enregistrement du défi. Veuillez réessayer"
   },
   "manageChallengeNew.challengeForm.taskBundleIdPropertyDescription": {
     "string": "The feature property to treat as a bundle id. Features sharing a value become a single task with multiple features; features without the property stay as separate tasks. Leave blank for one task per feature."
@@ -1800,7 +1800,7 @@
     "string": "Défi d'édition groupée"
   },
   "manageProjectDetail.challengeSelection.clear": {
-    "string": "Nettoyage de la sélection"
+    "string": "Effacer la sélection"
   },
   "manageProjectDetail.challengeSelection.editSelected": {
     "string": "{count, plural, =0 {Edit selected challenges} un {Edit # selected challenge} autre {Edit # selected challenges}}"
@@ -2241,7 +2241,7 @@
     "string": "Notifier dans l'appli"
   },
   "notifications.empty.all": {
-    "string": "Aucune notification"
+    "string": "Aucune notification pour le moment"
   },
   "notifications.empty.unread": {
     "string": "Aucune notification non-lue"
@@ -2589,7 +2589,7 @@
     "string": "Vous devez être connecté pour gérer votre compte."
   },
   "shared.signIn.title": {
-    "string": "Merci de vous connecter"
+    "string": "Veuillez vous connecter"
   },
   "shared.statusBadge.notDiscoverable": {
     "string": "Non découvrable"
@@ -3117,7 +3117,7 @@
     "string": "retiré"
   },
   "taskInfoPanel.comments.emptyState": {
-    "string": "Aucune activité pour le moment. Soyez le premier à commenter !"
+    "string": "Aucune activité"
   },
   "taskInfoPanel.comments.markedAs": {
     "string": "marqué comme"
@@ -3330,7 +3330,7 @@
     "string": "Toutes les tâches"
   },
   "taskMap.settings.markersNone": {
-    "string": "Aucune"
+    "string": "Aucun"
   },
   "taskMap.settings.markersPrimary": {
     "string": "Cette tâche seulement"
@@ -3363,7 +3363,7 @@
     "string": "Activer/désactiver l'affichage des marqueurs"
   },
   "taskPrioritizationPage.boundsDrawControl.clearAll": {
-    "string": "Tout nettoyer"
+    "string": "Tout effacer"
   },
   "taskPrioritizationPage.boundsDrawControl.clearAllTitle": {
     "string": "Supprimez toutes les formes de ce palier"
