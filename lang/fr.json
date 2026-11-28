@@ -15,7 +15,7 @@
     "string": "A corrigé une tâche coopérative."
   },
   "achievement.fixedCoopTask.title": {
-    "string": "Réparateur coopératif"
+    "string": "Résolveur coopératif"
   },
   "achievement.fixedFinalTask.description": {
     "string": "A résolu la dernière tâche d'un défi."
@@ -162,7 +162,7 @@
     "string": "Découvrir des défis"
   },
   "appLayout.header.nav.learn": {
-    "string": "Documentation (en)"
+    "string": "Apprendre (en)"
   },
   "appLayout.header.nav.mobile": {
     "string": "Navigation mobile"
@@ -180,7 +180,7 @@
     "string": "Connexion en cours…"
   },
   "appLayout.header.themeToggle.toDark": {
-    "string": "passer au thème sombre"
+    "string": "Passer au thème sombre"
   },
   "appLayout.header.themeToggle.toLight": {
     "string": "Passer au thème clair"
@@ -243,7 +243,7 @@
     "string": "{max, plural, one {{count, number}/# caractère} many {{count, number}/# caractères} other {{count, number}/# caractères}}"
   },
   "browsedChallengePage.challengeModals.comments.empty": {
-    "string": "Aucun commentaire pour le moment. Soyez le premier à commenter !"
+    "string": "Aucun commentaire"
   },
   "browsedChallengePage.challengeModals.comments.owner": {
     "string": "Propriétaire"
@@ -267,7 +267,7 @@
     "string": "Commentaires du défi"
   },
   "browsedChallengePage.challengeModals.reportHistory.awaitingReview": {
-    "string": "En attente de validation par les administrateurs de MapRoulette."
+    "string": "En attente de vérification par les administrateurs de MapRoulette."
   },
   "browsedChallengePage.challengeModals.reportHistory.description": {
     "string": "Reports filed against this challenge and where each one stands. The MapRoulette administrators review every report."
@@ -849,7 +849,7 @@
     "string": "Projets"
   },
   "common.projects2": {
-    "string": "Projets"
+    "string": "projets"
   },
   "common.rebuildTasks": {
     "string": "Reconstruire les tâches"
@@ -1158,7 +1158,7 @@
     "string": "Effacer les filtres"
   },
   "exploreChallenges.filterBar.difficulty.any": {
-    "string": "Toute"
+    "string": "Toutes"
   },
   "exploreChallenges.filterBar.filtersToggle": {
     "string": "{compter, pluriel, =0 {Filters} un {Filters (#)} autres {Filters (#)}}"
@@ -1197,7 +1197,7 @@
     "string": "Le plus ancien"
   },
   "exploreChallenges.filterBar.sortBy.recommended": {
-    "string": "Recommandé"
+    "string": "Recommandée"
   },
   "exploreChallenges.filterBar.title": {
     "string": "Filtres de la liste de défis"
@@ -1521,7 +1521,7 @@
     "string": "Défi créé avec succès"
   },
   "manageChallengeNew.challengeForm.descriptionPlaceholder": {
-    "string": "Décrivez le propos du défi…"
+    "string": "Expliquez en quoi consiste ce défi..."
   },
   "manageChallengeNew.challengeForm.difficultyPlaceholder": {
     "string": "Choisir la difficulté"
@@ -2565,7 +2565,7 @@
     "string": "Terminé : {count}"
   },
   "shared.projectCard.totalChallenges": {
-    "string": "Total des Challenges : {count}"
+    "string": "Total défis : {count}"
   },
   "shared.projectPickerModal.description": {
     "string": "Choisir le projet auquel appartient ce défi"
@@ -2661,7 +2661,7 @@
     "string": "Note (optionnel)"
   },
   "superAdminReview.emptyTitle": {
-    "string": "Rien à valider"
+    "string": "Rien à vérifier"
   },
   "superAdminReview.reviewError": {
     "string": "Impossible d'enregistrer cette décision"
@@ -2709,7 +2709,7 @@
     "string": "Précédent"
   },
   "superAdminUsers.table.subtitle": {
-    "string": "A list of all users in the system (page {page})"
+    "string": "Page {page, number}"
   },
   "superAdminUsers.table.title": {
     "string": "Tous les utilisateurs"
@@ -3093,7 +3093,7 @@
     "string": "Modifier avec iD"
   },
   "taskEditPage.taskMap.focusedFeatureHint": {
-    "string": "Showing one feature of this task"
+    "string": "Montrer un élément de cette tâche"
   },
   "taskEditPage.taskMap.showAllFeatures": {
     "string": "Tout afficher"
@@ -3558,7 +3558,7 @@
     "string": "Impossible de soumettre l'image"
   },
   "teamImages.requestSuccess": {
-    "string": "Image envoyée — un super-admin l'examinera avant de pouvoir l'utiliser"
+    "string": "Image envoyée — un super-admin la vérifiera avant de pouvoir l'utiliser"
   },
   "teamImages.requestedBy": {
     "string": "Demandé par {name}"
